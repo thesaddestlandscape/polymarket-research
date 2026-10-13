@@ -41,22 +41,22 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1791840183.8671029,
-   "ultimo_aviso": 1791840183.8671029
+   "ok": false,
+   "detalle": "HTTPError: 503 Server Error: Service Unavailable for url: https://1rpc.io/matic",
+   "desde": 1791854587.4728355,
+   "ultimo_aviso": 1791854587.4728355
   },
   "archivo": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1791843787.8218122,
-   "ultimo_aviso": 1791843787.8218122
+   "ok": false,
+   "detalle": "RuntimeError: sin cabeza",
+   "desde": 1791854587.4728355,
+   "ultimo_aviso": 1791854587.4728355
   },
   "latest": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1791840183.8671029,
-   "ultimo_aviso": 1791840183.8671029
+   "ok": false,
+   "detalle": "HTTPError: 503 Server Error: Service Unavailable for url: https://1rpc.io/matic",
+   "desde": 1791854587.4728355,
+   "ultimo_aviso": 1791854587.4728355
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-13T00:23:03+00:00"
+ "_actualizado_utc": "2026-10-13T01:23:07+00:00"
 }
