@@ -1,0 +1,31 @@
+Defensa por cancelación en pares 15m (LAT=200 ms). Binance: BTCUSDT 1557989, SOLUSDT 366731
+
+===== DESCUBRIMIENTO 09-10 Oct (todas las políticas): 80 mercados, 77 con relleno, sueltas 27, PnL base -18.54 $
+  AUC suelta vs par, bn1 (Binance 1 s en contra, bps): 0.617 (n 27/50)
+  AUC suelta vs par, dm2 (caída del mid propio 2 s): 0.673 (n 27/50)
+  AUC suelta vs par, edad del precio (ms; menor=joven): 0.567 (n 27/50)
+  SALIR si [bn1>=1                ] antes del 1er relleno: sale en  30/80 merc. (evita 18 sueltas, pierde 12 pares) | señal encendida P50 0% de la vida | PnL -5.75 $
+  SALIR si [bn1>=2                ] antes del 1er relleno: sale en  18/80 merc. (evita 13 sueltas, pierde 5 pares) | señal encendida P50 0% de la vida | PnL -6.10 $
+  SALIR si [bn1>=3                ] antes del 1er relleno: sale en   8/80 merc. (evita 7 sueltas, pierde 1 pares) | señal encendida P50 0% de la vida | PnL -7.14 $
+  SALIR si [bn1>=5                ] antes del 1er relleno: sale en   1/80 merc. (evita 1 sueltas, pierde 0 pares) | señal encendida P50 0% de la vida | PnL -17.14 $
+  SALIR si [dm2>=0.01             ] antes del 1er relleno: sale en  68/80 merc. (evita 26 sueltas, pierde 42 pares) | señal encendida P50 33% de la vida | PnL +4.10 $
+  SALIR si [dm2>=0.02             ] antes del 1er relleno: sale en  56/80 merc. (evita 23 sueltas, pierde 33 pares) | señal encendida P50 16% de la vida | PnL -1.55 $
+  SALIR si [dm2>=0.03             ] antes del 1er relleno: sale en  45/80 merc. (evita 22 sueltas, pierde 23 pares) | señal encendida P50 4% de la vida | PnL -2.75 $
+  SALIR si [A2: edad<300 y bn1>=1 ] antes del 1er relleno: sale en  23/80 merc. (evita 14 sueltas, pierde 9 pares) | señal encendida P50 0% de la vida | PnL -9.10 $
+  SALIR si [bn1>=2 o dm2>=0.02    ] antes del 1er relleno: sale en  56/80 merc. (evita 23 sueltas, pierde 33 pares) | señal encendida P50 16% de la vida | PnL -1.55 $
+
+===== VALIDACIÓN 12-13 Oct (crear): 80 mercados, 79 con relleno, sueltas 20, PnL base -9.78 $
+  AUC suelta vs par, bn1 (Binance 1 s en contra, bps): 0.547 (n 20/59)
+  AUC suelta vs par, dm2 (caída del mid propio 2 s): 0.553 (n 20/58)
+  AUC suelta vs par, edad del precio (ms; menor=joven): 0.457 (n 20/58)
+  SALIR si [bn1>=1                ] antes del 1er relleno: sale en  39/80 merc. (evita 9 sueltas, pierde 30 pares) | señal encendida P50 0% de la vida | PnL -2.41 $
+  SALIR si [bn1>=2                ] antes del 1er relleno: sale en  22/80 merc. (evita 4 sueltas, pierde 18 pares) | señal encendida P50 0% de la vida | PnL -11.81 $
+  SALIR si [bn1>=3                ] antes del 1er relleno: sale en  14/80 merc. (evita 2 sueltas, pierde 12 pares) | señal encendida P50 0% de la vida | PnL -11.83 $
+  SALIR si [bn1>=5                ] antes del 1er relleno: sale en   6/80 merc. (evita 2 sueltas, pierde 4 pares) | señal encendida P50 0% de la vida | PnL -5.93 $
+  SALIR si [dm2>=0.01             ] antes del 1er relleno: sale en  67/80 merc. (evita 15 sueltas, pierde 52 pares) | señal encendida P50 50% de la vida | PnL -3.75 $
+  SALIR si [dm2>=0.02             ] antes del 1er relleno: sale en  64/80 merc. (evita 13 sueltas, pierde 51 pares) | señal encendida P50 26% de la vida | PnL -4.90 $
+  SALIR si [dm2>=0.03             ] antes del 1er relleno: sale en  50/80 merc. (evita 10 sueltas, pierde 40 pares) | señal encendida P50 10% de la vida | PnL -1.31 $
+  SALIR si [A2: edad<300 y bn1>=1 ] antes del 1er relleno: sale en  33/80 merc. (evita 9 sueltas, pierde 24 pares) | señal encendida P50 0% de la vida | PnL -0.96 $
+  SALIR si [bn1>=2 o dm2>=0.02    ] antes del 1er relleno: sale en  64/80 merc. (evita 13 sueltas, pierde 51 pares) | señal encendida P50 26% de la vida | PnL -4.90 $
+
+Lectura: una regla solo sirve si en DESCUBRIMIENTO evita más sueltas que pares con la señal encendida una fracción pequeña de la vida, y repite en VALIDACIÓN (10 reglas miradas: corregir por multiplicidad).

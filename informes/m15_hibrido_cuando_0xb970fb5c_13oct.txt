@@ -1,0 +1,33 @@
+Híbrida 0xb970fb5c743b22e9c3df143f81075ad3c79c0000 — ¿cuándo cubre/refuerza y a qué coste? (tokens 15m mapeados: 8522)
+
+===== EXTRACCIÓN 05-07 (ya vista el 08-Oct): 197 mercados (cobertura desenlace 100%), rellenos 4204
+PnL total +5095 $ (maker +1162, tomador +3933); por mercado +25.86 $ IC90 (+2.49,+49.18); por día: 10-05 +2127, 10-06 +2543, 10-07 +425
+  tomador CUBRE    n= 180 vol    9940 $ PnL   +1245 $ PnL/$ +0.125 (media por orden +0.271 IC90 +0.028,+0.528) precio P50 0.48
+     coste del par al cubrir: P25/50/75 0.864/0.979/1.139 | <1,00: 54% | <0,97: 48%
+     0-30 s tras su relleno maker del otro lado: n=55 PnL/$ +0.051
+     30-120 s tras su relleno maker del otro lado: n=42 PnL/$ +0.502
+     120-300 s tras su relleno maker del otro lado: n=41 PnL/$ +0.398
+     300-∞ s tras su relleno maker del otro lado: n=15 PnL/$ -0.280
+  tomador REFUERZA n= 237 vol    8949 $ PnL   +2817 $ PnL/$ +0.315 (media por orden +0.339 IC90 +0.099,+0.589) precio P50 0.35
+     0-30 s tras su relleno maker del mismo lado: n=136 PnL/$ +0.195
+     30-120 s tras su relleno maker del mismo lado: n=18 PnL/$ +0.550
+     120-300 s tras su relleno maker del mismo lado: n=32 PnL/$ +0.436
+     300-∞ s tras su relleno maker del mismo lado: n=16 PnL/$ +0.529
+  tomador ABRE     n=  38 vol    1429 $ PnL    -127 $ PnL/$ -0.089 (media por orden -0.111 IC90 -0.440,+0.225) precio P50 0.41
+  tomador VENDE    n=   1 vol      13 $ PnL      -2 $ PnL/$ -0.131 (media por orden -0.131 IC90 +nan,+nan) precio P50 0.89
+
+===== VALIDACIÓN 08-12 (no vista): 210 mercados (cobertura desenlace 100%), rellenos 3112
+PnL total -858 $ (maker -190, tomador -668); por mercado -4.09 $ IC90 (-19.35,+10.04); por día: 10-08 +554, 10-09 -650, 10-10 -734, 10-11 +452, 10-12 -480
+  tomador CUBRE    n= 189 vol    6466 $ PnL    -859 $ PnL/$ -0.133 (media por orden -0.109 IC90 -0.281,+0.082) precio P50 0.51
+     coste del par al cubrir: P25/50/75 0.907/1.040/1.209 | <1,00: 43% | <0,97: 35%
+     0-30 s tras su relleno maker del otro lado: n=47 PnL/$ -0.034
+     30-120 s tras su relleno maker del otro lado: n=59 PnL/$ -0.251
+     120-300 s tras su relleno maker del otro lado: n=36 PnL/$ -0.046
+     300-∞ s tras su relleno maker del otro lado: n=19 PnL/$ +0.011
+  tomador REFUERZA n= 315 vol    7178 $ PnL    -128 $ PnL/$ -0.018 (media por orden +0.127 IC90 -0.033,+0.293) precio P50 0.44
+     0-30 s tras su relleno maker del mismo lado: n=168 PnL/$ +0.031
+     30-120 s tras su relleno maker del mismo lado: n=43 PnL/$ -0.059
+     120-300 s tras su relleno maker del mismo lado: n=35 PnL/$ -0.006
+     300-∞ s tras su relleno maker del mismo lado: n=24 PnL/$ +0.254
+  tomador ABRE     n=  58 vol    1918 $ PnL     +46 $ PnL/$ +0.024 (media por orden +0.154 IC90 -0.130,+0.451) precio P50 0.46
+  tomador VENDE    n=   1 vol     283 $ PnL    +273 $ PnL/$ +0.964 (media por orden +0.964 IC90 +nan,+nan) precio P50 0.49
