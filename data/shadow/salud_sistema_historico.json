@@ -11347,5 +11347,106 @@
       "💀 1 OOM-kill(s) del kernel en 24h: python(pid 405691, 829.1MB)"
     ],
     "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-13T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 27,
+      "resolve_postmortem_p50_s": 127.3,
+      "resolve_postmortem_p95_s": 239.0,
+      "resolve_postmortem_max_s": 245.4,
+      "resolve_postmortem_duraciones_s": [
+        127.3,
+        83.6,
+        68.4,
+        81.4,
+        95.0,
+        175.3,
+        131.7,
+        79.7,
+        82.7,
+        124.3,
+        127.9,
+        157.5,
+        120.7,
+        76.8,
+        108.7,
+        104.5,
+        148.0,
+        245.4,
+        163.9,
+        159.0,
+        150.7,
+        106.5,
+        143.2,
+        239.0,
+        142.0,
+        129.3,
+        111.2
+      ],
+      "n_ciclos_live_trade": 1065,
+      "hueco_live_trade_max_s": 85.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 17,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 92.0,
+      "gb_libres": 6.41,
+      "git_gb": 0.0,
+      "data_gb": 24.31,
+      "datalogs_gb": 12.93
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 2.52,
+      "ram_pct_libre": 33.4
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 751,
+      "n_results_total": 985166
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 42
+    },
+    "carga_sistema": {
+      "load1": 5.86,
+      "load5": 7.8,
+      "load15": 10.4,
+      "nproc": 4,
+      "ratio5": 1.95,
+      "n_procesos_total": 235
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 1,
+      "eventos": [
+        {
+          "ts": "Oct 12 08:09:44",
+          "pid": "813249",
+          "nombre": "python",
+          "rss_mb": 886.8
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "💾 disco al 92% (6.41GB libres)",
+      "💀 1 OOM-kill(s) del kernel en 24h: python(pid 813249, 886.8MB)"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
