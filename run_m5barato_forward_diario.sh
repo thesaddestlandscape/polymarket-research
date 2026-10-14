@@ -15,4 +15,8 @@ $PY diag_v6_visible_anticipada.py || true      # diagnóstico visible/anticipada
 # 2) V5: laboratorio (maquinaria v4 a 215/355/475 ms sobre el archivo) + vigía
 bash -c "ulimit -v 4500000; nice -n 15 ionice -c3 $PY lab_5m_barato_replay.py --dia $D --tag lat" || avisa "V5 laboratorio"
 bash -c "nice -n 15 $PY vigia_5m_barato_v5_forward.py --telegram" || avisa "V5 vigía"
+# 3) Vigilancia por moneda (Javi 14-Oct: "mantenlo vigilado"): quién gana en los pares del día (caché on-chain) y pastel de
+#    la caja por moneda acumulado -> si una altcoin muestra ventaja EVIDENTE, se explora con gate propio.
+bash -c "ulimit -v 3500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_quien_gana.py --desde $D --hasta $D" > /dev/null || avisa "quién gana (pares)"
+bash -c "ulimit -v 2000000; nice -n 15 ionice -c3 $PY analisis_5m_barato_pastel_caja.py" | grep -E "PASTEL|por activo|por día" || avisa "pastel caja"
 echo "=== fin $(date -u +%FT%TZ)"
