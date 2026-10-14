@@ -35,7 +35,15 @@ RNG = random.Random(9)
 
 
 def cargar(dia):
+    """Libro SOLO del lado s (por referencias) de cada 5m/15m del par; operaciones de ambos tokens del 15m."""
+    tw = V.twap_refs([(date.fromisoformat(dia) - timedelta(days=1)).isoformat(), dia])
+    def lado_s(mo, cie):
+        r15, r5 = tw.get(mo, {}).get(cie - 900), tw.get(mo, {}).get(cie - 300)
+        if r15 is None or r5 is None or abs((r5 / r15 - 1) * 1e4) < 1.0:
+            return None
+        return "YES" if r15 > r5 else "NO"
     meta, libros, ops = {}, defaultdict(V.Libro), defaultdict(lambda: V.array("q"))
+    es_s = {}
     for pref in ("m15", "m5"):
         f = VOL / f"{pref}_registro" / f"{pref}_registro_{dia}.csv.gz"
         if not f.exists():
@@ -47,7 +55,9 @@ def cargar(dia):
                     if tp == "k,":
                         c = ln.rstrip("\n").split(",")
                         if len(c) >= 8 and c[4] in ("5min", "15min"):
-                            meta[c[2]] = (c[3], c[4], c[5], int(datetime.fromisoformat(c[6]).timestamp()), c[7])
+                            cie = int(datetime.fromisoformat(c[6]).timestamp())
+                            meta[c[2]] = (c[3], c[4], c[5], cie, c[7])
+                            es_s[c[2]] = (cie % 900 == 0 and lado_s(c[3], cie) == c[7])
                         continue
                     if tp not in ("q,", "t,"):
                         continue
@@ -57,6 +67,8 @@ def cargar(dia):
                         continue
                     try:
                         if tp == "q,":
+                            if not es_s.get(c[2]):
+                                continue
                             tr = int(c[7])
                             if (m[3] - 300) * 1000 - 10000 <= tr <= m[3] * 1000:
                                 g = lambda x: None if x in ("", "None") else float(x)
