@@ -50,6 +50,8 @@ TRADES = REPO / "data/sports/trades.csv"
 LOCK_PATH = REPO / "data/sports/.trades_lock"
 CONFIG_PATH = REPO / "data/sports/config_live_sports.json"
 FEE = 0.05
+import wallet_mirror_filtro_bucket as _wmfb  # noqa: E402  14-Oct: el filtro wallet+bucket de sports usa su copia
+assert FEE == _wmfb.FEE_SPORTS, "FEE de sports desalineada con wallet_mirror_filtro_bucket.FEE_SPORTS"
 MAX_CIDS_POR_CICLO = 20
 HAIRCUT_VENTA = 0.06  # mismo valor que cripto (analisis_smart_exit.py) -- ~2-3c de spread + fee de venta, provisional hasta calibrar con datos propios de sports
 

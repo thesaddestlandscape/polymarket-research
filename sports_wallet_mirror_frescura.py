@@ -17,7 +17,7 @@ data/shadow/data/live de cripto. Fichero propio, no se reutiliza código
 de wallet_mirror_tracker.py (categorías distintas -- sports no tiene eje
 de marco temporal, solo `categoria`). Excepción 14-Oct: el CRITERIO del filtro
 wallet+bucket es el módulo neutro wallet_mirror_filtro_bucket (sin datos ni
-comisión de cripto; la comisión de sports se pasa desde sports_resolve.FEE).
+comisión de cripto; la de sports es wallet_mirror_filtro_bucket.FEE_SPORTS = sports_resolve.FEE).
 
 Fuente única: data/sports/wallet_mirror_sniper_dry_run.csv (a diferencia
 de cripto, sports NO tiene un `ballenas_timing_history.csv` equivalente
@@ -130,7 +130,8 @@ def _historial_reciente(wallets_objetivo: set | None = None) -> dict:
 def wallets_operativas_recientes() -> dict:
     """(wallet, categoria) -> info si tiene evidencia reciente suficiente
     (N_RECIENTE_OPERAR trades resueltos propios), no degradada frente a su
-    histórico, y con borde estadístico propio sobre 50% -- MISMO criterio
+    histórico en términos de nuestra posición (14-Oct: ya sin exigir borde sobre el
+    50 %; OJO: el sniper de sports hoy solo lo usa para un recuento del log, no decide dinero) -- MISMO criterio
     exacto que wallet_mirror_tracker.py (cripto). Fail-closed: candidata
     sin suficiente historial reciente propio se EXCLUYE."""
     candidatas = cargar_wallets_validadas()
@@ -148,14 +149,14 @@ def wallets_operativas_recientes() -> dict:
             continue
         recientes = [a for _, a in aciertos[-N_RECIENTE_OPERAR:]]
         k, n = sum(recientes), len(recientes)
-        ci_lo, ci_hi = wilson_ci(k, n)
-        hit_hist = info["hit"] * 100
-        if ci_hi * 100 < (hit_hist - MARGEN_DEGRADACION_PP_OPERAR):
+        # 14-Oct (/code-review): degradación en términos de NUESTRA POSICIÓN (antes, en FADE, al revés).
+        seguir = info["tipo"] == "SEGUIR"
+        k_pos = k if seguir else n - k
+        hit_hist_pos = (info["hit"] if seguir else 1.0 - info["hit"]) * 100
+        _, ci_hi = wilson_ci(k_pos, n)
+        if ci_hi * 100 < (hit_hist_pos - MARGEN_DEGRADACION_PP_OPERAR):
             continue  # degradada frente a SU histórico
-        k_posicion = k if info["tipo"] == "SEGUIR" else (n - k)
-        ci_lo_posicion, _ = wilson_ci(k_posicion, n)
-        if ci_lo_posicion <= 0.50:
-            continue  # sin edge reciente confirmado por sí mismo
+        # 14-Oct: sin exigencia de acierto > 50 % (ver wallet_mirror_filtro_bucket, nota AGREGADO); la economía va por tramo.
         out[clave] = info
     return out
 
@@ -217,8 +218,7 @@ def wallets_operativas_recientes_por_bucket(wallets_admitidas: dict | None = Non
         candidatas = {k: v for k, v in candidatas.items() if k in wallets_admitidas}
     wallets_objetivo = {w for w, _ in candidatas}
     hist = _historial_reciente_por_bucket(wallets_objetivo)
-    from sports_resolve import FEE as fee_sports  # import tardío: sports_resolve importa el sniper (ciclo al cargar)
-    eq = lambda p: wmfb.equilibrio_ganadoras(p, fee_sports)
+    eq = lambda p: wmfb.equilibrio_ganadoras(p, wmfb.FEE_SPORTS)  # constante neutra (= sports_resolve.FEE, sin ciclo)
     out, motivos = {}, {}
     for (w, categoria, tipo, b), aciertos in hist.items():
         info = candidatas.get((w, categoria))

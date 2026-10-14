@@ -62,6 +62,8 @@ def filas_sniper(desde, hasta):
                 yield r
 
 
+# 14-Oct: réplica del criterio ANTERIOR al 14-Oct (Wilson90 bajo > 0,50); producción ya no lo exige
+# (wallet_mirror_filtro_bucket, nota AGREGADO). Regenerar con esto modela el roster viejo.
 def roster_en(t, clave, info, hist_ts, hist_ac):
     """Réplica punto a punto de wallets_operativas_recientes() para una clave."""
     w, activo, marco = clave

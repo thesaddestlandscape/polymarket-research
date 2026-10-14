@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Criterio ÚNICO del filtro wallet+micro-bucket de Wallet Mirror (cripto y sports) — 14-Oct (OK Javi: "que opere con
 sentido y sin riesgo"). Sin dependencias de cripto ni de sports: cada llamador pasa su función de equilibrio con SU
-comisión real (cripto: wallet_mirror_tracker; sports: sports_wallet_mirror_frescura con sports_resolve.FEE).
+comisión real (cripto: wallet_mirror_tracker con comision_cripto.FEE_CRIPTO; sports: sports_wallet_mirror_frescura con
+FEE_SPORTS de abajo, que sports_resolve comprueba al importar).
 
 Antes, cada módulo exigía Wilson90 BAJO del acierto reciente > 0,50 FIJO en cada (wallet, bucket): en un bucket barato
 el equilibrio es ~precio, así que vetaba TODO bucket < 0,40 (cripto: 0 de 183 combinaciones aprobadas por debajo) y WM
@@ -18,6 +19,17 @@ buckets baratos y, en los medios/altos, pide el acierto que da dinero a ese prec
 7/8) — cambio consciente, revisado (/code-review medium 14-Oct).
 """
 MARGEN_EQUILIBRIO = 0.05
+
+# NOTA AGREGADO (14-Oct, OK Javi, 4 pasadas /code-review): el filtro AGREGADO de wallet (wallets_operativas_recientes en
+# cripto y sports) exigía Wilson90 bajo del acierto de la posición > 0,50 FIJO: sesgo hacia wallets que compran caro (una
+# rentable a 0,35 acierta ~40 % y quedaba fuera; una que pierde dinero a 0,85 acertando 80 % pasaba). Se ELIMINA. Se
+# probaron sustitutos a nivel de wallet (Wilson vs equilibrio: 14/85 wallets; EV por € de sus últimas copias): mezclar
+# precios en un número por wallet no tiene sentido económico (12 ganancias caras + 3 pérdidas de cola = EV negativo de
+# una wallet que en su tramo barato sí gana). La economía se exige POR TRAMO: gate bueno_confirmado + evaluar_bucket.
+# El agregado conserva: evidencia reciente suficiente y no degradada vs su histórico (en términos de la posición).
+FEE_SPORTS = 0.05   # comisión de sports 5 %·(1−p) solo en ganadoras = sports_resolve.FEE (verificado 26-Ago contra gamma).
+                    # Constante aquí y NO import de sports_resolve: ese módulo importa el sniper de sports (ciclo); un
+                    # fallo de import tumbaría el arranque del sniper (/code-review 14-Oct).
 
 
 def equilibrio_por_accion(p: float, fee: float) -> float:

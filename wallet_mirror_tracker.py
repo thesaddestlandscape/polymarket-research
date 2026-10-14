@@ -261,11 +261,12 @@ def _historial_reciente_wallet_mirror(wallets_objetivo: set | None = None) -> di
 
 
 def wallets_operativas_recientes() -> dict:
-    """Wrapper de cargar_wallets_validadas() SOLO para lo que toca dinero real
+    """    Wrapper de cargar_wallets_validadas() SOLO para lo que toca dinero real
     (wallet_mirror_executor_dryrun.py) -- exige rendimiento RECIENTE (últimos
     N_RECIENTE_OPERAR trades resueltos, fuente ballenas_timing_history.csv +
     DRY_RUN_VIVO, ver _historial_reciente_wallet_mirror) no degradado frente
-    al histórico Y con borde estadístico propio sobre el 50%. Fail-closed:
+    al histórico, en términos de NUESTRA posición (14-Oct: ya NO exige borde sobre
+    el 50 %, ver wallet_mirror_filtro_bucket, nota AGREGADO). Fail-closed:
     candidata sin suficiente historial reciente propio se EXCLUYE, no hay
     fallback silencioso al histórico agregado. NO usar para detección/logging
     (eso sigue siendo cargar_wallets_validadas() sin filtrar, ver nota arriba)."""
@@ -284,39 +285,15 @@ def wallets_operativas_recientes() -> dict:
             continue  # sin hit histórico (dato inesperado) -> fail-closed, no se opera
         recientes = [a for _, a in aciertos[-N_RECIENTE_OPERAR:]]
         k, n = sum(recientes), len(recientes)  # k = nº recientes donde ACERTÓ LA WALLET (semántica nativa, ver _historial_reciente_wallet_mirror)
-        ci_lo, ci_hi = wilson_ci(k, n)
-        hit_hist = info["hit"] * 100
-        if ci_hi * 100 < (hit_hist - MARGEN_DEGRADACION_PP_OPERAR):
+        # 14-Oct (/code-review): degradación medida en términos de NUESTRA POSICIÓN (antes en los de la wallet: en FADE
+        # vetaba a la wallet que empeoraba -- lo que nos favorece -- y dejaba pasar a la que mejoraba).
+        seguir = info["tipo"] == "SEGUIR"
+        k_pos = k if seguir else n - k
+        hit_hist_pos = (info["hit"] if seguir else 1.0 - info["hit"]) * 100
+        _, ci_hi = wilson_ci(k_pos, n)
+        if ci_hi * 100 < (hit_hist_pos - MARGEN_DEGRADACION_PP_OPERAR):
             continue  # degradada frente a SU histórico -- mismo criterio que vigia_wallet_mirror_degradacion.py
-        # 13-Ago (fix del mismo día, gap real encontrado probando el filtro
-        # de arriba en vivo): comparar solo contra el histórico no basta --
-        # si la wallet lleva un tiempo mal, sus propios trades recientes YA
-        # están dentro de ese histórico y lo arrastran hacia abajo con ella,
-        # así que "reciente no mucho peor que el histórico" deja de disparar
-        # aunque el reciente siga siendo malo en términos absolutos (caso
-        # real: 0xfcefc196...#BTC#15min, hist bajó de 76.7%->59.3% en unas
-        # horas arrastrado por sus propias 8/20 recientes, dejando de
-        # marcarse degradada pese a que 40% reciente sigue sin edge). Exigir
-        # ADEMÁS que el propio reciente muestre borde estadístico real sobre
-        # 50% (Wilson90 INFERIOR, no el superior de arriba) -- "hit rate
-        # alto validado reciente" tiene que sostenerse por sí mismo, no solo
-        # relativo a una línea base que puede estar degradándose con él.
-        # 24-Ago (/code-review, bug crítico cazado antes de desplegar):
-        # k/ci_lo/ci_hi de arriba están en semántica "acertó LA WALLET"
-        # (necesaria para la comparación de degradación de arriba, que
-        # compara contra hit_hist -- también wallet-win). Pero el edge que
-        # de verdad importa aquí es el de NUESTRA POSICIÓN: para SEGUIR
-        # coincide con "acertó la wallet" (mismo lado), para FADE es lo
-        # contrario (apostamos contra ella -- queremos su hit CONFIRMADO
-        # BAJO, no alto). Sin este split, el check exigía ci_lo>50% de
-        # "acertó la wallet" también para FADE -- justo lo opuesto de la
-        # tesis FADE (se selecciona porque hit_hist<50%), excluyendo casi
-        # todas las candidatas FADE reales (verificado: 5/97 sobrevivían
-        # vs 68/230 SEGUIR).
-        k_posicion = k if info["tipo"] == "SEGUIR" else (n - k)
-        ci_lo_posicion, _ = wilson_ci(k_posicion, n)
-        if ci_lo_posicion <= 0.50:
-            continue  # sin edge reciente confirmado por sí mismo -> no se opera
+        # 14-Oct: sin exigencia de acierto > 50 % (ver wallet_mirror_filtro_bucket, nota AGREGADO); la economía va por tramo.
         out[clave] = info
     return out
 
