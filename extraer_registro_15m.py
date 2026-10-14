@@ -35,7 +35,7 @@ def extraer(dia, forzar=False):
     tmp = dst.with_suffix(".tmp")
     n_in = n_out = 0
     t0 = time.time()
-    with gzip.open(tmp, "wt", compresslevel=6) as fo:
+    with gzip.open(tmp, "wt", compresslevel=9) as fo:
         fo.write("tipo,t_ms,id,c1,c2,c3,c4,c5\n")
         for f in fuentes:
             m15 = set()

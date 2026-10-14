@@ -51,7 +51,7 @@ def extraer_fichero(src, dst):
     n_in = n_out = 0
     truncado = False
     tmp = dst.with_name(dst.name + ".tmp")
-    with gzip.open(src, "rt", errors="replace") as fi, gzip.open(tmp, "wt", compresslevel=6) as fo:
+    with gzip.open(src, "rt", errors="replace") as fi, gzip.open(tmp, "wt", compresslevel=9) as fo:
         try:
             for ln in fi:
                 n_in += 1

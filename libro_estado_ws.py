@@ -78,6 +78,7 @@ _ULT = {}                  # (hijo) token -> t_ms del último registro (muestreo
 _TOPQ = {}                 # (hijo) token -> último top registrado sin muestrear (registro q)
 _L2Q = {}                  # (hijo) token -> últimos 3 niveles ask registrados (registro l)
 _LFULL = {}                # (hijo) token -> último libro ask completo registrado (registro L, solo pares BTC)
+_LFULL_T = {}              # (hijo) token -> hora del exchange de la última fila L (muestreo <= 1 cada MUESTREO_MS)
 _T_RECV = [0]              # (hijo) hora local (ms) de recepción del mensaje WS en curso (registro q/t, auditoría de reloj)
 _HIST = {}                 # token -> deque[(t_ms, bb, ba, i1, i5, i10, dask5, bid_size, ask_size)]
 _LOCK = threading.Lock()
@@ -374,10 +375,11 @@ def _aplicar(msg, salida):
                         _L2Q[tk] = niv
                         cols = [str(x) for ps in niv for x in ps] + [""] * (6 - 2 * len(niv))
                         _REGISTRO.put(f"l,{t_ev},{tk},{','.join(cols)},{_T_RECV[0]}\n")
-                    if tk in _REGISTRO.l2full:              # 14-Oct (Javi): libro ask COMPLETO, solo pares BTC (fila L)
-                        full = tuple(sorted((p, s) for p, s in L["asks"].items() if s > 0))
+                    if tk in _REGISTRO.l2full and t_ev - _LFULL_T.get(tk, 0) >= MUESTREO_MS:   # L: libro ask COMPLETO,
+                        full = tuple(sorted((p, s) for p, s in L["asks"].items() if s > 0))  # solo pares BTC, <= 1 cada 100 ms
                         if _LFULL.get(tk) != full:           # L = todos los niveles ask "p:s;p:s;..." + recepción
                             _LFULL[tk] = full
+                            _LFULL_T[tk] = t_ev
                             _REGISTRO.put(f"L,{t_ev},{tk},{';'.join(f'{p}:{s}' for p, s in full)},{_T_RECV[0]}\n")
         for tk in tocados:
             if t_ev - _ULT.get(tk, 0) >= MUESTREO_MS:   # el libro se actualiza siempre; se muestrea el histórico
@@ -476,7 +478,7 @@ class _Registro:
                         f.close()
                     dia = hoy
                     ruta = REGISTRO_MS_DIR / f"maker_ms_{hoy}_{os.getpid()}.csv.gz"
-                    f = gzip.open(ruta, "wt", encoding="utf-8", compresslevel=5)
+                    f = gzip.open(ruta, "wt", encoding="utf-8", compresslevel=9)   # 14-Oct (Javi): máxima compresión
                     f.write("tipo,t_ms,id,c1,c2,c3,c4,c5\n")
                     self.vistos = set()        # el mapa k se repite en el fichero de cada día
                 if linea:
