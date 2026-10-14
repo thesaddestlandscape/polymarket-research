@@ -1,64 +1,52 @@
 {
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0171,
-  "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 107.32,
+  "ic_bayes_familia": 0.0168,
+  "n_tuplas_fuertes": 4,
+  "pnl_fiel_combinado_eur": 100.88,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_5M#SOL#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 49.9754,
-    "n_ejecutado": 86
+    "pnl_fiel_eur_sin_suelo": 32.6438,
+    "n_ejecutado": 90
    },
    {
     "k": "LIQUIDACIONES_5M#XRP#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 35.3316,
-    "n_ejecutado": 102
+    "pnl_fiel_eur_sin_suelo": 28.3141,
+    "n_ejecutado": 163
+   },
+   {
+    "k": "LIQUIDACIONES_5M#ETH#5min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 20.1671,
+    "n_ejecutado": 26
    },
    {
     "k": "LIQUIDACIONES_5M#BNB#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 22.016,
-    "n_ejecutado": 48
+    "pnl_fiel_eur_sin_suelo": 19.7561,
+    "n_ejecutado": 78
    }
   ]
  },
- "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0176,
-  "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 64.36,
+ "UPDOWN_GBM_15M_TARDIO": {
+  "ic_bayes_familia": -0.0244,
+  "n_tuplas_fuertes": 1,
+  "pnl_fiel_combinado_eur": 15.65,
   "tuplas": [
    {
-    "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 39.4207,
-    "n_ejecutado": 312
-   },
-   {
-    "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 24.9417,
-    "n_ejecutado": 266
+    "k": "UPDOWN_GBM_15M_TARDIO#ETH#15min#BUY_YES",
+    "pnl_fiel_eur_sin_suelo": 15.6488,
+    "n_ejecutado": 190
    }
   ]
  },
  "UPDOWN_GBM": {
   "ic_bayes_familia": 0.0521,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 23.29,
+  "pnl_fiel_combinado_eur": 15.23,
   "tuplas": [
    {
-    "k": "UPDOWN_GBM#BTC#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 23.2865,
-    "n_ejecutado": 109
-   }
-  ]
- },
- "MOMENTUM_IBS_5M_FADE": {
-  "ic_bayes_familia": -0.0329,
-  "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 16.68,
-  "tuplas": [
-   {
-    "k": "MOMENTUM_IBS_5M_FADE#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 16.6818,
-    "n_ejecutado": 194
+    "k": "UPDOWN_GBM#ETH#240min#BUY_YES",
+    "pnl_fiel_eur_sin_suelo": 15.2348,
+    "n_ejecutado": 273
    }
   ]
  }
