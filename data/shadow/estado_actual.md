@@ -1,4 +1,4 @@
-# Estado del bot — 2026-10-14 10:26 UTC
+# Estado del bot — 2026-10-14 10:31 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +125529.94 $ (ficción Kelly: +493435% s/ operativo) |
 | P&L sim hoy (2026-10-14) | 🟢 +984.58 $ |
 | Operaciones resueltas | 1001695 (573005 WIN / 428690 LOSS) — 57.2% |
-| Señales abiertas | 241885 |
+| Señales abiertas | 242402 |
 
 ## Estrategias (visión global)
 
@@ -30,7 +30,7 @@
 | GBM_LATE_5M | 12710 | 66.5% | +0.165 | ➡️ estable (últ. 1000) | +8136.37$ | 1.94$ | ✅ activa |
 | UPDOWN_GBM | 73893 | 55.2% | +0.052 | 📉 agota (-0.06) (últ. 1000) | +6649.24$ | 0.52$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 21950 | 50.6% | +0.006 | 📉 agota (-0.03) (últ. 1000) | +6272.41$ | 0.50$ | ✅ activa |
-| GBM_LATE_15M_PYCONFIRMADO | 8611 | 63.2% | +0.132 | 📉 agota (-0.10) (últ. 1000) | +4050.49$ | 1.35$ | ✅ activa |
+| GBM_LATE_15M_PYCONFIRMADO | 8611 | 63.2% | +0.132 | 📉 agota (-0.10) (últ. 1000) | +4050.49$ | 1.36$ | ✅ activa |
 | CANDIDATA10_CONFIRMACION_CRUZADA | 31175 | 48.3% | -0.017 | ➡️ estable (últ. 1000) | +3567.23$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_BALLENA | 44886 | 49.9% | -0.001 | 📉 agota (-0.06) (últ. 1000) | +2185.74$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_5M_BALLENA | 111878 | 42.6% | -0.074 | ➡️ estable (últ. 1000) | +1829.14$ | 0.50$ | ⚠️ IC negativo |
@@ -91,22 +91,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-10-14T10:25 UTC
+✅ **OK** — última verificación 2026-10-14T10:31 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $83,279.05 | 0.2min |  |
-| ✅ ETH | $2,497.80 | 0.2min |  |
-| ✅ SOL | $106.77 | 0.2min |  |
+| ✅ BTC | $83,280.01 | 0.2min |  |
+| ✅ ETH | $2,497.93 | 0.2min |  |
+| ✅ SOL | $106.95 | 0.2min |  |
 | ✅ XRP | $1.37 | 0.2min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $83,279.05 | consenso |  |
-| ETH | $2,497.80 | consenso |  |
-| SOL | $106.67 | consenso |  |
+| BTC | $83,280.01 | consenso |  |
+| ETH | $2,497.93 | consenso |  |
+| SOL | $106.60 | consenso |  |
 | XRP | $1.37 | consenso |  |
 
 ---
