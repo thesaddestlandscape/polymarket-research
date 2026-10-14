@@ -79,11 +79,11 @@
   "hi": 0.08,
   "n": 278,
   "pnl_medio": 0.6708,
-  "diff_vs_resto": 0.6899,
+  "diff_vs_resto": 0.69,
   "p_valor": 0.0,
   "split_half_diff": [
-   0.8642,
-   0.5156
+   0.8643,
+   0.5157
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.5642,
@@ -261,6 +261,13 @@
   ],
   "fecha_historial": "2026-10-07"
  },
+ "SEGUIR#ETH#5min#1": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ],
+  "fecha_historial": null
+ },
  "SEGUIR#DOGE#5min#0": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
@@ -276,12 +283,6 @@
   "fecha_historial": "2026-10-06"
  },
  "SEGUIR#ETH#5min#0": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "malo_confirmado"
-  ]
- },
- "SEGUIR#ETH#5min#1": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
    "malo_confirmado"
