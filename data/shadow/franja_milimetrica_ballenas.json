@@ -2,27 +2,27 @@
   "GBM_LATE_5M#BTC#5min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 51,
-      "hit": 86.3,
-      "pnl_media": 1.459,
+      "n": 53,
+      "hit": 84.9,
+      "pnl_media": 1.403,
       "pnl_ci90": [
-        1.134,
-        1.773
+        1.033,
+        1.711
       ],
       "split_half_pnl": [
-        1.35,
-        1.563
+        1.375,
+        1.43
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 48.0,
-      "ballenas_n": 14544,
+      "ballenas_hit": 48.3,
+      "ballenas_n": 17701,
       "ask_real": {
-        "n": 26,
+        "n": 30,
         "dias": 6,
-        "ev_eur": 0.11,
+        "ev_eur": 0.041,
         "ic90_dias": [
-          -0.023,
-          0.229
+          -0.038,
+          0.14
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -30,27 +30,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 645,
-      "hit": 71.5,
-      "pnl_media": 0.757,
+      "n": 679,
+      "hit": 71.6,
+      "pnl_media": 0.763,
       "pnl_ci90": [
-        0.651,
-        0.862
+        0.66,
+        0.868
       ],
       "split_half_pnl": [
-        0.401,
-        1.112
+        0.382,
+        1.143
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 52.5,
-      "ballenas_n": 21066,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 24425,
       "ask_real": {
-        "n": 237,
+        "n": 254,
         "dias": 12,
-        "ev_eur": 0.097,
+        "ev_eur": 0.089,
         "ic90_dias": [
-          0.038,
-          0.147
+          0.023,
+          0.14
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -60,27 +60,27 @@
   "LIQUIDACIONES_5M#BTC#5min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 204,
-      "hit": 65.2,
-      "pnl_media": 0.347,
+      "n": 208,
+      "hit": 64.4,
+      "pnl_media": 0.332,
       "pnl_ci90": [
-        0.234,
-        0.462
+        0.216,
+        0.449
       ],
       "split_half_pnl": [
-        0.398,
-        0.296
+        0.39,
+        0.273
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 48.0,
-      "ballenas_n": 14544,
+      "ballenas_hit": 48.3,
+      "ballenas_n": 17701,
       "ask_real": {
-        "n": 120,
+        "n": 124,
         "dias": 21,
-        "ev_eur": -0.093,
+        "ev_eur": -0.099,
         "ic90_dias": [
-          -0.234,
-          0.044
+          -0.256,
+          0.031
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -90,26 +90,26 @@
   "UPDOWN_GBM#BTC#5min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 3002,
-      "hit": 59.0,
+      "n": 3105,
+      "hit": 58.9,
       "pnl_media": 0.083,
       "pnl_ci90": [
-        0.067,
+        0.066,
         0.1
       ],
       "split_half_pnl": [
-        0.062,
-        0.105
+        0.06,
+        0.107
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 52.5,
-      "ballenas_n": 21066,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 24425,
       "ask_real": {
-        "n": 1996,
+        "n": 2054,
         "dias": 21,
-        "ev_eur": -0.001,
+        "ev_eur": 0.002,
         "ic90_dias": [
-          -0.025,
+          -0.02,
           0.024
         ],
         "veredicto": "ask_sin_concluir"
@@ -120,27 +120,27 @@
   "FAVORITO_CONFIRMADO#ETH#5min#BUY_YES": [
     {
       "bucket": "[0.75,0.80)",
-      "n": 267,
-      "hit": 82.4,
-      "pnl_media": 0.057,
+      "n": 269,
+      "hit": 82.5,
+      "pnl_media": 0.059,
       "pnl_ci90": [
-        0.004,
-        0.109
+        0.008,
+        0.111
       ],
       "split_half_pnl": [
-        0.043,
-        0.072
+        0.045,
+        0.074
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 73.6,
-      "ballenas_n": 2729,
+      "ballenas_hit": 75.6,
+      "ballenas_n": 2770,
       "ask_real": {
         "n": 103,
-        "dias": 20,
-        "ev_eur": 0.07,
+        "dias": 21,
+        "ev_eur": 0.088,
         "ic90_dias": [
-          0.004,
-          0.139
+          0.014,
+          0.156
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -162,15 +162,15 @@
         0.814
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 45.4,
-      "ballenas_n": 3002,
+      "ballenas_hit": 48.6,
+      "ballenas_n": 2891,
       "ask_real": {
-        "n": 82,
-        "dias": 8,
-        "ev_eur": -0.025,
+        "n": 74,
+        "dias": 7,
+        "ev_eur": 0.049,
         "ic90_dias": [
-          -0.233,
-          0.204
+          -0.135,
+          0.258
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -190,15 +190,15 @@
         0.908
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.5,
-      "ballenas_n": 3784,
+      "ballenas_hit": 52.6,
+      "ballenas_n": 3606,
       "ask_real": {
-        "n": 424,
-        "dias": 11,
-        "ev_eur": 0.046,
+        "n": 417,
+        "dias": 10,
+        "ev_eur": 0.044,
         "ic90_dias": [
-          0.0,
-          0.105
+          -0.0,
+          0.104
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -218,8 +218,8 @@
         0.451
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 68.9,
-      "ballenas_n": 2692,
+      "ballenas_hit": 71.3,
+      "ballenas_n": 2667,
       "ask_real": {
         "n": 20,
         "dias": 10,
@@ -236,27 +236,27 @@
   "LIQUIDACIONES_5M#ETH#5min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 398,
-      "hit": 61.1,
-      "pnl_media": 0.125,
+      "n": 402,
+      "hit": 61.2,
+      "pnl_media": 0.126,
       "pnl_ci90": [
-        0.074,
-        0.177
+        0.076,
+        0.176
       ],
       "split_half_pnl": [
-        0.109,
-        0.14
+        0.113,
+        0.139
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 45.4,
-      "ballenas_n": 3002,
+      "ballenas_hit": 48.6,
+      "ballenas_n": 2891,
       "ask_real": {
-        "n": 137,
+        "n": 135,
         "dias": 21,
-        "ev_eur": 0.002,
+        "ev_eur": 0.031,
         "ic90_dias": [
-          -0.198,
-          0.312
+          -0.19,
+          0.333
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -266,27 +266,27 @@
   "GBM_LATE_5M#SOL#5min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 432,
-      "hit": 74.3,
-      "pnl_media": 0.912,
+      "n": 448,
+      "hit": 73.9,
+      "pnl_media": 0.897,
       "pnl_ci90": [
-        0.785,
-        1.04
+        0.768,
+        1.024
       ],
       "split_half_pnl": [
-        0.654,
-        1.169
+        0.687,
+        1.108
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1329,
+      "ballenas_hit": 47.3,
+      "ballenas_n": 1346,
       "ask_real": {
-        "n": 287,
-        "dias": 14,
-        "ev_eur": 0.0,
+        "n": 299,
+        "dias": 13,
+        "ev_eur": 0.009,
         "ic90_dias": [
-          -0.097,
-          0.089
+          -0.07,
+          0.075
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -294,27 +294,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 295,
-      "hit": 72.5,
-      "pnl_media": 0.796,
+      "n": 309,
+      "hit": 73.1,
+      "pnl_media": 0.822,
       "pnl_ci90": [
-        0.636,
-        0.951
+        0.669,
+        0.976
       ],
       "split_half_pnl": [
-        0.434,
-        1.156
+        0.502,
+        1.139
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 56.9,
-      "ballenas_n": 1793,
+      "ballenas_hit": 55.5,
+      "ballenas_n": 1578,
       "ask_real": {
-        "n": 213,
-        "dias": 5,
-        "ev_eur": 0.018,
+        "n": 217,
+        "dias": 6,
+        "ev_eur": 0.016,
         "ic90_dias": [
-          -0.04,
-          0.044
+          -0.045,
+          0.042
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -336,8 +336,8 @@
         0.134
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1329,
+      "ballenas_hit": 47.3,
+      "ballenas_n": 1346,
       "ask_real": {
         "n": 75,
         "dias": 20,
@@ -354,55 +354,55 @@
   "UPDOWN_GBM#SOL#5min#BUY_YES": [
     {
       "bucket": "[0.40,0.45)",
-      "n": 42,
-      "hit": 66.7,
-      "pnl_media": 0.294,
+      "n": 43,
+      "hit": 67.4,
+      "pnl_media": 0.312,
       "pnl_ci90": [
-        0.14,
-        0.444
+        0.156,
+        0.461
       ],
       "split_half_pnl": [
         0.151,
-        0.437
+        0.466
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 43.3,
-      "ballenas_n": 1124,
+      "ballenas_hit": 40.9,
+      "ballenas_n": 1148,
       "ask_real": {
         "n": 24,
         "dias": 16,
-        "ev_eur": 0.252,
+        "ev_eur": 0.324,
         "ic90_dias": [
-          -0.076,
-          0.526
+          0.032,
+          0.588
         ],
-        "veredicto": "ask_sin_concluir"
+        "veredicto": "ask_ok"
       },
-      "accionable": false
+      "accionable": true
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 1752,
+      "n": 1787,
       "hit": 59.1,
-      "pnl_media": 0.088,
+      "pnl_media": 0.089,
       "pnl_ci90": [
-        0.066,
+        0.068,
         0.11
       ],
       "split_half_pnl": [
-        0.045,
-        0.131
+        0.046,
+        0.132
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 56.9,
-      "ballenas_n": 1793,
+      "ballenas_hit": 55.5,
+      "ballenas_n": 1578,
       "ask_real": {
-        "n": 1062,
+        "n": 1044,
         "dias": 21,
-        "ev_eur": -0.012,
+        "ev_eur": 0.0,
         "ic90_dias": [
-          -0.038,
-          0.015
+          -0.028,
+          0.031
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -424,8 +424,8 @@
         1.101
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.4,
-      "ballenas_n": 692,
+      "ballenas_hit": 47.8,
+      "ballenas_n": 601,
       "ask_real": {
         "n": 110,
         "dias": 5,
@@ -440,27 +440,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 732,
-      "hit": 69.0,
-      "pnl_media": 0.686,
+      "n": 747,
+      "hit": 69.2,
+      "pnl_media": 0.695,
       "pnl_ci90": [
-        0.579,
-        0.791
+        0.587,
+        0.801
       ],
       "split_half_pnl": [
-        0.398,
-        0.974
+        0.395,
+        0.994
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 52.0,
-      "ballenas_n": 837,
+      "ballenas_hit": 52.4,
+      "ballenas_n": 765,
       "ask_real": {
-        "n": 366,
+        "n": 387,
         "dias": 11,
-        "ev_eur": -0.019,
+        "ev_eur": -0.018,
         "ic90_dias": [
-          -0.089,
-          0.042
+          -0.085,
+          0.039
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -470,57 +470,27 @@
   "LIQUIDACIONES_5M#XRP#5min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 151,
-      "hit": 64.9,
-      "pnl_media": 0.304,
+      "n": 155,
+      "hit": 64.5,
+      "pnl_media": 0.297,
       "pnl_ci90": [
-        0.175,
-        0.431
+        0.166,
+        0.422
       ],
       "split_half_pnl": [
-        0.233,
-        0.374
+        0.261,
+        0.332
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.4,
-      "ballenas_n": 692,
+      "ballenas_hit": 47.8,
+      "ballenas_n": 601,
       "ask_real": {
-        "n": 99,
+        "n": 98,
         "dias": 21,
-        "ev_eur": 0.027,
+        "ev_eur": 0.021,
         "ic90_dias": [
-          -0.194,
-          0.289
-        ],
-        "veredicto": "ask_sin_concluir"
-      },
-      "accionable": false
-    }
-  ],
-  "UPDOWN_GBM#XRP#5min#BUY_YES": [
-    {
-      "bucket": "[0.45,0.50)",
-      "n": 715,
-      "hit": 58.5,
-      "pnl_media": 0.086,
-      "pnl_ci90": [
-        0.056,
-        0.119
-      ],
-      "split_half_pnl": [
-        0.024,
-        0.148
-      ],
-      "robusto_split_half": true,
-      "ballenas_hit": 46.4,
-      "ballenas_n": 692,
-      "ask_real": {
-        "n": 457,
-        "dias": 21,
-        "ev_eur": -0.048,
-        "ic90_dias": [
-          -0.102,
-          0.004
+          -0.211,
+          0.279
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -542,8 +512,8 @@
         0.774
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 52.6,
-      "ballenas_n": 268,
+      "ballenas_hit": 46.2,
+      "ballenas_n": 249,
       "ask_real": {
         "n": 18,
         "dias": 3,
@@ -570,8 +540,8 @@
         0.778
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.6,
-      "ballenas_n": 364,
+      "ballenas_hit": 52.3,
+      "ballenas_n": 363,
       "ask_real": {
         "n": 79,
         "dias": 2,
@@ -597,8 +567,8 @@
         0.573
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.3,
-      "ballenas_n": 203,
+      "ballenas_hit": 43.6,
+      "ballenas_n": 234,
       "ask_real": {
         "n": 9,
         "dias": 2,
@@ -622,8 +592,8 @@
         1.087
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 251,
+      "ballenas_hit": 44.7,
+      "ballenas_n": 228,
       "ask_real": {
         "n": 205,
         "dias": 5,
@@ -640,27 +610,27 @@
   "GBM_LATE_15M#BTC#15min#BUY_YES": [
     {
       "bucket": "[0.30,0.35)",
-      "n": 81,
-      "hit": 67.9,
-      "pnl_media": 2.137,
+      "n": 82,
+      "hit": 68.3,
+      "pnl_media": 2.159,
       "pnl_ci90": [
-        1.604,
-        2.648
+        1.631,
+        2.676
       ],
       "split_half_pnl": [
-        2.009,
-        2.261
+        2.052,
+        2.265
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 29.3,
-      "ballenas_n": 20134,
+      "ballenas_hit": 30.5,
+      "ballenas_n": 18891,
       "ask_real": {
-        "n": 31,
+        "n": 32,
         "dias": 17,
-        "ev_eur": -0.043,
+        "ev_eur": -0.036,
         "ic90_dias": [
-          -0.247,
-          0.135
+          -0.234,
+          0.137
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -668,27 +638,27 @@
     },
     {
       "bucket": "[0.35,0.40)",
-      "n": 108,
-      "hit": 76.9,
+      "n": 112,
+      "hit": 76.8,
       "pnl_media": 2.026,
       "pnl_ci90": [
-        1.661,
-        2.371
+        1.675,
+        2.372
       ],
       "split_half_pnl": [
-        2.062,
-        1.991
+        2.101,
+        1.951
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 33.4,
-      "ballenas_n": 18597,
+      "ballenas_hit": 34.3,
+      "ballenas_n": 17521,
       "ask_real": {
-        "n": 36,
+        "n": 39,
         "dias": 16,
-        "ev_eur": 0.053,
+        "ev_eur": 0.036,
         "ic90_dias": [
-          -0.154,
-          0.255
+          -0.172,
+          0.247
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -709,14 +679,14 @@
       ],
       "robusto_split_half": true,
       "ballenas_hit": 40.0,
-      "ballenas_n": 18664,
+      "ballenas_n": 16852,
       "ask_real": {
-        "n": 63,
-        "dias": 18,
-        "ev_eur": 0.04,
+        "n": 62,
+        "dias": 17,
+        "ev_eur": 0.032,
         "ic90_dias": [
-          -0.101,
-          0.185
+          -0.108,
+          0.174
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -724,27 +694,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 751,
+      "n": 760,
       "hit": 68.0,
       "pnl_media": 0.779,
       "pnl_ci90": [
-        0.668,
-        0.895
+        0.66,
+        0.893
       ],
       "split_half_pnl": [
-        0.775,
-        0.783
+        0.782,
+        0.775
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 47.8,
-      "ballenas_n": 22909,
+      "ballenas_hit": 48.2,
+      "ballenas_n": 21144,
       "ask_real": {
-        "n": 223,
+        "n": 227,
         "dias": 21,
-        "ev_eur": -0.057,
+        "ev_eur": -0.063,
         "ic90_dias": [
-          -0.135,
-          0.022
+          -0.142,
+          0.013
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -752,55 +722,55 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 1029,
+      "n": 1061,
       "hit": 70.4,
-      "pnl_media": 0.7,
+      "pnl_media": 0.703,
       "pnl_ci90": [
-        0.606,
-        0.791
+        0.614,
+        0.793
       ],
       "split_half_pnl": [
-        0.672,
-        0.728
+        0.685,
+        0.72
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.1,
-      "ballenas_n": 27534,
+      "ballenas_hit": 55.3,
+      "ballenas_n": 24901,
       "ask_real": {
-        "n": 421,
+        "n": 440,
         "dias": 21,
-        "ev_eur": -0.037,
+        "ev_eur": -0.052,
         "ic90_dias": [
-          -0.078,
-          0.011
+          -0.092,
+          -0.012
         ],
-        "veredicto": "ask_sin_concluir"
+        "veredicto": "ask_negativo"
       },
       "accionable": false
     },
     {
       "bucket": "[0.55,0.60)",
-      "n": 209,
-      "hit": 78.5,
-      "pnl_media": 0.698,
+      "n": 210,
+      "hit": 78.1,
+      "pnl_media": 0.685,
       "pnl_ci90": [
-        0.535,
-        0.863
+        0.522,
+        0.843
       ],
       "split_half_pnl": [
-        0.713,
-        0.683
+        0.719,
+        0.651
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 58.7,
-      "ballenas_n": 23745,
+      "ballenas_hit": 59.7,
+      "ballenas_n": 21971,
       "ask_real": {
-        "n": 68,
+        "n": 64,
         "dias": 20,
-        "ev_eur": -0.068,
+        "ev_eur": -0.09,
         "ic90_dias": [
-          -0.179,
-          0.034
+          -0.22,
+          0.014
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -808,27 +778,27 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 139,
-      "hit": 82.0,
-      "pnl_media": 0.581,
+      "n": 140,
+      "hit": 82.1,
+      "pnl_media": 0.586,
       "pnl_ci90": [
-        0.406,
-        0.745
+        0.417,
+        0.751
       ],
       "split_half_pnl": [
-        0.546,
-        0.615
+        0.556,
+        0.616
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
-        "n": 57,
+        "n": 56,
         "dias": 19,
-        "ev_eur": 0.088,
+        "ev_eur": 0.112,
         "ic90_dias": [
-          -0.032,
-          0.2
+          -0.018,
+          0.223
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -848,15 +818,15 @@
         0.379
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 71.5,
-      "ballenas_n": 21422,
+      "ballenas_hit": 70.5,
+      "ballenas_n": 19851,
       "ask_real": {
-        "n": 33,
-        "dias": 17,
-        "ev_eur": -0.049,
+        "n": 31,
+        "dias": 16,
+        "ev_eur": -0.077,
         "ic90_dias": [
-          -0.238,
-          0.1
+          -0.286,
+          0.073
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -864,27 +834,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 61,
-      "hit": 90.2,
-      "pnl_media": 0.455,
+      "n": 63,
+      "hit": 90.5,
+      "pnl_media": 0.463,
       "pnl_ci90": [
-        0.272,
-        0.625
+        0.286,
+        0.633
       ],
       "split_half_pnl": [
-        0.446,
-        0.463
+        0.366,
+        0.557
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 78.8,
-      "ballenas_n": 21446,
+      "ballenas_hit": 78.0,
+      "ballenas_n": 20206,
       "ask_real": {
         "n": 24,
-        "dias": 16,
-        "ev_eur": 0.1,
+        "dias": 15,
+        "ev_eur": 0.105,
         "ic90_dias": [
-          0.008,
-          0.167
+          0.004,
+          0.175
         ],
         "veredicto": "ask_ok"
       },
@@ -894,27 +864,27 @@
   "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 534,
-      "hit": 66.3,
-      "pnl_media": 0.561,
+      "n": 538,
+      "hit": 66.5,
+      "pnl_media": 0.569,
       "pnl_ci90": [
-        0.459,
-        0.662
+        0.467,
+        0.674
       ],
       "split_half_pnl": [
-        0.448,
-        0.675
+        0.456,
+        0.683
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 47.8,
-      "ballenas_n": 22909,
+      "ballenas_hit": 48.2,
+      "ballenas_n": 21144,
       "ask_real": {
-        "n": 155,
+        "n": 156,
         "dias": 21,
-        "ev_eur": -0.059,
+        "ev_eur": -0.064,
         "ic90_dias": [
-          -0.13,
-          0.015
+          -0.139,
+          0.007
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -922,55 +892,55 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 718,
-      "hit": 71.4,
-      "pnl_media": 0.558,
+      "n": 733,
+      "hit": 71.9,
+      "pnl_media": 0.572,
       "pnl_ci90": [
-        0.478,
-        0.635
+        0.491,
+        0.649
       ],
       "split_half_pnl": [
-        0.514,
-        0.601
+        0.515,
+        0.628
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.1,
-      "ballenas_n": 27534,
+      "ballenas_hit": 55.3,
+      "ballenas_n": 24901,
       "ask_real": {
-        "n": 329,
+        "n": 333,
         "dias": 21,
-        "ev_eur": -0.055,
+        "ev_eur": -0.06,
         "ic90_dias": [
-          -0.112,
-          0.011
+          -0.119,
+          -0.003
         ],
-        "veredicto": "ask_sin_concluir"
+        "veredicto": "ask_negativo"
       },
       "accionable": false
     },
     {
       "bucket": "[0.55,0.60)",
-      "n": 301,
-      "hit": 71.1,
-      "pnl_media": 0.312,
+      "n": 304,
+      "hit": 70.4,
+      "pnl_media": 0.295,
       "pnl_ci90": [
-        0.213,
-        0.407
+        0.2,
+        0.395
       ],
       "split_half_pnl": [
-        0.272,
-        0.352
+        0.264,
+        0.327
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 58.7,
-      "ballenas_n": 23745,
+      "ballenas_hit": 59.7,
+      "ballenas_n": 21971,
       "ask_real": {
-        "n": 109,
+        "n": 105,
         "dias": 21,
-        "ev_eur": -0.029,
+        "ev_eur": -0.083,
         "ic90_dias": [
-          -0.146,
-          0.078
+          -0.211,
+          0.019
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -978,27 +948,27 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 239,
-      "hit": 69.0,
-      "pnl_media": 0.147,
+      "n": 242,
+      "hit": 69.4,
+      "pnl_media": 0.154,
       "pnl_ci90": [
-        0.045,
-        0.244
+        0.056,
+        0.249
       ],
       "split_half_pnl": [
-        0.195,
-        0.099
+        0.202,
+        0.106
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
-        "n": 94,
+        "n": 93,
         "dias": 20,
-        "ev_eur": -0.076,
+        "ev_eur": -0.051,
         "ic90_dias": [
-          -0.207,
-          0.056
+          -0.187,
+          0.077
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1018,15 +988,15 @@
         0.207
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 71.5,
-      "ballenas_n": 21422,
+      "ballenas_hit": 70.5,
+      "ballenas_n": 19851,
       "ask_real": {
-        "n": 52,
-        "dias": 20,
-        "ev_eur": -0.01,
+        "n": 50,
+        "dias": 19,
+        "ev_eur": 0.003,
         "ic90_dias": [
-          -0.136,
-          0.106
+          -0.123,
+          0.119
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1034,27 +1004,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 130,
-      "hit": 77.7,
-      "pnl_media": 0.106,
+      "n": 132,
+      "hit": 78.0,
+      "pnl_media": 0.113,
       "pnl_ci90": [
-        0.008,
-        0.196
+        0.019,
+        0.203
       ],
       "split_half_pnl": [
-        0.051,
-        0.161
+        0.059,
+        0.168
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 78.8,
-      "ballenas_n": 21446,
+      "ballenas_hit": 78.0,
+      "ballenas_n": 20206,
       "ask_real": {
-        "n": 44,
-        "dias": 19,
-        "ev_eur": 0.061,
+        "n": 43,
+        "dias": 18,
+        "ev_eur": 0.053,
         "ic90_dias": [
-          -0.085,
-          0.183
+          -0.09,
+          0.173
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1064,27 +1034,27 @@
   "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min#BUY_YES": [
     {
       "bucket": "[0.35,0.40)",
-      "n": 101,
-      "hit": 62.4,
-      "pnl_media": 1.252,
+      "n": 104,
+      "hit": 62.5,
+      "pnl_media": 1.261,
       "pnl_ci90": [
-        0.837,
-        1.677
+        0.846,
+        1.667
       ],
       "split_half_pnl": [
-        1.43,
-        1.076
+        1.394,
+        1.127
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 33.4,
-      "ballenas_n": 18597,
+      "ballenas_hit": 34.3,
+      "ballenas_n": 17521,
       "ask_real": {
-        "n": 28,
+        "n": 30,
         "dias": 14,
-        "ev_eur": -0.023,
+        "ev_eur": -0.047,
         "ic90_dias": [
-          -0.349,
-          0.318
+          -0.362,
+          0.268
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1105,14 +1075,14 @@
       ],
       "robusto_split_half": true,
       "ballenas_hit": 40.0,
-      "ballenas_n": 18664,
+      "ballenas_n": 16852,
       "ask_real": {
-        "n": 40,
-        "dias": 18,
-        "ev_eur": 0.072,
+        "n": 39,
+        "dias": 17,
+        "ev_eur": 0.06,
         "ic90_dias": [
-          -0.107,
-          0.241
+          -0.12,
+          0.227
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1120,27 +1090,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 631,
-      "hit": 68.6,
-      "pnl_media": 0.805,
+      "n": 636,
+      "hit": 68.7,
+      "pnl_media": 0.809,
       "pnl_ci90": [
-        0.682,
-        0.933
+        0.684,
+        0.932
       ],
       "split_half_pnl": [
         0.786,
-        0.824
+        0.832
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 47.8,
-      "ballenas_n": 22909,
+      "ballenas_hit": 48.2,
+      "ballenas_n": 21144,
       "ask_real": {
-        "n": 180,
+        "n": 182,
         "dias": 21,
-        "ev_eur": -0.039,
+        "ev_eur": -0.033,
         "ic90_dias": [
-          -0.124,
-          0.036
+          -0.117,
+          0.045
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1148,29 +1118,29 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 506,
+      "n": 527,
       "hit": 72.3,
       "pnl_media": 0.781,
       "pnl_ci90": [
-        0.651,
-        0.91
+        0.657,
+        0.903
       ],
       "split_half_pnl": [
-        0.749,
-        0.813
+        0.79,
+        0.772
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.1,
-      "ballenas_n": 27534,
+      "ballenas_hit": 55.3,
+      "ballenas_n": 24901,
       "ask_real": {
-        "n": 204,
+        "n": 218,
         "dias": 21,
-        "ev_eur": -0.048,
+        "ev_eur": -0.062,
         "ic90_dias": [
-          -0.105,
-          0.011
+          -0.111,
+          -0.004
         ],
-        "veredicto": "ask_sin_concluir"
+        "veredicto": "ask_negativo"
       },
       "accionable": false
     },
@@ -1188,17 +1158,17 @@
         0.557
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 58.7,
-      "ballenas_n": 23745,
+      "ballenas_hit": 59.7,
+      "ballenas_n": 21971,
       "ask_real": {
-        "n": 43,
-        "dias": 17,
-        "ev_eur": -0.142,
+        "n": 41,
+        "dias": 16,
+        "ev_eur": -0.134,
         "ic90_dias": [
-          -0.272,
-          -0.003
+          -0.27,
+          0.011
         ],
-        "veredicto": "ask_negativo"
+        "veredicto": "ask_sin_concluir"
       },
       "accionable": false
     },
@@ -1216,8 +1186,8 @@
         0.671
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
         "n": 35,
         "dias": 14,
@@ -1244,15 +1214,15 @@
         0.567
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 71.5,
-      "ballenas_n": 21422,
+      "ballenas_hit": 70.5,
+      "ballenas_n": 19851,
       "ask_real": {
-        "n": 22,
-        "dias": 11,
-        "ev_eur": 0.008,
+        "n": 19,
+        "dias": 10,
+        "ev_eur": -0.034,
         "ic90_dias": [
-          -0.187,
-          0.143
+          -0.23,
+          0.117
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1260,27 +1230,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 61,
-      "hit": 86.9,
-      "pnl_media": 0.367,
+      "n": 63,
+      "hit": 87.3,
+      "pnl_media": 0.379,
       "pnl_ci90": [
-        0.148,
-        0.552
+        0.168,
+        0.559
       ],
       "split_half_pnl": [
-        0.261,
-        0.47
+        0.273,
+        0.481
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 78.8,
-      "ballenas_n": 21446,
+      "ballenas_hit": 78.0,
+      "ballenas_n": 20206,
       "ask_real": {
         "n": 28,
-        "dias": 17,
-        "ev_eur": 0.056,
+        "dias": 16,
+        "ev_eur": 0.06,
         "ic90_dias": [
-          -0.052,
-          0.137
+          -0.035,
+          0.145
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1288,27 +1258,27 @@
     },
     {
       "bucket": "[0.75,0.80)",
-      "n": 52,
-      "hit": 88.5,
-      "pnl_media": 0.251,
+      "n": 53,
+      "hit": 88.7,
+      "pnl_media": 0.258,
       "pnl_ci90": [
-        0.052,
-        0.443
+        0.062,
+        0.416
       ],
       "split_half_pnl": [
         0.142,
-        0.36
+        0.369
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 83.2,
-      "ballenas_n": 22341,
+      "ballenas_hit": 81.4,
+      "ballenas_n": 20973,
       "ask_real": {
-        "n": 13,
-        "dias": 10,
-        "ev_eur": 0.102,
+        "n": 14,
+        "dias": 11,
+        "ev_eur": 0.11,
         "ic90_dias": [
-          0.073,
-          0.129
+          0.081,
+          0.137
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1330,17 +1300,17 @@
         0.57
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 47.8,
-      "ballenas_n": 22909,
+      "ballenas_hit": 48.2,
+      "ballenas_n": 21144,
       "ask_real": {
-        "n": 39,
-        "dias": 4,
-        "ev_eur": -0.098,
+        "n": 31,
+        "dias": 3,
+        "ev_eur": -0.155,
         "ic90_dias": [
-          -0.243,
-          0.025
+          -0.352,
+          -0.068
         ],
-        "veredicto": "ask_sin_concluir"
+        "veredicto": "ask_negativo"
       },
       "accionable": false
     },
@@ -1358,15 +1328,15 @@
         0.688
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.1,
-      "ballenas_n": 27534,
+      "ballenas_hit": 55.3,
+      "ballenas_n": 24901,
       "ask_real": {
-        "n": 321,
-        "dias": 13,
-        "ev_eur": 0.001,
+        "n": 318,
+        "dias": 12,
+        "ev_eur": -0.003,
         "ic90_dias": [
-          -0.048,
-          0.055
+          -0.05,
+          0.059
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1386,8 +1356,8 @@
         0.787
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
         "n": 28,
         "dias": 11,
@@ -1404,27 +1374,27 @@
   "GBM_LATE_15M_TARDIO#BTC#15min#BUY_YES": [
     {
       "bucket": "[0.35,0.40)",
-      "n": 159,
-      "hit": 65.4,
-      "pnl_media": 1.43,
+      "n": 164,
+      "hit": 65.9,
+      "pnl_media": 1.455,
       "pnl_ci90": [
-        1.089,
-        1.76
+        1.128,
+        1.779
       ],
       "split_half_pnl": [
-        1.387,
-        1.472
+        1.391,
+        1.52
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 33.4,
-      "ballenas_n": 18597,
+      "ballenas_hit": 34.3,
+      "ballenas_n": 17521,
       "ask_real": {
-        "n": 39,
+        "n": 43,
         "dias": 17,
-        "ev_eur": 0.04,
+        "ev_eur": 0.059,
         "ic90_dias": [
-          -0.152,
-          0.218
+          -0.149,
+          0.235
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1445,14 +1415,14 @@
       ],
       "robusto_split_half": true,
       "ballenas_hit": 40.0,
-      "ballenas_n": 18664,
+      "ballenas_n": 16852,
       "ask_real": {
-        "n": 64,
-        "dias": 18,
-        "ev_eur": 0.033,
+        "n": 63,
+        "dias": 17,
+        "ev_eur": 0.025,
         "ic90_dias": [
-          -0.092,
-          0.177
+          -0.111,
+          0.153
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1460,27 +1430,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 537,
-      "hit": 72.8,
-      "pnl_media": 0.976,
+      "n": 546,
+      "hit": 72.7,
+      "pnl_media": 0.972,
       "pnl_ci90": [
-        0.841,
-        1.107
+        0.839,
+        1.102
       ],
       "split_half_pnl": [
-        0.89,
-        1.062
+        0.882,
+        1.063
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 47.8,
-      "ballenas_n": 22909,
+      "ballenas_hit": 48.2,
+      "ballenas_n": 21144,
       "ask_real": {
-        "n": 159,
+        "n": 166,
         "dias": 21,
-        "ev_eur": 0.006,
+        "ev_eur": -0.008,
         "ic90_dias": [
-          -0.099,
-          0.096
+          -0.105,
+          0.081
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1488,27 +1458,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 743,
-      "hit": 72.1,
-      "pnl_media": 0.758,
+      "n": 767,
+      "hit": 72.2,
+      "pnl_media": 0.763,
       "pnl_ci90": [
-        0.647,
-        0.861
+        0.661,
+        0.862
       ],
       "split_half_pnl": [
-        0.767,
-        0.749
+        0.769,
+        0.757
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.1,
-      "ballenas_n": 27534,
+      "ballenas_hit": 55.3,
+      "ballenas_n": 24901,
       "ask_real": {
-        "n": 308,
+        "n": 321,
         "dias": 21,
-        "ev_eur": -0.063,
+        "ev_eur": -0.066,
         "ic90_dias": [
-          -0.11,
-          -0.013
+          -0.118,
+          -0.021
         ],
         "veredicto": "ask_negativo"
       },
@@ -1516,27 +1486,27 @@
     },
     {
       "bucket": "[0.55,0.60)",
-      "n": 224,
-      "hit": 79.0,
-      "pnl_media": 0.714,
+      "n": 226,
+      "hit": 78.3,
+      "pnl_media": 0.689,
       "pnl_ci90": [
-        0.559,
-        0.865
+        0.531,
+        0.849
       ],
       "split_half_pnl": [
-        0.695,
-        0.732
+        0.7,
+        0.678
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 58.7,
-      "ballenas_n": 23745,
+      "ballenas_hit": 59.7,
+      "ballenas_n": 21971,
       "ask_real": {
-        "n": 78,
+        "n": 77,
         "dias": 20,
-        "ev_eur": -0.035,
+        "ev_eur": -0.073,
         "ic90_dias": [
-          -0.148,
-          0.069
+          -0.195,
+          0.028
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1544,55 +1514,55 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 174,
-      "hit": 81.6,
-      "pnl_media": 0.563,
+      "n": 175,
+      "hit": 81.7,
+      "pnl_media": 0.567,
       "pnl_ci90": [
-        0.407,
-        0.72
+        0.412,
+        0.718
       ],
       "split_half_pnl": [
         0.482,
-        0.644
+        0.652
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
-        "n": 64,
+        "n": 63,
         "dias": 19,
-        "ev_eur": 0.086,
+        "ev_eur": 0.108,
         "ic90_dias": [
-          -0.012,
-          0.187
+          0.001,
+          0.205
         ],
-        "veredicto": "ask_sin_concluir"
+        "veredicto": "ask_ok"
       },
-      "accionable": false
+      "accionable": true
     },
     {
       "bucket": "[0.65,0.70)",
-      "n": 144,
-      "hit": 83.3,
-      "pnl_media": 0.43,
+      "n": 145,
+      "hit": 83.4,
+      "pnl_media": 0.433,
       "pnl_ci90": [
         0.273,
         0.575
       ],
       "split_half_pnl": [
         0.349,
-        0.511
+        0.516
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 71.5,
-      "ballenas_n": 21422,
+      "ballenas_hit": 70.5,
+      "ballenas_n": 19851,
       "ask_real": {
-        "n": 44,
-        "dias": 19,
-        "ev_eur": 0.012,
+        "n": 41,
+        "dias": 18,
+        "ev_eur": -0.01,
         "ic90_dias": [
-          -0.146,
-          0.143
+          -0.176,
+          0.114
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1600,27 +1570,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 109,
-      "hit": 88.1,
-      "pnl_media": 0.391,
+      "n": 111,
+      "hit": 88.3,
+      "pnl_media": 0.397,
       "pnl_ci90": [
-        0.243,
-        0.521
+        0.25,
+        0.528
       ],
       "split_half_pnl": [
-        0.305,
-        0.475
+        0.312,
+        0.48
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 78.8,
-      "ballenas_n": 21446,
+      "ballenas_hit": 78.0,
+      "ballenas_n": 20206,
       "ask_real": {
         "n": 37,
-        "dias": 17,
-        "ev_eur": 0.113,
+        "dias": 16,
+        "ev_eur": 0.116,
         "ic90_dias": [
-          0.037,
-          0.159
+          0.052,
+          0.163
         ],
         "veredicto": "ask_ok"
       },
@@ -1628,27 +1598,27 @@
     },
     {
       "bucket": "[0.75,0.80)",
-      "n": 86,
-      "hit": 90.7,
-      "pnl_media": 0.309,
+      "n": 88,
+      "hit": 90.9,
+      "pnl_media": 0.315,
       "pnl_ci90": [
-        0.162,
-        0.432
+        0.171,
+        0.435
       ],
       "split_half_pnl": [
-        0.244,
-        0.373
+        0.252,
+        0.378
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 83.2,
-      "ballenas_n": 22341,
+      "ballenas_hit": 81.4,
+      "ballenas_n": 20973,
       "ask_real": {
-        "n": 25,
-        "dias": 14,
-        "ev_eur": 0.067,
+        "n": 26,
+        "dias": 15,
+        "ev_eur": 0.072,
         "ic90_dias": [
-          -0.009,
-          0.129
+          -0.001,
+          0.134
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1656,27 +1626,27 @@
     },
     {
       "bucket": "[0.80,0.85)",
-      "n": 41,
+      "n": 42,
       "hit": 100.0,
-      "pnl_media": 0.392,
+      "pnl_media": 0.391,
       "pnl_ci90": [
-        0.382,
-        0.403
+        0.38,
+        0.401
       ],
       "split_half_pnl": [
         0.391,
-        0.393
+        0.391
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 86.7,
-      "ballenas_n": 23588,
+      "ballenas_hit": 85.6,
+      "ballenas_n": 22821,
       "ask_real": {
-        "n": 15,
+        "n": 14,
         "dias": 8,
-        "ev_eur": 0.073,
+        "ev_eur": 0.074,
         "ic90_dias": [
           0.052,
-          0.104
+          0.105
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1686,27 +1656,27 @@
   "UPDOWN_GBM#BTC#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 166,
-      "hit": 63.9,
-      "pnl_media": 0.511,
+      "n": 167,
+      "hit": 64.1,
+      "pnl_media": 0.522,
       "pnl_ci90": [
-        0.273,
-        0.748
+        0.285,
+        0.756
       ],
       "split_half_pnl": [
         0.542,
-        0.48
+        0.501
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 47.8,
-      "ballenas_n": 22909,
+      "ballenas_hit": 48.2,
+      "ballenas_n": 21144,
       "ask_real": {
-        "n": 46,
+        "n": 47,
         "dias": 18,
-        "ev_eur": -0.187,
+        "ev_eur": -0.19,
         "ic90_dias": [
-          -0.357,
-          -0.05
+          -0.337,
+          -0.058
         ],
         "veredicto": "ask_negativo"
       },
@@ -1714,27 +1684,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 171,
-      "hit": 71.9,
+      "n": 181,
+      "hit": 71.8,
       "pnl_media": 0.735,
       "pnl_ci90": [
         0.517,
-        0.942
+        0.939
       ],
       "split_half_pnl": [
-        0.686,
-        0.783
+        0.623,
+        0.846
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.1,
-      "ballenas_n": 27534,
+      "ballenas_hit": 55.3,
+      "ballenas_n": 24901,
       "ask_real": {
-        "n": 73,
-        "dias": 20,
-        "ev_eur": -0.005,
+        "n": 76,
+        "dias": 21,
+        "ev_eur": -0.046,
         "ic90_dias": [
-          -0.135,
-          0.12
+          -0.173,
+          0.081
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1754,8 +1724,8 @@
         0.753
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
         "n": 14,
         "dias": 9,
@@ -1782,15 +1752,15 @@
         0.634
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 71.5,
-      "ballenas_n": 21422,
+      "ballenas_hit": 70.5,
+      "ballenas_n": 19851,
       "ask_real": {
-        "n": 10,
-        "dias": 8,
-        "ev_eur": 0.062,
+        "n": 9,
+        "dias": 7,
+        "ev_eur": 0.015,
         "ic90_dias": [
-          -0.195,
-          0.222
+          -0.231,
+          0.17
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1812,15 +1782,15 @@
         0.845
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
-        "n": 18,
-        "dias": 11,
-        "ev_eur": 0.131,
+        "n": 16,
+        "dias": 10,
+        "ev_eur": 0.119,
         "ic90_dias": [
-          -0.026,
-          0.23
+          -0.048,
+          0.229
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1840,15 +1810,15 @@
         0.554
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 71.5,
-      "ballenas_n": 21422,
+      "ballenas_hit": 70.5,
+      "ballenas_n": 19851,
       "ask_real": {
-        "n": 16,
-        "dias": 10,
-        "ev_eur": 0.017,
+        "n": 14,
+        "dias": 9,
+        "ev_eur": -0.023,
         "ic90_dias": [
-          -0.254,
-          0.181
+          -0.291,
+          0.15
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1856,27 +1826,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 56,
-      "hit": 85.7,
-      "pnl_media": 0.333,
+      "n": 57,
+      "hit": 86.0,
+      "pnl_media": 0.338,
       "pnl_ci90": [
-        0.117,
+        0.102,
         0.535
       ],
       "split_half_pnl": [
         0.035,
-        0.631
+        0.632
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 78.8,
-      "ballenas_n": 21446,
+      "ballenas_hit": 78.0,
+      "ballenas_n": 20206,
       "ask_real": {
-        "n": 22,
+        "n": 23,
         "dias": 15,
         "ev_eur": 0.127,
         "ic90_dias": [
-          0.095,
-          0.159
+          0.097,
+          0.158
         ],
         "veredicto": "ask_ok"
       },
@@ -1896,8 +1866,8 @@
         0.45
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 83.2,
-      "ballenas_n": 22341,
+      "ballenas_hit": 81.4,
+      "ballenas_n": 20973,
       "ask_real": {
         "n": 11,
         "dias": 9,
@@ -1924,15 +1894,15 @@
         0.305
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 86.7,
-      "ballenas_n": 23588,
+      "ballenas_hit": 85.6,
+      "ballenas_n": 22821,
       "ask_real": {
-        "n": 13,
-        "dias": 10,
-        "ev_eur": 0.071,
+        "n": 12,
+        "dias": 9,
+        "ev_eur": 0.07,
         "ic90_dias": [
-          0.052,
-          0.089
+          0.05,
+          0.09
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1942,27 +1912,27 @@
   "UPDOWN_GBM_15M_TARDIO#BTC#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 137,
-      "hit": 66.4,
-      "pnl_media": 0.493,
+      "n": 146,
+      "hit": 67.1,
+      "pnl_media": 0.525,
       "pnl_ci90": [
-        0.288,
-        0.695
+        0.329,
+        0.719
       ],
       "split_half_pnl": [
-        0.287,
-        0.696
+        0.284,
+        0.767
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.1,
-      "ballenas_n": 27534,
+      "ballenas_hit": 55.3,
+      "ballenas_n": 24901,
       "ask_real": {
-        "n": 57,
-        "dias": 19,
-        "ev_eur": -0.105,
+        "n": 60,
+        "dias": 20,
+        "ev_eur": -0.135,
         "ic90_dias": [
-          -0.234,
-          0.039
+          -0.26,
+          0.012
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -1982,8 +1952,8 @@
         0.295
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 58.7,
-      "ballenas_n": 23745,
+      "ballenas_hit": 59.7,
+      "ballenas_n": 21971,
       "ask_real": {
         "n": 12,
         "dias": 11,
@@ -2010,8 +1980,8 @@
         0.601
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
         "n": 17,
         "dias": 10,
@@ -2038,15 +2008,15 @@
         0.539
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 71.5,
-      "ballenas_n": 21422,
+      "ballenas_hit": 70.5,
+      "ballenas_n": 19851,
       "ask_real": {
-        "n": 16,
-        "dias": 10,
-        "ev_eur": -0.063,
+        "n": 14,
+        "dias": 9,
+        "ev_eur": -0.035,
         "ic90_dias": [
-          -0.277,
-          0.146
+          -0.287,
+          0.204
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2054,27 +2024,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 40,
-      "hit": 80.0,
-      "pnl_media": 0.265,
+      "n": 41,
+      "hit": 80.5,
+      "pnl_media": 0.274,
       "pnl_ci90": [
-        0.069,
-        0.451
+        0.08,
+        0.457
       ],
       "split_half_pnl": [
         0.024,
-        0.505
+        0.512
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 78.8,
-      "ballenas_n": 21446,
+      "ballenas_hit": 78.0,
+      "ballenas_n": 20206,
       "ask_real": {
         "n": 18,
-        "dias": 14,
-        "ev_eur": 0.065,
+        "dias": 13,
+        "ev_eur": 0.044,
         "ic90_dias": [
-          -0.074,
-          0.157
+          -0.071,
+          0.127
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2094,15 +2064,15 @@
         0.348
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 86.7,
-      "ballenas_n": 23588,
+      "ballenas_hit": 85.6,
+      "ballenas_n": 22821,
       "ask_real": {
-        "n": 14,
-        "dias": 10,
-        "ev_eur": 0.11,
+        "n": 13,
+        "dias": 9,
+        "ev_eur": 0.112,
         "ic90_dias": [
           0.073,
-          0.16
+          0.163
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2125,14 +2095,14 @@
       ],
       "robusto_split_half": true,
       "ballenas_hit": 40.0,
-      "ballenas_n": 18664,
+      "ballenas_n": 16852,
       "ask_real": {
-        "n": 14,
-        "dias": 8,
-        "ev_eur": -0.063,
+        "n": 13,
+        "dias": 7,
+        "ev_eur": -0.149,
         "ic90_dias": [
-          -0.295,
-          0.239
+          -0.343,
+          0.048
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2140,27 +2110,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 151,
-      "hit": 70.2,
-      "pnl_media": 0.815,
+      "n": 152,
+      "hit": 70.4,
+      "pnl_media": 0.825,
       "pnl_ci90": [
-        0.574,
-        1.056
+        0.582,
+        1.063
       ],
       "split_half_pnl": [
-        0.876,
-        0.756
+        0.892,
+        0.758
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 47.8,
-      "ballenas_n": 22909,
+      "ballenas_hit": 48.2,
+      "ballenas_n": 21144,
       "ask_real": {
-        "n": 38,
+        "n": 39,
         "dias": 18,
-        "ev_eur": -0.135,
+        "ev_eur": -0.14,
         "ic90_dias": [
-          -0.304,
-          0.008
+          -0.299,
+          0.006
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2168,27 +2138,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 174,
-      "hit": 77.0,
-      "pnl_media": 0.959,
+      "n": 183,
+      "hit": 76.5,
+      "pnl_media": 0.941,
       "pnl_ci90": [
-        0.751,
-        1.158
+        0.732,
+        1.147
       ],
       "split_half_pnl": [
-        1.003,
-        0.915
+        0.949,
+        0.934
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.1,
-      "ballenas_n": 27534,
+      "ballenas_hit": 55.3,
+      "ballenas_n": 24901,
       "ask_real": {
-        "n": 66,
-        "dias": 20,
-        "ev_eur": 0.034,
+        "n": 69,
+        "dias": 21,
+        "ev_eur": -0.032,
         "ic90_dias": [
-          -0.112,
-          0.188
+          -0.166,
+          0.111
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2208,8 +2178,8 @@
         0.234
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 58.7,
-      "ballenas_n": 23745,
+      "ballenas_hit": 59.7,
+      "ballenas_n": 21971,
       "ask_real": {
         "n": 11,
         "dias": 9,
@@ -2236,8 +2206,8 @@
         0.892
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.3,
-      "ballenas_n": 21310,
+      "ballenas_hit": 64.9,
+      "ballenas_n": 19838,
       "ask_real": {
         "n": 14,
         "dias": 10,
@@ -2264,15 +2234,15 @@
         0.78
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 71.5,
-      "ballenas_n": 21422,
+      "ballenas_hit": 70.5,
+      "ballenas_n": 19851,
       "ask_real": {
-        "n": 11,
-        "dias": 9,
-        "ev_eur": 0.063,
+        "n": 10,
+        "dias": 8,
+        "ev_eur": 0.021,
         "ic90_dias": [
-          -0.152,
-          0.205
+          -0.21,
+          0.159
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2282,29 +2252,29 @@
   "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 226,
+      "n": 229,
       "hit": 62.4,
-      "pnl_media": 0.329,
+      "pnl_media": 0.33,
       "pnl_ci90": [
         0.135,
-        0.522
+        0.523
       ],
       "split_half_pnl": [
-        0.774,
-        -0.115
+        0.749,
+        -0.086
       ],
       "robusto_split_half": false,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 116,
+        "n": 105,
         "dias": 10,
-        "ev_eur": -0.169,
+        "ev_eur": -0.238,
         "ic90_dias": [
-          -0.337,
-          0.025
+          -0.367,
+          -0.071
         ],
-        "veredicto": "ask_sin_concluir"
+        "veredicto": "ask_negativo"
       },
       "accionable": false
     }
@@ -2324,8 +2294,8 @@
         0.629
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 41.0,
-      "ballenas_n": 4215,
+      "ballenas_hit": 41.6,
+      "ballenas_n": 4318,
       "ask_real": {
         "n": 37,
         "dias": 18,
@@ -2340,27 +2310,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 182,
-      "hit": 66.5,
-      "pnl_media": 0.559,
+      "n": 183,
+      "hit": 66.1,
+      "pnl_media": 0.548,
       "pnl_ci90": [
-        0.392,
-        0.721
+        0.382,
+        0.709
       ],
       "split_half_pnl": [
         0.245,
-        0.873
+        0.847
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 5244,
+      "ballenas_hit": 48.7,
+      "ballenas_n": 4849,
       "ask_real": {
-        "n": 45,
-        "dias": 18,
-        "ev_eur": 0.027,
+        "n": 44,
+        "dias": 17,
+        "ev_eur": -0.011,
         "ic90_dias": [
-          -0.13,
-          0.161
+          -0.184,
+          0.124
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2380,15 +2350,15 @@
         0.553
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 59,
-        "dias": 21,
-        "ev_eur": -0.086,
+        "n": 56,
+        "dias": 20,
+        "ev_eur": -0.076,
         "ic90_dias": [
-          -0.222,
-          0.038
+          -0.239,
+          0.055
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2408,15 +2378,15 @@
         0.547
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.9,
-      "ballenas_n": 4296,
+      "ballenas_hit": 56.8,
+      "ballenas_n": 4236,
       "ask_real": {
-        "n": 33,
-        "dias": 16,
-        "ev_eur": 0.04,
+        "n": 31,
+        "dias": 15,
+        "ev_eur": 0.055,
         "ic90_dias": [
-          -0.115,
-          0.18
+          -0.11,
+          0.211
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2424,27 +2394,27 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 79,
-      "hit": 75.9,
-      "pnl_media": 0.29,
+      "n": 80,
+      "hit": 76.2,
+      "pnl_media": 0.297,
       "pnl_ci90": [
-        0.117,
-        0.443
+        0.131,
+        0.457
       ],
       "split_half_pnl": [
-        0.21,
-        0.367
+        0.178,
+        0.416
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 63.9,
-      "ballenas_n": 3432,
+      "ballenas_hit": 63.0,
+      "ballenas_n": 3410,
       "ask_real": {
         "n": 25,
         "dias": 13,
         "ev_eur": -0.018,
         "ic90_dias": [
-          -0.171,
-          0.128
+          -0.162,
+          0.135
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2452,27 +2422,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 72,
-      "hit": 83.3,
-      "pnl_media": 0.206,
+      "n": 74,
+      "hit": 83.8,
+      "pnl_media": 0.215,
       "pnl_ci90": [
-        0.079,
-        0.327
+        0.086,
+        0.331
       ],
       "split_half_pnl": [
-        0.078,
-        0.334
+        0.09,
+        0.34
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 75.8,
-      "ballenas_n": 3236,
+      "ballenas_hit": 74.1,
+      "ballenas_n": 3391,
       "ask_real": {
-        "n": 19,
-        "dias": 14,
-        "ev_eur": 0.033,
+        "n": 20,
+        "dias": 15,
+        "ev_eur": 0.034,
         "ic90_dias": [
-          -0.11,
-          0.173
+          -0.098,
+          0.167
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2480,27 +2450,27 @@
     },
     {
       "bucket": "[0.75,0.80)",
-      "n": 63,
-      "hit": 88.9,
-      "pnl_media": 0.217,
+      "n": 65,
+      "hit": 89.2,
+      "pnl_media": 0.223,
       "pnl_ci90": [
-        0.11,
-        0.313
+        0.124,
+        0.318
       ],
       "split_half_pnl": [
-        0.168,
-        0.264
+        0.173,
+        0.272
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 83.0,
-      "ballenas_n": 3433,
+      "ballenas_hit": 81.3,
+      "ballenas_n": 3401,
       "ask_real": {
-        "n": 26,
-        "dias": 15,
-        "ev_eur": 0.011,
+        "n": 24,
+        "dias": 14,
+        "ev_eur": -0.006,
         "ic90_dias": [
-          -0.094,
-          0.093
+          -0.106,
+          0.078
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2520,15 +2490,15 @@
         0.283
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 86.8,
-      "ballenas_n": 4116,
+      "ballenas_hit": 85.1,
+      "ballenas_n": 4167,
       "ask_real": {
         "n": 15,
         "dias": 12,
         "ev_eur": 0.093,
         "ic90_dias": [
           0.061,
-          0.132
+          0.131
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2538,27 +2508,27 @@
   "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_YES": [
     {
       "bucket": "[0.40,0.45)",
-      "n": 150,
-      "hit": 59.3,
-      "pnl_media": 0.596,
+      "n": 151,
+      "hit": 58.9,
+      "pnl_media": 0.581,
       "pnl_ci90": [
-        0.37,
-        0.811
+        0.354,
+        0.807
       ],
       "split_half_pnl": [
         0.453,
-        0.738
+        0.708
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 41.0,
-      "ballenas_n": 4215,
+      "ballenas_hit": 41.6,
+      "ballenas_n": 4318,
       "ask_real": {
         "n": 51,
         "dias": 19,
-        "ev_eur": -0.063,
+        "ev_eur": -0.085,
         "ic90_dias": [
-          -0.238,
-          0.121
+          -0.263,
+          0.091
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2566,27 +2536,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 380,
+      "n": 386,
       "hit": 69.7,
-      "pnl_media": 0.689,
+      "pnl_media": 0.687,
       "pnl_ci90": [
-        0.567,
-        0.806
+        0.571,
+        0.804
       ],
       "split_half_pnl": [
-        0.419,
-        0.958
+        0.421,
+        0.953
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 5244,
+      "ballenas_hit": 48.7,
+      "ballenas_n": 4849,
       "ask_real": {
-        "n": 178,
-        "dias": 21,
-        "ev_eur": 0.038,
+        "n": 181,
+        "dias": 20,
+        "ev_eur": 0.028,
         "ic90_dias": [
-          -0.048,
-          0.118
+          -0.058,
+          0.102
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2594,27 +2564,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 473,
-      "hit": 71.5,
-      "pnl_media": 0.565,
+      "n": 483,
+      "hit": 72.0,
+      "pnl_media": 0.582,
       "pnl_ci90": [
-        0.467,
-        0.661
+        0.487,
+        0.677
       ],
       "split_half_pnl": [
         0.402,
-        0.727
+        0.762
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 231,
+        "n": 234,
         "dias": 21,
-        "ev_eur": -0.013,
+        "ev_eur": -0.001,
         "ic90_dias": [
-          -0.061,
-          0.038
+          -0.057,
+          0.05
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2634,15 +2604,15 @@
         0.415
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.9,
-      "ballenas_n": 4296,
+      "ballenas_hit": 56.8,
+      "ballenas_n": 4236,
       "ask_real": {
-        "n": 122,
-        "dias": 21,
-        "ev_eur": -0.022,
+        "n": 116,
+        "dias": 20,
+        "ev_eur": -0.028,
         "ic90_dias": [
-          -0.099,
-          0.046
+          -0.105,
+          0.052
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2650,27 +2620,27 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 209,
-      "hit": 74.2,
-      "pnl_media": 0.264,
+      "n": 212,
+      "hit": 73.6,
+      "pnl_media": 0.254,
       "pnl_ci90": [
-        0.161,
-        0.363
+        0.154,
+        0.353
       ],
       "split_half_pnl": [
-        0.203,
-        0.325
+        0.216,
+        0.293
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 63.9,
-      "ballenas_n": 3432,
+      "ballenas_hit": 63.0,
+      "ballenas_n": 3410,
       "ask_real": {
-        "n": 85,
+        "n": 84,
         "dias": 21,
-        "ev_eur": 0.042,
+        "ev_eur": 0.032,
         "ic90_dias": [
-          -0.05,
-          0.135
+          -0.066,
+          0.137
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2678,27 +2648,27 @@
     },
     {
       "bucket": "[0.65,0.70)",
-      "n": 184,
-      "hit": 83.7,
-      "pnl_media": 0.318,
+      "n": 185,
+      "hit": 83.8,
+      "pnl_media": 0.321,
       "pnl_ci90": [
-        0.233,
-        0.399
+        0.237,
+        0.404
       ],
       "split_half_pnl": [
         0.363,
-        0.274
+        0.278
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 68.5,
-      "ballenas_n": 3225,
+      "ballenas_hit": 66.1,
+      "ballenas_n": 3407,
       "ask_real": {
-        "n": 72,
-        "dias": 21,
-        "ev_eur": -0.036,
+        "n": 70,
+        "dias": 20,
+        "ev_eur": -0.006,
         "ic90_dias": [
-          -0.144,
-          0.056
+          -0.104,
+          0.078
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2706,27 +2676,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 117,
-      "hit": 79.5,
-      "pnl_media": 0.14,
+      "n": 122,
+      "hit": 80.3,
+      "pnl_media": 0.156,
       "pnl_ci90": [
-        0.039,
-        0.237
+        0.06,
+        0.248
       ],
       "split_half_pnl": [
-        0.108,
-        0.171
+        0.075,
+        0.238
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 75.8,
-      "ballenas_n": 3236,
+      "ballenas_hit": 74.1,
+      "ballenas_n": 3391,
       "ask_real": {
-        "n": 45,
-        "dias": 17,
-        "ev_eur": -0.024,
+        "n": 48,
+        "dias": 18,
+        "ev_eur": -0.011,
         "ic90_dias": [
-          -0.129,
-          0.093
+          -0.113,
+          0.091
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2746,15 +2716,15 @@
         0.121
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 83.0,
-      "ballenas_n": 3433,
+      "ballenas_hit": 81.3,
+      "ballenas_n": 3401,
       "ask_real": {
-        "n": 24,
-        "dias": 15,
-        "ev_eur": -0.036,
+        "n": 22,
+        "dias": 14,
+        "ev_eur": -0.053,
         "ic90_dias": [
-          -0.159,
-          0.065
+          -0.199,
+          0.064
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2764,27 +2734,27 @@
   "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_YES": [
     {
       "bucket": "[0.35,0.40)",
-      "n": 116,
-      "hit": 58.6,
-      "pnl_media": 1.077,
+      "n": 125,
+      "hit": 59.2,
+      "pnl_media": 1.11,
       "pnl_ci90": [
-        0.672,
-        1.481
+        0.719,
+        1.494
       ],
       "split_half_pnl": [
-        1.322,
-        0.833
+        1.105,
+        1.114
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 34.8,
-      "ballenas_n": 3748,
+      "ballenas_hit": 38.8,
+      "ballenas_n": 3872,
       "ask_real": {
-        "n": 39,
-        "dias": 18,
-        "ev_eur": -0.098,
+        "n": 46,
+        "dias": 20,
+        "ev_eur": -0.041,
         "ic90_dias": [
-          -0.303,
-          0.103
+          -0.244,
+          0.13
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2792,27 +2762,27 @@
     },
     {
       "bucket": "[0.40,0.45)",
-      "n": 137,
+      "n": 140,
       "hit": 66.4,
       "pnl_media": 1.076,
       "pnl_ci90": [
-        0.764,
-        1.388
+        0.761,
+        1.378
       ],
       "split_half_pnl": [
-        1.189,
-        0.964
+        1.161,
+        0.99
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 41.0,
-      "ballenas_n": 4215,
+      "ballenas_hit": 41.6,
+      "ballenas_n": 4318,
       "ask_real": {
-        "n": 51,
+        "n": 53,
         "dias": 17,
-        "ev_eur": -0.031,
+        "ev_eur": -0.001,
         "ic90_dias": [
-          -0.187,
-          0.151
+          -0.179,
+          0.191
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2820,27 +2790,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 743,
-      "hit": 69.6,
-      "pnl_media": 0.839,
+      "n": 752,
+      "hit": 69.5,
+      "pnl_media": 0.838,
       "pnl_ci90": [
-        0.722,
-        0.953
+        0.72,
+        0.95
       ],
       "split_half_pnl": [
-        0.789,
-        0.89
+        0.806,
+        0.869
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 5244,
+      "ballenas_hit": 48.7,
+      "ballenas_n": 4849,
       "ask_real": {
-        "n": 229,
-        "dias": 21,
-        "ev_eur": 0.035,
+        "n": 233,
+        "dias": 20,
+        "ev_eur": 0.033,
         "ic90_dias": [
-          -0.046,
-          0.119
+          -0.047,
+          0.106
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2848,27 +2818,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 402,
-      "hit": 75.1,
-      "pnl_media": 0.893,
+      "n": 406,
+      "hit": 75.4,
+      "pnl_media": 0.903,
       "pnl_ci90": [
-        0.753,
-        1.029
+        0.765,
+        1.044
       ],
       "split_half_pnl": [
-        0.843,
-        0.944
+        0.853,
+        0.953
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 122,
-        "dias": 21,
-        "ev_eur": 0.048,
+        "n": 123,
+        "dias": 20,
+        "ev_eur": 0.06,
         "ic90_dias": [
-          -0.049,
-          0.151
+          -0.041,
+          0.166
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2888,15 +2858,15 @@
         0.785
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.9,
-      "ballenas_n": 4296,
+      "ballenas_hit": 56.8,
+      "ballenas_n": 4236,
       "ask_real": {
         "n": 68,
-        "dias": 20,
-        "ev_eur": 0.038,
+        "dias": 19,
+        "ev_eur": 0.054,
         "ic90_dias": [
-          -0.073,
-          0.149
+          -0.058,
+          0.161
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2904,55 +2874,55 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 109,
-      "hit": 85.3,
-      "pnl_media": 0.694,
+      "n": 110,
+      "hit": 85.5,
+      "pnl_media": 0.698,
       "pnl_ci90": [
-        0.51,
-        0.867
+        0.518,
+        0.872
       ],
       "split_half_pnl": [
-        0.568,
-        0.817
+        0.579,
+        0.816
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 63.9,
-      "ballenas_n": 3432,
+      "ballenas_hit": 63.0,
+      "ballenas_n": 3410,
       "ask_real": {
-        "n": 35,
+        "n": 34,
         "dias": 16,
-        "ev_eur": 0.076,
+        "ev_eur": 0.109,
         "ic90_dias": [
-          -0.022,
-          0.179
+          0.025,
+          0.193
         ],
-        "veredicto": "ask_sin_concluir"
+        "veredicto": "ask_ok"
       },
-      "accionable": false
+      "accionable": true
     },
     {
       "bucket": "[0.65,0.70)",
-      "n": 90,
-      "hit": 88.9,
-      "pnl_media": 0.586,
+      "n": 92,
+      "hit": 88.0,
+      "pnl_media": 0.56,
       "pnl_ci90": [
-        0.417,
-        0.743
+        0.389,
+        0.718
       ],
       "split_half_pnl": [
-        0.522,
-        0.649
+        0.467,
+        0.654
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 68.5,
-      "ballenas_n": 3225,
+      "ballenas_hit": 66.1,
+      "ballenas_n": 3407,
       "ask_real": {
         "n": 21,
         "dias": 13,
-        "ev_eur": 0.014,
+        "ev_eur": 0.077,
         "ic90_dias": [
-          -0.119,
-          0.127
+          -0.024,
+          0.163
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -2960,27 +2930,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 62,
-      "hit": 82.3,
-      "pnl_media": 0.244,
+      "n": 66,
+      "hit": 83.3,
+      "pnl_media": 0.272,
       "pnl_ci90": [
-        0.018,
-        0.465
+        0.056,
+        0.48
       ],
       "split_half_pnl": [
-        0.288,
-        0.2
+        0.229,
+        0.315
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 75.8,
-      "ballenas_n": 3236,
+      "ballenas_hit": 74.1,
+      "ballenas_n": 3391,
       "ask_real": {
-        "n": 24,
-        "dias": 14,
-        "ev_eur": -0.036,
+        "n": 26,
+        "dias": 15,
+        "ev_eur": -0.027,
         "ic90_dias": [
-          -0.182,
-          0.074
+          -0.165,
+          0.081
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3002,15 +2972,15 @@
         0.702
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 5244,
+      "ballenas_hit": 48.7,
+      "ballenas_n": 4849,
       "ask_real": {
-        "n": 121,
-        "dias": 8,
-        "ev_eur": -0.036,
+        "n": 115,
+        "dias": 7,
+        "ev_eur": -0.05,
         "ic90_dias": [
-          -0.147,
-          0.084
+          -0.16,
+          0.074
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3030,15 +3000,15 @@
         0.769
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 234,
-        "dias": 9,
-        "ev_eur": 0.057,
+        "n": 213,
+        "dias": 8,
+        "ev_eur": 0.054,
         "ic90_dias": [
-          0.014,
-          0.095
+          0.013,
+          0.097
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3058,15 +3028,15 @@
         0.897
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.9,
-      "ballenas_n": 4296,
+      "ballenas_hit": 56.8,
+      "ballenas_n": 4236,
       "ask_real": {
-        "n": 33,
-        "dias": 7,
-        "ev_eur": 0.166,
+        "n": 29,
+        "dias": 6,
+        "ev_eur": 0.237,
         "ic90_dias": [
-          0.006,
-          0.288
+          0.141,
+          0.322
         ],
         "veredicto": "ask_ok"
       },
@@ -3086,15 +3056,15 @@
         0.593
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 63.9,
-      "ballenas_n": 3432,
+      "ballenas_hit": 63.0,
+      "ballenas_n": 3410,
       "ask_real": {
-        "n": 20,
-        "dias": 9,
-        "ev_eur": 0.078,
+        "n": 18,
+        "dias": 8,
+        "ev_eur": 0.138,
         "ic90_dias": [
-          -0.109,
-          0.241
+          -0.044,
+          0.306
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3102,27 +3072,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 51,
-      "hit": 86.3,
-      "pnl_media": 0.341,
+      "n": 55,
+      "hit": 87.3,
+      "pnl_media": 0.367,
       "pnl_ci90": [
-        0.115,
-        0.554
+        0.162,
+        0.565
       ],
       "split_half_pnl": [
-        0.508,
-        0.181
+        0.424,
+        0.312
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 75.8,
-      "ballenas_n": 3236,
+      "ballenas_hit": 74.1,
+      "ballenas_n": 3391,
       "ask_real": {
-        "n": 8,
-        "dias": 6,
-        "ev_eur": -0.008,
+        "n": 11,
+        "dias": 8,
+        "ev_eur": 0.011,
         "ic90_dias": [
-          -0.288,
-          0.142
+          -0.192,
+          0.128
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3130,27 +3100,27 @@
     },
     {
       "bucket": "[0.75,0.80)",
-      "n": 46,
-      "hit": 93.5,
-      "pnl_media": 0.387,
+      "n": 49,
+      "hit": 93.9,
+      "pnl_media": 0.398,
       "pnl_ci90": [
-        0.22,
-        0.512
+        0.239,
+        0.515
       ],
       "split_half_pnl": [
-        0.214,
-        0.559
+        0.225,
+        0.564
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 83.0,
-      "ballenas_n": 3433,
+      "ballenas_hit": 81.3,
+      "ballenas_n": 3401,
       "ask_real": {
-        "n": 17,
+        "n": 19,
         "dias": 7,
-        "ev_eur": 0.094,
+        "ev_eur": 0.089,
         "ic90_dias": [
-          0.066,
-          0.118
+          0.061,
+          0.117
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3158,27 +3128,27 @@
     },
     {
       "bucket": "[0.80,0.85)",
-      "n": 45,
-      "hit": 97.8,
-      "pnl_media": 0.338,
+      "n": 48,
+      "hit": 97.9,
+      "pnl_media": 0.343,
       "pnl_ci90": [
-        0.229,
-        0.398
+        0.243,
+        0.4
       ],
       "split_half_pnl": [
-        0.289,
-        0.384
+        0.301,
+        0.385
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 86.8,
-      "ballenas_n": 4116,
+      "ballenas_hit": 85.1,
+      "ballenas_n": 4167,
       "ask_real": {
-        "n": 7,
-        "dias": 4,
-        "ev_eur": 0.047,
+        "n": 11,
+        "dias": 6,
+        "ev_eur": 0.048,
         "ic90_dias": [
-          0.026,
-          0.098
+          0.032,
+          0.079
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3186,27 +3156,27 @@
     },
     {
       "bucket": "[0.85,0.90)",
-      "n": 46,
-      "hit": 97.8,
-      "pnl_media": 0.2,
+      "n": 48,
+      "hit": 97.9,
+      "pnl_media": 0.201,
       "pnl_ci90": [
-        0.101,
+        0.107,
         0.255
       ],
       "split_half_pnl": [
-        0.25,
-        0.15
+        0.252,
+        0.151
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 90.5,
-      "ballenas_n": 5360,
+      "ballenas_hit": 89.4,
+      "ballenas_n": 5399,
       "ask_real": {
-        "n": 9,
+        "n": 10,
         "dias": 5,
-        "ev_eur": 0.042,
+        "ev_eur": 0.041,
         "ic90_dias": [
-          0.027,
-          0.052
+          0.028,
+          0.051
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3216,27 +3186,27 @@
   "GBM_LATE_15M_TARDIO#ETH#15min#BUY_YES": [
     {
       "bucket": "[0.40,0.45)",
-      "n": 196,
-      "hit": 64.8,
-      "pnl_media": 0.999,
+      "n": 200,
+      "hit": 64.5,
+      "pnl_media": 0.985,
       "pnl_ci90": [
-        0.729,
-        1.259
+        0.72,
+        1.238
       ],
       "split_half_pnl": [
-        1.105,
-        0.893
+        1.135,
+        0.834
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 41.0,
-      "ballenas_n": 4215,
+      "ballenas_hit": 41.6,
+      "ballenas_n": 4318,
       "ask_real": {
-        "n": 65,
+        "n": 67,
         "dias": 20,
-        "ev_eur": -0.053,
+        "ev_eur": -0.028,
         "ic90_dias": [
-          -0.177,
-          0.079
+          -0.16,
+          0.109
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3244,27 +3214,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 629,
+      "n": 635,
       "hit": 73.9,
-      "pnl_media": 1.023,
+      "pnl_media": 1.019,
       "pnl_ci90": [
-        0.905,
-        1.142
+        0.901,
+        1.138
       ],
       "split_half_pnl": [
-        1.039,
-        1.007
+        1.023,
+        1.016
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 5244,
+      "ballenas_hit": 48.7,
+      "ballenas_n": 4849,
       "ask_real": {
-        "n": 200,
-        "dias": 21,
+        "n": 203,
+        "dias": 20,
         "ev_eur": 0.003,
         "ic90_dias": [
-          -0.078,
-          0.083
+          -0.077,
+          0.077
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3272,27 +3242,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 699,
-      "hit": 74.5,
-      "pnl_media": 0.842,
+      "n": 710,
+      "hit": 74.8,
+      "pnl_media": 0.852,
       "pnl_ci90": [
-        0.737,
-        0.945
+        0.747,
+        0.956
       ],
       "split_half_pnl": [
-        0.809,
-        0.875
+        0.804,
+        0.901
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 243,
+        "n": 242,
         "dias": 21,
-        "ev_eur": -0.007,
+        "ev_eur": 0.014,
         "ic90_dias": [
-          -0.076,
-          0.062
+          -0.061,
+          0.079
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3312,15 +3282,15 @@
         0.676
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.9,
-      "ballenas_n": 4296,
+      "ballenas_hit": 56.8,
+      "ballenas_n": 4236,
       "ask_real": {
-        "n": 112,
-        "dias": 20,
-        "ev_eur": -0.027,
+        "n": 110,
+        "dias": 19,
+        "ev_eur": -0.025,
         "ic90_dias": [
-          -0.118,
-          0.057
+          -0.123,
+          0.062
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3328,26 +3298,26 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 190,
-      "hit": 85.8,
-      "pnl_media": 0.703,
+      "n": 192,
+      "hit": 85.9,
+      "pnl_media": 0.707,
       "pnl_ci90": [
-        0.569,
-        0.837
+        0.572,
+        0.838
       ],
       "split_half_pnl": [
-        0.584,
-        0.821
+        0.591,
+        0.823
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 63.9,
-      "ballenas_n": 3432,
+      "ballenas_hit": 63.0,
+      "ballenas_n": 3410,
       "ask_real": {
-        "n": 62,
+        "n": 61,
         "dias": 21,
-        "ev_eur": 0.121,
+        "ev_eur": 0.12,
         "ic90_dias": [
-          0.045,
+          0.032,
           0.199
         ],
         "veredicto": "ask_ok"
@@ -3356,27 +3326,27 @@
     },
     {
       "bucket": "[0.65,0.70)",
-      "n": 158,
-      "hit": 88.0,
-      "pnl_media": 0.552,
+      "n": 160,
+      "hit": 87.5,
+      "pnl_media": 0.538,
       "pnl_ci90": [
-        0.421,
-        0.675
+        0.408,
+        0.665
       ],
       "split_half_pnl": [
-        0.488,
-        0.616
+        0.494,
+        0.582
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 68.5,
-      "ballenas_n": 3225,
+      "ballenas_hit": 66.1,
+      "ballenas_n": 3407,
       "ask_real": {
-        "n": 51,
-        "dias": 20,
-        "ev_eur": 0.058,
+        "n": 49,
+        "dias": 19,
+        "ev_eur": 0.081,
         "ic90_dias": [
-          -0.022,
-          0.123
+          0.003,
+          0.138
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3384,27 +3354,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 103,
-      "hit": 88.3,
-      "pnl_media": 0.409,
+      "n": 107,
+      "hit": 88.8,
+      "pnl_media": 0.419,
       "pnl_ci90": [
-        0.266,
-        0.541
+        0.285,
+        0.544
       ],
       "split_half_pnl": [
-        0.407,
-        0.411
+        0.366,
+        0.472
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 75.8,
-      "ballenas_n": 3236,
+      "ballenas_hit": 74.1,
+      "ballenas_n": 3391,
       "ask_real": {
-        "n": 37,
-        "dias": 15,
-        "ev_eur": 0.041,
+        "n": 38,
+        "dias": 16,
+        "ev_eur": 0.036,
         "ic90_dias": [
-          -0.041,
-          0.126
+          -0.043,
+          0.111
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3412,27 +3382,27 @@
     },
     {
       "bucket": "[0.75,0.80)",
-      "n": 70,
-      "hit": 92.9,
-      "pnl_media": 0.367,
+      "n": 71,
+      "hit": 93.0,
+      "pnl_media": 0.37,
       "pnl_ci90": [
-        0.239,
-        0.474
+        0.243,
+        0.476
       ],
       "split_half_pnl": [
         0.339,
-        0.395
+        0.401
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 83.0,
-      "ballenas_n": 3433,
+      "ballenas_hit": 81.3,
+      "ballenas_n": 3401,
       "ask_real": {
-        "n": 31,
-        "dias": 16,
-        "ev_eur": 0.02,
+        "n": 29,
+        "dias": 15,
+        "ev_eur": 0.016,
         "ic90_dias": [
-          -0.052,
-          0.085
+          -0.066,
+          0.088
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3440,27 +3410,27 @@
     },
     {
       "bucket": "[0.80,0.85)",
-      "n": 45,
-      "hit": 93.3,
-      "pnl_media": 0.223,
+      "n": 47,
+      "hit": 93.6,
+      "pnl_media": 0.231,
       "pnl_ci90": [
-        0.061,
+        0.076,
         0.345
       ],
       "split_half_pnl": [
-        0.382,
-        0.072
+        0.383,
+        0.086
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 86.8,
-      "ballenas_n": 4116,
+      "ballenas_hit": 85.1,
+      "ballenas_n": 4167,
       "ask_real": {
-        "n": 13,
-        "dias": 10,
-        "ev_eur": -0.088,
+        "n": 15,
+        "dias": 12,
+        "ev_eur": -0.068,
         "ic90_dias": [
-          -0.242,
-          0.082
+          -0.205,
+          0.079
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3470,27 +3440,27 @@
   "UPDOWN_GBM#ETH#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 181,
-      "hit": 63.0,
-      "pnl_media": 0.52,
+      "n": 185,
+      "hit": 63.2,
+      "pnl_media": 0.531,
       "pnl_ci90": [
-        0.293,
-        0.742
+        0.31,
+        0.752
       ],
       "split_half_pnl": [
-        0.198,
-        0.838
+        0.239,
+        0.82
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 5244,
+      "ballenas_hit": 48.7,
+      "ballenas_n": 4849,
       "ask_real": {
-        "n": 67,
+        "n": 70,
         "dias": 20,
-        "ev_eur": -0.025,
+        "ev_eur": -0.001,
         "ic90_dias": [
-          -0.21,
-          0.136
+          -0.169,
+          0.166
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3498,27 +3468,55 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 163,
-      "hit": 73.6,
-      "pnl_media": 0.782,
+      "n": 165,
+      "hit": 73.9,
+      "pnl_media": 0.796,
       "pnl_ci90": [
-        0.567,
-        0.987
+        0.585,
+        0.996
       ],
       "split_half_pnl": [
-        0.808,
-        0.756
+        0.821,
+        0.771
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 65,
+        "n": 66,
         "dias": 19,
-        "ev_eur": -0.076,
+        "ev_eur": -0.077,
         "ic90_dias": [
-          -0.208,
-          0.088
+          -0.202,
+          0.076
+        ],
+        "veredicto": "ask_sin_concluir"
+      },
+      "accionable": false
+    },
+    {
+      "bucket": "[0.60,0.65)",
+      "n": 40,
+      "hit": 77.5,
+      "pnl_media": 0.467,
+      "pnl_ci90": [
+        0.125,
+        0.767
+      ],
+      "split_half_pnl": [
+        0.093,
+        0.841
+      ],
+      "robusto_split_half": true,
+      "ballenas_hit": 63.0,
+      "ballenas_n": 3410,
+      "ask_real": {
+        "n": 13,
+        "dias": 9,
+        "ev_eur": 0.102,
+        "ic90_dias": [
+          -0.087,
+          0.227
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3538,15 +3536,15 @@
         0.602
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 75.8,
-      "ballenas_n": 3236,
+      "ballenas_hit": 74.1,
+      "ballenas_n": 3391,
       "ask_real": {
-        "n": 21,
-        "dias": 15,
-        "ev_eur": 0.032,
+        "n": 20,
+        "dias": 14,
+        "ev_eur": 0.03,
         "ic90_dias": [
-          -0.077,
-          0.097
+          -0.078,
+          0.096
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3568,15 +3566,15 @@
         0.351
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.9,
-      "ballenas_n": 4296,
+      "ballenas_hit": 56.8,
+      "ballenas_n": 4236,
       "ask_real": {
-        "n": 22,
+        "n": 21,
         "dias": 13,
-        "ev_eur": -0.122,
+        "ev_eur": -0.1,
         "ic90_dias": [
-          -0.335,
-          0.094
+          -0.304,
+          0.144
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3584,27 +3582,27 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 52,
-      "hit": 78.8,
-      "pnl_media": 0.478,
+      "n": 53,
+      "hit": 79.2,
+      "pnl_media": 0.491,
       "pnl_ci90": [
-        0.17,
-        0.775
+        0.188,
+        0.782
       ],
       "split_half_pnl": [
         0.161,
-        0.795
+        0.808
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 63.9,
-      "ballenas_n": 3432,
+      "ballenas_hit": 63.0,
+      "ballenas_n": 3410,
       "ask_real": {
-        "n": 16,
-        "dias": 9,
+        "n": 17,
+        "dias": 10,
         "ev_eur": 0.125,
         "ic90_dias": [
-          -0.033,
-          0.226
+          -0.02,
+          0.219
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3624,8 +3622,8 @@
         0.51
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 68.5,
-      "ballenas_n": 3225,
+      "ballenas_hit": 66.1,
+      "ballenas_n": 3407,
       "ask_real": {
         "n": 13,
         "dias": 9,
@@ -3652,15 +3650,15 @@
         0.436
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 75.8,
-      "ballenas_n": 3236,
+      "ballenas_hit": 74.1,
+      "ballenas_n": 3391,
       "ask_real": {
-        "n": 23,
-        "dias": 16,
-        "ev_eur": -0.01,
+        "n": 22,
+        "dias": 15,
+        "ev_eur": -0.015,
         "ic90_dias": [
-          -0.133,
-          0.084
+          -0.134,
+          0.086
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3680,8 +3678,8 @@
         0.165
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 90.5,
-      "ballenas_n": 5360,
+      "ballenas_hit": 89.4,
+      "ballenas_n": 5399,
       "ask_real": {
         "n": 17,
         "dias": 10,
@@ -3698,27 +3696,27 @@
   "UPDOWN_GBM_15M_TARDIO#ETH#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 157,
-      "hit": 61.8,
-      "pnl_media": 0.504,
+      "n": 160,
+      "hit": 61.9,
+      "pnl_media": 0.508,
       "pnl_ci90": [
-        0.278,
-        0.737
+        0.286,
+        0.736
       ],
       "split_half_pnl": [
-        0.298,
-        0.707
+        0.342,
+        0.674
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 5244,
+      "ballenas_hit": 48.7,
+      "ballenas_n": 4849,
       "ask_real": {
-        "n": 48,
+        "n": 50,
         "dias": 19,
-        "ev_eur": -0.064,
+        "ev_eur": -0.069,
         "ic90_dias": [
-          -0.281,
-          0.137
+          -0.275,
+          0.14
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3726,27 +3724,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 142,
-      "hit": 72.5,
-      "pnl_media": 0.705,
+      "n": 144,
+      "hit": 72.9,
+      "pnl_media": 0.722,
       "pnl_ci90": [
-        0.493,
-        0.915
+        0.507,
+        0.929
       ],
       "split_half_pnl": [
-        0.665,
-        0.744
+        0.682,
+        0.761
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 44,
+        "n": 45,
         "dias": 15,
-        "ev_eur": -0.05,
+        "ev_eur": -0.051,
         "ic90_dias": [
-          -0.228,
-          0.133
+          -0.221,
+          0.138
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3756,27 +3754,27 @@
   "UPDOWN_GBM_IBS_ALTO#ETH#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 127,
-      "hit": 73.2,
-      "pnl_media": 0.954,
+      "n": 128,
+      "hit": 73.4,
+      "pnl_media": 0.963,
       "pnl_ci90": [
-        0.695,
-        1.208
+        0.709,
+        1.216
       ],
       "split_half_pnl": [
-        1.102,
-        0.808
+        1.057,
+        0.868
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 49.8,
-      "ballenas_n": 5244,
+      "ballenas_hit": 48.7,
+      "ballenas_n": 4849,
       "ask_real": {
-        "n": 42,
+        "n": 43,
         "dias": 20,
-        "ev_eur": -0.116,
+        "ev_eur": -0.098,
         "ic90_dias": [
-          -0.329,
-          0.082
+          -0.304,
+          0.106
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3784,27 +3782,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 139,
-      "hit": 79.9,
-      "pnl_media": 1.061,
+      "n": 141,
+      "hit": 80.1,
+      "pnl_media": 1.073,
       "pnl_ci90": [
-        0.836,
-        1.279
+        0.857,
+        1.287
       ],
       "split_half_pnl": [
-        1.125,
-        0.998
+        1.133,
+        1.014
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.2,
-      "ballenas_n": 7145,
+      "ballenas_hit": 50.6,
+      "ballenas_n": 6162,
       "ask_real": {
-        "n": 51,
+        "n": 52,
         "dias": 18,
-        "ev_eur": -0.013,
+        "ev_eur": -0.014,
         "ic90_dias": [
-          -0.166,
-          0.162
+          -0.182,
+          0.159
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3824,15 +3822,15 @@
         0.952
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.9,
-      "ballenas_n": 4296,
+      "ballenas_hit": 56.8,
+      "ballenas_n": 4236,
       "ask_real": {
         "n": 15,
         "dias": 12,
-        "ev_eur": 0.062,
+        "ev_eur": 0.035,
         "ic90_dias": [
-          -0.096,
-          0.215
+          -0.127,
+          0.181
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3854,8 +3852,8 @@
         0.624
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 48.0,
-      "ballenas_n": 1832,
+      "ballenas_hit": 47.2,
+      "ballenas_n": 1867,
       "ask_real": {
         "n": 27,
         "dias": 11,
@@ -3870,27 +3868,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 121,
-      "hit": 72.7,
-      "pnl_media": 0.592,
+      "n": 124,
+      "hit": 73.4,
+      "pnl_media": 0.612,
       "pnl_ci90": [
-        0.392,
-        0.791
+        0.411,
+        0.804
       ],
       "split_half_pnl": [
-        0.618,
-        0.566
+        0.643,
+        0.581
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.5,
-      "ballenas_n": 3191,
+      "ballenas_hit": 54.5,
+      "ballenas_n": 2993,
       "ask_real": {
-        "n": 48,
-        "dias": 17,
-        "ev_eur": -0.048,
+        "n": 51,
+        "dias": 18,
+        "ev_eur": -0.021,
         "ic90_dias": [
-          -0.185,
-          0.085
+          -0.155,
+          0.116
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3900,27 +3898,27 @@
   "GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_YES": [
     {
       "bucket": "[0.35,0.40)",
-      "n": 121,
-      "hit": 66.9,
-      "pnl_media": 1.176,
+      "n": 124,
+      "hit": 67.7,
+      "pnl_media": 1.208,
       "pnl_ci90": [
-        0.908,
-        1.437
+        0.946,
+        1.466
       ],
       "split_half_pnl": [
-        0.673,
-        1.671
+        0.722,
+        1.694
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 39.1,
-      "ballenas_n": 1621,
+      "ballenas_hit": 38.2,
+      "ballenas_n": 1600,
       "ask_real": {
-        "n": 38,
+        "n": 39,
         "dias": 17,
-        "ev_eur": 0.062,
+        "ev_eur": 0.068,
         "ic90_dias": [
-          -0.123,
-          0.263
+          -0.115,
+          0.265
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3928,27 +3926,27 @@
     },
     {
       "bucket": "[0.40,0.45)",
-      "n": 131,
-      "hit": 64.1,
-      "pnl_media": 0.733,
+      "n": 134,
+      "hit": 64.2,
+      "pnl_media": 0.737,
       "pnl_ci90": [
-        0.496,
-        0.961
+        0.504,
+        0.968
       ],
       "split_half_pnl": [
-        0.372,
-        1.087
+        0.37,
+        1.104
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 39.6,
-      "ballenas_n": 1816,
+      "ballenas_hit": 40.1,
+      "ballenas_n": 1812,
       "ask_real": {
-        "n": 37,
-        "dias": 18,
-        "ev_eur": -0.13,
+        "n": 38,
+        "dias": 19,
+        "ev_eur": -0.12,
         "ic90_dias": [
-          -0.247,
-          -0.019
+          -0.229,
+          -0.007
         ],
         "veredicto": "ask_negativo"
       },
@@ -3956,27 +3954,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 375,
-      "hit": 77.6,
-      "pnl_media": 0.889,
+      "n": 377,
+      "hit": 77.7,
+      "pnl_media": 0.893,
       "pnl_ci90": [
         0.78,
-        0.994
+        1.001
       ],
       "split_half_pnl": [
-        0.753,
-        1.024
+        0.74,
+        1.045
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 48.0,
-      "ballenas_n": 1832,
+      "ballenas_hit": 47.2,
+      "ballenas_n": 1867,
       "ask_real": {
         "n": 128,
         "dias": 21,
-        "ev_eur": 0.033,
+        "ev_eur": 0.024,
         "ic90_dias": [
-          -0.021,
-          0.088
+          -0.03,
+          0.084
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -3984,27 +3982,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 598,
-      "hit": 80.1,
-      "pnl_media": 0.842,
+      "n": 606,
+      "hit": 80.4,
+      "pnl_media": 0.849,
       "pnl_ci90": [
-        0.763,
-        0.922
+        0.775,
+        0.927
       ],
       "split_half_pnl": [
-        0.775,
-        0.908
+        0.784,
+        0.915
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.5,
-      "ballenas_n": 3191,
+      "ballenas_hit": 54.5,
+      "ballenas_n": 2993,
       "ask_real": {
         "n": 212,
         "dias": 21,
-        "ev_eur": -0.02,
+        "ev_eur": -0.018,
         "ic90_dias": [
-          -0.063,
-          0.022
+          -0.067,
+          0.025
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4012,27 +4010,27 @@
     },
     {
       "bucket": "[0.55,0.60)",
-      "n": 193,
-      "hit": 73.6,
-      "pnl_media": 0.412,
+      "n": 194,
+      "hit": 73.7,
+      "pnl_media": 0.416,
       "pnl_ci90": [
-        0.284,
-        0.537
+        0.282,
+        0.539
       ],
       "split_half_pnl": [
-        0.307,
-        0.516
+        0.288,
+        0.543
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 56.7,
-      "ballenas_n": 1855,
+      "ballenas_hit": 57.4,
+      "ballenas_n": 1886,
       "ask_real": {
-        "n": 58,
-        "dias": 20,
-        "ev_eur": 0.018,
+        "n": 57,
+        "dias": 19,
+        "ev_eur": 0.033,
         "ic90_dias": [
-          -0.049,
-          0.091
+          -0.034,
+          0.116
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4040,27 +4038,27 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 163,
-      "hit": 76.1,
-      "pnl_media": 0.349,
+      "n": 164,
+      "hit": 76.2,
+      "pnl_media": 0.353,
       "pnl_ci90": [
-        0.223,
-        0.466
+        0.23,
+        0.473
       ],
       "split_half_pnl": [
-        0.198,
-        0.498
+        0.207,
+        0.5
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 62.8,
-      "ballenas_n": 1770,
+      "ballenas_hit": 65.8,
+      "ballenas_n": 1732,
       "ask_real": {
-        "n": 63,
-        "dias": 20,
-        "ev_eur": -0.024,
+        "n": 60,
+        "dias": 19,
+        "ev_eur": -0.043,
         "ic90_dias": [
-          -0.121,
-          0.061
+          -0.136,
+          0.044
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4068,27 +4066,27 @@
     },
     {
       "bucket": "[0.65,0.70)",
-      "n": 117,
-      "hit": 86.3,
-      "pnl_media": 0.402,
+      "n": 119,
+      "hit": 86.6,
+      "pnl_media": 0.407,
       "pnl_ci90": [
-        0.293,
-        0.501
+        0.301,
+        0.509
       ],
       "split_half_pnl": [
-        0.29,
-        0.513
+        0.297,
+        0.516
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.6,
-      "ballenas_n": 1802,
+      "ballenas_hit": 68.0,
+      "ballenas_n": 1713,
       "ask_real": {
-        "n": 41,
-        "dias": 18,
-        "ev_eur": 0.074,
+        "n": 40,
+        "dias": 19,
+        "ev_eur": 0.086,
         "ic90_dias": [
-          0.015,
-          0.123
+          0.025,
+          0.127
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4096,27 +4094,27 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 84,
-      "hit": 85.7,
-      "pnl_media": 0.298,
+      "n": 86,
+      "hit": 86.0,
+      "pnl_media": 0.305,
       "pnl_ci90": [
-        0.18,
-        0.408
+        0.188,
+        0.411
       ],
       "split_half_pnl": [
-        0.129,
-        0.466
+        0.14,
+        0.47
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 70.2,
-      "ballenas_n": 1956,
+      "ballenas_hit": 70.8,
+      "ballenas_n": 1875,
       "ask_real": {
-        "n": 32,
-        "dias": 16,
-        "ev_eur": 0.015,
+        "n": 34,
+        "dias": 17,
+        "ev_eur": 0.016,
         "ic90_dias": [
-          -0.084,
-          0.087
+          -0.066,
+          0.082
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4124,27 +4122,27 @@
     },
     {
       "bucket": "[0.75,0.80)",
-      "n": 55,
-      "hit": 92.7,
-      "pnl_media": 0.272,
+      "n": 56,
+      "hit": 92.9,
+      "pnl_media": 0.274,
       "pnl_ci90": [
-        0.156,
-        0.373
+        0.16,
+        0.375
       ],
       "split_half_pnl": [
-        0.267,
-        0.276
+        0.271,
+        0.278
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 80.4,
-      "ballenas_n": 2078,
+      "ballenas_hit": 80.1,
+      "ballenas_n": 2197,
       "ask_real": {
-        "n": 25,
-        "dias": 13,
-        "ev_eur": -0.022,
+        "n": 21,
+        "dias": 12,
+        "ev_eur": -0.031,
         "ic90_dias": [
-          -0.118,
-          0.055
+          -0.147,
+          0.064
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4154,27 +4152,27 @@
   "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min#BUY_YES": [
     {
       "bucket": "[0.35,0.40)",
-      "n": 180,
-      "hit": 62.2,
-      "pnl_media": 1.256,
+      "n": 184,
+      "hit": 62.5,
+      "pnl_media": 1.271,
       "pnl_ci90": [
-        0.936,
-        1.569
+        0.956,
+        1.576
       ],
       "split_half_pnl": [
-        1.109,
-        1.403
+        1.101,
+        1.44
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 39.1,
-      "ballenas_n": 1621,
+      "ballenas_hit": 38.2,
+      "ballenas_n": 1600,
       "ask_real": {
         "n": 67,
-        "dias": 21,
-        "ev_eur": 0.016,
+        "dias": 20,
+        "ev_eur": -0.019,
         "ic90_dias": [
-          -0.168,
-          0.191
+          -0.202,
+          0.175
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4182,27 +4180,27 @@
     },
     {
       "bucket": "[0.40,0.45)",
-      "n": 139,
-      "hit": 60.4,
-      "pnl_media": 0.794,
+      "n": 142,
+      "hit": 60.6,
+      "pnl_media": 0.803,
       "pnl_ci90": [
-        0.48,
-        1.099
+        0.488,
+        1.112
       ],
       "split_half_pnl": [
-        0.417,
-        1.166
+        0.48,
+        1.126
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 39.6,
-      "ballenas_n": 1816,
+      "ballenas_hit": 40.1,
+      "ballenas_n": 1812,
       "ask_real": {
-        "n": 49,
+        "n": 51,
         "dias": 18,
-        "ev_eur": -0.07,
+        "ev_eur": -0.083,
         "ic90_dias": [
-          -0.202,
-          0.055
+          -0.209,
+          0.044
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4210,27 +4208,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 683,
+      "n": 687,
       "hit": 68.7,
-      "pnl_media": 0.773,
+      "pnl_media": 0.774,
       "pnl_ci90": [
-        0.656,
-        0.891
+        0.661,
+        0.893
       ],
       "split_half_pnl": [
-        0.747,
-        0.799
+        0.742,
+        0.807
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 48.0,
-      "ballenas_n": 1832,
+      "ballenas_hit": 47.2,
+      "ballenas_n": 1867,
       "ask_real": {
         "n": 245,
         "dias": 21,
-        "ev_eur": -0.011,
+        "ev_eur": -0.013,
         "ic90_dias": [
-          -0.082,
-          0.062
+          -0.09,
+          0.054
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4238,27 +4236,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 701,
-      "hit": 71.8,
-      "pnl_media": 0.768,
+      "n": 712,
+      "hit": 72.1,
+      "pnl_media": 0.78,
       "pnl_ci90": [
-        0.661,
-        0.876
+        0.67,
+        0.883
       ],
       "split_half_pnl": [
-        0.696,
-        0.839
+        0.716,
+        0.844
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.5,
-      "ballenas_n": 3191,
+      "ballenas_hit": 54.5,
+      "ballenas_n": 2993,
       "ask_real": {
-        "n": 210,
+        "n": 214,
         "dias": 21,
-        "ev_eur": -0.064,
+        "ev_eur": -0.051,
         "ic90_dias": [
-          -0.135,
-          0.002
+          -0.13,
+          0.017
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4266,27 +4264,27 @@
     },
     {
       "bucket": "[0.55,0.60)",
-      "n": 161,
-      "hit": 76.4,
-      "pnl_media": 0.64,
+      "n": 162,
+      "hit": 76.5,
+      "pnl_media": 0.645,
       "pnl_ci90": [
-        0.452,
+        0.459,
         0.822
       ],
       "split_half_pnl": [
-        0.377,
-        0.9
+        0.389,
+        0.901
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 56.7,
-      "ballenas_n": 1855,
+      "ballenas_hit": 57.4,
+      "ballenas_n": 1886,
       "ask_real": {
         "n": 54,
-        "dias": 19,
-        "ev_eur": 0.115,
+        "dias": 18,
+        "ev_eur": 0.119,
         "ic90_dias": [
           0.025,
-          0.198
+          0.202
         ],
         "veredicto": "ask_ok"
       },
@@ -4294,27 +4292,27 @@
     },
     {
       "bucket": "[0.60,0.65)",
-      "n": 98,
-      "hit": 83.7,
-      "pnl_media": 0.65,
+      "n": 99,
+      "hit": 83.8,
+      "pnl_media": 0.656,
       "pnl_ci90": [
-        0.446,
-        0.845
+        0.46,
+        0.842
       ],
       "split_half_pnl": [
         0.632,
-        0.667
+        0.679
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 62.8,
-      "ballenas_n": 1770,
+      "ballenas_hit": 65.8,
+      "ballenas_n": 1732,
       "ask_real": {
-        "n": 39,
-        "dias": 19,
-        "ev_eur": -0.067,
+        "n": 38,
+        "dias": 18,
+        "ev_eur": -0.042,
         "ic90_dias": [
-          -0.178,
-          0.04
+          -0.154,
+          0.053
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4322,27 +4320,27 @@
     },
     {
       "bucket": "[0.65,0.70)",
-      "n": 65,
-      "hit": 87.7,
-      "pnl_media": 0.558,
+      "n": 67,
+      "hit": 88.1,
+      "pnl_media": 0.569,
       "pnl_ci90": [
-        0.36,
-        0.746
+        0.368,
+        0.747
       ],
       "split_half_pnl": [
-        0.361,
-        0.75
+        0.38,
+        0.753
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 65.6,
-      "ballenas_n": 1802,
+      "ballenas_hit": 68.0,
+      "ballenas_n": 1713,
       "ask_real": {
-        "n": 22,
-        "dias": 14,
-        "ev_eur": 0.091,
+        "n": 24,
+        "dias": 15,
+        "ev_eur": 0.085,
         "ic90_dias": [
-          -0.012,
-          0.163
+          -0.01,
+          0.148
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4350,27 +4348,55 @@
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 51,
-      "hit": 92.2,
-      "pnl_media": 0.52,
+      "n": 52,
+      "hit": 92.3,
+      "pnl_media": 0.526,
       "pnl_ci90": [
-        0.354,
-        0.667
+        0.358,
+        0.671
       ],
       "split_half_pnl": [
-        0.306,
-        0.726
+        0.323,
+        0.728
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 70.2,
-      "ballenas_n": 1956,
+      "ballenas_hit": 70.8,
+      "ballenas_n": 1875,
       "ask_real": {
         "n": 16,
         "dias": 9,
-        "ev_eur": 0.072,
+        "ev_eur": 0.068,
         "ic90_dias": [
-          0.057,
-          0.088
+          0.049,
+          0.082
+        ],
+        "veredicto": "ask_sin_concluir"
+      },
+      "accionable": false
+    },
+    {
+      "bucket": "[0.75,0.80)",
+      "n": 41,
+      "hit": 95.1,
+      "pnl_media": 0.417,
+      "pnl_ci90": [
+        0.275,
+        0.545
+      ],
+      "split_half_pnl": [
+        0.547,
+        0.293
+      ],
+      "robusto_split_half": true,
+      "ballenas_hit": 80.1,
+      "ballenas_n": 2197,
+      "ask_real": {
+        "n": 15,
+        "dias": 9,
+        "ev_eur": -0.004,
+        "ic90_dias": [
+          -0.119,
+          0.074
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4392,15 +4418,15 @@
         0.731
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 48.0,
-      "ballenas_n": 1832,
+      "ballenas_hit": 47.2,
+      "ballenas_n": 1867,
       "ask_real": {
-        "n": 114,
-        "dias": 9,
-        "ev_eur": -0.026,
+        "n": 107,
+        "dias": 8,
+        "ev_eur": -0.025,
         "ic90_dias": [
-          -0.118,
-          0.072
+          -0.117,
+          0.079
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4408,55 +4434,55 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 318,
-      "hit": 60.4,
-      "pnl_media": 0.317,
+      "n": 340,
+      "hit": 62.1,
+      "pnl_media": 0.384,
       "pnl_ci90": [
-        0.161,
-        0.46
+        0.24,
+        0.524
       ],
       "split_half_pnl": [
-        0.311,
-        0.323
+        0.32,
+        0.448
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.5,
-      "ballenas_n": 3191,
+      "ballenas_hit": 54.5,
+      "ballenas_n": 2993,
       "ask_real": {
-        "n": 130,
-        "dias": 10,
-        "ev_eur": -0.154,
+        "n": 146,
+        "dias": 11,
+        "ev_eur": -0.115,
         "ic90_dias": [
-          -0.305,
-          -0.035
+          -0.251,
+          0.013
         ],
-        "veredicto": "ask_negativo"
+        "veredicto": "ask_sin_concluir"
       },
       "accionable": false
     },
     {
       "bucket": "[0.70,0.75)",
-      "n": 53,
-      "hit": 94.3,
-      "pnl_media": 0.517,
+      "n": 55,
+      "hit": 94.5,
+      "pnl_media": 0.527,
       "pnl_ci90": [
-        0.362,
-        0.648
+        0.375,
+        0.656
       ],
       "split_half_pnl": [
-        0.631,
-        0.407
+        0.634,
+        0.423
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 70.2,
-      "ballenas_n": 1956,
+      "ballenas_hit": 70.8,
+      "ballenas_n": 1875,
       "ask_real": {
-        "n": 29,
-        "dias": 8,
-        "ev_eur": -0.028,
+        "n": 30,
+        "dias": 7,
+        "ev_eur": -0.017,
         "ic90_dias": [
-          -0.13,
-          0.057
+          -0.093,
+          0.058
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4476,15 +4502,15 @@
         0.4
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 84.6,
-      "ballenas_n": 1945,
+      "ballenas_hit": 83.2,
+      "ballenas_n": 1962,
       "ask_real": {
-        "n": 12,
-        "dias": 7,
-        "ev_eur": 0.049,
+        "n": 11,
+        "dias": 6,
+        "ev_eur": 0.05,
         "ic90_dias": [
-          0.03,
-          0.078
+          0.031,
+          0.083
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4494,27 +4520,27 @@
   "GBM_LATE_15M_TARDIO#SOL#15min#BUY_YES": [
     {
       "bucket": "[0.35,0.40)",
-      "n": 240,
-      "hit": 58.3,
-      "pnl_media": 1.05,
+      "n": 246,
+      "hit": 58.1,
+      "pnl_media": 1.039,
       "pnl_ci90": [
-        0.767,
-        1.332
+        0.77,
+        1.303
       ],
       "split_half_pnl": [
-        0.657,
-        1.443
+        0.676,
+        1.402
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 39.1,
-      "ballenas_n": 1621,
+      "ballenas_hit": 38.2,
+      "ballenas_n": 1600,
       "ask_real": {
-        "n": 82,
+        "n": 84,
         "dias": 21,
-        "ev_eur": 0.13,
+        "ev_eur": 0.075,
         "ic90_dias": [
-          -0.045,
-          0.306
+          -0.102,
+          0.253
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4522,27 +4548,27 @@
     },
     {
       "bucket": "[0.40,0.45)",
-      "n": 203,
-      "hit": 61.6,
-      "pnl_media": 0.833,
+      "n": 207,
+      "hit": 61.4,
+      "pnl_media": 0.825,
       "pnl_ci90": [
-        0.574,
-        1.076
+        0.57,
+        1.077
       ],
       "split_half_pnl": [
-        0.538,
-        1.125
+        0.579,
+        1.068
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 39.6,
-      "ballenas_n": 1816,
+      "ballenas_hit": 40.1,
+      "ballenas_n": 1812,
       "ask_real": {
-        "n": 74,
+        "n": 76,
         "dias": 20,
-        "ev_eur": -0.126,
+        "ev_eur": -0.133,
         "ic90_dias": [
-          -0.247,
-          -0.027
+          -0.237,
+          -0.035
         ],
         "veredicto": "ask_negativo"
       },
@@ -4550,27 +4576,27 @@
     },
     {
       "bucket": "[0.45,0.50)",
-      "n": 538,
-      "hit": 70.8,
-      "pnl_media": 0.859,
+      "n": 543,
+      "hit": 70.7,
+      "pnl_media": 0.855,
       "pnl_ci90": [
-        0.729,
-        0.985
+        0.722,
+        0.981
       ],
       "split_half_pnl": [
-        0.793,
-        0.925
+        0.802,
+        0.908
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 48.0,
-      "ballenas_n": 1832,
+      "ballenas_hit": 47.2,
+      "ballenas_n": 1867,
       "ask_real": {
-        "n": 197,
+        "n": 199,
         "dias": 21,
-        "ev_eur": 0.016,
+        "ev_eur": 0.0,
         "ic90_dias": [
-          -0.062,
-          0.099
+          -0.077,
+          0.072
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4578,27 +4604,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 853,
-      "hit": 74.7,
-      "pnl_media": 0.85,
+      "n": 868,
+      "hit": 74.8,
+      "pnl_media": 0.853,
       "pnl_ci90": [
-        0.754,
-        0.939
+        0.763,
+        0.943
       ],
       "split_half_pnl": [
         0.812,
-        0.887
+        0.895
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.5,
-      "ballenas_n": 3191,
+      "ballenas_hit": 54.5,
+      "ballenas_n": 2993,
       "ask_real": {
-        "n": 298,
+        "n": 301,
         "dias": 21,
-        "ev_eur": -0.061,
+        "ev_eur": -0.06,
         "ic90_dias": [
-          -0.133,
-          0.012
+          -0.138,
+          0.01
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4606,138 +4632,26 @@
     },
     {
       "bucket": "[0.55,0.60)",
-      "n": 226,
-      "hit": 76.1,
-      "pnl_media": 0.621,
+      "n": 228,
+      "hit": 75.9,
+      "pnl_media": 0.613,
       "pnl_ci90": [
-        0.466,
-        0.772
+        0.456,
+        0.764
       ],
       "split_half_pnl": [
-        0.469,
-        0.773
+        0.478,
+        0.748
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 56.7,
-      "ballenas_n": 1855,
+      "ballenas_hit": 57.4,
+      "ballenas_n": 1886,
       "ask_real": {
         "n": 87,
-        "dias": 20,
-        "ev_eur": 0.032,
+        "dias": 19,
+        "ev_eur": 0.021,
         "ic90_dias": [
-          -0.04,
-          0.103
-        ],
-        "veredicto": "ask_sin_concluir"
-      },
-      "accionable": false
-    },
-    {
-      "bucket": "[0.60,0.65)",
-      "n": 159,
-      "hit": 79.9,
-      "pnl_media": 0.516,
-      "pnl_ci90": [
-        0.349,
-        0.677
-      ],
-      "split_half_pnl": [
-        0.564,
-        0.47
-      ],
-      "robusto_split_half": true,
-      "ballenas_hit": 62.8,
-      "ballenas_n": 1770,
-      "ask_real": {
-        "n": 65,
-        "dias": 20,
-        "ev_eur": -0.098,
-        "ic90_dias": [
-          -0.188,
-          -0.0
-        ],
-        "veredicto": "ask_sin_concluir"
-      },
-      "accionable": false
-    },
-    {
-      "bucket": "[0.65,0.70)",
-      "n": 109,
-      "hit": 88.1,
-      "pnl_media": 0.567,
-      "pnl_ci90": [
-        0.42,
-        0.706
-      ],
-      "split_half_pnl": [
-        0.371,
-        0.76
-      ],
-      "robusto_split_half": true,
-      "ballenas_hit": 65.6,
-      "ballenas_n": 1802,
-      "ask_real": {
-        "n": 38,
-        "dias": 17,
-        "ev_eur": 0.092,
-        "ic90_dias": [
-          0.009,
-          0.153
-        ],
-        "veredicto": "ask_sin_concluir"
-      },
-      "accionable": false
-    },
-    {
-      "bucket": "[0.70,0.75)",
-      "n": 90,
-      "hit": 93.3,
-      "pnl_media": 0.523,
-      "pnl_ci90": [
-        0.4,
-        0.63
-      ],
-      "split_half_pnl": [
-        0.449,
-        0.597
-      ],
-      "robusto_split_half": true,
-      "ballenas_hit": 70.2,
-      "ballenas_n": 1956,
-      "ask_real": {
-        "n": 37,
-        "dias": 17,
-        "ev_eur": 0.043,
-        "ic90_dias": [
-          -0.03,
-          0.101
-        ],
-        "veredicto": "ask_sin_concluir"
-      },
-      "accionable": false
-    },
-    {
-      "bucket": "[0.75,0.80)",
-      "n": 67,
-      "hit": 94.0,
-      "pnl_media": 0.38,
-      "pnl_ci90": [
-        0.254,
-        0.496
-      ],
-      "split_half_pnl": [
-        0.364,
-        0.396
-      ],
-      "robusto_split_half": true,
-      "ballenas_hit": 80.4,
-      "ballenas_n": 2078,
-      "ask_real": {
-        "n": 33,
-        "dias": 16,
-        "ev_eur": 0.015,
-        "ic90_dias": [
-          -0.097,
+          -0.054,
           0.09
         ],
         "veredicto": "ask_sin_concluir"
@@ -4745,21 +4659,133 @@
       "accionable": false
     },
     {
-      "bucket": "[0.80,0.85)",
-      "n": 40,
-      "hit": 95.0,
-      "pnl_media": 0.272,
+      "bucket": "[0.60,0.65)",
+      "n": 160,
+      "hit": 80.0,
+      "pnl_media": 0.521,
       "pnl_ci90": [
-        0.137,
-        0.386
+        0.347,
+        0.68
+      ],
+      "split_half_pnl": [
+        0.571,
+        0.471
+      ],
+      "robusto_split_half": true,
+      "ballenas_hit": 65.8,
+      "ballenas_n": 1732,
+      "ask_real": {
+        "n": 61,
+        "dias": 19,
+        "ev_eur": -0.082,
+        "ic90_dias": [
+          -0.171,
+          0.008
+        ],
+        "veredicto": "ask_sin_concluir"
+      },
+      "accionable": false
+    },
+    {
+      "bucket": "[0.65,0.70)",
+      "n": 111,
+      "hit": 88.3,
+      "pnl_media": 0.574,
+      "pnl_ci90": [
+        0.42,
+        0.713
+      ],
+      "split_half_pnl": [
+        0.379,
+        0.765
+      ],
+      "robusto_split_half": true,
+      "ballenas_hit": 68.0,
+      "ballenas_n": 1713,
+      "ask_real": {
+        "n": 40,
+        "dias": 18,
+        "ev_eur": 0.088,
+        "ic90_dias": [
+          0.007,
+          0.15
+        ],
+        "veredicto": "ask_sin_concluir"
+      },
+      "accionable": false
+    },
+    {
+      "bucket": "[0.70,0.75)",
+      "n": 92,
+      "hit": 93.5,
+      "pnl_media": 0.53,
+      "pnl_ci90": [
+        0.407,
+        0.642
+      ],
+      "split_half_pnl": [
+        0.456,
+        0.604
+      ],
+      "robusto_split_half": true,
+      "ballenas_hit": 70.8,
+      "ballenas_n": 1875,
+      "ask_real": {
+        "n": 38,
+        "dias": 17,
+        "ev_eur": 0.041,
+        "ic90_dias": [
+          -0.025,
+          0.094
+        ],
+        "veredicto": "ask_sin_concluir"
+      },
+      "accionable": false
+    },
+    {
+      "bucket": "[0.75,0.80)",
+      "n": 70,
+      "hit": 94.3,
+      "pnl_media": 0.389,
+      "pnl_ci90": [
+        0.255,
+        0.499
+      ],
+      "split_half_pnl": [
+        0.375,
+        0.402
+      ],
+      "robusto_split_half": true,
+      "ballenas_hit": 80.1,
+      "ballenas_n": 2197,
+      "ask_real": {
+        "n": 30,
+        "dias": 16,
+        "ev_eur": 0.011,
+        "ic90_dias": [
+          -0.112,
+          0.094
+        ],
+        "veredicto": "ask_sin_concluir"
+      },
+      "accionable": false
+    },
+    {
+      "bucket": "[0.80,0.85)",
+      "n": 41,
+      "hit": 95.1,
+      "pnl_media": 0.275,
+      "pnl_ci90": [
+        0.139,
+        0.387
       ],
       "split_half_pnl": [
         0.148,
-        0.395
+        0.396
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 84.6,
-      "ballenas_n": 1945,
+      "ballenas_hit": 83.2,
+      "ballenas_n": 1962,
       "ask_real": {
         "n": 13,
         "dias": 9,
@@ -4776,27 +4802,27 @@
   "UPDOWN_GBM#SOL#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 433,
-      "hit": 62.6,
-      "pnl_media": 0.415,
+      "n": 467,
+      "hit": 61.9,
+      "pnl_media": 0.389,
       "pnl_ci90": [
-        0.267,
-        0.563
+        0.251,
+        0.532
       ],
       "split_half_pnl": [
-        0.819,
-        0.012
+        0.746,
+        0.034
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.5,
-      "ballenas_n": 3191,
+      "ballenas_hit": 54.5,
+      "ballenas_n": 2993,
       "ask_real": {
-        "n": 321,
+        "n": 349,
         "dias": 21,
-        "ev_eur": -0.005,
+        "ev_eur": 0.003,
         "ic90_dias": [
-          -0.083,
-          0.072
+          -0.078,
+          0.077
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4806,27 +4832,27 @@
   "UPDOWN_GBM_15M_TARDIO#SOL#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 91,
-      "hit": 62.6,
-      "pnl_media": 0.322,
+      "n": 92,
+      "hit": 62.0,
+      "pnl_media": 0.307,
       "pnl_ci90": [
-        0.141,
-        0.505
+        0.124,
+        0.488
       ],
       "split_half_pnl": [
-        0.185,
+        0.158,
         0.456
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.5,
-      "ballenas_n": 3191,
+      "ballenas_hit": 54.5,
+      "ballenas_n": 2993,
       "ask_real": {
         "n": 14,
         "dias": 11,
-        "ev_eur": -0.074,
+        "ev_eur": -0.226,
         "ic90_dias": [
-          -0.439,
-          0.311
+          -0.557,
+          0.133
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4836,27 +4862,27 @@
   "GBM_LATE_15M#XRP#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 265,
-      "hit": 60.8,
-      "pnl_media": 0.395,
+      "n": 271,
+      "hit": 61.6,
+      "pnl_media": 0.42,
       "pnl_ci90": [
-        0.265,
-        0.52
+        0.292,
+        0.548
       ],
       "split_half_pnl": [
-        0.215,
-        0.574
+        0.205,
+        0.632
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 44.7,
-      "ballenas_n": 1529,
+      "ballenas_hit": 45.2,
+      "ballenas_n": 1512,
       "ask_real": {
         "n": 95,
         "dias": 18,
-        "ev_eur": -0.019,
+        "ev_eur": 0.014,
         "ic90_dias": [
-          -0.128,
-          0.06
+          -0.093,
+          0.102
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4864,27 +4890,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 716,
-      "hit": 74.7,
-      "pnl_media": 0.712,
+      "n": 743,
+      "hit": 75.1,
+      "pnl_media": 0.724,
       "pnl_ci90": [
-        0.632,
-        0.785
+        0.648,
+        0.798
       ],
       "split_half_pnl": [
-        0.578,
-        0.845
+        0.592,
+        0.856
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.7,
-      "ballenas_n": 2358,
+      "ballenas_hit": 52.3,
+      "ballenas_n": 2119,
       "ask_real": {
-        "n": 215,
+        "n": 225,
         "dias": 21,
-        "ev_eur": -0.047,
+        "ev_eur": -0.058,
         "ic90_dias": [
-          -0.122,
-          0.033
+          -0.126,
+          0.014
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4894,27 +4920,27 @@
   "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 595,
-      "hit": 76.3,
-      "pnl_media": 1.07,
+      "n": 601,
+      "hit": 76.5,
+      "pnl_media": 1.08,
       "pnl_ci90": [
-        0.948,
-        1.185
+        0.963,
+        1.199
       ],
       "split_half_pnl": [
-        0.847,
-        1.293
+        0.859,
+        1.299
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 44.7,
-      "ballenas_n": 1529,
+      "ballenas_hit": 45.2,
+      "ballenas_n": 1512,
       "ask_real": {
-        "n": 160,
+        "n": 162,
         "dias": 20,
-        "ev_eur": -0.055,
+        "ev_eur": -0.053,
         "ic90_dias": [
-          -0.109,
-          -0.007
+          -0.107,
+          -0.003
         ],
         "veredicto": "ask_negativo"
       },
@@ -4922,27 +4948,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 1764,
-      "hit": 80.9,
-      "pnl_media": 1.171,
+      "n": 1792,
+      "hit": 81.0,
+      "pnl_media": 1.175,
       "pnl_ci90": [
-        1.108,
-        1.23
+        1.113,
+        1.235
       ],
       "split_half_pnl": [
-        1.047,
-        1.295
+        1.043,
+        1.306
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.7,
-      "ballenas_n": 2358,
+      "ballenas_hit": 52.3,
+      "ballenas_n": 2119,
       "ask_real": {
-        "n": 515,
+        "n": 503,
         "dias": 21,
-        "ev_eur": -0.03,
+        "ev_eur": -0.031,
         "ic90_dias": [
-          -0.076,
-          0.01
+          -0.078,
+          0.011
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -4952,27 +4978,27 @@
   "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 862,
-      "hit": 65.4,
-      "pnl_media": 0.628,
+      "n": 869,
+      "hit": 65.7,
+      "pnl_media": 0.639,
       "pnl_ci90": [
-        0.515,
-        0.737
+        0.531,
+        0.743
       ],
       "split_half_pnl": [
-        0.556,
-        0.7
+        0.557,
+        0.721
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 44.7,
-      "ballenas_n": 1529,
+      "ballenas_hit": 45.2,
+      "ballenas_n": 1512,
       "ask_real": {
-        "n": 255,
+        "n": 258,
         "dias": 21,
-        "ev_eur": -0.076,
+        "ev_eur": -0.073,
         "ic90_dias": [
-          -0.138,
-          -0.031
+          -0.129,
+          -0.02
         ],
         "veredicto": "ask_negativo"
       },
@@ -4980,29 +5006,29 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 1708,
-      "hit": 74.8,
-      "pnl_media": 0.935,
+      "n": 1745,
+      "hit": 75.0,
+      "pnl_media": 0.943,
       "pnl_ci90": [
-        0.865,
-        1.005
+        0.876,
+        1.011
       ],
       "split_half_pnl": [
-        0.878,
-        0.992
+        0.868,
+        1.017
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.7,
-      "ballenas_n": 2358,
+      "ballenas_hit": 52.3,
+      "ballenas_n": 2119,
       "ask_real": {
-        "n": 568,
+        "n": 579,
         "dias": 21,
-        "ev_eur": -0.05,
+        "ev_eur": -0.043,
         "ic90_dias": [
-          -0.097,
-          -0.006
+          -0.091,
+          0.003
         ],
-        "veredicto": "ask_negativo"
+        "veredicto": "ask_sin_concluir"
       },
       "accionable": false
     }
@@ -5022,8 +5048,8 @@
         0.813
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.7,
-      "ballenas_n": 2358,
+      "ballenas_hit": 52.3,
+      "ballenas_n": 2119,
       "ask_real": {
         "n": 0,
         "veredicto": "sin_datos"
@@ -5034,27 +5060,27 @@
   "GBM_LATE_15M_TARDIO#XRP#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 827,
-      "hit": 65.7,
-      "pnl_media": 0.636,
+      "n": 834,
+      "hit": 65.9,
+      "pnl_media": 0.648,
       "pnl_ci90": [
-        0.526,
-        0.746
+        0.539,
+        0.756
       ],
       "split_half_pnl": [
-        0.549,
-        0.724
+        0.553,
+        0.743
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 44.7,
-      "ballenas_n": 1529,
+      "ballenas_hit": 45.2,
+      "ballenas_n": 1512,
       "ask_real": {
-        "n": 255,
+        "n": 259,
         "dias": 21,
-        "ev_eur": -0.084,
+        "ev_eur": -0.085,
         "ic90_dias": [
-          -0.142,
-          -0.038
+          -0.145,
+          -0.035
         ],
         "veredicto": "ask_negativo"
       },
@@ -5062,29 +5088,29 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 2421,
-      "hit": 74.8,
-      "pnl_media": 0.929,
+      "n": 2467,
+      "hit": 74.9,
+      "pnl_media": 0.937,
       "pnl_ci90": [
-        0.872,
-        0.987
+        0.882,
+        0.994
       ],
       "split_half_pnl": [
-        0.868,
-        0.991
+        0.869,
+        1.005
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.7,
-      "ballenas_n": 2358,
+      "ballenas_hit": 52.3,
+      "ballenas_n": 2119,
       "ask_real": {
-        "n": 840,
+        "n": 841,
         "dias": 21,
-        "ev_eur": -0.042,
+        "ev_eur": -0.037,
         "ic90_dias": [
-          -0.081,
-          -0.007
+          -0.08,
+          0.004
         ],
-        "veredicto": "ask_negativo"
+        "veredicto": "ask_sin_concluir"
       },
       "accionable": false
     }
@@ -5092,27 +5118,27 @@
   "LEADLAG_BTC_XRP_15M#XRP#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 1152,
-      "hit": 61.9,
-      "pnl_media": 0.317,
+      "n": 1167,
+      "hit": 62.0,
+      "pnl_media": 0.319,
       "pnl_ci90": [
-        0.242,
-        0.39
+        0.243,
+        0.395
       ],
       "split_half_pnl": [
-        0.356,
-        0.279
+        0.362,
+        0.277
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.7,
-      "ballenas_n": 2358,
+      "ballenas_hit": 52.3,
+      "ballenas_n": 2119,
       "ask_real": {
-        "n": 494,
+        "n": 480,
         "dias": 21,
-        "ev_eur": -0.109,
+        "ev_eur": -0.088,
         "ic90_dias": [
-          -0.162,
-          -0.055
+          -0.152,
+          -0.034
         ],
         "veredicto": "ask_negativo"
       },
@@ -5122,27 +5148,27 @@
   "UPDOWN_GBM#XRP#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 226,
-      "hit": 65.9,
-      "pnl_media": 0.623,
+      "n": 229,
+      "hit": 66.4,
+      "pnl_media": 0.641,
       "pnl_ci90": [
-        0.432,
-        0.81
+        0.45,
+        0.824
       ],
       "split_half_pnl": [
-        0.384,
-        0.862
+        0.366,
+        0.914
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 44.7,
-      "ballenas_n": 1529,
+      "ballenas_hit": 45.2,
+      "ballenas_n": 1512,
       "ask_real": {
-        "n": 78,
-        "dias": 16,
+        "n": 79,
+        "dias": 17,
         "ev_eur": -0.016,
         "ic90_dias": [
-          -0.148,
-          0.12
+          -0.155,
+          0.122
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5150,27 +5176,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 703,
-      "hit": 74.3,
-      "pnl_media": 0.911,
+      "n": 733,
+      "hit": 73.4,
+      "pnl_media": 0.877,
       "pnl_ci90": [
-        0.8,
-        1.016
+        0.772,
+        0.979
       ],
       "split_half_pnl": [
-        0.749,
-        1.072
+        0.754,
+        1.0
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.7,
-      "ballenas_n": 2358,
+      "ballenas_hit": 52.3,
+      "ballenas_n": 2119,
       "ask_real": {
-        "n": 303,
-        "dias": 18,
-        "ev_eur": -0.024,
+        "n": 315,
+        "dias": 19,
+        "ev_eur": -0.031,
         "ic90_dias": [
-          -0.08,
-          0.028
+          -0.084,
+          0.016
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5180,26 +5206,26 @@
   "GBM_LATE_15M#DOGE#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 485,
+      "n": 488,
       "hit": 67.8,
-      "pnl_media": 0.727,
+      "pnl_media": 0.726,
       "pnl_ci90": [
-        0.582,
-        0.868
+        0.589,
+        0.861
       ],
       "split_half_pnl": [
-        0.593,
-        0.86
+        0.588,
+        0.865
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.8,
-      "ballenas_n": 935,
+      "ballenas_hit": 45.9,
+      "ballenas_n": 846,
       "ask_real": {
-        "n": 156,
-        "dias": 21,
-        "ev_eur": -0.01,
+        "n": 157,
+        "dias": 20,
+        "ev_eur": -0.006,
         "ic90_dias": [
-          -0.102,
+          -0.095,
           0.089
         ],
         "veredicto": "ask_sin_concluir"
@@ -5208,27 +5234,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 3057,
-      "hit": 69.3,
-      "pnl_media": 0.71,
+      "n": 3115,
+      "hit": 69.4,
+      "pnl_media": 0.718,
       "pnl_ci90": [
-        0.657,
-        0.762
+        0.664,
+        0.771
       ],
       "split_half_pnl": [
-        0.654,
-        0.766
+        0.66,
+        0.776
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1352,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 1202,
       "ask_real": {
-        "n": 1131,
+        "n": 1130,
         "dias": 21,
-        "ev_eur": -0.057,
+        "ev_eur": -0.049,
         "ic90_dias": [
-          -0.082,
-          -0.029
+          -0.078,
+          -0.021
         ],
         "veredicto": "ask_negativo"
       },
@@ -5238,27 +5264,27 @@
   "GBM_LATE_15M_ESPACIO_ATR#DOGE#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 414,
-      "hit": 74.2,
-      "pnl_media": 0.996,
+      "n": 417,
+      "hit": 74.1,
+      "pnl_media": 0.994,
       "pnl_ci90": [
-        0.849,
-        1.137
+        0.848,
+        1.14
       ],
       "split_half_pnl": [
-        0.827,
-        1.165
+        0.832,
+        1.154
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.8,
-      "ballenas_n": 935,
+      "ballenas_hit": 45.9,
+      "ballenas_n": 846,
       "ask_real": {
-        "n": 126,
-        "dias": 21,
+        "n": 127,
+        "dias": 20,
         "ev_eur": 0.013,
         "ic90_dias": [
-          -0.079,
-          0.108
+          -0.078,
+          0.105
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5266,29 +5292,29 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 2634,
-      "hit": 76.4,
-      "pnl_media": 1.002,
+      "n": 2677,
+      "hit": 76.7,
+      "pnl_media": 1.014,
       "pnl_ci90": [
-        0.947,
-        1.056
+        0.96,
+        1.068
       ],
       "split_half_pnl": [
-        0.931,
-        1.073
+        0.926,
+        1.102
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1352,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 1202,
       "ask_real": {
-        "n": 908,
+        "n": 902,
         "dias": 21,
-        "ev_eur": -0.036,
+        "ev_eur": -0.027,
         "ic90_dias": [
-          -0.062,
-          -0.009
+          -0.058,
+          0.005
         ],
-        "veredicto": "ask_negativo"
+        "veredicto": "ask_sin_concluir"
       },
       "accionable": false
     }
@@ -5296,27 +5322,27 @@
   "GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 457,
+      "n": 460,
       "hit": 66.1,
       "pnl_media": 0.667,
       "pnl_ci90": [
-        0.519,
-        0.815
+        0.517,
+        0.811
       ],
       "split_half_pnl": [
-        0.491,
-        0.842
+        0.487,
+        0.848
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.8,
-      "ballenas_n": 935,
+      "ballenas_hit": 45.9,
+      "ballenas_n": 846,
       "ask_real": {
-        "n": 148,
-        "dias": 21,
-        "ev_eur": -0.004,
+        "n": 149,
+        "dias": 20,
+        "ev_eur": -0.0,
         "ic90_dias": [
-          -0.093,
-          0.092
+          -0.085,
+          0.091
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5324,29 +5350,29 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 2099,
-      "hit": 72.3,
-      "pnl_media": 0.84,
+      "n": 2142,
+      "hit": 72.5,
+      "pnl_media": 0.851,
       "pnl_ci90": [
-        0.778,
-        0.904
+        0.788,
+        0.912
       ],
       "split_half_pnl": [
-        0.78,
-        0.9
+        0.774,
+        0.928
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1352,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 1202,
       "ask_real": {
-        "n": 708,
+        "n": 718,
         "dias": 21,
-        "ev_eur": -0.052,
+        "ev_eur": -0.035,
         "ic90_dias": [
-          -0.086,
-          -0.015
+          -0.077,
+          0.007
         ],
-        "veredicto": "ask_negativo"
+        "veredicto": "ask_sin_concluir"
       },
       "accionable": false
     }
@@ -5354,27 +5380,27 @@
   "GBM_LATE_15M_PYCONFIRMADO#DOGE#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 49,
-      "hit": 71.4,
-      "pnl_media": 0.877,
+      "n": 50,
+      "hit": 72.0,
+      "pnl_media": 0.9,
       "pnl_ci90": [
-        0.457,
-        1.296
+        0.485,
+        1.31
       ],
       "split_half_pnl": [
-        1.031,
-        0.729
+        1.069,
+        0.731
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.8,
-      "ballenas_n": 935,
+      "ballenas_hit": 45.9,
+      "ballenas_n": 846,
       "ask_real": {
         "n": 20,
         "dias": 3,
-        "ev_eur": 0.024,
+        "ev_eur": 0.0,
         "ic90_dias": [
-          -0.061,
-          0.223
+          -0.082,
+          0.129
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5394,8 +5420,8 @@
         0.631
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1352,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 1202,
       "ask_real": {
         "n": 0,
         "veredicto": "sin_datos"
@@ -5406,27 +5432,27 @@
   "GBM_LATE_15M_TARDIO#DOGE#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 437,
+      "n": 440,
       "hit": 71.6,
-      "pnl_media": 0.893,
+      "pnl_media": 0.891,
       "pnl_ci90": [
-        0.75,
-        1.035
+        0.748,
+        1.038
       ],
       "split_half_pnl": [
-        0.774,
-        1.01
+        0.767,
+        1.015
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.8,
-      "ballenas_n": 935,
+      "ballenas_hit": 45.9,
+      "ballenas_n": 846,
       "ask_real": {
-        "n": 149,
-        "dias": 21,
-        "ev_eur": 0.008,
+        "n": 150,
+        "dias": 20,
+        "ev_eur": 0.011,
         "ic90_dias": [
-          -0.082,
-          0.106
+          -0.077,
+          0.107
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5434,27 +5460,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 2824,
-      "hit": 72.5,
-      "pnl_media": 0.846,
+      "n": 2879,
+      "hit": 72.7,
+      "pnl_media": 0.854,
       "pnl_ci90": [
-        0.79,
-        0.899
+        0.799,
+        0.908
       ],
       "split_half_pnl": [
-        0.81,
-        0.883
+        0.812,
+        0.896
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1352,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 1202,
       "ask_real": {
-        "n": 1060,
+        "n": 1063,
         "dias": 21,
-        "ev_eur": -0.056,
+        "ev_eur": -0.049,
         "ic90_dias": [
-          -0.081,
-          -0.03
+          -0.077,
+          -0.022
         ],
         "veredicto": "ask_negativo"
       },
@@ -5464,27 +5490,27 @@
   "MOMENTUM_IBS_15M_BALLENA#DOGE#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 2642,
-      "hit": 60.3,
-      "pnl_media": 0.116,
+      "n": 2688,
+      "hit": 60.6,
+      "pnl_media": 0.122,
       "pnl_ci90": [
-        0.094,
-        0.137
+        0.101,
+        0.144
       ],
       "split_half_pnl": [
-        0.114,
-        0.118
+        0.113,
+        0.131
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1352,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 1202,
       "ask_real": {
         "n": 1014,
         "dias": 21,
-        "ev_eur": -0.111,
+        "ev_eur": -0.094,
         "ic90_dias": [
-          -0.142,
-          -0.077
+          -0.133,
+          -0.056
         ],
         "veredicto": "ask_negativo"
       },
@@ -5506,15 +5532,15 @@
         0.579
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 46.8,
-      "ballenas_n": 935,
+      "ballenas_hit": 45.9,
+      "ballenas_n": 846,
       "ask_real": {
-        "n": 29,
-        "dias": 15,
-        "ev_eur": -0.164,
+        "n": 28,
+        "dias": 14,
+        "ev_eur": -0.135,
         "ic90_dias": [
-          -0.357,
-          0.07
+          -0.323,
+          0.107
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5534,15 +5560,15 @@
         0.927
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1352,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 1202,
       "ask_real": {
-        "n": 200,
-        "dias": 18,
-        "ev_eur": -0.12,
+        "n": 191,
+        "dias": 17,
+        "ev_eur": -0.112,
         "ic90_dias": [
-          -0.197,
-          -0.046
+          -0.194,
+          -0.034
         ],
         "veredicto": "ask_negativo"
       },
@@ -5564,8 +5590,8 @@
         0.474
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 50.3,
-      "ballenas_n": 1352,
+      "ballenas_hit": 51.3,
+      "ballenas_n": 1202,
       "ask_real": {
         "n": 1,
         "dias": 1,
@@ -5579,27 +5605,27 @@
   "GBM_LATE_15M#BNB#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 579,
-      "hit": 68.2,
-      "pnl_media": 0.734,
+      "n": 588,
+      "hit": 68.5,
+      "pnl_media": 0.747,
       "pnl_ci90": [
-        0.602,
-        0.867
+        0.618,
+        0.877
       ],
       "split_half_pnl": [
-        0.601,
-        0.867
+        0.598,
+        0.897
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.7,
-      "ballenas_n": 760,
+      "ballenas_hit": 49.7,
+      "ballenas_n": 758,
       "ask_real": {
-        "n": 190,
+        "n": 196,
         "dias": 21,
-        "ev_eur": -0.009,
+        "ev_eur": -0.0,
         "ic90_dias": [
-          -0.076,
-          0.061
+          -0.067,
+          0.066
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5607,27 +5633,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 2868,
-      "hit": 69.0,
-      "pnl_media": 0.701,
+      "n": 2912,
+      "hit": 69.2,
+      "pnl_media": 0.709,
       "pnl_ci90": [
-        0.647,
-        0.757
+        0.653,
+        0.763
       ],
       "split_half_pnl": [
-        0.603,
-        0.799
+        0.605,
+        0.814
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.2,
-      "ballenas_n": 1091,
+      "ballenas_hit": 49.6,
+      "ballenas_n": 986,
       "ask_real": {
-        "n": 939,
+        "n": 931,
         "dias": 21,
-        "ev_eur": -0.023,
+        "ev_eur": -0.016,
         "ic90_dias": [
-          -0.058,
-          0.015
+          -0.054,
+          0.022
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5637,27 +5663,27 @@
   "GBM_LATE_15M_ESPACIO_ATR#BNB#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 482,
-      "hit": 62.2,
-      "pnl_media": 0.413,
+      "n": 486,
+      "hit": 62.6,
+      "pnl_media": 0.423,
       "pnl_ci90": [
-        0.306,
-        0.518
+        0.318,
+        0.527
       ],
       "split_half_pnl": [
-        0.24,
-        0.587
+        0.238,
+        0.607
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.7,
-      "ballenas_n": 760,
+      "ballenas_hit": 49.7,
+      "ballenas_n": 758,
       "ask_real": {
-        "n": 135,
+        "n": 131,
         "dias": 21,
-        "ev_eur": -0.069,
+        "ev_eur": -0.064,
         "ic90_dias": [
-          -0.14,
-          -0.007
+          -0.132,
+          -0.002
         ],
         "veredicto": "ask_negativo"
       },
@@ -5665,27 +5691,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 1740,
-      "hit": 71.6,
-      "pnl_media": 0.622,
+      "n": 1768,
+      "hit": 71.9,
+      "pnl_media": 0.632,
       "pnl_ci90": [
-        0.568,
-        0.675
+        0.577,
+        0.685
       ],
       "split_half_pnl": [
-        0.485,
-        0.759
+        0.484,
+        0.779
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.2,
-      "ballenas_n": 1091,
+      "ballenas_hit": 49.6,
+      "ballenas_n": 986,
       "ask_real": {
-        "n": 640,
+        "n": 639,
         "dias": 21,
-        "ev_eur": -0.02,
+        "ev_eur": -0.024,
         "ic90_dias": [
           -0.059,
-          0.021
+          0.016
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5695,27 +5721,27 @@
   "GBM_LATE_15M_MULTIHORIZONTE#BNB#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 483,
-      "hit": 70.0,
-      "pnl_media": 0.817,
+      "n": 492,
+      "hit": 70.3,
+      "pnl_media": 0.831,
       "pnl_ci90": [
-        0.674,
-        0.96
+        0.694,
+        0.97
       ],
       "split_half_pnl": [
-        0.71,
-        0.924
+        0.721,
+        0.941
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.7,
-      "ballenas_n": 760,
+      "ballenas_hit": 49.7,
+      "ballenas_n": 758,
       "ask_real": {
-        "n": 164,
+        "n": 170,
         "dias": 21,
-        "ev_eur": -0.025,
+        "ev_eur": -0.015,
         "ic90_dias": [
-          -0.108,
-          0.045
+          -0.096,
+          0.053
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5723,27 +5749,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 2062,
-      "hit": 71.0,
-      "pnl_media": 0.787,
+      "n": 2098,
+      "hit": 71.1,
+      "pnl_media": 0.794,
       "pnl_ci90": [
-        0.723,
-        0.854
+        0.727,
+        0.858
       ],
       "split_half_pnl": [
-        0.714,
-        0.861
+        0.705,
+        0.883
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.2,
-      "ballenas_n": 1091,
+      "ballenas_hit": 49.6,
+      "ballenas_n": 986,
       "ask_real": {
-        "n": 644,
+        "n": 651,
         "dias": 21,
-        "ev_eur": -0.033,
+        "ev_eur": -0.027,
         "ic90_dias": [
-          -0.073,
-          0.012
+          -0.072,
+          0.014
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5753,27 +5779,27 @@
   "GBM_LATE_15M_PYCONFIRMADO#BNB#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 69,
-      "hit": 68.1,
-      "pnl_media": 0.714,
+      "n": 74,
+      "hit": 68.9,
+      "pnl_media": 0.749,
       "pnl_ci90": [
-        0.352,
-        1.065
+        0.378,
+        1.086
       ],
       "split_half_pnl": [
-        0.226,
-        1.187
+        0.358,
+        1.141
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.7,
-      "ballenas_n": 760,
+      "ballenas_hit": 49.7,
+      "ballenas_n": 758,
       "ask_real": {
-        "n": 20,
+        "n": 26,
         "dias": 3,
-        "ev_eur": 0.065,
+        "ev_eur": 0.02,
         "ic90_dias": [
           -0.218,
-          0.296
+          0.145
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5793,8 +5819,8 @@
         0.681
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.2,
-      "ballenas_n": 1091,
+      "ballenas_hit": 49.6,
+      "ballenas_n": 986,
       "ask_real": {
         "n": 70,
         "dias": 5,
@@ -5811,27 +5837,27 @@
   "GBM_LATE_15M_TARDIO#BNB#15min#BUY_YES": [
     {
       "bucket": "[0.45,0.50)",
-      "n": 542,
-      "hit": 70.8,
-      "pnl_media": 0.849,
+      "n": 551,
+      "hit": 71.1,
+      "pnl_media": 0.861,
       "pnl_ci90": [
-        0.721,
-        0.977
+        0.736,
+        0.991
       ],
       "split_half_pnl": [
-        0.748,
-        0.95
+        0.722,
+        1.0
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.7,
-      "ballenas_n": 760,
+      "ballenas_hit": 49.7,
+      "ballenas_n": 758,
       "ask_real": {
-        "n": 179,
+        "n": 186,
         "dias": 21,
-        "ev_eur": -0.019,
+        "ev_eur": -0.017,
         "ic90_dias": [
-          -0.085,
-          0.058
+          -0.079,
+          0.052
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5839,27 +5865,27 @@
     },
     {
       "bucket": "[0.50,0.55)",
-      "n": 2697,
-      "hit": 71.9,
-      "pnl_media": 0.823,
+      "n": 2740,
+      "hit": 72.0,
+      "pnl_media": 0.829,
       "pnl_ci90": [
-        0.766,
-        0.88
+        0.773,
+        0.885
       ],
       "split_half_pnl": [
-        0.732,
-        0.913
+        0.734,
+        0.923
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.2,
-      "ballenas_n": 1091,
+      "ballenas_hit": 49.6,
+      "ballenas_n": 986,
       "ask_real": {
-        "n": 882,
+        "n": 881,
         "dias": 21,
         "ev_eur": -0.016,
         "ic90_dias": [
-          -0.052,
-          0.022
+          -0.054,
+          0.024
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5869,27 +5895,27 @@
   "MOMENTUM_IBS_15M_BALLENA#BNB#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 2161,
-      "hit": 62.2,
-      "pnl_media": 0.127,
+      "n": 2205,
+      "hit": 62.4,
+      "pnl_media": 0.13,
       "pnl_ci90": [
-        0.104,
-        0.152
+        0.107,
+        0.154
       ],
       "split_half_pnl": [
-        0.115,
-        0.139
+        0.116,
+        0.145
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.2,
-      "ballenas_n": 1091,
+      "ballenas_hit": 49.6,
+      "ballenas_n": 986,
       "ask_real": {
-        "n": 811,
+        "n": 805,
         "dias": 21,
-        "ev_eur": -0.073,
+        "ev_eur": -0.069,
         "ic90_dias": [
-          -0.117,
-          -0.023
+          -0.119,
+          -0.016
         ],
         "veredicto": "ask_negativo"
       },
@@ -5911,15 +5937,15 @@
         1.215
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 53.7,
-      "ballenas_n": 760,
+      "ballenas_hit": 49.7,
+      "ballenas_n": 758,
       "ask_real": {
-        "n": 49,
-        "dias": 17,
-        "ev_eur": -0.01,
+        "n": 47,
+        "dias": 16,
+        "ev_eur": 0.032,
         "ic90_dias": [
-          -0.172,
-          0.15
+          -0.099,
+          0.167
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5939,15 +5965,15 @@
         1.005
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.2,
-      "ballenas_n": 1091,
+      "ballenas_hit": 49.6,
+      "ballenas_n": 986,
       "ask_real": {
-        "n": 239,
-        "dias": 18,
-        "ev_eur": -0.054,
+        "n": 227,
+        "dias": 17,
+        "ev_eur": -0.057,
         "ic90_dias": [
-          -0.12,
-          0.015
+          -0.136,
+          0.017
         ],
         "veredicto": "ask_sin_concluir"
       },
@@ -5970,14 +5996,14 @@
       ],
       "robusto_split_half": true,
       "ballenas_hit": 56.8,
-      "ballenas_n": 12840,
+      "ballenas_n": 12870,
       "ask_real": {
-        "n": 19,
-        "dias": 12,
-        "ev_eur": 0.279,
+        "n": 18,
+        "dias": 11,
+        "ev_eur": 0.35,
         "ic90_dias": [
-          0.041,
-          0.556
+          0.126,
+          0.599
         ],
         "veredicto": "ask_ok"
       },
