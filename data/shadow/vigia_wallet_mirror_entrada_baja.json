@@ -1,36 +1,36 @@
 {
- "actualizado_utc": "2026-10-13T07:41:13+00:00",
+ "actualizado_utc": "2026-10-14T07:41:12+00:00",
  "ask_max": 0.2,
  "real": {
   "BTC#5min#normal": {
-   "n": 15988,
-   "dias": 53,
+   "n": 16035,
+   "dias": 54,
    "hit": 0.106,
    "ask_medio": 0.101,
-   "pnl_tr": -0.101,
+   "pnl_tr": -0.102,
    "mitades": [
-    -0.045,
-    -0.156
+    -0.048,
+    -0.157
    ],
    "ic90_dias": [
-    -0.256,
-    0.003
+    -0.251,
+    0.006
    ],
    "candidata": false
   },
   "TOTAL": {
-   "n": 24570,
-   "dias": 53,
+   "n": 24779,
+   "dias": 54,
    "hit": 0.106,
    "ask_medio": 0.104,
-   "pnl_tr": -0.098,
+   "pnl_tr": -0.096,
    "mitades": [
-    -0.162,
-    -0.035
+    -0.152,
+    -0.04
    ],
    "ic90_dias": [
-    -0.235,
-    0.04
+    -0.237,
+    0.037
    ],
    "candidata": false
   },
@@ -51,34 +51,34 @@
    "candidata": false
   },
   "BTC#15min#normal": {
-   "n": 5097,
-   "dias": 47,
+   "n": 5198,
+   "dias": 48,
    "hit": 0.107,
-   "ask_medio": 0.108,
-   "pnl_tr": -0.05,
+   "ask_medio": 0.109,
+   "pnl_tr": -0.054,
    "mitades": [
-    0.219,
-    -0.319
+    0.201,
+    -0.31
    ],
    "ic90_dias": [
-    -0.381,
-    0.35
+    -0.363,
+    0.322
    ],
    "candidata": false
   },
   "BTC#15min#grande": {
-   "n": 562,
-   "dias": 31,
-   "hit": 0.13,
-   "ask_medio": 0.117,
-   "pnl_tr": 0.129,
+   "n": 575,
+   "dias": 32,
+   "hit": 0.139,
+   "ask_medio": 0.116,
+   "pnl_tr": 0.189,
    "mitades": [
-    1.002,
-    -0.744
+    0.96,
+    -0.58
    ],
    "ic90_dias": [
-    -0.394,
-    0.797
+    -0.327,
+    0.86
    ],
    "candidata": false
   },
@@ -99,50 +99,50 @@
    "candidata": false
   },
   "ETH#5min#normal": {
-   "n": 682,
-   "dias": 35,
-   "hit": 0.1,
+   "n": 711,
+   "dias": 36,
+   "hit": 0.111,
    "ask_medio": 0.116,
-   "pnl_tr": -0.239,
+   "pnl_tr": -0.15,
    "mitades": [
-    -0.087,
-    -0.39
+    -0.003,
+    -0.298
    ],
    "ic90_dias": [
-    -0.455,
-    -0.009
+    -0.362,
+    0.09
    ],
    "candidata": false
   },
   "BTC#5min#grande": {
-   "n": 1107,
-   "dias": 45,
+   "n": 1109,
+   "dias": 46,
    "hit": 0.086,
    "ask_medio": 0.09,
-   "pnl_tr": -0.17,
+   "pnl_tr": -0.172,
    "mitades": [
-    -0.397,
-    0.056
+    -0.381,
+    0.037
    ],
    "ic90_dias": [
-    -0.458,
-    0.225
+    -0.46,
+    0.238
    ],
    "candidata": false
   },
   "DOGE#5min#normal": {
-   "n": 91,
-   "dias": 14,
-   "hit": 0.099,
-   "ask_medio": 0.141,
-   "pnl_tr": -0.336,
+   "n": 95,
+   "dias": 15,
+   "hit": 0.105,
+   "ask_medio": 0.14,
+   "pnl_tr": -0.282,
    "mitades": [
-    0.232,
-    -0.892
+    0.179,
+    -0.734
    ],
    "ic90_dias": [
-    -0.786,
-    0.256
+    -0.711,
+    0.305
    ],
    "candidata": false
   },
@@ -171,50 +171,50 @@
    "candidata": false
   },
   "ETH#15min#normal": {
-   "n": 278,
-   "dias": 35,
-   "hit": 0.104,
+   "n": 283,
+   "dias": 37,
+   "hit": 0.102,
    "ask_medio": 0.116,
-   "pnl_tr": -0.186,
+   "pnl_tr": -0.2,
    "mitades": [
-    -0.317,
-    -0.054
+    -0.194,
+    -0.206
    ],
    "ic90_dias": [
-    -0.491,
-    0.101
+    -0.502,
+    0.079
    ],
    "candidata": false
   },
   "BTC#60min#normal": {
-   "n": 93,
-   "dias": 23,
-   "hit": 0.097,
+   "n": 95,
+   "dias": 24,
+   "hit": 0.095,
    "ask_medio": 0.12,
-   "pnl_tr": -0.445,
+   "pnl_tr": -0.457,
    "mitades": [
-    -0.144,
-    -0.739
+    -0.163,
+    -0.745
    ],
    "ic90_dias": [
-    -0.76,
-    -0.114
+    -0.771,
+    -0.136
    ],
    "candidata": false
   },
   "XRP#5min#normal": {
-   "n": 53,
-   "dias": 17,
-   "hit": 0.113,
-   "ask_medio": 0.132,
-   "pnl_tr": -0.289,
+   "n": 58,
+   "dias": 18,
+   "hit": 0.121,
+   "ask_medio": 0.131,
+   "pnl_tr": -0.189,
    "mitades": [
-    0.237,
-    -0.795
+    0.109,
+    -0.486
    ],
    "ic90_dias": [
-    -0.775,
-    0.251
+    -0.664,
+    0.278
    ],
    "candidata": false
   },
@@ -291,10 +291,10 @@
    "candidata": false
   },
   "BTC#240min#normal": {
-   "n": 33,
-   "dias": 8,
+   "n": 34,
+   "dias": 9,
    "hit": 0.0,
-   "ask_medio": 0.161,
+   "ask_medio": 0.159,
    "pnl_tr": -1.0,
    "mitades": [
     -1.0,
