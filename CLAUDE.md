@@ -392,7 +392,7 @@ La lista real de screens y su frescura la da `python3 verify_deploy.py`; el mapa
 ```bash
 bash live_switch.sh on/off/status   # o Telegram: /on /off /status
 ```
-**Ventanas (hora Madrid)** — fuente de verdad `config_live.json::ventanas_lunes_viernes`/`ventanas_fin_de_semana` (verificado 30-Sep). L-V: 08:30-09:30 | 10:30-11:30 | 15:00-23:00 | 01:00-02:00 | 02:00-06:00 (madrugada, abierta para FAVORITO#BTC#60min) | 06:00-07:00. Fin de semana: 15-16 | 17-18 | 19-20 | 21-22 | 23:00-23:59 | 01-02 | 06-07. `live_guard.py` no maneja cruce de medianoche (por eso 23:59). `RESOLUTION_SNIPER_PRECIERRE` opera sin ventanas.
+**Ventanas (hora Madrid)** — fuente de verdad `config_live.json::ventanas_lunes_viernes`/`ventanas_fin_de_semana` (verificado 30-Sep). **Desde el 14-Oct (Javi) hay una ventana `24h_javi_14oct` 00:00-23:59 en ambas listas: el live opera las 24 h** (pensada para WALLET_MIRROR#BTC#15min [0.35,0.40); cualquier bucket que se confirme en cualquier tupla de la whitelist operará también 24 h). L-V: 08:30-09:30 | 10:30-11:30 | 15:00-23:00 | 01:00-02:00 | 02:00-06:00 (madrugada, abierta para FAVORITO#BTC#60min) | 06:00-07:00. Fin de semana: 15-16 | 17-18 | 19-20 | 21-22 | 23:00-23:59 | 01-02 | 06-07. `live_guard.py` no maneja cruce de medianoche (por eso 23:59). `RESOLUTION_SNIPER_PRECIERRE` opera sin ventanas.
 **Stake**: `min(IC × bankroll × 0.5, bankroll × 10%, max_stake)` — valores reales en `config_live.json::riesgo`.
 **Circuit breakers**: bankroll bajo el mínimo → OFF | caída diaria → para el día | caída de ventana → para la ventana (umbrales en `config_live.json`).
 **Credenciales**: `data/live/.env` (gitignored).
