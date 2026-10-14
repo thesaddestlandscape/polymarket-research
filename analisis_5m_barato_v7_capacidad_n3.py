@@ -4,6 +4,10 @@ ejecución simulada (caché disparo15m_D, BTC, DELTA 0, L355) lee del ARCHIVO re
 del 5m: l,t_ex,token,p1,s1,p2,s2,p3,s3,t_rx) y toma la última con recepción <= t+355 ms. Por stake objetivo S compra
 barriendo los niveles con precio <= p_lim (límite de la regla) hasta S € -> VWAP, acciones (mínimo 5 o no opera),
 mismo desenlace y comisión por nivel. Sigue siendo una cota (sin niveles > 3 ni competencia por el mismo nivel).
+14-Oct (Javi: "necesitamos llegar a todos los niveles"): el registro histórico solo tiene 3 niveles; se estima la profundidad
+TOTAL al precio límite como max(€ en niveles 1-3 <= p_lim, € COMPRADOS por tomadores a <= p_lim en [t+L, t+L+2 s] según las
+operaciones del registro m5): lo que otros se llevaron justo después de nuestra llegada estaba en el libro. COTA SUPERIOR
+(supone que nos lo habríamos llevado nosotros). Desde el 14-Oct 12:26Z el registro graba el libro COMPLETO (fila L).
 Uso: nice -n 19 python3 analisis_5m_barato_v7_capacidad_n3.py
 """
 import bisect
@@ -66,6 +70,29 @@ def main():
                             continue
                 except (EOFError, OSError):
                     pass
+        # operaciones tomadoras COMPRA del token (registro m5): € a <= p_lim en [t+355, t+2355] (hora del exchange)
+        from archivo_volumen import VOL
+        ops = defaultdict(list)
+        fm5 = VOL / "m5_registro" / f"m5_registro_{dia}.csv.gz"
+        if fm5.exists():
+            with gzip.open(fm5, "rt", errors="replace") as fh:
+                try:
+                    for ln in fh:
+                        if not ln.startswith("t,"):
+                            continue
+                        c = ln.split(",")
+                        if c[2] in objetivo and c[4] == "BUY":
+                            try:
+                                ops[c[2]].append((int(c[1]), float(c[3]), float(c[5])))
+                            except (ValueError, IndexError):
+                                pass
+                except (EOFError, OSError):
+                    pass
+        for tk, lst in objetivo.items():
+            for r in lst:
+                t1 = int(r["t"]) + 355
+                pl = float(r["p_lim"])
+                r["eur_comprado_2s"] = sum(p * sz for te, p, sz in ops.get(tk, []) if t1 <= te <= t1 + 2000 and p <= pl + 1e-9)
         for tk, lst in objetivo.items():
             L = sorted(ls.get(tk, []), key=lambda x: x[0])
             ts = [x[0] for x in L]
@@ -79,7 +106,13 @@ def main():
     if prof:
         print(f"\nV7 BTC DELTA 0 L355 — € disponibles en niveles 1-3 a <= p_lim al llegar: P25/P50/P75/máx "
               f"{prof[len(prof) // 4]:.0f}/{prof[len(prof) // 2]:.0f}/{prof[3 * len(prof) // 4]:.0f}/{prof[-1]:.0f}")
-    for S in STAKES:
+    tot = sorted(max(sum(p * s for p, s in f["niveles"] if p <= float(f["p_lim"]) + 1e-9), f.get("eur_comprado_2s", 0.0))
+                 for f in filas)
+    print(f"PROFUNDIDAD TOTAL ESTIMADA (máx niveles 1-3 y comprado por otros en 2 s) € P25/P50/P75/máx "
+          f"{tot[len(tot) // 4]:.0f}/{tot[len(tot) // 2]:.0f}/{tot[3 * len(tot) // 4]:.0f}/{tot[-1]:.0f}")
+    for modo in ("niveles_1_3", "total_estimada"):
+      print(f"\n== {modo}")
+      for S in STAKES:
         pnl = cost = 0.0
         n = 0
         top = []
@@ -87,7 +120,14 @@ def main():
             g = f["gana"] == "True"
             plim = float(f["p_lim"])
             falta, acc, coste_f, pnl_f = S, 0.0, 0.0, 0.0
-            for p, s in f["niveles"]:
+            niv = list(f["niveles"])
+            if modo == "total_estimada":
+                extra = f.get("eur_comprado_2s", 0.0) - sum(p * s for p, s in niv if p <= plim + 1e-9)
+                if extra > 0:                                   # profundidad extra (cota) al precio límite
+                    niv = niv + [(plim, extra / plim)]
+                if not niv and f.get("eur_comprado_2s", 0.0) > 0:
+                    niv = [(plim, f["eur_comprado_2s"] / plim)]
+            for p, s in sorted(niv):
                 if p > plim + 1e-9 or falta <= 0:
                     break
                 x = min(s, falta / (p + V.fee(p)))
@@ -102,7 +142,7 @@ def main():
             cost += coste_f
             top.append(pnl_f)
         top.sort(reverse=True)
-        print(f"  stake {S:4d} €: ops {n:2d} | invertido {cost:8.1f} € | PnL {pnl:+8.2f} € | EV/€ {pnl / cost if cost else 0:+.3f} | "
+        print(f"    stake {S:4d} €: ops {n:2d} | invertido {cost:8.1f} € | PnL {pnl:+8.2f} € | EV/€ {pnl / cost if cost else 0:+.3f} | "
               f"sin top3 {pnl - sum(top[:3]):+8.2f} € | {pnl / dias:+.2f} €/día -> x365 {pnl / dias * 365:+,.0f} €/año (techo descubrimiento)")
 
 
