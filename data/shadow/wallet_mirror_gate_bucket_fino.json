@@ -72,25 +72,25 @@
     "veredicto": "malo_confirmado"
   },
   "SEGUIR#BTC#15min#0": {
-    "n_dias": 34,
-    "pnl_sin_mejores_dias": 0.1264,
+    "n_dias": 35,
+    "pnl_sin_mejores_dias": 0.1125,
     "robusto_dias": true,
     "lo": 0.03,
     "hi": 0.08,
-    "n": 275,
-    "pnl_medio": 0.689,
-    "diff_vs_resto": 0.7081,
+    "n": 278,
+    "pnl_medio": 0.6708,
+    "diff_vs_resto": 0.6903,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.5491,
-      0.8659
+      0.8646,
+      0.516
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 0.5813,
+    "pnl_medio_loo": 0.5642,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.1011,
-      1.2806
+      0.1221,
+      1.2523
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -198,11 +198,11 @@
     "hi": 0.05,
     "n": 840,
     "pnl_medio": -0.4797,
-    "diff_vs_resto": -0.4541,
+    "diff_vs_resto": -0.4542,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.5656,
-      -0.3426
+      -0.5657,
+      -0.3427
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5348,
