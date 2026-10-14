@@ -1,53 +1,53 @@
 {
- "actualizado_utc": "2026-10-13T09:40:23+00:00",
+ "actualizado_utc": "2026-10-14T09:40:15+00:00",
  "fok_reales": {
-  "enviadas": 10,
-  "muertas": 5,
-  "muertas_resueltas": 5,
-  "muertas_que_ganarian": 4
+  "enviadas": 12,
+  "muertas": 6,
+  "muertas_resueltas": 6,
+  "muertas_que_ganarian": 5
  },
  "offsets": {
   "5m#-47": {
-   "n": 0,
+   "n": 1,
    "pendientes": 0,
-   "dias": 0,
-   "acierto": null,
-   "ask_medio": null,
-   "ev_eur": null,
+   "dias": 1,
+   "acierto": 0.0,
+   "ask_medio": 0.6,
+   "ev_eur": -1.0,
    "ic90_cierre": null
   },
   "5m#-46": {
-   "n": 2,
+   "n": 3,
    "pendientes": 0,
    "dias": 2,
-   "acierto": 0.5,
-   "ask_medio": 0.605,
-   "ev_eur": -0.238,
+   "acierto": 0.333,
+   "ask_medio": 0.517,
+   "ev_eur": -0.492,
    "ic90_cierre": null
   },
   "5m#-45": {
-   "n": 2,
+   "n": 4,
    "pendientes": 0,
-   "dias": 2,
-   "acierto": 0.5,
-   "ask_medio": 0.565,
-   "ev_eur": -0.214,
+   "dias": 3,
+   "acierto": 0.25,
+   "ask_medio": 0.505,
+   "ev_eur": -0.607,
    "ic90_cierre": null
   },
   "5m#emparejado": {
-   "senales_T45": 2,
-   "tambien_a_T47": 0,
+   "senales_T45": 4,
+   "tambien_a_T47": 1,
    "solo_a_T47": 0,
-   "comunes_resueltos": 0,
-   "dif_ev_T47_menos_T45": null
+   "comunes_resueltos": 1,
+   "dif_ev_T47_menos_T45": 0.0
   },
   "15m#-47": {
-   "n": 0,
+   "n": 1,
    "pendientes": 0,
-   "dias": 0,
-   "acierto": null,
-   "ask_medio": null,
-   "ev_eur": null,
+   "dias": 1,
+   "acierto": 1.0,
+   "ask_medio": 0.83,
+   "ev_eur": 0.191,
    "ic90_cierre": null
   },
   "15m#-46": {
@@ -60,18 +60,18 @@
    "ic90_cierre": null
   },
   "15m#-45": {
-   "n": 0,
+   "n": 1,
    "pendientes": 0,
-   "dias": 0,
-   "acierto": null,
-   "ask_medio": null,
-   "ev_eur": null,
+   "dias": 1,
+   "acierto": 1.0,
+   "ask_medio": 0.82,
+   "ev_eur": 0.204,
    "ic90_cierre": null
   },
   "15m#emparejado": {
-   "senales_T45": 0,
+   "senales_T45": 1,
    "tambien_a_T47": 0,
-   "solo_a_T47": 0,
+   "solo_a_T47": 1,
    "comunes_resueltos": 0,
    "dif_ev_T47_menos_T45": null
   }
