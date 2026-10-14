@@ -15,7 +15,9 @@ grande que en cripto, donde al menos existía la capa agregada.
 Separación estricta (CLAUDE.md): solo lee data/sports/, nunca
 data/shadow/data/live de cripto. Fichero propio, no se reutiliza código
 de wallet_mirror_tracker.py (categorías distintas -- sports no tiene eje
-de marco temporal, solo `categoria`).
+de marco temporal, solo `categoria`). Excepción 14-Oct: el CRITERIO del filtro
+wallet+bucket es el módulo neutro wallet_mirror_filtro_bucket (sin datos ni
+comisión de cripto; la comisión de sports se pasa desde sports_resolve.FEE).
 
 Fuente única: data/sports/wallet_mirror_sniper_dry_run.csv (a diferencia
 de cripto, sports NO tiene un `ballenas_timing_history.csv` equivalente
@@ -31,7 +33,8 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-from sports_wallet_mirror_gate_bucket import bucket as _bucket_precio
+from sports_wallet_mirror_gate_bucket import bucket as _bucket_precio, STEP as STEP_BUCKET
+import wallet_mirror_filtro_bucket as wmfb  # 14-Oct: criterio único wallet+bucket (módulo neutro, sin código cripto)
 from analisis_gate_riguroso import wilson_ci
 
 REPO = Path(__file__).resolve().parent
@@ -40,6 +43,7 @@ EDGE_JSON = DIR_SPORTS / "wallet_edge_score_por_categoria.json"
 DRY_RUN_VIVO = DIR_SPORTS / "wallet_mirror_sniper_dry_run.csv"
 
 _cache_dry_run_vivo = {"mtime": None, "filas": None}
+MOTIVOS_VETO_BUCKET: dict = {}  # (wallet, categoria, tipo, bucket) -> motivo del último refresco
 
 
 def _leer_dry_run_vivo_filas():
@@ -213,34 +217,26 @@ def wallets_operativas_recientes_por_bucket(wallets_admitidas: dict | None = Non
         candidatas = {k: v for k, v in candidatas.items() if k in wallets_admitidas}
     wallets_objetivo = {w for w, _ in candidatas}
     hist = _historial_reciente_por_bucket(wallets_objetivo)
-    out = {}
+    from sports_resolve import FEE as fee_sports  # import tardío: sports_resolve importa el sniper (ciclo al cargar)
+    eq = lambda p: wmfb.equilibrio_ganadoras(p, fee_sports)
+    out, motivos = {}, {}
     for (w, categoria, tipo, b), aciertos in hist.items():
         info = candidatas.get((w, categoria))
         if info is None or info["tipo"] != tipo:
             continue
-        if len(aciertos) < N_RECIENTE_BUCKET_OPERAR:
-            continue
-        recientes_tup = aciertos[-N_RECIENTE_BUCKET_OPERAR:]
-        recientes = [a for _, a in recientes_tup]
-        k, n = sum(recientes), len(recientes)
-        # Mismo fix 04-Sep que wallet_mirror_tracker.py (cripto,
-        # /code-review): comparar contra el histórico DE ESTE BUCKET
-        # concreto, calculado con la parte de `aciertos` anterior a la
-        # ventana reciente -- sin precomputado (a diferencia de
-        # info["hit"] agregado). Si no hay suficiente historia previa,
-        # se deja pasar solo por el borde >50% de abajo.
-        antiguos_tup = aciertos[:-N_RECIENTE_BUCKET_OPERAR]
-        if len(antiguos_tup) >= MIN_ANTIGUOS_DEGRADACION_BUCKET:
-            k_hist = sum(a for _, a in antiguos_tup)
-            hit_hist_bucket = k_hist / len(antiguos_tup) * 100
-            _, ci_hi = wilson_ci(k, n)
-            if ci_hi * 100 < (hit_hist_bucket - MARGEN_DEGRADACION_PP_BUCKET):
-                continue  # degradada frente a SU histórico EN ESTE BUCKET
-        k_posicion = k if tipo == "SEGUIR" else (n - k)
-        ci_lo_posicion, _ = wilson_ci(k_posicion, n)
-        if ci_lo_posicion <= 0.50:
-            continue
-        out[(w, categoria, tipo, b)] = {"n": n, "hit_reciente": round(k / n, 4)}
+        # 14-Oct (OK Javi, /code-review medium): criterio ÚNICO wallet_mirror_filtro_bucket (antes Wilson90 bajo > 0,50
+        # fijo vetaba todo bucket barato). `aciertos` viene en términos de la WALLET (FADE invertido en el historial) ->
+        # NUESTRA posición. CAMBIO CONSCIENTE en FADE: la degradación frente al histórico se mide ahora también en
+        # términos de la posición (antes en los de la wallet: vetaba a la FADE cuya wallet empeoraba, lo que nos favorece).
+        pos = [a if tipo == "SEGUIR" else 1 - a for _, a in aciertos]
+        ok, motivo, det = wmfb.evaluar_bucket(pos, b, STEP_BUCKET, eq, N_RECIENTE_BUCKET_OPERAR,
+                                              MIN_ANTIGUOS_DEGRADACION_BUCKET, MARGEN_DEGRADACION_PP_BUCKET, wilson_ci)
+        if ok:
+            out[(w, categoria, tipo, b)] = det
+        else:
+            motivos[(w, categoria, tipo, b)] = motivo
+    MOTIVOS_VETO_BUCKET.clear()
+    MOTIVOS_VETO_BUCKET.update(motivos)
     return out
 
 
