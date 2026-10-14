@@ -74,6 +74,12 @@
       "fin": "06:00",
       "nombre": "madrugada_favorito_btc60m",
       "_nota": "2026-08-15 (decisión explícita Javi, tras barrido de cierre de Stage 0): hit-rate por hora UTC de FAVORITO_CONFIRMADO#BTC#60min#BUY_NO en shadow (results.csv, breakeven~59%) muestra 00h-03h UTC (=02:00-06:00 Madrid verano) consistentemente por encima del breakeven y contiguo con asia_04h_utc (04h UTC): 00h=68.4%(n=19) 01h=75.0%(n=16) 02h=86.7%(n=15) 03h=73.7%(n=19). n por hora todavía bajo (14-19, no cumple n>=40 individualmente) -- se abre para generar dato real de fill-ability y acelerar el gate de Stage 0 de esta misma tupla (única con n útil hoy: n=62 real, Wilson90lo margen -3.2pp del breakeven, ritmo real ~1-2 trades/día por ventana estrecha). Mismo criterio que asia_04h_utc/prueba_23h_utc al abrirse: exploratorio, no gate riguroso todavía. Ningún otro parámetro tocado: mismo stake/frenos/whitelist/gate_bucket_propio que el resto de ventanas -- esta tupla sigue restringida a su zona de precio confirmada [0.35,0.40) por gate_bucket_propio, esta ventana solo permite que el ejecutor la evalúe en más horas del día."
+    },
+    {
+      "nombre": "24h_javi_14oct",
+      "inicio": "00:00",
+      "fin": "23:59",
+      "_nota": "2026-10-14 (petición explícita Javi: 'lo más sencillo es habilitar que live_trade.main pueda operar las 24 horas'): ventana de todo el día para que WALLET_MIRROR#BTC#15min opere 24 h en su único bucket confirmado SEGUIR#BTC#15min#1 [0.35,0.40) (bueno_confirmado 14-Oct 11:54Z, n=194, pnl +0.33). Antes: L-V 6 ventanas parciales, finde 7. OJO: abre las 24 h a TODAS las tuplas de pares_permitidos_live; hoy solo esa tiene bucket bueno (gate propio y bot wallets 0 buenos), pero cualquier bucket que se confirme operará también 24 h. Frenos, gates, veto ask real y profundidad sin cambios. Backup: datalogs/config_live_backup_20261014_pre24h.json. Fin 23:59 por live_guard (no cruza medianoche)."
     }
   ],
   "_mediodia_eliminada": "12:30-13:30 eliminada: GBM IC=-0.154 PNL=-7.96€, OF IC=-0.033 PNL=-5.43€ — peor ventana en ambas estrategias (n≥30)",
@@ -117,6 +123,12 @@
       "fin": "07:00",
       "nombre": "asia_04h_utc",
       "_nota": "2026-07-10: AÑADIDA — ya confirmada fuerte en ventanas_lunes_viernes (H-CUSTOM-LATE-04H-ASIA, IC+0.131 n=177 forward +68.47€) pero faltaba en fin de semana, sin razón documentada (parece descuido del 08-Jul, no una exclusión deliberada). En finde específicamente: n=20 (4 pares) hit 75% +13.61€ (+0.681€/trade)."
+    },
+    {
+      "nombre": "24h_javi_14oct",
+      "inicio": "00:00",
+      "fin": "23:59",
+      "_nota": "2026-10-14 (petición explícita Javi: 'lo más sencillo es habilitar que live_trade.main pueda operar las 24 horas'): ventana de todo el día para que WALLET_MIRROR#BTC#15min opere 24 h en su único bucket confirmado SEGUIR#BTC#15min#1 [0.35,0.40) (bueno_confirmado 14-Oct 11:54Z, n=194, pnl +0.33). Antes: L-V 6 ventanas parciales, finde 7. OJO: abre las 24 h a TODAS las tuplas de pares_permitidos_live; hoy solo esa tiene bucket bueno (gate propio y bot wallets 0 buenos), pero cualquier bucket que se confirme operará también 24 h. Frenos, gates, veto ask real y profundidad sin cambios. Backup: datalogs/config_live_backup_20261014_pre24h.json. Fin 23:59 por live_guard (no cruza medianoche)."
     }
   ],
   "riesgo": {
