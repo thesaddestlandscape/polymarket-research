@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-14T15:34:27+00:00",
+ "generado_utc": "2026-10-14T15:40:38+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -36,21 +36,21 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 652.45,
+   "n": 1,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 652.45,
+   "n": 1,
+   "imbalance": 1.0
   },
   "60min": {
-   "usd_long": 5427.24,
-   "usd_short": 517032.17,
-   "n": 69,
-   "imbalance": 0.9792
+   "usd_long": 5345.13,
+   "usd_short": 440935.27,
+   "n": 52,
+   "imbalance": 0.976
   }
  },
  "DOGE": {
@@ -74,9 +74,9 @@
   },
   "60min": {
    "usd_long": 49.13,
-   "usd_short": 178.37,
-   "n": 3,
-   "imbalance": 0.5681
+   "usd_short": 0.0,
+   "n": 2,
+   "imbalance": -1.0
   }
  },
  "ETH": {
@@ -88,21 +88,21 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 1409.6,
+   "usd_short": 72.84,
    "n": 1,
    "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 1409.6,
-   "n": 1,
+   "usd_short": 1482.45,
+   "n": 2,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 224497.57,
-   "usd_short": 155899.63,
-   "n": 54,
-   "imbalance": -0.1803
+   "usd_short": 36413.01,
+   "n": 19,
+   "imbalance": -0.7209
   }
  },
  "SOL": {
@@ -126,9 +126,9 @@
   },
   "60min": {
    "usd_long": 59429.86,
-   "usd_short": 173747.83,
-   "n": 41,
-   "imbalance": 0.4903
+   "usd_short": 51011.84,
+   "n": 14,
+   "imbalance": -0.0762
   }
  },
  "XRP": {
@@ -152,17 +152,17 @@
   },
   "60min": {
    "usd_long": 3420.21,
-   "usd_short": 129726.52,
-   "n": 27,
-   "imbalance": 0.9486
+   "usd_short": 106910.79,
+   "n": 17,
+   "imbalance": 0.938
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 1,
-  "ultimo_lag_s": 0.18,
-  "max_lag_s": 0.18,
-  "media_lag_s": 0.18,
+  "n_muestras": 2,
+  "ultimo_lag_s": 0.13,
+  "max_lag_s": 0.58,
+  "media_lag_s": 0.35,
   "umbral_alerta_s": 5.0
  }
 }
