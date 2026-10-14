@@ -1,25 +1,25 @@
 {
- "generado_utc": "2026-10-13T08:00:01+00:00",
+ "generado_utc": "2026-10-14T08:00:01+00:00",
  "buckets": {
   "CS#FADE[0.65,0.70)#grid_fijo": {
-   "n_senales": 661,
-   "n_wallets_distintas": 163,
-   "n_mercados_distintos": 660,
+   "n_senales": 673,
+   "n_wallets_distintas": 166,
+   "n_mercados_distintos": 672,
    "top5_wallets": [
     {
      "wallet": "0xda770326bd091d26f816917aa83a6baff668683f",
      "n": 44,
-     "pct": 6.7
+     "pct": 6.5
     },
     {
      "wallet": "0xc4fe817476491890086330a639ac417d51bf601f",
      "n": 42,
-     "pct": 6.4
+     "pct": 6.2
     },
     {
      "wallet": "0x0cf18b4294b05509c44a6a0172eff7e97b20d7fe",
      "n": 41,
-     "pct": 6.2
+     "pct": 6.1
     },
     {
      "wallet": "0x61f621ed129a8b64f0d2abbef50d23cd52d1e497",
@@ -28,52 +28,15 @@
     },
     {
      "wallet": "0xdc41c39b95453c943174f369926018f6963bdd7e",
-     "n": 30,
-     "pct": 4.5
+     "n": 31,
+     "pct": 4.6
     }
    ],
-   "top1_wallet_pct": 6.7,
+   "top1_wallet_pct": 6.5,
    "top1_mercado_pct": 0.3,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "bueno_confirmado"
-  },
-  "Tennis#FADE[0.09,0.14)#ventana_fina": {
-   "n_senales": 93,
-   "n_wallets_distintas": 42,
-   "n_mercados_distintos": 93,
-   "top5_wallets": [
-    {
-     "wallet": "0xfe787d2da716d60e8acff57fb87eb13cd4d10319",
-     "n": 16,
-     "pct": 17.2
-    },
-    {
-     "wallet": "0x2da325618fff9b2ffe64a49253fbcae8c7b9f258",
-     "n": 9,
-     "pct": 9.7
-    },
-    {
-     "wallet": "0x6a7b4ef59745f19c280da45add5d1a5a8e9ca65c",
-     "n": 5,
-     "pct": 5.4
-    },
-    {
-     "wallet": "0xc07d5961e7a361992983c1a3a865d00dc28cb1df",
-     "n": 5,
-     "pct": 5.4
-    },
-    {
-     "wallet": "0x35e701f088b6ef25fff6b902769c1cd8b85f8331",
-     "n": 4,
-     "pct": 4.3
-    }
-   ],
-   "top1_wallet_pct": 17.2,
-   "top1_mercado_pct": 1.1,
-   "alerta_wallet": false,
-   "alerta_mercado": false,
-   "veredicto_gate": "malo_confirmado"
   },
   "LoL#SEGUIR[0.09,0.14)#ventana_fina": {
    "n_senales": 49,
@@ -108,6 +71,43 @@
    ],
    "top1_wallet_pct": 6.1,
    "top1_mercado_pct": 2.0,
+   "alerta_wallet": false,
+   "alerta_mercado": false,
+   "veredicto_gate": "malo_confirmado"
+  },
+  "Tennis#SEGUIR[0.09,0.14)#ventana_fina": {
+   "n_senales": 131,
+   "n_wallets_distintas": 54,
+   "n_mercados_distintos": 131,
+   "top5_wallets": [
+    {
+     "wallet": "0x952718df56ab7955e0a0121a9e47fa8f52b6888b",
+     "n": 16,
+     "pct": 12.2
+    },
+    {
+     "wallet": "0xc4fe817476491890086330a639ac417d51bf601f",
+     "n": 14,
+     "pct": 10.7
+    },
+    {
+     "wallet": "0x84cfffc3f16dcc353094de30d4a45226eccd2f63",
+     "n": 8,
+     "pct": 6.1
+    },
+    {
+     "wallet": "0x2a69660046d7acc4ab204d7cc5ba78b0776cd2f7",
+     "n": 7,
+     "pct": 5.3
+    },
+    {
+     "wallet": "0xdc41c39b95453c943174f369926018f6963bdd7e",
+     "n": 7,
+     "pct": 5.3
+    }
+   ],
+   "top1_wallet_pct": 12.2,
+   "top1_mercado_pct": 0.8,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "malo_confirmado"
@@ -148,43 +148,6 @@
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "malo_confirmado"
-  },
-  "Dota#SEGUIR[0.36,0.41)#ventana_fina": {
-   "n_senales": 89,
-   "n_wallets_distintas": 46,
-   "n_mercados_distintos": 89,
-   "top5_wallets": [
-    {
-     "wallet": "0x904ed7c7820a434ea9b11e7333ed69190d850bec",
-     "n": 8,
-     "pct": 9.0
-    },
-    {
-     "wallet": "0x758dac51ba3cc9a246a79787da9df11c5f425d9e",
-     "n": 7,
-     "pct": 7.9
-    },
-    {
-     "wallet": "0x028602e5b0909dd7864f884f899ff287a72cf61d",
-     "n": 6,
-     "pct": 6.7
-    },
-    {
-     "wallet": "0xc9f4bec86118be62d973fd53004efca8fed8c1e4",
-     "n": 4,
-     "pct": 4.5
-    },
-    {
-     "wallet": "0xd3b034d7bfb2473fb252d0414646d9786bac329e",
-     "n": 4,
-     "pct": 4.5
-    }
-   ],
-   "top1_wallet_pct": 9.0,
-   "top1_mercado_pct": 1.1,
-   "alerta_wallet": false,
-   "alerta_mercado": false,
-   "veredicto_gate": "bueno_confirmado"
   },
   "NFL#SEGUIR[0.21,0.26)#ventana_fina": {
    "n_senales": 99,
