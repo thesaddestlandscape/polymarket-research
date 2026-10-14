@@ -63,14 +63,62 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from wallet_mirror_tracker import (  # noqa: E402
-    wallets_operativas_recientes, wallets_operativas_recientes_por_bucket, wallet_aprueba_bucket,
+    wallets_operativas_recientes, wallet_aprueba_bucket,
     _opuesto, _fillability_mirror, _market_id_y_direccion,
 )
+import wallet_mirror_tracker as wmt  # noqa: E402
+from analisis_gate_riguroso import wilson_ci  # noqa: E402
+from comision_cripto import FEE_CRIPTO  # noqa: E402
+
 from fetch_polymarket_activity_ws import _parse_updown  # noqa: E402
 import live_trade as lt  # noqa: E402
 from live_guard import puede_operar_live  # noqa: E402
 from live_stake import calcular_stake, bloquear_por_circuit_breaker  # noqa: E402
 import wallet_mirror_gate_bucket as wmgb  # noqa: E402
+
+
+def _acierto_equilibrio(precio: float) -> float:
+    """Acierto mínimo para no perder comprando a `precio` con la comisión tomadora real 0,07·p·(1−p) por acción."""
+    return precio * (1.0 + FEE_CRIPTO * (1.0 - precio))
+
+
+def wallets_bucket_no_degradadas(wallets_admitidas: dict | None = None) -> dict:
+    """14-Oct (OK Javi): sustituye a wallet_mirror_tracker.wallets_operativas_recientes_por_bucket SOLO en este
+    ejecutor. Aquella exigía Wilson90 bajo del acierto reciente > 0,50 FIJO en cada (wallet, bucket): en buckets
+    baratos el equilibrio es ~precio, así que vetaba TODO bucket < 0,40 (0 de 183 combinaciones aprobadas por debajo;
+    WM BTC 15m [0,35-0,40) bueno_confirmado nunca podía operar). Ahora la wallet solo se veta en el bucket si está
+    DEGRADADA: Wilson90 ALTO de su acierto (de la posición) en las últimas N_RECIENTE_BUCKET_OPERAR copias < acierto de
+    equilibrio al borde SUPERIOR del bucket (conservador), o degradada frente a su propio histórico del bucket
+    (mismo criterio que antes). Se mantiene fail-closed: sin wallet admitida en agregado, tipo distinto o menos de
+    N_RECIENTE_BUCKET_OPERAR copias en el bucket -> ausente -> no opera. La edge del bucket la exige el gate
+    bueno_confirmado (unidad mercado-lado, comisión real, concentración), que se comprueba antes."""
+    candidatas = wmt.cargar_wallets_validadas()
+    if not candidatas:
+        return {}
+    if wallets_admitidas is not None:
+        candidatas = {k: v for k, v in candidatas.items() if k in wallets_admitidas}
+    hist = wmt._historial_reciente_wallet_mirror_por_bucket({w for w, _, _ in candidatas})
+    n_rec = wmt.N_RECIENTE_BUCKET_OPERAR
+    out = {}
+    for (w, activo, marco, tipo, b), aciertos in hist.items():
+        info = candidatas.get((w, activo, marco))
+        if info is None or info["tipo"] != tipo or len(aciertos) < n_rec:
+            continue
+        recientes = [a for _, a in aciertos[-n_rec:]]
+        n = len(recientes)
+        # todo en términos de NUESTRA posición (en FADE ganamos cuando la wallet falla; /code-review 14-Oct)
+        pos = lambda a: a if tipo == "SEGUIR" else 1 - a
+        k_pos = sum(pos(a) for a in recientes)
+        antiguos = aciertos[:-n_rec]
+        if len(antiguos) >= wmt.MIN_ANTIGUOS_DEGRADACION_BUCKET:
+            hit_hist_pos = sum(pos(a) for _, a in antiguos) / len(antiguos) * 100
+            if wilson_ci(k_pos, n)[1] * 100 < hit_hist_pos - wmt.MARGEN_DEGRADACION_PP_BUCKET:
+                continue  # degradada frente a SU histórico en este bucket
+        p_top = min(0.99, round(b + wmgb.STEP, 4))
+        if wilson_ci(k_pos, n)[1] < _acierto_equilibrio(p_top):
+            continue  # degradada: ni la cota alta de su acierto llega al equilibrio de este bucket
+        out[(w, activo, marco, tipo, b)] = {"n": n, "hit_posicion_reciente": round(k_pos / n, 4)}
+    return out
 
 ASK_MAX_REAL = 0.80  # 23-Sep, tope duro de entrada solo-real (payout inverso)
 
@@ -427,7 +475,7 @@ async def _correr_una_conexion(wallets: dict, vistos: dict, wallets_bucket: dict
                             # bot_wallets_gate_bucket.PRECIO_MAX_REAL.
                             _log(f"  ⛔ entrada {ask_ref}>={ASK_MAX_REAL} (payout inverso) -- no se ejecuta")
                         elif not aprueba_bucket:
-                            _log(f"  ⛔ wallet {w[:10]}... sin edge reciente confirmado en este "
+                            _log(f"  ⛔ wallet {w[:10]}... degradada o sin evidencia reciente (n<8) en este "
                                  f"micro-bucket de precio (ask={ask_ref}) -- no se ejecuta")
                         elif (lt._posiciones_abiertas_misma_direccion(direction)
                               >= lt._cargar_config().get("riesgo", {})
@@ -570,17 +618,17 @@ async def main() -> None:
     # evalúa bucket para wallets ya admitidas en agregado) -- mismo
     # refresco que `wallets`, mismo hilo aparte por el mismo motivo (lee
     # ballenas_timing_history.csv completo).
-    wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, wallets)
+    wallets_bucket = await asyncio.to_thread(wallets_bucket_no_degradadas, wallets)
     ultimo_refresco = datetime.now(timezone.utc).timestamp()
     vistos = _vistos_cargar()
     _log(f"wallet_mirror_executor_dryrun arrancado -- {len(wallets)} wallets validadas "
-         f"({len(wallets_bucket)} combinaciones wallet+bucket con edge reciente), DRY_RUN={DRY_RUN}")
+         f"({len(wallets_bucket)} combinaciones wallet+bucket no degradadas), DRY_RUN={DRY_RUN}")
     while True:
         try:
             ahora_ts = datetime.now(timezone.utc).timestamp()
             if ahora_ts - ultimo_refresco > REFRESCO_WALLETS_S:
                 wallets = await asyncio.to_thread(wallets_operativas_recientes)
-                wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, wallets)
+                wallets_bucket = await asyncio.to_thread(wallets_bucket_no_degradadas, wallets)
                 ultimo_refresco = ahora_ts
             vistos = await _correr_una_conexion(wallets, vistos, wallets_bucket)
         except (websockets.exceptions.ConnectionClosed, OSError, asyncio.TimeoutError) as e:
