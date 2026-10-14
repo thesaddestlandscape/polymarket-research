@@ -35,11 +35,11 @@
     "hi": 0.38,
     "n": 59,
     "pnl_medio": -0.3982,
-    "diff_vs_resto": -0.3553,
-    "p_valor": 0.027,
+    "diff_vs_resto": -0.3563,
+    "p_valor": 0.028,
     "split_half_diff": [
-      -0.3049,
-      -0.404
+      -0.3059,
+      -0.405
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4377,
@@ -102,11 +102,11 @@
     "hi": 0.08,
     "n": 288,
     "pnl_medio": 0.8143,
-    "diff_vs_resto": 0.8319,
+    "diff_vs_resto": 0.8317,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.7986,
-      0.8652
+      0.7985,
+      0.865
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 0.7119,
@@ -215,24 +215,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 42,
-    "pnl_sin_mejores_dias": -0.6039,
+    "pnl_sin_mejores_dias": -0.6054,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 859,
-    "pnl_medio": -0.4912,
-    "diff_vs_resto": -0.4656,
+    "n": 862,
+    "pnl_medio": -0.493,
+    "diff_vs_resto": -0.4674,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.4651,
-      -0.4661
+      -0.4675,
+      -0.4673
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.5451,
+    "pnl_medio_loo": -0.5467,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.7002,
-      -0.2549
+      -0.7102,
+      -0.2576
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -251,11 +251,11 @@
     "hi": 0.18,
     "n": 42,
     "pnl_medio": 0.8555,
-    "diff_vs_resto": 0.8228,
-    "p_valor": 0.0,
+    "diff_vs_resto": 0.8221,
+    "p_valor": 0.0005,
     "split_half_diff": [
-      0.7866,
-      0.859
+      0.7858,
+      0.8583
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 0.7239,
@@ -284,13 +284,6 @@
     ],
     "fecha_historial": "2026-10-07"
   },
-  "SEGUIR#ETH#5min#1": {
-    "veredicto": "sin_concluir",
-    "historial_crudo": [
-      "malo_confirmado"
-    ],
-    "fecha_historial": null
-  },
   "SEGUIR#DOGE#5min#0": {
     "veredicto": "sin_concluir",
     "historial_crudo": [
@@ -313,6 +306,12 @@
       "bueno_confirmado"
     ],
     "fecha_historial": null
+  },
+  "SEGUIR#ETH#5min#1": {
+    "veredicto": "sin_concluir",
+    "historial_crudo": [
+      "malo_confirmado"
+    ]
   },
   "SEGUIR#ETH#5min#0": {
     "veredicto": "sin_concluir",
