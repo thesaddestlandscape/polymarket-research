@@ -77,6 +77,7 @@ _LIB = {}                  # (hijo) token -> {"bids": {p: s}, "asks": {p: s}}
 _ULT = {}                  # (hijo) token -> t_ms del último registro (muestreo mínimo entre registros)
 _TOPQ = {}                 # (hijo) token -> último top registrado sin muestrear (registro q)
 _L2Q = {}                  # (hijo) token -> últimos 3 niveles ask registrados (registro l)
+_LFULL = {}                # (hijo) token -> último libro ask completo registrado (registro L, solo pares BTC)
 _T_RECV = [0]              # (hijo) hora local (ms) de recepción del mensaje WS en curso (registro q/t, auditoría de reloj)
 _HIST = {}                 # token -> deque[(t_ms, bb, ba, i1, i5, i10, dask5, bid_size, ask_size)]
 _LOCK = threading.Lock()
@@ -373,6 +374,11 @@ def _aplicar(msg, salida):
                         _L2Q[tk] = niv
                         cols = [str(x) for ps in niv for x in ps] + [""] * (6 - 2 * len(niv))
                         _REGISTRO.put(f"l,{t_ev},{tk},{','.join(cols)},{_T_RECV[0]}\n")
+                    if tk in _REGISTRO.l2full:              # 14-Oct (Javi): libro ask COMPLETO, solo pares BTC (fila L)
+                        full = tuple(sorted((p, s) for p, s in L["asks"].items() if s > 0))
+                        if _LFULL.get(tk) != full:           # L = todos los niveles ask "p:s;p:s;..." + recepción
+                            _LFULL[tk] = full
+                            _REGISTRO.put(f"L,{t_ev},{tk},{';'.join(f'{p}:{s}' for p, s in full)},{_T_RECV[0]}\n")
         for tk in tocados:
             if t_ev - _ULT.get(tk, 0) >= MUESTREO_MS:   # el libro se actualiza siempre; se muestrea el histórico
                 _ULT[tk] = t_ev
@@ -429,6 +435,10 @@ class _Registro:
         # 06-Oct (OK Javi): niveles ask 1-3 (fila l) SOLO de los 5m que cierran con un 15m y SOLO en su último tramo,
         # para que vigia_5m_barato_forward.py reconstruya el VWAP multinivel. token -> cierre (epoch s)
         self.l2 = {}
+        # 14-Oct (Javi: "necesitamos llegar a todos los niveles"): tokens 5m BTC que cierran con un 15m -> fila L con el
+        # libro ask COMPLETO en su último tramo (capacidad real de 5m barato / V7). Tipo nuevo: la fila l (3 niveles) no
+        # cambia porque la lee el vigía congelado v4.
+        self.l2full = set()
         threading.Thread(target=self._loop, daemon=True, name="registro_ms").start()
 
     def put(self, linea):
@@ -444,6 +454,8 @@ class _Registro:
                     cie = int(datetime.fromisoformat(str(fin)).timestamp())
                     if cie % 900 == 0:
                         self.l2[t] = cie
+                        if a == "BTC":
+                            self.l2full.add(t)
                 except (TypeError, ValueError):
                     pass
             if t not in self.vistos:

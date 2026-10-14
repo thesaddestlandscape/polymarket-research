@@ -60,7 +60,7 @@ def extraer_fichero(src, dst):
                     fo.write(ln)
                     n_out += 1
                     continue
-                if tp not in ("q,", "t,", "l,"):
+                if tp not in ("q,", "t,", "l,", "L,"):     # L (14-Oct): libro ask completo de los pares BTC
                     continue
                 c = ln.rstrip("\n").split(",")
                 m = mapa.get(c[2]) if len(c) > 2 else None
@@ -71,7 +71,7 @@ def extraer_fichero(src, dst):
                 marco, cie = m
                 if marco not in ("5min", "15min"):
                     continue
-                if tp == "l,":
+                if tp in ("l,", "L,"):
                     fo.write(ln)
                     n_out += 1
                     continue
