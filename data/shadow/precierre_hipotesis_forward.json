@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-14T07:28:33+00:00",
+ "generado_utc": "2026-10-15T07:28:50+00:00",
  "corte": "2026-09-30T13:30",
  "hipotesis": {
   "H1 SOLITARIO 5m (contrario)": {
@@ -11,12 +11,12 @@
     "dias_positivos": 0
    },
    "forward": {
-    "n": 801,
-    "dias": 15,
-    "ev": -0.2451,
+    "n": 850,
+    "dias": 16,
+    "ev": -0.24,
     "ic90": [
-     -0.3776,
-     -0.1282
+     -0.3579,
+     -0.1355
     ],
     "dias_positivos": 3
    },
@@ -35,14 +35,14 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 234,
-    "dias": 15,
-    "ev": -0.0044,
+    "n": 244,
+    "dias": 16,
+    "ev": 0.0038,
     "ic90": [
-     -0.0806,
-     0.0856
+     -0.072,
+     0.0872
     ],
-    "dias_positivos": 9
+    "dias_positivos": 10
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -59,14 +59,14 @@
     "dias_positivos": 5
    },
    "forward": {
-    "n": 241,
-    "dias": 15,
-    "ev": 0.002,
+    "n": 254,
+    "dias": 16,
+    "ev": 0.0058,
     "ic90": [
-     -0.0375,
-     0.0367
+     -0.0378,
+     0.0434
     ],
-    "dias_positivos": 10
+    "dias_positivos": 11
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -83,14 +83,14 @@
     "dias_positivos": 6
    },
    "forward": {
-    "n": 1703,
-    "dias": 15,
-    "ev": 0.0014,
+    "n": 1814,
+    "dias": 16,
+    "ev": 0.0012,
     "ic90": [
-     -0.0138,
-     0.0181
+     -0.0134,
+     0.0159
     ],
-    "dias_positivos": 7
+    "dias_positivos": 8
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -107,16 +107,16 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 503,
-    "dias": 14,
-    "ev": 0.0255,
+    "n": 530,
+    "dias": 15,
+    "ev": 0.019,
     "ic90": [
-     0.002,
-     0.0502
+     -0.0053,
+     0.0452
     ],
     "dias_positivos": 8
    },
-   "confirmada": true,
+   "confirmada": false,
    "ev_minimo_dinero_real": false
   },
   "H7 TWAP 15m + tomadora mismo lado": {
@@ -128,14 +128,14 @@
     "dias_positivos": 0
    },
    "forward": {
-    "n": 1680,
-    "dias": 15,
-    "ev": 0.0026,
+    "n": 1790,
+    "dias": 16,
+    "ev": 0.0021,
     "ic90": [
-     -0.0126,
-     0.0186
+     -0.0118,
+     0.0175
     ],
-    "dias_positivos": 7
+    "dias_positivos": 8
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -152,12 +152,12 @@
     "dias_positivos": 6
    },
    "forward": {
-    "n": 27,
+    "n": 28,
     "dias": 9,
-    "ev": -0.0963,
+    "ev": -0.0828,
     "ic90": [
-     -0.2795,
-     0.0988
+     -0.2644,
+     0.1098
     ],
     "dias_positivos": 5
    },
@@ -173,12 +173,12 @@
     "dias_positivos": 0
    },
    "forward": {
-    "n": 81,
-    "dias": 14,
-    "ev": -0.0184,
+    "n": 93,
+    "dias": 15,
+    "ev": -0.0194,
     "ic90": [
-     -0.1198,
-     0.0861
+     -0.1065,
+     0.0678
     ],
     "dias_positivos": 8
    },
