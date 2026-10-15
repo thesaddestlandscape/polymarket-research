@@ -240,3 +240,14 @@ Empieza por una conclusión ejecutiva inequívoca.
 Esta misión no se considera completada por obtener un backtest positivo de los pares que llegaron a completarse.
 Debe demostrar, con un proceso cronológico reproducible: que la regla compra ambos lados únicamente cuando el precio ejecutable se encuentra en el intervalo definido; que el stake total no supera 1 € por lado y mercado en la versión base; que los pares completos producen el margen esperado después de costes; que las posiciones no emparejadas se contabilizan íntegramente; que el método de ejecución es realista con las condiciones del mercado; que la rentabilidad total de la política completa es positiva fuera de muestra; que el resultado no depende de excluir pérdidas, de unas pocas operaciones excepcionales o de precios imposibles de ejecutar; que se conoce el volumen de pares completos y el capital necesario para alcanzar distintos objetivos; que existe o no una ruta cuantitativamente defendible hacia 200.000 € netos anuales.
 Diseña la mejor estrategia posible para esta regla concreta, pero deja que los datos decidan si funciona y cuánto puede ganar. La prioridad es demostrar un alpha ejecutable, no prometer una rentabilidad anual.
+
+---
+## RESULTADO EXPLORATORIO 15-Oct (cota optimista: top del libro, sin latencia ni profundidad; `analisis_lowlow_pair_exploratorio_15oct.py`)
+BTC 5m 10-14 Oct (~1.440 mercados, desenlace oficial, sueltas íntegras):
+| Variante | PnL 5 días | €/mercado | días + |
+|---|---|---|---|
+| BASE tomador ≤0,10 ambos lados | −283,1 € | −0,197 | 0/5 |
+| Solo 1ª pata (longshot) | −255,6 € | −0,178 | 0/5 |
+| Maker 0,03 / 0,05 / 0,07 (relleno si opera < b) | −530,7 / −335,0 / −308,6 € | −0,37 / −0,23 / −0,21 | 0/5 |
+| Filtro 15m (bid15 − ask5 ≥ 0,05; 244 merc) | −31,8 € | −0,130 | 1/5 |
+Mecanismo: una suelta SIEMPRE pierde (0/1.314; por construcción, si el barato gana el contrario cae a ~0 y "completa" el par) → la 2ª pata es casi siempre el perdedor final; la estrategia es un longshot a 0,10 que acierta ~8,7 % < 11 % de equilibrio. Por tiempo de entrada no hay franja estable. Clasificación §11: DESCARTAR en la banda 0,00-0,10 (todas negativas en el caso optimista). No reabrir sin evidencia nueva.
