@@ -26,6 +26,7 @@ vigia_gate_bucket_fino 06:58, para que ambos JSON ya estén frescos).
 """
 import json
 import subprocess
+import time
 import sys
 from pathlib import Path
 
@@ -63,8 +64,25 @@ def _puntos_a_revisar() -> set[tuple[str, float]]:
 def main() -> int:
     from shadow_digest import enviar_telegram
 
-    r = subprocess.run([sys.executable, str(REPO / "analisis_gate_bucket_propio_fillable_03ago.py")],
-                        capture_output=True, text=True, timeout=180, cwd=str(REPO))
+    # 15-Oct: timeout ADAPTATIVO (antes 180 s fijo; murió el 15-Oct 07:30 en el racimo 06-09Z), mismo patrón que
+    # vigia_resolution_sniper_precierre: 3x la última duración real, mínimo 300 s, tope 3000 s.
+    dur_path = REPO / "data" / "live" / "vigia_gate_bucket_propio_fillable_duracion.json"
+    try:
+        ultima = float(json.loads(dur_path.read_text())["s"])
+    except Exception:
+        ultima = 180.0
+    lim = min(3000.0, max(300.0, 3 * ultima))
+    t0 = time.time()
+    try:
+        r = subprocess.run([sys.executable, str(REPO / "analisis_gate_bucket_propio_fillable_03ago.py")],
+                           capture_output=True, text=True, timeout=lim, cwd=str(REPO))
+    except subprocess.TimeoutExpired:
+        print(f"ERROR TimeoutExpired: analisis_gate_bucket_propio_fillable_03ago.py tras {lim:.0f} s (última {ultima:.0f} s)")
+        return 1
+    try:
+        dur_path.write_text(json.dumps({"s": round(time.time() - t0, 1)}))
+    except Exception:
+        pass
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_gate_bucket_propio_fillable_03ago.py: {r.stderr[-2000:]}")
         return 1

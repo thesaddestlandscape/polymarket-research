@@ -164,13 +164,17 @@ def s7():
 
 
 def s8_9():
-    filas = []
+    # 15-Oct: STREAMING (antes list(DictReader) de 21 días de binance_jump_cruzado -> OOM-kill 13 y 14-Oct a las 09:57,
+    # el vigía murió en silencio). Solo se guardan los instantes 0 y 0,6 s y los campos que se usan, como dict pequeño.
+    campos = ("ask", "ask_size", "direccion", "resto_s")
+    ev = defaultdict(dict)
     for p in sorted(glob.glob(str(DATALOGS / "binance_jump_cruzado_*.csv.gz"))):
         with gzip.open(p, "rt", encoding="utf-8", newline="") as fh:
-            filas += list(csv.DictReader(fh))
-    ev = defaultdict(dict)
-    for r in filas:
-        ev[(r["ts_evento"], r["activo"], r["marco"], r["market"], r["activo_salto"])][r["offset_s"]] = r
+            for r in csv.DictReader(fh):
+                if r.get("offset_s") not in ("0.0", "0.6"):
+                    continue
+                ev[(r["ts_evento"], r["activo"], r["marco"], r["market"], r["activo_salto"])][r["offset_s"]] = \
+                    {k: r.get(k) for k in campos}
     slugs = {k[3] for k in ev if k[2] != "1h"}
     ids = {k[3] for k in ev if k[2] == "1h"}
     gan = dict(_resolver_slugs(slugs)) if slugs else {}

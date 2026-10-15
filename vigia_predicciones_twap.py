@@ -100,7 +100,9 @@ def main() -> int:
             except ValueError:
                 continue
     for x in filas:
-        snaps = sorted(s for s in libro.get((x["st"], x["mid"]), []) if 0 <= s[0] - x["t"] <= VENTANA_LIBRO_S)
+        # 15-Oct: key=hora (trampa: ordenar tuplas con un None -ask vacío- revienta: float < NoneType)
+        snaps = sorted((s for s in libro.get((x["st"], x["mid"]), []) if 0 <= s[0] - x["t"] <= VENTANA_LIBRO_S),
+                       key=lambda s: s[0])
         x["con_libro"] = bool(snaps)
         if snaps:
             _, ratio, ask = snaps[0]
