@@ -1,62 +1,8 @@
 {
- "generado": "2026-10-14T21:07:37+00:00",
+ "generado": "2026-10-15T09:50:02+00:00",
  "ventana_h": 24,
  "dias_alerta": 3,
  "unidades": [
-  {
-   "unidad": "DISPERSO#BTC#15min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": "2026-09-16T09:02:10",
-   "dias_sin_operar": 28.5,
-   "senales_24h": 2102,
-   "motivos_24h": [
-    [
-     "gate=sin_concluir fillable=1",
-     1343
-    ],
-    [
-     "gate=sin_concluir fillable=0",
-     670
-    ],
-    [
-     "gate=malo_confirmado fillable=0",
-     46
-    ],
-    [
-     "gate=malo_confirmado fillable=1",
-     43
-    ]
-   ]
-  },
-  {
-   "unidad": "DISPERSO#DOGE#5min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": null,
-   "dias_sin_operar": null,
-   "senales_24h": 201,
-   "motivos_24h": [
-    [
-     "gate=sin_concluir fillable=1",
-     112
-    ],
-    [
-     "gate=sin_concluir fillable=0",
-     89
-    ],
-    [
-     "libro: abort_gate_bucket_postrequote",
-     6
-    ],
-    [
-     "recheck post-requote gate=malo_confirmado",
-     2
-    ],
-    [
-     "libro: veto_profundidad",
-     2
-    ]
-   ]
-  },
   {
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#BNB#15min",
    "estado": "SIN_SEÑALES",
@@ -69,7 +15,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#BNB#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-09-24T12:54:17",
-   "dias_sin_operar": 20.3,
+   "dias_sin_operar": 20.9,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -77,7 +23,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#BTC#15min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-10T10:44:15",
-   "dias_sin_operar": 4.4,
+   "dias_sin_operar": 5.0,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -85,7 +31,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#BTC#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-10T18:29:17",
-   "dias_sin_operar": 4.1,
+   "dias_sin_operar": 4.6,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -101,7 +47,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#DOGE#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-10T08:14:17",
-   "dias_sin_operar": 4.5,
+   "dias_sin_operar": 5.1,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -117,7 +63,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#ETH#5min",
    "estado": "OPERA",
    "ultimo_trade": "2026-10-13T09:24:15",
-   "dias_sin_operar": 1.5,
+   "dias_sin_operar": 2.0,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -133,24 +79,15 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#SOL#5min",
    "estado": "OPERA",
    "ultimo_trade": "2026-10-14T06:24:17",
-   "dias_sin_operar": 0.6,
+   "dias_sin_operar": 1.1,
    "senales_24h": 0,
-   "motivos_24h": [
-    [
-     "libro: smart_exit_veto_profundidad",
-     1
-    ],
-    [
-     "libro: smart_exit_sin_datos",
-     1
-    ]
-   ]
+   "motivos_24h": []
   },
   {
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#XRP#15min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-09T17:14:15",
-   "dias_sin_operar": 5.2,
+   "dias_sin_operar": 5.7,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -158,201 +95,9 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#XRP#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-03T20:49:15",
-   "dias_sin_operar": 11.0,
+   "dias_sin_operar": 11.5,
    "senales_24h": 0,
    "motivos_24h": []
-  },
-  {
-   "unidad": "SNIPER#BTC#5min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": "2026-09-09T02:55:13",
-   "dias_sin_operar": 35.8,
-   "senales_24h": 15154,
-   "motivos_24h": [
-    [
-     "gate=sin_concluir fillable=1",
-     9941
-    ],
-    [
-     "gate=sin_concluir fillable=0",
-     4673
-    ],
-    [
-     "gate=malo_confirmado fillable=1",
-     307
-    ],
-    [
-     "gate=malo_confirmado fillable=0",
-     233
-    ]
-   ]
-  },
-  {
-   "unidad": "SNIPER#ETH#15min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": "2026-09-16T02:17:58",
-   "dias_sin_operar": 28.8,
-   "senales_24h": 291,
-   "motivos_24h": [
-    [
-     "gate=sin_concluir fillable=1",
-     190
-    ],
-    [
-     "gate=sin_concluir fillable=0",
-     101
-    ]
-   ]
-  },
-  {
-   "unidad": "WALLET_MIRROR#BNB#5min",
-   "estado": "SIN_SEÑALES",
-   "ultimo_trade": null,
-   "dias_sin_operar": null,
-   "senales_24h": 0,
-   "motivos_24h": []
-  },
-  {
-   "unidad": "WALLET_MIRROR#BTC#15min",
-   "estado": "OPERA",
-   "ultimo_trade": "2026-10-14T16:55:10",
-   "dias_sin_operar": 0.2,
-   "senales_24h": 5024,
-   "motivos_24h": [
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=sin_concluir",
-     2210
-    ],
-    [
-     "no sigue fillable en decisión",
-     1803
-    ],
-    [
-     "fuera de ventana horaria live",
-     713
-    ],
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=malo_confirmado",
-     278
-    ],
-    [
-     "wallet W sin edge reciente confirmado en este micro-bucket de precio (ask=N)",
-     14
-    ]
-   ]
-  },
-  {
-   "unidad": "WALLET_MIRROR#BTC#5min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": "2026-09-01T14:29:22",
-   "dias_sin_operar": 43.3,
-   "senales_24h": 4558,
-   "motivos_24h": [
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=sin_concluir",
-     2378
-    ],
-    [
-     "no sigue fillable en decisión",
-     1094
-    ],
-    [
-     "fuera de ventana horaria live",
-     1052
-    ],
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=malo_confirmado",
-     34
-    ]
-   ]
-  },
-  {
-   "unidad": "WALLET_MIRROR#BTC#60min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": "2026-08-31T13:59:51",
-   "dias_sin_operar": 44.3,
-   "senales_24h": 102,
-   "motivos_24h": [
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=sin_concluir",
-     77
-    ],
-    [
-     "no sigue fillable en decisión",
-     16
-    ],
-    [
-     "fuera de ventana horaria live",
-     9
-    ]
-   ]
-  },
-  {
-   "unidad": "WALLET_MIRROR#ETH#15min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": "2026-10-03T04:06:49",
-   "dias_sin_operar": 11.7,
-   "senales_24h": 385,
-   "motivos_24h": [
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=sin_concluir",
-     254
-    ],
-    [
-     "no sigue fillable en decisión",
-     105
-    ],
-    [
-     "fuera de ventana horaria live",
-     26
-    ]
-   ]
-  },
-  {
-   "unidad": "WALLET_MIRROR#ETH#5min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": "2026-09-04T04:33:52",
-   "dias_sin_operar": 40.7,
-   "senales_24h": 1731,
-   "motivos_24h": [
-    [
-     "no sigue fillable en decisión",
-     842
-    ],
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=sin_concluir",
-     629
-    ],
-    [
-     "fuera de ventana horaria live",
-     258
-    ],
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=malo_confirmado",
-     2
-    ]
-   ]
-  },
-  {
-   "unidad": "WALLET_MIRROR#XRP#15min",
-   "estado": "BLOQUEADA",
-   "ultimo_trade": null,
-   "dias_sin_operar": null,
-   "senales_24h": 195,
-   "motivos_24h": [
-    [
-     "veto micro-bucket (solo opera en bueno_confirmado): veredicto=sin_concluir",
-     133
-    ],
-    [
-     "no sigue fillable en decisión",
-     32
-    ],
-    [
-     "fuera de ventana horaria live",
-     30
-    ]
-   ]
   }
  ]
 }
