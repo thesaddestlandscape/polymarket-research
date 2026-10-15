@@ -111,3 +111,21 @@ def test_tope_cuenta_intenciones_sin_casa_y_lineas_por_fila(tmp_path, monkeypatc
     led.write_text("\n".join(json.dumps(f) for f in filas) + "\n{truncada")
     monkeypatch.setattr(M, "LEDGER", led)
     assert M._casadas_ledger_24h() == 4                                          # b, c(casada), None, None
+
+
+def test_tope_barata_suma_coste_y_descuenta_muertas(tmp_path, monkeypatch):
+    led = tmp_path / "l.jsonl"
+    filas = [{"fase": "intencion_casa", "modo": "barata", "hash": "a", "ask": 0.20, "tam": 6},   # 1,20 casó
+             {"fase": "casa", "modo": "barata", "hash": "a", "estado": "casada"},
+             {"fase": "intencion_casa", "modo": "barata", "hash": "b", "ask": 0.18, "tam": 6},   # murió: no cuenta
+             {"fase": "casa", "modo": "barata", "hash": "b", "estado": "muerta"},
+             {"fase": "intencion_casa", "modo": "barata", "hash": "c", "ask": 0.17, "tam": 6},   # sin casa: cuenta
+             {"fase": "intencion_casa", "modo": "favorito", "hash": "d", "ask": 0.97, "tam": 7}]  # otro modo
+    led.write_text("\n".join(json.dumps(f) for f in filas))
+    monkeypatch.setattr(M, "LEDGER", led)
+    assert abs(M._coste_barata_ledger() - (1.20 + 1.02)) < 1e-9
+
+
+def test_tope_barata_no_permite_superar_5():
+    # 4 órdenes a 0,20 x 6 = 4,80; la 5ª (1,20) superaría 5 USDC
+    assert 4 * 6 * 0.20 + 6 * 0.20 > M.TOPE_COSTE_BARATA_USDC

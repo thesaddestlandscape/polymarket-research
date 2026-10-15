@@ -190,6 +190,41 @@ def _resolver_estado(c, h, res, t_max_s=6.0):
 
 TAM_CASA = 7.0              # tamaño poco habitual: identifica NUESTRO casado (prints que suman 7 en <= 50 ms)
 TOPE_CASADAS_24H = 3       # tope ENTRE ejecuciones (el saldo queda retenido hasta redimir)
+# 15-Oct (Javi: "lanza FOK más baratas", "máximo arriesgar 5 euros en total"): modo --barata = 6 acciones del lado NO
+# favorito con ask en [0,17, 0,20] (1,02-1,20 $ por orden, el mínimo del CLOB es 5 acc y 1 $). Tope DURO de coste
+# acumulado de las órdenes baratas: 5 USDC (< 5 €), contando toda intención salvo las que murieron/rechazadas.
+TAM_BARATA = 6.0
+BANDA_BARATA = (0.17, 0.20)
+TOPE_COSTE_BARATA_USDC = 5.0
+MODO = "favorito"
+
+
+def _coste_barata_ledger():
+    """USDC comprometidos por órdenes --barata (TODO el ledger, sin ventana: el tope de Javi es total)."""
+    intenciones, cerradas = [], {}
+    try:
+        with open(LEDGER) as f:
+            for ln in f:
+                try:
+                    e = json.loads(ln)
+                except ValueError:
+                    continue
+                if e.get("modo") != "barata":
+                    continue
+                if e.get("fase") == "intencion_casa":
+                    intenciones.append((e.get("hash"), float(e.get("ask") or 0) * float(e.get("tam") or 0)))
+                elif e.get("fase") == "casa":
+                    cerradas.setdefault(e.get("hash"), []).append(e.get("estado"))
+    except FileNotFoundError:
+        pass
+    total = 0.0
+    for h, coste in intenciones:
+        est = cerradas.get(h, [])
+        if est and est[0] in ("muerta", "rechazada"):
+            est.pop(0)
+            continue                                    # no casó: no consumió presupuesto
+        total += coste
+    return total
 
 
 def _casadas_ledger_24h():
@@ -286,7 +321,11 @@ def casadas(c, n, real):
     t_lim = time.time() + 3600
     saltados = set()
     while len([h for h in hechas if h.get("enviada")]) < n and time.time() < t_lim:
-        if real and _casadas_ledger_24h() >= TOPE_CASADAS_24H:
+        if real and MODO == "barata" and _coste_barata_ledger() + TAM_CASA * BANDA_BARATA[1] > TOPE_COSTE_BARATA_USDC + 1e-9:
+            print(f"⛔ tope de coste de las órdenes baratas: {_coste_barata_ledger():.2f} USDC ya comprometidos "
+                  f"(máx {TOPE_COSTE_BARATA_USDC}): PARO")
+            break
+        if real and MODO == "favorito" and _casadas_ledger_24h() >= TOPE_CASADAS_24H:
             print(f"⛔ ya hay {TOPE_CASADAS_24H} casadas/ambiguas en 24 h en el ledger: tope entre ejecuciones (redimir antes)")
             break
         ms = [m for m in mercados_btc(60, 300) if m[0] not in saltados]
@@ -337,7 +376,10 @@ def casadas(c, n, real):
             if abs(round(ask * 100) - ask * 100) > 1e-6:
                 return False, None                      # solo asks en rejilla de 0,01: 7 × ask con 2 decimales (el
                                                         # CLOB rechaza importes de compra con más; 0,975 no)
-            ok = 0.97 <= ask <= 0.99 and ask_sz >= TAM_CASA and (bid_otro is None or bid_otro <= 0.03)
+            if MODO == "barata":
+                ok = BANDA_BARATA[0] <= ask <= BANDA_BARATA[1] and ask_sz >= TAM_CASA
+            else:
+                ok = 0.97 <= ask <= 0.99 and ask_sz >= TAM_CASA and (bid_otro is None or bid_otro <= 0.03)
             return ok, ask
         live_ok, saldo_antes = None, None
         try:
@@ -389,13 +431,16 @@ def casadas(c, n, real):
             if otro_p:
                 print(f"⛔ otro proceso usa la wallet dedicada ({otro_p}): PARO")
                 break
+            if MODO == "barata" and _coste_barata_ledger() + TAM_CASA * ask > TOPE_COSTE_BARATA_USDC + 1e-9:
+                print("⛔ esta orden superaría el tope de 5 USDC: PARO")
+                break
             ok, ask2 = apto(tk, otro)                   # RE-CHEQUEO COMPLETO justo antes del POST
             if not ok or ask2 != ask:
                 print(f"{slug}: condiciones cambiaron antes del POST (ask {ask}->{ask2}): no envío")
                 continue
             with open(LEDGER, "a") as f:
                 f.write("\n" + json.dumps({"fase": "intencion_casa", "slug": slug, "tok": tk, "ask": ask, "hash": h,
-                                           "t": er.ahora_ms()}) + "\n")   # "\n" previo: una línea truncada
+                                           "t": er.ahora_ms(), "modo": MODO, "tam": TAM_CASA}) + "\n")   # "\n" previo: una línea truncada
                                                                             # anterior no se traga esta intención
                 f.flush()
                 os.fsync(f.fileno())                    # la intención sobrevive a un corte tras el POST
@@ -407,7 +452,7 @@ def casadas(c, n, real):
                 res = {"error": f"{type(e).__name__}: {e}"}
             ack = (time.time_ns() - t0n) / 1e6
             estado, orden, t_print, grupo, saldo_despues = _desenlace(c, h, res, prints, tk, ask, t0, ack, saldo_antes)
-            reg = {"fase": "casa", "slug": slug, "marco": marco, "hash": h, "ask": ask, "T": round(T, 2),
+            reg = {"fase": "casa", "modo": MODO, "slug": slug, "marco": marco, "hash": h, "ask": ask, "T": round(T, 2),
                    "ms_ack": round(ack, 1), "estado": estado, "grupo_prints": grupo,
                    "ms_envio_a_primer_print": (t_print - t0) if t_print is not None else None,
                    "t_envio_ms": t0, "res": res, "saldo_antes": saldo_antes, "saldo_despues": saldo_despues}
@@ -435,10 +480,14 @@ def main():
     ap.add_argument("--fok", type=int, default=8)
     ap.add_argument("--confirmo-dinero-real", action="store_true")
     ap.add_argument("--casa", type=int, default=0)
+    ap.add_argument("--barata", action="store_true", help="--casa con 6 acc del lado no favorito a 0,17-0,20 (tope 5 USDC)")
     a = ap.parse_args()
     if a.casa:
         if a.casa > 3:
             sys.exit("--casa máximo 3 (el saldo queda retenido hasta redimir)")
+        global MODO, TAM_CASA
+        if a.barata:
+            MODO, TAM_CASA = "barata", TAM_BARATA
         casadas(cliente_dedicado(), a.casa, a.confirmo_dinero_real)
         return
     if a.gtc > MAX_N or a.fok > MAX_N:
