@@ -66,24 +66,24 @@
  },
  "SEGUIR#BTC#15min#0": {
   "n_dias": 36,
-  "pnl_sin_mejores_dias": 0.1416,
+  "pnl_sin_mejores_dias": 0.1333,
   "robusto_dias": true,
   "lo": 0.03,
   "hi": 0.08,
-  "n": 329,
-  "pnl_medio": 0.6698,
-  "diff_vs_resto": 0.685,
+  "n": 331,
+  "pnl_medio": 0.6597,
+  "diff_vs_resto": 0.6749,
   "p_valor": 0.0,
   "split_half_diff": [
-   0.9941,
-   0.3778
+   0.982,
+   0.3696
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.5797,
+  "pnl_medio_loo": 0.5701,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.1715,
-   1.2042
+   0.1712,
+   1.1973
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -141,20 +141,20 @@
   "robusto_dias": false,
   "lo": 0.01,
   "hi": 0.06,
-  "n": 50,
-  "pnl_medio": -0.6872,
-  "diff_vs_resto": -0.6765,
+  "n": 51,
+  "pnl_medio": -0.6934,
+  "diff_vs_resto": -0.6832,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.3637,
-   -0.9892
+   -0.3643,
+   -0.9898
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.0617
+   -0.0801
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 95,
@@ -166,6 +166,15 @@
   "veredicto": "malo_confirmado"
  },
  "SEGUIR#XRP#15min#0": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ],
+  "fecha_historial": null
+ },
+ "SEGUIR#ETH#15min#1": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
    "bueno_confirmado",
@@ -215,24 +224,24 @@
  },
  "SEGUIR#BTC#5min#0": {
   "n_dias": 43,
-  "pnl_sin_mejores_dias": -0.5585,
+  "pnl_sin_mejores_dias": -0.561,
   "robusto_dias": false,
   "lo": 0.0,
   "hi": 0.05,
-  "n": 921,
-  "pnl_medio": -0.4239,
-  "diff_vs_resto": -0.3981,
+  "n": 926,
+  "pnl_medio": -0.427,
+  "diff_vs_resto": -0.4012,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.4482,
-   -0.348
+   -0.4517,
+   -0.3508
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.5249,
+  "pnl_medio_loo": -0.5275,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.6695,
-   -0.1359
+   -0.6714,
+   -0.1489
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -245,27 +254,27 @@
  },
  "SEGUIR#SOL#5min#0": {
   "n_dias": 11,
-  "pnl_sin_mejores_dias": 0.1845,
+  "pnl_sin_mejores_dias": 0.2224,
   "robusto_dias": true,
   "lo": 0.1,
   "hi": 0.15,
-  "n": 48,
-  "pnl_medio": 0.8068,
-  "diff_vs_resto": 0.7815,
-  "p_valor": 0.0015,
+  "n": 53,
+  "pnl_medio": 0.7731,
+  "diff_vs_resto": 0.7521,
+  "p_valor": 0.0025,
   "split_half_diff": [
-   0.4054,
-   1.1575
+   0.5416,
+   0.9547
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.645,
+  "pnl_medio_loo": 0.6263,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.0549,
-   1.6064
+   0.0796,
+   1.5329
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 86,
+  "n_posiciones_buscadas": 87,
   "veredicto_crudo_hoy": "bueno_confirmado",
   "historial_crudo": [
    "bueno_confirmado",
@@ -274,36 +283,6 @@
   ],
   "fecha_historial": "2026-10-15",
   "veredicto": "bueno_confirmado"
- },
- "SEGUIR#ETH#5min#0": {
-  "n_dias": 24,
-  "pnl_sin_mejores_dias": -1.0,
-  "robusto_dias": false,
-  "lo": 0.01,
-  "hi": 0.06,
-  "n": 125,
-  "pnl_medio": -0.5629,
-  "diff_vs_resto": -0.5254,
-  "p_valor": 0.003,
-  "split_half_diff": [
-   -0.9625,
-   -0.0952
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": -0.8111,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   -1.0,
-   -0.0012
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 96,
-  "veredicto_crudo_hoy": "malo_confirmado",
-  "historial_crudo": [
-   "malo_confirmado"
-  ],
-  "fecha_historial": "2026-10-15",
-  "veredicto": "malo_confirmado"
  },
  "SEGUIR#BNB#5min#0": {
   "veredicto": "sin_concluir",
@@ -344,12 +323,10 @@
   ],
   "fecha_historial": null
  },
- "SEGUIR#ETH#15min#1": {
+ "SEGUIR#ETH#5min#0": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
+   "malo_confirmado"
   ]
  },
  "SEGUIR#BTC#60min#0": {
