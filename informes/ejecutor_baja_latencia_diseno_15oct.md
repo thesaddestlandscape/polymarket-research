@@ -60,3 +60,11 @@ Dinero no cuadra → parar · API a medias → estado recuperable por ledger + c
 | Edad de firma aceptada | 0,5/10/60/120 s: 6/6 | prefirmar es viable |
 Tomador hasta casado ≈ 175-200 ms desde recepción (sin hora de casado real: requiere FOK que case o VPS). Maker ≈ 50 ms.
 Error cazado: FOK con tamaño 105,01 → importe con 4 decimales → 400 "invalid amounts" (rechazo de validación a ~70 ms que parecía una medida); tamaños enteros y no contar rechazos de validación.
+
+## Decisiones Javi 15-Oct (recortes de latencia)
+1. OK: MAKER por defecto (la idea principal son PARES = maker); tomador solo lo inevitable.
+2. OK: detectar antes (conexión propia mínima por par, disparo con el primer mensaje relevante, orjson + uvloop).
+3. OK: anticipar (ráfagas del 15m → V7) en vez de reaccionar al cambio del bid.
+4. OK: firma/envío (prefirmado ≥120 s validado, cuerpo pre-serializado + HMAC al vuelo, varias conexiones calientes).
+5. OK: proceso dedicado con afinidad de CPU y prioridad.
+6. DESCARTADO: mover el VPS (sin hueco en otras ubicaciones; solo Helsinki).
