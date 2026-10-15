@@ -83646,3 +83646,4 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-10-15T09:59:15.383+00:00,1792058400,60min,True,SOL,Down,,0,,,,,5645317,False,sin_ask,,,,272.0,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,6.642558261578508
 2026-10-15T09:59:15.383+00:00,1792058400,60min,True,BTC,Down,,0,,,,,5645315,False,sin_ask,,,,285.1,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,12.32617953613631
 2026-10-15T09:59:48.082+00:00,1792058400,60min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
+2026-10-15T10:59:48.133+00:00,1792062000,60min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
