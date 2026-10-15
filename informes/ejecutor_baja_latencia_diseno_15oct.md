@@ -18,6 +18,12 @@ Objetivo: **p50 < 200 ms, p90 < 250 ms**. Hoy (camino actual, medido 12-Oct): ~4
 **Suelo físico del TOMADOR** desde nuestra recepción: decisión+firma ~3 ms + ida al origen ~30 ms + retraso del tomador ~145 ms ≈ **~180 ms** → < 200 ms ES ALCANZABLE solo si el camino caliente no gasta nada más (hoy gasta ~300 ms extra). Medido desde el evento en Polymarket: +31 ms → ~210 ms p50. Disparado por Binance: +135 ms → imposible < 200 desde Helsinki.
 **MAKER** (alta 68 ms, cancelación 60 ms, sin retraso del tomador): ~35 ms desde recepción → holgura enorme; es la vía natural para todo lo que pueda ser maker.
 
+## F0 medido 15-Oct (sin enviar nada)
+- HTTP a /time: frío p50 83 ms (p90 135); conexión caliente p50 56 ms (p90 74, mín 50) → ida ≈ 28 ms.
+- py_clob_client_v2 (ya usa httpx HTTP/2 compartido): 1ª create_order de un mercado 183 ms (rellena caché de mercado por REST) → PRECARGAR al abrir; siguientes firma p50 3,7 ms (p90 8,8).
+- Camino PRECIERRE actual (12-Oct, 16 órdenes): decisión→respuesta 489 ms = REST 82 + firma 30 + checks 53 + POST 290.
+- Camino nuevo estimado hasta CASADO: libro WS en memoria 0 + orden prefirmada ~0 (o firma caliente 4) + checks en memoria <1 + ida 28 + retraso del tomador ~145 ≈ **175-180 ms** desde recepción. Los ~110 ms que separan POST 290 de ese número (respuesta, cola del motor) se miden en F1 con la hora de casado del exchange.
+
 ## Dónde se pierden hoy los ~300 ms (a verificar en F0 con perfilado)
 1. Lectura REST del libro antes de enviar (~1-1,5 s en live_trade; trampa "relleno más barato = malo").
 2. py-clob-client en el camino caliente: consultas por orden (tick size, neg_risk, fee) y firma al vuelo.
