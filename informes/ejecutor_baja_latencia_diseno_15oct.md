@@ -49,3 +49,14 @@ Dinero no cuadra → parar · API a medias → estado recuperable por ledger + c
 - **F2 (dry-run)**: conectar V7 (disparo 15m) y la pata de V6 al ejecutor en DRY_RUN, registrando el KPI simulado contra el registro ms.
 - **F3 (dinero, requiere gates de la subestrategia + /code-review medium + OK Javi)**.
 - **Palanca externa (decisión Javi, pendiente #4)**: VPS junto al origen del CLOB (quita ~25-50 ms de ida y vuelta); para Binance, el feed ya llega con 135 ms → los disparadores que valen < 200 ms son los de POLYMARKET (V7, 15m), no los de Binance.
+
+## F1 REAL (15-Oct, wallet dedicada, coste 0 $: 6 GTC canceladas, 8 FOK muertas)
+| Medida | p50 | otros |
+|---|---|---|
+| GTC acuse POST | 84 ms | p90 98, mín 72 |
+| GTC visible en el WS (envío → recepción de nuestro nivel) | 82 ms | mín 68 → en el libro a ~50 ms del envío |
+| Cancelación acuse / desaparece en WS | 65 / 62 ms | p90 201 / 146 |
+| FOK no casable acuse | 228 ms | mín 215, p90 321 → retraso del tomador ≈ 144 ms |
+| Edad de firma aceptada | 0,5/10/60/120 s: 6/6 | prefirmar es viable |
+Tomador hasta casado ≈ 175-200 ms desde recepción (sin hora de casado real: requiere FOK que case o VPS). Maker ≈ 50 ms.
+Error cazado: FOK con tamaño 105,01 → importe con 4 decimales → 400 "invalid amounts" (rechazo de validación a ~70 ms que parecía una medida); tamaños enteros y no contar rechazos de validación.
