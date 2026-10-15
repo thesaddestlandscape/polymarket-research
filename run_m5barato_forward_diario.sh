@@ -22,4 +22,9 @@ bash -c "nice -n 15 $PY vigia_5m_barato_v5_forward.py --telegram" || avisa "V5 v
 #    la caja por moneda acumulado -> si una altcoin muestra ventaja EVIDENTE, se explora con gate propio.
 bash -c "ulimit -v 3500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_quien_gana.py --desde $D --hasta $D" > /dev/null || avisa "quién gana (pares)"
 bash -c "ulimit -v 2000000; nice -n 15 ionice -c3 $PY analisis_5m_barato_pastel_caja.py" | grep -E "PASTEL|por activo|por día" || avisa "pastel caja"
+# 4) FV v4 (15-Oct, Javi: "dejar el forward de FV v4 acumulando días"): dataset del día + juicio OOS desde 14-Oct con el
+#    modelo elegido SOLO en DESC 05-13 (determinista); hash del código en el log para detectar cambios de regla.
+echo "FV v4 sha $(sha256sum analisis_5m_barato_fv_modelo_v4.py | cut -c1-16)"
+bash -c "ulimit -v 3500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_fv_modelo_v4.py --solo-dataset $D" > /dev/null || avisa "FV v4 dataset"
+bash -c "ulimit -v 3500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_fv_modelo_v4.py --oos-desde 2026-10-14 --oos-hasta $D" | grep -E "ELEGIDO|OOS" || avisa "FV v4 juicio"
 echo "=== fin $(date -u +%FT%TZ)"
