@@ -1562,5 +1562,17 @@
   "UPDOWN_GBM_ETH_15M_HORA7#ETH#15min": {
     "n": 201,
     "confirmado": false
+  },
+  "GBM_LATE_60M_FADE#BTC": {
+    "n": 200,
+    "confirmado": true
+  },
+  "GBM_LATE_60M_FADE#BTC#60min": {
+    "n": 200,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#BNB": {
+    "n": 209,
+    "confirmado": false
   }
 }
