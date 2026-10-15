@@ -13,11 +13,11 @@
   "hi": 0.14,
   "n": 49,
   "pnl_medio": -0.5896,
-  "diff_vs_resto": -0.5626,
-  "p_valor": 0.0085,
+  "diff_vs_resto": -0.5637,
+  "p_valor": 0.01,
   "split_half_diff": [
-   -0.1351,
-   -0.9731
+   -0.1362,
+   -0.9742
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8115,
@@ -35,60 +35,30 @@
   ],
   "veredicto": "malo_confirmado"
  },
- "Tennis#SEGUIR": {
-  "n_dias": 33,
-  "pnl_sin_mejores_dias": -0.7653,
-  "robusto_dias": false,
-  "lo": 0.09,
-  "hi": 0.14,
-  "n": 131,
-  "pnl_medio": -0.5679,
-  "diff_vs_resto": -0.5537,
-  "p_valor": 0.0095,
-  "split_half_diff": [
-   -0.6624,
-   -0.4467
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": -0.6497,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   -0.8102,
-   -0.2667
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.07259,
-  "veredicto_crudo_hoy": "malo_confirmado",
-  "historial_crudo": [
-   "malo_confirmado"
-  ],
-  "veredicto": "malo_confirmado"
- },
  "LoL#FADE": {
-  "n_dias": 18,
-  "pnl_sin_mejores_dias": -0.8273,
+  "n_dias": 19,
+  "pnl_sin_mejores_dias": -0.8308,
   "robusto_dias": false,
   "lo": 0.11,
   "hi": 0.16,
-  "n": 51,
-  "pnl_medio": -0.715,
-  "diff_vs_resto": -0.6668,
-  "p_valor": 0.003,
+  "n": 52,
+  "pnl_medio": -0.7205,
+  "diff_vs_resto": -0.6727,
+  "p_valor": 0.002,
   "split_half_diff": [
-   -0.6203,
-   -0.7116
+   -0.6334,
+   -0.7119
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.8751,
+  "pnl_medio_loo": -0.8775,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.3475
+   -0.3624
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 86,
-  "g_kelly_f10": -0.08222,
+  "g_kelly_f10": -0.08267,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -171,11 +141,11 @@
   "hi": 0.34,
   "n": 42,
   "pnl_medio": -0.6239,
-  "diff_vs_resto": -0.588,
+  "diff_vs_resto": -0.5902,
   "p_valor": 0.002,
   "split_half_diff": [
-   -0.5161,
-   -0.6598
+   -0.5184,
+   -0.662
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.698,
@@ -185,7 +155,7 @@
    -0.3308
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 72,
+  "n_posiciones_buscadas": 73,
   "g_kelly_f10": -0.06956,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
@@ -222,6 +192,12 @@
    "malo_confirmado"
   ],
   "veredicto": "malo_confirmado"
+ },
+ "Tennis#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ]
  },
  "Tennis#FADE": {
   "veredicto": "sin_concluir",
