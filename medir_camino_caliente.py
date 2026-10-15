@@ -17,8 +17,9 @@ firmadas y enviadas (también las de respuesta ambigua) y al final cancela las d
 Uso: python3 medir_camino_caliente.py --gtc 8 --fok 8 [--confirmo-dinero-real]   (sin la marca: firma y simula, no envía)
 
 --casa N (Javi 15-Oct, "tendrás que utilizar la otra vía": sin VPS, medir el CASADO real): FOK BUY 7 acc (tamaño poco habitual, para reconocer nuestro casado) MARKETABLE del
-FAVORITO casi decidido de un BTC 5m/15m (ask en [0,97, 0,99], mejor bid del otro lado <= 0,03) a 15-35 s del cierre (DESPUÉS
-del disparo de PRECIERRE a T-45, que opera esos mismos mercados con la wallet del live), límite = mejor ask (nunca por
+FAVORITO casi decidido de un BTC 5m/15m (ask en [0,97, 0,99], mejor bid del otro lado <= 0,03) a T-280..-55 o T-35..-15
+(nunca alrededor de T-45, el disparo de PRECIERRE; además PRECIERRE live solo compra con ask < 0,80/0,85: no competimos
+por el mismo nivel), límite = mejor ask (nunca por
 encima: no barre niveles) y re-chequeo del libro WS de ESE token justo antes del POST. Mide envío -> recepción del print
 de NUESTRO trade (grupo de prints que suma 7 en <= 50 ms) en el WS = cota superior del casado (+~31 ms de feed). Coste: ~7 $
 por orden que se recuperan al resolver si el favorito gana (+0,07-0,21 $); si se da la vuelta, −~7 $. Tope 3 casadas en 24 h
@@ -78,10 +79,13 @@ def _otro_proceso_wallet_dedicada():
         if not pid.isdigit() or int(pid) in excl:
             continue
         try:
-            cmd = open(f"/proc/{pid}/cmdline", "rb").read().replace(b"\0", b" ").decode(errors="replace")
+            argv = open(f"/proc/{pid}/cmdline", "rb").read().split(b"\0")
         except OSError:
             continue
-        if "python" in cmd and any(x in cmd for x in ("experimento_pares_cola_15m", "medir_cancelacion_delay",
+        exe = os.path.basename(argv[0].decode(errors="replace")) if argv and argv[0] else ""
+        cmd = b" ".join(argv).decode(errors="replace")
+        # solo un INTÉRPRETE de Python ejecutando el script (no shells/envoltorios cuya línea lo menciona)
+        if exe.startswith("python") and any(x in cmd for x in ("experimento_pares_cola_15m", "medir_cancelacion_delay",
                                                        "medir_latencia_ordenes_15m", "medir_camino_caliente")):
             return cmd[:120]
     return None
@@ -285,7 +289,7 @@ def casadas(c, n, real):
         if real and _casadas_ledger_24h() >= TOPE_CASADAS_24H:
             print(f"⛔ ya hay {TOPE_CASADAS_24H} casadas/ambiguas en 24 h en el ledger: tope entre ejecuciones (redimir antes)")
             break
-        ms = [m for m in mercados_btc(40, 100) if m[0] not in saltados]
+        ms = [m for m in mercados_btc(60, 300) if m[0] not in saltados]
         if not ms:
             time.sleep(10)
             continue
@@ -324,7 +328,7 @@ def casadas(c, n, real):
         def apto(tk, otro):
             """(ok, ask) con TODAS las condiciones; se evalúa al elegir Y justo antes del POST."""
             T = fin - time.time()
-            if not (15 <= T <= 35) or not (lib.fresco(tk) and lib.fresco(otro)):
+            if not (15 <= T <= 35 or 55 <= T <= 280) or not (lib.fresco(tk) and lib.fresco(otro)):
                 return False, None
             t1, t2 = lib.top.get(tk), lib.top.get(otro)
             if not t1 or not t2 or t1[3] is None or t1[4] is None:
@@ -338,7 +342,8 @@ def casadas(c, n, real):
         live_ok, saldo_antes = None, None
         try:
             while time.time() < fin - 15 and not disparo:
-                if fin - time.time() > 35:
+                T_ = fin - time.time()
+                if T_ > 280 or 35 < T_ < 55:            # fuera de ventana: antes de T-280, o el disparo de PRECIERRE (T-45)
                     time.sleep(0.2)
                     continue
                 if live_ok is None:                     # tras T-45 (PRECIERRE ya disparó): ¿el live opera este cierre?
@@ -371,7 +376,9 @@ def casadas(c, n, real):
                     break
                 time.sleep(0.05)
             if not disparo:
-                print(f"{slug}: sin favorito apto en T 35-15 s")
+                tops = {t[:6]: lib.top.get(t) and lib.top.get(t)[1:4] for t in toks}
+                print(f"{slug}: sin favorito apto en T-280..-55 / -35..-15 (fresco {[lib.fresco(t) for t in toks]}, "
+                      f"bid/bid_sz/ask {tops})", flush=True)
                 continue
             tk, otro, ask, h, signed = disparo
             if not real:
