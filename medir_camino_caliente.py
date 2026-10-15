@@ -163,7 +163,7 @@ def main():
                 ws_baja.append(tb - t_c)
             time.sleep(0.3)
         for i in range(a.fok if parar is None else 0):
-            tam = round(105.0 + 0.01 * (i + 1), 2)
+            tam = float(105 + i + 1)                   # entero: importe 1,06..1,13 $ con 2 decimales (el CLOB rechaza más)
             signed = arm._firmar((tok, 0.01, tam, "BUY"))
             h = hash_orden(signed, neg)
             time.sleep(0.5)
@@ -184,7 +184,12 @@ def main():
             if lleno(r["res"]):
                 parar = f"FOK con relleno o respuesta no interpretable: {r['res']}"
                 break
+            txt = str(r["res"]).lower()
+            if "invalid" in txt or "status_code=400" in txt and "fully" not in txt:
+                parar = f"FOK rechazada al validar (no mide el retraso): {str(r['res'])[:200]}"
+                break
             res_fok.append(r["ms_post"])
+            print(f"FOK {tam}: {r['ms_post']} ms -> {str(r['res'])[:120]}")
             time.sleep(0.5)
     finally:
         for f in futuros:                              # que ningún POST siga en vuelo al barrer
