@@ -1,7 +1,7 @@
 {
-  "actualizado_utc": "2026-10-15T06:20:21+00:00",
+  "actualizado_utc": "2026-10-15T12:20:15+00:00",
   "cutoff": "2026-09-24T08:00:00",
-  "n_unidades_fade_forward": 32997,
+  "n_unidades_fade_forward": 33110,
   "hipotesis": {
     "H1_peores_todas": {
       "n_unidades": 637,
@@ -25,22 +25,22 @@
       "veredicto": "sin_concluir"
     },
     "H2_malas_ask_020_030": {
-      "n_unidades": 780,
+      "n_unidades": 784,
       "n_dias": 22,
-      "n_wallets": 177,
-      "top_wallet_pct": 0.136,
+      "n_wallets": 180,
+      "top_wallet_pct": 0.135,
       "hit": 0.2487,
       "ask_medio": 0.248,
       "wilson90lo": 0.2242,
-      "pnl_medio": -0.0047,
+      "pnl_medio": -0.0051,
       "exceso_hit_vs_ask_pp": 0.07,
       "split_half": [
-        -0.0299,
-        0.0205
+        -0.0349,
+        0.0246
       ],
       "ci90_bootstrap_dia": [
-        -0.099,
-        0.0946
+        -0.0994,
+        0.0935
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
