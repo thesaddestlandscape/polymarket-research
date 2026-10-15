@@ -319,7 +319,7 @@ def casadas(c, n, real):
     _lk = _cerrojo_unico()  # noqa: F841 (mantener vivo el cerrojo)
     hechas, por_marco = [], {"5m": 0, "15m": 0}
     t_lim = time.time() + 3600
-    saltados = set()
+    saltados, cierres_usados = set(), set()   # 15-Oct: UNA orden por cierre (5m y 15m que cierran a la vez = una apuesta)
     while len([h for h in hechas if h.get("enviada")]) < n and time.time() < t_lim:
         if real and MODO == "barata" and _coste_barata_ledger() + TAM_CASA * BANDA_BARATA[1] > TOPE_COSTE_BARATA_USDC + 1e-9:
             print(f"⛔ tope de coste de las órdenes baratas: {_coste_barata_ledger():.2f} USDC ya comprometidos "
@@ -328,7 +328,7 @@ def casadas(c, n, real):
         if real and MODO == "favorito" and _casadas_ledger_24h() >= TOPE_CASADAS_24H:
             print(f"⛔ ya hay {TOPE_CASADAS_24H} casadas/ambiguas en 24 h en el ledger: tope entre ejecuciones (redimir antes)")
             break
-        ms = [m for m in mercados_btc(60, 300) if m[0] not in saltados]
+        ms = [m for m in mercados_btc(60, 300) if m[0] not in saltados and m[1] not in cierres_usados]
         if not ms:
             time.sleep(10)
             continue
@@ -462,6 +462,7 @@ def casadas(c, n, real):
             print(f"{slug} T={T:.1f} ask={ask} {estado}: ack {ack:.1f} ms, envío->1er print {reg['ms_envio_a_primer_print']} ms "
                   f"({grupo.get('atribucion')})")
             reg["enviada"] = True
+            cierres_usados.add(fin)
             hechas.append(reg)
             por_marco[marco] += 1
             if estado == "ambigua":
