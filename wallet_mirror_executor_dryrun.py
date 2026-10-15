@@ -91,6 +91,10 @@ RECONNECT_ESPERA_S = 5
 RECV_TIMEOUT_S = 30
 REFRESCO_WALLETS_S = 1800
 STAKE_REF_EUR = 1.05  # mismo suelo que el resto del sistema
+# 15-Oct (OK Javi): sin boost de Kelly en WM hasta que el bucket se reconfirme con el roster nuevo de wallets (filtro
+# agregado del 14-Oct; 2 de las 4 pérdidas del 14/15-Oct iban a 1,95/1,79 €). Techo 3 de calcular_stake = suelo; el
+# resto de la cascada (freno diario, bankroll mínimo) sigue igual. Volver a None cuando se reconfirme.
+WM_TECHO_STAKE_EUR = STAKE_REF_EUR
 
 DRY_RUN = False  # 11-Ago: activado con aprobación explícita de Javi tras checklist
 # de conexión completo (ballenas cross-check + gates B/C N/A arquitectónicamente,
@@ -274,10 +278,12 @@ async def _correr_una_conexion(wallets: dict, vistos: dict, wallets_bucket: dict
                 try:
                     ic_proxy = min(0.30, max(0.05, info["edge_pp"] / 100.0))
                     resultado_stake = calcular_stake(ic_proxy, strategy="WALLET_MIRROR",
-                                                      subtype=f"{activo}#{marco}")
-                    stake_dryrun = resultado_stake.get("stake_eur", STAKE_REF_EUR)
-                except Exception:
-                    stake_dryrun = STAKE_REF_EUR
+                                                      subtype=f"{activo}#{marco}",
+                                                      techo_override=WM_TECHO_STAKE_EUR)
+                    stake_dryrun = resultado_stake.get("stake_eur", 0.0)
+                except Exception as e:
+                    stake_dryrun = 0.0  # 15-Oct (/code-review): fail-closed; antes 1,05 € se saltaba el freno
+                    _log(f"  ⛔ calcular_stake falló ({type(e).__name__}: {e}) -- stake 0, no se opera")
 
                 tupla_sintetica = f"WALLET_MIRROR#{activo}#{marco}#BUY_{mirror_lado}"
                 en_wl = _en_whitelist(tupla_sintetica)

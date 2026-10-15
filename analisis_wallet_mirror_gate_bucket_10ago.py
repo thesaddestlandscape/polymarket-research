@@ -103,6 +103,25 @@ def bucket(p):
     return round(math.floor(p / STEP + 1e-9) * STEP, 4)
 
 
+# 15-Oct (OK Javi, /code-review medium): la "verdad de suelo" degradaba un bueno con n_real>=2 y media<0 y era un ESTADO
+# ABSORBENTE: el veto impide operar el bucket y nunca llegan trades reales que lo levanten (BTC 15m grande [0,35-0,40):
+# 229 unidades +0,28 €/€, 35/45 días +, malo_confirmado el 15-Oct 02:34Z por 1 de 5 reales). Ahora degrada solo si el
+# PnL medio POR € de los reales es INCOMPATIBLE con la distribución del ejecutor en ese bucket (remuestreo: P(media de
+# n_real unidades del ejecutor <= media real) < P_SUELO_REAL; tiene en cuenta el tamaño del pago, no solo el acierto) o
+# si ya hay N_REAL_DIRECTO reales con media < 0. Sin ventana de días (una ventana reabría a la vez todo lo que los reales
+# viejos habían vetado).
+P_SUELO_REAL = 0.05
+N_REAL_DIRECTO = 15
+SIMS_SUELO_REAL = 20000
+
+
+def _p_media_real(pnl_ejecutor: list, media_real: float, n_real: int, seed_key: str) -> float:
+    """P(media de n_real retornos por € remuestreados del ejecutor <= media_real)."""
+    rng = np.random.default_rng(zlib.crc32(seed_key.encode()))
+    sims = rng.choice(np.asarray(pnl_ejecutor, dtype=float), size=(SIMS_SUELO_REAL, n_real)).mean(axis=1)
+    return float((sims <= media_real + 1e-12).mean())
+
+
 # 07-Oct: versión del método de la unidad/comisión. Si cambia, el historial de tolerancia (2 de 3 días) calculado con el
 # método anterior NO cuenta (fichero aparte para no alterar el JSON que leen los consumidores).
 METODO = "v2_mercado_lado_bucket_fee_real_07oct"
@@ -240,7 +259,13 @@ def _cargar_pnl_real_por_bucket() -> dict:
     ciegamente en el proxy del ejecutor para ESE bucket concreto.
 
     Fail-safe: fichero ausente/corrupto -> {} (comportamiento idéntico al
-    de antes de este cambio, ningún bucket se degrada)."""
+    de antes de este cambio, ningún bucket se degrada).
+
+    15-Oct (/code-review x2): guarda el retorno POR € recalculado con pnl_neto(signal_ask, ganó) -- la MISMA función
+    y comisión que el ejecutor (pnl_neto_eur/stake_eur daba −1,043 en cada pérdida, por debajo del mínimo −1,0 del
+    ejecutor, y el remuestreo salía p=0 siempre); el bucket sale del ask de la SEÑAL (entry_price solo si falta); y UNA
+    observación por (market_id, direction, bucket), como la unidad del ejecutor."""
+    vistos_unidad = set()
     out = defaultdict(lambda: defaultdict(list))
     try:
         with open(TRADES_REAL, encoding="utf-8") as f:
@@ -260,14 +285,18 @@ def _cargar_pnl_real_por_bucket() -> dict:
                     continue
                 activo, marco = subtype.split("#", 1)
                 try:
-                    ask = float(r.get("entry_price") or "")
-                    pnl = float(r.get("pnl_neto_eur") or "")
+                    ask = float(r.get("signal_ask") or r.get("entry_price") or "")
+                    gano = float(r.get("pnl_neto_eur") or "") > 0
                 except (TypeError, ValueError):
                     continue
                 if not (0.0 < ask < 1.0):
                     continue
                 clave_str = f"{tipo}#{activo}#{marco}#{grande}"
-                out[clave_str][f"{bucket(ask):.2f}"].append(pnl)
+                unidad = (clave_str, r.get("market_id"), r.get("direction"), bucket(ask))
+                if unidad in vistos_unidad:
+                    continue
+                vistos_unidad.add(unidad)
+                out[clave_str][f"{bucket(ask):.2f}"].append(pnl_neto(ask, gano))
     except Exception:
         return {}
     return {k: dict(v) for k, v in out.items()}
@@ -290,6 +319,7 @@ def main():
         print(f"método {metodo_previo} -> {METODO}: historial de tolerancia previo IGNORADO")
         _estado = estado_vacio()
     pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
+    pnl_ejecutor_por_bucket = {}
 
     resultado = {}  # "tipo#activo#marco#grande" -> {bucket_str: entrada}
     pendientes = []
@@ -348,6 +378,7 @@ def main():
             # SEGUIR), consultado como "BUY_YES" (misma convención que el
             # resto de gates portados hoy).
             ballenas = bcc.consultar(activo, marco, b, "BUY_YES")
+            pnl_ejecutor_por_bucket[(clave_str, f"{b:.2f}")] = pnl_d  # 15-Oct: para el test de la verdad de suelo
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4), "g_kelly_f10": round(g_kelly, 5),
                        "concentracion_top1_wallet": round(concentracion_top1, 4) if concentracion_top1 is not None else None,
                        "tercio3_n": 0, "tercio3_pnl_medio": None,
@@ -461,11 +492,19 @@ def main():
         nota_real = ""
         pnls_reales = pnl_real_por_bucket.get(clave_str, {}).get(b)
         if veredicto_crudo == "bueno_confirmado" and pnls_reales and len(pnls_reales) >= 2:
-            media_real = sum(pnls_reales) / len(pnls_reales)
+            n_r = len(pnls_reales)
+            media_real = sum(pnls_reales) / n_r
             if media_real < 0:
-                veredicto_crudo = "malo_confirmado"
-                nota_real = (f" [degradado: {len(pnls_reales)} trades REALES "
-                             f"pnl_medio={media_real:+.3f}€<0]")
+                pnl_ej = pnl_ejecutor_por_bucket.get((clave_str, b))
+                # sin distribución del ejecutor -> p=0, se degrada como antes (fail-closed)
+                p_real = _p_media_real(pnl_ej, media_real, n_r, f"real#{clave_str}#{b}") if pnl_ej else 0.0
+                if p_real < P_SUELO_REAL or n_r >= N_REAL_DIRECTO:
+                    veredicto_crudo = "malo_confirmado"
+                    nota_real = (f" [degradado: {n_r} trades REALES pnl_medio={media_real:+.3f}/€<0, "
+                                 f"P(ejecutor <= real)={p_real:.3f}]")
+                else:
+                    nota_real = (f" [verdad de suelo NO degrada: {n_r} reales pnl_medio={media_real:+.3f}/€ "
+                                 f"compatibles con el ejecutor, P={p_real:.3f}]")
         nota_concentracion = ""
         concentracion = entrada.get("concentracion_top1_wallet")
         if veredicto_crudo == "bueno_confirmado" and concentracion is not None and concentracion > 0.30:
