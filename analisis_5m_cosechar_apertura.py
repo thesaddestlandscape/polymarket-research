@@ -99,6 +99,7 @@ def simular_dia(d):
     est = {}                                        # (pol, token) -> Pata
     bloqueo = collections.defaultdict(lambda: -INF)  # (pol, mkt) -> hora hasta la que la defensa bloquea
     bn = collections.deque()                        # (t_rx, precio) Binance último segundo
+    fins, mkts_ord = [], []                         # cierres ordenados -> mercados con ventana viva en O(log n)
 
     def con15(tk):
         fin = meta[tk][2]
@@ -131,7 +132,7 @@ def simular_dia(d):
         hay = con_rellenos(nom, mkt)
         b = round(PAR / 2, 2)
         bid, ask, bsz = tp
-        en_entrada = T > 300 - ENTRADA_S
+        en_entrada = 300 - ENTRADA_S < T <= 300        # primeros 15 s DE LA VENTANA (no antes de abrir)
         # sin rellenos: solo se cotiza en la ventana de entrada (o al rearmarse tras la defensa, dentro de esa ventana)
         ok = T > T_FIN_S and b < ask - 1e-9 and (hay or en_entrada) and t_rx >= bloqueo[(nom, mkt)]
         if b > bid + 1e-9:
@@ -152,16 +153,18 @@ def simular_dia(d):
 
     def defender(t_rx, tk_evento=None):
         """Aplica la defensa: cancela las patas SIN rellenos de los mercados afectados y bloquea REARME_MS."""
+        i0 = bisect.bisect_right(fins, t_rx)          # solo ventanas vivas: cierre en (t_rx, t_rx + 300 s]
+        i1 = bisect.bisect_right(fins, t_rx + 300_000)
+        vivos = mkts_ord[i0:i1]
         for pol in POLS:
             nom, defensa = pol[0], pol[1]
             if defensa == "A0":
                 continue
-            for mkt, tks in por_mkt.items():
+            for mkt in vivos:
+                tks = por_mkt[mkt]
                 if len(tks) != 2 or con_rellenos(nom, mkt):
                     continue
                 tk0 = next(iter(tks.values()))
-                if meta[tk0][2] <= t_rx:
-                    continue
                 if defensa == "A_BN" and tk_evento is None:
                     pass
                 elif defensa == "B_15" and tk_evento is not None and con15(tk0) and \
@@ -199,6 +202,10 @@ def simular_dia(d):
                     if len(c) >= 8 and c[4] == "5min" and c[3] == "BTC" and c[2] not in meta:
                         fin = int(datetime.fromisoformat(c[6]).timestamp() * 1000)
                         meta[c[2]] = (c[3], c[5], fin, c[7])
+                        if c[5] not in por_mkt:
+                            k_ = bisect.bisect_right(fins, fin)
+                            fins.insert(k_, fin)
+                            mkts_ord.insert(k_, c[5])
                         d_ = por_mkt.setdefault(c[5], {})
                         d_[c[7]] = c[2]
                         if len(d_) == 2:
