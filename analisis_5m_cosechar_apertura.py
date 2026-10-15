@@ -87,9 +87,9 @@ def serie_15m(d):
 
 
 def simular_dia(d):
-    c = OUT / f"mercados_{d}.csv.gz"
-    if c.exists():
-        with gzip.open(c, "rt") as fh:
+    cache = OUT / f"mercados_{d}.csv.gz"
+    if cache.exists():
+        with gzip.open(cache, "rt") as fh:
             return list(csv.DictReader(fh))
     f = VOL / "m5_registro" / f"m5_registro_{d}.csv.gz"
     if not f.exists():
@@ -262,7 +262,7 @@ def simular_dia(d):
                           "qN": round(q["NO"], 4), "coste": round(coste, 6), "pnl": round(q[r] - coste, 6),
                           "completo": int(pares >= PM.SH - 1e-9), "rebate": round(reb, 6)})
     OUT.mkdir(parents=True, exist_ok=True)
-    with gzip.open(c, "wt", newline="") as fh:
+    with gzip.open(cache, "wt", newline="") as fh:
         if filas:
             w = csv.DictWriter(fh, fieldnames=list(filas[0]))
             w.writeheader()
