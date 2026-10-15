@@ -15,8 +15,19 @@ tokens con mejor bid >= 0,10 y mejor ask >= 0,12, comprobado justo ANTES de cada
 Cualquier relleno detectado (respuesta, cancelación o estado) -> PARA. try/finally: barre por hash TODAS las órdenes
 firmadas y enviadas (también las de respuesta ambigua) y al final cancela las de ESTE mercado de la wallet dedicada.
 Uso: python3 medir_camino_caliente.py --gtc 8 --fok 8 [--confirmo-dinero-real]   (sin la marca: firma y simula, no envía)
+
+--casa N (Javi 15-Oct, "tendrás que utilizar la otra vía": sin VPS, medir el CASADO real): FOK BUY 7 acc (tamaño poco habitual, para reconocer nuestro casado) MARKETABLE del
+FAVORITO casi decidido de un BTC 5m/15m (ask en [0,97, 0,99], mejor bid del otro lado <= 0,03) a 15-35 s del cierre (DESPUÉS
+del disparo de PRECIERRE a T-45, que opera esos mismos mercados con la wallet del live), límite = mejor ask (nunca por
+encima: no barre niveles) y re-chequeo del libro WS de ESE token justo antes del POST. Mide envío -> recepción del print
+de NUESTRO trade (grupo de prints que suma 7 en <= 50 ms) en el WS = cota superior del casado (+~31 ms de feed). Coste: ~7 $
+por orden que se recuperan al resolver si el favorito gana (+0,07-0,21 $); si se da la vuelta, −~7 $. Tope 3 casadas en 24 h
+ENTRE ejecuciones (ledger; el saldo queda retenido hasta redimir; peor caso 3 × ~7 $), una sola instancia (cerrojo) y
+ningún otro script de la wallet dedicada vivo; PARADA ante respuesta ambigua.
 """
 import argparse
+import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -52,15 +63,385 @@ def pct(xs):
     return f"n={len(xs)} p50 {xs[len(xs) // 2]:.1f} p90 {xs[int(len(xs) * 0.9)]:.1f} min {xs[0]:.1f} ms"
 
 
+def _otro_proceso_wallet_dedicada():
+    """¿Corre otro script que usa la wallet dedicada (experimento de pares, medición de cancelación)? Lee /proc (sin
+    pgrep -f, que se encuentra a sí mismo)."""
+    import os
+    excl, p = set(), os.getpid()                       # este proceso y TODOS sus ancestros (timeout, bash -c, cron...)
+    while p > 1 and p not in excl:
+        excl.add(p)
+        try:
+            p = int(open(f"/proc/{p}/stat").read().rsplit(")", 1)[1].split()[1])
+        except (OSError, ValueError, IndexError):
+            break
+    for pid in os.listdir("/proc"):
+        if not pid.isdigit() or int(pid) in excl:
+            continue
+        try:
+            cmd = open(f"/proc/{pid}/cmdline", "rb").read().replace(b"\0", b" ").decode(errors="replace")
+        except OSError:
+            continue
+        if "python" in cmd and any(x in cmd for x in ("experimento_pares_cola_15m", "medir_cancelacion_delay",
+                                                       "medir_latencia_ordenes_15m", "medir_camino_caliente")):
+            return cmd[:120]
+    return None
+
+
+def _saldo_dedicada(c):
+    from py_clob_client_v2.clob_types import AssetType, BalanceAllowanceParams
+    try:
+        pr = BalanceAllowanceParams(asset_type=AssetType.COLLATERAL)
+        try:
+            c.update_balance_allowance(pr)              # fuerza recálculo (el saldo del servidor va cacheado)
+        except Exception:
+            pass
+        b = c.get_balance_allowance(pr)
+        return float(b["balance"]) / 1e6
+    except Exception:
+        return None                                     # fail-closed: sin saldo legible no se envía
+
+
+def _live_abierto_en(fin):
+    """¿Tiene el LIVE (PRECIERRE/NAIVE u otro) una posición OPEN en un mercado que cierra a `fin`? Lee la cola de
+    trades.csv; ante error -> True (no competir con el live por el mismo nivel)."""
+    import csv
+    from collections import deque
+    from datetime import datetime, timezone
+    try:
+        with open(REPO / "data/live/trades.csv", encoding="utf-8") as f:
+            filas = deque(csv.DictReader(f), maxlen=300)   # solo la cola (trampa: list(DictReader) entero)
+        for r in filas:
+            if r.get("status") == "CLOSED" or not str(r.get("subtype", "")).startswith("BTC"):
+                continue                                   # OPEN, ERROR ("revisar manualmente"), STUB... de BTC
+            try:
+                e = datetime.fromisoformat(r["end_date"].replace("Z", "+00:00")).astimezone(timezone.utc).timestamp()
+            except (KeyError, ValueError, AttributeError):
+                continue
+            if abs(e - fin) < 2:
+                print(f"  live con fila {r.get('status')} {r.get('strategy')} {r.get('subtype')} en este cierre")
+                return True
+        return False
+    except Exception as e:
+        print(f"  no se pudo leer trades.csv ({type(e).__name__}: {e}): no compito")
+        return True
+
+
+def _cerrojo_unico():
+    """Una sola instancia de medición real a la vez (--casa o --gtc/--fok) (dos terminales duplicarían el tope). El cerrojo vive lo que el proceso."""
+    import fcntl
+    f = open("/root/polymarket-research-datalogs/medir_camino_caliente_casa.lock", "w")
+    try:
+        fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        sys.exit("⛔ ya hay otra instancia de medir_camino_caliente --casa: no arranco")
+    return f
+
+
+def _resolver_estado(c, h, res, t_max_s=6.0):
+    """CONSERVADOR (7ª /code-review): 'muerta' SOLO si la respuesta dice explícitamente que la FOK no pudo llenarse;
+    'casada' si la respuesta o get_order muestran relleno; TODO lo demás 'ambigua' (cuenta para el tope y PARA). El
+    saldo nunca rebaja un caso a muerta (puede no estar liquidado/cacheado)."""
+    if isinstance(res, dict):                           # 1º evidencia de relleno (gana a cualquier texto)
+        try:
+            if (str(res.get("status", "")).lower() == "matched" or float(res.get("takingAmount") or 0) > 0
+                    or float(res.get("makingAmount") or 0) > 0 or res.get("tradeIDs")):
+                return "casada", res
+        except (TypeError, ValueError):
+            return "ambigua", res
+    rechazo_fok = (isinstance(res, dict) and set(res) == {"error"} and "status_code=400" in str(res["error"])
+                   and "couldn't be fully filled" in str(res["error"]))
+    if rechazo_fok:                                     # 2º mensaje EXACTO del CLOB como excepción, y confirmado:
+        try:
+            o = c.get_order(h)                          # FOK muerta -> None (14-Oct); si aparece con relleno, casó
+        except Exception as e:
+            o = f"{type(e).__name__}: {e}"
+        try:
+            if o is None:
+                return "muerta", o                      # FOK muerta: el servidor no la guarda (14-Oct)
+            if isinstance(o, dict) and float(o.get("size_matched") or 0) > 0:
+                return "casada", o
+            if (isinstance(o, dict) and "size_matched" in o and float(o.get("size_matched") or 0) == 0
+                    and str(o.get("status", "")).upper() in ("CANCELED", "CANCELLED")):
+                return "muerta", o
+        except (TypeError, ValueError):
+            pass
+        return "ambigua", o                             # cualquier otra forma: no se presume muerte
+    if isinstance(res, dict) and res.get("orderID") and str(res["orderID"]).lower() != str(h).lower():
+        h = res["orderID"]
+    t_fin, o = time.time() + t_max_s, None
+    while time.time() < t_fin:
+        try:
+            o = c.get_order(h)
+        except Exception as e:
+            o = f"{type(e).__name__}: {e}"
+        if isinstance(o, dict):
+            try:
+                if float(o.get("size_matched") or 0) > 0:
+                    return "casada", o
+            except (TypeError, ValueError):
+                return "ambigua", o
+        time.sleep(0.3)
+    return "ambigua", o
+
+
+TAM_CASA = 7.0              # tamaño poco habitual: identifica NUESTRO casado (prints que suman 7 en <= 50 ms)
+TOPE_CASADAS_24H = 3       # tope ENTRE ejecuciones (el saldo queda retenido hasta redimir)
+
+
+def _casadas_ledger_24h():
+    """Cuenta para el tope: 'casa' casada/ambigua, y TODA intención sin su 'casa' (el proceso murió tras el POST:
+    pudo casar). Ventana 24 h."""
+    casas, intenciones = [], []                       # por FILA (no por hash: un hash repetido/None no resta)
+    try:
+        with open(LEDGER) as f:
+            for ln in f:
+                try:
+                    e = json.loads(ln)
+                except ValueError:
+                    continue
+                if e.get("fase") == "intencion_casa":
+                    intenciones.append((e.get("hash"), int(e.get("t") or 0)))
+                elif e.get("fase") == "casa":
+                    casas.append((e.get("hash"), e.get("estado"), int(e.get("t_envio_ms") or 0)))
+    except FileNotFoundError:
+        pass
+    ahora = er.ahora_ms()
+    n = sum(1 for _h, est, t in casas if est in ("casada", "ambigua") and ahora - t < 86_400_000)
+    con_casa = [h for h, _e, _t in casas]
+    for h, t in intenciones:                            # cada intención sin su 'casa' (emparejadas 1 a 1)
+        if h in con_casa:
+            con_casa.remove(h)
+        elif ahora - t < 86_400_000:
+            n += 1
+    return n
+
+
+MS_MIN_FISICO = 120        # nada nuestro puede casar antes: ida ~28 ms + retraso del tomador ~144 ms
+
+
+def _grupo_nuestro(prints, tk, ask, t0, t_hasta):
+    """Subconjuntos de prints de NUESTRO token a precio <= ask (cualquier lado; si casara por acuñación y el feed lo
+    imprimiera en el otro token, queda 'ninguna': la medida se pierde, no se falsea) dentro de 50 ms, desde t0 + MS_MIN_FISICO, cuya suma es EXACTAMENTE TAM_CASA. Solo se
+    atribuye si hay UNO (o todos empiezan en el mismo print); si hay varios candidatos distintos -> ambigua, no cuenta.
+    -> (t_primer_print | None, detalle)."""
+    from itertools import combinations
+    cands = []
+    for (k, t, m) in prints:
+        try:
+            pr, sz = float(m.get("price")), float(m.get("size"))
+        except (TypeError, ValueError):
+            continue
+        if t < t0 + MS_MIN_FISICO or t > t_hasta or sz > TAM_CASA + 1e-6:
+            continue                                    # el casado no puede llegar después del acuse + margen
+        if k == tk and pr <= ask + 1e-9:
+            cands.append((t, sz, True, pr))
+    cands.sort()
+    inicios = set()
+    hallado = None
+    for i in range(len(cands)):
+        ventana = [x for x in cands[i:] if x[0] - cands[i][0] <= 50][:11]
+        resto = ventana[1:]
+        for r in range(0, len(resto) + 1):              # solo subconjuntos que INCLUYEN ventana[0]: <= 2^10 por i
+            for sub in combinations(resto, r):
+                if abs(ventana[0][1] + sum(x[1] for x in sub) - TAM_CASA) < 1e-6:
+                    inicios.add(ventana[0][0])
+                    hallado = hallado or [ventana[0], *sub]
+    if len(inicios) == 1:
+        return min(inicios), {"atribucion": "unica", "grupo": hallado}
+    return None, {"atribucion": "ninguna" if not inicios else f"ambigua ({len(inicios)} grupos)", "cands": cands[:8]}
+
+
+def _desenlace(c, h, res, prints, tk, ask, t0, ack, saldo_antes, espera_s=2.0):
+    """Tras el POST de --casa: (estado, orden, t_print, grupo, saldo_despues). Las pruebas (prints únicos del WS, saldo)
+    solo pueden SUBIR la alerta a 'ambigua', nunca rebajarla. Probado en tests/test_medir_camino_caliente.py."""
+    estado, orden = _resolver_estado(c, h, res)
+    time.sleep(espera_s)                                # liquidación on-chain (~1,5 s) y llegada de prints del WS
+    t_print, grupo = _grupo_nuestro(list(prints), tk, ask, t0, t0 + ack + 400)   # de ESTA orden
+    if estado != "casada" and grupo.get("atribucion") == "unica":
+        estado = "ambigua"                              # el WS muestra nuestras 7 acciones: no se presume muerte
+    saldo_despues = _saldo_dedicada(c)
+    if estado in ("muerta", "rechazada"):
+        if saldo_antes is None or saldo_despues is None:
+            estado = "ambigua"                          # sin poder comprobar el saldo no se presume muerte
+        elif saldo_antes - saldo_despues >= 0.5 * TAM_CASA * ask:
+            estado = "ambigua"
+    if estado == "casada" and isinstance(orden, dict) and orden.get("size_matched") is not None:
+        try:
+            if abs(float(orden.get("size_matched") or 0) - TAM_CASA) > 1e-6:
+                estado = "ambigua"                      # tamaño imposible para una FOK: anomalía -> cuenta y PARA
+                t_print, grupo = None, {**grupo, "atribucion": f"size_matched {orden.get('size_matched')} != {TAM_CASA}"}
+        except (TypeError, ValueError):
+            estado, t_print = "ambigua", None
+    return estado, orden, t_print, grupo, saldo_despues
+
+
+def casadas(c, n, real):
+    from py_clob_client_v2 import PartialCreateOrderOptions, OrderArgs, OrderType
+    _lk = _cerrojo_unico()  # noqa: F841 (mantener vivo el cerrojo)
+    hechas, por_marco = [], {"5m": 0, "15m": 0}
+    t_lim = time.time() + 3600
+    saltados = set()
+    while len([h for h in hechas if h.get("enviada")]) < n and time.time() < t_lim:
+        if real and _casadas_ledger_24h() >= TOPE_CASADAS_24H:
+            print(f"⛔ ya hay {TOPE_CASADAS_24H} casadas/ambiguas en 24 h en el ledger: tope entre ejecuciones (redimir antes)")
+            break
+        ms = [m for m in mercados_btc(40, 100) if m[0] not in saltados]
+        if not ms:
+            time.sleep(10)
+            continue
+        # alterna 5m/15m: el marco con menos medidas primero (cada 15m cierra a la vez que un 5m)
+        ms.sort(key=lambda m: por_marco["15m" if "15m" in m[0] else "5m"])
+        slug, fin, toks, neg = ms[0]
+        marco = "15m" if "15m" in slug else "5m"
+        prints = []
+        saltados.add(slug)                              # un intento por mercado, pase lo que pase (sin bucles)
+
+        def al_trade(tk, t_recv, msg, _p=prints):       # lista ligada a ESTA iteración
+            _p.append((tk, t_recv, msg))
+        try:                                            # precarga de TODO lo que create_order pediría por red
+            for tk in toks:                             # calienta la caché del cliente: create_order no irá por red
+                c.get_tick_size(tk)
+            negs = {bool(c.get_neg_risk(tk)) for tk in toks}
+            if negs != {bool(neg)}:
+                print(f"{slug}: neg_risk de gamma ({neg}) != CLOB ({negs}): salto mercado (fail-closed)")
+                continue
+        except Exception as e:
+            print(f"{slug}: precarga falló ({type(e).__name__}: {e}); salto mercado")
+            time.sleep(5)
+            continue
+        if real:                                        # todo lo lento, ANTES de la ventana de disparo
+            libre = _saldo_dedicada(c)
+            if libre is None or libre < TAM_CASA + 1.5:
+                print(f"⛔ saldo de la wallet dedicada no apto ({libre}): PARO")
+                break
+            otro_p = _otro_proceso_wallet_dedicada()
+            if otro_p:
+                print(f"⛔ otro proceso usa la wallet dedicada ({otro_p}): PARO")
+                break
+        lib = er.Libro(toks, al_trade=al_trade).iniciar()
+        disparo = None
+
+        def apto(tk, otro):
+            """(ok, ask) con TODAS las condiciones; se evalúa al elegir Y justo antes del POST."""
+            T = fin - time.time()
+            if not (15 <= T <= 35) or not (lib.fresco(tk) and lib.fresco(otro)):
+                return False, None
+            t1, t2 = lib.top.get(tk), lib.top.get(otro)
+            if not t1 or not t2 or t1[3] is None or t1[4] is None:
+                return False, None
+            ask, ask_sz, bid_otro = t1[3], t1[4], t2[1]
+            if abs(round(ask * 100) - ask * 100) > 1e-6:
+                return False, None                      # solo asks en rejilla de 0,01: 7 × ask con 2 decimales (el
+                                                        # CLOB rechaza importes de compra con más; 0,975 no)
+            ok = 0.97 <= ask <= 0.99 and ask_sz >= TAM_CASA and (bid_otro is None or bid_otro <= 0.03)
+            return ok, ask
+        live_ok, saldo_antes = None, None
+        try:
+            while time.time() < fin - 15 and not disparo:
+                if fin - time.time() > 35:
+                    time.sleep(0.2)
+                    continue
+                if live_ok is None:                     # tras T-45 (PRECIERRE ya disparó): ¿el live opera este cierre?
+                    live_ok = not (real and _live_abierto_en(fin))
+                    saldo_antes = _saldo_dedicada(c) if real else None
+                if not live_ok:
+                    print(f"{slug}: el live tiene posición en este cierre: no compito, salto")
+                    break
+                for i, tk in enumerate(toks):
+                    ok, ask = apto(tk, toks[1 - i])
+                    if not ok:
+                        continue
+                    if real and _live_abierto_en(fin):  # re-chequeo del live JUSTO antes de firmar (~ms de disco)
+                        live_ok = False
+                        break
+                    try:                                # tick 0,01 SIEMPRE: el ask ya está en rejilla de 0,01, que es
+                                                        # válida con tick 0,01 o 0,001, y 0,01 nunca es "menor" que el
+                                                        # mínimo cacheado por el cliente (no lanza)
+                        signed = c.create_order(OrderArgs(token_id=tk, price=ask, size=TAM_CASA, side="BUY"),
+                                                PartialCreateOrderOptions(tick_size="0.01", neg_risk=neg))
+                        h = hash_orden(signed, neg)
+                    except Exception as e:
+                        print(f"{slug}: firma falló ({type(e).__name__}: {e}): salto mercado")
+                        live_ok = False                 # un intento de firma por mercado (sin bucles de E/S)
+                        break
+                    disparo = (tk, toks[1 - i], ask, h, signed)
+                    break
+                if live_ok is False:
+                    print(f"{slug}: salto mercado (live presente en este cierre o firma fallida)")
+                    break
+                time.sleep(0.05)
+            if not disparo:
+                print(f"{slug}: sin favorito apto en T 35-15 s")
+                continue
+            tk, otro, ask, h, signed = disparo
+            if not real:
+                print(f"[seco] dispararía {slug} ask={ask}")
+                hechas.append({"seco": True, "enviada": True})
+                continue
+            otro_p = _otro_proceso_wallet_dedicada()     # ~ms: justo antes del POST
+            if otro_p:
+                print(f"⛔ otro proceso usa la wallet dedicada ({otro_p}): PARO")
+                break
+            ok, ask2 = apto(tk, otro)                   # RE-CHEQUEO COMPLETO justo antes del POST
+            if not ok or ask2 != ask:
+                print(f"{slug}: condiciones cambiaron antes del POST (ask {ask}->{ask2}): no envío")
+                continue
+            with open(LEDGER, "a") as f:
+                f.write("\n" + json.dumps({"fase": "intencion_casa", "slug": slug, "tok": tk, "ask": ask, "hash": h,
+                                           "t": er.ahora_ms()}) + "\n")   # "\n" previo: una línea truncada
+                                                                            # anterior no se traga esta intención
+                f.flush()
+                os.fsync(f.fileno())                    # la intención sobrevive a un corte tras el POST
+            T = fin - time.time()
+            t0, t0n = er.ahora_ms(), time.time_ns()
+            try:
+                res = c.post_order(signed, OrderType.FOK)
+            except Exception as e:
+                res = {"error": f"{type(e).__name__}: {e}"}
+            ack = (time.time_ns() - t0n) / 1e6
+            estado, orden, t_print, grupo, saldo_despues = _desenlace(c, h, res, prints, tk, ask, t0, ack, saldo_antes)
+            reg = {"fase": "casa", "slug": slug, "marco": marco, "hash": h, "ask": ask, "T": round(T, 2),
+                   "ms_ack": round(ack, 1), "estado": estado, "grupo_prints": grupo,
+                   "ms_envio_a_primer_print": (t_print - t0) if t_print is not None else None,
+                   "t_envio_ms": t0, "res": res, "saldo_antes": saldo_antes, "saldo_despues": saldo_despues}
+            reg["estado_orden"] = orden
+            with open(LEDGER, "a") as f:
+                f.write("\n" + json.dumps(reg, default=str) + "\n")
+            print(f"{slug} T={T:.1f} ask={ask} {estado}: ack {ack:.1f} ms, envío->1er print {reg['ms_envio_a_primer_print']} ms "
+                  f"({grupo.get('atribucion')})")
+            reg["enviada"] = True
+            hechas.append(reg)
+            por_marco[marco] += 1
+            if estado == "ambigua":
+                print("⛔ respuesta ambigua: PARO y reviso la wallet dedicada", reg.get("estado_orden"))
+                break
+        finally:
+            lib.parar()
+    v = sorted(x["ms_envio_a_primer_print"] for x in hechas if x.get("estado") == "casada"
+               and x.get("ms_envio_a_primer_print") is not None)
+    print(f"CASADAS: n={len(v)} envío->1er print {v} | acks {sorted(x['ms_ack'] for x in hechas if 'ms_ack' in x)}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--gtc", type=int, default=8)
     ap.add_argument("--fok", type=int, default=8)
     ap.add_argument("--confirmo-dinero-real", action="store_true")
+    ap.add_argument("--casa", type=int, default=0)
     a = ap.parse_args()
+    if a.casa:
+        if a.casa > 3:
+            sys.exit("--casa máximo 3 (el saldo queda retenido hasta redimir)")
+        casadas(cliente_dedicado(), a.casa, a.confirmo_dinero_real)
+        return
     if a.gtc > MAX_N or a.fok > MAX_N:
         sys.exit(f"máximo {MAX_N} por tipo")
     real = a.confirmo_dinero_real
+    if real:
+        _lk = _cerrojo_unico()  # noqa: F841 (mismo cerrojo que --casa: un solo proceso de medición a la vez)
+        otro_p = _otro_proceso_wallet_dedicada()
+        if otro_p:
+            sys.exit(f"⛔ otro proceso usa la wallet dedicada ({otro_p}): no arranco")
     c = cliente_dedicado()
     t_lim = time.time() + 960                          # espera como mucho un ciclo de 15m a que abra uno
     ms = []
@@ -144,7 +525,10 @@ def main():
                 print(f"aviso: orderID {oid} != hash local {h}")
             time.sleep(0.8)
             if not oid:
-                print(f"GTC edad {edad} s RECHAZADA o ambigua: {res}")   # se barre por hash al final
+                if real and "status_code=400" not in str(res):
+                    parar = f"GTC con respuesta ambigua (sin orderID ni 400): {res}"   # pudo quedar en el libro
+                    break
+                print(f"GTC edad {edad} s RECHAZADA: {res}")   # se barre por hash al final
                 time.sleep(0.3)
                 continue
             ta = primera(tam, t_ev)
@@ -156,6 +540,14 @@ def main():
             cres = cr["res"] if isinstance(cr["res"], dict) else {}
             if oid.lower() not in [x.lower() for x in (cres.get("canceled") or [])]:
                 parar = f"la cancelación no confirma {oid}: {cres} (¿rellenada?)"
+                break
+            try:                                        # cancelada, pero ¿se rellenó EN PARTE antes?
+                o = c.get_order(oid)
+                if isinstance(o, dict) and float(o.get("size_matched") or 0) > 0:
+                    parar = f"GTC {oid} rellenada en parte ({o.get('size_matched')}) antes de cancelar"
+                    break
+            except Exception as e:
+                parar = f"no se pudo comprobar relleno parcial de {oid}: {type(e).__name__}: {e}"
                 break
             time.sleep(0.8)
             tb = primera(-tam, t_c)
@@ -185,6 +577,9 @@ def main():
                 parar = f"FOK con relleno o respuesta no interpretable: {r['res']}"
                 break
             txt = str(r["res"]).lower()
+            if real and not ("couldn't be fully filled" in txt and "status_code=400" in txt):
+                parar = f"FOK sin la muerte explícita del CLOB (posible relleno o red): {str(r['res'])[:200]}"
+                break
             if "invalid" in txt or "status_code=400" in txt and "fully" not in txt:
                 parar = f"FOK rechazada al validar (no mide el retraso): {str(r['res'])[:200]}"
                 break
@@ -192,9 +587,9 @@ def main():
             print(f"FOK {tam}: {r['ms_post']} ms -> {str(r['res'])[:120]}")
             time.sleep(0.5)
     finally:
-        for f in futuros:                              # que ningún POST siga en vuelo al barrer
-            try:
-                f.result(timeout=20)
+        for f in futuros:                              # que ningún POST siga en vuelo al barrer (sin tope: el
+            try:                                       # cliente HTTP tiene su propio timeout)
+                f.result()
             except Exception:
                 pass
         if real:
@@ -203,7 +598,12 @@ def main():
                     o = c.get_order(h)
                     st = str((o or {}).get("status", "")).upper() if isinstance(o, dict) else ""
                     if st in ("LIVE", "OPEN"):
-                        env.cancelar(h, meta={"barrido": True})
+                        cr = env.cancelar(h, meta={"barrido": True})
+                        o2 = c.get_order(h)
+                        if isinstance(o2, dict) and str(o2.get("status", "")).upper() in ("LIVE", "OPEN"):
+                            print(f"🚨🚨 ORDEN {h} SIGUE VIVA tras cancelar ({cr.get('res')}): CANCELAR A MANO en la wallet dedicada")
+                    if isinstance(o, dict) and float(o.get("size_matched") or 0) > 0:
+                        print(f"⚠️ orden {h} ({tipo}) con size_matched={o.get('size_matched')}: hay posición en la wallet dedicada")
                     elif st and st not in ("CANCELED", "CANCELLED", "UNMATCHED", ""):
                         print(f"⚠️ orden {h} ({tipo}) en estado {st}: revisar posición en la wallet dedicada")
                 except Exception as e:

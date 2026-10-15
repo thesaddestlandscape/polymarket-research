@@ -46,6 +46,7 @@ class Libro:
         self.tokens = list(tokens)
         self.al_nivel = al_nivel
         self.vivo_tk = {}                   # token -> t_recv del último mensaje que lo tocó (frescura POR TOKEN)
+        self.ult_tk = {}                    # token -> t_recv del último price_change/snapshot (actividad real)
         self.lib = {t: {"bids": {}, "asks": {}} for t in self.tokens}
         self.top = {}                       # token -> (t_recv_ms, bid, bid_sz, ask, ask_sz)
         self.al_cambiar, self.al_trade = al_cambiar, al_trade
@@ -103,6 +104,7 @@ class Libro:
         for tk in tocados:
             if tk not in self.vivo_tk:
                 continue                    # sin snapshot desde la última conexión: el libro no vale todavía
+            self.ult_tk[tk] = t_recv            # último mensaje que tocó el libro (válido) de ESTE token
             bb, bs, ba, as_ = self._top_de(tk)
             nuevo = (t_recv, bb, bs, ba, as_)
             viejo = self.top.get(tk)
@@ -120,6 +122,7 @@ class Libro:
                     async with websockets.connect(WS_URL, open_timeout=10, close_timeout=2, max_size=None,
                                                   ping_interval=None) as ws:
                         self.vivo_tk = {}           # tras (re)conectar, ningún libro vale hasta su snapshot nuevo
+                        self.ult_tk = {}
                         self.lib = {t: {"bids": {}, "asks": {}} for t in self.tokens}
                         self.top = {}
                         await ws.send(json.dumps({"assets_ids": self.tokens, "type": "market"}))
