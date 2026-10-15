@@ -175,3 +175,12 @@ No compres el contrato porque sea barato. Cómpralo únicamente cuando exista ev
 - El −0,13 €/€ de "primera compra" que cité NO es de este universo: es el longshot de primera compra de wallets del 30-Sep (otro estudio). En ESTE universo la política "solo 1ª pata" dio −255,6 € en 1.439 mercados = −0,178 €/mercado = −0,178 €/€ (1 € por mercado). Corregir en el informe.
 - "La suelta siempre pierde por construcción" lo dije demasiado fuerte: vale si el perdedor siempre cae a ≤0,10 antes del cierre, lo que es casi siempre pero no una identidad (mercados que resuelven con el perdedor por encima de 0,10, ask vacío al final). Verificar con los datos, como pide §2.2.
 - FV v4 (`analisis_5m_barato_fv_modelo_v4.py`, commit f7dfd42f67) predice el CAMBIO DEL MID a 0,5/1/3 s, no la probabilidad de resolución: para este encargo hay que añadir el puente FV → q calibrada.
+
+---
+## RESULTADO 15-Oct (`analisis_btc5m_fv_longshot.py`, informe datalogs/m5barato_mision/fv_longshot_informe.txt)
+DESC 05-13 (FV por validación cruzada por días), OOS 14-Oct, entrada al ask real +355 ms, comisión 0,07·p·(1−p), 1 por mercado-lado:
+- CONTROL longshot ≤0,10: DESC n=2.331 acierto 8,4 % vs precio 9,1 % → EV −0,141 €/€ IC90 días (−0,206, −0,075); OOS n=279 EV −0,072.
+- FV M=0 (elegido): DESC EV −0,050 IC90 (−0,109, +0,005); OOS n=263 EV −0,073 (= control). M=0,02 −0,106; M=0,05 −0,270.
+- Calibración: Brier FV 0,07644 vs solo precio 0,07639 → FV v4 NO aporta información sobre el precio para la resolución de longshots; q calibrada casi sin dispersión (0,06-0,10). La mejora de DESC era selección de precio más bajo (0,066 vs 0,090).
+- Veredicto: BTC5M-FV-LONGSHOT como TOMADOR con FV v4 = SIN EVIDENCIA (rechazada en este universo). FV v4 predice Δmid 0,5-3 s, no la resolución a 1-4 min.
+- Contraste: como MAKER lo barato gana (población +0,04/+0,08 €/€; @mo-money 1ª pata ≤0,30 +5,5 pp; ganadoras persistentes +0,057 OOS) → la ventaja es EJECUCIÓN (cola/qué rellenos), no predicción → siguiente: cosechar al abrir y fase 2 (lo invisible) de makers persistentes.
