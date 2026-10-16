@@ -29,6 +29,9 @@ POLÍTICAS (FIJADAS ANTES DE MIRAR, 16-Oct). Base PAR = 0,96 solamente, defensas
   1 s con un tick de hace horas: 10-oct 94 % y 100 % de los ticks BTC disparan en los tramos 2-3, 12-oct 100 %, frente a 2-7 %
   con la ventana reiniciada). v2 reinicia las ventanas de Binance en cada salto atrás >60 s y descarta las fotos pendientes;
   `--bn-v1` reproduce el comportamiento de v1 (la regresión lo usa).
+  R1b/R2b/R3b  Como R1/R2/R3 pero SIN cancelar a t_det + 65 ms: la pata corta sigue viva y se cancela (efecto en t_act + 65 ms,
+         cancelación enviada al ejecutarse la reacción; los rellenos de esa pata hasta entonces se conservan) SOLO si la compra
+         o la venta se ejecuta. Si no se cumple U/X o no hay dato, el mercado es idéntico a BASE. Mismas U/X y bases; candidatas en DESC.
 CONTROL (--control): R1 con U = 0 y SIN cancelación = v1 exactamente (prueba de regresión). OJO: R1 con U = 0 y con
   cancelación (`_R1_U0.00`, ablación) NO es v1: cancelar la otra pata a +65 ms elimina los rellenos maker posteriores.
 CONTABILIDAD COMPLETA (unidad = mercado; ninguna fila descartada salvo mercados sin desenlace oficial, contados en la
@@ -87,11 +90,16 @@ ENGINES = [(f"{d}_P{int(PAR * 100)}_{c}" + (f"_S1k{k}" if k else ""), d, c, k)
 
 
 def variantes(control=False):
-    """Capas reactivas aplicadas a los motores sin skew: (sufijo, tipo, U, X, cancela_otra). BASE = sufijo ''."""
+    """Capas reactivas aplicadas a los motores sin skew: (sufijo, tipo, U, X, cancela) con cancela False / True (a t_det+65 ms) / "act" (variantes b). BASE = sufijo ''."""
     v = [("", None, None, None, False), ("_R1_U0.00", "R1", 0.0, None, True)]
     v += [(f"_R1_U{u:.2f}", "R1", u, None, True) for u in U_LIST]
     v += [(f"_R2_X{x:.2f}", "R2", None, x, True) for x in X_LIST]
     v += [(f"_R3_U{u:.2f}_X{x:.2f}", "R3", u, x, True) for u in U_LIST for x in X_LIST]
+    # variantes b (OK chief 16-Oct): la pata corta se cancela con efecto en t_act + 65 ms SOLO si la compra/venta se ejecuta;
+    # si no se cumple U/X (o no hay dato) sigue viva hasta su cancelación normal de v1 (idéntico a BASE en ese mercado)
+    v += [(f"_R1b_U{u:.2f}", "R1", u, None, "act") for u in U_LIST]
+    v += [(f"_R2b_X{x:.2f}", "R2", None, x, "act") for x in X_LIST]
+    v += [(f"_R3b_U{u:.2f}_X{x:.2f}", "R3", u, x, "act") for u in U_LIST for x in X_LIST]
     if control:
         v.append(("_CTRL", "R1", 0.0, None, False))
     return v
@@ -198,7 +206,7 @@ def evaluar_variante(var, evs, det, snap, res):
     base); det=(t_det, lado_primer_relleno) o None; snap={'YES':(bid,ask,bsz,asz)|None,'NO':...}|None a t_det+L; res='YES'|'NO'."""
     _suf, kind, U, X, cancela = var
     ev = {l: list(evs[l]) for l in LADOS}
-    if kind and cancela and det:
+    if kind and cancela is True and det:
         otro = OPUESTO[det[1]]
         ev[otro] = [e for e in ev[otro] if e[0] <= det[0] + CANCEL_MS]
     t_act = (det[0] + L_TOMADOR_MS) if det else None
@@ -229,6 +237,8 @@ def evaluar_variante(var, evs, det, snap, res):
                     ventas[suelta].append(acc)
                     hecho = True
             motivo = "|".join(m for m in (m1, m2) if m)
+            if hecho and cancela == "act":              # variantes b: la pata corta se cancela SOLO si la reacción se ejecuta
+                ev[corta] = [e for e in ev[corta] if e[0] <= t_act + CANCEL_MS]
         else:
             motivo = "sin_desbalance"
     q = {l: sum(e[3] for e in ev[l]) for l in LADOS}

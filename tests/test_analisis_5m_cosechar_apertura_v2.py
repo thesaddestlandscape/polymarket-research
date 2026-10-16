@@ -282,3 +282,63 @@ def test_salto_de_tramo_descarta_fotos_pendientes(tmp_path):
     filas, st, cov = filas_de(tmp_path, L)
     assert st["st"]["saltos_tiempo"] == 1 and cov["sin_foto"] >= 1
     assert filas["A0_P96_FINAL_R1_U1.05"]["motivo"] == "sin_dato"
+
+
+# ------------------------------------------------------------------ variantes b (cancelar solo si la reacción se ejecuta)
+CAMPOS = ("qY", "qN", "tY", "tN", "sY", "sN", "coste", "fees", "pnl", "rebate", "completo", "modo_final")
+
+
+def test_b_sin_reaccion_identico_a_base():
+    ev = {"YES": EVY, "NO": [(1200, 1250, 0.48, 5.0)]}                       # la otra pata se rellena a +170 ms (v1 la conserva)
+    for sufijo in ("_R1b_U1.00", "_R2b_X0.03", "_R3b_U1.00_X0.03"):
+        for sn, ev_ in ((snap(askN=0.60, bidY=0.40), ev), (None, {"YES": EVY, "NO": []}), (snap(bidY=0.6, askY=0.5, bidN=0.7, askN=0.5), {"YES": EVY, "NO": []}),
+                        (snap(), {"YES": EVY, "NO": [(1050, 1060, 0.48, 5.0)]})):    # última: pareja ya completa -> sin desbalance
+            b = V2.evaluar_variante(VAR[""], ev_, (1030, "YES"), sn, "YES")
+            x = V2.evaluar_variante(VAR[sufijo], ev_, (1030, "YES"), sn, "YES")
+            assert all(b[k] == x[k] for k in CAMPOS), (sufijo, sn)
+
+
+def test_b_cuando_no_cumple_no_cancela_pero_r1_si():
+    ev = {"YES": EVY, "NO": [(1200, 1250, 0.48, 5.0)]}                       # t_ex 1200 > t_det + 65
+    sn = snap(askN=0.60)
+    assert V2.evaluar_variante(VAR["_R1_U1.00"], ev, (1030, "YES"), sn, "YES")["modo_final"] == "suelta"         # R1 cancela antes
+    assert V2.evaluar_variante(VAR["_R1b_U1.00"], ev, (1030, "YES"), sn, "YES")["modo_final"] == "par_maker"     # R1b conserva el relleno
+
+
+def test_b_ejecuta_y_cancela_a_t_act_mas_65():
+    t_act = 1030 + V2.L_TOMADOR_MS
+    dentro = (t_act + V2.CANCEL_MS, t_act + 100, 0.48, 5.0)                   # relleno maker de la pata corta en la ventana de cancelación
+    fuera = (t_act + V2.CANCEL_MS + 1, t_act + 100, 0.48, 5.0)
+    a = V2.evaluar_variante(VAR["_R1b_U1.05"], {"YES": EVY, "NO": [dentro]}, (1030, "YES"), snap(), "YES")
+    assert a["tN"] == 5.0 and a["qN"] == 5.0 and a["modo_final"] == "completado_parcial"     # doble cobertura: queda en el libro de cuentas
+    b = V2.evaluar_variante(VAR["_R1b_U1.05"], {"YES": EVY, "NO": [fuera]}, (1030, "YES"), snap(), "YES")
+    assert b["tN"] == 5.0 and b["qN"] == 0 and b["modo_final"] == "completado_tomador"
+    # relleno de la pata corta ENTRE t_det+65 y t_act, recibido antes de t_act: ya es conocido -> par_maker sin reacción (R1 lo habría cancelado)
+    c = V2.evaluar_variante(VAR["_R1b_U1.05"], {"YES": EVY, "NO": [(1200, 1240, 0.48, 5.0)]}, (1030, "YES"), snap(), "YES")
+    assert c["modo_final"] == "par_maker" and c["tN"] == 0
+
+
+def test_r2b_vende_y_cancela():
+    t_act = 1030 + V2.L_TOMADOR_MS
+    fuera = (t_act + V2.CANCEL_MS + 1, t_act + 100, 0.48, 5.0)
+    x = V2.evaluar_variante(VAR["_R2b_X0.03"], {"YES": EVY, "NO": [fuera]}, (1030, "YES"), snap(bidY=0.47), "YES")
+    assert x["modo_final"] == "salida" and x["qN"] == 0 and x["sY"] == 5.0
+    y = V2.evaluar_variante(VAR["_R2b_X0.03"], {"YES": EVY, "NO": [fuera]}, (1030, "YES"), snap(bidY=0.40), "YES")
+    assert y["modo_final"] == "par_maker" and y["qN"] == 5.0 and y["sY"] == 0          # no sale: la pata sigue viva como en v1
+
+
+def test_r3b_cae_a_salida_y_cuenta_candidatas():
+    x = V2.evaluar_variante(VAR["_R3b_U1.00_X0.03"], {"YES": EVY, "NO": []}, (1030, "YES"), snap(askN=0.60, bidY=0.47), "NO")
+    assert x["modo_final"] == "salida" and x["motivo"] == "U_no_cumplida|salida"
+    pols = V2.politicas()
+    el = [p[0] for p in pols if "FINAL" in p[1] and p[2] in ("R1", "R2", "R3") and p[3][4] and not p[0].endswith("_R1_U0.00")]
+    assert len(el) == 60 and len([p for p in el if "b_" in p]) == 30
+
+
+def test_flujo_variante_b_idempotente_con_base_si_no_reacciona(tmp_path):
+    t_det = T0 + 330
+    L = [q(t_det + 150, TN, 0.49, 0.60), tr(t_det + 200, t_det + 210, TN, 0.47)]       # ask 0,60: U no se cumple; NO se rellena a +200 ms
+    filas, _st, _c = filas_de(tmp_path, flujo_basico(L))
+    b, r = filas["A0_P96_FINAL"], filas["A0_P96_FINAL_R1b_U1.05"]
+    assert all(b[k] == r[k] for k in ("qY", "qN", "tY", "tN", "coste", "pnl", "modo_final")) and b["modo_final"] == "par_maker"
+    assert filas["A0_P96_FINAL_R1_U1.05"]["modo_final"] == "suelta"
