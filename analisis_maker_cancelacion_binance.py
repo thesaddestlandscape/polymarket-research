@@ -32,8 +32,10 @@ import glob
 import gzip
 import io
 import json
+import os
 import random
 import sys
+import time
 from pathlib import Path
 
 import requests
@@ -83,13 +85,144 @@ def leer(dias):
     return meta, libro, trades, binance
 
 
-def desenlaces(mids):
+V2_TOKENS_URL = "https://data-api.polymarket.com/v2/tokens"     # Data API (changelog 07-Oct): resolución ON-CHAIN por token
+TOKENS_CACHE = DATALOGS / "maker_ms_mid_tokens_cache.json"      # {"mids": {mid: {"YES": tok, "NO": tok}}, "escaneados": {fichero: bytes}}
+REGISTRO_K = Path("/mnt/HC_Volume_106538179/m15_registro")      # archivo 60 d del registro (filas k: token -> mercado/lado)
+V2_MIDS_POR_LLAMADA = 25                                        # 2 tokens por mercado; el endpoint admite <= 50 token_id
+V2_MAX_FICHEROS_K = 4                                           # ficheros nuevos del archivo que se escanean por llamada
+
+
+def _par_completo(tc, m):
+    p = tc["mids"].get(m, {})
+    return bool(p.get("YES")) and bool(p.get("NO")) and p["YES"] != p["NO"]
+
+
+def _escribir_json_atomico(ruta, obj):
+    tmp = ruta.with_name(ruta.name + f".tmp{os.getpid()}")
+    tmp.write_text(json.dumps(obj))
+    os.replace(tmp, ruta)
+
+
+def _tokens_desde_registro(mids, tc):
+    """Completa tc['mids'] con los pares de tokens (YES/NO) de las filas k del archivo del registro, de más nuevo a más
+    viejo, sin releer ficheros ya escaneados (tc['escaneados']) y parando en cuanto están todos los mids pedidos.
+    Fila k: k,t,token,moneda,marco,mid,cierre,lado. -> True si cambió tc."""
+    cambio = False
+    if not REGISTRO_K.is_dir():
+        return cambio
+    nuevos = 0
+    for f in sorted(REGISTRO_K.glob("m15_registro_*.csv.gz"), reverse=True):
+        if all(_par_completo(tc, m) for m in mids) or nuevos >= V2_MAX_FICHEROS_K:
+            break
+        tam = f.stat().st_size
+        if tc["escaneados"].get(f.name) == tam:
+            continue
+        nuevos += 1
+        try:
+            with gzip.open(f, "rt", errors="replace") as fh:
+                for ln in fh:
+                    if ln.startswith("k,"):
+                        c = ln.rstrip("\n").split(",")
+                        if len(c) >= 8 and c[7] in ("YES", "NO"):
+                            tc["mids"].setdefault(c[5], {})[c[7]] = c[2]
+            tc["escaneados"][f.name] = tam
+            cambio = True
+        except (EOFError, OSError) as e:        # fichero truncado: lo leído se conserva, no se marca como escaneado
+            print(f"  desenlaces v2: {f.name} ilegible ({type(e).__name__})", file=sys.stderr)
+            cambio = True
+    return cambio
+
+
+def _v2_get(ses, tokens):
+    """GET /v2/tokens con reintentos ante 429/5xx/JSON roto. -> lista de filas o None si no hubo respuesta válida."""
+    for intento in range(4):
+        try:
+            r = ses.get(V2_TOKENS_URL, params={"token_id": ",".join(tokens)}, timeout=20)
+            if r.status_code == 200:
+                d = r.json().get("data")
+                if isinstance(d, list):
+                    return d
+            elif r.status_code not in (429, 500, 502, 503, 504):
+                return None
+            if r.status_code == 429:
+                time.sleep(min(float(r.headers.get("retry-after", 2) or 2), 10.0))
+        except Exception as e:
+            print(f"  desenlaces v2: {type(e).__name__}", file=sys.stderr)
+        time.sleep(0.5 * (intento + 1))
+    return None
+
+
+def desenlace_v2(y, n):
+    """Resolución on-chain de un mercado a partir de las filas v2 de su token YES (y) y NO (n). -> 'YES'/'NO' o None.
+    Fail-closed: exige las dos filas, misma condición, tokens opuestos entre sí, YES = primer resultado (outcome_index 0,
+    la misma convención que outcomePrices[0] de gamma), ambos resueltos y precios finales 1/0; todo lo demás -> None."""
+    try:
+        if not y or not n or y["condition_id"] != n["condition_id"]:
+            return None
+        if y["opposite_token_id"] != n["token_id"] or n["opposite_token_id"] != y["token_id"]:
+            return None
+        if y["outcome_index"] != 0 or n["outcome_index"] != 1 or y["resolved"] is not True or n["resolved"] is not True:
+            return None
+        fy, fn = float(y["final_price"]), float(n["final_price"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    if fy >= 0.999 and fn <= 0.001:
+        return "YES"
+    if fn >= 0.999 and fy <= 0.001:
+        return "NO"
+    return None
+
+
+def _desenlaces_v2(falt, tokens_por_mid, ses):
+    """Fallback on-chain para los mercados que gamma no resolvió. -> {mid: 'YES'/'NO'} (solo los resueltos sin duda)."""
+    try:
+        tc = json.loads(TOKENS_CACHE.read_text())
+        tc["mids"], tc["escaneados"]
+    except Exception:
+        tc = {"mids": {}, "escaneados": {}}
+    cambio = False
+    for m, par in (tokens_por_mid or {}).items():
+        if m in falt and par.get("YES") and par.get("NO") and tc["mids"].get(m) != par:
+            tc["mids"][m] = {"YES": par["YES"], "NO": par["NO"]}
+            cambio = True
+    if not all(_par_completo(tc, m) for m in falt):
+        cambio = _tokens_desde_registro(falt, tc) or cambio
+    if cambio:
+        try:
+            _escribir_json_atomico(TOKENS_CACHE, tc)
+        except OSError as e:
+            print(f"  desenlaces v2: no se pudo guardar el mapa de tokens ({type(e).__name__})", file=sys.stderr)
+    con_par = [m for m in falt if _par_completo(tc, m)]
+    out = {}
+    for k in range(0, len(con_par), V2_MIDS_POR_LLAMADA):
+        lote = con_par[k:k + V2_MIDS_POR_LLAMADA]
+        filas = _v2_get(ses, [t for m in lote for t in (tc["mids"][m]["YES"], tc["mids"][m]["NO"])])
+        if filas is None:
+            print(f"  desenlaces v2 lote {k // V2_MIDS_POR_LLAMADA}: sin respuesta válida", file=sys.stderr)
+            continue
+        por_tok = {x.get("token_id"): x for x in filas if isinstance(x, dict)}
+        for m in lote:
+            o = desenlace_v2(por_tok.get(tc["mids"][m]["YES"]), por_tok.get(tc["mids"][m]["NO"]))
+            if o:
+                out[m] = o
+        time.sleep(0.3)
+    print(f"  desenlaces v2/tokens: {len(falt)} sin gamma, {len(con_par)} con tokens conocidos, {len(out)} resueltos on-chain",
+          file=sys.stderr)
+    return out
+
+
+def desenlaces(mids, tokens_por_mid=None):
+    """{id de mercado gamma: 'YES'/'NO'} con caché. Fuente 1: gamma (closed=true). Fuente 2 (solo para lo que gamma no
+    resolvió: error, 429, JSON roto o ausente): /v2/tokens de la Data API (resolución on-chain). Necesita los tokens del
+    mercado: tokens_por_mid {mid: {'YES': token, 'NO': token}} opcional; si falta, se buscan en las filas k del archivo
+    del registro (mapa en maker_ms_mid_tokens_cache.json). Sin resolución clara -> ausente, nunca inventada."""
     try:
         c = json.loads(CACHE.read_text())
     except Exception:
         c = {}
     pend = sorted(m for m in set(mids) if m not in c)
     ses = requests.Session()
+    n_gamma = 0
     for k in range(0, len(pend), 40):
         try:
             for m in ses.get("https://gamma-api.polymarket.com/markets", timeout=20,
@@ -98,12 +231,25 @@ def desenlaces(mids):
                 pr = json.loads(pr) if isinstance(pr, str) else pr
                 if pr and float(pr[0]) >= 0.999:
                     c[str(m["id"])] = "YES"
+                    n_gamma += 1
                 elif pr and float(pr[1]) >= 0.999:
                     c[str(m["id"])] = "NO"
+                    n_gamma += 1
         except Exception as e:
             print(f"  desenlaces lote {k // 40}: {type(e).__name__}", file=sys.stderr)
+    falt = [m for m in pend if m not in c]
+    n_v2 = 0
+    if falt:
+        try:
+            v2 = _desenlaces_v2(falt, tokens_por_mid, ses)
+            n_v2 = len(v2)
+            c.update(v2)
+        except Exception as e:                  # el fallback nunca rompe a quien llama
+            print(f"  desenlaces v2: fallback abortado ({type(e).__name__}: {e})", file=sys.stderr)
     if pend:
-        CACHE.write_text(json.dumps(c))
+        print(f"  desenlaces: {len(pend)} pendientes -> gamma {n_gamma}, v2/tokens {n_v2}, sin resolver {len(pend) - n_gamma - n_v2}",
+              file=sys.stderr)
+        _escribir_json_atomico(CACHE, c)
     return c
 
 
