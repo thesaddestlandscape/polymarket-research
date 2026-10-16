@@ -48,6 +48,23 @@ Dinero no cuadra → parar · API a medias → estado recuperable por ledger + c
 - **F1 (órdenes reales a coste ~0, requiere OK Javi)**: GTC post-only lejos del precio + cancelación, y FOK a precio que no puede cruzar con tamaño mínimo (ojo trampa 07-Oct: una FOK "imposible" puede llenarse si el precio cae: usar precios que no puedan casar) → KPI L real de alta/cancelación/FOK con el camino caliente.
 - **F2 (dry-run)**: conectar V7 (disparo 15m) y la pata de V6 al ejecutor en DRY_RUN, registrando el KPI simulado contra el registro ms.
 - **F3 (dinero, requiere gates de la subestrategia + /code-review medium + OK Javi)**.
+
+## F2 en marcha (16-Oct) — `f2_5m_barato_dryrun.py` + `analisis_f2_5m_barato.py` (commits 3ad526fe42, 05a1082755)
+Reglas v4 (= v1 corregida) y V7 importadas de los ficheros congelados; BTC en proceso propio (núcleo 3, nice −10,
+switchinterval 0,5 ms) con firmador en proceso hijo (ArmeroProceso, núcleos 0-2); altcoins sin firma.
+- Primeras medidas (firma dentro del proceso): decisión <2 ms, decisión→envío p50 13 / p90 286 ms → motivo del firmador aparte.
+- ref5 (twap60 oficial) llega a +1,31 s p50, +1,78 p90, +2,26 p99; >1,5 s en el 25 % (1-16 Oct, 4.367 cierres/moneda).
+  De 52 primeros eventos v4 del vigía, 0 se detectaron antes de la llegada real de ref5 → el forward no está inflado por esto.
+
+### Criterios F2 → F3, FIJADOS 16-Oct 07:30Z ANTES de ver la conciliación (no cambiarlos mirando datos)
+Sobre ≥5 días de F2 y ≥20 eventos v4 (primeros) en cierres que F2 vio:
+1. Paridad de detección: ≥90 % de los primeros eventos offline los detecta F2 y ≥90 % de los de F2 están offline.
+2. Hora: |t_F2 − t_offline| p50 ≤ 50 ms y p90 ≤ 150 ms.
+3. Relleno simulado a L215: misma clase (llena / no llena) en ≥85 % de los eventos comunes.
+4. Camino caliente BTC: decisión→envío p50 ≤ 2 ms y p90 ≤ 5 ms; orden prefirmada disponible en ≥98 % de las decisiones.
+5. Cero caídas del firmador o del WS sin recuperación en 5 días; cero errores de firma persistentes.
+Cumplidos 1-5 → F3 SOLO si además la SUBESTRATEGIA pasa sus propios gates (v4: G1-G10 del vigía) + /code-review medium
+del camino de envío real + checklist de 6 categorías + OK Javi. F2 en verde no autoriza dinero por sí solo.
 - **Palanca externa (decisión Javi, pendiente #4)**: VPS junto al origen del CLOB (quita ~25-50 ms de ida y vuelta); para Binance, el feed ya llega con 135 ms → los disparadores que valen < 200 ms son los de POLYMARKET (V7, 15m), no los de Binance.
 
 ## F1 REAL (15-Oct, wallet dedicada, coste 0 $: 6 GTC canceladas, 8 FOK muertas)
