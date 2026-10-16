@@ -79,6 +79,16 @@
   ],
   "n_suficiente_para_concluir": false
  },
+ "0x3e9f9ef866c4f864a1e8e4cc386b948e7eb63988": {
+  "n": 2,
+  "pnl_total_eur": -2.1,
+  "pnl_medio_eur": -1.05,
+  "hit_rate": 0.0,
+  "fuentes": [
+   "sports"
+  ],
+  "n_suficiente_para_concluir": false
+ },
  "0xc58e8d8a2479c5bea8d34b97cb0efbe0fa73c6b6": {
   "n": 1,
   "pnl_total_eur": -2.0387,
@@ -249,26 +259,6 @@
   ],
   "n_suficiente_para_concluir": false
  },
- "0x6b97ebe911d7f2e5e3e8c4a0faad4a5c7c0b8d30": {
-  "n": 1,
-  "pnl_total_eur": -1.05,
-  "pnl_medio_eur": -1.05,
-  "hit_rate": 0.0,
-  "fuentes": [
-   "sports"
-  ],
-  "n_suficiente_para_concluir": false
- },
- "0x3e9f9ef866c4f864a1e8e4cc386b948e7eb63988": {
-  "n": 1,
-  "pnl_total_eur": -1.05,
-  "pnl_medio_eur": -1.05,
-  "hit_rate": 0.0,
-  "fuentes": [
-   "sports"
-  ],
-  "n_suficiente_para_concluir": false
- },
  "0xa4eb1cc5bd05bbcad1cd44e76308d5b8ecbb393f": {
   "n": 3,
   "pnl_total_eur": -0.5734,
@@ -316,6 +306,16 @@
   "hit_rate": 0.875,
   "fuentes": [
    "cripto"
+  ],
+  "n_suficiente_para_concluir": false
+ },
+ "0x6b97ebe911d7f2e5e3e8c4a0faad4a5c7c0b8d30": {
+  "n": 2,
+  "pnl_total_eur": 0.134,
+  "pnl_medio_eur": 0.067,
+  "hit_rate": 0.5,
+  "fuentes": [
+   "sports"
   ],
   "n_suficiente_para_concluir": false
  },
