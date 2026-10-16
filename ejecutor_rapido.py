@@ -226,6 +226,227 @@ class Armero:
         return None
 
 
+def _hijo_firmador(conn, fabrica, tick_size, neg_risk, caducidad_s, margen_s, nice, renovar_s, reserva, cpus=None):
+    """Proceso FIRMADOR (16-Oct, F2: firmar dentro del proceso del libro bloqueaba el envío >50 ms, p90 286 ms).
+    Recibe ('claves', [clave...]) / ('tomada', clave, t_firma) / ('fin',) y devuelve ('firma', clave, (t_firma,
+    signed)) para que cada clave tenga `reserva` firmas FRESCAS. Una firma vale vida = caducidad − margen (mismo
+    criterio que el padre al tomar) y se RENUEVA antes, en un plazo ESCALONADO al azar entre vida − renovar y
+    vida − renovar/2 por firma: la rejilla firmada de golpe no se renueva de golpe (ni justo al abrir la ventana).
+    Recorrido en anillo (sigue donde lo dejó: un aluvión de tomas no mata de hambre a las claves del final). Una clave cuya firma falla se reintenta con espera
+    exponencial (0,5 s → 60 s) y su error se avisa UNA vez por racha. Nunca envía nada al exchange: solo firma."""
+    import importlib
+    import os
+    import random
+    if cpus:                                      # (spawn ya re-importó el __main__ del padre; desde aquí, fuera del
+        os.sched_setaffinity(0, cpus)             #  núcleo caliente: el padre se fija a su núcleo DESPUÉS de lanzarnos)
+    try:
+        os.nice(nice)
+    except OSError:
+        pass
+    mod, fn = fabrica.split(":")
+    cliente = getattr(importlib.import_module(mod), fn)()
+    from py_clob_client_v2 import OrderArgs, PartialCreateOrderOptions
+    opts = PartialCreateOrderOptions(tick_size=tick_size, neg_risk=neg_risk)
+    vida = caducidad_s - margen_s
+    ren = min(renovar_s, vida / 2)                # renovar nunca deja la vida fresca <= 0 (firmaría sin parar)
+    objetivo, vivas, fallo, pos = [], {}, {}, 0   # vivas: clave -> [(t_firma, renovar_desde)]
+    conn.send(("listo", None, None))
+    while True:
+        while conn.poll(0 if objetivo else 0.5):
+            m = conn.recv()
+            if m[0] == "fin":
+                return
+            if m[0] == "claves":
+                objetivo = m[1]
+                fijas = set(objetivo)
+                for d in (vivas, fallo):
+                    for k in [k for k in d if k not in fijas]:
+                        del d[k]
+                pos = 0                           # nuevo objetivo: empieza por lo más urgente
+            elif m[0] == "tomada":
+                lst = vivas.get(m[1])
+                if lst:
+                    lst[:] = [x for x in lst if x[0] != m[2]]
+        ahora = time.time()
+        hizo = False
+        n = len(objetivo)
+        for _ in range(n):
+            k = objetivo[pos % n]
+            pos = (pos + 1) % n
+            lst = vivas.get(k)
+            if lst and min(x[1] for x in lst) <= ahora:
+                lst = vivas[k] = [x for x in lst if x[1] > ahora]
+            if len(lst or ()) >= reserva or fallo.get(k, (0, 0))[1] > ahora:
+                continue
+            try:
+                tok, precio, tam, lado = k
+                sg = cliente.create_order(OrderArgs(token_id=tok, price=precio, size=tam, side=lado), opts)
+            except Exception as e:
+                nf = fallo.get(k, (0, 0))[0] + 1
+                fallo[k] = (nf, ahora + min(60.0, 0.5 * 2 ** (nf - 1)))
+                if nf == 1:
+                    conn.send(("error", k, f"{type(e).__name__}: {e}"))
+                continue
+            fallo.pop(k, None)
+            t = time.time()
+            vivas.setdefault(k, []).append((t, t + vida - random.uniform(ren / 2, ren)))
+            conn.send(("firma", k, (t, sg)))
+            hizo = True
+            if conn.poll(0):                      # atiende cambios / tomas y sigue en `pos` (anillo)
+                break
+        if not hizo:
+            conn.poll(0.2)                        # en reposo, pero despierta en cuanto llega una toma o claves nuevas
+
+
+class ArmeroProceso:
+    """Misma interfaz que Armero (armar, tomar, errores, n_firmadas) pero la FIRMA vive en un proceso hijo: el proceso
+    del libro y del envío no paga nunca los ~4 ms de CPU por firma (ni la 1ª firma por mercado, ~180 ms con REST).
+    `fabrica` = "modulo:funcion" que devuelve el cliente en el hijo (las credenciales no cruzan el pipe).
+    Validez de una firma = caducidad_s − margen_s, igual en padre e hijo (caducidad 100 s: F1 15-Oct midió que el CLOB
+    acepta firmas de 0,5/10/60/120 s, 6/6); el hijo la renueva entre renovar_s y renovar_s/2 antes. Una firma en vuelo se
+    acepta si su clave sigue armada (tope 2×reserva por clave: lo que el hijo olvidó al retirar y volver a armar una
+    clave no infla el pool). tomar() es O(1) y nunca bloquea; sin firma viva devuelve None (fail-closed). Si el firmador
+    muere, el pool se vacía, armar() no lanza y vivo() pasa a False. `cpus`: núcleos del hijo (los fija el hijo al
+    arrancar su función, tras el re-import del __main__ que hace spawn). Errores: sacar_errores() (nunca iterar el deque)."""
+
+    def __init__(self, fabrica, tick_size: str, neg_risk: bool, caducidad_s: float = 100.0, reserva: int = 2,
+                 margen_s: float = 10.0, nice: int = 10, espera_listo_s: float = 60.0, renovar_s: float = 30.0,
+                 cpus=None):
+        import collections
+        import multiprocessing as mp
+        import queue
+        ctx = mp.get_context("spawn")             # spawn: sin heredar hilos ni sockets del padre
+        self._c, hijo = ctx.Pipe()
+        self.caducidad_s, self.margen_s, self.reserva = caducidad_s, margen_s, reserva
+        self.vida_s = caducidad_s - margen_s
+        if self.vida_s <= 0:
+            raise ValueError("caducidad_s debe ser > margen_s")
+        self.pool, self.claves, self.lock, self.n_firmadas = {}, set(), threading.Lock(), 0
+        self.errores = collections.deque(maxlen=500)
+        self._parado = False
+        self._envio_lock = threading.Lock()
+        self._tomadas = queue.SimpleQueue()       # el camino caliente solo encola; un hilo avisa al firmador
+        self.proc = ctx.Process(target=_hijo_firmador, args=(hijo, fabrica, tick_size, neg_risk, caducidad_s,
+                                                             margen_s, nice, renovar_s, reserva, cpus),
+                                daemon=True, name="firmador")
+        self.proc.start()
+        hijo.close()                              # sin esta copia, la muerte del hijo da EOF en vez de colgar poll()
+        try:
+            if not self._c.poll(espera_listo_s):
+                raise RuntimeError("firmador sin arrancar")
+            if self._c.recv()[0] != "listo":
+                raise RuntimeError("firmador: saludo inesperado")
+        except (EOFError, OSError, RuntimeError) as e:
+            self._matar()
+            raise RuntimeError(f"firmador no disponible: {type(e).__name__}: {e}") from e
+        threading.Thread(target=self._recibir, daemon=True, name="armero_rx").start()
+        threading.Thread(target=self._avisar, daemon=True, name="armero_tx").start()
+
+    def _matar(self):
+        self._parado = True
+        if self.proc.is_alive():
+            self.proc.terminate()
+        self.proc.join(5)
+        if self.proc.is_alive():
+            self.proc.kill()
+            self.proc.join(2)
+        try:
+            self._c.close()
+        except OSError:
+            pass
+
+    def _avisar(self):
+        while not self._parado:
+            m = self._tomadas.get()
+            try:
+                self._send(m)
+            except Exception as e:                # transitorio: se sigue; si el hijo murió, _recibir vacía el pool
+                self.errores.append((time.time(), m[1], f"aviso tomada: {type(e).__name__}"))
+                if not self.proc.is_alive():
+                    return
+                time.sleep(0.05)
+
+    def _send(self, m):
+        with self._envio_lock:
+            self._c.send(m)
+
+    def _recibir(self):
+        while True:
+            try:
+                tipo, k, x = self._c.recv()
+            except (EOFError, OSError) as e:
+                if not self._parado:
+                    self.errores.append((time.time(), None, f"firmador muerto: {type(e).__name__}"))
+                with self.lock:
+                    self.pool.clear()             # sin firmador no se repone: mejor no operar que operar a medias
+                return
+            if tipo == "firma":
+                t, sg = x
+                ahora = time.time()
+                with self.lock:
+                    if k not in self.claves:      # firma en vuelo de una clave ya retirada
+                        continue
+                    vivas = [y for y in self.pool.get(k, []) if ahora - y[0] < self.vida_s]
+                    self.pool[k] = (vivas + [(t, sg)])[-(2 * self.reserva):]   # tope: renovadas + a punto de caducar
+                    self.n_firmadas += 1
+            elif tipo == "error":
+                self.errores.append((time.time(), k, x))
+
+    def vivo(self):
+        return self.proc.is_alive() and not self._parado
+
+    def sacar_errores(self):
+        """Vacía y devuelve los errores (popleft atómico: nunca se itera el deque mientras los hilos añaden)."""
+        out = []
+        while True:
+            try:
+                out.append(self.errores.popleft())
+            except IndexError:
+                return out
+
+    def armar(self, claves):
+        """Fija las claves que deben estar listas (orden = prioridad de firma). Nunca lanza: con el firmador caído
+        registra el error y vacía el pool (vivo() False)."""
+        claves = list(claves)
+        with self.lock:
+            self.claves = set(claves)
+            for k in [k for k in self.pool if k not in self.claves]:
+                del self.pool[k]
+        try:
+            self._send(("claves", claves))
+        except (OSError, EOFError, ValueError) as e:
+            self.errores.append((time.time(), None, f"armar: firmador caído: {type(e).__name__}"))
+            with self.lock:
+                self.pool.clear()
+
+    def tomar(self, clave):
+        ahora = time.time()
+        with self.lock:
+            lista = self.pool.get(clave) or []
+            while lista:
+                t, sg = lista.pop(0)              # la más vieja AÚN válida (le quedan >= margen_s de vida)
+                if ahora - t < self.vida_s:
+                    break
+            else:
+                return None
+        self._tomadas.put(("tomada", clave, t))
+        return sg
+
+    def listas(self, clave):
+        ahora = time.time()
+        with self.lock:
+            return sum(1 for t, _ in (self.pool.get(clave) or []) if ahora - t < self.vida_s)
+
+    def parar(self):
+        self._parado = True
+        try:
+            self._send(("fin",))
+        except Exception:
+            pass
+        self.proc.join(3)
+        self._matar()
+
+
 # ───────────────────────────── Riesgo (foto en segundo plano) ─────────────────────────────
 class Riesgo:
     """`comprobaciones`: lista de funciones sin argumentos que devuelven (ok: bool, motivo: str). Se evalúan en un hilo
