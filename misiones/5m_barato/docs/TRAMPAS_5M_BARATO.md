@@ -52,3 +52,4 @@ Pares 5m maker (OOS −0,050, CABEZA −0,032, 0/4 días) · maker de un solo la
 copiar tomadoras persistentes (OOS −0,004) · FV v1-v3 (no batían al mid) · LOWLOW-PAIR (todas negativas en cota optimista) ·
 BTC5M-FV-LONGSHOT (FV v4 no discrimina longshots) · entrada con retraso deliberado · vender bid15 rancio (−0,64) ·
 órdenes armadas para cancelar en el delay · caja 2 patas a 250-400 ms (dry-run arbitraje anidado −35/−179 $).
+- **El `m5_registro`/`m15_registro` diario NO es cronológico** (16-Oct): es la unión de tramos, cada uno ordenado (10-Oct: 22:25–24:00, 08:10–22:25, 00:00–08:10). Una ventana deslizante sin reiniciar en saltos atrás conserva ticks de horas antes: la defensa A_BN de cosechar v1 se activaba en el 94-100 % de los ticks (vs 2-7 % real). Todo lector debe reiniciar ventanas en saltos >60 s u ordenar por hora.
