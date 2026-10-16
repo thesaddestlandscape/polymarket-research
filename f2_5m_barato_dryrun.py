@@ -282,7 +282,7 @@ class Par:
             signed = arm.tomar((self.tc, p_lim, tam_orden(p_lim), "BUY"))
         t_arm = time.time_ns()
         clave = f"{regla}|{self.mo}|{self.cie}|{extra.get('n', '')}|{extra.get('delta', '')}|{t_evento}"
-        fut = self.ctx.env.enviar(clave, signed, "FOK", t_evento,
+        fut = self.ctx.env.enviar(clave, signed, "FOK", t_evento, inline=self.ctx.inline,
                                   meta={"regla": regla, "moneda": self.mo, "cierre": self.cie, "p_lim": p_lim,
                                         "prefirmada": signed is not None})
         return {"ms_evento_a_decision": round(t_dec0 / 1e6 - t_evento, 3),
@@ -407,11 +407,12 @@ def main():
     ap.add_argument("--sin-firma", action="store_true", help="no prefirmar (sin cliente de la wallet dedicada)")
     ap.add_argument("--horas", type=float, default=0, help="parar tras N horas (0 = indefinido)")
     ap.add_argument("--cpu", type=int, default=None, help="fijar el proceso (libro+decisión+envío) a este núcleo")
+    ap.add_argument("--envio-inline", action="store_true", help="enviar desde el hilo que decide (sin traspaso al pool)")
     a = ap.parse_args()
     monedas = [m.strip().upper() for m in a.monedas.split(",") if m.strip()]
     threading.Thread(target=_escritor, daemon=True, name="escritor").start()
     ctx = Ctx()
-    ctx.refs, ctx.agenda, ctx.armero = Refs(), Agenda(), None
+    ctx.refs, ctx.agenda, ctx.armero, ctx.inline = Refs(), Agenda(), None, a.envio_inline
     cliente = None
     sys.setswitchinterval(0.0005)             # (B) el hilo de envío no espera 5 ms al GIL del hilo del WS
     permitidas = os.sched_getaffinity(0)
@@ -437,7 +438,7 @@ def main():
     ctx.env = er.Enviador(cliente, OUT / f"f2_ledger_{int(time.time())}.jsonl", riesgo, dry_run=True)
     assert ctx.env.dry_run is True
     log({"tipo": "arranque", "monedas": monedas, "firma": ctx.armero is not None, "pid": os.getpid(),
-         "cpu": a.cpu, "nice": os.nice(0), "switchinterval": sys.getswitchinterval(),
+         "cpu": a.cpu, "nice": os.nice(0), "envio_inline": a.envio_inline, "switchinterval": sys.getswitchinterval(),
          "armero": type(ctx.armero).__name__ if ctx.armero else None,
          "lats_v4": LATS_V4, "v7_deltas": V7.DELTAS, "v7_lats": V7.LATS, "hash_v4": V.hash_config()})
     print(f"[f2] arranque DRY-RUN monedas={monedas} firma={ctx.armero is not None}", flush=True)

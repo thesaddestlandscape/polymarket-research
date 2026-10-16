@@ -543,7 +543,7 @@ class Enviador:
     def vaciar_ledger(self):
         self._cola.join()                            # espera a que se ESCRIBA lo ya sacado de la cola, no solo a vaciarla
 
-    def enviar(self, clave_idem, signed, tipo, t_evento_ms, meta=None, post_only=False):
+    def enviar(self, clave_idem, signed, tipo, t_evento_ms, meta=None, post_only=False, inline=False):
         """Devuelve un Future con el registro completo, o None si la clave ya se usó. Intención al ledger ANTES del POST."""
         from py_clob_client_v2 import OrderType
         ok, motivo = self.riesgo.puede()
@@ -581,6 +581,17 @@ class Enviador:
                    "ms_evento_a_respuesta": round(t1 / 1e6 - t_evento_ms, 2), "res": res}
             self._log(out)
             return out
+        if inline:
+            # F2 16-Oct: el traspaso al pool (despertar un hilo en un núcleo ocupado) costaba p90 ~5 ms y picos de
+            # 287 ms. inline=True envía desde el MISMO hilo que decide: el llamador queda bloqueado lo que dure el
+            # POST (~200 ms en real); úsese solo con UNA orden en vuelo por mercado. Devuelve un Future ya resuelto.
+            from concurrent.futures import Future
+            fut = Future()
+            try:
+                fut.set_result(_post())
+            except Exception as e:                    # nunca propagar al hilo del WS: queda en el Future
+                fut.set_exception(e)
+            return fut
         return self.pool.submit(_post)
 
     def cancelar(self, order_id, meta=None):
