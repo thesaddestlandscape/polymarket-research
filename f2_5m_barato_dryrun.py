@@ -424,7 +424,7 @@ def main():
             cliente = cliente_dedicado()
             # el hijo fija SUS núcleos (fuera del caliente) antes de importar nada: arranca ya fuera
             ctx.armero = er.ArmeroProceso("medir_cancelacion_delay:cliente_dedicado", "0.01", False,
-                                          caducidad_s=100.0, reserva=2, nice=20,
+                                          caducidad_s=100.0, reserva=3, nice=20,
                                           cpus=(permitidas - {a.cpu}) if a.cpu is not None else None)
         except BaseException as e:            # cliente_dedicado usa sys.exit ante credenciales dudosas
             ctx.armero = None
