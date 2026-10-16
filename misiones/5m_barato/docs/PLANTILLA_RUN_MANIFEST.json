@@ -1,0 +1,21 @@
+{
+  "job_id": "REPLACE_WITH_UNIQUE_ID",
+  "experiment_id": "HARVEST_OPEN_A_OR_B",
+  "code_version": "REPLACE_WITH_GIT_COMMIT_OR_HASH",
+  "parameter_hash": "REPLACE_WITH_HASH",
+  "input_hashes": [],
+  "universe": "BTC_5M_GENERAL_OR_BTC_5M_CHEAP_15M_DEFENSE",
+  "date_start_utc": "2026-10-05",
+  "date_end_utc": "REPLACE_WITH_END_DATE",
+  "status": "PREPARED",
+  "processed_partitions": [],
+  "missing_partitions": [],
+  "checkpoint_path": "REPLACE_WITH_PATH",
+  "stdout_path": "REPLACE_WITH_PATH",
+  "stderr_path": "REPLACE_WITH_PATH",
+  "final_report_path": "REPLACE_WITH_PATH",
+  "idempotency_key_fields": ["market_id", "token_id", "event_ts", "event_type", "strategy_version"],
+  "created_at_utc": "REPLACE_WITH_TIMESTAMP",
+  "finished_at_utc": null,
+  "notes": "Never mark COMPLETE without reconciled coverage and a final report."
+}

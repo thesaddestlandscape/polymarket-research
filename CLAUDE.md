@@ -120,6 +120,8 @@ Petición explícita de Javi (17-Jul, reforzada muchas veces). En cada conexión
 23. **10 propuestas para cerrar el gap contra el "PnL fiel v2 fill-ability real"**: `shadow_pnl_fiel.py` → `data/shadow/pnl_fiel_por_estrategia.json` (regenerar si es viejo). Usar SOLO tuplas con `pnl_fiel_eur_sin_suelo`>0 que no estén en `pares_permitidos_live` o estén infra-explotadas; el total agregado NO es el número a perseguir. Anclar en los números del día y citar las limitaciones de la cabecera del script (vetos de ejecución no modelados). Lista adicional a 21/21b.
 24. **Buscador de edge perdido** (Javi 21-Sep: *"buscar dónde está el edge cueste lo que cueste"*): cuando una tupla pierde su edge, recorrer todas las dimensiones (zona fina de precio, hora/día, marco, moneda, lado, wallets, tamaño, latencia, confluencia, cross-activo) con el rigor forward de siempre, sin relajarlo. `project_estrategia_buscador_edge_perdido_21sep`, `project_buscador_edge_perdido_v1_22sep`.
 
+**Misión 5m barato**: `misiones/5m_barato/` (instrucciones, mapa, trampas); subagentes `cheap5m-*` solo para ella; chief = sesión principal.
+
 Obsidian (`/root/second-brain`) es parte fundamental: se lee siempre y se escribe ahí (decisiones/estado narrativo en `02_projects/` + `03_decisions/`; nunca a mano en `09_estrategias/`/`10_hipotesis/`, que genera `sync_obsidian.py`).
 
 ## ⚠️ Manual operativo — errores que NO cometer (escrito para cualquier modelo)
@@ -236,7 +238,6 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - Filtros que funcionan en shadow se invierten en el subconjunto fillable (P25, P27 candidata 2, 3 de 5 confirmaciones del gate fino).
 - Maker pasivo: los rellenos aciertan 71-77 % frente a 90 % del total (selección adversa desde el otro lado).
 - Fill-ability contra `libro_snapshots.csv` genérico (ciclo ~20 s) es FALSA para tuplas con ejecutor de baja latencia; usar el observer/ejecutor dedicado. Y comprobar la fecha de despliegue del observador antes de cruzar.
-- Contar filas de `libro_snapshots.csv` subestima la fill-ability 4-8x (colapsar por `market_id`).
 - El libro público con profundidad perfecta no implica que se acepten órdenes: post-cierre, 59/59 órdenes reales rechazadas ("trading is disabled"); a T-2 s también hubo rechazo. El corte real del exchange es ~T+1,5 s y a T-2 s casi no hay asks del ganador (los ask 0,01 pierden).
 - Subir el stake fuerza el libro: el des-pineo 1,05→1,75 dio corr(stake,acierto) = −0,32.
 - Entrar caro mata: breakeven = precio de entrada. FAVORITO 60min BUY_YES entraba con 29-66 min restantes, donde "confirmado" no confirma nada.
@@ -256,7 +257,6 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - Boosts horarios apilados cuentan el mismo fenómeno 2-3 veces (P15). Blacklist horaria invertida por mezclar direcciones (h10/h11 eran buenas en BUY_NO).
 - Auto-apply aplicó un bucket contaminado sin revisión: por eso está desactivado.
 - Una fuente ADITIVA nunca abre una zona dentro de un bucket `malo_confirmado`; decidirlo con Javi, no forzarlo.
-- El "bug" del timestamp de `predictions.csv` protege contra la selección adversa: no arreglarlo.
 - Guardia de `ballenas_executor_15min.py`: descartar activos cuya banda operativa favorezca NO en vez de YES.
 
 **Operación e infraestructura**
