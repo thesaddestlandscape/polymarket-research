@@ -1,7 +1,7 @@
 {
- "actualizado_utc": "2026-10-15T09:40:15+00:00",
+ "actualizado_utc": "2026-10-16T09:40:27+00:00",
  "fok_reales": {
-  "enviadas": 12,
+  "enviadas": 13,
   "muertas": 6,
   "muertas_resueltas": 6,
   "muertas_que_ganarian": 5
@@ -26,54 +26,54 @@
    "ic90_cierre": null
   },
   "5m#-45": {
-   "n": 4,
+   "n": 5,
    "pendientes": 0,
-   "dias": 3,
-   "acierto": 0.25,
-   "ask_medio": 0.505,
-   "ev_eur": -0.607,
+   "dias": 4,
+   "acierto": 0.2,
+   "ask_medio": 0.492,
+   "ev_eur": -0.686,
    "ic90_cierre": null
   },
   "5m#emparejado": {
-   "senales_T45": 4,
+   "senales_T45": 5,
    "tambien_a_T47": 1,
    "solo_a_T47": 1,
    "comunes_resueltos": 1,
    "dif_ev_T47_menos_T45": 0.0
   },
   "15m#-47": {
-   "n": 1,
+   "n": 2,
    "pendientes": 0,
-   "dias": 1,
-   "acierto": 1.0,
+   "dias": 2,
+   "acierto": 0.5,
    "ask_medio": 0.83,
-   "ev_eur": 0.191,
+   "ev_eur": -0.405,
    "ic90_cierre": null
   },
   "15m#-46": {
-   "n": 3,
+   "n": 4,
    "pendientes": 0,
-   "dias": 2,
-   "acierto": 1.0,
-   "ask_medio": 0.816,
-   "ev_eur": 0.212,
+   "dias": 3,
+   "acierto": 0.75,
+   "ask_medio": 0.762,
+   "ev_eur": -0.091,
    "ic90_cierre": null
   },
   "15m#-45": {
-   "n": 1,
+   "n": 2,
    "pendientes": 0,
-   "dias": 1,
-   "acierto": 1.0,
-   "ask_medio": 0.82,
-   "ev_eur": 0.204,
+   "dias": 2,
+   "acierto": 0.5,
+   "ask_medio": 0.735,
+   "ev_eur": -0.398,
    "ic90_cierre": null
   },
   "15m#emparejado": {
-   "senales_T45": 1,
-   "tambien_a_T47": 0,
+   "senales_T45": 2,
+   "tambien_a_T47": 1,
    "solo_a_T47": 1,
-   "comunes_resueltos": 0,
-   "dif_ev_T47_menos_T45": null
+   "comunes_resueltos": 1,
+   "dif_ev_T47_menos_T45": 0.0
   }
  }
 }
