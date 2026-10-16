@@ -192638,3 +192638,18 @@
 {"ts": "2026-10-16T09:59:05+00:00", "sym": "BNB", "value": 0.089, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-10-16T10:01:15+00:00", "sym": "DOGE", "value": 0.1021, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-10-16T10:01:15+00:00", "sym": "BNB", "value": 0.0205, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:02:55+00:00", "sym": "XRP", "value": 1.34, "reason": "cross_source_warn coingecko=1.3400 vs mediana=1.3361 (0.59%)"}
+{"ts": "2026-10-16T10:03:06+00:00", "sym": "DOGE", "value": 0.1889, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:03:06+00:00", "sym": "BNB", "value": 0.0014, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:04:41+00:00", "sym": "DOGE", "value": 0.1832, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:04:41+00:00", "sym": "BNB", "value": 0.0864, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:06:33+00:00", "sym": "DOGE", "value": 0.0378, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:06:33+00:00", "sym": "BNB", "value": 0.0685, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:11:47+00:00", "sym": "DOGE", "value": 0.05, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:11:47+00:00", "sym": "BNB", "value": 0.0974, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:13:34+00:00", "sym": "DOGE", "value": 0.1502, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:13:34+00:00", "sym": "BNB", "value": 0.1056, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:15:21+00:00", "sym": "DOGE", "value": 0.0805, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:15:21+00:00", "sym": "BNB", "value": 0.085, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:17:26+00:00", "sym": "DOGE", "value": 0.183, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-16T10:17:26+00:00", "sym": "BNB", "value": 0.1768, "reason": "cambio_fuente coingecko->binance"}
