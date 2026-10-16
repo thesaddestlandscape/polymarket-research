@@ -28,7 +28,11 @@ import bisect
 import collections
 import csv
 import gzip
+import hashlib
+import json
+import os
 import sys
+import time
 from array import array
 from datetime import datetime
 from pathlib import Path
@@ -48,6 +52,51 @@ REARME_MS = 2000
 INF = float("inf")
 POLS = [(f"{d}_P{int(p * 100)}_{c}", d, p, c) for d in ("A0", "A_BN", "B_15") for p in (0.96, 0.98)
         for c in ("FINAL", "CABEZA")]
+
+TRUNCADOS = set()                                   # días cuyo m5_registro de origen estaba truncado (no se cachean)
+
+
+def escribir_atomico(ruta, texto):
+    """Escritura atómica (tmp + fsync + os.replace): un kill nunca deja el fichero final a medias."""
+    ruta = Path(ruta)
+    tmp = ruta.with_name(ruta.name + ".tmp")
+    with open(tmp, "w") as fh:
+        fh.write(texto)
+        fh.flush()
+        os.fsync(fh.fileno())
+    os.replace(tmp, ruta)
+
+
+def leer_cache(cache):
+    """Filas de la caché o None. Se descomprime ENTERA (el CRC del gz detecta truncados); si falla o no tiene filas se
+    borra y se recalcula (una caché vacía no cuenta como válida)."""
+    if not cache.exists():
+        return None
+    try:
+        with gzip.open(cache, "rt") as fh:
+            filas = list(csv.DictReader(fh))
+    except (EOFError, OSError, UnicodeDecodeError, csv.Error) as e:
+        print(f"  {cache.name}: caché corrupta ({type(e).__name__}) -> se borra y se recalcula", file=sys.stderr, flush=True)
+        cache.unlink()
+        return None
+    if not filas:
+        print(f"  {cache.name}: caché sin filas -> se borra y se recalcula", file=sys.stderr, flush=True)
+        cache.unlink()
+        return None
+    return filas
+
+
+def escribir_cache(cache, filas):
+    """Caché atómica (gz a <cache>.tmp + os.replace). Un día sin filas NO se cachea."""
+    OUT.mkdir(parents=True, exist_ok=True)
+    tmp = cache.with_name(cache.name + ".tmp")
+    with gzip.open(tmp, "wt", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(filas[0]))
+        w.writeheader()
+        w.writerows(filas)
+    with open(tmp, "rb") as fh:
+        os.fsync(fh.fileno())
+    os.replace(tmp, cache)
 
 
 def serie_15m(d):
@@ -88,9 +137,9 @@ def serie_15m(d):
 
 def simular_dia(d):
     cache = OUT / f"mercados_{d}.csv.gz"
-    if cache.exists():
-        with gzip.open(cache, "rt") as fh:
-            return list(csv.DictReader(fh))
+    c_ = leer_cache(cache)
+    if c_ is not None:
+        return c_
     f = VOL / "m5_registro" / f"m5_registro_{d}.csv.gz"
     if not f.exists():
         return None
@@ -243,6 +292,7 @@ def simular_dia(d):
                             o.consumir(t_ex, pe)
         except (EOFError, OSError) as e:
             print(f"  {d}: fichero truncado ({type(e).__name__})", file=sys.stderr)
+            TRUNCADOS.add(d)
     mkts = {meta[tk][1] for (_, tk) in est}
     des = desenlaces(mkts)
     print(f"  {d}: desenlace oficial {sum(1 for m in mkts if m in des)}/{len(mkts)}", flush=True)
@@ -268,12 +318,12 @@ def simular_dia(d):
             filas.append({"dia": d, "pol": nom, "mkt": mkt, "con15": int(fin % 900_000 == 0), "qY": round(q["YES"], 4),
                           "qN": round(q["NO"], 4), "coste": round(coste, 6), "pnl": round(q[r] - coste, 6),
                           "completo": int(pares >= PM.SH - 1e-9), "rebate": round(reb, 6)})
-    OUT.mkdir(parents=True, exist_ok=True)
-    with gzip.open(cache, "wt", newline="") as fh:
-        if filas:
-            w = csv.DictWriter(fh, fieldnames=list(filas[0]))
-            w.writeheader()
-            w.writerows(filas)
+    if not filas:
+        print(f"  {d}: dia_sin_filas (registro presente, 0 mercados con rellenos): no se cachea", flush=True)
+    elif d in TRUNCADOS:
+        print(f"  {d}: origen truncado: resultado parcial, no se cachea", flush=True)
+    else:
+        escribir_cache(cache, filas)
     return filas
 
 
@@ -299,15 +349,44 @@ def resumen(filas, pol, dias, solo15=False):
 
 
 def main():
+    global OUT
     ap = argparse.ArgumentParser()
     ap.add_argument("--dias", default=",".join(DIAS))
+    ap.add_argument("--out", default=str(OUT), help="directorio de cachés/informe/manifiesto (por defecto el real)")
     a = ap.parse_args()
+    OUT = Path(a.out)
+    OUT.mkdir(parents=True, exist_ok=True)
+    pedidos = a.dias.split(",")
+    man = {"job": "analisis_5m_cosechar_apertura", "script": Path(__file__).name,
+           "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+           "args": vars(a), "dias_pedidos": pedidos, "dias_ok": [], "dias_ausentes": [], "dias_sin_filas": [],
+           "dias_truncados": [], "dias_fallidos": {}, "inicio_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "fin_utc": None,
+           "estado": "RUNNING"}
+    escribir_atomico(OUT / "manifiesto.json", json.dumps(man, indent=1))
     filas = []
-    for d in a.dias.split(","):
-        r = simular_dia(d)
-        if r:
+    for d in pedidos:
+        try:
+            r = simular_dia(d)
+        except Exception as e:                       # un día roto no tumba el resto ni deja el manifiesto en RUNNING
+            man["dias_fallidos"][d] = f"{type(e).__name__}: {e}"
+            print(f"  {d}: FALLIDO {man['dias_fallidos'][d]}", file=sys.stderr, flush=True)
+            escribir_atomico(OUT / "manifiesto.json", json.dumps(man, indent=1))
+            continue
+        if r is None:
+            man["dias_ausentes"].append(d)
+            print(f"  {d}: AUSENTE (sin m5_registro)", flush=True)
+        else:
             filas += r
-    lines = [f"COSECHAR PARES AL ABRIR — BTC 5m, DESC {DESC[0]}..{DESC[-1]}, OOS {OOS[0]}..{OOS[-1]}"]
+            (man["dias_ok"] if r else man["dias_sin_filas"]).append(d)
+            if d in TRUNCADOS:
+                man["dias_truncados"].append(d)
+            print(f"  {d}: {len(r)} filas (mercados {len({x['mkt'] for x in r})})", flush=True)
+        escribir_atomico(OUT / "manifiesto.json", json.dumps(man, indent=1))   # resumen parcial tras cada día
+    completo = len(man["dias_ok"]) == len(pedidos) and not man["dias_truncados"] and not man["dias_fallidos"]
+    cobertura = (f"COBERTURA: {len(man['dias_ok'])}/{len(pedidos)} días con filas | ausentes (sin registro): "
+                 f"{man['dias_ausentes'] or 'ninguno'} | sin filas: {man['dias_sin_filas'] or 'ninguno'} | origen truncado: "
+                 f"{man['dias_truncados'] or 'ninguno'} | fallidos: {list(man['dias_fallidos']) or 'ninguno'} | VEREDICTO {'COMPLETE' if completo else 'PARTIAL'}")
+    lines = [cobertura, f"COSECHAR PARES AL ABRIR — BTC 5m, DESC {DESC[0]}..{DESC[-1]}, OOS {OOS[0]}..{OOS[-1]}"]
     for etiqueta, dias in (("DESC", DESC), ("OOS", OOS)):
         lines.append(f"\n== {etiqueta}")
         for pol in [p[0] for p in POLS]:
@@ -329,7 +408,10 @@ def main():
                  f"{resumen(filas, f'A0_P{par_}_FINAL', OOS, True)}")
     txt = "\n".join(lines)
     print(txt)
-    (OUT / "informe.txt").write_text(txt + "\n")
+    escribir_atomico(OUT / "informe.txt", txt + "\n")
+    man["estado"] = "COMPLETE" if completo else "PARTIAL"
+    man["fin_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    escribir_atomico(OUT / "manifiesto.json", json.dumps(man, indent=1))
 
 
 if __name__ == "__main__":

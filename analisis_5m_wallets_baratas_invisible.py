@@ -18,9 +18,14 @@ Uso: nice -n 19 ionice -c3 python3 analisis_5m_wallets_baratas_invisible.py [--d
 import argparse
 import bisect
 import collections
+import csv
 import gzip
+import hashlib
+import json
+import os
 import random
 import sys
+import time
 from array import array
 from datetime import datetime
 from pathlib import Path
@@ -39,9 +44,50 @@ MOMONEY = "0x32ed2e546b187ca15e2841edc82b22c713cf8ec3"
 P_MAX = 0.20
 CTX_MS = 2000
 
+IN_DIR = OUT                                        # entradas de la fase 1 (baratas_wallets.csv): fijas aunque se cambie --out
+TRUNCADOS = set()                                   # días cuyo m5_registro de origen estaba truncado (no se cachean)
+
+
+def escribir_atomico(ruta, texto):
+    """Escritura atómica (tmp + fsync + os.replace): un kill nunca deja el fichero final a medias."""
+    ruta = Path(ruta)
+    tmp = ruta.with_name(ruta.name + ".tmp")
+    with open(tmp, "w") as fh:
+        fh.write(texto)
+        fh.flush()
+        os.fsync(fh.fileno())
+    os.replace(tmp, ruta)
+
+
+def leer_cache(cache):
+    """DataFrame de la caché o None. Se lee ENTERA (el CRC del gz detecta truncados); si falla o no tiene filas se borra
+    y se recalcula (una caché vacía no cuenta como válida)."""
+    if not cache.exists():
+        return None
+    try:
+        df = pd.read_csv(cache)
+    except (EOFError, OSError, UnicodeDecodeError, ValueError, csv.Error, pd.errors.ParserError) as e:   # EmptyDataError es ValueError
+        print(f"  {cache.name}: caché corrupta ({type(e).__name__}) -> se borra y se recalcula", file=sys.stderr, flush=True)
+        cache.unlink()
+        return None
+    if not len(df):
+        print(f"  {cache.name}: caché sin filas -> se borra y se recalcula", file=sys.stderr, flush=True)
+        cache.unlink()
+        return None
+    return df
+
+
+def escribir_cache(cache, df):
+    """Caché atómica (gz a <cache>.tmp + os.replace)."""
+    tmp = cache.with_name(cache.name + ".tmp")
+    df.to_csv(tmp, index=False, compression="gzip")
+    with open(tmp, "rb") as fh:
+        os.fsync(fh.fileno())
+    os.replace(tmp, cache)
+
 
 def grupos():
-    r = pd.read_csv(OUT / "baratas_wallets.csv", index_col=0)
+    r = pd.read_csv(IN_DIR / "baratas_wallets.csv", index_col=0)
     persist = set(r.sort_values("pnl_t", ascending=False).head(20).index.str.lower())
     return persist
 
@@ -104,7 +150,7 @@ def series(d, tokens):
                 except (ValueError, IndexError):
                     continue
         except (EOFError, OSError):
-            pass
+            TRUNCADOS.add(d)
 
     def ordenar(cols):
         o = sorted(range(len(cols[0])), key=cols[0].__getitem__)
@@ -149,11 +195,16 @@ def en(serie, t):
 
 def dia(d, persist):
     cache = OUT / f"invisible_fills_{d}.csv.gz"
-    if cache.exists():
-        return pd.read_csv(cache)
+    c_ = leer_cache(cache)
+    if c_ is not None:
+        return c_
+    if not (VOL / "m5_onchain" / f"m5_onchain_{d}.csv.gz").exists() or \
+            not (VOL / "m5_registro" / f"m5_registro_{d}.csv.gz").exists():
+        return None                                  # AUSENTE: falta el on-chain o el registro del día
     filas, tok = fills_dia(d, persist)
     if not filas:
-        return None
+        print(f"  {d}: dia_sin_filas (on-chain presente, 0 rellenos maker baratos): no se cachea", flush=True)
+        return pd.DataFrame()
     q, bn, s15 = series(d, {f[2] for f in filas})
     des = desenlaces({f[3] for f in filas})
     out = []
@@ -185,7 +236,13 @@ def dia(d, persist):
                     "spread": round(ask - bid, 4), "mid": round((ask + bid) / 2, 4), "bsz": bsz,
                     "bn5_bps": round(bn5, 3), "d15": d15})
     df = pd.DataFrame(out)
-    df.to_csv(cache, index=False, compression="gzip")
+    if not len(df):
+        print(f"  {d}: dia_sin_filas (rellenos sin desenlace/serie): no se cachea", flush=True)
+    elif d in TRUNCADOS:
+        print(f"  {d}: origen truncado: resultado parcial, no se cachea", flush=True)
+    else:
+        OUT.mkdir(parents=True, exist_ok=True)
+        escribir_cache(cache, df)
     return df
 
 
@@ -194,18 +251,50 @@ def ev(x):
 
 
 def main():
+    global OUT
     ap = argparse.ArgumentParser()
     ap.add_argument("--dias", default=",".join(DIAS))
+    ap.add_argument("--out", default=str(OUT), help="directorio de cachés/informe/manifiesto (por defecto el real)")
     a = ap.parse_args()
+    OUT = Path(a.out)
+    OUT.mkdir(parents=True, exist_ok=True)
+    pedidos = a.dias.split(",")
+    man = {"job": "analisis_5m_wallets_baratas_invisible", "script": Path(__file__).name,
+           "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+           "args": vars(a), "dias_pedidos": pedidos, "dias_ok": [], "dias_ausentes": [], "dias_sin_filas": [],
+           "dias_truncados": [], "dias_fallidos": {}, "inicio_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+           "fin_utc": None, "estado": "RUNNING"}
+    man_f = OUT / "manifiesto_invisible.json"
+    escribir_atomico(man_f, json.dumps(man, indent=1))
     persist = grupos()
     partes = []
-    for d in a.dias.split(","):
-        r = dia(d, persist)
-        if r is not None:
+    for d in pedidos:
+        try:
+            r = dia(d, persist)
+        except Exception as e:                       # un día roto no tumba el resto ni deja el manifiesto en RUNNING
+            man["dias_fallidos"][d] = f"{type(e).__name__}: {e}"
+            print(f"  {d}: FALLIDO {man['dias_fallidos'][d]}", file=sys.stderr, flush=True)
+            escribir_atomico(man_f, json.dumps(man, indent=1))
+            continue
+        if r is None:
+            man["dias_ausentes"].append(d)
+            print(f"  {d}: AUSENTE (sin m5_onchain o m5_registro)", flush=True)
+        elif not len(r):
+            man["dias_sin_filas"].append(d)
+        else:
             partes.append(r)
+            man["dias_ok"].append(d)
+            if d in TRUNCADOS:
+                man["dias_truncados"].append(d)
             print(f"  {d}: {len(r)} rellenos", flush=True)
-    df = pd.concat(partes, ignore_index=True)
-    lines = ["FASE 2 (lo invisible) — rellenos MAKER de compra a <= 0,20 en BTC 5m; contexto a hora de bloque − 2 s",
+        escribir_atomico(man_f, json.dumps(man, indent=1))   # resumen parcial tras cada día
+    completo = len(man["dias_ok"]) == len(pedidos) and not man["dias_truncados"] and not man["dias_fallidos"]
+    cobertura = (f"COBERTURA: {len(man['dias_ok'])}/{len(pedidos)} días con filas | ausentes: "
+                 f"{man['dias_ausentes'] or 'ninguno'} | sin filas: {man['dias_sin_filas'] or 'ninguno'} | origen truncado: "
+                 f"{man['dias_truncados'] or 'ninguno'} | fallidos: {list(man['dias_fallidos']) or 'ninguno'} | "
+                 f"VEREDICTO {'COMPLETE' if completo else 'PARTIAL'}")
+    df = pd.concat(partes, ignore_index=True) if partes else pd.DataFrame(columns=["grupo"])
+    lines = [cobertura, "FASE 2 (lo invisible) — rellenos MAKER de compra a <= 0,20 en BTC 5m; contexto a hora de bloque − 2 s",
              f"Grupos: PERSIST = top 20 persistentes (fase 1); MOMONEY; CONTROL = 1/5 del resto. Días {DIAS[0]}..{DIAS[-1]}"]
     for g, x in df.groupby("grupo"):
         lines.append(f"\n== {g}: rellenos {len(x)} wallets {x.wallet.nunique()} | EV/€ {ev(x):+.3f} | acierto {x.gana.mean():.3f}"
@@ -223,7 +312,10 @@ def main():
             lines.append(f"   {col:10s}: " + " | ".join(partes_))
     txt = "\n".join(lines)
     print(txt)
-    (OUT / "invisible_informe.txt").write_text(txt + "\n")
+    escribir_atomico(OUT / "invisible_informe.txt", txt + "\n")
+    man["estado"] = "COMPLETE" if completo else "PARTIAL"
+    man["fin_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    escribir_atomico(man_f, json.dumps(man, indent=1))
 
 
 if __name__ == "__main__":
