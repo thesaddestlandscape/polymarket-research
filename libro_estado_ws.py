@@ -1101,8 +1101,11 @@ def _main_hijo():
     global _ES_HIJO
     _ES_HIJO = True
     try:
-        if os.getpriority(os.PRIO_PROCESS, 0) > 0:
-            os.setpriority(os.PRIO_PROCESS, 0, 0)    # el padre corre a nice 10; el lector no
+        # 17-Oct (Javi: "hazlo con las otras vías", VPS descartado): el lector a nice -10. Medido con renice a mano
+        # (12:18Z): sello->recepción p90 ~280 -> ~115 ms y p99 a la mitad con la máquina a load 12-23; la mediana ya
+        # está en el suelo de red (~44 ms). Es ligero (~20 % de un núcleo): apenas resta CPU al resto.
+        if os.getpriority(os.PRIO_PROCESS, 0) > -10:
+            os.setpriority(os.PRIO_PROCESS, 0, -10)  # el padre corre a nice 10; el lector, por delante
     except OSError as e:
         _log(f"no se pudo subir la prioridad del hijo: {e}")
     global _REGISTRO, _LIBRO5
