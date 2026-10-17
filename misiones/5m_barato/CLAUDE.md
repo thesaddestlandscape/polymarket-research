@@ -23,7 +23,7 @@ La estrategia dedicada a BTC 15m permanece independiente. Puede aportar variable
 
 ## 2. Principios no negociables
 
-1. **Solo shadow/dry-run para nuevas pruebas.** F1 del 15-Oct incluyó pruebas reales históricas; no repetir órdenes reales. Los procesos F2 (`f2_5m_barato_dryrun.py`, DRY-RUN fijo sin opción de envío) los gestiona SOLO la sesión principal: ningún subagente los lanza, reinicia ni mata. No cambiar modo ni activar un sender live.
+1. **Solo shadow/dry-run para nuevas pruebas**, con UNA excepción aprobada por Javi (17-Oct): el peldaño «micro-real» de `docs/FLUJO_DE_TRABAJO.md` (wallet dedicada, ≤5 € de exposición, código en dev + `/code-review` medium + OK final de Javi, lo opera solo la sesión principal). F1 del 15-Oct incluyó pruebas reales históricas; no repetir F1. Los procesos F2 (`f2_5m_barato_dryrun.py`, DRY-RUN fijo sin opción de envío) los gestiona SOLO la sesión principal: ningún subagente los lanza, reinicia ni mata. No cambiar modo ni activar un sender live.
 2. **Sin gastos sin autorización.** No contratar VPS, proveedores, datos ni servicios. Priorizar instrumentos, optimizaciones y cómputo ya disponible.
 3. **No leer secretos.** Nunca abrir, imprimir, copiar o transmitir `.env`, claves, API secrets, tokens de autenticación, seed phrases o claves privadas. No usar endpoints privados de trading ni firmar transacciones.
 4. **Baselines congelados.** No modificar V4 (`vigia_5m_barato_forward.py`, hash_config `77a75859ae5cf22e`), ni ningún vigía congelado (V2/V3/V5/V6/V7/FV v4/H5M: hashean el FICHERO ENTERO; una coma rompe el manifiesto), sus parámetros, resultados históricos ni datasets raw. Nuevos mecanismos van en `/root/polymarket-research-dev` o en `experimentos/5m_barato/`.
@@ -94,6 +94,9 @@ Caja altcoin (10 días, cifras comunicadas: XRP +$703, DOGE +$203, BNB +$53, BTC
 
 ## 4. Prioridad operativa actual
 
+> **Desde el 17-Oct manda `docs/FLUJO_DE_TRABAJO.md` v2** (roles, escalera de 7 peldaños hasta dinero real, ciclo diario, reglas de RAM/cuota, prioridades vivas que reordena a diario `cheap5m-objetivo-200k` en `docs/LIBRO_OBJETIVO_200K.md`). La lista P0-P7 de abajo es la del 16-Oct: P0, P1 y P2 ya están cerrados (DECISION_LOG 17-Oct).
+
+
 1. **P0 — Recuperar `cosechar al abrir` A/B** con checkpoints y reporte, fuera de 06:00–09:00Z. Verificar cobertura antes de reanudar; solo 05–06-Oct se han comunicado como procesados.
 2. **P1 — Diagnóstico barato de V7 sin señales BTC:** encontrar primer paso del pipeline en el que el conteo cae a cero: datos, feed, reloj, parser, filtros, registro o sequía/regimen.
 3. **P2 — Preparar conciliación F2 del 17-Oct:** verificar modo shadow, recuperar criterios congelados y preparar comparación contra vigías sin órdenes reales.
@@ -105,6 +108,7 @@ Caja altcoin (10 días, cifras comunicadas: XRP +$703, DOGE +$203, BNB +$53, BTC
 
 ## 5. Agentes y autoridad
 
+- `cheap5m-objetivo-200k` (17-Oct): **dueño del objetivo** 200 k€/año como suma; mantiene `docs/LIBRO_OBJETIVO_200K.md`, recorre los 10 ángulos y ordena el trabajo por valor de la información. Mientras no esté cargado en la sesión, `cheap5m-risk-economics` tiene su misión ampliada.
 - `cheap5m-chief` = **la sesión principal** (un subagente no puede lanzar subagentes): sigue `docs/ROL_CHIEF.md`. Prioriza, decide, lanza un único job pesado y filtra lo que llega a Javi. Javi capitanea la investigación y decide.
 - `cheap5m-repo-auditor`: solo lectura; fuentes, baseline, procesos y continuidad.
 - `cheap5m-market-data-engineer`: calidad y contrato de datos; diagnósticos baratos.
@@ -122,7 +126,8 @@ Caja altcoin (10 días, cifras comunicadas: XRP +$703, DOGE +$203, BNB +$53, BTC
 
 ## 7. Reglas de ejecución para TODOS los agentes de la misión
 - Bash solo para leer y consultar, salvo `cheap5m-execution-engineer`. Nada de `pgrep/pkill -f` con patrones propios (se encuentran a sí mismos).
-- Análisis pesados: uno a la vez, `nice -n 19 ionice -c3`, `ulimit -v 3000000`, nunca 06:00-09:00Z; si MemAvailable < 1,5 GB, no lanzar.
+- Análisis pesados: UNO en toda la máquina (lo asigna el chief), `nice -n 19 ionice -c3`, `ulimit -v 1500000` (2-3 GB solo con permiso del chief), nunca 06:00-09:15Z ni 22:15-22:30Z; antes de lanzar, MemAvailable > 2,5 GB y load < 16 (guard_ram reinicia observadores con <900 MB libres: pasó 3 veces el 17-Oct).
 - No editar `ejecutor_rapido.py` sin `/code-review` en MEDIUM + tests: lo usa `medir_camino_caliente.py`, que envía órdenes reales.
-- Cuota: no lanzar más de 2-3 subagentes a la vez; los de solo lectura en sonnet.
+- Cuota: máximo 3 subagentes a la vez; opus para objetivo-200k, validador y red-team cuando haya cuota, si no `model: sonnet` al lanzar; si un agente se corta por cuota, reanudarlo (SendMessage) o relanzarlo con el mismo encargo.
+- EV siempre PONDERADO POR € (Σpnl/Σcoste) además de por unidad (trampa 17-Oct: media de cocientes infló H5M de ≈+0,064 a +0,142).
 - Idioma: castellano de España; cifras siempre con n, IC, periodo y fichero de origen.

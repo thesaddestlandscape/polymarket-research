@@ -1,67 +1,85 @@
-# Flujo de trabajo multiagente — 5m barato
+# Flujo de trabajo del equipo — 5m barato (v2, 17-Oct)
 
-## 0. Director y regla de carga
+Objetivo único: **200.000 € netos/año como SUMA de subestrategias de 5m barato** (Javi 17-Oct: suma, no por
+subestrategia). Todo el equipo trabaja para cerrar el hueco del libro `docs/LIBRO_OBJETIVO_200K.md`. La v1 (16-Oct, P0-P5)
+está en git; sus prioridades están cerradas o integradas abajo.
 
-`cheap5m-chief` (= la sesión principal, que sigue `docs/ROL_CHIEF.md`; un subagente no puede lanzar subagentes) es responsable de la prioridad, dependencias y decisión; Javi capitanea y decide. Hay **un único trabajo pesado a la vez**. Se pueden paralelizar auditorías y consultas read-only si no compiten por I/O ni miran indebidamente el holdout de otro agente; máximo 2-3 subagentes simultáneos (cuota).
+## 1. Roles (quién hace qué; nadie aprueba su propio trabajo)
 
-## 1. Fase de lectura y preservación
+| Rol | Agente | Hace | No hace |
+|---|---|---|---|
+| Capitán | Javi | decide dinero real, capital, stakes, prioridades | — |
+| Chief | sesión principal (`docs/ROL_CHIEF.md`) | lanza agentes, asigna el turno pesado, escribe REGISTRO/DECISION_LOG, despliega, /code-review, pide OK a Javi | delegar la decisión |
+| **Dueño del objetivo** | `cheap5m-objetivo-200k` | libro del hueco, 10 ángulos, ordena TODO por valor de la información (VOI), propone las 3 pruebas siguientes | medir su propia propuesta como validada |
+| Ideas | `cheap5m-alpha-researcher` | ≤5 hipótesis/día con mecanismo y regla congelable; auditoría de planteamiento de lo rechazado | implementar |
+| Quién gana | `cheap5m-wallet-intelligence-analyst` | on-chain maker/tomador: mecanismo de ganadores y vendedores, debilidades, migraciones (régimen) | copiar fills |
+| Relojes y causalidad | `cheap5m-event-causality-analyst` | carreras en ms, orden de eventos, look-ahead, lead-lag de fuentes | — |
+| Datos | `cheap5m-market-data-engineer` | contratos y cobertura de datos (libro5_ms, multivenue_ms, m5_registro, on-chain, desenlaces), salud de loggers | editar |
+| Constructor | `cheap5m-execution-engineer` | ÚNICO que escribe código experimental: simuladores, datasets, ejecutores en dev con tests | tocar producción, V4, F2 |
+| Validación | `cheap5m-statistical-validator` | reproduce de forma independiente cada cifra que vaya a contar (script propio, ponderado por €, IC por días/cierre, placebo) | — |
+| Ataque | `cheap5m-red-team-auditor` | busca la razón más fuerte por la que una señal es falsa antes de forward y antes de dinero | — |
+| Capital y riesgo | `cheap5m-risk-economics` | rampas de stake pre-registradas, kill-switches simulados, capital necesario por escenario | — |
+| Procedencia | `cheap5m-repo-auditor` | hashes, reproducibilidad, artefactos congelados, que nada se edita en caliente | — |
 
-Invocar `cheap5m-repo-auditor` antes de cualquier cambio. Verificar git, V4 y hashes, jobs, artefactos, checkpoint, logs, datos originales, F2 mode y outputs. No editar baselines.
+## 2. La escalera de una subestrategia (solo se cuenta como ingreso desde el peldaño 5)
 
-## 2. P0: continuidad `cosechar al abrir` A/B
+1. **Idea registrada** (REGISTRO, `PENDING`): mecanismo falsable, regla congelada, gate, datos, coste.
+2. **Descubrimiento** (DESC): medida en días de elección; resultado `EXPLORATORY`/`PROMISING`/`REJECTED`.
+3. **Fuera de muestra** (OOS cronológico, días distintos) + **validador independiente** + **red-team**.
+4. **Forward congelado** (vigía con hash; criterio fijado antes): ≥ los días de su gate.
+5. **Micro-real** en la wallet dedicada (≤5 € de exposición, modo dedicado, `/code-review`, OK de Javi): mide cola,
+   rellenos y comisión reales. Primera cifra que entra en el libro (escenario conservador).
+6. **Live mínimo** (stake 2 € en la principal; whitelist + checklist de 6 categorías + `/code-review` + OK Javi).
+7. **Rampa** pre-registrada 2 → 5 → 10 € … (`risk-economics`), con criterio de subida y de bajada fijado antes
+   (Javi: demostrar y luego subir poco a poco, como las wallets que ganan).
 
-- Agent repo auditor reconstruye qué hay y cobertura.
-- Market data engineer revisa esquema, claves idempotentes y huecos.
-- Execution engineer es el único que crea/corrige soporte de resume en un área aislada después de especificación.
-- Trabajo heavy fuera de 06:00–09:00Z.
-- Cada mercado/día se escribe de forma idempotente con manifest/checkpoint. Al reanudar, verificar rows procesadas antes de añadir más.
-- Informe obligatorio: A/B, cobertura por día, parciales, pérdidas, fills, costes, incertidumbre y paths.
+Bajar de peldaño es automático si se incumple el criterio del peldaño en que está.
 
-## 3. P1: V7 cero señales
+## 3. Ciclo diario (UTC) y turnos de máquina
 
-Consulta barata primero: último evento en cada fuente y paso; conteos de BTC antes/después de filtros; heartbeats, gaps, parser, reloj, registry, exceptions. Identificar primer punto en el que el conteo pasa a cero y clasificar causa. No lanzar replay masivo hasta documentar la razón.
+| Hora | Qué | Quién |
+|---|---|---|
+| 00:00-06:00 | **Turno pesado nocturno** (uno solo): corridas largas de simulador/dataset | constructor |
+| 06:00-09:15 | **Nada pesado** (racimo de crons de producción) | — |
+| 09:30 | Lectura de vigías/forwards/Telegram de la noche y actualización del libro; elige las 3 pruebas del día por VOI | dueño del objetivo |
+| 09:45 | El chief asigna: 1 trabajo pesado + ≤2 ligeros; encarga ideas si el libro lo pide | chief |
+| 10:00-14:00 | **Turno pesado de día** (uno solo) + ligeros en paralelo | constructor / analistas |
+| 14:00-18:00 | Validación independiente y red-team de lo que el día quiera contar | validador / red-team |
+| 18:00 | Cierre: libro actualizado, REGISTRO/DECISION_LOG, checkpoint en memoria | chief + dueño |
+| 22:15-22:30 | Nada (reinicio de RAM programado) | — |
 
-## 4. P2: F2 conciliación
+## 4. Reglas de recursos (la RAM es el cuello de botella)
 
-Verificar el proceso en shadow/dry-run, recuperar gates F2→F3 congelados, preparar conciliación con vigías el 17-Oct. Instrumentación decision→send solo en mock/shadow. Nunca repetir F1 real.
+- **Un solo trabajo pesado (>1 GB) en toda la máquina**, asignado por el chief. Antes de lanzarlo: MemAvailable > 2,5 GB
+  y load < 16; si no, esperar 10 min.
+- Cada proceso de agente: `ulimit -v 1500000` (2 GB solo con permiso), `nice -n 19 ionice -c3`, un día cada vez,
+  streaming, cachés por día con hash e idempotentes.
+- **Máximo 3 agentes a la vez.** Cuota: opus para objetivo, validador y red-team cuando haya; si no, sonnet en todos
+  (`model: sonnet` al lanzar). Si un agente se corta por cuota, se reanuda (SendMessage) o se relanza con el mismo encargo.
+- Nunca: producción, órdenes, firma, V4, F2, screens/cron, `pgrep/pkill -f` con su propio patrón.
 
-## 5. P3: forwards congelados
+## 5. Definición de "hecho" para cualquier cifra
 
-- V4 no se modifica.
-- FV V4 se audita y sigue en forward con configuración fija.
-- Al alcanzar ≥5 días cronológicos válidos, preparar propuesta maker FV 4/4b separada, pero pasar revisión independiente antes de comenzar un nuevo forward.
+Comando reproducible + fichero; n y días; **EV ponderado por €** (Σpnl/Σcoste) además de por unidad; IC90 por días y por
+cierre; sin los 2 mejores días y sin los 5 mejores cierres; placebo/inversión; precio ejecutable y reloj de RECEPCIÓN;
+desenlace oficial con cobertura; supervivencia revisada; veredicto del validador. Sin esto, la cifra no entra en el libro.
+Estados: `PENDING`, `EXPLORATORY`, `PROMISING`, `DATA_BLOCKED`, `REJECTED`, `DRY_RUN_VALIDATED`, `MICRO_REAL`, `LIVE`;
+trabajos: `COMPLETE`/`PARTIAL`/`FAILED`/`BLOCKED`.
 
-## 6. P4: ingeniería inversa de wallets
+## 6. Prioridades vivas (17-Oct; las reordena el dueño del objetivo cada día)
 
-Agent 5 tiene misión explícita de reconstruir y mejorar su mecanismo, no copiar fills. La fase «lo invisible» viene después de A/B salvo plan read-only y no contaminante documentado por chief. Selección de wallets en discovery, holdout cronológico separado y placebo.
+| P | Pieza | Peldaño | Siguiente paso | Quién |
+|---|---|---|---|---|
+| 1 | Micro-órdenes maker reales H35 (ETH/XRP, ≤5 €) | 4→5 | construir modo maker en dev + /code-review + OK Javi (cuando baje la carga) | chief + constructor |
+| 2 | Modelo de colocación maker (batir primeras 5 acc + rebate en ≥+0,05) | 2 | dataset + modelo DESC/OOS | constructor (en curso) |
+| 3 | Vendedores del volumen tardío barato; migración de las 6 wallets de V7 | 2 | on-chain | quién gana (en curso) |
+| 4 | Lead-lag multi-bolsa (Bybit +5-70 ms) | 2 | repetir con 1-2 días incl. horario USA | causalidad |
+| 5 | H35 completo (15-16 Oct) y recálculo ponderado por € de H35/H12 | 3 | corrida nocturna con memoria | constructor |
+| 6 | H39 MM-REPOSO (pares rotando) | 1 | tras P2 (mismo motor) | constructor |
+| — | PRECIERRE (fuera de 5m barato): rampa de stake en seguimiento diario | 6→7 | vigía 09:40Z | risk-economics |
 
-## 7. P5: construcción de portafolio para €200k
+## 7. Comunicación
 
-Risk-economics debe hacer un plan hacia el objetivo utilizando la suma de las subestrategias de 5m barato y los medios existentes: contribución por candidata, gap a 200k, solapamiento de ventanas, límites de capital/liq, presupuesto de cómputo, coste de ejecución, nuevas subestrategias candidatas y orden de investigación. No basta con señalar que €200k no están validados. El plan tampoco puede sumar como independientes estrategias que disputan las mismas oportunidades.
-
-## 8. Congelar experimento antes de confirmar
-
-Cada experimento tiene ID, mecanismo, hipótesis falsable, owner, commit/hash, universo, periodo, señal, timestamp de decisión, coste/fill, controles, métrica primaria, gates y regla de parada. Registrar antes de evaluar el holdout.
-
-## 9. Implementación
-
-Solo `cheap5m-execution-engineer` modifica código experimental bajo una especificación congelada. Rama/directorio separado; sin V4, datos raw ni producción. Añadir tests de timestamp, checkpoint, idempotencia, ejecución parcial, coste, posición residual y conciliación PnL.
-
-## 10. Validación y ataque
-
-- `cheap5m-statistical-validator`: reimplementa/recalcula independiente.
-- `cheap5m-red-team-auditor`: busca la explicación más fuerte por la que la señal sería falsa.
-- `cheap5m-risk-economics`: construye la cartera agregada y prueba el gap económico.
-
-El implementador no aprueba su propio experimento.
-
-## Estados válidos
-
-- `REJECTED`
-- `DATA_BLOCKED`
-- `EXPLORATORY`
-- `PROMISING`
-- `DRY_RUN_VALIDATED`
-- `PARTIAL` / `FAILED` para trabajos incompletos
-
-No usar «terminado» si no existe informe, manifest, coverage y comprobación de completitud.
+- Cada agente devuelve un reporte con estado, cifras con fuente, incertidumbres y siguiente paso exacto.
+- Solo el chief escribe REGISTRO/DECISION_LOG; solo el dueño del objetivo escribe el libro.
+- Javi recibe: el libro (hueco y suma por escenario), decisiones que solo él puede tomar, y lo que entra o sale de dinero.
