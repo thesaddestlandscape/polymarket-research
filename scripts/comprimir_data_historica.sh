@@ -187,7 +187,16 @@ cd /root/polymarket-research-datalogs
 # se borran a 30 días (~1 GB/día). Solo se borra el local si la copia del volumen tiene el mismo tamaño (fail-safe:
 # si la copia falla, el fichero se queda en local y se reintenta mañana).
 MS_VOL=/mnt/HC_Volume_106538179/maker_ms_crudo
-if mkdir -p "$MS_VOL" 2>/dev/null; then
+if mountpoint -q /mnt/HC_Volume_106538179 && mkdir -p "$MS_VOL" 2>/dev/null; then   # nunca en el raíz si no está montado
+  # retención ANTES de copiar (con el volumen casi lleno, la copia fallaría antes de liberar nada)
+  find "$MS_VOL" -maxdepth 1 -name 'maker_ms_*.csv.gz' -mtime +30 -print -delete || true
+  find "$MS_VOL" -maxdepth 1 -name '*.tmp' -mmin +120 -print -delete || true
+  # 17-Oct: libro5_ms (feed crudo 5m de libro_estado_ws, se escribe YA en el volumen): 14 días como máximo
+  L5=/mnt/HC_Volume_106538179/libro5_ms
+  if [ -d "$L5" ]; then
+    find "$L5" -maxdepth 1 -name 'libro5_ms_*.csv.gz' -mtime +14 -print -delete || true   # el escritor también borra: una carrera no aborta el script (set -e)
+    # (el tamaño lo acota el propio escritor: presupuesto de 20 GB; aquí solo la retención por días)
+  fi
   find /root/polymarket-research-datalogs -maxdepth 1 -name 'maker_ms_*_*.csv.gz' -mtime +4 -print0 |
   while IFS= read -r -d '' f; do
     b=$(basename "$f")
@@ -195,12 +204,11 @@ if mkdir -p "$MS_VOL" 2>/dev/null; then
       nice -n 19 ionice -c3 cp -p "$f" "$MS_VOL/$b.tmp" && mv "$MS_VOL/$b.tmp" "$MS_VOL/$b"
     fi
     if [ -f "$MS_VOL/$b" ] && [ "$(stat -c %s "$MS_VOL/$b")" -eq "$(stat -c %s "$f")" ]; then
-      rm -f "$f" && echo "maker_ms movido al volumen: $b"
+      rm -f "$f" && echo "movido al volumen: $b"
     else
-      echo "⚠ maker_ms NO movido (copia fallida, se queda en local): $b"
+      echo "⚠ NO movido al volumen (copia fallida, se queda en local): $b"
     fi
   done
-  find "$MS_VOL" -maxdepth 1 -name 'maker_ms_*.csv.gz' -mtime +30 -print -delete
 else
   echo "⚠ volumen no disponible: maker_ms se quedan en local (no se borran)"
 fi

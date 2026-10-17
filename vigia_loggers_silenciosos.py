@@ -38,7 +38,8 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 ESTADO = REPO / "data" / "live" / "vigia_loggers_silenciosos_estado.json"
 PATRONES = [str(REPO / "data/shadow/*.csv"), str(REPO / "data/sports/*.csv"), str(REPO / "data/live/*.csv"),
-            "/root/polymarket-research-datalogs/*.csv", "/root/polymarket-research-datalogs/*.csv.gz"]
+            "/root/polymarket-research-datalogs/*.csv", "/root/polymarket-research-datalogs/*.csv.gz",
+            "/mnt/HC_Volume_106538179/libro5_ms/*.csv.gz"]   # 17-Oct: feed crudo 5m (libro_estado_ws, en el volumen)
 MIN_H, FACTOR, HIST_MIN_H, RETIRO_DIAS, GAP_OLVIDO = 3.0, 2.0, 48.0, 10, 0.98
 CONDICIONALES = {str(REPO / "data/sports/smart_exit_prices.csv"): REPO / "data/sports/trades.csv",
                  str(REPO / "data/live/smart_exit_prices.csv"): REPO / "data/live/trades.csv"}
@@ -52,12 +53,28 @@ _FECHA = re.compile(r"[_-]?\d{4}-\d{2}-\d{2}")
 # logger. Sin quitarlo, cada reinicio de observadores dejaba una familia huérfana que avisaba en falso ~48 h después.
 # 12-Oct: tras el reinicio del VPS los PID son cortos (maker_ms_<fecha>_2928 avisó en falso a las 34,7 h): en
 # maker_ms se quita el PID tenga los dígitos que tenga; en el resto, solo sufijos de >=6 dígitos.
-_SUFIJO_PROCESO = re.compile(r"(?:_v?\d{6,}|(?<=^maker_ms)_\d+)(?=\.csv)")
+_SUFIJO_PROCESO = re.compile(r"(?:_v?\d{6,}|(?<=^maker_ms)_\d+|(?<=^libro5_ms)_\d+(?:_e\d+)?)(?=\.csv)")   # 17-Oct: + libro5_ms
 # 08-Oct: loggers por EVENTOS con latido horario en su log ("N eventos en la última hora"): el silencio del CSV es
 # correcto si el log está vivo (< 2 h) y TODOS los latidos posteriores a la última escritura dicen 0 eventos. Si un
 # latido cuenta eventos y el CSV no crece, o el log calla, se avisa como siempre.
 EVENTOS = {"/root/polymarket-research-datalogs/arbitraje_anidado_dryrun.csv": REPO / "logs" / "arbitraje_anidado_dryrun_fase0.log"}
 _LATIDO = re.compile(r"^\[([^\]]+)\] (\d+) eventos en la última hora")
+
+
+def _libro5_en_pausa(clave) -> bool:
+    """17-Oct: libro5 apagado a mano (interruptor) no es un logger roto; una pausa por volumen bajo se silencia solo
+    sus primeras 3 h (después hay que actuar). Si está muerto o el estado es viejo (> 10 min), sí se avisa."""
+    if "libro5_ms" not in str(clave):
+        return False
+    try:
+        e = json.loads(Path("/root/polymarket-research-datalogs/libro5_estado.json").read_text())
+        if time.time() - e.get("ts", 0) >= 600:
+            return False
+        if e.get("estado") == "apagado":               # interruptor manual: silencio buscado
+            return True
+        return e.get("estado") == "pausa" and time.time() - e.get("desde", 0) < 3 * 3600   # pausa por disco: 3 h
+    except Exception:
+        return False
 
 
 def _familias() -> dict:
@@ -138,7 +155,7 @@ def main() -> int:
                 est[clave] = {"primera_vez": ahora, "ultimo_mtime": mt, "gap_max_h": 0.0, "avisado": False,
                               "escrituras": False}
             continue
-        if (clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave])) or _compuerta_cerrada(clave):
+        if (clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave])) or _compuerta_cerrada(clave) or _libro5_en_pausa(clave):
             e["ultimo_mtime"] = max(e["ultimo_mtime"], mt, ahora)   # sin posiciones: callar es lo correcto
             e["avisado"] = False
             e["escrituras"] = True                 # 09-Oct: logger real (log compañero vivo / condicional): se vigila

@@ -65,6 +65,7 @@ LOTE_S = 0.02              # el hijo agrupa registros y los manda cada 20 ms
 # por hora de RECEPCIÓN (bookTicker spot no trae hora de evento; es el reloj con el que cancelaríamos), k = mapa
 # token -> moneda/marco/mercado/cierre/lado. gz diario fuera de git, retención en comprimir_data_historica.sh.
 REGISTRO_MS_DIR = Path(os.environ.get("LIBRO_WS_REGISTRO_DIR", "/root/polymarket-research-datalogs"))
+LIBRO5_DIR = Path(os.environ.get("LIBRO5_DIR", "/mnt/HC_Volume_106538179/libro5_ms"))   # 17-Oct: en el volumen
 # 05-Oct noche (misión "monetizar la ventana Binance -> Polymarket"): además del bookTicker (sin hora de evento),
 # aggTrade trae T (hora de la operación) y E (hora del evento) del exchange -> t0 real y latencia de red por evento.
 # x = aggTrade (T, símbolo, precio, cantidad, comprador_es_maker, E, recepción); q = top de Polymarket SIN muestrear
@@ -330,7 +331,7 @@ def _registrar(token, t_ms, salida):
                                 bids[0][1] if bids else None, asks[0][1] if asks else None)))
 
 
-def _aplicar(msg, salida):
+def _aplicar(msg, salida, k=None):          # k: grupo/conexión de origen (libro5 graba solo la del dueño)
     t_ev = int(msg.get("timestamp") or time.time() * 1000)
     if msg.get("event_type") == "last_trade_price":
         tk = msg.get("asset_id")
@@ -339,11 +340,17 @@ def _aplicar(msg, salida):
                 salida.append(("t", tk, (t_ev, float(msg["price"]), msg.get("side"), float(msg.get("size") or 0))))
                 if _REGISTRO is not None:
                     _REGISTRO.put(f"t,{t_ev},{tk},{msg.get('price')},{msg.get('side')},{msg.get('size')},{_T_RECV[0]},\n")
+                if _LIBRO5 is not None and _LIBRO5.activo:
+                    try:
+                        _LIBRO5.operacion(t_ev, tk, msg, k)
+                    except Exception as e:
+                        _LIBRO5.desactivar(f"{type(e).__name__}: {e}")
             except (KeyError, TypeError, ValueError):
                 pass
         return
     if "price_changes" in msg:
         tocados = set()
+        filas5 = [] if (_LIBRO5 is not None and _LIBRO5.activo) else None   # libro5: filas d de este mensaje
         for pc in msg["price_changes"]:
             tk = pc.get("asset_id")
             L = _LIB.get(tk)
@@ -359,6 +366,8 @@ def _aplicar(msg, salida):
             else:
                 L[lado][p] = s
             tocados.add(tk)
+            if filas5 is not None and _LIBRO5.grabable(tk, k):
+                filas5.append(("d", t_ev, tk, "B" if lado == "bids" else "A", p, s))   # tupla: el texto, en el escritor
         if _REGISTRO is not None:
             for tk in tocados:
                 L = _LIB[tk]
@@ -381,6 +390,11 @@ def _aplicar(msg, salida):
                             _LFULL[tk] = full
                             _LFULL_T[tk] = t_ev
                             _REGISTRO.put(f"L,{t_ev},{tk},{';'.join(f'{p}:{s}' for p, s in full)},{_T_RECV[0]}\n")
+        if filas5:
+            try:
+                _LIBRO5.put(filas5)
+            except Exception as e:                      # libro5 nunca tumba la sesión WS
+                _LIBRO5.desactivar(f"{type(e).__name__}: {e}")
         for tk in tocados:
             if t_ev - _ULT.get(tk, 0) >= MUESTREO_MS:   # el libro se actualiza siempre; se muestrea el histórico
                 _ULT[tk] = t_ev
@@ -391,6 +405,11 @@ def _aplicar(msg, salida):
                     "asks": {float(a["price"]): float(a["size"]) for a in (msg.get("asks") or [])}}
         _ULT[tk] = t_ev
         _registrar(tk, t_ev, salida)
+        if _LIBRO5 is not None and _LIBRO5.activo:
+            try:
+                _LIBRO5.libro(t_ev, tk, msg, k)
+            except Exception as e:
+                _LIBRO5.desactivar(f"{type(e).__name__}: {e}")
 
 
 class _Emisor:
@@ -421,6 +440,7 @@ class _Emisor:
                     out.write(_trama(lote))
                     out.flush()
                 except (BrokenPipeError, OSError):
+                    _cerrar_libro5()
                     os._exit(0)                     # el padre murió
 
 
@@ -494,7 +514,377 @@ class _Registro:
                 time.sleep(5)
 
 
+class _Libro5:
+    """17-Oct (OK Javi, misión 5m barato H35: "la cola tiene que ser conocida"). Graba el feed CRUDO del libro y de las
+    operaciones de TODOS los tokens 5m de todas las monedas durante toda su vida, directamente en el VOLUMEN
+    (LIBRO5_DIR/libro5_ms_YYYY-MM-DD_<pid>.csv.gz; no en el disco raíz ni en maker_ms_*, que el vigía congelado v4 y el
+    resto de lectores leen entero). Aquí NO se reconstruye nada: la cola se reconstruye después, en el análisis.
+    El hilo del socket NO formatea: valida (lo mismo que _aplicar), encola TUPLAS (una escritura en cola por mensaje) y
+    sigue; el texto, seq, ficheros, errores y marcas los hace el hilo escritor.
+    Filas (8 columnas):
+      B,t_ms,token,bids "p:s;..." (orden del servidor),asks,,recepción,seq   libro completo enviado por el servidor
+      d,t_ms,token,B|A,precio,tamaño,recepción,seq                         price_change (tamaño absoluto; 0 = vacío)
+      T,t_ms,token,precio,BUY|SELL,tamaño,recepción,seq                    last_trade_price (relleno vs cancelación)
+      G,t_ms,token|*,motivo[+motivo],,,recepción,seq                       hueco: arranque/caida/cancelada/fin_sesion/
+                                     baja/traspaso/json_ilegible/cola_llena/pausa/error_escritura/reanudado/
+                                     interruptor/fin_proceso/libro5_desactivado
+    Lectura: un proceso (pid) = un flujo; sus ficheros (diarios y _e<n> tras un error) se encadenan por seq. seq NUNCA se
+    repite; solo salta justo antes de una G,* con error_escritura (gzip guarda en búfer: lo no volcado se pierde). La
+    última línea de un fichero puede estar incompleta (corte): se descarta. Por token: estado = último B + d posteriores
+    en orden de seq (NUNCA por t_ms, sello de lote del WS). Tras una G del token o una G,* no hay continuidad hasta su
+    siguiente B (el servidor manda B al suscribir y tras cada operación; un token sin operaciones puede tardar).
+    Espacio: libro5 se mantiene por debajo de PRESUPUESTO_GB borrando sus propios ficheros más antiguos (nunca el que
+    escribe); no depende de lo que ocupen otros. Seguridad: cualquier excepción aquí desactiva libro5 sin tocar la
+    sesión WS. Se PAUSA (el socket deja de encolar) y se reanuda solo: con el volumen por debajo de MIN_LIBRE_GB,
+    durante el reintento de un error de escritura, o mientras exista el fichero INTERRUPTOR (persistente a reinicios).
+    Con ESCRITURA_FALLOS_MAX errores sin un periodo sano (con datos escritos) entre medias, se desactiva. Cada minuto
+    deja su estado en ESTADO (activo/pausa/apagado/muerto) para que el vigía de loggers no avise en falso."""
+
+    MAXQ = 20000                   # lotes (uno por mensaje del WS)
+    PRESUPUESTO_GB = 20.0          # tope de libro5 en el volumen: por encima se borran sus ficheros más antiguos
+    MIN_LIBRE_GB = 10.0            # seguridad: con el volumen por debajo, pausa (los archivos de 60 d recortan a 8)
+    ESCRITURA_FALLOS_MAX = 8
+    SANO_FLUSHES = 12              # ~1 min de volcados correctos seguidos para dar por sano el disco
+    INTERRUPTOR = Path("/root/polymarket-research-datalogs/LIBRO5_OFF")   # fuera de git: el bucle no lo toca
+    ESTADO = Path("/root/polymarket-research-datalogs/libro5_estado.json")   # lo lee vigia_loggers_silenciosos
+
+    def __init__(self):
+        vol = "/mnt/HC_Volume_106538179"
+        if str(LIBRO5_DIR).startswith(vol) and not os.path.ismount(vol):
+            raise RuntimeError(f"{vol} no está montado: libro5 no escribe en el disco raíz")
+        LIBRO5_DIR.mkdir(parents=True, exist_ok=True)
+        self.q = queue.Queue(maxsize=self.MAXQ)
+        self.lk = threading.Lock()     # transiciones activo/muerto
+        self.activo = True
+        self.muerto = False
+        self.descartes = 0
+        self.perdida = False           # solo la toca el hilo del socket (marca G,*,cola_llena en banda)
+        self.cie = {}                  # token 5m -> cierre (epoch s); solo hilo de stdin
+        self.rechazados = set()        # tokens 5m cerrados o con cierre ilegible; solo hilo de stdin
+        self.toks = frozenset()        # tokens 5m vivos: se SUSTITUYE entera (lectura atómica desde el socket)
+        self.dueno = {}                # token 5m vivo -> grupo cuya conexión se graba (la última alta manda; solo socket)
+        self.fin = threading.Event()
+        self.cerrado = threading.Event()
+        threading.Thread(target=self._loop, daemon=True, name="registro_libro5").start()
+
+    # ---------- estado (cualquier hilo) ----------
+    def desactivar(self, motivo, definitivo=True):
+        with self.lk:
+            if definitivo:
+                self.muerto = True
+            era = self.activo
+            self.activo = False
+        if era or definitivo:
+            _log(f"registro_libro5 {'DESACTIVADO' if definitivo else 'EN PAUSA'}: {motivo}")
+
+    def _reanudar(self):
+        with self.lk:
+            if self.muerto:
+                return False
+            self.activo = True
+            return True
+
+    # ---------- hilo del socket: solo tuplas ----------
+    def put(self, items, recv=None):
+        """Una sola escritura en cola por mensaje del WS. Único dueño de self.perdida: la pérdida se marca EN BANDA (la
+        G,*,cola_llena va al frente del primer lote que sí entra, en su punto real del flujo)."""
+        if not self.activo or not items:
+            return
+        r = _T_RECV[0] if recv is None else recv
+        if self.perdida:
+            items = [("G", int(time.time() * 1000), "*", "cola_llena")] + items
+        try:
+            self.q.put_nowait((r, items))
+            self.perdida = False
+        except queue.Full:
+            self.descartes += len(items)
+            self.perdida = True
+
+    def grabable(self, tk, k):
+        """Solo los 5m vivos y solo desde la conexión de su grupo dueño (un token no se graba dos veces)."""
+        return tk in self.toks and self.dueno.get(tk) == k
+
+    def libro(self, t_ev, tk, msg, k):
+        if self.grabable(tk, k):
+            # texto compacto con los valores tal cual (sin float): ~1-2 KB en cola, no las listas de dicts del JSON
+            b = ";".join(f"{x.get('price')}:{x.get('size')}" for x in (msg.get("bids") or []) if isinstance(x, dict))
+            a = ";".join(f"{x.get('price')}:{x.get('size')}" for x in (msg.get("asks") or []) if isinstance(x, dict))
+            self.put([("B", t_ev, tk, b, a)])
+
+    def operacion(self, t_ev, tk, msg, k):
+        if not self.grabable(tk, k):
+            return
+        try:
+            p, s = float(msg["price"]), float(msg.get("size") or 0)
+        except (KeyError, TypeError, ValueError):
+            return
+        self.put([("T", t_ev, tk, p, msg.get("side") if msg.get("side") in ("BUY", "SELL") else "", s)])
+
+    def alta(self, k, toks):
+        """Grupo k suscribe toks: pasa a ser su dueño (si venía de otro grupo: G traspaso, la reconstrucción espera al B
+        que el servidor manda al suscribir)."""
+        vivos, t, items = self.toks, int(time.time() * 1000), []
+        for tk in toks:
+            if tk in vivos:
+                if self.dueno.get(tk) not in (None, k):
+                    items.append(("G", t, tk, "traspaso"))
+                self.dueno[tk] = k
+        self.put(items, recv=t)
+        if len(self.dueno) > 4 * len(vivos) + 1000:
+            for tk in [x for x in self.dueno if x not in vivos]:
+                del self.dueno[tk]
+
+    def hueco(self, k, toks, motivo):
+        """Hueco en la conexión del grupo k: G para los tokens de los que k es dueño. Con baja/fin_sesion k deja de
+        ser su dueño; con caida/cancelada/json_ilegible sigue siéndolo (al reconectar: alta y el B del servidor)."""
+        t, items = int(time.time() * 1000), []
+        for tk in toks:
+            if self.dueno.get(tk) != k:
+                continue
+            items.append(("G", t, tk, motivo))
+            if motivo in ("baja", "fin_sesion"):
+                del self.dueno[tk]
+        self.put(items, recv=t)
+
+    # ---------- hilo de stdin ----------
+    def meta(self, meta):
+        """Alta de tokens 5m nuevos y poda de los cerrados; publica un frozenset nuevo solo si algo cambió."""
+        ahora, cambio = time.time(), False
+        for t, (a, m, mid, fin, lado) in meta.items():
+            if m != "5min" or t in self.cie or t in self.rechazados:
+                continue
+            try:
+                c = int(datetime.fromisoformat(str(fin)).timestamp())
+            except (TypeError, ValueError):
+                self.rechazados.add(t)
+                continue
+            if c >= ahora - 600:
+                self.cie[t] = c
+                cambio = True
+            else:
+                self.rechazados.add(t)
+        for t in [t for t, c in self.cie.items() if c < ahora - 600]:
+            self.cie.pop(t, None)
+            self.rechazados.add(t)
+            cambio = True
+        if len(self.rechazados) > 50000:
+            self.rechazados = set(list(self.rechazados)[-20000:])
+        if cambio:
+            self.toks = frozenset(self.cie)
+
+    def cerrar(self, timeout=3.5):
+        """Al salir el proceso: el escritor vuelca (acotado) lo pendiente, G,*,fin_proceso y cierra el gzip."""
+        self.fin.set()
+        self.cerrado.wait(timeout)
+
+    # ---------- hilo escritor ----------
+    def _texto(self, it):
+        if it[0] == "d":
+            return f"d,{it[1]},{it[2]},{it[3]},{it[4]},{it[5]}"
+        if it[0] == "B":
+            return f"B,{it[1]},{it[2]},{it[3]},{it[4]},"
+        if it[0] == "T":
+            return f"T,{it[1]},{it[2]},{it[3]},{it[4]},{it[5]}"
+        return f"G,{it[1]},{it[2]},{it[3]},,"
+
+    def _libre(self):
+        st = os.statvfs(LIBRO5_DIR)
+        return st.f_bavail * st.f_frsize / 1e9
+
+    def _ajustar_presupuesto(self, actual):
+        """Borra los libro5_ms más antiguos (nunca `actual`, el fichero abierto) mientras la familia pase de
+        PRESUPUESTO_GB. Devuelve el espacio libre del volumen."""
+        fs = []
+        for p in LIBRO5_DIR.glob("libro5_ms_*.csv.gz"):
+            try:
+                stp = p.stat()
+            except OSError:
+                continue
+            fs.append((stp.st_mtime, stp.st_size, p))
+        total = sum(x[1] for x in fs) / 1e9
+        reciente = time.time() - 3 * 86400            # los 3 últimos días de captura nunca se borran por presupuesto
+        for mt, tam, p in sorted(fs):
+            if total <= self.PRESUPUESTO_GB:
+                break
+            if (actual is not None and p.name == actual) or mt >= reciente:
+                continue
+            try:
+                p.unlink()
+                total -= tam / 1e9
+                _log(f"registro_libro5: presupuesto {self.PRESUPUESTO_GB} GB superado, borrado {p.name}")
+            except OSError:
+                continue
+        return self._libre()
+
+    def _estado(self, txt, motivo=""):
+        try:
+            if txt != getattr(self, "_estado_txt", None):
+                self._estado_txt, self._estado_desde = txt, int(time.time())
+            tmp = self.ESTADO.with_suffix(".json.tmp")
+            tmp.write_text(json.dumps({"ts": int(time.time()), "estado": txt, "desde": self._estado_desde,
+                                       "motivo": motivo}))
+            tmp.replace(self.ESTADO)
+        except OSError:
+            pass
+
+    def _vaciar(self):
+        try:
+            while True:
+                self.q.get_nowait()
+        except queue.Empty:
+            pass
+
+    def _abrir(self, dia_txt, n):
+        """Nunca sobrescribe: modo 'x' y, si el nombre existe (mismo PID tras reiniciar, error previo), contador _e<n>."""
+        while True:
+            suf = f"{os.getpid()}" if n == 0 else f"{os.getpid()}_e{n}"
+            try:
+                return gzip.open(LIBRO5_DIR / f"libro5_ms_{dia_txt}_{suf}.csv.gz", "xt", encoding="utf-8",
+                                 compresslevel=3), n   # CPU baja: comparte proceso con el lector WS
+            except FileExistsError:
+                n += 1
+
+    def _loop(self):
+        st = {"f": None, "dia": None, "n": 0, "seq": 0, "intento": 0, "escrito": False}
+        pendiente = {"arranque"}       # motivos de la próxima G,* (se escriben juntos: ninguno pisa a otro)
+        fallos, sanos, escrito = 0, 0, False
+        t_flush = t_chk = 0.0
+        desc_log = 0
+
+        def escribir(recv, items):
+            hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            if st["f"] is None or hoy != st["dia"]:
+                if st["f"] is not None:
+                    st["f"].close()
+                    st["f"] = None
+                st["f"], st["n"] = self._abrir(hoy, 0 if hoy != st["dia"] else st["n"])
+                st["f"].write("tipo,t_ms,token,c1,c2,c3,recepcion,seq\n")
+                st["dia"] = hoy
+            s, lineas = st["seq"], []
+            if pendiente:
+                s += 1
+                t_g = int(time.time() * 1000)
+                lineas.append(f"G,{t_g},*,{'+'.join(sorted(pendiente))},,,{t_g},{s}\n")
+            for it in items:
+                s += 1
+                lineas.append(f"{self._texto(it)},{recv},{s}\n")
+            st["intento"] = s                  # si la escritura falla a medias, estos seq ya no se reutilizan
+            st["f"].write("".join(lineas))
+            st["seq"] = s
+            st["escrito"] = True
+            pendiente.clear()
+
+        def cerrar_fichero():
+            try:
+                if st["f"] is not None:
+                    st["f"].close()
+            except Exception:
+                pass
+            st["f"] = None
+
+        def volcar_y_marcar(motivo):
+            """Vuelca (máx. 1 s) lo encolado, marca el final y cierra pase lo que pase."""
+            try:
+                limite = time.time() + 1.0
+                try:
+                    while time.time() < limite:
+                        escribir(*self.q.get_nowait())
+                except queue.Empty:
+                    pass
+                pendiente.add(motivo)
+                t_g = int(time.time() * 1000)
+                escribir(t_g, [])
+            except Exception:
+                pass
+            finally:
+                cerrar_fichero()
+                self._vaciar()
+
+        while True:
+            try:
+                if self.fin.is_set():
+                    if self.activo:            # en pausa no se abre ningún fichero nuevo
+                        volcar_y_marcar("fin_proceso")
+                    else:
+                        cerrar_fichero()
+                    self.cerrado.set()
+                    return
+                if self.muerto:
+                    volcar_y_marcar("libro5_desactivado")
+                    self._estado("muerto")
+                    self.cerrado.set()
+                    return
+                if time.time() - t_chk > 60:
+                    t_chk = time.time()
+                    apagado = self.INTERRUPTOR.exists()
+                    actual = None
+                    if st["f"] is not None and st["dia"]:
+                        actual = Path(getattr(st["f"], "name", "") or "").name or None
+                    libre = self._ajustar_presupuesto(actual)
+                    if self.activo and (apagado or libre < self.MIN_LIBRE_GB):
+                        self.desactivar("interruptor LIBRO5_OFF" if apagado else
+                                        f"volumen con {libre:.1f} GB libres (< {self.MIN_LIBRE_GB})", definitivo=False)
+                        pendiente.add("interruptor" if apagado else "pausa")
+                    elif not self.activo and not apagado and libre >= self.MIN_LIBRE_GB + 0.5:   # sin estado absorbente
+                        self._vaciar()         # lo encolado durante la pausa es de antes del hueco
+                        if self._reanudar():
+                            pendiente.add("reanudado")
+                            _log(f"registro_libro5 REANUDADO: volumen con {libre:.1f} GB libres")
+                    self._estado("activo" if self.activo else ("apagado" if apagado else "pausa"),
+                                 "" if self.activo else f"libre={libre:.1f}GB fallos={fallos}")
+                if not self.activo:
+                    self._vaciar()
+                    cerrar_fichero()
+                    time.sleep(1.0)
+                    continue
+                try:
+                    item = self.q.get(timeout=1.0)
+                except queue.Empty:
+                    item = None
+                if item is not None:
+                    escribir(*item)
+                if st["f"] is not None and time.time() - t_flush > 5:
+                    st["f"].flush()
+                    t_flush = time.time()
+                    if st["escrito"]:                  # solo cuenta un volcado CON datos nuevos
+                        sanos += 1
+                        st["escrito"] = False
+                    if sanos >= self.SANO_FLUSHES:     # disco sano un rato: el contador de fallos vuelve a 0
+                        fallos = 0
+                    if self.descartes != desc_log:
+                        _log(f"registro_libro5: {self.descartes} filas descartadas (cola llena)")
+                        desc_log = self.descartes
+            except Exception as e:
+                fallos += 1
+                sanos = 0
+                _log(f"registro_libro5: {type(e).__name__}: {e} (fallo {fallos}/{self.ESCRITURA_FALLOS_MAX})")
+                cerrar_fichero()
+                st["seq"] = max(st["seq"], st["intento"])   # seq nunca se repite entre ficheros
+                st["n"] += 1
+                pendiente.add("error_escritura")
+                if fallos >= self.ESCRITURA_FALLOS_MAX:
+                    self.desactivar(f"{fallos} errores de escritura")
+                    volcar_y_marcar("libro5_desactivado")   # protegido: si el disco sigue fallando, solo cierra
+                    self._estado("muerto", f"{fallos} errores de escritura")
+                    self.cerrado.set()
+                    return
+                self.desactivar("reintento tras error de escritura", definitivo=False)   # el socket deja de encolar
+                self._vaciar()
+                self.fin.wait(min(300, 5 * 2 ** (fallos - 1)))   # se despierta si el proceso termina
+                if self.fin.is_set():
+                    continue
+                self._vaciar()                 # lo que entrase en la carrera de la pausa es de antes del hueco
+                try:
+                    ok = self._ajustar_presupuesto(None) >= self.MIN_LIBRE_GB and not self.INTERRUPTOR.exists()
+                except OSError:
+                    ok = False
+                if ok and self._reanudar():
+                    _log("registro_libro5: se reanuda tras el error de escritura")
+
+
 _REGISTRO = None
+_LIBRO5 = None
+_SUSC = {}                 # grupo -> tokens suscritos por su sesión viva (libro5: huecos al caer)
 _DESEADOS = {"univ": [], "extra": [], "claves": {}, "ver": 0}
 _DES_LOCK = threading.Lock()
 
@@ -507,8 +897,14 @@ def _hilo_stdin():
         except Exception:
             m = None
         if m is None:
+            _cerrar_libro5()
             os._exit(0)                             # EOF: el padre murió o cerró -> el hijo sale
         if m[0] == "tokens":
+            if len(m) > 4 and _LIBRO5 is not None:      # ANTES de publicar la versión: el token ya está en libro5
+                try:                                    # cuando el gestor lo suscriba (no se pierde su primer B)
+                    _LIBRO5.meta(m[4])
+                except Exception as e:
+                    _LIBRO5.desactivar(f"{type(e).__name__}: {e}")
             with _DES_LOCK:
                 _DESEADOS["univ"], _DESEADOS["extra"] = m[1], m[2]
                 _DESEADOS["claves"] = m[3] if len(m) > 3 else {}
@@ -597,9 +993,39 @@ async def _sesion_grupo(k, emisor):
     while k in _GRUPOS:
         try:
             await _una_sesion(k, emisor)
+        except asyncio.CancelledError:
+            _hueco_libro5(k, _SUSC.pop(k, ()), "cancelada")
+            raise
         except Exception as e:
             _log(f"sesión caída [{k}]: {type(e).__name__}: {e}; reconecta en 2 s")
+            _hueco_libro5(k, _SUSC.pop(k, ()), "caida")
             await asyncio.sleep(2)
+        else:
+            _hueco_libro5(k, _SUSC.pop(k, ()), "fin_sesion")
+
+
+def _cerrar_libro5():
+    if _LIBRO5 is not None:
+        try:
+            _LIBRO5.cerrar()
+        except Exception:
+            pass
+
+
+def _alta_libro5(k, toks):
+    if _LIBRO5 is not None and not _LIBRO5.muerto:
+        try:
+            _LIBRO5.alta(k, list(toks))
+        except Exception as e:
+            _LIBRO5.desactivar(f"{type(e).__name__}: {e}")
+
+
+def _hueco_libro5(k, toks, motivo):
+    if _LIBRO5 is not None and not _LIBRO5.muerto:     # también en pausa: actualiza dueños (las G no se escriben)
+        try:
+            _LIBRO5.hueco(k, list(toks), motivo)
+        except Exception as e:
+            _LIBRO5.desactivar(f"{type(e).__name__}: {e}")
 
 
 async def _una_sesion(k, emisor):
@@ -614,6 +1040,8 @@ async def _una_sesion(k, emisor):
         t_ping = time.time()
         await ws.send(json.dumps({"type": "market", "assets_ids": toks[:SUB_TROZO]}))
         suscritos = set(toks)
+        _alta_libro5(k, toks)
+        _SUSC[k] = suscritos                            # libro5: mismos tokens que esta sesión (se marcan si cae)
         for t in toks:
             _LIB.setdefault(t, {"bids": {}, "asks": {}})
         _log(f"conectado [{k}], {len(toks)} tokens (lector en proceso separado, pid {os.getpid()})")
@@ -628,6 +1056,7 @@ async def _una_sesion(k, emisor):
                     return                                  # grupo retirado: cerrar la conexión
                 deseados = _GRUPOS[k]
                 nuevos = [t for t in deseados if t not in suscritos]
+                _alta_libro5(k, nuevos)
                 cola_sub.extend(nuevos)
                 for t in nuevos:
                     _LIB.setdefault(t, {"bids": {}, "asks": {}})
@@ -635,6 +1064,7 @@ async def _una_sesion(k, emisor):
                 viejos = [t for t in suscritos if t not in set(deseados)]
                 if viejos:
                     await ws.send(json.dumps({"assets_ids": viejos, "operation": "unsubscribe"}))
+                    _hueco_libro5(k, viejos, "baja")
                     for t in viejos:
                         suscritos.discard(t)
                         if _huerfano(t):
@@ -657,11 +1087,13 @@ async def _una_sesion(k, emisor):
             try:
                 j = json.loads(raw)
             except Exception:
+                if isinstance(raw, (bytes, bytearray)) or (isinstance(raw, str) and raw[:1] in "[{"):   # mensaje perdido
+                    _hueco_libro5(k, suscritos, "json_ilegible")
                 continue
             salida = []
             for e in (j if isinstance(j, list) else [j]):
                 if isinstance(e, dict):
-                    _aplicar(e, salida)
+                    _aplicar(e, salida, k)
             emisor.extend(salida)
 
 
@@ -673,11 +1105,16 @@ def _main_hijo():
             os.setpriority(os.PRIO_PROCESS, 0, 0)    # el padre corre a nice 10; el lector no
     except OSError as e:
         _log(f"no se pudo subir la prioridad del hijo: {e}")
-    global _REGISTRO
+    global _REGISTRO, _LIBRO5
     try:
         _REGISTRO = _Registro()
     except Exception as e:
         _log(f"registro_ms desactivado: {type(e).__name__}: {e}")
+    if _REGISTRO is not None:                       # libro5 se apaga con el fichero _Libro5.INTERRUPTOR (persistente)
+        try:
+            _LIBRO5 = _Libro5()
+        except Exception as e:
+            _log(f"registro_libro5 desactivado: {type(e).__name__}: {e}")
     emisor = _Emisor()
     threading.Thread(target=_hilo_stdin, daemon=True, name="stdin").start()
     while True:
