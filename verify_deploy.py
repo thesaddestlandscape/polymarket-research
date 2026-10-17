@@ -104,6 +104,8 @@ SCREENS = {
     "freezeestado": {"entry": "resolution_sniper_freeze_estado_fase0.py",
                      "probe": "log:logs/resolution_sniper_freeze_estado_fase0.log:arrancado"},
     "dryrunmc": {"entry": "dryrun_mejora_contraria_02sep.py"},  # sin probe: no loguea al arrancar
+    # 17-Oct: grabador multi-bolsa al ms (solo captura, sin dinero real).
+    "multivenue": {"entry": "multivenue_ms_fase0.py", "probe": "log:logs/multivenue_ms_fase0.log:arrancado"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},

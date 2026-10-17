@@ -39,7 +39,8 @@ sys.path.insert(0, str(REPO))
 ESTADO = REPO / "data" / "live" / "vigia_loggers_silenciosos_estado.json"
 PATRONES = [str(REPO / "data/shadow/*.csv"), str(REPO / "data/sports/*.csv"), str(REPO / "data/live/*.csv"),
             "/root/polymarket-research-datalogs/*.csv", "/root/polymarket-research-datalogs/*.csv.gz",
-            "/mnt/HC_Volume_106538179/libro5_ms/*.csv.gz"]   # 17-Oct: feed crudo 5m (libro_estado_ws, en el volumen)
+            "/mnt/HC_Volume_106538179/libro5_ms/*.csv.gz",   # 17-Oct: feed crudo 5m (libro_estado_ws, en el volumen)
+            "/mnt/HC_Volume_106538179/multivenue_ms/*.csv.gz"]   # 17-Oct: grabador multi-bolsa (multivenue_ms_fase0)
 MIN_H, FACTOR, HIST_MIN_H, RETIRO_DIAS, GAP_OLVIDO = 3.0, 2.0, 48.0, 10, 0.98
 CONDICIONALES = {str(REPO / "data/sports/smart_exit_prices.csv"): REPO / "data/sports/trades.csv",
                  str(REPO / "data/live/smart_exit_prices.csv"): REPO / "data/live/trades.csv"}
@@ -84,7 +85,10 @@ def _familias() -> dict:
             base = os.path.basename(f)
             if "_antes_" in base or "reconstruido" in base or base.endswith(".bak"):
                 continue
-            clave = os.path.join(os.path.dirname(f), _SUFIJO_PROCESO.sub("", _FECHA.sub("", base).replace(".gz", "")))
+            limpio = _FECHA.sub("", base).replace(".gz", "")
+            if limpio.startswith("multivenue_ms"):          # multivenue_ms_<bolsa>_<pid>[_e<n>]: una familia por bolsa
+                limpio = re.sub(r"_\d+(?:_e\d+)?(?=\.csv)", "", limpio)
+            clave = os.path.join(os.path.dirname(f), _SUFIJO_PROCESO.sub("", limpio))
             try:
                 mt = os.path.getmtime(f)
             except OSError:

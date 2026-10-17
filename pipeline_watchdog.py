@@ -226,6 +226,9 @@ SCREEN_RESTART = {
     # 25-Sep: declaradas (corrían sin watchdog desde 15-Sep / 02-Sep). Solo observación/dry-run.
     "freezeestado": f"cd {REPO} && nice -n 10 .venv/bin/python resolution_sniper_freeze_estado_fase0.py >> logs/resolution_sniper_freeze_estado_fase0.log 2>&1",
     "dryrunmc": f"cd {REPO} && nice -n 10 .venv/bin/python dryrun_mejora_contraria_02sep.py >> logs/dryrun_mejora_contraria_02sep.log 2>&1",
+    # 17-Oct (OK Javi): grabador multi-bolsa al ms (Binance spot/perp, Coinbase, Kraken, Bitstamp, Bybit), solo captura,
+    # un proceso por bolsa bajo un supervisor. nice 5: por debajo de los ejecutores con dinero real.
+    "multivenue": f"cd {REPO} && nice -n 5 .venv/bin/python multivenue_ms_fase0.py >> logs/multivenue_ms_fase0.log 2>&1",
     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
@@ -364,7 +367,7 @@ def check_screens() -> dict[str, bool]:
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc"]}
+                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue"]}
     except Exception:
         return {}
 
