@@ -14,7 +14,7 @@ etiquetado. Toda cifra con fecha, n, IC90 por días y fuente. **EV siempre ponde
 | **Hueco hasta 200 k€** | **200.000** |
 
 Qué falta, en orden: **(1) edge propio medido con dinero real** (nada ha llegado al peldaño 5); **(2) capacidad**: el techo
-optimista de lo mejor conocido (R5K) es ~1/3 del objetivo a K=50; **(3) capital**: principal ~44 $, dedicada 19,6 $ (tope de
+optimista de lo mejor conocido (R5K) es ~1/3 del objetivo a K=50; **(3) capital**: principal 39,66 $ libres + 3,68 $ en posiciones (balance_real.json 14:30Z), dedicada 19,6 $ (tope de
 pruebas 5 €); toda rampa es decisión de Javi.
 
 ## Subestrategias
@@ -24,7 +24,7 @@ pruebas 5 €); toda rampa es decisión de Javi.
 | **H43 R5K** (maker tras 5.000 acc acumuladas, BTC) | 2 · EXPLORATORY (24 celdas miradas) | +0,212 (cierre +0,10/+0,33), sin 2 mejores días +0,141, sin top-20 +0,117 — POBLACIÓN, cola optimista | 1.010 unidades / 11 días (06-16 Oct) | ~92 unidades/día × ~9 $ (K=50) ≈ 830 $/día de coste | 0 / 0 / ~65 k€ (si capturásemos el +0,21 en todas a K=50); K=200 +0,222 → techo mayor, cola sin medir | con H35/maker de banda (mismos mercados) | vigía forward diario 09:30Z (desde 17-Oct; ≥40 unidades en ≥10 días); micro-órdenes P1 orientadas a R5K |
 | **Maker de banda** (línea base: unirse al bid 0,10-0,30) | 2 · línea base | población +0,064; **nuestras primeras 5 acc ≈+0,007** (+0,042/+0,031/+0,009/−0,054, 10-13 Oct); rebate ≈+0,011 sin verificar en 5m | ~2.000 unidades/día | ~2.200 $/día a 5 acc en todos los mercados | 0 / 0 / ~10-15 k€ | todas las maker | se mide dentro de las micro-órdenes P1 (es la línea base a batir) |
 | **H35 DEEP_PEG** (puja 1-2 ticks bajo el top) | 3 · PARTIAL (15-16 Oct pendientes por memoria) | ALL +0,022 (1 día OOS); ETH +0,186, XRP +0,102, BTC −0,011; sin top-5 mercados casi todas <0 | OOS 14-Oct, 515 rellenos | — | 0 / 0 / ? | maker de banda, R5K | completar 15-16 Oct (h35_15_16.sh); recalcular ponderado; micro-real ETH/XRP |
-| **Modelo de colocación** (cuándo/dónde pujar) | 1 · PENDING (agente cortado) | — | — | — | — | todas las maker | construir dataset DESC 05-10 / OOS 12-16 y batir la línea base en ≥+0,05 |
+| **Modelo de colocación** (cuándo/dónde pujar) | 1 · PENDING (agente cortado) | — | — | — | — | todas las maker | dataset en curso (DESC 05-10 / OOS 14-16; 11-13 excluidos por ser días de hallazgo de H35) y batir la línea base en ≥+0,05 |
 | **H39 MM-REPOSO** (pares rotando, como las ganadoras) | 1 · PENDING | ganadoras on-chain +1,1/+1,6 %/€ (2 wallets 7/7 días OOS); mediana de las PAIR ≈0 | — | — | — | maker | tras el modelo de colocación (mismo motor) |
 | **V4** (pata 5m barata como tomador) | 4 · FORWARD congelado, 4/10 gates, DRIFT | +0,21 comunicado (por señal ejecutable) | 17 ejecutables / 9 días | ~2 señales/día | 0 / 0 / pequeño | — | seguir forward (G1 n≥40 ~27-28 Oct) |
 | **V7** (disparo 15m BTC) | 4 · FORWARD; escalón de régimen 13-Oct; revive 16-Oct con vendedores sustitutos | 16-Oct: 6 mercados, +6,49 € (n minúsculo) | — | descubrimiento ~28-37 k€/año (no validado) | 0 / 0 / ~30 k€ | V4 | seguir forward; vigilar a 0x56f609c6 y 0x29efa7c2 |
