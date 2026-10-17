@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-10-16T08:10:23+00:00",
+ "actualizado_utc": "2026-10-17T08:10:22+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
@@ -20,42 +20,29 @@
    ]
   },
   "CS#SEGUIR#0.65": {
-   "n": 549,
-   "dias": 51,
-   "frac_dias_pos": 0.627,
-   "top_wallet": 0.102,
-   "n_wallets": 168,
-   "pnl_medio": 0.0683,
+   "n": 562,
+   "dias": 52,
+   "frac_dias_pos": 0.635,
+   "top_wallet": 0.1,
+   "n_wallets": 174,
+   "pnl_medio": 0.0701,
    "medias_tramos": [
-    0.0737,
-    0.0793,
-    0.0518
-   ]
-  },
-  "Tennis#FADE#0.85": {
-   "n": 442,
-   "dias": 44,
-   "frac_dias_pos": 0.636,
-   "top_wallet": 0.253,
-   "n_wallets": 67,
-   "pnl_medio": 0.0157,
-   "medias_tramos": [
-    0.0175,
-    0.0275,
-    0.0022
+    0.075,
+    0.0711,
+    0.0643
    ]
   },
   "CS#FADE#0.65": {
-   "n": 593,
-   "dias": 53,
-   "frac_dias_pos": 0.736,
-   "top_wallet": 0.062,
-   "n_wallets": 157,
-   "pnl_medio": 0.1425,
+   "n": 608,
+   "dias": 54,
+   "frac_dias_pos": 0.741,
+   "top_wallet": 0.061,
+   "n_wallets": 160,
+   "pnl_medio": 0.1483,
    "medias_tramos": [
-    0.1657,
-    0.126,
-    0.1359
+    0.1586,
+    0.143,
+    0.1433
    ]
   },
   "LoL#FADE#0.85": {
@@ -71,6 +58,32 @@
     0.0051
    ]
   },
+  "Dota#FADE#0.60": {
+   "n": 113,
+   "dias": 40,
+   "frac_dias_pos": 0.6,
+   "top_wallet": 0.106,
+   "n_wallets": 55,
+   "pnl_medio": 0.0448,
+   "medias_tramos": [
+    0.0762,
+    0.0377,
+    0.0218
+   ]
+  },
+  "Dota#SEGUIR#0.75": {
+   "n": 80,
+   "dias": 30,
+   "frac_dias_pos": 0.733,
+   "top_wallet": 0.1,
+   "n_wallets": 43,
+   "pnl_medio": 0.078,
+   "medias_tramos": [
+    0.0331,
+    0.1961,
+    0.01
+   ]
+  },
   "MLB#SEGUIR#0.70": {
    "n": 133,
    "dias": 29,
@@ -82,19 +95,6 @@
     0.0003,
     0.0599,
     0.1392
-   ]
-  },
-  "NHL#FADE#0.45": {
-   "n": 129,
-   "dias": 23,
-   "frac_dias_pos": 0.609,
-   "top_wallet": 0.202,
-   "n_wallets": 39,
-   "pnl_medio": 0.0903,
-   "medias_tramos": [
-    0.1313,
-    0.0208,
-    0.1187
    ]
   }
  }
