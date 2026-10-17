@@ -1,0 +1,5 @@
+Reproduccion (todo con ulimit -v 1500000..2500000, nice -n 19 ionice -c3, un script cada vez):
+ 1) pass1.py <dia> out        (on-chain m5_onchain -> out/band_D.csv.gz, finpos_D, wstat_D; banda pc(0,10-0,30] T(60-300], tomador que cruza, inventario previo)
+ 2) an/build2.py -> an/P.pkl ; an/mkslim.py -> an/S.pkl (cum0, acc_l/c_l = volumen con >=500 acc acumuladas por mercado-lado, prorrata)
+ 3) an/a1..a15.py (A) ; runB.sh + B.py + p2an.py + pass2.py + v7sel.py + pass3.py (B)
+Desenlaces: ../des_cache.json (gamma/closed + /v2/tokens), cobertura 100 % de los 18.452 mercados.
