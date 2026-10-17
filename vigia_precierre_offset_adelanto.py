@@ -33,6 +33,12 @@ Z_MIN, RATIO_MIN, N_DECIDIR = 1.8, 5.0, 40
 EJECUTOR_CSV = REPO / "data/shadow/resolution_sniper_precierre_executor_v2.csv"
 OUT = REPO / "data/shadow/vigia_precierre_offset_adelanto.json"
 _FOK_KILL = "FOK orders are fully filled or killed"
+# 17-Oct (OK Javi): seguimiento de la RAMPA de stake pre-registrada (memoria project_rampa_stake_precierre_17oct):
+# 2 € -> 5 € solo con, POR MARCO y desde el arreglo del límite FOK: >=40 órdenes reales y >=10 días, EV/€ >= +0,05 con
+# IC90 por días > 0, > 0 sin los 2 mejores días, FOK muertas <= 20 %; bajar un escalón si las 20 últimas dan EV < 0.
+DESDE_RAMPA = "2026-10-17T08:16"
+TRADES = REPO / "data/live/trades.csv"
+RAMPA = {"n_min": 40, "dias_min": 10, "ev_min": 0.05, "fok_muertas_max": 0.20, "ultimas": 20}
 
 
 def _fok_reales() -> dict:
@@ -87,6 +93,64 @@ def _ic90(por_cierre: dict):
     return [round(med[100], 3), round(med[1899], 3)]
 
 
+def _ic90_dias(por_dia: dict, rng=random.Random(7)):
+    dias = list(por_dia)
+    if len(dias) < 3:
+        return None
+    bs = []
+    for _ in range(2000):
+        m = [rng.choice(dias) for _ in dias]
+        pnl = sum(por_dia[d][0] for d in m); st = sum(por_dia[d][1] for d in m)
+        bs.append(pnl / st if st else 0.0)
+    bs.sort()
+    return [round(bs[100], 3), round(bs[1899], 3)]
+
+
+def _rampa() -> dict:
+    """Órdenes reales cerradas de PRECIERRE desde DESDE_RAMPA, por marco, frente a los criterios de la rampa."""
+    filas = [r for r in csv.DictReader(open(TRADES, encoding="utf-8", newline=""))
+             if r.get("strategy") == "RESOLUTION_SNIPER_PRECIERRE" and r.get("status") == "CLOSED"
+             and r.get("timestamp_utc", "") >= DESDE_RAMPA]
+    env = {"5m": 0, "15m": 0}; muertas = {"5m": 0, "15m": 0}
+    with open(EJECUTOR_CSV, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            if r.get("timestamp_utc", "") < DESDE_RAMPA or r.get("disparado") != "True" or r.get("dry_run") == "True":
+                continue
+            if r.get("estrategia") not in ("", None, "RESOLUTION_SNIPER_PRECIERRE"):
+                continue
+            mk = "5m" if r.get("marco") == "5min" else ("15m" if r.get("marco") == "15min" else None)
+            if mk:
+                env[mk] += 1
+                muertas[mk] += _FOK_KILL in (r.get("order_error") or "")
+    out = {}
+    for mk, sub in (("5m", "5min"), ("15m", "15min")):
+        g = [r for r in filas if (r.get("subtype") or "").split("#")[-1] == sub]   # OJO: "15min".endswith("5min")
+        por_dia = {}
+        for r in g:
+            d = r["timestamp_utc"][:10]
+            a = por_dia.setdefault(d, [0.0, 0.0])
+            a[0] += float(r["pnl_neto_eur"] or 0); a[1] += float(r["stake_eur"] or 0)
+        pnl = sum(v[0] for v in por_dia.values()); st = sum(v[1] for v in por_dia.values())
+        ev = round(pnl / st, 3) if st else None
+        mejores = sorted(por_dia, key=lambda d: por_dia[d][0], reverse=True)[:2]
+        resto = [v for d, v in por_dia.items() if d not in mejores]
+        ev_sin2 = round(sum(v[0] for v in resto) / sum(v[1] for v in resto), 3) if resto and sum(v[1] for v in resto) else None
+        ult = sorted(g, key=lambda r: r["timestamp_utc"])[-RAMPA["ultimas"]:]
+        st_u = sum(float(r["stake_eur"] or 0) for r in ult)
+        ev_ult = round(sum(float(r["pnl_neto_eur"] or 0) for r in ult) / st_u, 3) if st_u else None
+        ic = _ic90_dias(por_dia)
+        fm = round(muertas[mk] / env[mk], 3) if env[mk] else None
+        gates = {"n>=40": len(g) >= RAMPA["n_min"], "dias>=10": len(por_dia) >= RAMPA["dias_min"],
+                 "EV>=+0,05": ev is not None and ev >= RAMPA["ev_min"], "IC90_dias>0": bool(ic and ic[0] > 0),
+                 "sin_2_mejores>0": ev_sin2 is not None and ev_sin2 > 0,
+                 "FOK_muertas<=20%": fm is not None and fm <= RAMPA["fok_muertas_max"]}
+        out[mk] = {"n": len(g), "dias": len(por_dia), "pnl_eur": round(pnl, 2), "ev_eur": ev, "ic90_dias": ic,
+                   "ev_sin_2_mejores": ev_sin2, "ev_ultimas_20": ev_ult, "enviadas": env[mk], "fok_muertas": muertas[mk],
+                   "fok_muertas_pct": fm, "gates": gates, "listo_para_subir": all(gates.values()),
+                   "bajar_escalon": len(ult) >= RAMPA["ultimas"] and ev_ult is not None and ev_ult < 0}
+    return out
+
+
 def main() -> int:
     fok = _fok_reales()
     sen = _señales()
@@ -128,12 +192,31 @@ def main() -> int:
         e = res[f"{marco}#emparejado"]
         lineas.append(f"  mismos mercados: de {e['senales_T45']} señales a T-45, {e['tambien_a_T47']} también a T-47 "
                       f"(+{e['solo_a_T47']} solo a T-47); ΔEV T-47−T-45 = {e['dif_ev_T47_menos_T45']} (n={e['comunes_resueltos']})")
+    try:
+        rampa = _rampa()
+    except Exception as e:                                   # el informe de offsets no depende de esto
+        rampa = {"error": f"{type(e).__name__}: {e}"}
+    lineas.append(f"📈 RAMPA de stake (desde {DESDE_RAMPA}Z, límite FOK nuevo; 2→5 € con n≥40, ≥10 días, EV≥+0,05, "
+                  "IC90 días>0, >0 sin 2 mejores días, FOK muertas ≤20 %):")
+    if "error" in rampa:
+        lineas.append(f"  ⚠ no se pudo calcular: {rampa['error']}")
+    for mk in ("15m", "5m"):
+        x = rampa.get(mk)
+        if not x:
+            continue
+        falta = [k for k, v in x["gates"].items() if not v]
+        lineas.append(f"  {mk}: {x['n']} órdenes en {x['dias']} días | PnL {x['pnl_eur']:+.2f} € | EV/€ {x['ev_eur']} "
+                      f"IC90 días {x['ic90_dias'] or 'n<3 días'} | sin 2 mejores {x['ev_sin_2_mejores']} | "
+                      f"FOK muertas {x['fok_muertas']}/{x['enviadas']} | "
+                      + ("✅ LISTO para proponer subir a Javi" if x["listo_para_subir"] else f"falta: {', '.join(falta)}")
+                      + (" | 🔻 últimas 20 con EV<0: BAJAR escalón" if x["bajar_escalon"] else ""))
     n15 = res["15m#-47"]["n"]
     lineas.append(f"Estado: {'✅ 15m con n≥40 a T-47 -> LISTO para decidir con Javi' if n15 >= N_DECIDIR else f'EN CURSO (15m T-47 n={n15}/{N_DECIDIR})'}. "
                   "Nada cambia en real sin /code-review medium + OK de Javi.")
     msg = "\n".join(lineas)
     OUT.write_text(json.dumps({"actualizado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                               "fok_reales": fok, "offsets": res}, indent=1, ensure_ascii=False), encoding="utf-8")
+                               "fok_reales": fok, "offsets": res, "rampa": rampa}, indent=1, ensure_ascii=False),
+                   encoding="utf-8")
     print(msg)
     if "--telegram" in sys.argv:
         from shadow_digest import enviar_telegram
