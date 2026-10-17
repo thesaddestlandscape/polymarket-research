@@ -17,7 +17,7 @@ El agente económico no debe limitarse a responder que la cifra no está validad
 
 **Beneficio anual validado actual: 0 €.** La cifra objetivo es un objetivo de diseño y priorización, no una cuota que sesgue los experimentos.
 
-**Restricción de capital real (16-Oct):** bankroll on-chain cripto 34,59 $, `max_stake_eur` live 2,0, calendario sin recargas planificadas, wallet dedicada con tope de pruebas 5 €. Todo escenario que necesite más stake o capital es CONDICIONAL a una decisión de Javi y se etiqueta así; la palanca de capital se modela explícitamente, no se supone.
+**Restricción de capital real (verificado 17-Oct 08:45Z):** wallet PRINCIPAL live cripto 0xB6eD…028b = 39,66 $ libres + 4,51 $ en posiciones (`data/live/balance_real.json`; el 16-Oct eran 34,59 $); wallet DEDICADA de experimentos 0x659a…297F = 19,59 pUSD on-chain, 0 posiciones, tope de pruebas 5 € (Javi 09-Oct). `max_stake_eur` live 2,0, calendario sin recargas planificadas. Leer siempre el saldo fresco: estas cifras caducan. Todo escenario que necesite más stake o capital es CONDICIONAL a una decisión de Javi y se etiqueta así; la palanca de capital se modela explícitamente, no se supone.
 
 La estrategia dedicada a BTC 15m permanece independiente. Puede aportar variables de referencia para 5m, pero no se mezclan universos ni resultados sin demostrar un mecanismo y una comparación correcta.
 

@@ -14,7 +14,7 @@ disallowedTools: Edit, Write
 - Quien te lanza es la sesión principal (rol chief, `misiones/5m_barato/docs/ROL_CHIEF.md`); Javi capitanea y decide.
 - Datos de hecho que el paquete original tenía mal o truncados: F1 → MAKER en el libro ~50 ms, TOMADOR casado ≈215 ms del envío;
   placebo de wallets −0,003; @mo-money 1ª pata ≤0,30 acierta 22,6 % vs precio 17,1 %; «−0,002» = EV de v1/v4 en el periodo de V2;
-  «n=40» de v4 = gate G1 de 40 EJECUTABLES. Capital real: bankroll 34,59 $, stake live máx. 2 €, sin recargas planificadas.
+  «n=40» de v4 = gate G1 de 40 EJECUTABLES. Capital real: wallet PRINCIPAL live (34,59 $ el 16-Oct, 39,66 $ libres el 17-Oct; leer siempre data/live/balance_real.json) y wallet DEDICADA de experimentos 19,59 pUSD con tope de pruebas 5 €, stake live máx. 2 €, sin recargas planificadas.
 - Universo: diseño y decisiones en BTC; v4/V2/V3/V5 son multimoneda tal como se congelaron; V6/V7/FV v4 solo BTC.
 - Bash solo para leer y consultar (salvo cheap5m-execution-engineer). Nunca `pgrep/pkill -f` con un patrón que contenga el propio
   comando. Nunca toques los procesos F2 (`f2_5m_barato_dryrun.py`), `observadores`, ni ningún screen/cron: los gestiona la sesión principal.

@@ -183,7 +183,27 @@ borrar_gz_antiguos data/sports "activity_ws_*.csv"
 
 cd /root/polymarket-research-datalogs
 # 05-Oct: maker_ms_*.csv.gz (registro ms de libro_estado_ws, ~1 GB/día desde 16:20Z, ya nace en gz): retención 4 días.
-find /root/polymarket-research-datalogs -maxdepth 1 -name 'maker_ms_*.csv.gz' -mtime +4 -print -delete
+# 17-Oct (OK Javi): ya NO se borran -- se MUEVEN al volumen (única fuente de la cola por niveles, filas l/L) y allí
+# se borran a 30 días (~1 GB/día). Solo se borra el local si la copia del volumen tiene el mismo tamaño (fail-safe:
+# si la copia falla, el fichero se queda en local y se reintenta mañana).
+MS_VOL=/mnt/HC_Volume_106538179/maker_ms_crudo
+if mkdir -p "$MS_VOL" 2>/dev/null; then
+  find /root/polymarket-research-datalogs -maxdepth 1 -name 'maker_ms_*_*.csv.gz' -mtime +4 -print0 |
+  while IFS= read -r -d '' f; do
+    b=$(basename "$f")
+    if [ ! -f "$MS_VOL/$b" ] || [ "$(stat -c %s "$MS_VOL/$b")" -ne "$(stat -c %s "$f")" ]; then
+      nice -n 19 ionice -c3 cp -p "$f" "$MS_VOL/$b.tmp" && mv "$MS_VOL/$b.tmp" "$MS_VOL/$b"
+    fi
+    if [ -f "$MS_VOL/$b" ] && [ "$(stat -c %s "$MS_VOL/$b")" -eq "$(stat -c %s "$f")" ]; then
+      rm -f "$f" && echo "maker_ms movido al volumen: $b"
+    else
+      echo "⚠ maker_ms NO movido (copia fallida, se queda en local): $b"
+    fi
+  done
+  find "$MS_VOL" -maxdepth 1 -name 'maker_ms_*.csv.gz' -mtime +30 -print -delete
+else
+  echo "⚠ volumen no disponible: maker_ms se quedan en local (no se borran)"
+fi
 # 05-Oct: onchain_fills_*.csv.gz (fetch_polymarket_fills_onchain.py, ~315 MB/día, maker/tomador explícitos): 4 días.
 find /root/polymarket-research-datalogs -maxdepth 1 -name 'onchain_fills_*.csv.gz' -mtime +4 -print -delete
 # 07-Oct: requote_mejora_sombra_*.csv (registro en sombra de live_trade, pocas filas/día): gz a 3 días, borrar a 120 días.

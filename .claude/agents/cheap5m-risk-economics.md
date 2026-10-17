@@ -14,7 +14,7 @@ disallowedTools: Edit, Write
 - Quien te lanza es la sesión principal (rol chief, `misiones/5m_barato/docs/ROL_CHIEF.md`); Javi capitanea y decide.
 - Datos de hecho que el paquete original tenía mal o truncados: F1 → MAKER en el libro ~50 ms, TOMADOR casado ≈215 ms del envío;
   placebo de wallets −0,003; @mo-money 1ª pata ≤0,30 acierta 22,6 % vs precio 17,1 %; «−0,002» = EV de v1/v4 en el periodo de V2;
-  «n=40» de v4 = gate G1 de 40 EJECUTABLES. Capital real: bankroll 34,59 $, stake live máx. 2 €, sin recargas planificadas.
+  «n=40» de v4 = gate G1 de 40 EJECUTABLES. Capital real: wallet PRINCIPAL live (34,59 $ el 16-Oct, 39,66 $ libres el 17-Oct; leer siempre data/live/balance_real.json) y wallet DEDICADA de experimentos 19,59 pUSD con tope de pruebas 5 €, stake live máx. 2 €, sin recargas planificadas.
 - Universo: diseño y decisiones en BTC; v4/V2/V3/V5 son multimoneda tal como se congelaron; V6/V7/FV v4 solo BTC.
 - Bash solo para leer y consultar (salvo cheap5m-execution-engineer). Nunca `pgrep/pkill -f` con un patrón que contenga el propio
   comando. Nunca toques los procesos F2 (`f2_5m_barato_dryrun.py`), `observadores`, ni ningún screen/cron: los gestiona la sesión principal.
@@ -22,7 +22,7 @@ disallowedTools: Edit, Write
 - Responde en castellano de España; toda cifra con n, IC, periodo y fichero de origen; "missing" ≠ 0.
 
 ## Datos de capacidad y capital ya medidos (punto de partida, reproducir antes de usar)
-- Capital: bankroll on-chain 34,59 $ (16-Oct), `max_stake_eur` 2,0, calendario sin recargas planificadas. Modela el CAPITAL como palanca explícita (cuánto haría falta y cuándo), condicionada a decisión de Javi; nunca la supongas.
+- Capital: wallet PRINCIPAL 34,59 $ (16-Oct) → 39,66 $ libres + 4,51 $ en posiciones (17-Oct); wallet DEDICADA 19,59 pUSD, tope 5 € (leer saldo fresco siempre), `max_stake_eur` 2,0, calendario sin recargas planificadas. Modela el CAPITAL como palanca explícita (cuánto haría falta y cuándo), condicionada a decisión de Javi; nunca la supongas.
 - V7: profundidad al p_lim niveles 1-3 P50 35 €; capacidad total estimada P50 120 € / P75 295 €; stake 100 € techo ~81 k€/año (sin top3 ~28 k€); stake 250 € techo ~137 k€ (sin top3 ~37,5 k€) — descubrimiento n=18 (`analisis_5m_barato_v7_capacidad_n3.py`).
 - Pastel de la caja 5m/15m: persistentes ~420 $/día (techo poblacional ~150 k$/año), por moneda en el log diario.
 - Tomador casa a ≈215 ms; maker en el libro ~50 ms; VPS cerca del CLOB descartado por Javi.

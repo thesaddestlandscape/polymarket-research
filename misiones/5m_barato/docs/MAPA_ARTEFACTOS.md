@@ -76,7 +76,7 @@ quién gana del día, pastel de la caja por moneda). Telegram bot=cripto.
 - Pastel de la caja: `analisis_5m_barato_pastel_caja.py` (persistentes de caja ~420 $/día ≈ 150 k$/año como techo poblacional).
 
 ## 7. Capital y límites reales (restricción dura para risk-economics)
-- Bankroll on-chain cripto 16-Oct: **34,59 $** (`data/shadow/estado_actual.md`). `config_live.json::riesgo.max_stake_eur` = 2,0.
+- Bankroll on-chain cripto (wallet PRINCIPAL) 16-Oct: **34,59 $**; 17-Oct 39,66 $ libres + 4,51 $ posiciones; wallet DEDICADA 19,59 pUSD (tope 5 €) (`data/shadow/estado_actual.md`). `config_live.json::riesgo.max_stake_eur` = 2,0.
 - Calendario `project_calendario_200k_11ago2027`: **sin recargas planificadas**. Wallet dedicada de experimentos: tope de pruebas
   5 € (Javi 15-Oct). Cualquier escenario con stake > 2 € o capital > bankroll es CONDICIONAL a una decisión de Javi y se etiqueta así.
 - VPS: solo Helsinki (VPS cerca del CLOB DESCARTADO por Javi 15-Oct).
