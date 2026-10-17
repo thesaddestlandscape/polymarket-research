@@ -75,6 +75,7 @@ Pendiente de decisión de Javi antes de DRY_RUN=False: techo de correlación
 en ráfaga (MAX_DISPAROS_POR_VENTANA) y sizing (peor día 5min -15,6€ a 1€).
 """
 import csv
+import math
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, wait
@@ -341,6 +342,10 @@ ASK_TWAP_MIN, ASK_TWAP_MAX = 0.25, 0.65
 # consciente de Javi, NO gate cumplido (18 celdas miradas para elegirla); protege el kill TWAP.
 # 5min no cambia (ahí no hay edge fuera de la banda). Memoria project_checkpoint_sesion_06oct.
 ASK_TWAP_MAX_POR_MARCO = {"5min": ASK_TWAP_MAX, "15min": 0.85}
+# 17-Oct (OK Javi): margen máximo sobre el ask leído para el límite de la FOK de PRECIERRE TWAP
+# (ver _firmar_enviar_registrar): ese tramo se corta un tick por debajo del techo de banda del
+# marco (banda [min, max) abierta arriba); el límite final es el mayor entre ese y ask*1,05.
+PRECIERRE_FOK_MARGEN_MAX = 0.16
 
 
 def _techo_precio_precierre(marco: str) -> float:
@@ -1056,10 +1061,30 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
     # 06-Oct: con la banda de 15min hasta 0,85 el techo fijo de 0,80 dejaría el límite POR DEBAJO
     # del ask (FOK muerto siempre). Techo = el mayor entre ASK_MAX y el techo de banda del marco,
     # solo para PRECIERRE en modo TWAP (NAIVE ya corta en NAIVE_ASK_MAX_OPERAR=0,80).
+    # (Lo de arriba sigue valiendo para NAIVE; PRECIERRE TWAP ya no usa ask*1,05 como límite:)
+    # 17-Oct (OK Javi): en PRECIERRE TWAP el límite pasa de ask*1,05 a min(ask + 0,16, techo de la
+    # BANDA validada del marco: 5min 0,65, 15min 0,85). 25 FOK reales 29-Sep..17-Oct cruzadas con
+    # precierre_libro_ms y el desenlace oficial: las 9 muertas acertaban 8/9 (rellenadas 8/16) y,
+    # compradas al ask ~600 ms tras el envío (ya barrido por los competidores de T-44,8 s), daban
+    # +0,28 €/€ con fee (n=7 con libro; n<15, decisión de Javi, no gate). Ese ask había subido
+    # +0,03/+0,16 (0,98 en la perdedora): +0,16 rescata 4 ganadoras y sigue matando la perdedora.
+    # El gate de profundidad NO cambia (sigue midiendo liquidez a <=ask*1,05, subconjunto de lo
+    # que alcanza la orden); una FOK marketable casa al precio del libro, no al límite.
     techo_fok = ASK_MAX
     if MODO_TWAP and strategy == STRATEGY:
         techo_fok = _techo_precio_precierre(pre.marco)
     precio_limite_fok = min(round(ask * 1.05, 4), techo_fok)
+    if MODO_TWAP and strategy == STRATEGY:
+        # max(): nunca más estrecho que el límite anterior (/code-review 17-Oct: en 5min con ask
+        # 0,62-0,65 el techo de banda 0,65 quedaba por debajo de ask*1,05). Así el gate de
+        # profundidad (niveles <= min(ask*1,05, techo_fok)) cuenta siempre un SUBCONJUNTO de lo
+        # que la orden alcanza.
+        # Tope = techo de banda − 1 tick (banda abierta arriba: 15min nunca compra a 0,85). Todo se
+        # redondea HACIA ABAJO a 0,01 (lo que ya hacía el cliente con ask*1,05 sin redondear).
+        precio_limite_fok = max(precio_limite_fok,
+                                min(ask + PRECIERRE_FOK_MARGEN_MAX,
+                                    ASK_TWAP_MAX_POR_MARCO.get(pre.marco, ASK_TWAP_MAX) - 0.01))
+        precio_limite_fok = math.floor(precio_limite_fok * 100 + 1e-9) / 100
     if precio_limite_fok < ask:
         # fail-closed: un límite por debajo del ask no puede casar; no se firma ni se envía
         resultado["gate_confirmado"] = False
@@ -1067,7 +1092,7 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
         return resultado
     if precio_limite_fok > ask:
         _log(f"  📈 Límite FOK ensanchado {ask:.4f}→{precio_limite_fok:.4f} "
-             f"(banda de profundidad ya verificada, techo={techo_fok})")
+             f"(profundidad verificada a <={min(ask * 1.05, techo_fok):.4f})")
     resultado["precio_limite_fok"] = precio_limite_fok
     t1 = time.perf_counter()
     try:
@@ -1207,6 +1232,20 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
     # del proyecto.
     if resp is not None:
         filled_price = float(trade_real.get("price", precio_orden)) if trade_real else precio_orden
+        # 17-Oct (/code-review): con el límite hasta ask+0,16 la FOK puede barrer varios niveles y
+        # un solo trade de get_trades() no es el precio medio pagado. resp de post_order trae
+        # makingAmount (USDC) / takingAmount (acciones): su cociente es el VWAP real (verificado
+        # 16-Oct SOL 15m: 2/3,225 = 0,620 = entry_price). Solo se usa si es coherente.
+        try:
+            _mk = float(resp.get("makingAmount") or 0)
+            _tk = float(resp.get("takingAmount") or 0)
+            _p_trade = float(trade_real.get("price")) if trade_real and trade_real.get("price") is not None else None
+            if (_p_trade is not None and _mk > 0 and _tk > 0
+                    and 0 < _mk / _tk <= precio_limite_fok + 0.005
+                    and abs(_mk / _tk - _p_trade) <= PRECIERRE_FOK_MARGEN_MAX + 0.01):
+                filled_price = round(_mk / _tk, 4)
+        except (TypeError, ValueError, AttributeError):
+            pass
         fee_rate_bps = (trade_real.get("fee_rate_bps") if trade_real else None) or 0
         notas = (f"{strategy} {pre.marco} {notas_base} t_envio_rel={resultado['t_envio_rel_cierre_s']}s "
                  f"t_total={resultado['t_total_ms']}ms")
