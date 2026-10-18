@@ -95448,3 +95448,4 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-10-18T21:25:00.213+00:00,1792358700,5min,False,DOGE,Up,,0,,,,,5838367,False,no_fillable_ask=None_ratio=0.0,0.0,,,67.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,2.9509240887028447
 2026-10-18T21:25:00.213+00:00,1792358700,5min,False,BNB,Down,,0,,,,,5838368,False,no_fillable_ask=None_ratio=0.0,0.0,,,69.3,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.5566259985430497
 2026-10-18T21:25:00.213+00:00,1792358700,5min,False,XRP,Down,,0,,,,,5838369,False,no_fillable_ask=None_ratio=0.0,0.0,,,48.6,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.8377555160913501
+2026-10-18T21:29:48.314+00:00,1792359000,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
