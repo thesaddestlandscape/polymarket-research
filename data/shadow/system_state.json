@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-10-18T20:59:55+00:00",
-  "bankroll_sim": 135132.65,
-  "pnl_total": 135112.65,
-  "n_ops": 1064137,
+  "timestamp_utc": "2026-10-18T21:12:58+00:00",
+  "bankroll_sim": 135170.55,
+  "pnl_total": 135150.55,
+  "n_ops": 1064298,
   "win_rate": 0.5721,
   "estrategias_activas": 602,
   "desactivadas": [
@@ -44,7 +44,7 @@
       "n": 437
     }
   ],
-  "brier_medio": 0.2305,
+  "brier_medio": 0.2304,
   "clv_medio": 0.0385,
   "monitor_5min": {
     "ou_5m": {
@@ -60,9 +60,9 @@
       "alerta_proxima": "n=608/400, CLV=-0.030/−0.030"
     },
     "of_decay": {
-      "clv_historico": 0.07,
-      "clv_ult30": 0.1368,
-      "decay_ratio": 1.96
+      "clv_historico": 0.0698,
+      "clv_ult30": 0.104,
+      "decay_ratio": 1.49
     },
     "alertas": []
   }
