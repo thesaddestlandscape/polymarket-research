@@ -59282,3 +59282,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-10-18T16:10:21+00:00,0xe3cd47ef3708322333a8f09a650c07f139e3437c55c67bd9a904dcf78fbbef74,btc-updown-5m-1792339800,BTC,5min,Down,5,0.5,2676.2,0.37,3075.3,0.35,-5.41,1,0,0,0,fuera_de_zona_confirmada
 2026-10-18T16:10:46+00:00,0x74aabeb99dedbdcc312105e5aa543c06af07cb0d8a7b52e33995ff5d09a8b160,sol-updown-5m-1792339800,SOL,5min,Down,2,0.53,69.8,0.52,27.4,0.52,0.0,1,0,0,0,fuera_de_zona_confirmada
 2026-10-18T16:10:49+00:00,0x1b972284f89d2afc8c84a48944bc8132d5c2565b254b92f3bea44a304dce45c0,eth-updown-5m-1792339800,ETH,5min,Down,5,0.52,390.8,0.46,459.9,0.45,-2.17,1,0,0,0,fuera_de_zona_confirmada
+2026-10-18T16:12:46+00:00,0x3ccb1ca85ff0f46510ddd4881b5720ef20777630f16a90b1dd203ce7d5ffcf42,xrp-updown-15m-1792339200,XRP,15min,Down,2,0.81,0.0,0.999,0.0,0.999,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-10-18T16:14:15+00:00,0x40795cacefbe413f44738bba98f3704dd0330dadbb940c3dcbc6eaa98720b58f,doge-updown-5m-1792339800,DOGE,5min,Up,2,0.41,0.0,,0.0,,,0,0,0,0,fuera_de_zona_confirmada
+2026-10-18T16:15:09+00:00,0xde292164504cf713728e96f0ce4100b6a3886938087be07d7095b8adec407e6e,btc-updown-5m-1792340100,BTC,5min,Down,3,0.5,0.0,0.53,0.0,0.55,3.77,0,0,0,0,fuera_de_zona_confirmada
+2026-10-18T16:15:23+00:00,0x2edbe77d207919815e95e1b2f26bab8c1e44b6115cff8d990e0acf6d903cbeea,btc-updown-15m-1792340100,BTC,15min,Down,2,0.41,0.0,0.5,0.0,0.56,12.0,0,0,0,0,fuera_de_zona_confirmada
+2026-10-18T16:15:26+00:00,0xf87b565c7eac3bcb292c1b8ec454a9b2c1a12152ff6934f12f64f5fead5c1ec4,eth-updown-15m-1792340100,ETH,15min,Down,2,0.47,0.0,0.59,0.0,0.59,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-10-18T16:15:34+00:00,0x711a6cb47a9f3f4407d85bf5de0f5faf11a9fc6aa37814404f4544c57b9aac21,eth-updown-5m-1792340100,ETH,5min,Down,2,0.46,0.0,0.71,0.0,0.74,4.23,0,0,0,0,fuera_de_zona_confirmada
+2026-10-18T16:16:39+00:00,0xb3a7e3a7d45132221f0a78761fda9b5bc414d3f579850573a8980db701faa890,eth-updown-4h-1792339200,ETH,240min,Down,2,0.63,0.0,0.71,0.0,0.73,2.82,0,0,0,0,fuera_de_zona_confirmada
