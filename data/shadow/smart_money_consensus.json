@@ -1,45 +1,38 @@
 {
-  "SOL": {
-    "smart_money_consensus": 0.0,
-    "n_trades_smart": 174,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": -0.1719,
-    "n_wallets_smart_ponderado": 5
-  },
   "BTC": {
-    "smart_money_consensus": -0.0239,
-    "n_trades_smart": 461,
+    "smart_money_consensus": -0.0401,
+    "n_trades_smart": 1896,
     "n_wallets_smart": 11,
-    "smart_money_consensus_ponderado": 0.019,
+    "smart_money_consensus_ponderado": -0.0518,
     "n_wallets_smart_ponderado": 11
   },
   "ETH": {
-    "smart_money_consensus": 0.1338,
-    "n_trades_smart": 411,
-    "n_wallets_smart": 7,
-    "smart_money_consensus_ponderado": 0.084,
-    "n_wallets_smart_ponderado": 7
+    "smart_money_consensus": 0.0853,
+    "n_trades_smart": 129,
+    "n_wallets_smart": 5,
+    "smart_money_consensus_ponderado": 0.1344,
+    "n_wallets_smart_ponderado": 5
   },
-  "DOGE": {
-    "smart_money_consensus": -1.0,
-    "n_trades_smart": 7,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -1.0,
-    "n_wallets_smart_ponderado": 2
-  },
-  "BNB": {
-    "smart_money_consensus": -0.8333,
-    "n_trades_smart": 12,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.9857,
-    "n_wallets_smart_ponderado": 2
-  },
-  "XRP": {
-    "smart_money_consensus": 0.3494,
-    "n_trades_smart": 83,
+  "SOL": {
+    "smart_money_consensus": 0.0601,
+    "n_trades_smart": 183,
     "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.3856,
+    "smart_money_consensus_ponderado": 0.002,
     "n_wallets_smart_ponderado": 3
   },
-  "_actualizado": "2026-10-18T07:21:35+00:00"
+  "XRP": {
+    "smart_money_consensus": -0.0909,
+    "n_trades_smart": 11,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -0.347,
+    "n_wallets_smart_ponderado": 1
+  },
+  "DOGE": {
+    "smart_money_consensus": 1.0,
+    "n_trades_smart": 4,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 1.0,
+    "n_wallets_smart_ponderado": 1
+  },
+  "_actualizado": "2026-10-18T08:06:54+00:00"
 }
