@@ -1,23 +1,23 @@
 {
- "generado_utc": "2026-10-18T19:46:22+00:00",
+ "generado_utc": "2026-10-18T19:51:54+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 1346.48,
-   "n": 3,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 11276.18,
-   "n": 4,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 53519.81,
-   "n": 16,
+   "usd_short": 36550.2,
+   "n": 11,
    "imbalance": 1.0
   },
   "60min": {
@@ -29,47 +29,47 @@
  },
  "BTC": {
   "2min": {
-   "usd_long": 2511.54,
-   "usd_short": 120834.41,
-   "n": 29,
-   "imbalance": 0.9593
+   "usd_long": 0.0,
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
-   "usd_long": 2511.54,
-   "usd_short": 546457.64,
-   "n": 45,
-   "imbalance": 0.9908
+   "usd_long": 81.23,
+   "usd_short": 0.0,
+   "n": 1,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 5187.8,
-   "usd_short": 1166460.27,
-   "n": 129,
-   "imbalance": 0.9911
+   "usd_long": 5269.02,
+   "usd_short": 908378.87,
+   "n": 94,
+   "imbalance": 0.9885
   },
   "60min": {
-   "usd_long": 23871.39,
+   "usd_long": 23952.61,
    "usd_short": 1485312.07,
-   "n": 153,
-   "imbalance": 0.9684
+   "n": 154,
+   "imbalance": 0.9683
   }
  },
  "DOGE": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 12746.07,
-   "n": 14,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 42871.41,
-   "n": 22,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 164114.44,
-   "n": 91,
+   "usd_short": 114645.7,
+   "n": 39,
    "imbalance": 1.0
   },
   "60min": {
@@ -82,72 +82,72 @@
  "ETH": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 232806.4,
-   "n": 35,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
-   "usd_short": 601253.98,
-   "n": 54,
-   "imbalance": 1.0
+   "usd_long": 1878.03,
+   "usd_short": 0.0,
+   "n": 4,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 47.04,
-   "usd_short": 2433213.53,
-   "n": 187,
-   "imbalance": 1.0
+   "usd_long": 1878.03,
+   "usd_short": 1451466.64,
+   "n": 126,
+   "imbalance": 0.9974
   },
   "60min": {
-   "usd_long": 47.04,
+   "usd_long": 1925.07,
    "usd_short": 3787510.91,
-   "n": 276,
-   "imbalance": 1.0
+   "n": 280,
+   "imbalance": 0.999
   }
  },
  "SOL": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 271867.38,
-   "n": 53,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
-   "usd_short": 315519.17,
-   "n": 62,
-   "imbalance": 1.0
+   "usd_long": 223.92,
+   "usd_short": 0.0,
+   "n": 1,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
-   "usd_short": 705294.14,
-   "n": 154,
-   "imbalance": 1.0
+   "usd_long": 223.92,
+   "usd_short": 580777.8,
+   "n": 124,
+   "imbalance": 0.9992
   },
   "60min": {
-   "usd_long": 306.57,
+   "usd_long": 530.49,
    "usd_short": 851908.77,
-   "n": 199,
-   "imbalance": 0.9993
+   "n": 200,
+   "imbalance": 0.9988
   }
  },
  "XRP": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 200266.7,
-   "n": 37,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 211350.58,
-   "n": 40,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
-   "usd_long": 6.47,
-   "usd_short": 653298.63,
-   "n": 176,
+   "usd_long": 0.0,
+   "usd_short": 410914.64,
+   "n": 96,
    "imbalance": 1.0
   },
   "60min": {
@@ -159,9 +159,9 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 227,
-  "ultimo_lag_s": 0.53,
-  "max_lag_s": 0.76,
+  "n_muestras": 6,
+  "ultimo_lag_s": 0.49,
+  "max_lag_s": 0.54,
   "media_lag_s": 0.36,
   "umbral_alerta_s": 5.0
  }
