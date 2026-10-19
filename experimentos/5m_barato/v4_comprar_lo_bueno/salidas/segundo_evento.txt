@@ -1,0 +1,16 @@
+mercados con >=2 eventos: 15 de 58 mercados con evento
+L215: ejecutables 8 win 6 PnL 24.57 coste 15.10 EV 1.628
+     BTC 10-10 16:00 Up ask 0.17 acc 11.765 gana True pnl 9.65 resto 209.74
+     BTC 10-08 00:45 Up ask 0.25 acc 9.091 gana True pnl 6.7 resto 67.46
+     BTC 10-10 23:45 Down ask 0.28 acc 7.143 gana True pnl 5.04 resto 105.98
+     BNB 10-17 18:45 Up ask 0.29 acc 5.0 gana True pnl 3.48 resto 280.11
+     BTC 10-11 14:15 Up ask 0.53 acc 5.0 gana True pnl 2.26 resto 256.42
+     DOGE 10-15 14:15 Up ask 0.85 acc 1.67 gana True pnl 0.24 resto 277.31
+     BNB 10-16 13:30 Up ask 0.55 acc 0.01 gana False pnl -0.01 resto 291.96
+     ETH 10-13 10:15 Up ask 0.54 acc 5.0 gana False pnl -2.79 resto 280.69
+    sin la mejor: 1.15 | sin 2 mejores: 0.777
+    días: 7 {'2026-10-08': 6.698930624999999, '2026-10-10': 14.690905078999998, '2026-10-11': 2.262815, '2026-10-13': -2.78694, '2026-10-15': 0.23559525, '2026-10-16': -0.005673250000000001, '2026-10-17': 3.4779349999999996}
+L150: ejecutables 9 win 7 PnL 29.06 coste 20.84 EV 1.394
+L250: ejecutables 6 win 4 PnL 20.86 coste 12.14 EV 1.718
+primer evento de esos mismos mercados, L215 ejecutables 5 win 3 PnL 28.66
+2º evento: win 12 / 15 esperado bajo acierto=precio 7.74 P(X>=w)= 0.0132

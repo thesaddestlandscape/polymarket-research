@@ -1,0 +1,45 @@
+filas 11097 | cobertura desenlace 1.0
+
+##### 0x9783f45ce35f794be38ca47dd0816a5c241383b9  filas 5996  días 10
+ rol x side: {('TOMADOR', True): 5996}
+ monedas: {'BTC': np.int64(5996)}
+ COMPRAS TOMADORAS: fills 5996 unidades 151 coste 66988 $ PnL +18991.9 $ EV/€ ponderado +0.284 | acierto unidades 0.470 precio medio 0.399
+   EV ponderado por día: {'2026-10-09': -0.491, '2026-10-10': 0.668, '2026-10-11': -0.006, '2026-10-12': 0.726, '2026-10-13': 1.806, '2026-10-14': -0.934, '2026-10-15': -0.463, '2026-10-16': -0.007, '2026-10-17': 0.539, '2026-10-18': -0.039}
+   T restante (s) en el fill P10/50/90: [ 83.4 161.2 266.1] | precio P10/50/90: [0.1   0.327 0.77 ]
+   fills/unidad P50/P90: [ 16. 117.] | coste por unidad P50/P90 $: [ 147.4 1289.2]
+   por banda de precio (unidades, EV pond.): {Interval(0.0, 0.2, closed='right'): (62, np.float64(-0.344)), Interval(0.2, 0.4, closed='right'): (31, np.float64(0.426)), Interval(0.4, 0.6, closed='right'): (12, np.float64(0.526)), Interval(0.6, 0.8, closed='right'): (20, np.float64(0.371)), Interval(0.8, 1.0, closed='right'): (26, np.float64(0.093))}
+   por moneda: {'BTC': (5996, np.float64(0.284))}
+ ventas tomadoras: 0 | fills maker: 0
+
+##### 0xe38cc08b122dc5fdf21ebd936059cb47f30def5b  filas 3497  días 10
+ rol x side: {('TOMADOR', True): 3458, ('TOMADOR', False): 39}
+ monedas: {'BTC': np.int64(3497)}
+ COMPRAS TOMADORAS: fills 3458 unidades 102 coste 18130 $ PnL +1859.2 $ EV/€ ponderado +0.103 | acierto unidades 0.510 precio medio 0.461
+   EV ponderado por día: {'2026-10-09': -0.744, '2026-10-10': 0.701, '2026-10-11': -0.733, '2026-10-12': 0.668, '2026-10-13': 0.477, '2026-10-14': -0.854, '2026-10-15': -0.78, '2026-10-16': 0.097, '2026-10-17': 0.596, '2026-10-18': 0.116}
+   T restante (s) en el fill P10/50/90: [ 81.4 179.2 284.1] | precio P10/50/90: [0.26 0.45 0.76]
+   fills/unidad P50/P90: [16.5 94.5] | coste por unidad P50/P90 $: [107.3 438.7]
+   por banda de precio (unidades, EV pond.): {Interval(0.0, 0.2, closed='right'): (9, np.float64(-1.057)), Interval(0.2, 0.4, closed='right'): (37, np.float64(-0.106)), Interval(0.4, 0.6, closed='right'): (30, np.float64(0.387)), Interval(0.6, 0.8, closed='right'): (19, np.float64(0.049)), Interval(0.8, 1.0, closed='right'): (7, np.float64(0.162))}
+   por moneda: {'BTC': (3458, np.float64(0.103))}
+ ventas tomadoras: 39 | fills maker: 0
+
+##### 0xdec35f1d2eece908432f505094f12d34b69e9a52  filas 1027  días 6
+ rol x side: {('TOMADOR', True): 1009, ('MAKER', True): 18}
+ monedas: {'BTC': np.int64(330), 'ETH': np.int64(163), 'XRP': np.int64(157), 'DOGE': np.int64(150), 'SOL': np.int64(121), 'BNB': np.int64(106)}
+ COMPRAS TOMADORAS: fills 1009 unidades 763 coste 20257 $ PnL -180.7 $ EV/€ ponderado -0.009 | acierto unidades 0.832 precio medio 0.841
+   EV ponderado por día: {'2026-10-09': -0.023, '2026-10-10': 0.499, '2026-10-11': 0.008, '2026-10-12': -0.025, '2026-10-13': 0.068, '2026-10-14': -0.034}
+   T restante (s) en el fill P10/50/90: [ 32.5  66.6 119.5] | precio P10/50/90: [0.7   0.91  0.968]
+   fills/unidad P50/P90: [1. 2.] | coste por unidad P50/P90 $: [16.4 57.7]
+   por banda de precio (unidades, EV pond.): {Interval(0.0, 0.2, closed='right'): (43, np.float64(0.425)), Interval(0.2, 0.4, closed='right'): (10, np.float64(-0.785)), Interval(0.4, 0.6, closed='right'): (8, np.float64(0.922)), Interval(0.6, 0.8, closed='right'): (59, np.float64(-0.049)), Interval(0.8, 1.0, closed='right'): (643, np.float64(-0.014))}
+   por moneda: {'BNB': (106, np.float64(-0.011)), 'BTC': (316, np.float64(0.032)), 'DOGE': (150, np.float64(-0.043)), 'ETH': (161, np.float64(-0.055)), 'SOL': (121, np.float64(-0.064)), 'XRP': (155, np.float64(-0.0))}
+ ventas tomadoras: 0 | fills maker: 18
+
+##### 0x27e99389f6fd80cbc414f39a33e58425b3fac5b7  filas 577  días 10
+ rol x side: {('TOMADOR', True): 577}
+ monedas: {'BTC': np.int64(259), 'ETH': np.int64(100), 'SOL': np.int64(75), 'DOGE': np.int64(67), 'BNB': np.int64(42), 'XRP': np.int64(34)}
+ COMPRAS TOMADORAS: fills 577 unidades 147 coste 1349 $ PnL +204.4 $ EV/€ ponderado +0.152 | acierto unidades 0.544 precio medio 0.477
+   EV ponderado por día: {'2026-10-09': 0.337, '2026-10-10': 0.595, '2026-10-11': 0.123, '2026-10-12': 0.152, '2026-10-13': 0.472, '2026-10-14': -0.72, '2026-10-15': 0.233, '2026-10-16': 0.033, '2026-10-17': -0.026, '2026-10-18': -0.13}
+   T restante (s) en el fill P10/50/90: [ 82.7 191.4 284.6] | precio P10/50/90: [0.21 0.44 0.73]
+   fills/unidad P50/P90: [ 2. 10.] | coste por unidad P50/P90 $: [ 4.2 24.8]
+   por banda de precio (unidades, EV pond.): {Interval(0.0, 0.2, closed='right'): (13, np.float64(-0.383)), Interval(0.2, 0.4, closed='right'): (51, np.float64(0.465)), Interval(0.4, 0.6, closed='right'): (40, np.float64(-0.227)), Interval(0.6, 0.8, closed='right'): (32, np.float64(0.356)), Interval(0.8, 1.0, closed='right'): (11, np.float64(0.187))}
+   por moneda: {'BNB': (42, np.float64(0.428)), 'BTC': (259, np.float64(0.519)), 'DOGE': (67, np.float64(-0.128)), 'ETH': (100, np.float64(-0.506)), 'SOL': (75, np.float64(0.256)), 'XRP': (34, np.float64(-0.427))}
+ ventas tomadoras: 0 | fills maker: 0

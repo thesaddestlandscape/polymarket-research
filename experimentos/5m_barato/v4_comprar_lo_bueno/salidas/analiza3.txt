@@ -1,0 +1,73 @@
+n sin huecos 53
+ejec bid15 persiste a +215 (>= bid0-1c): True n 9 gana 4/9
+ejec bid15 persiste a +215 (>= bid0-1c): False n 14 gana 6/14
+noejec bid15 persiste a +215 (>= bid0-1c): True n 18 gana 14/18
+noejec bid15 persiste a +215 (>= bid0-1c): False n 12 gana 9/12
+todas, bid15 persiste a +1000: True 17 12/17
+todas, bid15 persiste a +1000: False 36 21/36
+
+AUC rasgo -> GANA (pos = gana). Sin huecos. IC90 bootstrap
+== todas 53 win 33/53
+   jump15             AUC 0.64 IC90 (0.52, 0.76)  n 33+20
+   o_bid_sz           AUC 0.60 IC90 (0.47, 0.73)  n 33+20
+   o_spread           AUC 0.57 IC90 (0.45, 0.69)  n 33+20
+   c_spread           AUC 0.39 IC90 (0.27, 0.51)  n 33+20
+   c_edad_ask         AUC 0.63 IC90 (0.49, 0.77)  n 33+20
+   o_cambios_1s       AUC 0.61 IC90 (0.47, 0.75)  n 33+20
+   c_cambios_1s       AUC 0.56 IC90 (0.42, 0.7)  n 33+20
+   c_trades_1s        AUC 0.62 IC90 (0.49, 0.73)  n 33+20
+   o_trades_1s        AUC 0.62 IC90 (0.5, 0.74)  n 33+20
+   c_cancel_1s        AUC 0.57 IC90 (0.44, 0.7)  n 33+20
+   margen             AUC 0.61 IC90 (0.47, 0.75)  n 33+20
+   c_ask_sz           AUC 0.46 IC90 (0.33, 0.6)  n 33+20
+   c_bid_sz           AUC 0.73 IC90 (0.61, 0.84)  n 33+20
+   ask0               AUC 0.46 IC90 (0.32, 0.6)  n 33+20
+   bid15_0            AUC 0.46 IC90 (0.32, 0.6)  n 33+20
+   resto              AUC 0.54 IC90 (0.4, 0.67)  n 33+20
+   binR_R1000         AUC 0.68 IC90 (0.55, 0.81)  n 33+20
+   binR_R250          AUC 0.64 IC90 (0.52, 0.76)  n 33+20
+   edad_bid15_prev    AUC 0.33 IC90 (0.2, 0.45)  n 33+20
+   n_bid15_chg_1000   AUC 0.61 IC90 (0.48, 0.74)  n 33+20
+== ejecutables 23 win 10/23
+   jump15             AUC 0.62 IC90 (0.43, 0.8)  n 10+13
+   o_bid_sz           AUC 0.51 IC90 (0.28, 0.73)  n 10+13
+   o_spread           AUC 0.42 IC90 (0.25, 0.6)  n 10+13
+   c_spread           AUC 0.35 IC90 (0.18, 0.54)  n 10+13
+   c_edad_ask         AUC 0.58 IC90 (0.39, 0.78)  n 10+13
+   o_cambios_1s       AUC 0.58 IC90 (0.38, 0.8)  n 10+13
+   c_cambios_1s       AUC 0.53 IC90 (0.33, 0.73)  n 10+13
+   c_trades_1s        AUC 0.63 IC90 (0.45, 0.82)  n 10+13
+   o_trades_1s        AUC 0.60 IC90 (0.42, 0.78)  n 10+13
+   c_cancel_1s        AUC 0.48 IC90 (0.28, 0.7)  n 10+13
+   margen             AUC 0.52 IC90 (0.31, 0.72)  n 10+13
+   c_ask_sz           AUC 0.65 IC90 (0.43, 0.84)  n 10+13
+   c_bid_sz           AUC 0.76 IC90 (0.56, 0.94)  n 10+13
+   ask0               AUC 0.47 IC90 (0.27, 0.67)  n 10+13
+   bid15_0            AUC 0.48 IC90 (0.27, 0.68)  n 10+13
+   resto              AUC 0.62 IC90 (0.42, 0.82)  n 10+13
+   binR_R1000         AUC 0.58 IC90 (0.37, 0.8)  n 10+13
+   binR_R250          AUC 0.65 IC90 (0.47, 0.83)  n 10+13
+   edad_bid15_prev    AUC 0.48 IC90 (0.25, 0.7)  n 10+13
+   n_bid15_chg_1000   AUC 0.53 IC90 (0.32, 0.75)  n 10+13
+
+AUC rasgo -> NO EJECUTABLE (pos = noejec), sin huecos
+   jump15             AUC 0.60 IC90 (0.47, 0.72)  n 30+23
+   o_bid_sz           AUC 0.62 IC90 (0.48, 0.76)  n 30+23
+   o_spread           AUC 0.64 IC90 (0.53, 0.76)  n 30+23
+   c_spread           AUC 0.39 IC90 (0.27, 0.52)  n 30+23
+   c_edad_ask         AUC 0.62 IC90 (0.48, 0.75)  n 30+23
+   o_cambios_1s       AUC 0.56 IC90 (0.42, 0.69)  n 30+23
+   c_cambios_1s       AUC 0.53 IC90 (0.4, 0.66)  n 30+23
+   c_trades_1s        AUC 0.57 IC90 (0.44, 0.69)  n 30+23
+   o_trades_1s        AUC 0.62 IC90 (0.5, 0.74)  n 30+23
+   c_cancel_1s        AUC 0.59 IC90 (0.46, 0.72)  n 30+23
+   margen             AUC 0.35 IC90 (0.22, 0.48)  n 30+23
+   c_ask_sz           AUC 0.37 IC90 (0.24, 0.51)  n 30+23
+   c_bid_sz           AUC 0.70 IC90 (0.57, 0.82)  n 30+23
+   ask0               AUC 0.37 IC90 (0.24, 0.51)  n 30+23
+   bid15_0            AUC 0.32 IC90 (0.2, 0.45)  n 30+23
+   resto              AUC 0.45 IC90 (0.32, 0.58)  n 30+23
+   binR_R1000         AUC 0.75 IC90 (0.63, 0.85)  n 30+23
+   binR_R250          AUC 0.74 IC90 (0.63, 0.83)  n 30+23
+   edad_bid15_prev    AUC 0.26 IC90 (0.15, 0.37)  n 30+23
+   n_bid15_chg_1000   AUC 0.61 IC90 (0.47, 0.73)  n 30+23

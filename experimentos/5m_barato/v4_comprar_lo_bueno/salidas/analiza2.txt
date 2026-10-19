@@ -1,0 +1,36 @@
+hueco de feed (>60 s sin q en una pata antes de t0): 5 [('m_BTC_1791447300_1', 'B', True), ('m_BTC_1791671400_1', 'B', True), ('m_BTC_1792045800_1', 'A', False), ('m_SOL_1792228500_1', 'B', True), ('m_BNB_1792228500_1', 'A', False)]
+  entre ejecutables: 2 (ganan 0 ) entre no ejecutables: 3 (ganan 3 )
+SIN huecos: n 53 win 33 ejec 23 win 10 noejec 30 win 23
+Fisher sin huecos: 0.0218 ejec 10/23 vs noejec 23/30
+
+--- tiempos del consumo en no ejecutables con consumo confirmado (sin huecos)
+nx 30 CONSUMO 16 win 13 | CANCELA 13 win 10 | PARCIAL 1
+CONSUMO: gone ex - trig (ms) n=16 P10/25/50/75/90=4/28/106/164/212
+CONSUMO: gone rx - t0   (ms) n=16 P10/25/50/75/90=5/38/91/165/201
+  consumo (gone) a <100 ms del trigger [exchange]: 8 / 16 | [rx]: 9 / 16
+  consumo (gone) a <145 ms del trigger [exchange]: 11 / 16 | [rx]: 11 / 16
+  consumo (gone) a <175 ms del trigger [exchange]: 13 / 16 | [rx]: 14 / 16
+  consumo (gone) a <200 ms del trigger [exchange]: 14 / 16 | [rx]: 14 / 16
+  consumo (gone) a <215 ms del trigger [exchange]: 15 / 16 | [rx]: 16 / 16
+CANCELA: gone ex - trig (ms) n=13 P10/25/50/75/90=-178/-73/-10/19/58
+CANCELA: gone rx - t0   (ms) n=13 P10/25/50/75/90=17/27/41/58/131
+  cancel/reprice a <100 ms del trigger [exchange]: 12 / 13 | [rx]: 10 / 13
+  cancel/reprice a <145 ms del trigger [exchange]: 12 / 13 | [rx]: 12 / 13
+  cancel/reprice a <175 ms del trigger [exchange]: 13 / 13 | [rx]: 12 / 13
+  cancel/reprice a <200 ms del trigger [exchange]: 13 / 13 | [rx]: 13 / 13
+  cancel/reprice a <215 ms del trigger [exchange]: 13 / 13 | [rx]: 13 / 13
+gone ex<0 (el nivel se fue ANTES del trigger según sello exchange): 8
+
+no ejecutables con barrido previo (>=1 compra <=plim en los 3 s antes del trigger): 17 win 15 | sin barrido previo 13 win 8
+  con barrido previo, tipo: {'CONSUMO': 10, 'CANCELA': 7} | sin: {'CANCELA': 6, 'CONSUMO': 6, 'PARCIAL': 1}
+  sin barrido previo y CONSUMO: ex-trig n=6 P10/25/50/75/90=17/47/51/56/198
+  con  barrido previo y CONSUMO: ex-trig n=10 P10/25/50/75/90=6/15/121/144/176
+trigger 15m_bid noejec 18 win 15 cons 9 cancela 9 | ejec 9 win 5
+trigger 5m_ask noejec 8 win 5 cons 4 cancela 3 | ejec 12 win 4
+trigger otro noejec 4 win 3 cons 3 cancela 1 | ejec 2 win 1
+
+bid15 en t0+215 vs bid15_0: cae 13 igual 8 sube 9
+   ejec: cae 16 igual 5 sube 2
+
+tamaño nivel 1 a t0 (acciones) no ejec: n=30 P10/25/50/75/90=5/5/14/22/64 | ejec: n=23 P10/25/50/75/90=5/10/31/88/338
+nocional nivel 1 $ no ejec: n=30 P10/25/50/75/90=2/2/5/9/25 | ejec: n=23 P10/25/50/75/90=3/4/9/34/99

@@ -1,0 +1,112 @@
+n eventos 58 ejecutables L215 25 no ejecutables 33
+con q5 y q15 en extracto: 58
+
+== TODAS n= 58 win 36
+ trigger: {'5m_ask': 22, '15m_bid': 30, 'otro': 6}
+  feed (t0 rx - exchange del trigger) ms: n=58 P10/P25/P50/P75/P90 = 23/39/49/94/232 min=20 max=767
+  primera compra <=plim DESPUES del trigger, exchange - trig_ex ms: n=48 P10/P25/P50/P75/P90 = 17/66/198/449/43871 min=2 max=138682
+  primera compra, rx - t0 ms: n=48 P10/P25/P50/P75/P90 = 17/57/184/584/43871 min=-39 max=138592
+  ask>plim (rx) - t0 ms: n=58 P10/P25/P50/P75/P90 = 17/58/195/2624/84921 min=4 max=324871
+  consumo ya en curso antes del trigger (cons_pre_n>0): 23 / 58
+  hay compra posterior al trigger: 48 / 58
+
+== NO EJECUTABLES L215 n= 33 win 26
+ trigger: {'15m_bid': 21, '5m_ask': 8, 'otro': 4}
+  feed (t0 rx - exchange del trigger) ms: n=33 P10/P25/P50/P75/P90 = 23/30/42/74/232 min=20 max=501
+  primera compra <=plim DESPUES del trigger, exchange - trig_ex ms: n=24 P10/P25/P50/P75/P90 = 15/47/144/30099/43871 min=2 max=119193
+  primera compra, rx - t0 ms: n=24 P10/P25/P50/P75/P90 = 17/53/144/30227/43871 min=-39 max=119287
+  ask>plim (rx) - t0 ms: n=33 P10/P25/P50/P75/P90 = 7/27/69/144/195 min=4 max=214
+  consumo ya en curso antes del trigger (cons_pre_n>0): 17 / 33
+  hay compra posterior al trigger: 24 / 33
+
+== EJECUTABLES L215 n= 25 win 10
+ trigger: {'5m_ask': 14, 'otro': 2, '15m_bid': 9}
+  feed (t0 rx - exchange del trigger) ms: n=25 P10/P25/P50/P75/P90 = 32/41/61/94/131 min=22 max=767
+  primera compra <=plim DESPUES del trigger, exchange - trig_ex ms: n=24 P10/P25/P50/P75/P90 = 66/165/228/313/31498 min=4 max=138682
+  primera compra, rx - t0 ms: n=24 P10/P25/P50/P75/P90 = 48/158/250/462/31574 min=4 max=138592
+  ask>plim (rx) - t0 ms: n=25 P10/P25/P50/P75/P90 = 244/552/3373/56915/311912 min=220 max=324871
+  consumo ya en curso antes del trigger (cons_pre_n>0): 6 / 25
+  hay compra posterior al trigger: 24 / 25
+
+=== B. tipo de desaparición del nivel <=plim (primera q que lo saca, rx>t0)
+NO EJECUTABLES {'CONSUMO_CONFIRMADO': 16, 'CANCELA_O_RECOTIZA(sin trades)': 16, 'CONSUMO_PARCIAL+CANCELA': 1}
+    CONSUMO_CONFIRMADO n 16 win 13 gone rx-t0: n=16 P10/P25/P50/P75/P90 = 5/38/91/165/201 min=4 max=214 | gone ex-trig: n=16 P10/P25/P50/P75/P90 = 4/28/106/164/212 min=-15 max=237
+    CANCELA_O_RECOTIZA(sin trades) n 16 win 13 gone rx-t0: n=16 P10/P25/P50/P75/P90 = 17/27/44/131/195 min=7 max=196 | gone ex-trig: n=16 P10/P25/P50/P75/P90 = -178/-64/10/87/161 min=-214 max=174
+    CONSUMO_PARCIAL+CANCELA n 1 win 0 gone rx-t0: n=1 P10/P25/P50/P75/P90 = 134/134/134/134/134 min=134 max=134 | gone ex-trig: n=1 P10/P25/P50/P75/P90 = 133/133/133/133/133 min=133 max=133
+EJECUTABLES {'CONSUMO_CONFIRMADO': 17, 'CANCELA_O_RECOTIZA(sin trades)': 4, 'CONSUMO_PARCIAL+CANCELA': 4}
+    CONSUMO_CONFIRMADO n 17 win 9 gone rx-t0: n=17 P10/P25/P50/P75/P90 = 244/648/3373/56577/95797 min=229 max=316929 | gone ex-trig: n=17 P10/P25/P50/P75/P90 = 227/402/3373/56603/95801 min=199 max=316923
+    CANCELA_O_RECOTIZA(sin trades) n 4 win 1 gone rx-t0: n=4 P10/P25/P50/P75/P90 = 220/301/669/3968/3968 min=220 max=3968 | gone ex-trig: n=4 P10/P25/P50/P75/P90 = -647/222/319/4058/4058 min=-647 max=4058
+    CONSUMO_PARCIAL+CANCELA n 4 win 0 gone rx-t0: n=4 P10/P25/P50/P75/P90 = 427/271141/311912/324871/324871 min=427 max=324871 | gone ex-trig: n=4 P10/P25/P50/P75/P90 = 434/271099/311910/324863/324863 min=434 max=324863
+clase vigía L215 x tipo (no ejecutables): {('B', 'CONSUMO_CONFIRMADO'): 3, ('C', 'CONSUMO_CONFIRMADO'): 13, ('B', 'CANCELA_O_RECOTIZA(sin trades)'): 13, ('C', 'CANCELA_O_RECOTIZA(sin trades)'): 3, ('B', 'CONSUMO_PARCIAL+CANCELA'): 1}
+
+=== C. margen de tiempo frente a NUESTRA llegada (ms, + = llegamos antes)
+NO EJECUTABLES cons_rx_t0 - 215: n=24 P10/P25/P50/P75/P90 = -198/-162/-71/30012/43656 min=-254 max=119072 | llegamos antes de la 1ª compra posterior: 7 / 24
+    gone_rx_t0 - 215: n=33 P10/P25/P50/P75/P90 = -208/-188/-146/-71/-20 min=-211 max=-1 | ask sigue en banda a t0+215: 0 / 33
+EJECUTABLES cons_rx_t0 - 215: n=24 P10/P25/P50/P75/P90 = -167/-57/35/247/31359 min=-211 max=138377 | llegamos antes de la 1ª compra posterior: 14 / 24
+    gone_rx_t0 - 215: n=25 P10/P25/P50/P75/P90 = 29/337/3158/56700/311697 min=5 max=324656 | ask sigue en banda a t0+215: 25 / 25
+TODAS cons_rx_t0 - 215: n=48 P10/P25/P50/P75/P90 = -198/-158/-31/369/43656 min=-254 max=138377 | llegamos antes de la 1ª compra posterior: 21 / 48
+    gone_rx_t0 - 215: n=58 P10/P25/P50/P75/P90 = -198/-157/-20/2409/84706 min=-211 max=324656 | ask sigue en banda a t0+215: 25 / 58
+
+=== D. quién consumió (on-chain, tomador del casado que hizo la 1ª compra posterior al trigger)
+eventos con 1ª compra posterior: 48 | con wallet on-chain: 48 | wallets distintas: 38
+  0x9783f45ce3 5 monedas {'BTC': 5} ex-trig ms [6, 66, 126, 198, 228]
+  0xdec35f1d2e 3 monedas {'DOGE': 3} ex-trig ms [174, 244, 257]
+  0xe38cc08b12 3 monedas {'BTC': 3} ex-trig ms [45, 51, 56]
+  0x810828d648 2 monedas {'XRP': 1, 'ETH': 1} ex-trig ms [228, 250]
+  0x05a5741a02 2 monedas {'DOGE': 1, 'BNB': 1} ex-trig ms [144, 31498]
+  0xe557ac974e 1 monedas {'BTC': 1} ex-trig ms [144]
+  0xc53375ff94 1 monedas {'BTC': 1} ex-trig ms [173]
+  0xb4cd4d6fe5 1 monedas {'BTC': 1} ex-trig ms [54]
+  0xa82365c8e8 1 monedas {'BTC': 1} ex-trig ms [15]
+  0xf148e17e19 1 monedas {'BTC': 1} ex-trig ms [55962]
+  0xfb0625f05e 1 monedas {'ETH': 1} ex-trig ms [449]
+  0x5e2b9261b0 1 monedas {'ETH': 1} ex-trig ms [121]
+  named 0x56f609c6 0 []
+  named 0x29efa7c2 0 []
+  named 0x9783f45c 5 [('10-07', 'BTC', 66), ('10-10', 'BTC', 198), ('10-11', 'BTC', 126), ('10-12', 'BTC', 228), ('10-16', 'BTC', 6)]
+  named 0xe38cc08b 3 [('10-10', 'BTC', 56), ('10-11', 'BTC', 51), ('10-16', 'BTC', 45)]
+  named 0x1df41c8f 0 []
+  named 0x6515bf17 1 [('10-11', 'BTC', 17)]
+  named 0x32ed2e54 0 []
+ por día (n con wallet): {'2026-10-06': 2, '2026-10-07': 2, '2026-10-08': 1, '2026-10-09': 3, '2026-10-10': 7, '2026-10-11': 6, '2026-10-12': 6, '2026-10-13': 1, '2026-10-14': 2, '2026-10-15': 3, '2026-10-16': 6, '2026-10-17': 6, '2026-10-18': 3}
+ wallets con >=2: 5 eventos cubiertos por ellas: 15
+
+=== E. precursores (Binance E-clock vs trigger exchange; visibilidad para nosotros = E + ~140 ms)
+TODAS n 58 con onset Binance >=1bp orientado en [-3s,+0.3s]: 17 | anterior al trigger (<0): 17 | con >=255 ms de antelación (visible para nosotros >=115 ms antes del trigger): 13 | tras el trigger: 0
+    onset-trig: n=17 P10/P25/P50/P75/P90 = -2052/-1369/-358/-303/-239 min=-2342 max=-191
+    binE_R250 x10 (bp*10): n=58 P10/P25/P50/P75/P90 = -23/0/0/0/15 min=-137 max=54 | >=+1bp a favor: 7 / 58 | <=-1bp en contra: 7
+    binE_R1000 x10 (bp*10): n=58 P10/P25/P50/P75/P90 = -100/-13/0/2/38 min=-177 max=188 | >=+1bp a favor: 12 / 58 | <=-1bp en contra: 15
+    binR_R1000 x10 (bp*10): n=58 P10/P25/P50/P75/P90 = -98/-13/0/1/38 min=-165 max=197 | >=+1bp a favor: 13 / 58 | <=-1bp en contra: 16
+NO EJEC n 33 con onset Binance >=1bp orientado en [-3s,+0.3s]: 12 | anterior al trigger (<0): 12 | con >=255 ms de antelación (visible para nosotros >=115 ms antes del trigger): 9 | tras el trigger: 0
+    onset-trig: n=12 P10/P25/P50/P75/P90 = -1555/-541/-329/-251/-250 min=-2342 max=-239
+    binE_R250 x10 (bp*10): n=33 P10/P25/P50/P75/P90 = 0/0/0/0/28 min=-16 max=54 | >=+1bp a favor: 6 / 33 | <=-1bp en contra: 1
+    binE_R1000 x10 (bp*10): n=33 P10/P25/P50/P75/P90 = -17/0/0/30/64 min=-35 max=188 | >=+1bp a favor: 10 / 33 | <=-1bp en contra: 5
+    binR_R1000 x10 (bp*10): n=33 P10/P25/P50/P75/P90 = -17/-1/0/28/51 min=-35 max=197 | >=+1bp a favor: 11 / 33 | <=-1bp en contra: 6
+EJEC n 25 con onset Binance >=1bp orientado en [-3s,+0.3s]: 5 | anterior al trigger (<0): 5 | con >=255 ms de antelación (visible para nosotros >=115 ms antes del trigger): 4 | tras el trigger: 0
+    onset-trig: n=5 P10/P25/P50/P75/P90 = -2052/-1806/-1369/-764/-191 min=-2052 max=-191
+    binE_R250 x10 (bp*10): n=25 P10/P25/P50/P75/P90 = -100/-10/0/0/0 min=-137 max=12 | >=+1bp a favor: 1 / 25 | <=-1bp en contra: 6
+    binE_R1000 x10 (bp*10): n=25 P10/P25/P50/P75/P90 = -116/-53/-7/0/2 min=-177 max=13 | >=+1bp a favor: 2 / 25 | <=-1bp en contra: 10
+    binR_R1000 x10 (bp*10): n=25 P10/P25/P50/P75/P90 = -125/-53/-6/0/2 min=-165 max=13 | >=+1bp a favor: 2 / 25 | <=-1bp en contra: 10
+Binance DESPUES del trigger (binE_fwd500, oriented bp):  fwd500 x10: n=58 P10/P25/P50/P75/P90 = -6/0/0/0/4 min=-43 max=24
+  gana binR_R1000 (bp) media 0.347 n 36 | >=+0.5bp 10
+  pierde binR_R1000 (bp) media -2.221 n 22 | >=+0.5bp 3
+
+=== G. señales forzadas por la regla de t_ini (condición ya vigente a C-300+1,5 s)
+n forzadas (t0-apertura <=1,7 s): 5 win 3 clases {'A': 2, 'B': 3}
+   10-07 BTC Down ask 0.52 bid15 0.61 start-open 1512 run_start-t0 0 cls A cons 66 pre 20 gana True
+   10-13 ETH Up ask 0.4 bid15 0.62 start-open -6450 run_start-t0 -7993 cls A cons 228 pre 2 gana False
+   10-15 SOL Down ask 0.47 bid15 0.58 start-open 1283 run_start-t0 -217 cls B cons 119193 pre 7 gana True
+   10-16 XRP Up ask 0.52 bid15 0.59 start-open 1586 run_start-t0 0 cls B cons 36124 pre 0 gana False
+   10-17 BTC Down ask 0.49 bid15 0.57 start-open 315 run_start-t0 -1189 cls B cons 176 pre 5 gana True
+n con inicio latente de la condición >150 ms antes de t0: 3 [('10-13', 'ETH', -7993, -6450), ('10-15', 'SOL', -217, 1283), ('10-17', 'BTC', -1189, 315)]
+
+=== F. maker pre-posicionado (puja de compra puesta en t0-1 s, toque = relleno, SIN cola => cota optimista)
+  join W=2000: llena 15/58 (0.26); gana|llena 10/15; precio medio 0.525; PnL/acc 2.12; EV/€ +0.269
+  join W=10000: llena 20/58 (0.34); gana|llena 11/20; precio medio 0.567; PnL/acc -0.33; EV/€ -0.029
+  join W=60000: llena 23/58 (0.40); gana|llena 12/23; precio medio 0.587; PnL/acc -1.49; EV/€ -0.110
+  mejora W=2000: llena 15/58 (0.26); gana|llena 10/15; precio medio 0.547; PnL/acc 1.80; EV/€ +0.220
+  mejora W=10000: llena 20/58 (0.34); gana|llena 11/20; precio medio 0.583; PnL/acc -0.65; EV/€ -0.056
+  mejora W=60000: llena 24/58 (0.41); gana|llena 13/24; precio medio 0.592; PnL/acc -1.21; EV/€ -0.085
+  referencia: no llenas (ganan) vs llenas:
+    mk_join_10000 llena n 20 win 11 | no llena n 38 win 25
+    mk_mejora_10000 llena n 20 win 11 | no llena n 38 win 25

@@ -5,32 +5,66 @@ peldaño ≥5 de `FLUJO_DE_TRABAJO.md` (micro-real, live, rampa) con su gate sup
 etiquetado. Toda cifra con fecha, n, IC90 por días y fuente. **EV siempre ponderado por € (Σpnl/Σcoste).**
 Unidades: pUSD ($) tal como salen de los ficheros; NO se ha convertido a € (convertir restaría ~10-15 %).
 
-## Resumen — corte 19-Oct 06:50Z (2ª pasada; la 1ª fue el 17-Oct 14:10Z)
+## Resumen — corte 19-Oct 13:30Z (3ª pasada; 2ª = 19-Oct 06:50Z, 1ª = 17-Oct 14:10Z)
 
 | Escenario (anual) | pUSD/año | Cómo se calcula |
 |---|---|---|
 | **Ingreso VALIDADO (peldaño ≥5 de la familia)** | **0** | nada ha llegado al peldaño 5; la familia solo tiene dry-run/forward |
-| Conservador (lo que sigue en pie sin su mejor operación/día) | **0** | V4 sin su mejor operación EV −0,002; H5M sin 2 mejores días +0,006; R5K día 1 −0,275 |
-| Base (15 % del optimista) | **≈ 12 k** | retención observada de estimaciones exploratorias en forward: 11 % (precierre multi-instante +0,089→+0,01), 28 % (H5M +0,142→+0,040 ponderado), ~0 % (15m reposición +0,263→−0,006): media 13 %, se usa 15 % |
-| Optimista NO validado (todo se cumple en su cola favorable, sin doble conteo) | **≈ 78 k** | tomador 4,9 k + H35 alts a 5 acc 9,4 k + R5K 64,2 k (BTC) |
-| Techo teórico si H35 escalara LINEALMENTE a 50 acc (no medido) | ≈ 163 k | 4,9 + 94 + 64,2: aun con TODO a favor queda < 200 k |
-| **Hueco hasta 200 k** | **200.000 validado · ≈ 122 k contra el optimista · ≈ 37 k contra el techo teórico** | |
+| Conservador (lo que sigue en pie sin su mejor operación/día) | **0** | V4 sin su mejor operación −0,002; H5M primeras 5 acc +0,003 (−0,023,+0,026); R5K forward −0,292 |
+| Base (15 % del optimista de V4+H35; R5K = 0) | **≈ 2 k** (antes ≈ 12 k) | retención observada de exploratorias en forward: 11 %, 28 %, ~0 % (+ R5K, 4º caso: el forward de 2 días ya no es compatible con +0,2, p=0,0007); R5K base 0 porque su punto forward es negativo con IC90 por cierre < 0 |
+| Optimista NO validado (cola favorable, sin doble conteo) | **≈ 34 k** (antes ≈ 78 k) | tomador 4,9 k + H35 alts a 5 acc 9,4 k + R5K 19,7 k (BTC, EV +0,065 = el máximo compatible con el forward a p ≥ 0,01 unilateral; antes 64 k a EV +0,212) |
+| Techo teórico si H35 escalara LINEALMENTE a 50 acc (no medido) | ≈ 119 k (antes ≈ 163 k) | 4,9 + 94,3 + 19,7: **aun con TODO a favor queda < 200 k** |
+| **Hueco hasta 200 k** | **200.000 validado · ≈ 166 k contra el optimista · ≈ 81 k contra el techo teórico** | |
 
 Fórmulas (anual = coste/día × EV × 365; fuentes en cada fila): tomador 2,08 ejec/día × 23,4 $ × 0,277 × 365 = 4,9 k;
-H35 alts 354 $/día × 0,073 × 365 = 9,4 k (×10 = 94 k si K=50); R5K 830 $/día × 0,212 × 365 = 64,2 k.
+H35 alts 354 $/día × 0,073 × 365 = 9,4 k (×10 = 94 k si K=50); R5K 830 $/día × 0,065 × 365 = 19,7 k (verificado con
+Python 19-Oct 13:30Z: se por cierre = 0,154 del IC90 del vigía; EV máximo con P(fwd ≤ −0,292 | EV) ≥ 0,01 = +0,065).
 
-**Qué falta, en orden (corte 19-Oct):**
-1. **Edge**: todo es EXPLORATORY. Lo único con IC90 por días > 0 (H5M sin BTC +0,085 (+0,011,+0,145), 10 días) es la
-   POBLACIÓN de makers, no lo que capturaríamos nosotros; y se miró después de ver los datos (post hoc).
-2. **Capacidad (el cuello real)**: 548 €/día = coste-base diario de **11 k$ a EV +0,05, 5,5 k$ a +0,10, 2,7 k$ a +0,20**.
-   Lo medido hoy: tomador 16-49 $/día; H35 alts 354 $/día; R5K 550-830 $/día; la piscina entera de makers ex-BTC mueve
-   35 k$/día (BTC 270 k$/día). Hacen falta 8-31 % de la piscina alt, o capturar ≥1 % de BTC con EV ≥ +0,2.
-3. **Capital**: NO es el cuello de la rotación (exposición simultánea de decenas de $), sí del RIESGO: con el modelo
-   Browniano (ruina 5 %: B = ln20·σ²/(2μ)) y σ = 2,05 por € y fill medido, H35 a K=50 necesita ~0,9 k$ (si el EV es el
-   optimista) a ~6 k$ (si es el base); R5K ~0,3 k$ a ~1,8 k$. Hoy: principal 40,57 $ libres (+1,04 $ en posiciones;
-   `data/live/balance_real.json` 19-Oct 06:30Z, `pusd_onchain` 49,72 → diferencia ~9 $ sin conciliar con `free_usdc`),
-   dedicada 19,59 pUSD (memoria 17-Oct 08:45Z y mensaje del chief; no re-verificada on-chain hoy: la dirección completa
-   solo está en la credencial, que no se lee). Toda rampa es decisión de Javi.
+**Qué falta, en orden (corte 19-Oct 13:30Z):**
+1. **Edge**: todo es EXPLORATORY y hoy ha empeorado: el único con IC90 por días > 0 de la 2ª pasada (H5M sin BTC) es POBLACIÓN, post
+   hoc, y su versión de «llegar el primero» (primeras 5 acc) es +0,003; R5K, el mayor pilar del optimista, tiene forward negativo.
+2. **Capacidad (el cuello real, sigue)**: 548 €/día = coste-base diario de 11 k$ a EV +0,05, 5,5 k$ a +0,10. Lo medido: tomador 16-49 $/día;
+   H35 alts 354 $/día; R5K 550-830 $/día. La única palanca de escala que queda es **H35 con K>5 (×10 = 94 k), que NO está simulado**
+   (columnas x10/x20 vacías) y es lo que H45 mide.
+3. **Capital**: igual que la 2ª pasada (rotación pequeña, riesgo sí). Hoy: principal 41,64 $ libres + 1,04 $ en posiciones
+   (`data/live/balance_real.json` 19-Oct 13:25Z; `pusd_onchain` 50,80 → ~9 $ sin conciliar con `free_usdc`); dedicada 19,59 pUSD (memoria 17-Oct,
+   NO re-verificada: la dirección completa solo está en la credencial, que no se lee). Toda rampa es decisión de Javi.
+
+## Qué ha cambiado en la 3ª pasada (19-Oct 06:50Z → 13:30Z)
+
+Fuentes: `experimentos/5m_barato/validacion_19oct/informe.md` (06:44Z), `h43_auditoria_datos/informe.md` (07:39Z), `v4_comprar_lo_bueno/salidas/*.txt`
+(08:13-08:18Z, SIN informe.md aún), `logs/vigia_5m_barato_r5k.log` (09:31Z), `dev/informes/h47_code_review1_19oct.md` (07:36Z),
+`wallets_18oct/stage1.log` (09:20Z, solo etapa 1). Solo lectura, sin cómputo pesado.
+
+- **H43 R5K, forward del vigía congelado (09:31Z): 2 días (17-18 Oct), 130 unidades, 1.201 $, EV ponderado −0,292, IC90 por cierre (−0,546,−0,040)**;
+  17-Oct −0,28, 18-Oct −0,31; sin top-20 −1,0; el IC90 YA excluye 0 por abajo. Compatibilidad (se 0,154 por cierre): P(fwd ≤ obs | EV real +0,20) = 0,0007;
+  | +0,10 = 0,005; | +0,05 = 0,013; | 0 = 0,029. La reconstrucción del validador (69 u., −0,306 el 18) coincide con el vigía (−0,31).
+  Estado formal: EN CURSO (2/10 días; no se retoca el gate congelado). Auditoría de datos: sin corrupción ni look-ahead; definición única (K cosechable
+  T∈(60,270], completas, día de cierre) deja el in-sample 06-16 en **n=985, +0,201, IC90 días (+0,109,+0,294), 9/11 días +, sin 2 mejores días +0,135, sin top-20 +0,105**
+  (el «+0,212, n=1.010» no se reproduce exacto) y el 17-Oct en −0,190 por cierre (−0,275 por fichero). La regla salió de 24 celdas (≈5 independientes: máximo esperado por azar ≈ +0,10).
+  Pool in-sample+forward por coste = +0,143, pero contaminado por selección: NO se usa. Es un subconjunto BTC de H5M y el 18-Oct fue su peor día: no son confirmaciones independientes.
+  **Efecto en el libro: R5K pasa de 64,2 k (optimista) a 19,7 k, base 0.**
+- **V4 (validador 06:40Z + causalidad 08:18Z), sin cambios de datos: sigue 25 ejecutables / 58 señales / +0,277; sin la mejor operación −0,002; 96 % del PnL en un día.**
+  Hallazgo que reorienta el trabajo: la SEÑAL existe (36/58 = 62,1 % de acierto frente a ask_t0 medio 0,422; «PnL de papel» al ask_t0 +101 € sobre 148 € = +0,685; 94,5 € de ese papel
+  está en las 33 no ejecutables) pero lo ejecutable es selección adversa (ejecutables 10/25 = 40 % a precio 0,397; no ejecutables 26/33 = 78,8 %; Fisher p = 0,003). El rival nos gana siempre:
+  ventaja sobre nuestro casado a L215 (reloj exchange): consumo n=16 p50 179 ms (p10-p90 69-479), cancela/recotiza n=13 p50 263 ms (179-581); 29/29 por >0 ms, 24/29 por ≥100 ms.
+  Es un evento de Binance: movimiento ≥1 bp orientado que EMPIEZA antes del instante en 29,3 % de las 58 señales (13/58 = 22,4 % con ≥255 ms de antelación, IC90 (0,138,0,31)) frente a 8,0 % (7,4 %) de placebo del mismo día/moneda/orientación (n=17.400).
+  Control por margen causal (137.000 filas ejecutables a L215, 06-18 Oct, `controles_margen.txt`): margen en [−0,1,0,025) → EV −0,20/−0,31/−0,28 con IC90 por cierre < 0 (acierto = precio − 3 a −13 pp);
+  margen ≥ 0,025 solo 14 filas/14 cierres (EV +0,21/+0,53, IC90 cruza 0): la condición de V4 casi no se da fuera de los eventos, y en 13-18 Oct no hay ninguna señal ≥0,025 que gane de forma robusta.
+  Lectura: desde este VPS (FOK 213 ms, taker delay 145 ms) la señal NO es capturable como tomador; el techo ≈5 k$/año de la rama tomador se confirma por un camino distinto (la ventaja es 150-300 ms y es estructural).
+  Latencia → EV: L150 +0,415 (31) → L215 +0,277 (25) → L250 +0,062 (22): cae a ≈0 con +35 ms.
+- **H5M población, ponderado por € (validador, 10 días, 20.078 u.)**: +0,040, IC90 días (−0,012,+0,087); por cierre (−0,012,+0,095). **Primeras 5 acciones +0,003, IC90 días (−0,023,+0,026)**;
+  por moneda ponderado: ETH +0,123, BNB +0,091, SOL +0,055, BTC +0,034, DOGE −0,025, XRP −0,069. 18-Oct −0,175 (bootstrap por cierre P(dif ≥0) = 0,0003) sin causa de régimen.
+  Regla de parada propuesta por el validador: 19-21 Oct juntos con media-vigía ≤ +0,05 o ponderado ≤ 0 con IC90 por cierre que no excluye 0 → ruptura desde el 18-Oct. El «CONFIRMADA» del vigía (6/6) es la media de cocientes.
+  (La cifra de la 2ª pasada «IC90 (−0,025,+0,095)» era el IC de la media de días del EV diario; el de Σpnl/Σcoste con bootstrap por días es (−0,012,+0,087). Ambos cruzan 0.)
+- **H47 (micro-órdenes)**: código `experimento_maker_h47.py` + tests en dev; `/code-review` medium #1 (07:36Z) dio 10 hallazgos SIN aplicar (los 4 primeros sesgan justo la tasa de relleno y el acuerdo sim↔real:
+  asentar 0,35 s frente a 1,5 s del harness, `relleno_real` solo desde `c.estado`, gemelo CONS con `t_post = t0`, bucle infinito en 'asentando'). Pendiente: aplicar 1-10 + mutación → 2ª review → OK final de Javi.
+  Aviso del implementador: repegado 35-65 órdenes/puja → B ≈ 8-15 k órdenes, riesgo 429. Javi dio (memoria 19-Oct) OK a A+B con suelo 12 pUSD, y exige OK final antes de enviar. Aún 0 órdenes reales.
+- **Wallets 18-Oct (quién tomó contra los makers)**: SOLO etapa 1 hecha (fills parquet 09-18 Oct, tx 14-18; `stage1.log` 09:20Z). `a1_tomadores`…`a4_estado` escritos pero sin salida: sin informe.
+  El ángulo 7 (quién gana y cómo) sigue sin cifra nueva; es lo que explicaría si el 17-18 Oct fue un cambio de tomadores.
+- **Colocación (modelo)**: sin salida nueva. **Dataset de colocación 17-18 Oct: NO existe** (base_*.csv.gz llega a 16-Oct) mientras los `maker_ms_2026-10-17/18_*.csv.gz` crudos siguen en disco
+  (retención ≈5 d: los de 14-Oct aún están; los de 17-Oct caerán hacia 22-Oct). H45 y el OOS de 17-18 Oct dependen de ellos: **ventana de datos que caduca**.
+- No hay datos nuevos de V2/V3/V5/V6/V7/FV v4/PRECIERRE/15m reposición desde la 2ª pasada (los crons de 04:35-06:13Z ya estaban leídos); no se recalculan.
 
 ## Cambios desde la 1ª pasada (17-Oct 14:10Z)
 
@@ -71,15 +105,15 @@ H35 alts 354 $/día × 0,073 × 365 = 9,4 k (×10 = 94 k si K=50); R5K 830 $/dí
 
 | Subestrategia | Peldaño / estado | EV/€ ponderado (IC90) | n / días | Capacidad medida | Anual (cons / base / opt) | Solape | Siguiente prueba |
 |---|---|---|---|---|---|---|---|
-| **H43 R5K** (maker tras 5.000 acc, **solo BTC**: ninguna otra moneda llega a 5.000) | 2 · EXPLORATORY (24 celdas miradas, 11 días) | descriptivo +0,212 (cierre +0,102/+0,326), sin 2 mejores días +0,141, sin top-20 +0,117; **forward día 1 −0,275 (−0,634/+0,119)** | 1.010 unid./11 d + 61 unid./1 d | 92 unid./día × 9 $ (K=50) = 830 $/día; residual de volumen tras cruzar 5.000: mediana 1.191 acc (p10 134, p90 4.977; 17-Oct, 61 unid.) | 0 / ≈ 9,6 k / 64,2 k | BTC maker (excluye H35 alts) | vigía 09:30Z (forward); fill/cola con micro-órdenes brazo 2 |
-| **H35 DEEP_PEG alts** (ETH k2, SOL k1, XRP k1; elegidos en DESC) | 2 · EXPLORATORY, simulador SIN calibrar (NO_REPRODUCE→criterio v2 post hoc); cola desconocida en ~75 % de pujas | ETH+SOL+XRP k1: DESC +0,076 (−0,128,+0,199) 4/6 d, sin 2 mejores −0,003; **OOS 14-16 +0,067** (−0,121,+0,269) 2/3 d, sin 2 mejores −0,046; 9 días +0,073 (−0,056,+0,153) 6/9, sin 2 mejores +0,030; JOIN mismas monedas OOS +0,022 | 3.050 rellenos / 9 d (OOS 1.088 / 3 d); por moneda OOS: ETH +0,046, SOL +0,066, **XRP +0,121 (+0,020,+0,229) 3/3** | 339 rellenos/día, 354 $/día a 5 acc (29,6 % de las pujas se rellenan); K>5 NO simulado (columnas x10/x20 vacías) | 0 / ≈ 1,4 k / 9,4 k (K=5); 94 k si K=50 (no medido) | maker de banda (lo contiene), H39 | micro-órdenes brazo 1 (calibrar cola) + H45 escala |
+| **H43 R5K** (maker tras 5.000 acc, **solo BTC**: ninguna otra moneda llega a 5.000) | 2 · EXPLORATORY, **forward en contra** (24 celdas miradas, 11 días) | definición única 06-16 Oct: +0,201 días (+0,109,+0,294), sin 2 mejores días +0,135, sin top-20 +0,105; **forward 17-18 Oct (vigía 09:31Z): −0,292, IC90 cierre (−0,546,−0,040)** | 985 unid./11 d + 130 unid./2 d | 92 unid./día × 9 $ (K=50) = 830 $/día; residual de volumen tras cruzar 5.000: mediana 1.191 acc (p10 134, p90 4.977; 17-Oct, 61 unid.) | 0 / **0** / **19,7 k** (EV +0,065 = cota forward al 1 %; antes 64,2 k) | BTC maker (excluye H35 alts); subconjunto BTC de H5M | forward del vigía + regla de parada propuesta (ver pruebas); H46 offline; NO micro-órdenes brazo 2 mientras el forward acumulado sea < +0,05 |
+| **H35 DEEP_PEG alts** (ETH k2, SOL k1, XRP k1; elegidos en DESC) | 2 · EXPLORATORY, simulador SIN calibrar (NO_REPRODUCE→criterio v2 post hoc); cola desconocida en ~75 % de pujas | ETH+SOL+XRP k1: DESC +0,076 (−0,128,+0,199) 4/6 d, sin 2 mejores −0,003; **OOS 14-16 +0,067** (−0,121,+0,269) 2/3 d, sin 2 mejores −0,046; 9 días +0,073 (−0,056,+0,153) 6/9, sin 2 mejores +0,030; JOIN mismas monedas OOS +0,022 | 3.050 rellenos / 9 d (OOS 1.088 / 3 d); por moneda OOS: ETH +0,046, SOL +0,066, **XRP +0,121 (+0,020,+0,229) 3/3** | 339 rellenos/día, 354 $/día a 5 acc (29,6 % de las pujas se rellenan); K>5 NO simulado (columnas x10/x20 vacías) | 0 / ≈ 1,4 k / 9,4 k (K=5); 94 k si K=50 (no medido; H45) | maker de banda (lo contiene), H39 | micro-órdenes brazo 1 (calibrar cola) + H45 escala |
 | **H35 BTC** (DEEP) | REJECTED en sim para BTC | k1 DESC −0,068 (−0,137,−0,007) 1/6 d; OOS −0,011 | 1.703 + 1.069 rellenos | — | 0 | — | fuera de la prueba real |
-| **Maker de banda** (unirse al bid, 5 acc, JOIN) | 2 · línea base | JOIN sim todas las monedas DESC −0,034, OOS +0,022 (+0,032 con rebate); población ponderada 10 d +0,040 (IC90 cruza 0); nuestras primeras 5 acc ≈ +0,007 (10-13 Oct, auditoría 17-Oct) | ~2.000 unid./día | ~2.200 $/día a 5 acc | 0 / ≈ 2 k / ≈ 14 k | contiene a H35/R5K | es la línea base a batir, no se suma |
+| **Maker de banda** (unirse al bid, 5 acc, JOIN) | 2 · línea base | JOIN sim todas las monedas DESC −0,034, OOS +0,022 (+0,032 con rebate); población ponderada 10 d +0,040 (IC90 cruza 0); nuestras primeras 5 acc ≈ +0,007 (10-13 Oct, auditoría 17-Oct) | ~2.000 unid./día | ~2.200 $/día a 5 acc | 0 / 0 / ≈ 0 (primeras 5 acc +0,003, IC90 días (−0,023,+0,026), 10 d; ponderado población +0,040 (−0,012,+0,087)) | contiene a H35/R5K | es la línea base a batir, no se suma |
 | **Modelo de colocación** | 1 · dataset COMPLETE 9/9, modelo sin correr (lo corre otro agente hoy tras 09:15Z) | — | 9 días (DESC 05-10, OOS 14-16) | — | — | todas las maker | gate ≥ +0,05 sobre mejor k de la línea base por moneda, IC90 días y cierre > 0, placebo e inversión peores |
 | **H39 MM-REPOSO** | 1 · PENDING, bloqueada por calibración | ganadoras on-chain +1,1/+1,6 %/€ (2 wallets, 7/7 d OOS) | — | — | — | maker | tras calibrar la cola |
-| **V4 / V2 / V3 / V5 / V6 / V7** (UN solo canal tomador: no se suman) | 4 · FORWARD congelado | V4 OOS +0,277 (−0,356,+1,046), sin top-1 −0,002; V7 n=1; V6 n=3; V2/V3 sin muestra | 25 ejec./12 d (V4) | 2,08 ejec./día; nocional al ask nivel 1 p50 13,6 $, p90 234 $; coste/día 16 $ (tope 10 $/señal), 49 $ (tope 50 $) | 0 / ≈ 0,7 k / **4,9 k** (15 k sin tope por señal) | mismo evento | seguir forward; G1 n≥40 ≈ 26-28 Oct (G4/G6/G7 fallarán salvo cambio); «28-37 k» de V7 y «30 k» de V6 son de descubrimiento y NO cuentan |
+| **V4 / V2 / V3 / V5 / V6 / V7** (UN solo canal tomador: no se suman) | 4 · FORWARD congelado | V4 OOS +0,277 (−0,356,+1,046), sin top-1 −0,002; ejecutables 40 % vs no ejecutables 78,8 % (Fisher p=0,003); rival 150-300 ms por delante; V7 n=1; V6 n=3 | 25 ejec./12 d (V4) | 2,08 ejec./día; nocional al ask nivel 1 p50 13,6 $, p90 234 $; coste/día 16 $ (tope 10 $/señal), 49 $ (tope 50 $) | 0 / ≈ 0,7 k / **4,9 k** (15 k sin tope por señal) | mismo evento | seguir forward; G1 n≥40 ≈ 26-28 Oct (G4/G6/G7 fallarán salvo cambio); «28-37 k» de V7 y «30 k» de V6 son de descubrimiento y NO cuentan |
 | **PRECIERRE** (referencia, fuera de la familia) | 6 · LIVE 2 € | +0,133 (33 órdenes, 17 aciertos, IC90 días cruza 0) | 33 / 19 d con orden | ~1,3 órdenes/día | ~0,12 k a 2 € | — | rampa 5 € solo con ≥40 órdenes post-arreglo (hoy 2) |
-| **H44-H47** (propuestas de esta pasada, ver abajo) | 0 · sin registrar | — | — | — | — | — | el chief decide |
+| **H44-H47** (registradas PENDING en REGISTRO 19-Oct) | 0 · PENDING; H47 en dev con code-review #1 sin aplicar; H44 forward desde 19-Oct | — | — | — | — | — | ver «3 pruebas» 3ª pasada |
 
 ## Cerrado (no reabrir sin mecanismo nuevo)
 Cosechar al abrir (H10/H11/H32/H33), pares maker estáticos, FV v1-v3 y FV v4 tomador, H26 "Binance en contra" (look-ahead),
@@ -141,20 +175,27 @@ creíble; con ella, el offline se vuelve fiable y barato. **Ojo: lo que NO medir
   real | relleno sim) ≥ 0,70 y P(relleno sim | relleno real) ≥ 0,70 y |markout real − sim| ≤ 0,03; si no, el simulador queda
   inválido para variantes dependientes de cola y el hilo maker pasa a «solo dinero real».
 
-## Las 3 pruebas de mayor valor (orden de ejecución)
+## Las 3 pruebas de mayor valor — actualizadas en la 3ª pasada (por € de capacidad en juego)
 
-1. **Micro-órdenes reales, escalón A hoy-mañana y B tras el OK** (arriba). Coste: ingeniería (adaptar harness + diff review) y
-   ≤ 1 $ (A) / EV≈0 ± ~17 $ (B). Gate: el propuesto. Quién: execution-engineer en dev + chief + OK de Javi (decide el presupuesto de pérdida).
-2. **H45 Escala + OOS 17-18 Oct del simulador de H35** (offline, gratis): ¿sigue el EV de DEEP a 25/50 acc y con los 2 días nuevos
-   (incl. el día malo 18-Oct)? Decide si la capacidad maker alt es 9 k o ~90 k/año. Coste: 2 corridas de dataset (~25 min/día) +
-   K en el simulador, turno nocturno 00-06Z con `ulimit -v` 2 GB (si los maker_ms crudos de 17-18 Oct están en el volumen).
-   Quién: execution-engineer. Va ANTES de pedir más stake.
-3. **Forwards gratuitos que sí pueden mover el libro**: R5K (09:30Z, gate ≈ 27-Oct), **H44 vista alt de H5M** (nuevo, ≈ 29-Oct) y
-   V4 (G1 ≈ 26-28 Oct). Coste ≈ 0 (H44 son ~20 líneas sobre los `unidades_*.csv.gz`). Quién: chief (cron externo, no toca los
-   vigías congelados). Son lo único que puede subir el escenario conservador por encima de 0 sin dinero.
+Criterio: capacidad anual que la prueba puede confirmar o matar ÷ coste. Con el techo ahora en ≈119 k, de los cuales 94 k son H35 a K=50 (no medido),
+**la prueba que decide si el hilo puede acercarse a 100 k es la de escala, y es gratis y caduca.**
 
-Colocación (modelo) corre hoy tras 09:15Z por otro agente: su salida decide la política de las pujas de B (qué t_q y k), pero
-NO sustituye a la 1: sin calibración un +0,05 en simulación no es un +0,05 real.
+1. **H45 · H35-ESCALA + OOS 17-18 Oct (offline, ≈0 €, URGENTE)**. Construir el dataset de colocación de 17 y 18 Oct (no existe: `m5_maker_colocacion/base_*` llega a 16-Oct)
+   con los `maker_ms_2026-10-17/18_*.csv.gz` crudos antes de que roten (≈22-Oct), con K = 5/25/50 acc en el simulador (hoy las columnas x10/x20 están vacías).
+   Gate (ya en REGISTRO H45): EV(25) ≥ EV(5) − 0,03 y rellenos×coste ≥ 4× el de 5 acc; EV(25) ≤ 0 ⇒ capacidad H35 ≈ 9 k y el hilo maker alt queda cerrado como camino a 200 k.
+   Valor: decide 9 k frente a ≈94 k (el 79 % del techo). Lo que NO resuelve: simulador sin calibrar (eso es H47). 18-Oct entra como día de estrés (H5M −0,175).
+   Coste/quién: execution-engineer, 1 solo trabajo pesado, turno 00-06Z, `nice -n 19 ionice -c3`, `ulimit -v` 2 GB, MemAvailable > 2,5 GB y load < 16 (hoy load ≈10, MemAvail 2,7 GB: de día no).
+2. **H47 · SIM-REAL, escalón A y luego B (≤1 $ y luego EV≈0 ± ~17 $)**. Bloqueos concretos: aplicar los 10 hallazgos de la review #1 (los 1-4 sesgan la tasa de relleno y el acuerdo sim↔real), tests de mutación, review #2, OK final de Javi.
+   Gate fijado (±8 pp tasa, acuerdo ≥0,70 en ambas direcciones, markout ±0,03). Expectativa honesta: el maker pequeño de población vale ≈ +0,003 en las primeras 5 acc, así que H47 validará o invalidará la
+   MAQUINARIA y el simulador, no creará EV; si el simulador falla, el 9,4 k de H35 y el 94 k pasan a «solo dinero real». Añadir al diseño: contar cuántas pujas B se rellenan en los ~2 s previos a un movimiento adverso (selección adversa real)
+   y guardar el rebate cobrado por relleno (única forma de verificar el 0,2). Quién: execution-engineer + chief + Javi (presupuesto de pérdida explícito, N fijo = 230 pujas, parada solo por suelo 12 pUSD).
+3. **Parada de atención de R5K + H46 offline (≈0 €)**. (a) Regla adicional pre-registrada (NO cambia el gate formal del vigía): si al 24-Oct (≥7 días de forward) el EV ponderado acumulado tiene IC90 por cierre con límite superior < +0,05,
+   R5K pasa a REJECTED como camino a escala y se retira el brazo 2 de las micro-órdenes; si el acumulado sube a ≥ +0,05 con ≥ 400 unidades, vuelve al libro. Hoy: 130 u., límite superior −0,040. (b) H46 (R5K normalizado por moneda en ETH/SOL/XRP) como
+   lectura de solo lectura sobre `m5_onchain` con el cuantil fijado en DESC 05-10: es la variante que la directiva de Javi pide ante el negativo y solo tiene sentido si la dosis-respuesta existe fuera de BTC. Gate de H46 intacto (≥40 u., ≥10 días, EV ≥ +0,05, IC90 cierre > 0, sin top-20 > 0).
+   (c) Terminar la etapa 2 de wallets 18-Oct (a1-a4, 0 €): ¿cambió el perfil de tomadores el 17-18 Oct? Si sí, es régimen y no azar, y afecta a R5K, H5M y H35 a la vez.
+
+Quedan como seguimiento gratuito (no pruebas nuevas): H44 (H5M ex-BTC, ≈29-Oct), regla de ruptura de H5M 19-21 Oct (media-vigía ≤ +0,05 o ponderado ≤ 0), V4 G1 (≈26-28 Oct; se espera que NO pase G4/G6/G7).
+Colocación (modelo) sigue sin correr; su salida decide t_q y k de las pujas de B pero no sustituye a H47.
 
 ## Hipótesis nuevas falsables (propuestas; solo el chief las registra)
 
@@ -172,10 +213,18 @@ NO sustituye a la 1: sin calibración un +0,05 en simulación no es un +0,05 rea
   solo lectura sobre `m5_onchain` (patrón `vendedores_tardios_17oct`).
 - **H47 · SIM-REAL (la calibración como hipótesis)**. Regla fijada arriba: 230 pujas reales H35 vs el simulador CONS reproduciendo
   las mismas decisiones; gate de acuerdo (±8 pp, 0,70/0,70, markout ±0,03). Falsable: si falla, el hilo maker offline se cierra.
+- **H48 · R5K-PARADA (regla de atención, 3ª pasada; no toca el vigía)**. Con el forward del vigía H43 congelado: al 24-Oct (≥7 días) si el IC90 por cierre del EV ponderado acumulado tiene límite superior < +0,05 → REJECTED como camino a escala y fuera del brazo 2 de micro-órdenes;
+  si ≥ 400 unidades y EV ≥ +0,05 con IC90 cierre > 0 → vuelve al libro. Hoy 130 u., (−0,546,−0,040). Coste 0.
+- **H49 · V4-GUARDA (solo si el chief quiere aprovechar el hallazgo del 19-Oct)**. La señal de V4 (62 % de acierto frente a ask 0,42) ES información; el rival la cobra a 150-300 ms. Variante con mecanismo distinto, no tomador: usar el evento V4 (bid15(s) − ask5(s) − fee ≥ 0,05) como DISPARADOR DE CANCELACIÓN/REPEGADO
+  de las pujas H35 abiertas de la misma moneda (aprox. H34) y medir en el simulador el EV de las pujas vivas con y sin evento en los ~2 s previos al relleno (prueba justa: apartar solo lo que llega antes del relleno; trampa del 07-Oct de simuladores que cancelan «para siempre»). Gate: EV(sin evento) − EV(con evento) ≥ +0,05 con IC90 cierre > 0, ≥ 40 rellenos con evento. Coste: offline sobre el dataset de H45.
 - (Nota, no es hipótesis de la familia) **Universo**: repetir la regla congelada de 15m reposición en ETH/SOL/XRP como vista de
   población (BTC 15m forward −0,006, pero en 5m las alts rinden más que BTC). Solo si el chief quiere ampliar al 15m.
 
 ## Se puede descartar ya (como camino a 200 k)
+
+- **R5K como pilar de escala (64 k)**: forward −0,292 (IC90 cierre (−0,546,−0,040), 130 u.) y regla elegida entre 24 celdas; solo sobrevive como cola ≤ 19,7 k hasta que el forward acumulado diga otra cosa. **No gastar micro-órdenes del brazo 2.**
+- **«Comprar lo bueno» de V4 como tomador desde este VPS**: el rival llega 150-300 ms antes (29/29) porque el movimiento de Binance empieza antes del instante; no hay forma de acortar los 213 ms del FOK ni de cancelar durante el taker delay (cerrado 14-Oct) ni VPS cerca (descartado por Javi). Se mantiene solo la señal como guarda del maker (H34).
+- **El «CONFIRMADA» de H5M como evidencia de ventaja de un maker pequeño** (media de cocientes): ponderado +0,040 con IC que cruza 0, primeras 5 acc +0,003.
 
 - **Toda la rama tomador (V2, V3, V5, V6, V7) como palanca de escala**: aun con EV +0,277 el techo por profundidad es ≈5 k$/año
   (15 k sin tope por señal). Se queda el cron; no gastar más atención diaria. Las cifras de descubrimiento (V6 30 k, V7 28-37 k)
@@ -196,8 +245,19 @@ NO sustituye a la 1: sin calibración un +0,05 en simulación no es un +0,05 rea
    mientras no haya forward.
 4. **Vigía «CONFIRMADA» por media de unidad**: H5M 6/6 gates con +0,121, ponderado +0,040 con IC90 por días (−0,025,+0,095).
 5. «Revive» de V7 (6 mercados, +6,49 €) no es del vigía formal (n=1): citar siempre el informe del hash.
+6. **EV de la cola favorable dependiente de la cola equivocada**: el 64 k de R5K salía de EV +0,212 (24 celdas, 11 días) sin acotar con el forward; con 2 días ya es incompatible con +0,2 (p=0,0007). Acotar siempre el escenario optimista con la verosimilitud del forward disponible (EV máximo con P ≥ 0,01), no con el punto exploratorio.
+7. **Señal real ≠ señal capturable**: V4 tiene 62 % de acierto frente a 42 % de precio en las 58 señales y aun así el ejecutable acierta 40 % = precio (Fisher p=0,003): cobrar la señal exige llegar antes que un rival que gana por 150-300 ms. Medir siempre capturado/papel (aquí 30 % de las ganadoras) y a quién se cede el resto.
+8. **Dos ICs distintos para «ponderado por € a 10 días»** (media de los EV diarios con t de Student vs bootstrap por días de Σpnl/Σcoste): (−0,025,+0,095) frente a (−0,012,+0,087). Decir cuál; ninguno excluye 0.
 
-## Fuentes (todas leídas/recalculadas el 19-Oct 06:10-06:55Z, solo lectura, `ulimit -v 1500000`)
+## Fuentes
+
+**3ª pasada (19-Oct 13:15-13:40Z, solo lectura, sin cómputo pesado; cuentas en Python ligero):** `experimentos/5m_barato/validacion_19oct/informe.md`; `h43_auditoria_datos/informe.md` (+ `a7_cierre_final.py`);
+`v4_comprar_lo_bueno/salidas/{final_tablas,final2,segundo_evento,placebo_bin,controles_margen,margen_pre,chk_onchain,analiza3}.txt` (sin informe.md);
+`logs/vigia_5m_barato_r5k.log` (09:31Z), `logs/vigia_5m_barato_maker_forward.log`, `logs/vigia_5m_barato_forward.log`; `/root/polymarket-research-dev/informes/h47_code_review1_19oct.md`;
+`experimentos/5m_barato/wallets_18oct/stage1.log`; `datalogs/maker_ms_2026-10-1*.csv.gz` (ls: existen 14-19 Oct) y `datalogs/m5_maker_colocacion/` (ls: base hasta 16-Oct);
+`data/live/balance_real.json` (ts 2026-10-19T13:25:09Z). se/p de R5K: Python propio, IC90 del vigía con normal (z=1,645).
+
+**2ª pasada (todas leídas/recalculadas el 19-Oct 06:10-06:55Z, solo lectura, `ulimit -v 1500000`):**
 
 H5M: `/root/polymarket-research-datalogs/vigia_5m_barato_maker/unidades_2026-10-09..18.csv.gz` (recalculado: ponderado por € y por días,
 t(9)=1,833) y `logs/vigia_5m_barato_maker_forward.log`. V4/V2/V3: `logs/vigia_5m_barato_forward.log`, `_v2_`, `_v3_`; capacidad:

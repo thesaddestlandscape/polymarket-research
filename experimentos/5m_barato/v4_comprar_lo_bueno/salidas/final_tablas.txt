@@ -1,0 +1,17 @@
+== PAREADO por latencia (58 señales; PnL total en €, unidad = señal, stake oficial 2 €/5 acc mín)
+  L150: comunes con L215 25 (PnL a L150 15.63 vs a L215 15.76) | solo a L150: n 6 gana 6 PnL 14.82 | solo a L215: n 0 gana 0 PnL 0
+  L175: comunes con L215 25 (PnL a L175 16.38 vs a L215 15.76) | solo a L175: n 3 gana 3 PnL 6.0 | solo a L215: n 0 gana 0 PnL 0
+  L200: comunes con L215 25 (PnL a L200 16.23 vs a L215 15.76) | solo a L200: n 2 gana 2 PnL 4.14 | solo a L215: n 0 gana 0 PnL 0
+  L225: comunes con L215 24 (PnL a L225 13.29 vs a L215 13.14) | solo a L225: n 0 gana 0 PnL 0 | solo a L215: n 1 gana 1 PnL 2.61
+  L250: comunes con L215 22 (PnL a L250 3.11 vs a L215 3.11) | solo a L250: n 0 gana 0 PnL 0 | solo a L215: n 3 gana 2 PnL 12.65
+
+V4 L215 todas: n 25 PnL 15.76 coste 56.98 EV 0.277 | sin los 5 huecos de feed: n 23 PnL 20.00 coste 52.73 EV 0.379
+  sin huecos: sin la mejor operación 0.082
+
+== Ventaja del competidor sobre NUESTRO casado a L215 (ms; + = nos ganan por esos ms), reloj exchange: feed_ms+215 - t_evento_ex_desde_trigger
+  CONSUMO: n=16 P10/25/50/75/90=69/120/179/284/479  | nos ganan por >0 ms: 16/16; por >=100 ms: 12; por >=200: 7
+  CANCELA/RECOTIZA: n=13 P10/25/50/75/90=179/222/263/535/581  | nos ganan por >0 ms: 13/13; por >=100 ms: 12; por >=200: 11
+
+== wallets que consumen (no ejecutables, sin huecos, con compra posterior al trigger)
+  eventos 23 wallets 20 [('0xe38cc08b', 3), ('0x9783f45c', 2), ('0xc53375ff', 1), ('0xa82365c8', 1), ('0x5e2b9261', 1), ('0xc0145123', 1)]
+CSV escrito /root/polymarket-research/experimentos/5m_barato/v4_comprar_lo_bueno/cronologia_58_senales.csv 58
