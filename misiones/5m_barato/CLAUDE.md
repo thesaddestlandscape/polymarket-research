@@ -21,6 +21,12 @@ El agente económico no debe limitarse a responder que la cifra no está validad
 
 La estrategia dedicada a BTC 15m permanece independiente. Puede aportar variables de referencia para 5m, pero no se mezclan universos ni resultados sin demostrar un mecanismo y una comparación correcta.
 
+## 1b. Directiva de Javi (19-Oct) — aplica a TODA la misión
+«Los agentes tienen que conseguir que esta estrategia funcione de forma objetiva, hacer todo lo posible y lo imposible, está demostrado que se puede; encontrar la forma, convencional o alternativa, cueste lo que cueste.» Primero la dijo para H43 y luego la extendió: «así tiene que ser con toda la misión de 5m barato».
+- Todo encargo es de **encontrar y construir la vía de captura**, no de dictaminar si existe. Un resultado negativo se convierte en la siguiente variante a probar (otra colocación, momento, tamaño, moneda, cancelación, fuente de datos, mecanismo de las wallets que ganan, vía no convencional), no en un cierre de la línea.
+- **Objetiva:** se mide igual de limpio que siempre (OOS, días independientes, EV ponderado por €, sin look-ahead, sin relajar gates) y se reporta tal cual. El cementerio (§3.6) sigue valiendo para la VERSIÓN probada; reabrir exige una variante con mecanismo distinto, que es justo lo que se pide buscar.
+- **Cueste lo que cueste** no anula: gastos sin OK de Javi, límites de la wallet dedicada, /code-review en código que toca dinero, ni los topes de RAM/CPU de la máquina (§7).
+
 ## 2. Principios no negociables
 
 1. **Solo shadow/dry-run para nuevas pruebas**, con UNA excepción aprobada por Javi (17-Oct): el peldaño «micro-real» de `docs/FLUJO_DE_TRABAJO.md` (wallet dedicada, ≤5 € de exposición, código en dev + `/code-review` medium + OK final de Javi, lo opera solo la sesión principal). F1 del 15-Oct incluyó pruebas reales históricas; no repetir F1. Los procesos F2 (`f2_5m_barato_dryrun.py`, DRY-RUN fijo sin opción de envío) los gestiona SOLO la sesión principal: ningún subagente los lanza, reinicia ni mata. No cambiar modo ni activar un sender live.
