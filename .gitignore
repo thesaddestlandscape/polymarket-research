@@ -215,3 +215,15 @@ data/shadow/ask_real_por_senal.csv
 data/sports/wallet_mirror_sniper_dry_run.csv
 data/shadow/perps_precios_1m/
 data/shadow/perps_klines_1h/
+
+# 19-Oct: CSV fase0 que crecen sin parar (>40MB, re-commiteados enteros cada ciclo; ya_decidido_universal pasó de 100MiB y bloqueó el push)
+/data/shadow/ya_decidido_universal_fase0.csv
+/data/shadow/ya_decidido_ws_fase0.csv
+/data/shadow/negrisk_arb_fase0.csv
+/data/shadow/libro_multinivel_fase0.csv
+/data/shadow/fade_depth_universal_fase0.csv
+/data/shadow/sports_sniper_cierre_fase0.csv
+/data/shadow/p33_maker_fillability_fase0.csv
+/data/shadow/escaleras_cierre_ws_fase0.csv
+/data/shadow/saltos_chainlink_fase0.csv
+/data/shadow/candidata10_confirmacion_cruzada_reactivo_fase0.csv
