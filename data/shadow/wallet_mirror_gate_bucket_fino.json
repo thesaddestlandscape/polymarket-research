@@ -35,11 +35,11 @@
     "hi": 0.09,
     "n": 41,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.95,
+    "diff_vs_resto": -0.9497,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.95,
-      -0.95
+      -0.9497,
+      -0.9497
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -58,34 +58,11 @@
     "veredicto": "malo_confirmado"
   },
   "SEGUIR#ETH#60min#0": {
-    "n_dias": 14,
-    "pnl_sin_mejores_dias": -0.8821,
-    "robusto_dias": false,
-    "lo": 0.19,
-    "hi": 0.24,
-    "n": 40,
-    "pnl_medio": -0.6707,
-    "diff_vs_resto": -0.6101,
-    "p_valor": 0.048,
-    "split_half_diff": [
-      -0.5176,
-      -0.7026
-    ],
-    "split_half_ok": true,
-    "pnl_medio_loo": -0.7837,
-    "robusto_loo": true,
-    "ci90_bootstrap": [
-      -0.8969,
-      -0.3475
-    ],
-    "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 77,
-    "veredicto_crudo_hoy": "malo_confirmado",
+    "veredicto": "sin_concluir",
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-10-19",
-    "veredicto": "malo_confirmado"
+    "fecha_historial": "2026-10-19"
   },
   "SEGUIR#BTC#60min#1": {
     "veredicto": "sin_concluir",
@@ -102,11 +79,11 @@
     "hi": 0.07,
     "n": 52,
     "pnl_medio": 2.9934,
-    "diff_vs_resto": 2.9851,
+    "diff_vs_resto": 2.9847,
     "p_valor": 0.0,
     "split_half_diff": [
-      3.7364,
-      2.2339
+      3.7359,
+      2.2335
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 2.1542,
@@ -165,24 +142,24 @@
   },
   "SEGUIR#BTC#240min#0": {
     "n_dias": 20,
-    "pnl_sin_mejores_dias": 0.2286,
+    "pnl_sin_mejores_dias": 0.1993,
     "robusto_dias": true,
     "lo": 0.36,
     "hi": 0.41,
-    "n": 51,
-    "pnl_medio": 0.3787,
-    "diff_vs_resto": 0.4473,
-    "p_valor": 0.025,
+    "n": 52,
+    "pnl_medio": 0.3522,
+    "diff_vs_resto": 0.4207,
+    "p_valor": 0.0335,
     "split_half_diff": [
-      0.6665,
+      0.6051,
       0.2364
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 0.4063,
+    "pnl_medio_loo": 0.3787,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.089,
-      0.6694
+      0.0621,
+      0.635
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 59,
@@ -266,24 +243,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 47,
-    "pnl_sin_mejores_dias": -0.6073,
+    "pnl_sin_mejores_dias": -0.6084,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 1195,
-    "pnl_medio": -0.4386,
-    "diff_vs_resto": -0.4113,
+    "n": 1198,
+    "pnl_medio": -0.44,
+    "diff_vs_resto": -0.4124,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.476,
-      -0.3468
+      -0.4774,
+      -0.3475
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.5164,
+    "pnl_medio_loo": -0.5177,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.68,
-      -0.1711
+      -0.6615,
+      -0.1729
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -303,10 +280,10 @@
     "n": 240,
     "pnl_medio": -0.3169,
     "diff_vs_resto": -0.3057,
-    "p_valor": 0.0115,
+    "p_valor": 0.006,
     "split_half_diff": [
       -0.4616,
-      -0.1498
+      -0.1499
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.3578,
@@ -364,34 +341,11 @@
     "fecha_historial": "2026-10-07"
   },
   "SEGUIR#ETH#5min#1": {
-    "n_dias": 16,
-    "pnl_sin_mejores_dias": -0.5127,
-    "robusto_dias": false,
-    "lo": 0.38,
-    "hi": 0.43,
-    "n": 41,
-    "pnl_medio": -0.3482,
-    "diff_vs_resto": -0.2966,
-    "p_valor": 0.0415,
-    "split_half_diff": [
-      -0.3362,
-      -0.259
-    ],
-    "split_half_ok": true,
-    "pnl_medio_loo": -0.395,
-    "robusto_loo": true,
-    "ci90_bootstrap": [
-      -0.5915,
-      -0.0466
-    ],
-    "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 59,
-    "veredicto_crudo_hoy": "malo_confirmado",
+    "veredicto": "sin_concluir",
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-10-19",
-    "veredicto": "malo_confirmado"
+    "fecha_historial": "2026-10-19"
   },
   "SEGUIR#DOGE#5min#0": {
     "veredicto": "sin_concluir",
