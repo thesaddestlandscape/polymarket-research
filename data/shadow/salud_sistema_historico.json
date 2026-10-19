@@ -1,47 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-04T08:27:59+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 111,
-      "resolve_postmortem_p50_s": 7.0,
-      "resolve_postmortem_p95_s": 43.0,
-      "resolve_postmortem_max_s": 2728.0,
-      "n_ciclos_live_trade": 1371,
-      "hueco_live_trade_max_s": 1909.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 24,
-      "stale": [
-        "ballenas_5m",
-        "favaltaconv"
-      ]
-    },
-    "disco": {
-      "pct_usado": 96.0,
-      "gb_libres": 3.08,
-      "git_gb": 33.17,
-      "data_gb": 15.81,
-      "datalogs_gb": 2.04
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.8,
-      "ram_pct_libre": 48.4
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 383,
-      "n_results_total": 66993
-    },
-    "anomalias": [
-      "⏱️ ciclo resolve+postmortem tardó 2728s (umbral 120s)",
-      "⚠️ screens STALE (código en disco != código cargado): ballenas_5m, favaltaconv",
-      "💾 disco al 96% (3.08GB libres)"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-04T14:38:34+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 143,
@@ -12403,6 +12361,159 @@
     },
     "anomalias": [
       "⏱️ ciclo resolve+postmortem tardó 455s (umbral 400s)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-19T07:57:00+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 35,
+      "resolve_postmortem_p50_s": 173.0,
+      "resolve_postmortem_p95_s": 324.4,
+      "resolve_postmortem_max_s": 456.3,
+      "resolve_postmortem_duraciones_s": [
+        192.5,
+        153.8,
+        118.8,
+        110.1,
+        124.8,
+        288.5,
+        242.3,
+        124.9,
+        127.2,
+        124.6,
+        164.6,
+        242.0,
+        162.6,
+        145.7,
+        149.5,
+        173.0,
+        162.5,
+        183.7,
+        184.1,
+        185.5,
+        132.9,
+        152.2,
+        142.6,
+        211.1,
+        200.8,
+        167.5,
+        196.7,
+        187.5,
+        193.2,
+        269.3,
+        315.9,
+        456.3,
+        324.4,
+        182.1,
+        165.8
+      ],
+      "n_ciclos_live_trade": 1427,
+      "hueco_live_trade_max_s": 94.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 18,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 85.0,
+      "gb_libres": 11.3,
+      "git_gb": 0.0,
+      "data_gb": 17.51,
+      "datalogs_gb": 13.0
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 2.64,
+      "ram_pct_libre": 34.9
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 761,
+      "n_results_total": 1070866
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 14.96,
+      "load5": 19.97,
+      "load15": 24.99,
+      "nproc": 4,
+      "ratio5": 4.99,
+      "n_procesos_total": 258
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 6,
+      "eventos": [
+        {
+          "ts": "Oct 18 22:18:20",
+          "pid": "3636260",
+          "nombre": "python",
+          "rss_mb": 3269.6
+        },
+        {
+          "ts": "Oct 19 06:28:39",
+          "pid": "3783797",
+          "nombre": "python3",
+          "rss_mb": 1423.3
+        },
+        {
+          "ts": "Oct 19 07:09:35",
+          "pid": "3637200",
+          "nombre": "python",
+          "rss_mb": 1667.1
+        },
+        {
+          "ts": "Oct 19 07:11:29",
+          "pid": "2925711",
+          "nombre": "systemd",
+          "rss_mb": 0.0
+        },
+        {
+          "ts": "Oct 19 07:11:29",
+          "pid": "2925713",
+          "nombre": "(sd-pam)",
+          "rss_mb": 0.0
+        },
+        {
+          "ts": "Oct 19 07:11:29",
+          "pid": "3803739",
+          "nombre": "python3",
+          "rss_mb": 1196.8
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 2,
+      "vigias": [
+        {
+          "log": "vigia_gate_bucket_propio.log",
+          "mtime_utc": "2026-10-19T07:18:03+00:00",
+          "ultima_linea_fallo": "subprocess.TimeoutExpired: Command '['/usr/bin/python3', '/root/polymarket-research/analisis_gate_bucket_propio_28jul.py']' timed out after 900 seconds"
+        },
+        {
+          "log": "vigia_resolution_sniper_precierre.log",
+          "mtime_utc": "2026-10-19T07:19:25+00:00",
+          "ultima_linea_fallo": "ERROR TimeoutExpired: analisis_gate_riguroso_resolution_sniper_precierre_02sep.py tras 440 s (última duración 147 s)"
+        }
+      ]
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 456s (umbral 400s)",
+      "🔥 CPU sobresuscrita: load5=19.97 en 4 cores (ratio=4.99x, umbral 3.0x) -- 258 procesos vivos",
+      "💀 6 OOM-kill(s) del kernel en 24h: python(pid 3636260, 3269.6MB), python3(pid 3783797, 1423.3MB), python(pid 3637200, 1667.1MB), systemd(pid 2925711, 0.0MB), (sd-pam)(pid 2925713, 0.0MB), python3(pid 3803739, 1196.8MB)",
+      "🚨 vigía roto: vigia_gate_bucket_propio.log (última ejecución falló, mtime 2026-10-19T07:18:03+00:00) -- subprocess.TimeoutExpired: Command '['/usr/bin/python3', '/root/polymarket-research/analisis_gate_bucket_propio_28jul.py']' timed out after 900 seconds",
+      "🚨 vigía roto: vigia_resolution_sniper_precierre.log (última ejecución falló, mtime 2026-10-19T07:19:25+00:00) -- ERROR TimeoutExpired: analisis_gate_riguroso_resolution_sniper_precierre_02sep.py tras 440 s (última duración 147 s)"
     ],
     "estado": "ANOMALIA"
   }
