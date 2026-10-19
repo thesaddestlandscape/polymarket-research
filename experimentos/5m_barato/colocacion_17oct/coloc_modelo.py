@@ -252,6 +252,11 @@ def resumen_sel(E, rows, ks, con_rebate=False):
     r["ev_sin_top5_cierres"] = float(rest.p.sum() / rest.c.sum()) if rest.c.sum() > 0 else float("nan")
     gd = pd.DataFrame({"p": num, "c": cos, "g": dias}).groupby("g").sum()
     r["dias_pos"] = int((gd.p > 0).sum())
+    top2d = gd.p.nlargest(2).index                       # reporte 19-Oct: sin los 2 mejores días y media POR UNIDAD (cada orden rellena pesa igual)
+    rd = gd.drop(index=top2d)
+    r["ev_sin_2_mejores_dias"] = float(rd.p.sum() / rd.c.sum()) if len(rd) and rd.c.sum() > 0 else float("nan")
+    rr = fil & (cos > 0)
+    r["ev_por_unidad"] = float(np.mean(num[rr] / cos[rr])) if rr.any() else float("nan")
     r["n_dias"] = int(len(gd))
     r["ev_dias"] = {k: float(v.p / v.c) if v.c > 0 else float("nan") for k, v in gd.iterrows()}
     return r
@@ -408,7 +413,7 @@ def fmt_r(r):
     if not r or not r.get("n_unid"):
         return "sin órdenes"
     return (f"unid {r['n_unid']:5d} rell {r['n_fill']:5d} | EV/€ {r['ev']:+.4f} (con rebate {r['ev_reb']:+.4f}) | IC90 días ({r['ic90_dias'][0]:+.3f},{r['ic90_dias'][1]:+.3f}) "
-            f"cierres ({r['ic90_cierre'][0]:+.3f},{r['ic90_cierre'][1]:+.3f}) | sin top5 cierres {r['ev_sin_top5_cierres']:+.4f} | días+ {r['dias_pos']}/{r['n_dias']} | PnL {r['pnl']:+.2f} $ coste {r['coste']:.1f} $")
+            f"cierres ({r['ic90_cierre'][0]:+.3f},{r['ic90_cierre'][1]:+.3f}) | sin top5 cierres {r['ev_sin_top5_cierres']:+.4f} sin 2 mejores días {r['ev_sin_2_mejores_dias']:+.4f} por unidad {r['ev_por_unidad']:+.4f} | días+ {r['dias_pos']}/{r['n_dias']} | PnL {r['pnl']:+.2f} $ coste {r['coste']:.1f} $")
 
 
 def mejor_k_base_desc(E_desc, mask_coin):
