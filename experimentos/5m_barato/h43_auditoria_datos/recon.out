@@ -1,0 +1,20 @@
+/root/polymarket-research/experimentos/5m_barato/h43_auditoria_datos/recon.py:71: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+  dia = d if difile else __import__("datetime").datetime.utcfromtimestamp(fin).strftime("%Y-%m-%d")
+2026-10-05 filas band 49638
+2026-10-06 filas band 145875
+2026-10-07 filas band 150759
+2026-10-08 filas band 159688
+2026-10-09 filas band 145521
+2026-10-10 filas band 139423
+2026-10-11 filas band 143916
+2026-10-12 filas band 152553
+2026-10-13 filas band 162208
+2026-10-14 filas band 146985
+2026-10-15 filas band 163469
+2026-10-16 filas band 147433
+2026-10-17 filas band 135237
+no monotonas (mismo mkt,lado, ts retrocede): 0
+DISC_ALL unidades 1113 sin desenlace 0
+DISC_BTC unidades 1108 sin desenlace 0
+DISC_BTC_T unidades 1099 sin desenlace 0
+VIG unidades 1099 sin desenlace 0
