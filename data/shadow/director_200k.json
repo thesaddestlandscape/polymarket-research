@@ -1,26 +1,7 @@
 {
- "generado_utc": "2026-10-18T09:00:02+00:00",
+ "generado_utc": "2026-10-19T09:00:03+00:00",
  "n_tuplas_live_hoy": 24,
  "edge_real_sin_conectar_top": [
-  {
-   "tupla": "MOMENTUM_IBS_5M_BALLENA#XRP#5min#BUY_NO",
-   "bucket": "0.80",
-   "n": 107,
-   "ev_eur": 0.3855,
-   "ic90_dias": [
-    0.0722,
-    0.6924
-   ],
-   "dias_pos": 12,
-   "dias": 20,
-   "fill_libro_real": 0.378,
-   "bh_ok": false,
-   "forward": "sin_watchlist",
-   "n_fwd": null,
-   "ev_fwd": null,
-   "sospechosa_integridad": false,
-   "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
-  },
   {
    "tupla": "UPDOWN_GBM_15M_TARDIO#XRP#15min#BUY_NO",
    "bucket": "0.60",
@@ -43,72 +24,34 @@
   {
    "tupla": "GBM_LATE_15M_TARDIO#ETH#15min#BUY_YES",
    "bucket": "0.30",
-   "n": 65,
-   "ev_eur": 0.2543,
+   "n": 60,
+   "ev_eur": 0.2997,
    "ic90_dias": [
-    0.0955,
-    0.4398
+    0.1156,
+    0.4968
+   ],
+   "dias_pos": 12,
+   "dias": 18,
+   "fill_libro_real": 0.429,
+   "bh_ok": false,
+   "forward": "sin_watchlist",
+   "n_fwd": null,
+   "ev_fwd": null,
+   "sospechosa_integridad": false,
+   "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
+  },
+  {
+   "tupla": "LIQUIDACIONES_DEPTH_FASE0#ETH#5min#BUY_YES",
+   "bucket": "0.35",
+   "n": 116,
+   "ev_eur": 0.2682,
+   "ic90_dias": [
+    0.1029,
+    0.4452
    ],
    "dias_pos": 13,
    "dias": 19,
-   "fill_libro_real": 0.428,
-   "bh_ok": false,
-   "forward": "sin_watchlist",
-   "n_fwd": null,
-   "ev_fwd": null,
-   "sospechosa_integridad": false,
-   "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
-  },
-  {
-   "tupla": "MOMENTUM_IBS_15M_BALLENA#BTC#15min#BUY_YES",
-   "bucket": "0.55",
-   "n": 107,
-   "ev_eur": 0.1922,
-   "ic90_dias": [
-    0.0652,
-    0.3154
-   ],
-   "dias_pos": 14,
-   "dias": 21,
-   "fill_libro_real": 0.678,
-   "bh_ok": false,
-   "forward": "sin_watchlist",
-   "n_fwd": null,
-   "ev_fwd": null,
-   "sospechosa_integridad": false,
-   "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
-  },
-  {
-   "tupla": "MOMENTUM_IBS_5M_BALLENA#BTC#5min#BUY_YES",
-   "bucket": "0.25",
-   "n": 201,
-   "ev_eur": 0.1902,
-   "ic90_dias": [
-    0.0011,
-    0.3795
-   ],
-   "dias_pos": 13,
-   "dias": 21,
-   "fill_libro_real": 0.629,
-   "bh_ok": false,
-   "forward": "sin_watchlist",
-   "n_fwd": null,
-   "ev_fwd": null,
-   "sospechosa_integridad": false,
-   "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
-  },
-  {
-   "tupla": "GBM_LATE_15M_TARDIO#BTC#15min#BUY_YES",
-   "bucket": "0.35",
-   "n": 42,
-   "ev_eur": 0.1827,
-   "ic90_dias": [
-    0.0106,
-    0.324
-   ],
-   "dias_pos": 10,
-   "dias": 16,
-   "fill_libro_real": 0.226,
+   "fill_libro_real": null,
    "bh_ok": false,
    "forward": "sin_watchlist",
    "n_fwd": null,
@@ -119,14 +62,14 @@
   {
    "tupla": "LIQUIDACIONES_DEPTH_FASE0#XRP#5min#BUY_YES",
    "bucket": "0.60",
-   "n": 47,
-   "ev_eur": 0.1802,
+   "n": 43,
+   "ev_eur": 0.1793,
    "ic90_dias": [
-    0.0255,
-    0.3286
+    0.0136,
+    0.3409
    ],
-   "dias_pos": 14,
-   "dias": 20,
+   "dias_pos": 13,
+   "dias": 19,
    "fill_libro_real": null,
    "bh_ok": false,
    "forward": "sin_watchlist",
@@ -155,17 +98,55 @@
    "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
   },
   {
+   "tupla": "MOMENTUM_IBS_15M_BALLENA#BTC#15min#BUY_YES",
+   "bucket": "0.55",
+   "n": 108,
+   "ev_eur": 0.1702,
+   "ic90_dias": [
+    0.0467,
+    0.306
+   ],
+   "dias_pos": 14,
+   "dias": 21,
+   "fill_libro_real": 0.671,
+   "bh_ok": false,
+   "forward": "sin_watchlist",
+   "n_fwd": null,
+   "ev_fwd": null,
+   "sospechosa_integridad": false,
+   "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
+  },
+  {
    "tupla": "GBM_LATE_15M#SOL#15min#BUY_NO",
    "bucket": "0.60",
-   "n": 209,
-   "ev_eur": 0.1517,
+   "n": 212,
+   "ev_eur": 0.17,
    "ic90_dias": [
-    0.0283,
-    0.2777
+    0.0441,
+    0.2904
    ],
-   "dias_pos": 13,
-   "dias": 20,
-   "fill_libro_real": 0.417,
+   "dias_pos": 15,
+   "dias": 21,
+   "fill_libro_real": 0.419,
+   "bh_ok": false,
+   "forward": "sin_watchlist",
+   "n_fwd": null,
+   "ev_fwd": null,
+   "sospechosa_integridad": false,
+   "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
+  },
+  {
+   "tupla": "FAVORITO_CONFIRMADO_DEPTH_FASE0#SOL#5min#BUY_YES",
+   "bucket": "0.80",
+   "n": 63,
+   "ev_eur": 0.1534,
+   "ic90_dias": [
+    0.0393,
+    0.2916
+   ],
+   "dias_pos": 17,
+   "dias": 21,
+   "fill_libro_real": null,
    "bh_ok": false,
    "forward": "sin_watchlist",
    "n_fwd": null,
@@ -176,53 +157,80 @@
   {
    "tupla": "FAVORITO_CONFIRMADO#ETH#5min#BUY_YES",
    "bucket": "0.75",
-   "n": 102,
-   "ev_eur": 0.1495,
+   "n": 105,
+   "ev_eur": 0.146,
    "ic90_dias": [
-    0.0858,
-    0.2086
+    0.0873,
+    0.2048
    ],
-   "dias_pos": 16,
+   "dias_pos": 17,
    "dias": 21,
-   "fill_libro_real": 0.636,
+   "fill_libro_real": 0.64,
    "bh_ok": true,
    "forward": "sin_watchlist",
    "n_fwd": null,
    "ev_fwd": null,
    "sospechosa_integridad": false,
    "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
+  },
+  {
+   "tupla": "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min#BUY_NO",
+   "bucket": "0.40",
+   "n": 60,
+   "ev_eur": 0.1443,
+   "ic90_dias": [
+    0.0549,
+    0.2265
+   ],
+   "dias_pos": 16,
+   "dias": 19,
+   "fill_libro_real": 0.079,
+   "bh_ok": false,
+   "forward": "sin_watchlist",
+   "n_fwd": null,
+   "ev_fwd": null,
+   "sospechosa_integridad": true,
+   "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi"
   }
  ],
  "pnl_fiel_sin_conectar_top": [
   {
    "tupla": "GBM_LATE_15M_PYCONFIRMADO#BTC#15min#BUY_NO",
-   "pnl_fiel_eur_sin_suelo": 74.24,
-   "n_ejecutado": 266,
-   "fill_rate": 0.2046,
+   "pnl_fiel_eur_sin_suelo": 66.27,
+   "n_ejecutado": 270,
+   "fill_rate": 0.2033,
    "sospechosa_integridad": false,
    "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
   },
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min#BUY_NO",
-   "pnl_fiel_eur_sin_suelo": 43.73,
+   "pnl_fiel_eur_sin_suelo": 41.27,
    "n_ejecutado": 55,
-   "fill_rate": 0.0259,
+   "fill_rate": 0.0256,
    "sospechosa_integridad": true,
    "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar -- ANTES verificar features reales (protocolo pt.2)"
   },
   {
    "tupla": "ORDER_FLOW_5M#SOL#5min#BUY_NO",
-   "pnl_fiel_eur_sin_suelo": 41.09,
+   "pnl_fiel_eur_sin_suelo": 41.18,
    "n_ejecutado": 90,
-   "fill_rate": 0.3158,
+   "fill_rate": 0.3125,
+   "sospechosa_integridad": false,
+   "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
+  },
+  {
+   "tupla": "FAVORITO_CONFIRMADO#ETH#15min#BUY_NO",
+   "pnl_fiel_eur_sin_suelo": 38.51,
+   "n_ejecutado": 1508,
+   "fill_rate": 0.528,
    "sospechosa_integridad": false,
    "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
   },
   {
    "tupla": "GBM_LATE_5M#ETH#5min#BUY_NO",
-   "pnl_fiel_eur_sin_suelo": 40.32,
+   "pnl_fiel_eur_sin_suelo": 38.21,
    "n_ejecutado": 40,
-   "fill_rate": 0.0334,
+   "fill_rate": 0.0333,
    "sospechosa_integridad": false,
    "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
   },
@@ -235,18 +243,10 @@
    "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
   },
   {
-   "tupla": "FAVORITO_CONFIRMADO#ETH#15min#BUY_NO",
-   "pnl_fiel_eur_sin_suelo": 35.84,
-   "n_ejecutado": 1489,
-   "fill_rate": 0.5278,
-   "sospechosa_integridad": false,
-   "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
-  },
-  {
    "tupla": "LIQUIDACIONES_5M#XRP#5min#BUY_YES",
    "pnl_fiel_eur_sin_suelo": 27.36,
    "n_ejecutado": 166,
-   "fill_rate": 0.4586,
+   "fill_rate": 0.4573,
    "sospechosa_integridad": false,
    "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
   },
@@ -262,7 +262,7 @@
    "tupla": "UPDOWN_GBM_IBS_ALTO#BTC#15min#BUY_YES",
    "pnl_fiel_eur_sin_suelo": 21.26,
    "n_ejecutado": 97,
-   "fill_rate": 0.1206,
+   "fill_rate": 0.1193,
    "sospechosa_integridad": false,
    "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
   },
@@ -275,7 +275,7 @@
    "accion": "candidata a checklist de 6 categorías + gate riguroso propio antes de promocionar"
   }
  ],
- "pnl_fiel_sin_conectar_suma_top": 364.41,
+ "pnl_fiel_sin_conectar_suma_top": 354.63,
  "payout_inverso_sin_decidir": [],
  "buscador_edge_perdido_forward_ok": [],
  "caveats": [
