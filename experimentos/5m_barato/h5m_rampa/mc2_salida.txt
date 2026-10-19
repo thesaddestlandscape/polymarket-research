@@ -1,0 +1,14 @@
+(a) H47-B 70 rellenos, P(completar) por presupuesto efectivo B (autoredención al cierre)
+ ev 0.077 [(4.5, 0.29), (7.6, 0.439), (12, 0.616), (20, 0.824), (30, 0.948), (40, 0.99)]
+ ev 0.05 [(4.5, 0.284), (7.6, 0.416), (12, 0.578), (20, 0.791), (30, 0.93), (40, 0.99)]
+ ev 0.0 [(4.5, 0.234), (7.6, 0.361), (12, 0.519), (20, 0.763), (30, 0.909), (40, 0.969)]
+ ev -0.1 [(4.5, 0.141), (7.6, 0.215), (12, 0.367), (20, 0.597), (30, 0.816), (40, 0.942)]
+(b) P2 5 acc, 1000 rellenos (150/día ≈ 7 días)
+ ev 0.077 P(parar por miradas) 0.199 P(IC90 inf>0 a 1000) 0.24 E 54.3 sd 82.1 P5 -81.8 DD95 113.2 DD90 85.1
+ ev 0.05 P(parar por miradas) 0.25 P(IC90 inf>0 a 1000) 0.192 E 37.9 sd 79.7 P5 -96.5 DD95 126.7 DD90 98.3
+ ev 0.0 P(parar por miradas) 0.379 P(IC90 inf>0 a 1000) 0.065 E -19.2 sd 80.9 P5 -145.2 DD95 161.7 DD90 141.0
+ ev -0.05 P(parar por miradas) 0.534 P(IC90 inf>0 a 1000) 0.018 E -72.0 sd 80.0 P5 -199.1 DD95 213.1 DD90 190.9
+ ev -0.1 P(parar por miradas) 0.714 P(IC90 inf>0 a 1000) 0.004 E -122.1 sd 76.8 P5 -252.8 DD95 261.4 DD90 234.3
+sd por € por relleno 2.048
+
+[exited with code 0]
