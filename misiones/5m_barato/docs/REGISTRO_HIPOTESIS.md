@@ -61,3 +61,9 @@ Este registro es un estado de control, no una certificación. Todo número debe 
 
 ## 20-Oct tarde — H56/H57/H58 (expansión de H55; preregistro en datalogs_analisis_caches/h56_h58/PREREGISTRO.json)
 - H56 alts 5m⊂15m: n=111/8 d, EV pond. −0,082 → no progresa (salvo forward fijado desde 21-Oct del corte ask 0,90-0,95, visto a posteriori, +0,073 n=16). H57 15m⊂60m (n=31, +0,014) y H58 5m⊂60m (n=33, +0,031): ruido. Informe: experimentos/5m_barato/h55_forward/informe_expansion_20oct.md.
+
+## 20-Oct tarde — propuestas del alpha-researcher (V4/V3 captura). PROPUESTAS, aún NO congeladas ni preregistradas con regla (ids renumerados: H56-H58 ya los usó la expansión de H55)
+- **H59 colchón de 2c (tomador V4):** mismo disparo de V4, precio límite FOK = p_limite + 0,02 comprobado con el tamaño real del mejor ask. BTC 06-18 Oct: n=20/10 d, EV +1,17, IC90 (+0,37;+2,30), +0,58 sin los 2 mejores días (sin colchón n=12, −0,10). CAUTELA: se probaron 5 colchones (multiplicidad), las 8 compras añadidas ganan 7, el tamaño del registro puede estar sobreestimado. Solo forward congelado en F2 dry-run.
+- **H60 H23 en altcoins:** bloqueada hasta extraer datos de alts.
+- **H61 H23 con cancelación mientras Binance va en contra en el último segundo:** A +1,81 (n=6) vs +0,32 (n=10): corte a posteriori, solo exploratorio.
+- Hallazgo H23: el edge lo crea la CANCELACIÓN (sin cancelar A da +0,06, n=31); adelantar los rellenos 50-250 ms no lo rompe en A (+0,77..+1,44, sin 2 mejores días +0,49..+0,98), en B baja a +0,30 con 250 ms. El arnés real espera ASENTAR_S=1,5 s antes de volver a pujar y así da n=10, +0,60, −0,04 sin los 2 mejores días: la palanca es cancelar y re-pujar al instante. Informe: experimentos/5m_barato/v4_captura_maker/informe.md.
