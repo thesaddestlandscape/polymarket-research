@@ -36,3 +36,16 @@ Con N y EV medidos el techo por fila es 0,2-12 k€/año. Los 200 k solo salen d
 3. H47-B: revisar el seco, OK final de Javi, calibrar colas (chief + Javi).
 4. Profundidad por banda para PRECIERRE y stake vs regla 5× (risk-economics).
 5. H48/H44 el 24-Oct y decisión de capital por peldaño (statistical-validator / Javi).
+
+## ADENDA 20-Oct (chief, Javi: "cada céntimo se reinvierte en sí misma; escalarlo sin más capital")
+Regla: 100 % de las ganancias de cada subestrategia se reinvierte en esa misma subestrategia (stake de cada peldaño = fracción de Kelly de SU bankroll).
+Modelo (Kelly completo, f* = EV/σ², σ² = 4,2 por € y relleno según h5m_rampa): crecimiento diario g = n·EV²/σ² (n = entradas independientes con EV>0 por día). Stake final para 200 k€/año: s = 200.000/(EV·365·n).
+| n/día | EV/€ | g (Kelly) | stake final | días desde 2 € (Kelly / ½ Kelly) |
+|---|---|---|---|---|
+| 2,8 | 0,08 | 0,43 %/d | 2.446 € | 1.666 / 3.332 |
+| 2,8 | 0,04 | 0,11 %/d | 4.892 € | 7.315 |
+| 10 | 0,08 | 1,52 %/d | 685 € | 383 / 766 |
+| 20 | 0,08 | 3,05 %/d | 342 € | 169 / 338 |
+| 50 | 0,08 | 7,62 %/d | 137 € | 55 / 111 |
+| 50 | 0,04 | 1,90 %/d | 274 € | 258 / 517 |
+Conclusión de diseño: sin capital externo, la velocidad la fijan n (oportunidades independientes/día) y EV (crece al cuadrado). Para llegar a ≥200 k€/año en ≤12 meses cada subestrategia necesita ≈20-50 entradas/día con EV ≥0,08 REAL (no el de n pequeño) Y que el stake final (137-342 €/entrada) quepa en la profundidad. Trabajo del equipo = fabricar n y EV: (1) 6 monedas × marcos 5m/15m/60m/4h × todas las ventanas anidadas; (2) variantes de entrada con más EV por selección (modelo de selección de cierres, AUC 0,75); (3) varias subestrategias no correlacionadas por mercado (sin doble conteo); (4) reinversión diaria automática por peldaño con gates y kill; (5) medir profundidad por banda para el techo de stake. Cada peldaño sigue exigiendo gates + /code-review + OK Javi.
