@@ -29,3 +29,10 @@
 2. Informes de los agentes H55/H53, V4/V3 y ronda 3 de H23 (si llegaron); /code-review 4º del paquete H23 solo si la ronda 3 cambió lógica.
 3. Lanzar el agente de captura H5M cuando B tenga ≥30 rellenos.
 4. Pendientes de Javi (arriba).
+
+## 5. Rotación automática de tandas — LISTA, NO CARGADA (Javi 20-Oct ~19:00Z: "primero probamos un par de días como hasta ahora")
+- **Código**: `--rotar-tanda` en `/root/polymarket-research-dev/experimento_maker_h47.py` (commit `afa157a893`, 120/121 tests; el que falla es ambiental: el B real vivo tiene el lock de pares) y funciones de rotación ya conectadas al bucle de `experimentos/5m_barato/h47_tandas_supervisor.py` (commits `9173c846a5` + conexión por Javi). Permisos para editar ya en `.claude/settings.local.json`.
+- **Estado hoy**: el proceso `h47sup` en memoria y `h47B` siguen con el código ANTERIOR. El supervisor en disco ya está conectado: NO reiniciar `h47sup` hasta decidirlo. Mientras tanto las tandas agotadas las roto yo con `--reiniciar-suelo` (reseteo manual, «VEZ n»).
+- **Guardas de la rotación (H47)**: precondiciones del reseteo manual (sin kill, nada abierto, saldo verificado), `suelos_previos` fail-closed, tanda agotada (saldo − suelo < 1,5), cuadre del ledger, saldo ≥ 12 + 5 pUSD, tope 12 en 24 h móvil sobre todos los ledgers, no consume REINICIOS_MAX. Frenos del supervisor: 6 rotaciones/24 h, pausa 3 h si 2 tandas se agotan en <45 min, Telegram en cada rotación o negativa.
+- **Para cargarla** (cuando Javi lo decida): 1) /code-review final ya hecho (ver DECISION_LOG/chat); 2) `screen -S h47sup -X quit`; 3) `screen -dmS h47sup bash -c 'cd /root/polymarket-research && nice -n 10 .venv/bin/python experimentos/5m_barato/h47_tandas_supervisor.py >> /root/polymarket-research-datalogs/h47_tandas_supervisor.out 2>&1'`; 4) B recarga el H47 nuevo solo cuando se reinicie (no hace falta forzarlo; `--rotar-tanda` la ejecuta un proceso aparte con el fichero nuevo). 5) Comprobar `h47_tandas_supervisor.log` y el Telegram en la 1ª rotación.
+- **Sha del OK de H23**: `h47=` cambia con este H47; recalcular con `python3 paquete_real/experimento_maker_h23.py --imprimir-sha` antes del OK.
