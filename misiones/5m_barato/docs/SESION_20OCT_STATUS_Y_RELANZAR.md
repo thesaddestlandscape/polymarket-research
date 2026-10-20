@@ -26,3 +26,6 @@ Contexto común del prompt: "Misión 5m barato, §1b (misiones/5m_barato/CLAUDE.
 
 ## 4. Orden al retomar
 1) Revisar B (ledger /root/polymarket-research-datalogs/experimento_h47_B_ledger.jsonl desde 11:54Z, `h47_real_B_20261020b.out`, KILL), PnL real en pUSD al resolverse, tasa de relleno real vs simulada (gate |Δ|≤8 pp, acuerdo≥0,70) → calibrar colas (parte B). 2) Replay H23: analisis_h23.txt. 3) H55/H53: `procesar` + informe. 4) Colas por moneda. 5) /code-review del paquete H23 real (experimentos/5m_barato/h23_maker/paquete_real/) contra dev e76b9a3d88 + OK Javi. 6) Fase siguiente del plan + revisión semanal ~27-Oct. 7) Pendientes de decisión Javi: VPS, capital por peldaño, alcance equipo "solo ganar".
+
+## 5. Actualización 12:58Z — calibración de colas desacoplada
+`run3_reanudar.sh` (setsid nohup nice 19 ionice idle, ulimit 3 GB) lanzado: re-extrae DOGE/BNB, corre el runner para ETH, SOL, XRP, DOGE, BNB y las 4 sensibilidades BTC (L79, L254, W1000, W150). Salidas: /mnt/HC_Volume_106538179/datalogs_analisis_caches/colas_20oct/{run3.out,runner2.log} (marcadores EXTFIN, ANAFIN, SENSFIN). Al volver: `tail runner2.log`; si SENSFIN existe, completar tabla con `final_tabla.py` y actualizar calibracion_colas.md (ver calib_colas/ESTADO_AGENTE.md). Si cae por RAM (guard_ram), relanzar el mismo comando (idempotente).
