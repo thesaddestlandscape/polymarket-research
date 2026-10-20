@@ -38,3 +38,11 @@ Cosechar al abrir A/B/v2 (REJECTED), pares maker/LOWLOW-PAIR, salidas tras relle
 ## A6 shadow (lanzado 20-Oct 09:59Z, screen `a6shadow`, nice 5, `datalogs/a6_shadow/`) — dos cautelas, cómo se cierran
 - **Colas de relleno sin calibrar** (opt / base 0,5 de profundidad / cons 1,0): NO se cierra con datos de hoy, solo H47-B (rellenos reales) puede calibrarlas. Criterio fijado ahora: tras H47-B, por cola, |tasa de relleno shadow − tasa real| ≤ 8 pp y acuerdo puja a puja ≥ 0,70 (mismo gate que H47); se adopta la cola que lo cumpla, si ninguna → el shadow se reporta solo como rango [cons, opt]. Hasta entonces ninguna cifra de EV del shadow se cita con una sola cola.
 - **Reconexiones del WS con load ~30**: causa probable (no confirmada) = `nice 19` dejaba al proceso sin CPU y el servidor lo desconectaba; subido a nice 5 (renice en caliente + `pipeline_watchdog.py::SCREEN_RESTART`, commit 935ad302cb). Verificación: contar filas `gap` por hora a load alto durante ≥24 h; si siguen, leer el `motivo` y actuar sobre él (reconexión con resuscripción + backfill de trades).
+
+## Flujo escalonado de agentes (20-Oct ~11:30Z, Javi: "no consuman todos los tokens de la sesión")
+Fase 1 (vivos, con tope de llamadas): anticipación V4 (event-causality-analyst, paso 1 y informe parcial) + calibración de colas del shadow (statistical-validator). 
+Fase 2 (esperan, se relanzan con su prompt al terminar la fase 1; el chief decide):
+- **H23 maker en dry-run** (execution-engineer): espera la calibración de colas (necesita el factor de cancelación para su simulador y la cancelación rápida). Entregables: spec H23 v1 congelada con cancelación rápida, proceso sombra persistente, paquete REAL listo (OK final de Javi + H47-B + /code-review).
+- **Capacidad y camino de escala H23** (risk-economics): espera los hallazgos de anticipación (paso 1) para no duplicar palancas. Entregable: experimentos/5m_barato/h23_capacidad/informe.md.
+Fase 3: escalón B real de H47 (tras calibración; OK de Javi dado) y rampa de stake por peldaños.
+Regla de tokens: un agente pesado a la vez salvo lecturas; cada agente con tope de ~35-45 llamadas, resultados a fichero y solo agregados al contexto, informe parcial por fase.
