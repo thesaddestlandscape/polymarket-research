@@ -1582,5 +1582,21 @@
   "FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min": {
     "n": 201,
     "confirmado": false
+  },
+  "GBM_LATE_60M_FADE#ETH": {
+    "n": 203,
+    "confirmado": true
+  },
+  "GBM_LATE_60M_FADE#ETH#60min": {
+    "n": 203,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_15M#SOL": {
+    "n": 201,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_15M#SOL#15min": {
+    "n": 201,
+    "confirmado": true
   }
 }
