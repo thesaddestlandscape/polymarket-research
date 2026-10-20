@@ -222,13 +222,17 @@ SCREEN_RESTART = {
     # proceso persistente propio -- NO se funde con vigias_frecuentes_fase0.py
     # (cadencia 1min más sensible que sus hermanos ahí, ver docstring de
     # nested_arb_loop.py). Puramente observacional, sin dinero real.
-    "nestedarb": f"cd {REPO} && nice -n 10 .venv/bin/python nested_arb_loop.py >> logs/nested_arb_loop.log 2>&1",
+    # 19-Oct (OK Javi, bajar carga): nestedarb retirado, P13 cerrado, 14 % de un core. Para reactivar: restaurar esta línea y la de verify_deploy.
     # 25-Sep: declaradas (corrían sin watchdog desde 15-Sep / 02-Sep). Solo observación/dry-run.
     "freezeestado": f"cd {REPO} && nice -n 10 .venv/bin/python resolution_sniper_freeze_estado_fase0.py >> logs/resolution_sniper_freeze_estado_fase0.log 2>&1",
     "dryrunmc": f"cd {REPO} && nice -n 10 .venv/bin/python dryrun_mejora_contraria_02sep.py >> logs/dryrun_mejora_contraria_02sep.log 2>&1",
     # 17-Oct (OK Javi): grabador multi-bolsa al ms (Binance spot/perp, Coinbase, Kraken, Bitstamp, Bybit), solo captura,
     # un proceso por bolsa bajo un supervisor. nice 5: por debajo de los ejecutores con dinero real.
     "multivenue": f"cd {REPO} && nice -n 5 .venv/bin/python multivenue_ms_fase0.py >> logs/multivenue_ms_fase0.log 2>&1",
+    # a6shadow (20-Oct, OK Javi): shadow persistente A6/H43 R5K ("habría puesto" BTC 5m), SOLO LECTURA: WS público de mercado del CLOB +
+    # gamma pública; sin órdenes, sin claves, no mueve dinero -> nice 5 (19 lo dejaba sin CPU con load 30: reconexiones del WS) y SIN choom (como curvacierre/multivenue). Salida gz diaria en
+    # /root/polymarket-research-datalogs/a6_shadow/ (retención 14 d, fuera de git). RSS < 300 MB; el propio proceso sale si pasa de 400.
+    "a6shadow": f"cd {REPO} && nice -n 5 .venv/bin/python experimentos/5m_barato/a6_detector_vivo/a6_shadow_persistente.py >> logs/a6_shadow.log 2>&1",
     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
@@ -367,7 +371,7 @@ def check_screens() -> dict[str, bool]:
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue"]}
+                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow"]}
     except Exception:
         return {}
 

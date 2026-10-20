@@ -96,8 +96,7 @@ SCREENS = {
                      "probe": "log:logs/sports_fase0_consolidado.log:hilos arrancados"},
     # 20-Ago: nested_arb_scanner.py, antes cron '* * * * *', ahora proceso
     # persistente propio vía nested_arb_loop.py (ver su docstring).
-    "nestedarb": {"entry": "nested_arb_loop.py",
-                   "probe": "log:logs/nested_arb_loop.log:arrancando"},
+    # 19-Oct (OK Javi): nestedarb retirado, ver pipeline_watchdog.py
     # freezeestado (15-Sep) y dryrunmc (02-Sep): screens de solo observación/dry-run
     # que corrían sin declarar (barrido 25-Sep, inventario_sistema A2) -- si caían,
     # nadie las reiniciaba. Sin dinero real.
@@ -106,6 +105,10 @@ SCREENS = {
     "dryrunmc": {"entry": "dryrun_mejora_contraria_02sep.py"},  # sin probe: no loguea al arrancar
     # 17-Oct: grabador multi-bolsa al ms (solo captura, sin dinero real).
     "multivenue": {"entry": "multivenue_ms_fase0.py", "probe": "log:logs/multivenue_ms_fase0.log:arrancado"},
+    # 20-Oct: shadow persistente A6/H43 R5K (solo lectura, ver pipeline_watchdog.py::SCREEN_RESTART). El cierre de imports solo ve el
+    # propio .py (detector_r5k.py y h43_unidades.py viven en otras carpetas): si se editan hay que reiniciar a mano (--restart a6shadow).
+    "a6shadow": {"entry": "experimentos/5m_barato/a6_detector_vivo/a6_shadow_persistente.py",
+                 "probe": "log:logs/a6_shadow.log:a6_shadow arrancando"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},
