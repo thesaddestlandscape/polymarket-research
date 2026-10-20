@@ -182,6 +182,19 @@ def proceso_de(entry: str) -> tuple[int, int] | None:
         parts = line.split(None, 2)
         if len(parts) == 3 and pattern.search(parts[2]) and "SCREEN" not in parts[2]:
             candidatos.append((int(parts[0]), ahora - int(parts[1])))
+    if not candidatos and "/" in entry:
+        # 20-Oct: proceso lanzado con `cd <dir> && python -I script.py` (h23shadow): la cmdline solo lleva el basename.
+        # Se acepta solo si el cwd real del proceso es la carpeta del entry (evita colisiones con scripts homónimos).
+        carpeta = str((BASE / entry).parent.resolve())
+        pat_base = re.compile(r"(?:^|[\s/])" + re.escape(Path(entry).name) + r"(?:$|\s)")
+        for line in out.splitlines()[1:]:
+            parts = line.split(None, 2)
+            if len(parts) == 3 and pat_base.search(parts[2]) and "SCREEN" not in parts[2] and "bash -c" not in parts[2]:
+                try:
+                    if os.readlink(f"/proc/{parts[0]}/cwd") == carpeta:
+                        candidatos.append((int(parts[0]), ahora - int(parts[1])))
+                except OSError:
+                    continue
     if not candidatos:
         return None
     # 18-Ago: sigue habiendo un segundo caso real de colisión -- dos repos
