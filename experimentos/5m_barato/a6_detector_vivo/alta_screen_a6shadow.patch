@@ -1,0 +1,35 @@
+--- a/pipeline_watchdog.py
++++ b/pipeline_watchdog.py
+@@ -229,6 +229,10 @@
+     # 17-Oct (OK Javi): grabador multi-bolsa al ms (Binance spot/perp, Coinbase, Kraken, Bitstamp, Bybit), solo captura,
+     # un proceso por bolsa bajo un supervisor. nice 5: por debajo de los ejecutores con dinero real.
+     "multivenue": f"cd {REPO} && nice -n 5 .venv/bin/python multivenue_ms_fase0.py >> logs/multivenue_ms_fase0.log 2>&1",
++    # a6shadow (20-Oct, OK Javi): shadow persistente A6/H43 R5K ("habría puesto" BTC 5m), SOLO LECTURA: WS público de mercado del CLOB +
++    # gamma pública; sin órdenes, sin claves, no mueve dinero -> nice 19 y SIN choom (como curvacierre/multivenue). Salida gz diaria en
++    # /root/polymarket-research-datalogs/a6_shadow/ (retención 14 d, fuera de git). RSS < 300 MB; el propio proceso sale si pasa de 400.
++    "a6shadow": f"cd {REPO} && nice -n 19 .venv/bin/python experimentos/5m_barato/a6_detector_vivo/a6_shadow_persistente.py >> logs/a6_shadow.log 2>&1",
+     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
+     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
+     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
+@@ -367,7 +371,7 @@
+         output = r.stdout + r.stderr
+         return {name: (f".{name}\t" in output or f".{name} " in output)
+                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
+-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue"]}
++                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow"]}
+     except Exception:
+         return {}
+ 
+--- a/verify_deploy.py
++++ b/verify_deploy.py
+@@ -105,6 +105,10 @@
+     "dryrunmc": {"entry": "dryrun_mejora_contraria_02sep.py"},  # sin probe: no loguea al arrancar
+     # 17-Oct: grabador multi-bolsa al ms (solo captura, sin dinero real).
+     "multivenue": {"entry": "multivenue_ms_fase0.py", "probe": "log:logs/multivenue_ms_fase0.log:arrancado"},
++    # 20-Oct: shadow persistente A6/H43 R5K (solo lectura, ver pipeline_watchdog.py::SCREEN_RESTART). El cierre de imports solo ve el
++    # propio .py (detector_r5k.py y h43_unidades.py viven en otras carpetas): si se editan hay que reiniciar a mano (--restart a6shadow).
++    "a6shadow": {"entry": "experimentos/5m_barato/a6_detector_vivo/a6_shadow_persistente.py",
++                 "probe": "log:logs/a6_shadow.log:a6_shadow arrancando"},
+     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
+     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
+     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},
