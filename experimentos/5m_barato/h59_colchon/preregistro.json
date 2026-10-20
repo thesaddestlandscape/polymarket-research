@@ -1,0 +1,66 @@
+{
+ "hipotesis": "H59",
+ "version": 1,
+ "estado": "EXPLORATORY",
+ "congelado_utc": "2026-10-20T19:05:00+00:00",
+ "hash_congelacion": "ea3789bafdc70764",
+ "v4_hash_config": "77a75859ae5cf22e",
+ "v4_fichero_sha256_16": "8bd08b2d8e36aa9a",
+ "regla": {
+  "moneda": "BTC",
+  "disparo": "V4 (importado)",
+  "primera_senal_por_cierre": true,
+  "latencia_ms": 215,
+  "limite": "p_limite(bid15_t0)+0.02",
+  "acciones": "max(5,ceil(2/limite*100)/100)",
+  "relleno": "ask_llegada<=limite y tam_nivel1>=acciones (FOK todo-o-nada)",
+  "precio": "ask_llegada",
+  "desenlace": "oficial gamma closed",
+  "ev": "ponderado por EUR"
+ },
+ "colchones_probados_descubrimiento": [
+  0.0,
+  0.01,
+  0.02,
+  0.03,
+  0.05
+ ],
+ "k_elegido_a_posteriori": 0.02,
+ "gate": {
+  "n": 40,
+  "dias_con_operacion": 10,
+  "ev_pond": 0.1,
+  "ic90_dias_inf": 0.0,
+  "sin_2_mejores_dias": 0.0,
+  "sin_top5pct": 0.0
+ },
+ "kill": {
+  "ev_pond_lt": -0.15,
+  "n_ev": 25,
+  "incremental_ev_lt": -0.15,
+  "n_incremental": 10,
+  "ic90_cierre_sup_lt0_n": 20
+ },
+ "oos": "t0 >= congelado_utc",
+ "calendario_miradas_propuesto": "primer informe con n>=40 y >=10 dias; relecturas unicas a n=60 y n=80; despues no concluyente",
+ "ritmo_esperado": {
+  "ejecutables_por_dia": [
+   1.2,
+   2.0
+  ],
+  "n40_fechas": {
+   "2.0/dia": "2026-11-09",
+   "1.5/dia": "2026-11-16",
+   "1.2/dia": "2026-11-22"
+  }
+ },
+ "sha256_16_ficheros": {
+  "f2_h59.patch": "fb531ddf34e87107",
+  "h59_lectura.py": "eb4f55a31a33c3dd",
+  "h59_regla.py": "59c8302df7fe4f73",
+  "h59_stats.py": "76e645b7e51c1474",
+  "test_f2_h59_parche.py": "04ab678b8607f5f0",
+  "test_h59.py": "ad2cbaab73081005",
+  "vigia_5m_barato_h59_forward.py": "85d57db20b72b81f"
+ }
+}

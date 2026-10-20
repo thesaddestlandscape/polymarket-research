@@ -1,0 +1,41 @@
+--- a/f2_5m_barato_dryrun.py	2026-10-20 19:02:55.821597780 +0000
++++ b/f2_5m_barato_dryrun.py	2026-10-20 19:02:55.821774556 +0000
+@@ -41,6 +41,7 @@
+ import ejecutor_rapido as er  # noqa: E402
+ import vigia_5m_barato_forward as V  # noqa: E402  (regla v4 congelada: margen, p_limite, fee, CONFIG)
+ import analisis_5m_barato_disparo15m as V7  # noqa: E402  (regla V7 congelada: DELTAS, LATS)
++import h59_regla as H59  # noqa: E402  (H59 sombra: V4 tomador con colchon; la regla vive SOLO en h59_regla.py)
+ 
+ GAMMA = "https://gamma-api.polymarket.com"
+ PRICES = REPO / "data" / "prices"
+@@ -322,6 +323,30 @@
+             self.ctx.agenda.en(t + L, lambda L=L: log({"tipo": "v4_relleno", "moneda": self.mo, "cierre": self.cie,
+                                                        "n": n, "L": L, "t_comprobado": er.ahora_ms(),
+                                                        **relleno(self.lib, self.tc, p_lim, acc)}))
++        if self.mo == "BTC" and n == 1:                   # H59: solo BTC y primera senal del cierre (misma que V4); SOMBRA, sin envio
++            self._h59(t, ask0, bid_o, qc)
++
++    # ── H59 (sombra): el mismo disparo V4, FOK virtual con limite p_limite + k, validada contra el TAMANO del nivel 1 a t+215 ──
++    def _h59(self, t, ask0, bid_o, qc):
++        lims = {k: H59.limite_fok(bid_o, k) for k in H59.K_COLCHONES}
++        lim_p = lims[H59.K_PRINCIPAL]
++        tiempos = self._decidir("H59", t, lim_p, {"n": 1}) if lim_p is not None else {}     # Enviador DRY-RUN: mide decision->envio
++        log({"tipo": "h59_evento", "moneda": self.mo, "cierre": self.cie, "lado": self.s, "mercado_5m": self.m5["id"], "t_deteccion": t,
++             "resto_s": round(self.cie - t / 1000, 2), "ask5_t0": ask0, "ask5_sz_t0": qc[4], "bid15_t0": bid_o,
++             "margen_neto": V.margen(bid_o, ask0), "p_limite_v4": V.p_limite(bid_o),
++             "limites": {f"{k:.2f}": v for k, v in lims.items()}, **tiempos})
++
++        def llegada():
++            q = self.lib.top.get(self.tc)
++            fresco = bool(q) and self.lib.fresco(self.tc)
++            ev = {"tipo": "h59_relleno", "moneda": self.mo, "cierre": self.cie, "t_comprobado": er.ahora_ms(), "fresco": fresco,
++                  "ask_llegada": q[3] if q else None, "asz_llegada": q[4] if q else None}
++            nivel1 = H59.evaluar_evento(ask0, bid_o, q[3] if q else None, q[4] if q else None, 0 if fresco else None)
++            for k, e in nivel1.items():
++                lim = e["lim"]
++                ev[f"k{k:.2f}"] = {**e, "l2": relleno(self.lib, self.tc, lim, e["acc_obj"]) if (lim is not None and fresco) else None}
++            log(ev)
++        self.ctx.agenda.en(t + H59.LAT_TOMADOR_MS, llegada)
+ 
+     # ── V7 ──
+     def al_trade(self, tk, t, msg):
