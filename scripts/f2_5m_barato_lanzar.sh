@@ -23,7 +23,7 @@ if [ "$que" = "btc" ] || [ "$que" = "ambos" ]; then
 fi
 if [ "$que" = "alt" ] || [ "$que" = "ambos" ]; then
   parar "$D/alt.pid"
-  nohup .venv/bin/python f2_5m_barato_dryrun.py --monedas ETH,SOL,XRP,DOGE,BNB --sin-firma >> logs/f2_5m_barato_alt.log 2>&1 &
+  nohup nice -n 10 .venv/bin/python f2_5m_barato_dryrun.py --monedas ETH,SOL,XRP,DOGE,BNB --sin-firma >> logs/f2_5m_barato_alt.log 2>&1 &
   echo $! > "$D/alt.pid"
 fi
 cat "$D"/*.pid 2>/dev/null
