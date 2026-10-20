@@ -46,3 +46,8 @@ Fase 2 (esperan, se relanzan con su prompt al terminar la fase 1; el chief decid
 - **Capacidad y camino de escala H23** (risk-economics): espera los hallazgos de anticipación (paso 1) para no duplicar palancas. Entregable: experimentos/5m_barato/h23_capacidad/informe.md.
 Fase 3: escalón B real de H47 (tras calibración; OK de Javi dado) y rampa de stake por peldaños.
 Regla de tokens: un agente pesado a la vez salvo lecturas; cada agente con tope de ~35-45 llamadas, resultados a fichero y solo agregados al contexto, informe parcial por fase.
+
+## Rampa por subestrategia + revisión semanal (Javi 20-Oct)
+- Rampa 2→5→10 € y siguientes peldaños (con ganancias) para CADA subestrategia: H55 favorito (plantilla en experimentos/5m_barato/rampa_plantilla/, agente a6e98dc39399e2811), H35/H47 alts, H23 maker, R5K, V4/V4b; y PRECIERRE 5m y 15m (rampa pre-registrada 17-Oct). Objetivo ≥200 k€/año limpios DE CADA UNA.
+- **Revisión semanal ~27-Oct:** por subestrategia, ¿cumple n, IC90 por días, EV ponderado, sin 2 mejores días y kill? ¿sube de peldaño? Con datos reales del día, no de memoria.
+- Pendiente en cola: risk-economics (capacidad y camino de escala H23 y del resto) una vez salgan H55/H23; calibración de colas por moneda (agente a0df08cc219a82d3c); vigía H53/H54/H55 (agente a6e98dc39399e2811); /code-review del paquete H23 real tras H47-B.
