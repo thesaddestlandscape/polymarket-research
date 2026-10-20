@@ -61658,3 +61658,11 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-10-20T16:55:09+00:00,0x5e346f1b394cd72327f78eb91326963a66ed15d4b60d90853462049c172538f4,btc-updown-5m-1792515300,BTC,5min,Up,3,0.42,0.0,0.63,0.0,0.63,0.0,0,0,0,0,fuera_de_zona_confirmada
 2026-10-20T16:55:18+00:00,0x14bad26060f1eac137502d4eb1e108922bca0bfab38d3dca2aa39484daa0dce8,xrp-updown-5m-1792515300,XRP,5min,Up,2,0.47,0.0,0.7,0.0,0.75,7.14,0,0,0,0,fuera_de_zona_confirmada
 2026-10-20T16:55:27+00:00,0xfa6331336a205f2eb21da3d356bfd342489cecff5819d9adf18f5b328e10fcc2,sol-updown-5m-1792515300,SOL,5min,Up,3,0.49,0.0,0.75,0.0,0.82,9.33,0,0,0,0,fuera_de_zona_confirmada
+2026-10-20T16:57:23+00:00,0x8cfa4dcfde181289a38195deee1facfd91dca55cd85b3de9e2e993855dcd7686,bnb-updown-5m-1792515300,BNB,5min,Down,2,0.07,0.0,0.1,0.0,0.1,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-10-20T17:00:15+00:00,0x2ca35bd817328b2d7e1aadbcd6db098bac1eb1b578691914b799960a1b6b4e10,btc-updown-5m-1792515600,BTC,5min,Down,5,0.51,0.0,0.66,0.0,0.66,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-10-20T17:00:25+00:00,0xc2fc9b3342a17fd000471822f71d97a42abdb8a9060622313a63d5b18f5c2fe6,eth-updown-5m-1792515600,ETH,5min,Up,2,0.29,0.0,0.38,0.0,0.35,-7.89,0,0,0,0,fuera_de_zona_confirmada
+2026-10-20T17:00:28+00:00,0xe55ada7c3c287cb9279cfafa5c44788338051fea7994ac196bfffbc342de1644,btc-updown-15m-1792515600,BTC,15min,Down,2,0.55,462.3,0.57,1004.3,0.57,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-10-20T17:00:37+00:00,0xad359f7770ac1d8a74d5be44b2cf44bb4b6a95003443facfb6c7b1e944ec2a64,xrp-updown-5m-1792515600,XRP,5min,Up,2,0.34,11.6,0.34,19.6,0.33,-2.94,1,0,0,0,fuera_de_zona_confirmada
+2026-10-20T17:01:55+00:00,0xaaa16f852d7f558615e983462d53170c04a378a512537eeda65ab9dddf61dcb2,bitcoin-up-or-down-october-20-2026-1pm-et,BTC,60min,Up,2,0.47,1437.3,0.41,1421.4,0.39,-4.88,1,0,0,0,fuera_de_zona_confirmada
+2026-10-20T17:02:08+00:00,0x6b150bd059d3a428623adef5941a3639ba1a74da5ae9f54c0a831acab2aedc68,eth-updown-15m-1792515600,ETH,15min,Up,3,0.39,1673.4,0.23,1851.6,0.23,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-10-20T17:02:37+00:00,0x330ba28f0c8d35c4d9e2720c98b4ad21303e6fdce4e1fdea11cea1a5795ff49d,doge-updown-5m-1792515600,DOGE,5min,Up,2,0.04,4.7,0.03,3.2,0.03,0.0,0,0,0,0,fuera_de_zona_confirmada
