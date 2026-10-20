@@ -1,0 +1,56 @@
+2026-10-09 171844 77044
+2026-10-10 145716 68396
+2026-10-11 134731 66950
+2026-10-12 148058 73283
+2026-10-13 170654 76870
+2026-10-14 156320 74523
+2026-10-15 177672 80236
+2026-10-16 155887 72520
+2026-10-17 128537 66531
+2026-10-18 128638 66717
+cobertura desenlace por moneda: {'BNB': 1.0, 'BTC': 1.0, 'DOGE': 1.0, 'ETH': 1.0, 'SOL': 1.0, 'XRP': 1.0}
+unidades 723070 rivales 387
+
+CAMPO sin rivales, compras tomadoras, 5m anidado: EV por moneda x (s / opuesto), unidades con coste; (n, coste $, EV, IC90 cierre, EV sin 2 mejores dias, dias+)
+BTC   campo    lado s  n=264867 coste=   8785624 EV=-0.027 IC90=(np.float64(-0.07), np.float64(0.01)) sin2mejores=-0.048 dias+=3/10
+BTC   campo    opuesto n=261916 coste=   8383898 EV=-0.015 IC90=(np.float64(-0.05), np.float64(0.02)) sin2mejores=-0.042 dias+=3/10
+BTC   RIVALES  lado s  n=   294 coste=     85516 EV=+0.239 IC90=(np.float64(0.03), np.float64(0.44)) sin2mejores=-0.004 dias+=5/10
+ETH   campo    lado s  n= 48916 coste=    774183 EV=-0.034 IC90=(np.float64(-0.08), np.float64(0.01)) sin2mejores=-0.067 dias+=3/10
+ETH   campo    opuesto n= 45215 coste=    766404 EV=+0.003 IC90=(np.float64(-0.04), np.float64(0.05)) sin2mejores=-0.023 dias+=5/10
+ETH   RIVALES  lado s  n=    25 coste=       257 EV=-0.490 IC90=(np.float64(-0.81), np.float64(-0.01)) sin2mejores=-0.613 dias+=2/9
+SOL   campo    lado s  n= 23592 coste=    300900 EV=+0.002 IC90=(np.float64(-0.04), np.float64(0.04)) sin2mejores=-0.024 dias+=6/10
+SOL   campo    opuesto n= 21628 coste=    269870 EV=-0.059 IC90=(np.float64(-0.1), np.float64(-0.01)) sin2mejores=-0.089 dias+=2/10
+SOL   RIVALES  lado s  n=    17 coste=       216 EV=+0.249 IC90=(np.float64(-0.12), np.float64(0.48)) sin2mejores=+0.081 dias+=6/9
+XRP   campo    lado s  n= 15777 coste=    157125 EV=+0.019 IC90=(np.float64(-0.02), np.float64(0.05)) sin2mejores=+0.000 dias+=7/10
+XRP   campo    opuesto n= 14499 coste=    148681 EV=-0.062 IC90=(np.float64(-0.1), np.float64(-0.02)) sin2mejores=-0.082 dias+=2/10
+XRP   RIVALES  lado s  n=    13 coste=        76 EV=-0.373 IC90=(np.float64(-0.76), np.float64(0.12)) sin2mejores=-0.448 dias+=2/7
+DOGE  campo    lado s  n=  7820 coste=     66074 EV=-0.015 IC90=(np.float64(-0.05), np.float64(0.03)) sin2mejores=-0.038 dias+=4/10
+DOGE  campo    opuesto n=  7266 coste=     57588 EV=-0.029 IC90=(np.float64(-0.06), np.float64(0.01)) sin2mejores=-0.042 dias+=4/10
+DOGE  RIVALES  lado s  n=    18 coste=       162 EV=-0.124 IC90=(np.float64(-0.64), np.float64(0.39)) sin2mejores=-0.609 dias+=3/9
+BNB   campo    lado s  n=  5669 coste=     44934 EV=-0.007 IC90=(np.float64(-0.06), np.float64(0.04)) sin2mejores=-0.046 dias+=3/10
+BNB   campo    opuesto n=  5518 coste=     43082 EV=-0.048 IC90=(np.float64(-0.09), np.float64(-0.0)) sin2mejores=-0.098 dias+=4/10
+BNB   RIVALES  lado s  n=    20 coste=       101 EV=+0.414 IC90=(np.float64(-0.12), np.float64(1.08)) sin2mejores=+0.175 dias+=5/8
+
+CAMPO sin rivales, lado s, por banda de precio de la unidad (todas las monedas / BTC / altcoins)
+BTC   (0.0, 0.15]    lado s n=15459 coste=   142272 EV=-0.643 (np.float64(-0.81), np.float64(-0.44)) | opuesto n=18137 EV=-0.178
+BTC   (0.15, 0.3]    lado s n=24711 coste=   446318 EV=-0.415 (np.float64(-0.53), np.float64(-0.29)) | opuesto n=26813 EV=-0.328
+BTC   (0.3, 0.5]     lado s n=55515 coste=  1520436 EV=-0.106 (np.float64(-0.19), np.float64(-0.02)) | opuesto n=54836 EV=-0.152
+BTC   (0.5, 0.7]     lado s n=67145 coste=  2270206 EV=+0.057 (np.float64(0.0), np.float64(0.11)) | opuesto n=65167 EV=+0.053
+BTC   (0.7, 1.01]    lado s n=102037 coste=  4406392 EV=+0.017 (np.float64(-0.0), np.float64(0.03)) | opuesto n=96963 EV=+0.037
+ALTS  (0.0, 0.15]    lado s n= 5825 coste=    24454 EV=-0.543 (np.float64(-0.68), np.float64(-0.38)) | opuesto n= 6124 EV=-0.551
+ALTS  (0.15, 0.3]    lado s n= 9667 coste=    72600 EV=-0.352 (np.float64(-0.44), np.float64(-0.26)) | opuesto n= 9094 EV=-0.432
+ALTS  (0.3, 0.5]     lado s n=20012 coste=   215731 EV=-0.090 (np.float64(-0.17), np.float64(-0.0)) | opuesto n=16792 EV=-0.078
+ALTS  (0.5, 0.7]     lado s n=23503 coste=   316244 EV=+0.033 (np.float64(-0.02), np.float64(0.09)) | opuesto n=19842 EV=+0.056
+ALTS  (0.7, 1.01]    lado s n=42767 coste=   714186 EV=+0.034 (np.float64(0.02), np.float64(0.04)) | opuesto n=42274 EV=+0.021
+
+Persistencia por gap |ref5/ref15-1| (lado s, campo, ALTS+BTC, p<0.5):
+  BTC   gap (0.0, 1.0]   n= 8620 coste=  223578 EV=-0.198
+  BTC   gap (1.0, 2.0]   n= 7818 coste=  184132 EV=+0.041
+  BTC   gap (2.0, 4.0]   n=13934 coste=  315742 EV=-0.094
+  BTC   gap (4.0, 8.0]   n=22051 coste=  480783 EV=-0.301
+  BTC   gap (8.0, 1000000000.0] n=37939 coste=  839950 EV=-0.286
+  ALTS  gap (0.0, 1.0]   n= 2049 coste=   17050 EV=-0.263
+  ALTS  gap (1.0, 2.0]   n= 1874 coste=   18961 EV=-0.358
+  ALTS  gap (2.0, 4.0]   n= 3480 coste=   30629 EV=-0.198
+  ALTS  gap (4.0, 8.0]   n= 6364 coste=   55401 EV=-0.182
+  ALTS  gap (8.0, 1000000000.0] n=20556 coste=  185702 EV=-0.165

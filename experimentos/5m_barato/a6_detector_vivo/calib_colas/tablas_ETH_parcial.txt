@@ -1,0 +1,10 @@
+muestras 934 rotas 0
+== ETH TODO (agregado, solo resumen posterior)  n=934 dias=3
+  fill any   : opt=0.93  base=0.91  cons=0.91  lo=0.91  prop=0.92  hi=0.92
+  fill<=2s   : opt=0.33  base=0.25  cons=0.22  lo=0.23  prop=0.25  hi=0.26
+  [lo] c_fill pooled=0.960 dias=0.959 IC90dias=(0.952,0.967) IC90bloque1h=(0.953, 0.968) | f_eff pooled=0.048 dias=0.047 IC90dias=(0.039,0.055) IC90bloque=(0.04, 0.06) cens=80
+  [prop] c_fill pooled=0.980 dias=0.979 IC90dias=(0.966,0.991) IC90bloque1h=(0.976, 0.985) | f_eff pooled=0.023 dias=0.024 IC90dias=(0.017,0.031) IC90bloque=(0.02, 0.03) cens=75
+  [hi] c_fill pooled=0.984 dias=0.982 IC90dias=(0.968,0.995) IC90bloque1h=(0.979, 0.988) | f_eff pooled=0.019 dias=0.020 IC90dias=(0.011,0.029) IC90bloque=(0.01, 0.02) cens=74
+  f* (lo) mejor factor de cola = 0.9 (dist media 0.006); por dias: (0.63, 0.09, 1.18, 3); dist de opt/base/cons: opt=0.031, base=0.006, cons=0.010
+  f* (prop) mejor factor de cola = 0.2 (dist media 0.008); por dias: (0.33, -0.02, 0.68, 3); dist de opt/base/cons: opt=0.022, base=0.010, cons=0.019
+  f* (hi) mejor factor de cola = 0.1 (dist media 0.007); por dias: (0.17, -0.03, 0.36, 3); dist de opt/base/cons: opt=0.019, base=0.012, cons=0.022

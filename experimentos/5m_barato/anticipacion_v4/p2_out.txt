@@ -1,0 +1,46 @@
+filas 2282799 con desenlace 2282799
+
+===  A m>=-.05&dm>=.01
+  disparos 1a por cierre 323 ejecutables a +215 ms 262 (81 %) | re-armes disparados 655 ejec 586
+  PRIMARIA 1a/cierre TODO      n=262 dias=13 coste= 639.1 PnL= -54.67 EV=-0.086 acierto=0.24 precio=0.23 IC90cierre=[-0.348  0.213] IC90dia=[-0.362  0.208] | Bonf4 cierre inf=-0.417 | sin2mejoresdias=-0.271 dias+=5/13
+  PRIMARIA DESC 06-12          n=154 dias= 7 coste= 377.2 PnL= +40.30 EV=+0.107 acierto=0.27 precio=0.24 IC90cierre=[-0.277  0.54 ] IC90dia=[-0.257  0.516] | Bonf4 cierre inf=-0.381 | sin2mejoresdias=-0.170 dias+=4/7
+  PRIMARIA TEST 13-18          n=108 dias= 6 coste= 261.9 PnL= -94.98 EV=-0.363 acierto=0.20 precio=0.22 IC90cierre=[-0.642  0.003] IC90dia=[-0.703  0.015] | Bonf4 cierre inf=-0.706 | sin2mejoresdias=-0.699 dias+=1/6
+  RE-ARMES (k>=1)              n=586 dias=13 coste=1438.5 PnL=-482.75 EV=-0.336 acierto=0.23 precio=0.23 IC90cierre=[-0.506 -0.14 ] IC90dia=[-0.514 -0.155] | Bonf4 cierre inf=-0.559 | sin2mejoresdias=-0.452 dias+=2/13
+  TODO (1a + re-armes)         n=848 dias=13 coste=2077.6 PnL=-537.43 EV=-0.259 acierto=0.24 precio=0.23 IC90cierre=[-0.431 -0.064] IC90dia=[-0.453 -0.071] | Bonf4 cierre inf=-0.484 | sin2mejoresdias=-0.364 dias+=5/13
+  no ejecutables a +215: 61 acierto 0.56 (selecc. adversa si > ejecutadas 0.24)
+
+===  B m>=-.02&dm>=.01
+  disparos 1a por cierre 183 ejecutables a +215 ms 133 (73 %) | re-armes disparados 223 ejec 173
+  PRIMARIA 1a/cierre TODO      n=133 dias=13 coste= 325.5 PnL=-139.93 EV=-0.430 acierto=0.23 precio=0.22 IC90cierre=[-0.573 -0.271] IC90dia=[-0.611 -0.268] | Bonf4 cierre inf=-0.625 | sin2mejoresdias=-0.543 dias+=1/13
+  PRIMARIA DESC 06-12          n= 82 dias= 7 coste= 197.6 PnL= -85.19 EV=-0.431 acierto=0.23 precio=0.21 IC90cierre=[-0.624 -0.224] IC90dia=[-0.637 -0.192] | Bonf4 cierre inf=-0.683 | sin2mejoresdias=-0.598 dias+=1/7
+  PRIMARIA TEST 13-18          n= 51 dias= 6 coste= 127.9 PnL= -54.74 EV=-0.428 acierto=0.24 precio=0.24 IC90cierre=[-0.656 -0.189] IC90dia=[-0.749 -0.21 ] | Bonf4 cierre inf=-0.731 | sin2mejoresdias=-0.767 dias+=0/6
+  RE-ARMES (k>=1)              n=173 dias=13 coste= 426.6 PnL= -23.96 EV=-0.056 acierto=0.32 precio=0.27 IC90cierre=[-0.371  0.316] IC90dia=[-0.38  0.26] | Bonf4 cierre inf=-0.457 | sin2mejoresdias=-0.309 dias+=5/13
+  TODO (1a + re-armes)         n=306 dias=13 coste= 752.1 PnL=-163.89 EV=-0.218 acierto=0.28 precio=0.25 IC90cierre=[-0.429  0.016] IC90dia=[-0.45  -0.003] | Bonf4 cierre inf=-0.501 | sin2mejoresdias=-0.384 dias+=4/13
+  no ejecutables a +215: 50 acierto 0.58 (selecc. adversa si > ejecutadas 0.23)
+
+===  C cruce -.05
+  disparos 1a por cierre 309 ejecutables a +215 ms 250 (81 %) | re-armes disparados 419 ejec 353
+  PRIMARIA 1a/cierre TODO      n=250 dias=13 coste= 610.2 PnL= -25.78 EV=-0.042 acierto=0.25 precio=0.24 IC90cierre=[-0.302  0.27 ] IC90dia=[-0.342  0.274] | Bonf4 cierre inf=-0.383 | sin2mejoresdias=-0.241 dias+=6/13
+  PRIMARIA DESC 06-12          n=144 dias= 7 coste= 353.0 PnL= +59.53 EV=+0.169 acierto=0.28 precio=0.25 IC90cierre=[-0.236  0.62 ] IC90dia=[-0.223  0.651] | Bonf4 cierre inf=-0.359 | sin2mejoresdias=-0.137 dias+=5/7
+  PRIMARIA TEST 13-18          n=106 dias= 6 coste= 257.2 PnL= -85.31 EV=-0.332 acierto=0.22 precio=0.22 IC90cierre=[-0.619  0.031] IC90dia=[-0.696  0.054] | Bonf4 cierre inf=-0.673 | sin2mejoresdias=-0.689 dias+=1/6
+  RE-ARMES (k>=1)              n=353 dias=13 coste= 887.4 PnL=-183.04 EV=-0.206 acierto=0.30 precio=0.29 IC90cierre=[-0.416  0.029] IC90dia=[-0.401 -0.008] | Bonf4 cierre inf=-0.467 | sin2mejoresdias=-0.337 dias+=4/13
+  TODO (1a + re-armes)         n=603 dias=13 coste=1497.7 PnL=-208.82 EV=-0.139 acierto=0.28 precio=0.27 IC90cierre=[-0.336  0.081] IC90dia=[-0.348  0.076] | Bonf4 cierre inf=-0.391 | sin2mejoresdias=-0.251 dias+=6/13
+  no ejecutables a +215: 59 acierto 0.54 (selecc. adversa si > ejecutadas 0.25)
+
+===  D m>=0&dm>=.01
+  disparos 1a por cierre 68 ejecutables a +215 ms 38 (56 %) | re-armes disparados 90 ejec 56
+  PRIMARIA 1a/cierre TODO      n= 38 dias=11 coste=  98.7 PnL= +28.82 EV=+0.292 acierto=0.50 precio=0.39 IC90cierre=[-0.17   0.883] IC90dia=[-0.224  0.93 ] | Bonf4 cierre inf=-0.281 | sin2mejoresdias=-0.128 dias+=6/11
+  PRIMARIA DESC 06-12          n= 25 dias= 6 coste=  64.6 PnL= +31.09 EV=+0.481 acierto=0.56 precio=0.39 IC90cierre=[-0.12   1.278] IC90dia=[-0.148  1.435] | Bonf4 cierre inf=-0.247 | sin2mejoresdias=-0.122 dias+=4/6
+  PRIMARIA TEST 13-18          n= 13 dias= 5 coste=  34.0 PnL=  -2.27 EV=-0.067 acierto=0.38 precio=0.41 IC90cierre=[-0.602  0.6  ] IC90dia=[-0.721  0.834] | Bonf4 cierre inf=-0.834 | sin2mejoresdias=-0.573 dias+=2/5
+  RE-ARMES (k>=1)              n= 56 dias=12 coste= 126.0 PnL= +50.54 EV=+0.401 acierto=0.41 precio=0.27 IC90cierre=[-0.216  1.102] IC90dia=[-0.158  1.131] | Bonf4 cierre inf=-0.393 | sin2mejoresdias=-0.044 dias+=5/12
+  TODO (1a + re-armes)         n= 94 dias=12 coste= 224.7 PnL= +79.36 EV=+0.353 acierto=0.45 precio=0.32 IC90cierre=[-0.12   0.918] IC90dia=[-0.136  0.969] | Bonf4 cierre inf=-0.249 | sin2mejoresdias=-0.035 dias+=7/12
+  no ejecutables a +215: 30 acierto 0.57 (selecc. adversa si > ejecutadas 0.50)
+
+===  V4 m>=.05
+  disparos 1a por cierre 30 ejecutables a +215 ms 12 (40 %) | re-armes disparados 27 ejec 12
+  PRIMARIA 1a/cierre TODO      n= 12 dias= 7 coste=  28.3 PnL= +16.69 EV=+0.589 acierto=0.58 precio=0.37 IC90cierre=[-0.135  1.448] IC90dia=[-0.307  1.496] | Bonf4 cierre inf=-0.397 | sin2mejoresdias=-0.200 dias+=3/7
+  PRIMARIA DESC 06-12          n=  9 dias= 5 coste=  21.7 PnL=  +4.03 EV=+0.186 acierto=0.56 precio=0.41 IC90cierre=[-0.326  0.716] IC90dia=[-0.523  0.809] | Bonf4 cierre inf=-0.539 | sin2mejoresdias=-0.564 dias+=2/5
+  PRIMARIA TEST 13-18          n=  3 dias= 2 coste=   6.6 PnL= +12.66 EV=+1.910 acierto=0.67 precio=0.25 IC90cierre=[-0.245  4.065] IC90dia=(nan, nan) | Bonf4 cierre inf=-1.0 | sin2mejoresdias=+nan dias+=1/2
+  RE-ARMES (k>=1)              n= 12 dias= 5 coste=  25.4 PnL= +34.72 EV=+1.365 acierto=0.83 precio=0.39 IC90cierre=[0.409 2.399] IC90dia=[0.827 1.701] | Bonf4 cierre inf=0.095 | sin2mejoresdias=+1.099 dias+=5/5
+  TODO (1a + re-armes)         n= 24 dias=10 coste=  53.7 PnL= +51.40 EV=+0.956 acierto=0.71 precio=0.38 IC90cierre=[0.321 1.629] IC90dia=[0.297 1.531] | Bonf4 cierre inf=0.115 | sin2mejoresdias=+0.406 dias+=7/10
+  no ejecutables a +215: 18 acierto 0.83 (selecc. adversa si > ejecutadas 0.58)

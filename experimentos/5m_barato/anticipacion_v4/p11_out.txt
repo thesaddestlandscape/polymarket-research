@@ -1,0 +1,24 @@
+(A) entrenamiento 09-12: 119 disparos 51 rival | holdout 13-18: 128 disparos 40 rival | AUC holdout 0.751 | coef {'c': np.float64(-0.36), 'ask5': np.float64(0.11), 'bid15': np.float64(0.28), 'T': np.float64(0.58), 'asz5': np.float64(-0.07), 'bsz15': np.float64(0.37), 'm': np.float64(-0.4), 'dm': np.float64(0.38), 'hs': np.float64(-0.05), 'hc': np.float64(0.27)}
+  A holdout: TODOS los disparos        disp=128 ejec=107 dias= 6 coste= 260.8 EV=-0.360 acierto=0.21 IC90cierre=(np.float64(-0.642), np.float64(0.013)) Bonf4inf=-0.694 IC90dia=(np.float64(-0.701), np.float64(-0.003)) sin2mejores=-0.695 dias+=1/6
+  A holdout: top 30 % predicho rival   disp= 39 ejec= 26 dias= 5 coste=  69.8 EV=-0.257 acierto=0.38 IC90cierre=(np.float64(-0.531), np.float64(-0.003)) Bonf4inf=-0.605 IC90dia=(np.float64(-0.638), np.float64(-0.007)) sin2mejores=-0.670 dias+=1/5
+  A holdout: resto 70 %                disp= 89 ejec= 81 dias= 6 coste= 191.0 EV=-0.398 acierto=0.15 IC90cierre=(np.float64(-0.762), np.float64(0.123)) Bonf4inf=-0.83 IC90dia=(np.float64(-0.729), np.float64(0.056)) sin2mejores=-0.701 dias+=1/6
+  A holdout: cierres que SI opero rival disp= 40 ejec= 28 dias= 5 coste=  68.7 EV=-0.099 acierto=0.36 IC90cierre=(np.float64(-0.463), np.float64(0.295)) Bonf4inf=-0.584 IC90dia=(np.float64(-0.744), np.float64(0.158)) sin2mejores=-0.773 dias+=2/5
+  A holdout: cierres que NO opero rival disp= 88 ejec= 79 dias= 6 coste= 192.1 EV=-0.453 acierto=0.15 IC90cierre=(np.float64(-0.788), np.float64(0.062)) Bonf4inf=-0.835 IC90dia=(np.float64(-0.746), np.float64(-0.019)) sin2mejores=-0.683 dias+=1/6
+
+(B) bolsillo favorito anidado (4 variantes fijadas):
+--- F1 ask[.70,.95] m>=-.05
+  TODO 06-18                           disp= 45 ejec= 22 dias=11 coste=  87.7 EV=+0.083 acierto=0.86 IC90cierre=(np.float64(-0.072), np.float64(0.211)) Bonf4inf=-0.131 IC90dia=(np.float64(-0.018), np.float64(0.199)) sin2mejores=+0.031 dias+=9/11
+  DESC 06-12                           disp= 22 ejec= 10 dias= 6 coste=  40.3 EV=+0.117 acierto=0.90 IC90cierre=(np.float64(-0.098), np.float64(0.273)) Bonf4inf=-0.156 IC90dia=(np.float64(-0.005), np.float64(0.268)) sin2mejores=+0.024 dias+=5/6
+  TEST 13-18                           disp= 23 ejec= 12 dias= 5 coste=  47.4 EV=+0.054 acierto=0.83 IC90cierre=(np.float64(-0.163), np.float64(0.251)) Bonf4inf=-0.259 IC90dia=(np.float64(-0.116), np.float64(0.237)) sin2mejores=-0.038 dias+=4/5
+--- F2 ask[.70,.95] m>=0
+  TODO 06-18                           disp= 13 ejec=  5 dias= 3 coste=  19.4 EV=+0.031 acierto=0.80 IC90cierre=(np.float64(-0.421), np.float64(0.308)) Bonf4inf=-0.467 IC90dia=(np.float64(-0.03), np.float64(0.152)) sin2mejores=-0.059 dias+=2/3
+  DESC 06-12                           disp=  4 ejec=  1 dias= 1 coste=   4.2 EV=+0.177 acierto=1.00 IC90cierre=(nan, nan) Bonf4inf=nan IC90dia=(nan, nan) sin2mejores=+nan dias+=1/1
+  TEST 13-18                           disp=  9 ejec=  4 dias= 2 coste=  15.2 EV=-0.010 acierto=0.75 IC90cierre=(np.float64(-0.631), np.float64(0.358)) Bonf4inf=-0.656 IC90dia=(nan, nan) sin2mejores=+nan dias+=1/2
+--- F3 ask[.50,.95] m>=-.05
+  TODO 06-18                           disp= 69 ejec= 36 dias=13 coste= 118.8 EV=+0.179 acierto=0.78 IC90cierre=(np.float64(0.005), np.float64(0.34)) Bonf4inf=-0.058 IC90dia=(np.float64(-0.024), np.float64(0.344)) sin2mejores=+0.040 dias+=8/13
+  DESC 06-12                           disp= 40 ejec= 22 dias= 7 coste=  70.2 EV=+0.140 acierto=0.73 IC90cierre=(np.float64(-0.097), np.float64(0.365)) Bonf4inf=-0.188 IC90dia=(np.float64(-0.116), np.float64(0.371)) sin2mejores=-0.075 dias+=4/7
+  TEST 13-18                           disp= 29 ejec= 14 dias= 6 coste=  48.6 EV=+0.235 acierto=0.86 IC90cierre=(np.float64(0.0), np.float64(0.454)) Bonf4inf=-0.101 IC90dia=(np.float64(-0.151), np.float64(0.44)) sin2mejores=-0.050 dias+=4/6
+--- F4 F1 & dm>=.01
+  TODO 06-18                           disp= 44 ejec= 22 dias=11 coste=  87.8 EV=+0.082 acierto=0.86 IC90cierre=(np.float64(-0.064), np.float64(0.213)) Bonf4inf=-0.141 IC90dia=(np.float64(-0.018), np.float64(0.194)) sin2mejores=+0.028 dias+=9/11
+  DESC 06-12                           disp= 22 ejec= 11 dias= 6 coste=  44.1 EV=+0.135 acierto=0.91 IC90cierre=(np.float64(-0.066), np.float64(0.279)) Bonf4inf=-0.148 IC90dia=(np.float64(0.005), np.float64(0.28)) sin2mejores=+0.026 dias+=5/6
+  TEST 13-18                           disp= 22 ejec= 11 dias= 5 coste=  43.7 EV=+0.029 acierto=0.82 IC90cierre=(np.float64(-0.204), np.float64(0.24)) Bonf4inf=-0.302 IC90dia=(np.float64(-0.122), np.float64(0.218)) sin2mejores=-0.067 dias+=4/5

@@ -1,0 +1,26 @@
+RAFAGAS R1_9783: n=3525 ordenes/rafaga P50/P90 [1. 3.] shares/rafaga P10/50/90 [ 10.  33. 107.] niveles distintos P50/P90 [1. 2.]
+   vwap-ask(ex-150) P10/50/90 (c): [-1.   0.   0.5] | pmax-ask P50/P90 (c): [0. 1.] | sh/tam. nivel1 P50: 0.27 | rafagas con sh>nivel1: 0.15 | vwap<ask-1c: 0.17 | pmax<=ask: 0.86
+RAFAGAS R2_e38c: n=1866 ordenes/rafaga P50/P90 [1. 3.] shares/rafaga P10/50/90 [ 3.  9. 47.] niveles distintos P50/P90 [1. 2.]
+   vwap-ask(ex-150) P10/50/90 (c): [-1.  -0.   1.1] | pmax-ask P50/P90 (c): [0.  1.5] | sh/tam. nivel1 P50: 0.09 | rafagas con sh>nivel1: 0.07 | vwap<ask-1c: 0.15 | pmax<=ask: 0.7
+
+== R1_9783
+  precio (0.0, 0.15]    fills= 1205 cierres= 70 coste=    4503 EV=-0.206 IC90cierre=(np.float64(-0.89), np.float64(0.75)) sin2mejores=-0.911 dias+=1/10
+  precio (0.15, 0.3]    fills= 1510 cierres= 60 coste=   10775 EV=+0.180 IC90cierre=(np.float64(-0.28), np.float64(0.74)) sin2mejores=-0.306 dias+=4/10
+  precio (0.3, 0.5]     fills= 1420 cierres= 47 coste=   16628 EV=+0.579 IC90cierre=(np.float64(0.12), np.float64(1.03)) sin2mejores=+0.028 dias+=5/10
+  precio (0.5, 0.7]     fills=  865 cierres= 34 coste=   14848 EV=+0.348 IC90cierre=(np.float64(0.07), np.float64(0.55)) sin2mejores=+0.096 dias+=5/8
+  precio (0.7, 1.0]     fills=  982 cierres= 45 coste=   22265 EV=+0.131 IC90cierre=(np.float64(0.04), np.float64(0.2)) sin2mejores=+0.110 dias+=10/10
+  T rest. (0, 60]        fills=   70 cierres= 10 coste=     409 EV=-0.514 IC90cierre=(np.float64(-0.94), np.float64(0.13)) sin2mejores=-0.739 dias+=1/5
+  T rest. (60, 120]      fills= 1900 cierres= 80 coste=   18344 EV=+0.268 IC90cierre=(np.float64(-0.06), np.float64(0.59)) sin2mejores=-0.089 dias+=4/10
+  T rest. (120, 200]     fills= 1941 cierres= 69 coste=   20940 EV=+0.030 IC90cierre=(np.float64(-0.24), np.float64(0.3)) sin2mejores=-0.351 dias+=4/10
+  T rest. (200, 300]     fills= 2071 cierres= 77 coste=   29325 EV=+0.457 IC90cierre=(np.float64(0.17), np.float64(0.75)) sin2mejores=+0.251 dias+=9/10
+
+== R2_e38c
+  precio (0.0, 0.15]    fills=   61 cierres= 13 coste=     106 EV=+0.845 IC90cierre=(np.float64(-0.93), np.float64(2.99)) sin2mejores=-0.869 dias+=3/6
+  precio (0.15, 0.3]    fills=  606 cierres= 42 coste=    2425 EV=+0.611 IC90cierre=(np.float64(-0.14), np.float64(1.29)) sin2mejores=-0.068 dias+=4/10
+  precio (0.3, 0.5]     fills= 1396 cierres= 58 coste=    6280 EV=-0.109 IC90cierre=(np.float64(-0.43), np.float64(0.26)) sin2mejores=-0.577 dias+=4/10
+  precio (0.5, 0.7]     fills=  890 cierres= 42 coste=    5272 EV=+0.038 IC90cierre=(np.float64(-0.28), np.float64(0.4)) sin2mejores=-0.216 dias+=6/10
+  precio (0.7, 1.0]     fills=  408 cierres= 30 coste=    4021 EV=+0.142 IC90cierre=(np.float64(0.04), np.float64(0.2)) sin2mejores=+0.078 dias+=6/8
+  T rest. (0, 60]        fills=   12 cierres=  5 coste=      13 EV=+0.124 IC90cierre=(np.float64(-0.64), np.float64(0.69)) sin2mejores=-1.000 dias+=2/3
+  T rest. (60, 120]      fills=  833 cierres= 36 coste=    3956 EV=+0.261 IC90cierre=(np.float64(-0.01), np.float64(0.56)) sin2mejores=+0.047 dias+=5/10
+  T rest. (120, 200]     fills= 1171 cierres= 43 coste=    5466 EV=-0.186 IC90cierre=(np.float64(-0.54), np.float64(0.24)) sin2mejores=-0.682 dias+=4/9
+  T rest. (200, 300]     fills= 1345 cierres= 71 coste=    8670 EV=+0.189 IC90cierre=(np.float64(-0.11), np.float64(0.52)) sin2mejores=-0.049 dias+=6/10

@@ -1,0 +1,26 @@
+(a) AUC rasgos del disparo A para etiqueta rival-opero-el-cierre (n=317, rival=91)
+{'ask5': np.float64(0.712), 'bid15': np.float64(0.72), 'asz5': np.float64(0.471), 'bsz15': np.float64(0.509), 'T': np.float64(0.67), 'm': np.float64(0.467), 'dm': np.float64(0.656), 'r250': np.float64(0.516), 'r1000': np.float64(0.52)}
+   cobertura gap solo en cierres rival (no se usa)
+   pct disparos con ask5<=0,15: rival 0.26 / no-rival 0.67 ; con T<120: 0.20 / 0.38
+
+(b) familia fijada: A & ask5>=X & T>=Y
+--- X=0.2 Y=120
+  DESC 06-12                         disparos= 73 ejec= 47 dias= 7 coste= 134.8 EV=-0.075 acierto=0.51 IC90cierre=(np.float64(-0.27), np.float64(0.107)) Bonf4inf=-0.331 IC90dia=(np.float64(-0.244), np.float64(0.1)) sin2mejores=-0.204 dias+=3/7
+  TEST 13-18                         disparos= 42 ejec= 25 dias= 6 coste=  74.6 EV=+0.024 acierto=0.56 IC90cierre=(np.float64(-0.253), np.float64(0.319)) Bonf4inf=-0.348 IC90dia=(np.float64(-0.292), np.float64(0.21)) sin2mejores=-0.175 dias+=4/6
+  TODO                               disparos=115 ejec= 72 dias=13 coste= 209.4 EV=-0.040 acierto=0.53 IC90cierre=(np.float64(-0.192), np.float64(0.121)) Bonf4inf=-0.251 IC90dia=(np.float64(-0.193), np.float64(0.108)) sin2mejores=-0.126 dias+=7/13
+--- X=0.2 Y=200
+  DESC 06-12                         disparos= 55 ejec= 34 dias= 7 coste=  81.7 EV=-0.085 acierto=0.41 IC90cierre=(np.float64(-0.376), np.float64(0.208)) Bonf4inf=-0.479 IC90dia=(np.float64(-0.327), np.float64(0.203)) sin2mejores=-0.253 dias+=3/7
+  TEST 13-18                         disparos= 28 ejec= 15 dias= 5 coste=  39.7 EV=-0.234 acierto=0.40 IC90cierre=(np.float64(-0.591), np.float64(0.122)) Bonf4inf=-0.727 IC90dia=(np.float64(-0.564), np.float64(0.017)) sin2mejores=-0.498 dias+=1/5
+  TODO                               disparos= 83 ejec= 49 dias=12 coste= 121.4 EV=-0.134 acierto=0.41 IC90cierre=(np.float64(-0.357), np.float64(0.091)) Bonf4inf=-0.447 IC90dia=(np.float64(-0.327), np.float64(0.069)) sin2mejores=-0.246 dias+=4/12
+--- X=0.3 Y=120
+  DESC 06-12                         disparos= 62 ejec= 39 dias= 7 coste= 120.6 EV=+0.042 acierto=0.62 IC90cierre=(np.float64(-0.146), np.float64(0.237)) Bonf4inf=-0.221 IC90dia=(np.float64(-0.111), np.float64(0.22)) sin2mejores=-0.103 dias+=3/7
+  TEST 13-18                         disparos= 38 ejec= 23 dias= 6 coste=  70.2 EV=+0.045 acierto=0.61 IC90cierre=(np.float64(-0.212), np.float64(0.307)) Bonf4inf=-0.316 IC90dia=(np.float64(-0.201), np.float64(0.197)) sin2mejores=-0.141 dias+=4/6
+  TODO                               disparos=100 ejec= 62 dias=13 coste= 190.8 EV=+0.043 acierto=0.61 IC90cierre=(np.float64(-0.111), np.float64(0.196)) Bonf4inf=-0.171 IC90dia=(np.float64(-0.084), np.float64(0.17)) sin2mejores=-0.043 dias+=7/13
+--- X=0.3 Y=200
+  DESC 06-12                         disparos= 43 ejec= 27 dias= 7 coste=  69.0 EV=+0.004 acierto=0.48 IC90cierre=(np.float64(-0.304), np.float64(0.312)) Bonf4inf=-0.423 IC90dia=(np.float64(-0.19), np.float64(0.241)) sin2mejores=-0.163 dias+=3/7
+  TEST 13-18                         disparos= 26 ejec= 14 dias= 5 coste=  37.6 EV=-0.191 acierto=0.43 IC90cierre=(np.float64(-0.569), np.float64(0.173)) Bonf4inf=-0.712 IC90dia=(np.float64(-0.505), np.float64(0.023)) sin2mejores=-0.441 dias+=1/5
+  TODO                               disparos= 69 ejec= 41 dias=12 coste= 106.6 EV=-0.065 acierto=0.46 IC90cierre=(np.float64(-0.31), np.float64(0.188)) Bonf4inf=-0.388 IC90dia=(np.float64(-0.23), np.float64(0.094)) sin2mejores=-0.175 dias+=4/12
+
+mejor en DESC: (0.3, 120) 0.04226100362228224
+TEST de la elegida (una sola vez):
+  ELEGIDA (0.3, 120) TEST            disparos= 38 ejec= 23 dias= 6 coste=  70.2 EV=+0.045 acierto=0.61 IC90cierre=(np.float64(-0.217), np.float64(0.308)) Bonf4inf=-0.306 IC90dia=(np.float64(-0.204), np.float64(0.2)) sin2mejores=-0.141 dias+=4/6

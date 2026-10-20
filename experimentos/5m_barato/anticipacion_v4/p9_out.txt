@@ -1,0 +1,51 @@
+FILAS por wallet x is_tk x side x act-BTC:
+btc            False  True 
+w  is_tk side              
+R1 0     0         0  11823
+         1         0   2222
+   1     0         0   5996
+R2 0     0         0   4597
+         1         0    538
+   1     0         0   3458
+         1         0     39
+R3 0     0       338    276
+         1        36     42
+   1     0       318    259
+
+VENTAS (side=1) tomadoras BTC por wallet: n y shares {'R2': {'n': 39, 'sh': 209.7562}} | compras shares {'R1': 182901.0, 'R2': 40120.0, 'R3': 1424.0}
+
+mercados 5m con compras: por wallet n y % que compra AMBOS lados (en el mismo mercado-token par?)  {'R1': {'size': 151, 'mean': 0.0}, 'R2': {'size': 102, 'mean': 0.0}, 'R3': {'size': 53, 'mean': 0.0}}
+mercados con ambos lados comprados: {'R1': 0.0, 'R2': 0.0, 'R3': 0.0} | n mercados {'R1': 151, 'R2': 102, 'R3': 53}
+PnL por unidad (w,mkt,lado): media, mediana, %>0, sh P50:
+      n       pnl   med   pos    sh50   usd50
+w                                            
+R1  151  18991.92 -3.74  0.47  526.00  147.44
+R2  102   1859.22  1.06  0.51  229.65  107.30
+R3   53    288.12  1.57  0.60   10.27    4.80
+COSTE R1: fee obs/teorico (ponderado por shares) = 1.000  fee/usd = 0.0320  filas fee==0: 0.000  n=5996
+COSTE R2: fee obs/teorico (ponderado por shares) = 1.000  fee/usd = 0.0323  filas fee==0: 0.000  n=3458
+COSTE R3: fee obs/teorico (ponderado por shares) = 1.000  fee/usd = 0.0350  filas fee==0: 0.000  n=259
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/anticipacion_v4/p9_posiciones_costes.py", line 30, in <module>
+    A = pd.read_csv(W + 'v4_comprar_lo_bueno/r3_out/p1_fills.csv.gz'); A = A[(A.placebo == 0) & A.w.isin(['R1_9783', 'R2_e38c'])].sort_values('ex')
+  File "/usr/local/lib/python3.14/dist-packages/pandas/io/parsers/readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/usr/local/lib/python3.14/dist-packages/pandas/io/parsers/readers.py", line 306, in _read
+    return parser.read(nrows)
+           ~~~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/io/parsers/readers.py", line 1947, in read
+    ) = self._engine.read(  # type: ignore[attr-defined]
+        ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        nrows
+        ^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/io/parsers/c_parser_wrapper.py", line 215, in read
+    chunks = self._reader.read_low_memory(nrows)
+  File "pandas/_libs/parsers.pyx", line 832, in pandas._libs.parsers.TextReader.read_low_memory
+  File "pandas/_libs/parsers.pyx", line 911, in pandas._libs.parsers.TextReader._read_rows
+  File "pandas/_libs/parsers.pyx", line 1009, in pandas._libs.parsers.TextReader._convert_column_data
+  File "pandas/_libs/parsers.pyx", line 1067, in pandas._libs.parsers.TextReader._convert_tokens
+  File "pandas/_libs/parsers.pyx", line 1177, in pandas._libs.parsers.TextReader._convert_with_dtype
+  File "pandas/_libs/parsers.pyx", line 1826, in pandas._libs.parsers._try_int64
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 66.0 KiB for an array with shape (8448,) and data type int64

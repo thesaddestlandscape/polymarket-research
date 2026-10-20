@@ -1,0 +1,14 @@
+R1_9783 1a rafaga de unidad        n=  145 ask5 cayo=0.70 bid15 subio=0.34 margen subio>=1c=0.82 ESTATICO(ni ask5 ni bid15 cambian en 1s)=0.03 | cruza -0,05 (m_prev<-0,05<=m)=0.20 cruza 0=0.17
+R1_9783 rafagas siguientes         n= 3279 ask5 cayo=0.53 bid15 subio=0.42 margen subio>=1c=0.67 ESTATICO(ni ask5 ni bid15 cambian en 1s)=0.06 | cruza -0,05 (m_prev<-0,05<=m)=0.20 cruza 0=0.14
+R1_9783 placebo                    n=24110 ask5 cayo=0.26 bid15 subio=0.24 margen subio>=1c=0.31 ESTATICO(ni ask5 ni bid15 cambian en 1s)=0.32 | cruza -0,05 (m_prev<-0,05<=m)=0.03 cruza 0=0.02
+R2_e38c 1a rafaga de unidad        n=   99 ask5 cayo=0.53 bid15 subio=0.53 margen subio>=1c=0.73 ESTATICO(ni ask5 ni bid15 cambian en 1s)=0.02 | cruza -0,05 (m_prev<-0,05<=m)=0.31 cruza 0=0.11
+R2_e38c rafagas siguientes         n= 1738 ask5 cayo=0.56 bid15 subio=0.45 margen subio>=1c=0.69 ESTATICO(ni ask5 ni bid15 cambian en 1s)=0.04 | cruza -0,05 (m_prev<-0,05<=m)=0.21 cruza 0=0.15
+R2_e38c placebo                    n=13850 ask5 cayo=0.27 bid15 subio=0.26 margen subio>=1c=0.31 ESTATICO(ni ask5 ni bid15 cambian en 1s)=0.29 | cruza -0,05 (m_prev<-0,05<=m)=0.03 cruza 0=0.01
+R1_9783 1a rafaga m15 P10/50/90 [-0.088 -0.046  0.018] m_prev [-0.188 -0.086 -0.005] ask5 [0.1  0.31 0.9 ]
+R2_e38c 1a rafaga m15 P10/50/90 [-0.218 -0.036  0.002] m_prev [-0.229 -0.077 -0.027] ask5 [0.25 0.45 0.71]
+R1_9783 1a n 147 coste 1787 EV 0.107 por dia+ 5 / 10
+R1_9783 sig n 3281 coste 36481 EV 0.315 por dia+ 6 / 10
+R2_e38c 1a n 100 coste 964 EV 0.081 por dia+ 6 / 10
+R2_e38c sig n 1739 coste 9762 EV 0.155 por dia+ 5 / 10
+dt entre rafagas P10/25/50/75/90 (ms) [  48.   86.  226.  823. 4199.]
+acc por orden P10/50/90 [ 3.3 15.  49. ]

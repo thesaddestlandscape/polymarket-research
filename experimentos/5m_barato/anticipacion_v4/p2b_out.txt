@@ -1,0 +1,28 @@
+
+A: disparos 317 ejec 257 | cierres con rival 92 (29 %)
+   rival opero el cierre    n= 65 coste= 159.0 EV=+0.002 acierto=0.37 dias=9
+   rival NO opero           n=192 coste= 471.4 EV=-0.183 acierto=0.20 dias=13
+   nuestro t - 1a compra rival (ms, ex rival-150 como envio): P10/50/90 [-98848.    101.  39642.] | nuestro ask5 P50 0.26 | T P50 206
+   por ask5: {Interval(0.0, 0.15, closed='right'): {'n': 164.0, 'EV': -0.282, 'acierto': 0.04}, Interval(0.15, 0.3, closed='right'): {'n': 22.0, 'EV': 0.06, 'acierto': 0.23}, Interval(0.3, 0.5, closed='right'): {'n': 23.0, 'EV': -0.05, 'acierto': 0.35}, Interval(0.5, 0.7, closed='right'): {'n': 15.0, 'EV': 0.009, 'acierto': 0.6}, Interval(0.7, 1.0, closed='right'): {'n': 33.0, 'EV': 0.062, 'acierto': 1.0}}
+   por T: {Interval(0, 60, closed='right'): {'n': 11.0, 'EV': -0.797}, Interval(60, 120, closed='right'): {'n': 81.0, 'EV': -0.358}, Interval(120, 200, closed='right'): {'n': 84.0, 'EV': -0.08}, Interval(200, 300, closed='right'): {'n': 81.0, 'EV': 0.127}}
+
+C: disparos 299 ejec 241 | cierres con rival 90 (30 %)
+   rival opero el cierre    n= 64 coste= 156.5 EV=+0.050 acierto=0.39 dias=9
+   rival NO opero           n=177 coste= 434.5 EV=-0.125 acierto=0.21 dias=13
+   nuestro t - 1a compra rival (ms, ex rival-150 como envio): P10/50/90 [-62770.    166.  37253.] | nuestro ask5 P50 0.265 | T P50 206
+   por ask5: {Interval(0.0, 0.15, closed='right'): {'n': 149.0, 'EV': -0.201, 'acierto': 0.05}, Interval(0.15, 0.3, closed='right'): {'n': 22.0, 'EV': 0.06, 'acierto': 0.23}, Interval(0.3, 0.5, closed='right'): {'n': 23.0, 'EV': -0.05, 'acierto': 0.35}, Interval(0.5, 0.7, closed='right'): {'n': 15.0, 'EV': 0.117, 'acierto': 0.67}, Interval(0.7, 1.0, closed='right'): {'n': 32.0, 'EV': 0.063, 'acierto': 1.0}}
+   por T: {Interval(0, 60, closed='right'): {'n': 12.0, 'EV': -0.798}, Interval(60, 120, closed='right'): {'n': 74.0, 'EV': -0.305}, Interval(120, 200, closed='right'): {'n': 76.0, 'EV': -0.012}, Interval(200, 300, closed='right'): {'n': 79.0, 'EV': 0.18}}
+
+D: disparos 68 ejec 38 | cierres con rival 46 (68 %)
+   rival opero el cierre    n= 23 coste=  57.8 EV=+0.405 acierto=0.43 dias=9
+   rival NO opero           n= 15 coste=  40.9 EV=+0.132 acierto=0.60 dias=4
+   nuestro t - 1a compra rival (ms, ex rival-150 como envio): P10/50/90 [-38920.   1301.  92340.] | nuestro ask5 P50 0.4 | T P50 206
+   por ask5: {Interval(0.0, 0.15, closed='right'): {'n': 10.0, 'EV': 0.342, 'acierto': 0.1}, Interval(0.15, 0.3, closed='right'): {'n': 4.0, 'EV': 0.54, 'acierto': 0.25}, Interval(0.3, 0.5, closed='right'): {'n': 10.0, 'EV': 0.481, 'acierto': 0.6}, Interval(0.5, 0.7, closed='right'): {'n': 9.0, 'EV': 0.166, 'acierto': 0.67}, Interval(0.7, 1.0, closed='right'): {'n': 5.0, 'EV': 0.121, 'acierto': 1.0}}
+   por T: {Interval(60, 120, closed='right'): {'n': 7.0, 'EV': 0.75}, Interval(120, 200, closed='right'): {'n': 11.0, 'EV': -0.292}, Interval(200, 300, closed='right'): {'n': 20.0, 'EV': 0.455}}
+
+V4: disparos 30 ejec 12 | cierres con rival 21 (70 %)
+   rival opero el cierre    n=  7 coste=  16.0 EV=+0.521 acierto=0.43 dias=4
+   rival NO opero           n=  5 coste=  12.4 EV=+0.677 acierto=0.80 dias=3
+   nuestro t - 1a compra rival (ms, ex rival-150 como envio): P10/50/90 [-76650.   3618.  99620.] | nuestro ask5 P50 0.39 | T P50 188
+   por ask5: {Interval(0.0, 0.15, closed='right'): {'n': 3.0, 'EV': 1.242, 'acierto': 0.33}, Interval(0.3, 0.5, closed='right'): {'n': 5.0, 'EV': 0.469, 'acierto': 0.6}, Interval(0.5, 0.7, closed='right'): {'n': 4.0, 'EV': 0.334, 'acierto': 0.75}}
+   por T: {Interval(60, 120, closed='right'): {'n': 3.0, 'EV': 2.212}, Interval(120, 200, closed='right'): {'n': 2.0, 'EV': -0.024}, Interval(200, 300, closed='right'): {'n': 7.0, 'EV': 0.179}}
