@@ -34,3 +34,7 @@ Estado: HECHO · EN CURSO (agente/proceso vivo) · PENDIENTE (sin lanzar) · JAV
 
 ## CERRADO (no reabrir sin mecanismo nuevo)
 Cosechar al abrir A/B/v2 (REJECTED), pares maker/LOWLOW-PAIR, salidas tras relleno H37/H40/H41, predicción Binance como defensa del maker, "Binance en contra" (era look-ahead), cancelación durante taker-delay (cerrada), V7 sin eventos = régimen, lead-lag multibolsa (Binance manda), H26 como estrategia propia: DATA_BLOCKED (solo vehículo H35-alts positivo fuera de muestra: +0,064/€).
+
+## A6 shadow (lanzado 20-Oct 09:59Z, screen `a6shadow`, nice 5, `datalogs/a6_shadow/`) — dos cautelas, cómo se cierran
+- **Colas de relleno sin calibrar** (opt / base 0,5 de profundidad / cons 1,0): NO se cierra con datos de hoy, solo H47-B (rellenos reales) puede calibrarlas. Criterio fijado ahora: tras H47-B, por cola, |tasa de relleno shadow − tasa real| ≤ 8 pp y acuerdo puja a puja ≥ 0,70 (mismo gate que H47); se adopta la cola que lo cumpla, si ninguna → el shadow se reporta solo como rango [cons, opt]. Hasta entonces ninguna cifra de EV del shadow se cita con una sola cola.
+- **Reconexiones del WS con load ~30**: causa probable (no confirmada) = `nice 19` dejaba al proceso sin CPU y el servidor lo desconectaba; subido a nice 5 (renice en caliente + `pipeline_watchdog.py::SCREEN_RESTART`, commit 935ad302cb). Verificación: contar filas `gap` por hora a load alto durante ≥24 h; si siguen, leer el `motivo` y actuar sobre él (reconexión con resuscripción + backfill de trades).
