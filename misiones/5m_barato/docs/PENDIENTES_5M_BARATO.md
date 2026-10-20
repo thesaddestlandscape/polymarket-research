@@ -5,7 +5,7 @@ Estado: HECHO · EN CURSO (agente/proceso vivo) · PENDIENTE (sin lanzar) · JAV
 | # | Pieza | Quién / dónde | Siguiente paso |
 |---|---|---|---|
 | 1 | H47 (SIM-REAL, micro-órdenes maker reales, wallet dedicada 0x659a…297F, presupuesto 5 $) | A real HECHO 20-Oct (40/40, 0 rellenos por diseño, kill arreglado: dev 027162df21+9aee8beff8+a6d42b178d). B: ensayo en seco programado ≥09:20Z | Revisar el seco; OK final de Javi para enviar B; luego rampa 2→5→10 € con n/IC/días |
-| 2 | V4 "comprar lo bueno" (P2) | agente event-causality-analyst, cálculos ≥09:15Z | informe en experimentos/5m_barato/v4_comprar_lo_bueno/informe.md |
+| 2 | V4 "comprar lo bueno" (P2) | HECHO 20-Oct: NO CAPTURABLE como tomador (rival compra a 49-57 ms del trigger, 188 ms antes que nuestro casado; 77 % de las ganadoras perdidas se pierden con cualquier latencia ≥145 ms); maker H23 n insuficiente y simulador sin calibrar. Informe experimentos/5m_barato/v4_comprar_lo_bueno/informe.md | Siguiente: congelar umbral 0,02 como V4b en SOMBRA (exploratorio, sin corrección de multiplicidad); micro-orden maker solo tras H47-B |
 | 3 | H43 R5K: A1 HECHO (h43_unidades.py, 13 tests), A5 HECHO (18-Oct cuadra 1:1 con on-chain), A6 ver sí / operar no (20-Oct) | agente execution-engineer | A2 sidecar vigía = /code-review + OK Javi; A6: shadow standalone (OK Javi), filtro de régimen H50, micro-orden solo tras H47-B + /code-review + OK |
 
 ## PENDIENTE (sin lanzar) — por orden de prioridad (Javi 19-Oct: 1 H45+H47, 2 V4, 3 H43 A6, resto espera)
