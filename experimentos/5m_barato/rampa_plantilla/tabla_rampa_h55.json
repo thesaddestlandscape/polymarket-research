@@ -1,0 +1,494 @@
+{
+ "spec": {
+  "nombre": "H55 FAV-ANIDADO (BTC, tomador +215 ms)",
+  "fuente": "descubrimiento_feat",
+  "dias_fuente": 13,
+  "stake_base_eur": 2.0,
+  "ev_escenarios": {
+   "A_punto_descubrimiento": null,
+   "B_sin_2_mejores_dias": 0.04,
+   "C_retencion_28pct_del_punto": null,
+   "D_cota_inf_IC90_cierre": 0.005,
+   "E_cero": 0.0
+  },
+  "peldanos_eur": [
+   2,
+   5,
+   10,
+   25,
+   50,
+   100,
+   250,
+   500,
+   1000
+  ],
+  "paso_peldano": {
+   "n_min": 40,
+   "dias_min": 10,
+   "ev_pond_min": 0.08,
+   "ic90_inf_cierre_gt": 0,
+   "sin_2_mejores_dias_gt": 0,
+   "fill_min_frac_objetivo": 0.8,
+   "g_log_f10_gt": 0,
+   "acuerdo_real_vs_simulador": "|PnL real - gemelo| IC90 por dias incluye 0 (desde el peldano 2)"
+  },
+  "kill": {
+   "K1_ev_lt": -0.1,
+   "K1_n": 25,
+   "K2_perdidas_ask_ge": 0.9,
+   "K2_perdidas": 2,
+   "K2_ventana_dias": 10
+  },
+  "reinversion": {
+   "frac_ganancias": 1.0,
+   "f_max_bankroll_por_entrada": 0.1,
+   "capital_inicial_eur": 20.0
+  },
+  "objetivo_anual_eur": 200000,
+  "horizontes_dias": [
+   14,
+   28,
+   56
+  ],
+  "sims": 4000,
+  "semilla": 20261020
+ },
+ "n": 36,
+ "lam": 2.769230769230769,
+ "ev": {
+  "A_punto_descubrimiento": 0.17873013466107743,
+  "B_sin_2_mejores_dias": 0.04,
+  "C_retencion_28pct_del_punto": 0.05004443770510168,
+  "D_cota_inf_IC90_cierre": 0.005,
+  "E_cero": 0.0
+ },
+ "ev_emp": 0.17873013466107743,
+ "ic90": [
+  0.0122524090453891,
+  0.34051750078937815
+ ],
+ "peldanos": [
+  {
+   "stake_eur": 2,
+   "capital_inmovilizado_eur": 4.77,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 9.14,
+   "eur_ano_EV_empirico": 596,
+   "eur_ano_IC90_dias": [
+    -76,
+    1316
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 596,
+    "B_sin_2_mejores_dias": 133,
+    "C_retencion_28pct_del_punto": 167,
+    "D_cota_inf_IC90_cierre": 17,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  },
+  {
+   "stake_eur": 5,
+   "capital_inmovilizado_eur": 5.19,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 14.18,
+   "eur_ano_EV_empirico": 982,
+   "eur_ano_IC90_dias": [
+    -229,
+    2256
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 925,
+    "B_sin_2_mejores_dias": 207,
+    "C_retencion_28pct_del_punto": 259,
+    "D_cota_inf_IC90_cierre": 26,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  },
+  {
+   "stake_eur": 10,
+   "capital_inmovilizado_eur": 10.38,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 27.42,
+   "eur_ano_EV_empirico": 1710,
+   "eur_ano_IC90_dias": [
+    -589,
+    4130
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 1789,
+    "B_sin_2_mejores_dias": 400,
+    "C_retencion_28pct_del_punto": 501,
+    "D_cota_inf_IC90_cierre": 50,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  },
+  {
+   "stake_eur": 25,
+   "capital_inmovilizado_eur": 25.95,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 60.34,
+   "eur_ano_EV_empirico": 3851,
+   "eur_ano_IC90_dias": [
+    -1016,
+    8929
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 3936,
+    "B_sin_2_mejores_dias": 881,
+    "C_retencion_28pct_del_punto": 1102,
+    "D_cota_inf_IC90_cierre": 110,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  },
+  {
+   "stake_eur": 50,
+   "capital_inmovilizado_eur": 51.75,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 106.01,
+   "eur_ano_EV_empirico": 6170,
+   "eur_ano_IC90_dias": [
+    -1662,
+    14247
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 6916,
+    "B_sin_2_mejores_dias": 1548,
+    "C_retencion_28pct_del_punto": 1936,
+    "D_cota_inf_IC90_cierre": 193,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  },
+  {
+   "stake_eur": 100,
+   "capital_inmovilizado_eur": 103.5,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 164.95,
+   "eur_ano_EV_empirico": 11024,
+   "eur_ano_IC90_dias": [
+    -887,
+    23161
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 10761,
+    "B_sin_2_mejores_dias": 2408,
+    "C_retencion_28pct_del_punto": 3013,
+    "D_cota_inf_IC90_cierre": 301,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  },
+  {
+   "stake_eur": 250,
+   "capital_inmovilizado_eur": 258.4,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 277.01,
+   "eur_ano_EV_empirico": 24545,
+   "eur_ano_IC90_dias": [
+    3367,
+    46371
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 18071,
+    "B_sin_2_mejores_dias": 4044,
+    "C_retencion_28pct_del_punto": 5060,
+    "D_cota_inf_IC90_cierre": 506,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  },
+  {
+   "stake_eur": 500,
+   "capital_inmovilizado_eur": 507.35,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 323.88,
+   "eur_ano_EV_empirico": 31227,
+   "eur_ano_IC90_dias": [
+    6604,
+    60471
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 21129,
+    "B_sin_2_mejores_dias": 4729,
+    "C_retencion_28pct_del_punto": 5916,
+    "D_cota_inf_IC90_cierre": 591,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  },
+  {
+   "stake_eur": 1000,
+   "capital_inmovilizado_eur": 1000.49,
+   "fill_frac": 1.0,
+   "coste_dia_eur": 361.81,
+   "eur_ano_EV_empirico": 34654,
+   "eur_ano_IC90_dias": [
+    6263,
+    68429
+   ],
+   "eur_ano_por_escenario": {
+    "A_punto_descubrimiento": 23603,
+    "B_sin_2_mejores_dias": 5282,
+    "C_retencion_28pct_del_punto": 6609,
+    "D_cota_inf_IC90_cierre": 660,
+    "E_cero": 0
+   },
+   "dias_min": 15
+  }
+ ],
+ "simulacion": {
+  "A_punto_descubrimiento": {
+   "14": {
+    "P_K1_falso": 0.04075,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.04075,
+    "P_gate": 0.23425,
+    "dd30_P95_en_stakes": 5.444812038014196
+   },
+   "28": {
+    "P_K1_falso": 0.043,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.043,
+    "P_gate": 0.71625,
+    "dd30_P95_en_stakes": 6.82991455846527
+   },
+   "56": {
+    "P_K1_falso": 0.0425,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.0425,
+    "P_gate": 0.91875,
+    "dd30_P95_en_stakes": 6.752087992383577
+   }
+  },
+  "B_sin_2_mejores_dias": {
+   "14": {
+    "P_K1_falso": 0.23075,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.23075,
+    "P_gate": 0.05475,
+    "dd30_P95_en_stakes": 8.486358556058333
+   },
+   "28": {
+    "P_K1_falso": 0.28475,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.28475,
+    "P_gate": 0.14775,
+    "dd30_P95_en_stakes": 11.62111609073613
+   },
+   "56": {
+    "P_K1_falso": 0.29375,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.29375,
+    "P_gate": 0.19275,
+    "dd30_P95_en_stakes": 11.81398312446592
+   }
+  },
+  "C_retencion_28pct_del_punto": {
+   "14": {
+    "P_K1_falso": 0.21475,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.21475,
+    "P_gate": 0.05775,
+    "dd30_P95_en_stakes": 8.069922577941123
+   },
+   "28": {
+    "P_K1_falso": 0.2445,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.2445,
+    "P_gate": 0.18225,
+    "dd30_P95_en_stakes": 10.589047337771278
+   },
+   "56": {
+    "P_K1_falso": 0.2485,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.2485,
+    "P_gate": 0.245,
+    "dd30_P95_en_stakes": 11.073952494661214
+   }
+  },
+  "D_cota_inf_IC90_cierre": {
+   "14": {
+    "P_K1_falso": 0.32625,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.32625,
+    "P_gate": 0.02775,
+    "dd30_P95_en_stakes": 9.434666722162861
+   },
+   "28": {
+    "P_K1_falso": 0.37825,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.37825,
+    "P_gate": 0.06525,
+    "dd30_P95_en_stakes": 12.697369740186119
+   },
+   "56": {
+    "P_K1_falso": 0.42325,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.42325,
+    "P_gate": 0.066,
+    "dd30_P95_en_stakes": 13.701966168713406
+   }
+  },
+  "E_cero": {
+   "14": {
+    "P_K1_falso": 0.33425,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.33425,
+    "P_gate": 0.02925,
+    "dd30_P95_en_stakes": 9.275379300650771
+   },
+   "28": {
+    "P_K1_falso": 0.4125,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.4125,
+    "P_gate": 0.06175,
+    "dd30_P95_en_stakes": 13.253822119269955
+   },
+   "56": {
+    "P_K1_falso": 0.43675,
+    "P_K2_falso": 0.0,
+    "P_kill_cualquiera": 0.43675,
+    "P_gate": 0.05125,
+    "dd30_P95_en_stakes": 14.150713067284777
+   }
+  }
+ },
+ "trayectoria_reinversion": {
+  "A_punto_descubrimiento": [
+   [
+    30,
+    82.0,
+    5
+   ],
+   [
+    90,
+    874.1,
+    84.7
+   ],
+   [
+    180,
+    5109.3,
+    500
+   ],
+   [
+    365,
+    16807.7,
+    1000
+   ]
+  ],
+  "B_sin_2_mejores_dias": [
+   [
+    30,
+    31.0,
+    2
+   ],
+   [
+    90,
+    52.9,
+    2
+   ],
+   [
+    180,
+    85.8,
+    2
+   ],
+   [
+    365,
+    153.4,
+    2
+   ]
+  ],
+  "C_retencion_28pct_del_punto": [
+   [
+    30,
+    33.7,
+    2
+   ],
+   [
+    90,
+    61.1,
+    2
+   ],
+   [
+    180,
+    102.3,
+    2
+   ],
+   [
+    365,
+    186.9,
+    2
+   ]
+  ],
+  "D_cota_inf_IC90_cierre": [
+   [
+    30,
+    21.4,
+    2
+   ],
+   [
+    90,
+    24.1,
+    2
+   ],
+   [
+    180,
+    28.2,
+    2
+   ],
+   [
+    365,
+    36.7,
+    2
+   ]
+  ],
+  "E_cero": [
+   [
+    30,
+    20.0,
+    2
+   ],
+   [
+    90,
+    20.0,
+    2
+   ],
+   [
+    180,
+    20.0,
+    2
+   ],
+   [
+    365,
+    20.0,
+    2
+   ]
+  ]
+ },
+ "stake_para_objetivo": {
+  "A_punto_descubrimiento": {
+   "stake_para_200k": null,
+   "eur_ano_en_techo_profundidad_nivel1": 23603
+  },
+  "B_sin_2_mejores_dias": {
+   "stake_para_200k": null,
+   "eur_ano_en_techo_profundidad_nivel1": 5282
+  },
+  "C_retencion_28pct_del_punto": {
+   "stake_para_200k": null,
+   "eur_ano_en_techo_profundidad_nivel1": 6609
+  },
+  "D_cota_inf_IC90_cierre": {
+   "stake_para_200k": null,
+   "eur_ano_en_techo_profundidad_nivel1": 660
+  },
+  "E_cero": {
+   "stake_para_200k": null,
+   "eur_ano_en_techo_profundidad_nivel1": 0
+  }
+ }
+}

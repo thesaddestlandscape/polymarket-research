@@ -1,0 +1,41 @@
+RAMPA H55 FAV-ANIDADO (BTC, tomador +215 ms) -- DISENO/EXPLORATORY (no autoriza dinero)
+fuente: descubrimiento_feat n=36 ejecutables de 69 disparos, 13 dias; entradas/dia=2.77; EV pond empirico +0.179 IC90 cierre (+0.012,+0.341); precio medio 0.645; acierto 0.78
+profundidad nivel 1 en la decision (proxy): P10/P50/P90 acciones = [15.0, 90.0, 467.0] ; ask>=0,90: 0.08 de las entradas
+Escenarios de EV por EUR: A_punto_descubrimiento=+0.179, B_sin_2_mejores_dias=+0.040, C_retencion_28pct_del_punto=+0.050, D_cota_inf_IC90_cierre=+0.005, E_cero=+0.000
+
+PELDANOS (EV constante por EUR con el tamano; techo = profundidad nivel 1 del libro en la decision)
+  S=    2 EUR | capital inmovilizado    4.77 | fill 1.00 | coste/dia    9.14 | EUR/ano EV emp     596 IC90 dias [-76, 1316] | por escenario {'A_punto_descubrimiento': 596, 'B_sin_2_mejores_dias': 133, 'C_retencion_28pct_del_punto': 167, 'D_cota_inf_IC90_cierre': 17, 'E_cero': 0} | dias min 15
+  S=    5 EUR | capital inmovilizado    5.19 | fill 1.00 | coste/dia   14.18 | EUR/ano EV emp     982 IC90 dias [-229, 2256] | por escenario {'A_punto_descubrimiento': 925, 'B_sin_2_mejores_dias': 207, 'C_retencion_28pct_del_punto': 259, 'D_cota_inf_IC90_cierre': 26, 'E_cero': 0} | dias min 15
+  S=   10 EUR | capital inmovilizado   10.38 | fill 1.00 | coste/dia   27.42 | EUR/ano EV emp    1710 IC90 dias [-589, 4130] | por escenario {'A_punto_descubrimiento': 1789, 'B_sin_2_mejores_dias': 400, 'C_retencion_28pct_del_punto': 501, 'D_cota_inf_IC90_cierre': 50, 'E_cero': 0} | dias min 15
+  S=   25 EUR | capital inmovilizado   25.95 | fill 1.00 | coste/dia   60.34 | EUR/ano EV emp    3851 IC90 dias [-1016, 8929] | por escenario {'A_punto_descubrimiento': 3936, 'B_sin_2_mejores_dias': 881, 'C_retencion_28pct_del_punto': 1102, 'D_cota_inf_IC90_cierre': 110, 'E_cero': 0} | dias min 15
+  S=   50 EUR | capital inmovilizado   51.75 | fill 1.00 | coste/dia  106.01 | EUR/ano EV emp    6170 IC90 dias [-1662, 14247] | por escenario {'A_punto_descubrimiento': 6916, 'B_sin_2_mejores_dias': 1548, 'C_retencion_28pct_del_punto': 1936, 'D_cota_inf_IC90_cierre': 193, 'E_cero': 0} | dias min 15
+  S=  100 EUR | capital inmovilizado   103.5 | fill 1.00 | coste/dia  164.95 | EUR/ano EV emp   11024 IC90 dias [-887, 23161] | por escenario {'A_punto_descubrimiento': 10761, 'B_sin_2_mejores_dias': 2408, 'C_retencion_28pct_del_punto': 3013, 'D_cota_inf_IC90_cierre': 301, 'E_cero': 0} | dias min 15
+  S=  250 EUR | capital inmovilizado   258.4 | fill 1.00 | coste/dia  277.01 | EUR/ano EV emp   24545 IC90 dias [3367, 46371] | por escenario {'A_punto_descubrimiento': 18071, 'B_sin_2_mejores_dias': 4044, 'C_retencion_28pct_del_punto': 5060, 'D_cota_inf_IC90_cierre': 506, 'E_cero': 0} | dias min 15
+  S=  500 EUR | capital inmovilizado  507.35 | fill 1.00 | coste/dia  323.88 | EUR/ano EV emp   31227 IC90 dias [6604, 60471] | por escenario {'A_punto_descubrimiento': 21129, 'B_sin_2_mejores_dias': 4729, 'C_retencion_28pct_del_punto': 5916, 'D_cota_inf_IC90_cierre': 591, 'E_cero': 0} | dias min 15
+  S= 1000 EUR | capital inmovilizado 1000.49 | fill 1.00 | coste/dia  361.81 | EUR/ano EV emp   34654 IC90 dias [6263, 68429] | por escenario {'A_punto_descubrimiento': 23603, 'B_sin_2_mejores_dias': 5282, 'C_retencion_28pct_del_punto': 6609, 'D_cota_inf_IC90_cierre': 660, 'E_cero': 0} | dias min 15
+
+MONTE CARLO por escenario de EV y horizonte (dias): P(K1 falso), P(K2 falso), P(kill cualquiera), P(pasar gate), drawdown P95 30 d en stakes
+  A_punto_descubrimiento      14 d: K1 0.04 K2 0.00 kill 0.04 gate 0.23 dd95 5.4
+  A_punto_descubrimiento      28 d: K1 0.04 K2 0.00 kill 0.04 gate 0.72 dd95 6.8
+  A_punto_descubrimiento      56 d: K1 0.04 K2 0.00 kill 0.04 gate 0.92 dd95 6.8
+  B_sin_2_mejores_dias        14 d: K1 0.23 K2 0.00 kill 0.23 gate 0.05 dd95 8.5
+  B_sin_2_mejores_dias        28 d: K1 0.28 K2 0.00 kill 0.28 gate 0.15 dd95 11.6
+  B_sin_2_mejores_dias        56 d: K1 0.29 K2 0.00 kill 0.29 gate 0.19 dd95 11.8
+  C_retencion_28pct_del_punto  14 d: K1 0.21 K2 0.00 kill 0.21 gate 0.06 dd95 8.1
+  C_retencion_28pct_del_punto  28 d: K1 0.24 K2 0.00 kill 0.24 gate 0.18 dd95 10.6
+  C_retencion_28pct_del_punto  56 d: K1 0.25 K2 0.00 kill 0.25 gate 0.24 dd95 11.1
+  D_cota_inf_IC90_cierre      14 d: K1 0.33 K2 0.00 kill 0.33 gate 0.03 dd95 9.4
+  D_cota_inf_IC90_cierre      28 d: K1 0.38 K2 0.00 kill 0.38 gate 0.07 dd95 12.7
+  D_cota_inf_IC90_cierre      56 d: K1 0.42 K2 0.00 kill 0.42 gate 0.07 dd95 13.7
+  E_cero                      14 d: K1 0.33 K2 0.00 kill 0.33 gate 0.03 dd95 9.3
+  E_cero                      28 d: K1 0.41 K2 0.00 kill 0.41 gate 0.06 dd95 13.3
+  E_cero                      56 d: K1 0.44 K2 0.00 kill 0.44 gate 0.05 dd95 14.2
+
+TRAYECTORIA con reinversion (dia, bankroll EUR, stake EUR) desde capital inicial 20.0: 
+  A_punto_descubrimiento     [(30, 82.0, 5), (90, 874.1, 84.7), (180, 5109.3, 500), (365, 16807.7, 1000)]
+  B_sin_2_mejores_dias       [(30, 31.0, 2), (90, 52.9, 2), (180, 85.8, 2), (365, 153.4, 2)]
+  C_retencion_28pct_del_punto [(30, 33.7, 2), (90, 61.1, 2), (180, 102.3, 2), (365, 186.9, 2)]
+  D_cota_inf_IC90_cierre     [(30, 21.4, 2), (90, 24.1, 2), (180, 28.2, 2), (365, 36.7, 2)]
+  E_cero                     [(30, 20.0, 2), (90, 20.0, 2), (180, 20.0, 2), (365, 20.0, 2)]
+
+STAKE NECESARIO para 200000 EUR/ano (limite: profundidad nivel 1 en la decision): {"A_punto_descubrimiento": {"stake_para_200k": null, "eur_ano_en_techo_profundidad_nivel1": 23603}, "B_sin_2_mejores_dias": {"stake_para_200k": null, "eur_ano_en_techo_profundidad_nivel1": 5282}, "C_retencion_28pct_del_punto": {"stake_para_200k": null, "eur_ano_en_techo_profundidad_nivel1": 6609}, "D_cota_inf_IC90_cierre": {"stake_para_200k": null, "eur_ano_en_techo_profundidad_nivel1": 660}, "E_cero": {"stake_para_200k": null, "eur_ano_en_techo_profundidad_nivel1": 0}}

@@ -1,0 +1,21 @@
+{
+ "nombre": "H55 FAV-ANIDADO (BTC, tomador +215 ms)",
+ "fuente": "descubrimiento_feat",
+ "dias_fuente": 13,
+ "stake_base_eur": 2.0,
+ "ev_escenarios": {
+   "A_punto_descubrimiento": null,
+   "B_sin_2_mejores_dias": 0.040,
+   "C_retencion_28pct_del_punto": null,
+   "D_cota_inf_IC90_cierre": 0.005,
+   "E_cero": 0.0
+ },
+ "peldanos_eur": [2, 5, 10, 25, 50, 100, 250, 500, 1000],
+ "paso_peldano": {"n_min": 40, "dias_min": 10, "ev_pond_min": 0.08, "ic90_inf_cierre_gt": 0, "sin_2_mejores_dias_gt": 0,
+                  "fill_min_frac_objetivo": 0.8, "g_log_f10_gt": 0, "acuerdo_real_vs_simulador": "|PnL real - gemelo| IC90 por dias incluye 0 (desde el peldano 2)"},
+ "kill": {"K1_ev_lt": -0.10, "K1_n": 25, "K2_perdidas_ask_ge": 0.90, "K2_perdidas": 2, "K2_ventana_dias": 10},
+ "reinversion": {"frac_ganancias": 1.0, "f_max_bankroll_por_entrada": 0.10, "capital_inicial_eur": 20.0},
+ "objetivo_anual_eur": 200000,
+ "horizontes_dias": [14, 28, 56],
+ "sims": 4000, "semilla": 20261020
+}
