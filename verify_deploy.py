@@ -109,6 +109,10 @@ SCREENS = {
     # propio .py (detector_r5k.py y h43_unidades.py viven en otras carpetas): si se editan hay que reiniciar a mano (--restart a6shadow).
     "a6shadow": {"entry": "experimentos/5m_barato/a6_detector_vivo/a6_shadow_persistente.py",
                  "probe": "log:logs/a6_shadow.log:a6_shadow arrancando"},
+    # 20-Oct: sombra DRY-RUN del maker H23 (solo lectura, ver pipeline_watchdog.py::SCREEN_RESTART). Los imports de h23_regla.py viven
+    # junto a h23_shadow.py; detector/h43 en a6_detector_vivo: si se editan hay que reiniciar a mano (--restart h23shadow).
+    "h23shadow": {"entry": "experimentos/5m_barato/h23_maker/h23_shadow.py",
+                  "probe": "log:logs/h23_shadow.log:h23_shadow arrancando"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},

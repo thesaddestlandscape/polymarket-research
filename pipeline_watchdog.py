@@ -233,6 +233,9 @@ SCREEN_RESTART = {
     # gamma pública; sin órdenes, sin claves, no mueve dinero -> nice 5 (19 lo dejaba sin CPU con load 30: reconexiones del WS) y SIN choom (como curvacierre/multivenue). Salida gz diaria en
     # /root/polymarket-research-datalogs/a6_shadow/ (retención 14 d, fuera de git). RSS < 300 MB; el propio proceso sale si pasa de 400.
     "a6shadow": f"cd {REPO} && nice -n 5 .venv/bin/python experimentos/5m_barato/a6_detector_vivo/a6_shadow_persistente.py >> logs/a6_shadow.log 2>&1",
+    # h23shadow (20-Oct, OK Javi): sombra DRY-RUN del maker H23 con cancelación a 60 ms (BTC 5m), solo lectura (WS público + gamma), sin
+    # órdenes ni claves -> nice 5 (como a6shadow: con 19 el WS se quedaba sin CPU) y SIN choom. Salida gz en datalogs/h23_shadow/ (14 d).
+    "h23shadow": f"cd {REPO}/experimentos/5m_barato/h23_maker && nice -n 5 {REPO}/.venv/bin/python -I h23_shadow.py >> {REPO}/logs/h23_shadow.log 2>&1",
     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
@@ -371,7 +374,7 @@ def check_screens() -> dict[str, bool]:
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow"]}
+                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow"]}
     except Exception:
         return {}
 

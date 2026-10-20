@@ -1,0 +1,35 @@
+2026-10-06 196505
+2026-10-07 139242
+2026-10-08 90299
+2026-10-09 167581
+2026-10-10 196580
+2026-10-11 218873
+2026-10-12 247498
+2026-10-13 107885
+2026-10-14 188745
+2026-10-15 201735
+2026-10-16 172220
+2026-10-17 165944
+2026-10-18 189692
+
+surplus medio (fv5-bid15) P10/50/90: [0.    0.021 0.195] | sigma300 usado P50 0.239
+--- E0 edge2>=0
+  TODO         disp=288 ejec=222 dias=13 coste= 515.6 EV=+0.002 acierto=0.26 precio=0.24 IC90cierre=(np.float64(-0.238), np.float64(0.25)) Bonf4inf=-0.303 IC90dia=(np.float64(-0.3), np.float64(0.302)) sin2mejores=-0.217 dias+=6/13
+  DESC 06-12   disp=183 ejec=137 dias= 7 coste= 323.4 EV=+0.206 acierto=0.30 precio=0.26 IC90cierre=(np.float64(-0.121), np.float64(0.557)) Bonf4inf=-0.207 IC90dia=(np.float64(-0.122), np.float64(0.536)) sin2mejores=-0.105 dias+=4/7
+  TEST 13-18   disp=105 ejec= 85 dias= 6 coste= 192.3 EV=-0.343 acierto=0.19 precio=0.22 IC90cierre=(np.float64(-0.632), np.float64(0.004)) Bonf4inf=-0.724 IC90dia=(np.float64(-0.764), np.float64(0.181)) sin2mejores=-0.771 dias+=2/6
+--- E1 edge2>=.02
+  TODO         disp=249 ejec=199 dias=13 coste= 464.4 EV=-0.052 acierto=0.25 precio=0.24 IC90cierre=(np.float64(-0.294), np.float64(0.209)) Bonf4inf=-0.359 IC90dia=(np.float64(-0.35), np.float64(0.287)) sin2mejores=-0.259 dias+=6/13
+  DESC 06-12   disp=161 ejec=127 dias= 7 coste= 302.5 EV=+0.129 acierto=0.31 precio=0.27 IC90cierre=(np.float64(-0.178), np.float64(0.474)) Bonf4inf=-0.276 IC90dia=(np.float64(-0.171), np.float64(0.554)) sin2mejores=-0.130 dias+=4/7
+  TEST 13-18   disp= 88 ejec= 72 dias= 6 coste= 161.9 EV=-0.388 acierto=0.15 precio=0.19 IC90cierre=(np.float64(-0.711), np.float64(-0.016)) Bonf4inf=-0.804 IC90dia=(np.float64(-0.855), np.float64(0.212)) sin2mejores=-0.868 dias+=2/6
+--- E2 edge2>=.05
+  TODO         disp=213 ejec=176 dias=13 coste= 409.1 EV=-0.094 acierto=0.24 precio=0.23 IC90cierre=(np.float64(-0.332), np.float64(0.169)) Bonf4inf=-0.409 IC90dia=(np.float64(-0.372), np.float64(0.212)) sin2mejores=-0.285 dias+=6/13
+  DESC 06-12   disp=134 ejec=106 dias= 7 coste= 242.3 EV=+0.070 acierto=0.28 precio=0.24 IC90cierre=(np.float64(-0.257), np.float64(0.431)) Bonf4inf=-0.352 IC90dia=(np.float64(-0.216), np.float64(0.365)) sin2mejores=-0.146 dias+=4/7
+  TEST 13-18   disp= 79 ejec= 70 dias= 6 coste= 166.7 EV=-0.331 acierto=0.19 precio=0.21 IC90cierre=(np.float64(-0.655), np.float64(0.058)) Bonf4inf=-0.747 IC90dia=(np.float64(-0.711), np.float64(0.272)) sin2mejores=-0.724 dias+=2/6
+--- E3 edge2>=.02&ask>=.5
+  TODO         disp= 68 ejec= 36 dias=10 coste= 144.3 EV=+0.039 acierto=0.83 precio=0.79 IC90cierre=(np.float64(-0.075), np.float64(0.152)) Bonf4inf=-0.116 IC90dia=(np.float64(-0.073), np.float64(0.142)) sin2mejores=-0.021 dias+=5/10
+  DESC 06-12   disp= 44 ejec= 28 dias= 7 coste= 112.0 EV=+0.072 acierto=0.86 precio=0.79 IC90cierre=(np.float64(-0.06), np.float64(0.2)) Bonf4inf=-0.111 IC90dia=(np.float64(0.002), np.float64(0.177)) sin2mejores=+0.013 dias+=3/7
+  TEST 13-18   disp= 24 ejec=  8 dias= 3 coste=  32.3 EV=-0.072 acierto=0.75 precio=0.80 IC90cierre=(np.float64(-0.352), np.float64(0.168)) Bonf4inf=-0.486 IC90dia=(np.float64(-0.441), np.float64(0.189)) sin2mejores=-1.000 dias+=2/3
+--- REF V4 m>=.05
+  TODO         disp= 30 ejec= 12 dias= 7 coste=  28.3 EV=+0.589 acierto=0.58 precio=0.37 IC90cierre=(np.float64(-0.131), np.float64(1.457)) Bonf4inf=-0.396 IC90dia=(np.float64(-0.307), np.float64(1.523)) sin2mejores=-0.200 dias+=3/7
+  DESC 06-12   disp= 23 ejec=  9 dias= 5 coste=  21.7 EV=+0.186 acierto=0.56 precio=0.41 IC90cierre=(np.float64(-0.418), np.float64(0.72)) Bonf4inf=-0.536 IC90dia=(np.float64(-0.524), np.float64(0.809)) sin2mejores=-0.564 dias+=2/5
+  TEST 13-18   disp=  7 ejec=  3 dias= 2 coste=   6.6 EV=+1.910 acierto=0.67 precio=0.25 IC90cierre=(np.float64(-0.245), np.float64(4.065)) Bonf4inf=-1.0 IC90dia=(nan, nan) sin2mejores=+nan dias+=1/2
