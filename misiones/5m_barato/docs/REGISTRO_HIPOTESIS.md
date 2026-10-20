@@ -58,3 +58,6 @@ Este registro es un estado de control, no una certificación. Todo número debe 
 - Nunca escoger wallets o ventanas en función de resultados futuros del holdout.
 - Cuando varios mecanismos operen en el mismo mercado/ventana, no sumar su PnL como si fuesen independientes.
 - Cada candidata tiene owner, commit/hash, config, universo, discovery/OOS, gates, artefactos y criterio de cierre.
+
+## 20-Oct tarde — H56/H57/H58 (expansión de H55; preregistro en datalogs_analisis_caches/h56_h58/PREREGISTRO.json)
+- H56 alts 5m⊂15m: n=111/8 d, EV pond. −0,082 → no progresa (salvo forward fijado desde 21-Oct del corte ask 0,90-0,95, visto a posteriori, +0,073 n=16). H57 15m⊂60m (n=31, +0,014) y H58 5m⊂60m (n=33, +0,031): ruido. Informe: experimentos/5m_barato/h55_forward/informe_expansion_20oct.md.
