@@ -1,45 +1,45 @@
 {
-  "ETH": {
-    "smart_money_consensus": 0.1678,
-    "n_trades_smart": 447,
+  "BTC": {
+    "smart_money_consensus": 0.1013,
+    "n_trades_smart": 227,
     "n_wallets_smart": 7,
-    "smart_money_consensus_ponderado": 0.1169,
+    "smart_money_consensus_ponderado": 0.001,
     "n_wallets_smart_ponderado": 7
   },
-  "XRP": {
-    "smart_money_consensus": 0.3333,
-    "n_trades_smart": 3,
+  "SOL": {
+    "smart_money_consensus": 0.1111,
+    "n_trades_smart": 18,
     "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.5478,
+    "smart_money_consensus_ponderado": 0.0311,
     "n_wallets_smart_ponderado": 2
   },
-  "BTC": {
-    "smart_money_consensus": 0.0125,
-    "n_trades_smart": 320,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": 0.2219,
-    "n_wallets_smart_ponderado": 5
+  "XRP": {
+    "smart_money_consensus": -0.1053,
+    "n_trades_smart": 38,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": -0.1388,
+    "n_wallets_smart_ponderado": 2
   },
   "DOGE": {
+    "smart_money_consensus": -0.2,
+    "n_trades_smart": 5,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": -0.5225,
+    "n_wallets_smart_ponderado": 2
+  },
+  "BNB": {
     "smart_money_consensus": 1.0,
-    "n_trades_smart": 2,
+    "n_trades_smart": 1,
     "n_wallets_smart": 1,
     "smart_money_consensus_ponderado": 1.0,
     "n_wallets_smart_ponderado": 1
   },
-  "SOL": {
-    "smart_money_consensus": 0.0811,
-    "n_trades_smart": 37,
+  "ETH": {
+    "smart_money_consensus": -0.169,
+    "n_trades_smart": 142,
     "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.2568,
+    "smart_money_consensus_ponderado": -0.368,
     "n_wallets_smart_ponderado": 2
   },
-  "BNB": {
-    "smart_money_consensus": 0.0,
-    "n_trades_smart": 2,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.4853,
-    "n_wallets_smart_ponderado": 2
-  },
-  "_actualizado": "2026-10-20T07:47:52+00:00"
+  "_actualizado": "2026-10-20T08:12:58+00:00"
 }
