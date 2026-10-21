@@ -1,45 +1,38 @@
 {
-  "BNB": {
-    "smart_money_consensus": -0.75,
-    "n_trades_smart": 8,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.9143,
-    "n_wallets_smart_ponderado": 1
-  },
-  "SOL": {
-    "smart_money_consensus": 0.2759,
-    "n_trades_smart": 58,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": 0.5614,
-    "n_wallets_smart_ponderado": 4
+  "BTC": {
+    "smart_money_consensus": -0.0062,
+    "n_trades_smart": 1624,
+    "n_wallets_smart": 9,
+    "smart_money_consensus_ponderado": -0.1074,
+    "n_wallets_smart_ponderado": 9
   },
   "ETH": {
-    "smart_money_consensus": 0.5741,
-    "n_trades_smart": 108,
-    "n_wallets_smart": 6,
-    "smart_money_consensus_ponderado": 0.545,
-    "n_wallets_smart_ponderado": 6
+    "smart_money_consensus": 0.1741,
+    "n_trades_smart": 402,
+    "n_wallets_smart": 5,
+    "smart_money_consensus_ponderado": 0.3272,
+    "n_wallets_smart_ponderado": 5
   },
-  "DOGE": {
-    "smart_money_consensus": -0.0909,
-    "n_trades_smart": 11,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.4016,
-    "n_wallets_smart_ponderado": 2
+  "SOL": {
+    "smart_money_consensus": 0.0636,
+    "n_trades_smart": 220,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.0181,
+    "n_wallets_smart_ponderado": 3
   },
   "XRP": {
+    "smart_money_consensus": -0.2308,
+    "n_trades_smart": 13,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 0.0005,
+    "n_wallets_smart_ponderado": 1
+  },
+  "DOGE": {
     "smart_money_consensus": 0.0,
-    "n_trades_smart": 22,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": -0.0635,
-    "n_wallets_smart_ponderado": 4
+    "n_trades_smart": 10,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -0.012,
+    "n_wallets_smart_ponderado": 1
   },
-  "BTC": {
-    "smart_money_consensus": -0.0416,
-    "n_trades_smart": 1250,
-    "n_wallets_smart": 11,
-    "smart_money_consensus_ponderado": -0.0166,
-    "n_wallets_smart_ponderado": 11
-  },
-  "_actualizado": "2026-10-21T00:15:19+00:00"
+  "_actualizado": "2026-10-21T00:38:31+00:00"
 }
