@@ -43323,3 +43323,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-10-21T06:36:56+00:00,SOL,5962745,0xa73cee7ec1ac3abb1301e5abac194b48d683ec8361b3d50d915ca4766db63f0c,2026-10-21T06:40:00Z,0.25,-0.007,1.0,3,184.7,NO,0,2026-10-21T06:48:52+00:00,18,False,banda_ok py=0.250 rest_lo=2.15 rest_hi=4.35
 2026-10-21T06:40:07+00:00,DOGE,5962884,0x307dfe9ae0f67624ad49732e20ddc3dff3edcc33241dab0bc50d866fb208888c,2026-10-21T06:45:00Z,0.48,-0.0495,1.0,7,296.3,,,,7,False,fuera_de_bandas_significativas
 2026-10-21T06:52:59+00:00,DOGE,5963473,0xf189c4f5d39aeeabc585e749f2ccc7cc4b4eb118af8c83be24fbf53e538b21ba,2026-10-21T06:55:00Z,0.48,-0.0495,0.9,10,121.0,,,,19,False,fuera_de_bandas_significativas
+2026-10-21T06:56:21+00:00,XRP,5963857,0xc98a7b986e48a302f24370e653c9f6239aeaa15af6f643ec84ccb2f46799e2e8,2026-10-21T07:00:00Z,0.62,-0.0443,1.0,3,219.8,,,,5,False,fuera_de_bandas_significativas
