@@ -1,0 +1,9 @@
+{"nombre":"H61b H23-CANCEL-BIN500-X05","congelada_utc":"2026-10-21T12:07:44Z","origen":"H61_RETENCION.md (EXPLORATORY, elegida en DISC 06-12 Oct por regla fijada antes de mirar)",
+ "base":"H23 v3 r150 (h23_regla_v3 3eeff503cf0a75c9), brazos A y B, BTC",
+ "senal":"ret = p_aggTrade(rx<=t-60ms)/p_aggTrade(rx<=t-60ms-500ms)-1, orientado al lado s; hora de RECEPCION; sin dato o trade >5 s -> no dispara",
+ "accion":"ret < -0,5 bps -> cancelar/no pujar; re-pujar con el retardo del arnes (150 ms) cuando ret >= -0,5",
+ "datos_validos":"relleno posterior a la congelacion (>= 2026-10-22), brazo C emparejado con v3 en los mismos cierres",
+ "gate":"retencion C/v3 >= 0,60; n_cierres con relleno en C >= 15; dEV pond > 0 con IC90 por dias > 0; ademas gate H23 (n>=40, >=10 d, EV>=+0,10, IC90 d>0, sin 2 mejores>0)",
+ "kill":"EV pond de C sin 2 mejores < -0,15 con n>=20",
+ "pendiente":"confirmar que el feed live de aggTrade = el del registro (submuestreado); si no, la senal no es la misma (missing)",
+ "prohibido":"cambiar umbrales/ventana tras ver forward; dinero real sin gate + /code-review + OK de Javi"}
