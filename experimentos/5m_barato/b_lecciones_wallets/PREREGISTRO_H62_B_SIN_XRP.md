@@ -5,5 +5,5 @@
  (a) B real: posiciones XRP vs ETH+SOL de las tandas siguientes (contabilidad_wallet_dedicada/posiciones.csv);
  (b) población on-chain (makers ETH/SOL/XRP, pc∈(0,10,0,30], T∈(60,300] s, «primeras 5 acciones» por maker-mercado-lado, sin nosotros).
 **Gate (para PROPONER excluir XRP, nunca para aplicarlo solo)**: ≥10 días independientes de forward; en (b) EV(XRP) − EV(ETH+SOL) con IC90 por días < 0 y EV(XRP) < 0; en (a) n≥40 posiciones XRP y consistente en signo (sin los 2 mejores días EV(XRP) ≤ 0). Si falla (b) o (a) no concluye → sin cambio. Si XRP > 0 en forward → REFUTADA.
-**Prohibido**: cambiar monedas de B () por esto antes del gate, tocar K_POR_MONEDA o cortar con n<40. Cambiar el set de monedas de B real exige /code-review + OK de Javi.
+**Prohibido**: cambiar monedas de B (flag --monedas) por esto antes del gate, tocar K_POR_MONEDA o cortar con n<40. Cambiar el set de monedas de B real exige /code-review + OK de Javi.
 **Cómo se mide**: tarea diaria del vigía de B (pendiente de implementar por un agente; hasta entonces, re-correr `scripts/pop.py` y `scripts/pm.py` con días nuevos; fills on-chain tienen retención de 4 días: extraer cada ≤3 días).
