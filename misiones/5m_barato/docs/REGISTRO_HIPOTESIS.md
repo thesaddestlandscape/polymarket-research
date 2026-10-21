@@ -67,3 +67,6 @@ Este registro es un estado de control, no una certificación. Todo número debe 
 - **H60 H23 en altcoins:** bloqueada hasta extraer datos de alts.
 - **H61 H23 con cancelación mientras Binance va en contra en el último segundo:** A +1,81 (n=6) vs +0,32 (n=10): corte a posteriori, solo exploratorio.
 - Hallazgo H23: el edge lo crea la CANCELACIÓN (sin cancelar A da +0,06, n=31); adelantar los rellenos 50-250 ms no lo rompe en A (+0,77..+1,44, sin 2 mejores días +0,49..+0,98), en B baja a +0,30 con 250 ms. El arnés real espera ASENTAR_S=1,5 s antes de volver a pujar y así da n=10, +0,60, −0,04 sin los 2 mejores días: la palanca es cancelar y re-pujar al instante. Informe: experimentos/5m_barato/v4_captura_maker/informe.md.
+
+## 21-Oct — H62 «B sin XRP» (preregistro: experimentos/5m_barato/b_lecciones_wallets/PREREGISTRO_H62_B_SIN_XRP.md, 2026-10-21T10:42:45Z)
+Hipótesis: XRP en maker barato 5m rinde menos que ETH+SOL (población 09-19: −0,065, IC90 días (−0,124,−0,010); B real −0,084 n=21). Solo medición forward desde el preregistro; gate ≥10 días, IC90 por días < 0; B real no se toca. Origen: POSTMORTEM_B.md / LECCIONES_B.md.
