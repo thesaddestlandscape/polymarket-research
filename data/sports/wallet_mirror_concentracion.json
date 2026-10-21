@@ -1,38 +1,38 @@
 {
- "generado_utc": "2026-10-20T08:00:03+00:00",
+ "generado_utc": "2026-10-21T08:00:01+00:00",
  "buckets": {
   "CS#FADE[0.65,0.70)#grid_fijo": {
-   "n_senales": 762,
-   "n_wallets_distintas": 186,
-   "n_mercados_distintos": 761,
+   "n_senales": 784,
+   "n_wallets_distintas": 191,
+   "n_mercados_distintos": 783,
    "top5_wallets": [
     {
      "wallet": "0xda770326bd091d26f816917aa83a6baff668683f",
      "n": 44,
-     "pct": 5.8
+     "pct": 5.6
     },
     {
      "wallet": "0xc4fe817476491890086330a639ac417d51bf601f",
      "n": 42,
-     "pct": 5.5
+     "pct": 5.4
     },
     {
      "wallet": "0x0cf18b4294b05509c44a6a0172eff7e97b20d7fe",
      "n": 41,
-     "pct": 5.4
+     "pct": 5.2
     },
     {
      "wallet": "0xdc41c39b95453c943174f369926018f6963bdd7e",
-     "n": 36,
+     "n": 37,
      "pct": 4.7
     },
     {
-     "wallet": "0x5d40576be2e9c61d283f4fd80d7a5ccf2331ba95",
-     "n": 34,
-     "pct": 4.5
+     "wallet": "0xfd144099a983b0cfdb88d0b89e0ca049fae22267",
+     "n": 37,
+     "pct": 4.7
     }
    ],
-   "top1_wallet_pct": 5.8,
+   "top1_wallet_pct": 5.6,
    "top1_mercado_pct": 0.3,
    "alerta_wallet": false,
    "alerta_mercado": false,
@@ -113,37 +113,37 @@
    "veredicto_gate": "malo_confirmado"
   },
   "Tennis#SEGUIR[0.09,0.14)#ventana_fina": {
-   "n_senales": 145,
-   "n_wallets_distintas": 58,
-   "n_mercados_distintos": 145,
+   "n_senales": 150,
+   "n_wallets_distintas": 59,
+   "n_mercados_distintos": 150,
    "top5_wallets": [
+    {
+     "wallet": "0xc4fe817476491890086330a639ac417d51bf601f",
+     "n": 18,
+     "pct": 12.0
+    },
     {
      "wallet": "0x952718df56ab7955e0a0121a9e47fa8f52b6888b",
      "n": 16,
-     "pct": 11.0
+     "pct": 10.7
     },
     {
-     "wallet": "0xc4fe817476491890086330a639ac417d51bf601f",
-     "n": 16,
-     "pct": 11.0
+     "wallet": "0x2a69660046d7acc4ab204d7cc5ba78b0776cd2f7",
+     "n": 10,
+     "pct": 6.7
     },
     {
      "wallet": "0xdc41c39b95453c943174f369926018f6963bdd7e",
      "n": 10,
-     "pct": 6.9
-    },
-    {
-     "wallet": "0x2a69660046d7acc4ab204d7cc5ba78b0776cd2f7",
-     "n": 9,
-     "pct": 6.2
+     "pct": 6.7
     },
     {
      "wallet": "0x84cfffc3f16dcc353094de30d4a45226eccd2f63",
      "n": 8,
-     "pct": 5.5
+     "pct": 5.3
     }
    ],
-   "top1_wallet_pct": 11.0,
+   "top1_wallet_pct": 12.0,
    "top1_mercado_pct": 0.7,
    "alerta_wallet": false,
    "alerta_mercado": false,
