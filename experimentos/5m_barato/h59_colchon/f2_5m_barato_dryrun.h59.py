@@ -29,6 +29,7 @@ import os
 import queue
 import sys
 import threading
+import types
 import time
 from collections import Counter
 from datetime import datetime, timezone
@@ -41,7 +42,21 @@ sys.path.insert(0, str(REPO))
 import ejecutor_rapido as er  # noqa: E402
 import vigia_5m_barato_forward as V  # noqa: E402  (regla v4 congelada: margen, p_limite, fee, CONFIG)
 import analisis_5m_barato_disparo15m as V7  # noqa: E402  (regla V7 congelada: DELTAS, LATS)
-import h59_regla as H59  # noqa: E402  (H59 sombra: V4 tomador con colchon; la regla vive SOLO en h59_regla.py)
+
+# ── H59 (sombra, SOLO lectura/log): la regla se importa de UNA sola ruta y su sha256 va en cada evento; si falta o no coincide, el brazo H59 se desactiva (F2 sigue) ──
+H59_RUTA = REPO / "experimentos" / "5m_barato" / "h59_colchon" / "h59_regla.py"
+H59_SHA16_ESPERADO = "59c8302df7fe4f73"                      # preregistro.json::sha256_16_ficheros::h59_regla.py
+try:
+    import hashlib as _hl
+    import importlib.util as _iu
+    H59_SHA256 = _hl.sha256(H59_RUTA.read_bytes()).hexdigest()
+    _sp = _iu.spec_from_file_location("h59_regla", H59_RUTA)
+    H59 = _iu.module_from_spec(_sp)
+    _sp.loader.exec_module(H59)
+    H59_ACTIVO = H59_SHA256[:16] == H59_SHA16_ESPERADO
+except Exception as _e:                                       # noqa: BLE001  (cualquier fallo desactiva SOLO el brazo H59)
+    H59, H59_SHA256, H59_ACTIVO = None, None, False
+    print(f"[f2] H59 no cargado: {type(_e).__name__}: {_e}", file=sys.stderr, flush=True)
 
 GAMMA = "https://gamma-api.polymarket.com"
 PRICES = REPO / "data" / "prices"
@@ -202,8 +217,97 @@ def tam_orden(p):
     return max(V.CONFIG["min_acciones"], math.ceil(V.CONFIG["stake_eur"] / p * 100) / 100)
 
 
+# ───────────────────────────── H59 sombra: estado a la llegada por RECEPCION, marcas idempotentes por cierre, L2 sobre copia ─────────────────────────────
+class _H59Estado:
+    """Tops del 5m lado s (t_recv, bid, bsz, ask, asz) desde t0, anotados por el callback del WS (hora de RECEPCION de la fila).
+    Estado a la llegada de la FOK = el ultimo top con t_recv <= t0 + 215 ms; nunca uno posterior, aunque el callback corra tarde."""
+    MAX = 400
+
+    def __init__(self, t0, top0, lat_ms):
+        self.t_lim, self.lock, self.h, self.truncado = t0 + lat_ms, threading.Lock(), [tuple(top0)], False
+
+    def anota(self, top):
+        with self.lock:
+            if len(self.h) < self.MAX:
+                self.h.append(tuple(top))
+            else:
+                self.truncado = True
+
+    def en_limite(self):
+        with self.lock:
+            h = list(self.h)
+            trunc = self.truncado
+        previos = [x for x in h if x[0] <= self.t_lim]
+        return (previos[-1] if previos else None), len(h), any(x[0] > self.t_lim for x in h), trunc
+
+
+_H59_LOCK, _H59_VISTO = threading.Lock(), {}
+
+
+def _h59_marcar(tipo, mo, cie):
+    """Marca durable por cierre ('E' = evento emitido, 'R' = llegada registrada) en OUT/h59_marcas_<dia>.txt (O_APPEND, una linea).
+    -> True si la marca es NUEVA (primera vez en este disco). Un reinicio de F2 a mitad de cierre no duplica el evento."""
+    clave = f"{tipo}|{mo}|{cie}"
+    ruta = OUT / f"h59_marcas_{utc_dia(cie)}.txt"
+    with _H59_LOCK:
+        vistas = _H59_VISTO.get(ruta)
+        if vistas is None:
+            try:
+                vistas = set(ruta.read_text().split())
+            except FileNotFoundError:
+                vistas = set()
+            _H59_VISTO[ruta] = vistas
+        if clave in vistas:
+            return False
+        try:
+            OUT.mkdir(parents=True, exist_ok=True)
+            fd = os.open(str(ruta), os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o644)
+            try:
+                os.write(fd, (clave + "\n").encode())
+            finally:
+                os.close(fd)
+        except OSError as e:
+            print(f"[f2] h59 marca: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
+        vistas.add(clave)
+        return True
+
+
+def _h59_reconciliar():
+    """Al arrancar: cierres con evento 'E' y sin llegada 'R' (reinicio entre medias) -> evento explicito; nunca se rellenan con ceros."""
+    perdidos = []
+    for dia in (utc_dia(time.time() - 86400), utc_dia()):
+        try:
+            ls = (OUT / f"h59_marcas_{dia}.txt").read_text().split()
+        except FileNotFoundError:
+            continue
+        perdidos += [l for l in ls if l.startswith("E|") and "R" + l[1:] not in ls]
+    if perdidos:
+        log({"tipo": "h59_relleno_perdido_reinicio", "marcas": perdidos})
+
+
+def _h59_l2(lib, tk, t_lim, p_lim, acc_obj, top_lim):
+    """Diagnostico L2 SOLO si el libro de `tk` no se ha tocado despues de t_lim (ult_tk antes y despues de COPIAR el dict:
+    iterar el dict vivo mientras el WS lo muta lanza RuntimeError). Si no, la clase dice por que no es exacto."""
+    u0 = lib.ult_tk.get(tk)
+    if u0 is None or u0 > t_lim:
+        return {"clase": "no_exacto_libro_tocado_tras_limite"}
+    asks = None
+    for _ in range(3):
+        try:
+            asks = dict(lib.lib[tk]["asks"])
+            break
+        except (RuntimeError, KeyError):
+            asks = None
+    if asks is None or lib.ult_tk.get(tk) != u0:
+        return {"clase": "no_exacto_copia_inestable"}
+    copia = types.SimpleNamespace(fresco=lambda tk_, *a: True, lib={tk: {"asks": asks}}, top={tk: top_lim})
+    return relleno(copia, tk, p_lim, acc_obj)
+
+
 # ───────────────────────────── un par 5m/15m de una moneda y un cierre ─────────────────────────────
 class Par:
+    _h59_estado = None                                 # H59: _H59Estado del cierre (None hasta la 1.a senal BTC)
+
     def __init__(self, mo, cie, m5, m15, ctx):
         self.mo, self.cie, self.ctx = mo, cie, ctx
         self.m5, self.m15 = m5, m15                   # dict: id, slug, up, down, tick, neg
@@ -292,6 +396,8 @@ class Par:
 
     # ── v4 ──
     def al_cambiar(self, tk, t, top):
+        if self._h59_estado is not None and tk == self.tc:           # H59: historico de tops del 5m s por RECEPCION (solo anota)
+            self._h59_estado.anota(top)
         if self.s is None or tk not in (self.tc, self.to) or not self._ventana(t):
             return
         qc, qo = self.lib.top.get(self.tc), self.lib.top.get(self.to)
@@ -323,30 +429,63 @@ class Par:
             self.ctx.agenda.en(t + L, lambda L=L: log({"tipo": "v4_relleno", "moneda": self.mo, "cierre": self.cie,
                                                        "n": n, "L": L, "t_comprobado": er.ahora_ms(),
                                                        **relleno(self.lib, self.tc, p_lim, acc)}))
-        if self.mo == "BTC" and n == 1:                   # H59: solo BTC y primera senal del cierre (misma que V4); SOMBRA, sin envio
+        if self.mo == "BTC" and n == 1:                   # H59: solo BTC y primera senal del cierre (misma que V4); SOMBRA, sin envio ni prefirmas
             self._h59(t, ask0, bid_o, qc)
 
-    # ── H59 (sombra): el mismo disparo V4, FOK virtual con limite p_limite + k, validada contra el TAMANO del nivel 1 a t+215 ──
+
+    # ── H59 (sombra): el mismo disparo V4, FOK virtual con limite p_limite + k validada contra el TAMANO del nivel 1 a t+215 por RECEPCION ──
     def _h59(self, t, ask0, bid_o, qc):
+        """NO firma, NO toma prefirmas de V4 (no llama a _decidir/Armero.tomar), NO envia: solo calcula y loguea. El evento base se loguea
+        SIEMPRE antes de la comprobacion de llegada; un fallo en la llegada queda como h59_relleno_error, no se pierde."""
+        if not H59_ACTIVO:
+            return
         lims = {k: H59.limite_fok(bid_o, k) for k in H59.K_COLCHONES}
         lim_p = lims[H59.K_PRINCIPAL]
-        tiempos = self._decidir("H59", t, lim_p, {"n": 1}) if lim_p is not None else {}     # Enviador DRY-RUN: mide decision->envio
-        log({"tipo": "h59_evento", "moneda": self.mo, "cierre": self.cie, "lado": self.s, "mercado_5m": self.m5["id"], "t_deteccion": t,
-             "resto_s": round(self.cie - t / 1000, 2), "ask5_t0": ask0, "ask5_sz_t0": qc[4], "bid15_t0": bid_o,
-             "margen_neto": V.margen(bid_o, ask0), "p_limite_v4": V.p_limite(bid_o),
-             "limites": {f"{k:.2f}": v for k, v in lims.items()}, **tiempos})
+        est = self._h59_estado = _H59Estado(t, qc, H59.LAT_TOMADOR_MS)           # lo unico sincrono: anotar tops por recepcion desde ya
+        ctl = {"duplicado": False}
+
+        def base():                                                              # hilo de la agenda (no el del WS): marca durable + evento base
+            if not _h59_marcar("E", self.mo, self.cie):                          # reinicio de F2 a mitad de cierre: no duplicar
+                ctl["duplicado"] = True
+                log({"tipo": "h59_evento_duplicado_omitido", "moneda": self.mo, "cierre": self.cie, "regla_sha256": H59_SHA256})
+                return
+            listas = None
+            arm = self.ctx.armero                                                 # lectura SIN consumir (ArmeroProceso.listas)
+            if lim_p is not None and arm is not None and hasattr(arm, "listas"):
+                try:
+                    listas = arm.listas((self.tc, lim_p, tam_orden(lim_p), "BUY"))
+                except Exception:                                                 # noqa: BLE001
+                    listas = None
+            log({"tipo": "h59_evento", "moneda": self.mo, "cierre": self.cie, "lado": self.s, "mercado_5m": self.m5["id"], "t_deteccion": t,
+                 "resto_s": round(self.cie - t / 1000, 2), "ask5_t0": ask0, "ask5_sz_t0": qc[4], "bid15_t0": bid_o,
+                 "margen_neto": V.margen(bid_o, ask0), "p_limite_v4": V.p_limite(bid_o), "t_recv_estado_t0": qc[0],
+                 "limites": {f"{k:.2f}": v for k, v in lims.items()}, "prefirmas_listas_k0.02": listas,
+                 "regla_sha256": H59_SHA256, "regla_ruta": str(H59_RUTA), "regla_version": H59.VERSION})
 
         def llegada():
-            q = self.lib.top.get(self.tc)
-            fresco = bool(q) and self.lib.fresco(self.tc)
-            ev = {"tipo": "h59_relleno", "moneda": self.mo, "cierre": self.cie, "t_comprobado": er.ahora_ms(), "fresco": fresco,
-                  "ask_llegada": q[3] if q else None, "asz_llegada": q[4] if q else None}
-            nivel1 = H59.evaluar_evento(ask0, bid_o, q[3] if q else None, q[4] if q else None, 0 if fresco else None)
-            for k, e in nivel1.items():
-                lim = e["lim"]
-                ev[f"k{k:.2f}"] = {**e, "l2": relleno(self.lib, self.tc, lim, e["acc_obj"]) if (lim is not None and fresco) else None}
+            if ctl["duplicado"]:
+                return
+            t_cb = er.ahora_ms()
+            try:
+                top, n_h, posterior, trunc = est.en_limite()
+                ask_l, asz_l = (top[3], top[4]) if top else (None, None)
+                edad = (est.t_lim - top[0]) if top else None
+                ev = {"tipo": "h59_relleno", "moneda": self.mo, "cierre": self.cie, "t_lim": est.t_lim, "t_comprobado": t_cb,
+                      "retraso_callback_ms": t_cb - est.t_lim, "t_recv_estado": top[0] if top else None, "edad_llegada_ms": edad,
+                      "ask_llegada": ask_l, "asz_llegada": asz_l, "n_tops": n_h, "hay_top_posterior": posterior, "hist_truncado": trunc,
+                      "regla_sha256": H59_SHA256}
+                nivel1 = H59.evaluar_evento(ask0, bid_o, ask_l, asz_l, edad)
+                for k, e in nivel1.items():
+                    lim = e["lim"]
+                    ev[f"k{k:.2f}"] = {**e, "l2": _h59_l2(self.lib, self.tc, est.t_lim, lim, e["acc_obj"], top)
+                                       if (lim is not None and top is not None) else None}
+            except Exception as e:                                                # noqa: BLE001  (el evento base ya esta logueado)
+                ev = {"tipo": "h59_relleno_error", "moneda": self.mo, "cierre": self.cie, "t_comprobado": t_cb,
+                      "error": f"{type(e).__name__}: {e}", "regla_sha256": H59_SHA256}
             log(ev)
-        self.ctx.agenda.en(t + H59.LAT_TOMADOR_MS, llegada)
+            _h59_marcar("R", self.mo, self.cie)
+        self.ctx.agenda.en(t, base)
+        self.ctx.agenda.en(est.t_lim, llegada)
 
     # ── V7 ──
     def al_trade(self, tk, t, msg):
@@ -467,6 +606,7 @@ def main():
          "armero": type(ctx.armero).__name__ if ctx.armero else None,
          "lats_v4": LATS_V4, "v7_deltas": V7.DELTAS, "v7_lats": V7.LATS, "hash_v4": V.hash_config()})
     print(f"[f2] arranque DRY-RUN monedas={monedas} firma={ctx.armero is not None}", flush=True)
+    _h59_reconciliar()                        # H59: cierres con evento y sin llegada por un reinicio previo -> evento explicito
     pares, hecho, ultimas_claves = {}, set(), None
     fin = time.time() + a.horas * 3600 if a.horas else None
     while fin is None or time.time() < fin:

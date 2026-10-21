@@ -6,6 +6,8 @@
 cd /root/polymarket-research || exit 1
 D=$(date -u -d "yesterday" +%Y-%m-%d)
 PY=/usr/bin/python3
+# HGB/OpenMP abren hilos y bajo ulimit -v "can't start new thread" mataba FV v4 (21-Oct): limitar hilos.
+export OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 MKL_NUM_THREADS=2
 avisa() { $PY -c "import sys; sys.path.insert(0,'/root/polymarket-research'); from shadow_digest import enviar_telegram as e; e('🚨 Forward 5m barato: $1 FALLÓ ($D), ver logs/m5barato_forward_diario.log')"; }
 echo "=== $(date -u +%FT%TZ) día $D"
 # 1) V6: simulación de órdenes en vuelo del día (caché fok_vuelo_D_p250) + vigía

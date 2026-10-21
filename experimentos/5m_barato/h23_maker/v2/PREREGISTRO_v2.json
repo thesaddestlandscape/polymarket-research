@@ -1,0 +1,26 @@
+{
+ "fecha_preregistro_utc": "2026-10-20T19:05Z",
+ "nota": "Escrito ANTES de ejecutar ningun replay v2 ni mirar resultados de las variantes. Todo EXPLORATORY: descubrimiento sobre 06-18 Oct (13 dias, ya vistos por H23 v1). La regla H23 (h23_regla.py, hash_config 46eff95337902549) NO cambia; solo cambia el retardo de re-puja tras cancelar (que NO es parte de h23_regla: lo impone el arnes).",
+ "universo_y_medida": "BTC (y ETH/SOL/XRP en H68). Lado s por TWAP60 oficial, 1 posicion por cierre/variante, desenlace oficial (maker_ms_desenlaces_cache; sin desenlace = missing, se cuenta aparte, NUNCA 0), hora de RECEPCION, rebate 20 %, fee 0,07. EV ponderado por EUR = sum(pnl)/sum(coste), pnl = lleno*gana - coste + rebate. IC90 por DIAS (bootstrap de dias, 3000, semilla 7). Se reporta tambien EV por unidad, 'sin los 2 mejores dias', PnL total y PnL/dia (EV/EUR que SUBE al esperar no implica mejor: comparar PnL total y emparejar).",
+ "celda_central": "cola base, alta 79 ms, cancelacion 60 ms. Sensibilidad: colas opt/cons y (254,150) siempre en rango, nunca elegir la mejor.",
+ "variantes": {
+  "H62": "RE-PUJA-0: re-puja en el mismo instante de la decision de cancelar (= 'join' de v1; envio en paralelo; cota teorica).",
+  "H63": "RE-PUJA-50: re-puja en t_cancel_decision + 50 ms.",
+  "H64": "RE-PUJA-150: + 150 ms (equivalente a cancelar, esperar el acuse ~60 ms y volver a firmar/enviar sin esperas largas).",
+  "H65": "RE-PUJA-500: + 500 ms.",
+  "H66": "RE-PUJA-1500: + 1500 ms (= espera ASENTAR_S del arnes real; 'join_r' de v1, con desbloqueo EXACTO en vez de en el siguiente evento de libro). 'r1500d' replica el bloqueo discreto del replay antiguo y solo sirve para validar contra h23_D.csv.",
+  "H67": "CAPACIDAD: mismo replay con stake 2/5/10/25 EUR (need x1/2,5/5/12,5; solo cola base, 79/60 ms, rep 0 y 150): rellenos, coste, EV pond, PnL/dia y fraccion de pujas que NO llegan a completarse.",
+  "H68": "H23 EN ALTS (ETH/SOL/XRP) = parte de descubrimiento de H60: misma regla, replay 06-18 sobre extracto de m5_registro/m15_registro; celda central rep 0 y rep 1500. Gate por moneda como H23 (n>=40 rellenos, >=10 dias, EV pond>=+0,10, IC90 dias>0, sin 2 mejores>0) solo valdria en OOS; aqui solo estima casos/dia."
+ },
+ "multiplicidad": "H62-H66 = 1 familia: 5 retardos x 2 brazos (A,B) = 10 celdas centrales sin seleccion del mejor; la lectura PRIMARIA es la curva EV/PnL frente al retardo y la diferencia emparejada frente a H62; cualquier celda aislada es descriptiva. H67: 4 stakes x 2 brazos x 2 reps = 16 celdas descriptivas. H68: 3 monedas x 2 brazos x 2 reps = 12 celdas descriptivas. Sin correccion formal posible con 13 dias: ninguna se declara significativa.",
+ "criterio_de_lectura": "Para pedir el parche de re-puja corta (solo si, y solo entonces): en A central, r150 conserva n_rellenos >= 1,4 x n(r1500) Y EV pond sin los 2 mejores dias > 0 Y PnL total >= PnL total(r1500). Si no, el parche no se justifica por esta evidencia.",
+ "H61_forward": {
+  "nombre": "H61 H23-CANCEL-BIN1S (forward SOLO; regla fijada aqui)",
+  "regla": "Sobre H23 v1 join (misma entrada/cancelacion/cota/umbral, brazos A y B), anadir: con puja viva, CANCELAR cuando el retorno de BTCUSDT a 1 s, ret1s = precio_ultimo_aggTrade(rx<=t)/precio_ultimo_aggTrade(rx<=t-1000 ms) - 1, orientado al lado s (Up: +ret; Down: -ret), sea ESTRICTAMENTE < 0 (cero exacto NO cancela); RE-PUJAR (con el retardo del arnes) cuando sea >= 0. Hora de RECEPCION del aggTrade (no la E de Binance). Sin umbral en bps, sin ventana alternativa, sin otros parametros.",
+  "origen": "Corte visto a posteriori en 06-18 (informe v4_captura_maker §3: A ret>=0 +1,81 n=6 vs ret<0 +0,32 n=10; B +1,18 n=12 vs +0,33 n=14). Esos 13 dias son descubrimiento y NO cuentan.",
+  "datos_validos": "Solo dias con puja >= 21-Oct 00:00Z (despues de este preregistro) en un brazo C nuevo de h23shadow (v2, requiere feed aggTrade por recepcion) emparejado con A/B de v1 en los MISMOS cierres.",
+  "gate": "Incremental frente a H23 v1 emparejado: n_cierres con relleno >= 15 en C, EV pond de C > EV pond de v1 en los cierres comunes con IC90 por dias del diferencial > 0, y retencion de rellenos (C/v1) >= 0,60; ademas el gate normal de H23 (n>=40, >=10 dias, EV>=+0,10, IC90 dias>0, sin 2 mejores>0). Kill: EV pond de C sin 2 mejores dias < -0,15 con n>=20 rellenos.",
+  "descriptivo_ciego_al_desenlace": "En 06-18 solo se mide la frecuencia del disparo (instantes de cotizacion con ret1s<0, =0, sin dato) y la proporcion de rellenos v1 con ret1s<0 en el relleno (retencion potencial = 1 - esa proporcion): NO se calcula ningun EV con el corte."
+ },
+ "estado_pesado": "Un solo job secuencial (run_v2.sh), nice 19/ionice 3, ulimit 3 GB, load5<20, MemAvailable>2,5 GB, nunca 06:00-09:15Z."
+}

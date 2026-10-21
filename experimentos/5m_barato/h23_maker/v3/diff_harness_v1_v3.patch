@@ -1,0 +1,222 @@
+--- ../../paquete_real/experimento_maker_h23.py	2026-10-20 18:00:37.035801530 +0000
++++ experimento_maker_h23_v3.py	2026-10-21 06:37:01.884814225 +0000
+@@ -1,5 +1,17 @@
+ #!/usr/bin/env python3
+-"""experimento_maker_h23.py -- H23-MAKER-V1 REAL (PAQUETE PREPARADO, NO ENVIADO). Va en la raiz de /root/polymarket-research-dev junto a
++"""experimento_maker_h23_v3.py -- H23-MAKER-V3 REAL (PAQUETE PREPARADO, NO ENVIADO, NO APROBADO). COPIA de experimento_maker_h23.py (v1, sha 602d5a2debb42cc0, CONGELADO, intacto).
++UNICO cambio funcional respecto a v1 (diff exacto: `diff -u ../../paquete_real/experimento_maker_h23.py experimento_maker_h23_v3.py`): RE-PUJA TEMPRANA (R.CONFIG['repuja_ms'] = 150).
++  v1 no re-puja en un token mientras haya una orden CANCELADA sin asentar (X.ASENTAR_S = 1,5 s, `decidir`): con eso el replay da n=10 y ~0 sin los 2 mejores dias; con
++  re-puja <= 150 ms da n=15 (v2/informe_21oct.md, EXPLORATORY). V3 libera la re-puja a los REPUJA_S de la DECISION de cancelar SOLO si (y fail-closed al comportamiento v1 si no):
++    (a) la cancelacion no fue 'ya_terminal' (el exchange no dijo 'already canceled or matched'),
++    (b) hay una LECTURA legible de get_order POSTERIOR a la cancelacion con estado TERMINAL (CANCELED/...) y size_matched == lo ya contabilizado (0 relleno nuevo),
++    (c) el token no tiene relleno ni la puja esta cerrada, y no hay kill/parada/kill de brazo.
++  RIESGO CONOCIDO R1 (documentado en PREREGISTRO.md): un casado de ms ANTES del cancel puede verse en get_order ~1 s tarde (comentario de la 9a review de ASENTAR_S). Si tras re-pujar
++  la orden vieja muestra un relleno tardio y ya habia una orden nueva posterior a su cancelacion => DOBLE EXPOSICION (<= 2 ordenes <= 3 USD, dentro del presupuesto util de 5 USD):
++  evento `h23v3_fill_tardio` y KILL de brazo PERSISTENTE (se rearma a mano). Todo evento `h23v3_repuja` lleva los ms reales desde la decision de cancelar al envio: si el p50 real
++  es > 300 ms, la evidencia del replay r150 NO aplica (r300/r500 pierden casi todo el beneficio).
++  Ledgers/escalones PROPIOS (H23V3, H23V3B), fichero de OK PROPIO (H23V3_OK_JAVI.txt), regla propia (h23_regla_v3.py): el n y el kill de v1 y de v3 no se mezclan.
++(Cabecera original de v1:) experimento_maker_h23.py -- H23-MAKER-V1 REAL (PAQUETE PREPARADO, NO ENVIADO). Va en la raiz de /root/polymarket-research-dev junto a
+ experimento_maker_h47.py (NO lo modifica: lo importa y lo extiende por subclase; el diff contra H47 es CERO lineas).
+ 
+ ⚠️ Con --confirmo-dinero-real ENVIA ORDENES REALES con la wallet DEDICADA. Sin esa bandera es un ENSAYO EN SECO (lee solo datos publicos, simula
+@@ -59,15 +71,16 @@
+ 
+ AQUI = Path(__file__).resolve().parent
+ sys.path.insert(0, str(AQUI))
+-sys.path.insert(0, str(AQUI / "experimentos/5m_barato/h23_maker"))      # h23_regla (fuente unica de la regla)
++sys.path.insert(0, str(AQUI / "experimentos/5m_barato/h23_maker"))      # h23_shadow (Refs, solo lectura)
++sys.path.insert(0, str(AQUI / "experimentos/5m_barato/h23_maker/v3"))   # h23_regla_v3 (fuente unica de la regla V3)
+ import experimento_maker_h47 as H   # noqa: E402
+-import h23_regla as R               # noqa: E402
++import h23_regla_v3 as R            # noqa: E402  (V3: copia de la regla v1 + repuja_ms + acciones_real)
+ 
+ X = H.X
+-OK_FICHERO = H.DATALOGS / "H23_OK_JAVI.txt"
++OK_FICHERO = H.DATALOGS / "H23V3_OK_JAVI.txt"      # fichero de OK PROPIO de V3 (el OK de v1 no vale)
+ H47B_LEDGER = H.DATALOGS / "experimento_h47_B_ledger.jsonl"
+-H.N_MAX.setdefault("H23", 40)
+-H.N_MAX.setdefault("H23B", 40)
++H.N_MAX.setdefault("H23V3", 40)
++H.N_MAX.setdefault("H23V3B", 40)
+ H.K_POR_MONEDA.setdefault("btc", 0)           # H23 no usa k (join); Exp47.crear_ctx lo busca
+ T_STOP_H23 = float(R.CONFIG["fin_margen_s"])  # 10 s
+ H.LOOP_S = 0.02                               # reaccion a eventos: el arnes dormia 100 ms por vuelta (la cancelacion es el edge)
+@@ -82,10 +95,12 @@
+ DESENLACE_MAX_MIN = 15.0                      # minutos tras el cierre sin desenlace oficial -> fail-closed (no postear)
+ PUERTA_REINTENTO_S = 15.0                     # puerta de arranque: reintento de resolver pendientes antes de la 1a orden de una tanda
+ PUERTA_MAX_CONSULTAS = 20
+-ARM_RE = {"A": re.compile(r"^experimento_h47_H23_ledger(_tanda[0-9]+)?\.jsonl$"), "B": re.compile(r"^experimento_h47_H23B_ledger(_tanda[0-9]+)?\.jsonl$")}
++ARM_RE = {"A": re.compile(r"^experimento_h47_H23V3_ledger(_tanda[0-9]+)?\.jsonl$"), "B": re.compile(r"^experimento_h47_H23V3B_ledger(_tanda[0-9]+)?\.jsonl$")}
+ KILL_BRAZO_GUARDA_S = 20.0                    # no se consulta gamma a menos de esto de la apertura del siguiente 5m cotizable ni durante el
+ HASH_REGLA = R.hash_config()
+-AQUI_REGLA = Path(R.__file__).resolve().parent
++REPUJA_S = float(R.CONFIG["repuja_ms"]) / 1000.0     # V3: re-puja liberada a los REPUJA_S de la DECISION de cancelar (v1: X.ASENTAR_S = 1,5 s)
++REPUJA_MIN_S = 0.10                                  # nunca por debajo de la RTT de cancelacion medida (F1: 60-65 ms) + margen: fail-closed si la config baja de aqui
++AQUI_REGLA = Path(R.__file__).resolve().parent.parent         # .../h23_maker (donde vive h23_shadow.py); la regla V3 esta en .../h23_maker/v3
+ 
+ 
+ def _sha_fichero(p):
+@@ -397,8 +412,9 @@
+         self._en_reaccion, self._ctx_actual, self._poll_ms = False, None, None
+         self._ult_vigilar, self._ult_kb, self._des = 0.0, 0.0, {}
+         self._intentos, self._ult_puerta, self.puerta_ok, self._sd_avisado = {}, 0.0, not real, None
+-        super().__init__(real, "H23" if brazo == "A" else "H23B", n_max, T_STOP_H23, size, min_nocional, ("btc",), presupuesto, max_vivas)
++        super().__init__(real, "H23V3" if brazo == "A" else "H23V3B", n_max, T_STOP_H23, size, min_nocional, ("btc",), presupuesto, max_vivas)
+         self.t_inicio_tanda = time.time()
++        self._t_ult_post = {}                                # V3: tok -> hora del ultimo post propio (para detectar doble exposicion)
+         self._previas, self._ordenes_previas = [], {}
+         if real:
+             try:
+@@ -410,7 +426,7 @@
+     # ---- etiquetas: ningun evento de H23 sale marcado como H35 (puja_fin/config los escribe H47 con 'H35')
+     def _log47(self, ev):
+         if ev.get("tipo") in ("puja_fin", "config", "mercado_fin", "puja_post", "h23_cancela", "h23_revalida_aborta", "kill_brazo", "tope_tanda", "par_refs", "puerta_arranque_ok", "puerta_arranque_pendiente", "kill_brazo_sin_desenlace"):
+-            ev["variante"] = f"H23-{self.brazo}"
++            ev["variante"] = f"H23V3-{self.brazo}"
+             ev.update(brazo=self.brazo, umbral=self.umbral, hash_regla=HASH_REGLA)
+             if ev["tipo"] == "config":
+                 ev["codigo_sha_h23"] = sha_propio()
+@@ -549,6 +565,9 @@
+                 return False
+             c.t_accion = t_c1
+             e["oid"] = None
++            c.t_det_cancel = t_det                                  # V3: ancla de la re-puja (la decision de cancelar, igual que el replay: t_cancel_decision + rep)
++            if h in self.canceladas:
++                self.canceladas[h]["t_det_cancel"] = t_det
+             self._log47({"tipo": "h23_cancela", "slug": c.mk["slug"], "de": o["precio"], "objetivo": objetivo, "T": round(T, 2), "causa": causa,
+                          "origen": origen, "t_evento": t_ev, "t_detecta": t_det, "t_cancel": t_c0, "t_cancel_ret": t_c1,
+                          "camino_ack": camino_ack, "rtt_incluye_asentar_s": X.ASENTAR_S if camino_ack else 0.0,
+@@ -725,6 +744,75 @@
+         self._log47({"tipo": "puerta_arranque_ok", "posiciones": len(pos)})
+         return True
+ 
++    # ---- V3: re-puja temprana
++    def _ctx_tok(self, tok):
++        for cx in getattr(self, "ctxs", {}).values():
++            est = getattr(cx, "estado", None)
++            if isinstance(est, dict) and tok in est:
++                return cx
++        return None
++
++    def _estado_tok(self, tok):
++        cx = self._ctx_tok(tok)
++        return cx.estado[tok] if cx is not None else None
++
++    def _liberada(self, o, ahora):
++        """V3: True si esta orden CANCELADA ya no impide re-pujar su token. Solo con TODO: re-puja temprana activa (REPUJA_S < ASENTAR_S y >= REPUJA_MIN_S), cancelacion no
++        'ya_terminal', han pasado REPUJA_S desde la DECISION de cancelar, existe una lectura de get_order POSTERIOR a la cancelacion con estado TERMINAL, el WS del libro de ESTE token ha emitido algun mensaje DESPUES de la
++        decision de cancelar (R3: nuestra orden cancelada ya no figura como bid) y, en el token, ningun relleno ni puja cerrada. Cualquier duda => False (= comportamiento v1: espera a que X.liquidar la saque de `canceladas` tras ASENTAR_S)."""
++        if not (REPUJA_MIN_S - 1e-9 <= REPUJA_S < float(X.ASENTAR_S) - 1e-9):
++            return False
++        if o.get("ya_terminal") or o.get("t_det_cancel") is None or o.get("t_cancel") is None:
++            return False
++        if ahora - float(o["t_det_cancel"]) < REPUJA_S:
++            return False
++        lp = o.get("lectura_post")
++        if not lp or lp["t"] < float(o["t_cancel"]) - 1e-9 or str(lp["st"]).upper() not in X.TERMINAL:
++            return False
++        cx = self._ctx_tok(o["tok"])
++        if cx is None or cx.lib.ult_tok.get(o["tok"], 0.0) <= float(o["t_det_cancel"]):
++            return False                  # sin vista del libro de ESTE token posterior a la decision de cancelar: no hay prueba de que el WS ya no muestre nuestra orden cancelada (R3)
++        e = cx.estado[o["tok"]]
++        if e["llenas"] > 1e-9 or e["cerrado"]:
++            return False
++        if self.kill or self.parada or self.senal or self.kill_brazo or self.tanda_agotada:
++            return False
++        if not o.get("liberada_t"):
++            o["liberada_t"] = ahora
++            self._log47({"tipo": "h23v3_repuja", "oid": next((k for k, v in self.canceladas.items() if v is o), None), "tok": o["tok"],
++                         "ms_desde_decision_cancel": round((ahora - float(o["t_det_cancel"])) * 1000, 1), "via": "lectura_terminal",
++                         "lectura": {"f": lp["f"], "st": lp["st"], "ms_tras_cancel": round((lp["t"] - float(o["t_cancel"])) * 1000, 1)}})
++        return True
++
++    def _cancelada_sin_liberar(self, tok, ahora):
++        return any(x["tok"] == tok and not self._liberada(x, ahora) for x in list(self.canceladas.values()))
++
++    def _lectura(self, h, f, st, size, **medida):
++        """Toda lectura legible de get_order de una CANCELADA queda en la orden (`lectura_post`); si la orden ya fue LIBERADA para re-pujar y aparece un relleno NUEVO despues,
++        es un relleno tardio (R1): con una orden propia posterior a su cancelacion en el mismo token = DOBLE EXPOSICION => kill de brazo persistente."""
++        o = self.canceladas.get(h)
++        prev = o.get("lectura_post") if o else None
++        super()._lectura(h, f, st, size, **medida)
++        if o is None:
++            return
++        ahora = time.time()
++        # EN SECO (real=False) X.consultar devuelve "LIVE" para una orden simulada ya cancelada (no existe el estado): se registra CANCELED (o MATCHED si se lleno) para poder
++        # EJERCITAR el camino de re-puja en el ensayo en seco. En REAL se guarda el estado que dice el exchange, sin tocarlo.
++        st_reg = st if self.real else ("MATCHED" if f >= float(size) - 1e-9 else "CANCELED")
++        o["lectura_post"] = {"t": ahora, "f": f, "st": st_reg}
++        if o.get("liberada_t") and prev is not None and f > float(prev["f"]) + 1e-9:
++            doble = self._t_ult_post.get(o["tok"], 0.0) > float(o.get("t_cancel") or 0.0)
++            ev = {"tipo": "h23v3_fill_tardio", "oid": h, "tok": o["tok"], "f_antes": prev["f"], "f_ahora": f, "status": st, "doble_exposicion": doble,
++                  "ms_desde_liberada": round((ahora - float(o["liberada_t"])) * 1000, 1)}
++            if doble and not self.kill_brazo:
++                motivo = (f"H23V3 doble exposicion: relleno tardio de {h} (f {prev['f']} -> {f}) DESPUES de re-pujar el mismo token; "
++                          f"la re-puja temprana no es segura con este libro/exchange: revisar y rearmar a mano")
++                self.kill_brazo = motivo
++                self._log_durable({"tipo": "kill_brazo", "motivo": motivo, "info": ev})
++                self.parar(motivo)
++            else:
++                self._log47(ev)
++
+     # ---- decision
+     def decidir(self, c, T, ahora):
+         self._fijar_lado(c)
+@@ -750,8 +838,8 @@
+         objetivo = self._objetivo(c, None)
+         if objetivo is None or self.parada or self.kill or self.senal or self.kill_brazo:
+             return
+-        if any(x["tok"] == tok for x in self.canceladas.values()):
+-            return                                                    # cancelada sin asentar: no se repone todavia (>= 1,5 s)
++        if self._cancelada_sin_liberar(tok, ahora):
++            return                                                    # cancelada sin asentar y SIN liberar (v1: >= 1,5 s; V3: liberada a los REPUJA_S con lectura terminal)
+         if time.time() < self.enfriar_tok.get(tok, 0) or ahora - c.t_accion < H.MIN_ENTRE_ACCIONES_S:
+             return
+         if c.mk["slug"] not in self.slugs_usados:
+@@ -784,6 +872,9 @@
+         h = self.post(c.mk["slug"], tok, c.lados[tok], objetivo, size, cola_dec, lib=lp, ajeno_dec=c.lib.mejor_bid_ajeno(tok),
+                       ask_dec=a[0] if a else None, fin=c.mk["fin"])
+         c.t_accion = time.time()
++        t_dc = getattr(c, "t_det_cancel", None)
++        if h is not None:
++            self._t_ult_post[tok] = c.t_accion
+         if h is None and lp.motivo is not None:
+             self._log47({"tipo": "h23_revalida_aborta", "slug": c.mk["slug"], **lp.motivo})
+         if h is not None or any(ev.get("tipo") == "intencion_post" and ev.get("slug") == c.mk["slug"] for ev in X.leer_ledger()[n_ev:]):
+@@ -798,7 +889,9 @@
+         b15 = c.lib.top(c.to)[0]
+         self._log47({"tipo": "puja_post", "oid": h, "slug": c.mk["slug"], "coin": "btc", "lado": c.lados[tok], "precio": objetivo,
+                      "size": size, "cola": cola_dec, "libro": self._libro5(c.lib, tok), "bid15": b15[0] if b15 else None,
+-                     "T": round(c.mk["fin"] - time.time(), 2), "n_orden": c.n_ord, "t_dec": ahora})
++                     "T": round(c.mk["fin"] - time.time(), 2), "n_orden": c.n_ord, "t_dec": ahora,
++                     "ms_desde_decision_cancel": round((c.t_accion - t_dc) * 1000, 1) if t_dc else None, "repuja_s_cfg": REPUJA_S})
++        c.t_det_cancel = None
+         if c.libro_dec is None:
+             c.libro_dec = self._libro5(c.lib, tok)
+ 
+@@ -909,14 +1002,14 @@
+ 
+ 
+ def configurar_rutas(real, brazo):
+-    esc = "H23" if brazo == "A" else "H23B"
++    esc = "H23V3" if brazo == "A" else "H23V3B"
+     H.configurar_rutas(real, esc, T_STOP_H23)
+ 
+ 
+ def main(argv=None):
+     ap = argparse.ArgumentParser()
+     ap.add_argument("--brazo", default="A", choices=tuple(R.CONFIG["brazos"]))
+-    ap.add_argument("--n", type=int, default=None, help="mercados con intencion (<= N_MAX['H23'] = 40)")
++    ap.add_argument("--n", type=int, default=None, help="mercados con intencion (<= N_MAX['H23V3'] = 40)")
+     ap.add_argument("--confirmo-dinero-real", action="store_true")
+     ap.add_argument("--ok-final-javi", default=None)
+     ap.add_argument("--imprimir-sha", action="store_true", help="imprime sha=<fichero> regla=<hash> para el fichero de OK y sale")
+@@ -983,7 +1076,7 @@
+     import h23_shadow as S                       # Refs (solo lectura del CSV de PolyBolt)
+     refs = S.Refs()
+     ex = Exp23(real, a.brazo, a.n, a.size, a.min_nocional, a.presupuesto_util, a.max_vivas, refs=refs)
+-    print(f"{'REAL' if real else 'ENSAYO EN SECO'} H23 brazo {a.brazo}: N={ex.n_max} (ya usadas {ex.n_usadas()}); kill={ex.kill}; ledger {X.LEDGER}", flush=True)
++    print(f"{'REAL' if real else 'ENSAYO EN SECO'} H23V3 brazo {a.brazo}: N={ex.n_max} (ya usadas {ex.n_usadas()}); kill={ex.kill}; ledger {X.LEDGER}", flush=True)
+     if real and ex.kill:
+         sys.exit("kill pendiente: revisar y rearmar (con el rearme de H47)")
+     ex.run(duracion_max_s=a.duracion_max_min * 60 if a.duracion_max_min else None)
