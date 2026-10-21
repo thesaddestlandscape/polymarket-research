@@ -364,5 +364,95 @@
   },
   "cementerio:STRUCT_NO_15M#ETH#15min": {
     "avisado": true
+  },
+  "hip_nunca:H-IBS-15": {
+    "avisado": true
+  },
+  "hip_nunca:H-HORA-GBM": {
+    "avisado": true
+  },
+  "hip_nunca:H-BTC-LEADS-ETH": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-GBM-SIGMA-ALTO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-GBM-SIGMA-BAJO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-DRIFT15-MOMENTUM": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-LONGSHOT-BIAS": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-ETH15-REVERSION": {
+    "avisado": true
+  },
+  "hip_nunca:H-FUNDING-HIGH-BUYNO": {
+    "avisado": true
+  },
+  "hip_nunca:H-DVOL-SPIKE-BUYNO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-POLY-DRIFT-CONFIRM": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-OF-VOLUMEN-ALTO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-CROSS-WINDOW-SPREAD-POS": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-CROSS-WINDOW-SPREAD-NEG": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-MOON-LLENA": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-MERCURY-RETROGRADO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-SMART-MONEY-CONSENSUS": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-WEEKLY-INRANGE-BUYYES": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-WEEKLY-PCTDIST-BUYNO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-LATE-ENTRY-15MIN": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-BUYYES15-SOLO-TARDIO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-UPDOWNGBM-BTC15-TARDIO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-GBMLATE-ANCHURA-MERCADO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-OF5M-SMARTMONEY-CONTRARIO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-ETH15-SIGMA-ACCEL": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-BTC15-SIGMA-ACCEL": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-XRP15-SIGMA-DECEL": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-SMARTMONEY-FAVORITO-SOL": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-FAVORITO-SOL-ALTACONVICCION": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-ETH15-BUYNO-TARDIO": {
+    "avisado": true
   }
 }
