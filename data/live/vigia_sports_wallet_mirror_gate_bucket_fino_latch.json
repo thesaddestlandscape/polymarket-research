@@ -14,7 +14,7 @@
   "n": 102,
   "pnl_medio": -0.5291,
   "diff_vs_resto": -0.5089,
-  "p_valor": 0.0195,
+  "p_valor": 0.02,
   "split_half_diff": [
    -0.038,
    -0.9798
@@ -49,11 +49,11 @@
   "hi": 0.14,
   "n": 50,
   "pnl_medio": -0.5978,
-  "diff_vs_resto": -0.5757,
-  "p_valor": 0.006,
+  "diff_vs_resto": -0.5746,
+  "p_valor": 0.008,
   "split_half_diff": [
-   -0.1735,
-   -0.9779
+   -0.1724,
+   -0.9768
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8154,
@@ -72,29 +72,29 @@
   "veredicto": "malo_confirmado"
  },
  "Tennis#SEGUIR": {
-  "n_dias": 38,
-  "pnl_sin_mejores_dias": -0.7282,
+  "n_dias": 39,
+  "pnl_sin_mejores_dias": -0.7379,
   "robusto_dias": false,
   "lo": 0.09,
   "hi": 0.14,
-  "n": 145,
-  "pnl_medio": -0.5525,
-  "diff_vs_resto": -0.5388,
-  "p_valor": 0.0025,
+  "n": 150,
+  "pnl_medio": -0.5674,
+  "diff_vs_resto": -0.5536,
+  "p_valor": 0.002,
   "split_half_diff": [
-   -0.6944,
-   -0.3854
+   -0.706,
+   -0.4013
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.6262,
+  "pnl_medio_loo": -0.6388,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.8093,
-   -0.2702
+   -0.8157,
+   -0.2945
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.07125,
+  "g_kelly_f10": -0.07239,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -109,11 +109,11 @@
   "hi": 0.16,
   "n": 53,
   "pnl_medio": -0.7257,
-  "diff_vs_resto": -0.6796,
-  "p_valor": 0.001,
+  "diff_vs_resto": -0.6795,
+  "p_valor": 0.0015,
   "split_half_diff": [
    -0.635,
-   -0.7225
+   -0.7224
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8799,
@@ -130,6 +130,14 @@
    "malo_confirmado"
   ],
   "veredicto": "malo_confirmado"
+ },
+ "Dota#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ]
  },
  "NFL#SEGUIR": {
   "n_dias": 17,
@@ -243,14 +251,6 @@
   "veredicto": "sin_concluir",
   "historial_crudo": [
    "malo_confirmado"
-  ]
- },
- "Dota#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
   ]
  },
  "MLB#FADE": {
