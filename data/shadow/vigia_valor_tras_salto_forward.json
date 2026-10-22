@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-21T08:27:39+00:00",
+ "generado_utc": "2026-10-22T08:27:28+00:00",
  "corte": "2026-09-30T10:00:00",
  "offset_s": 0.6,
  "hipotesis": {
@@ -15,14 +15,14 @@
     "dias_positivos": 3
    },
    "forward": {
-    "n": 2813,
-    "dias": 22,
-    "ev": -0.0101,
+    "n": 2976,
+    "dias": 23,
+    "ev": 0.0038,
     "ic90": [
-     -0.1773,
-     0.1588
+     -0.1552,
+     0.161
     ],
-    "dias_positivos": 6
+    "dias_positivos": 7
    },
    "activo_top_pct": 27,
    "confirmada": false
@@ -39,14 +39,14 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 953,
-    "dias": 22,
-    "ev": -0.1116,
+    "n": 1007,
+    "dias": 23,
+    "ev": -0.0673,
     "ic90": [
-     -0.3184,
-     0.1203
+     -0.2762,
+     0.1524
     ],
-    "dias_positivos": 7
+    "dias_positivos": 8
    },
    "activo_top_pct": 31,
    "confirmada": false
@@ -63,14 +63,14 @@
     "dias_positivos": 3
    },
    "forward": {
-    "n": 616,
-    "dias": 22,
-    "ev": -0.1707,
+    "n": 657,
+    "dias": 23,
+    "ev": -0.1408,
     "ic90": [
-     -0.298,
-     -0.0575
+     -0.2632,
+     -0.0231
     ],
-    "dias_positivos": 7
+    "dias_positivos": 8
    },
    "activo_top_pct": 25,
    "confirmada": false
@@ -87,14 +87,14 @@
     "dias_positivos": 5
    },
    "forward": {
-    "n": 1633,
-    "dias": 19,
-    "ev": 0.0023,
+    "n": 1685,
+    "dias": 21,
+    "ev": 0.0048,
     "ic90": [
-     -0.2668,
-     0.2394
+     -0.245,
+     0.2466
     ],
-    "dias_positivos": 4
+    "dias_positivos": 5
    },
    "activo_top_pct": 28,
    "confirmada": false
