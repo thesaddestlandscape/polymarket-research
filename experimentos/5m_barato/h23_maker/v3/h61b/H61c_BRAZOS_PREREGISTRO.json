@@ -1,0 +1,9 @@
+{"nombre":"H61c BRAZOS-UMBRAL (extension de H61b a mas brazos)","congelada_utc":"2026-10-22T08:35:00Z","estado":"EXPLORATORY, hipotesis NUEVA preregistrada aparte (no es H61b ni H23 v3)",
+ "motivo":"H61b da ~0,4 rellenos/dia en BTC con los brazos A (umbral 0,05) y B (0,02): la palanca es la frecuencia. Mas brazos = mas umbrales de margen neto para cotizar (bid15 - p - fee >= U).",
+ "regla":"IDENTICA a H23 v3 r150 + defensa H61b (h61b_regla.py, W=500 ms, X=0,5 bps, congelada sha 238cffd0e77f0142) salvo el umbral U del brazo",
+ "brazos_nuevos":{"U00":0.00,"U01":0.01,"U10":0.10},
+ "brazos_base_ya_existentes":{"A":0.05,"B":0.02},
+ "multiplicidad":"familia = 5 umbrales x 2 variantes (v3, C) x monedas; NINGUNA celda se declara significativa por mirar la mejor; correccion Bonferroni (5 brazos) sobre cualquier lectura de IC; el unico gate valido es el de H61b por brazo con datos >= 2026-10-22",
+ "gate":"el mismo de H61b_CONGELADA.json por brazo (retencion>=0,60; nC>=15; dEV pond IC90 dias>0; H23: n>=40, >=10 d, EV>=+0,10, IC90 d>0, sin 2 mejores>0), con datos >= 2026-10-22",
+ "kill":"EV pond sin 2 mejores dias < -0,15 con n>=20",
+ "prohibido":"elegir el umbral por el mejor resultado de los dias ya vistos; combinar brazos en la misma puja (pujan en los mismos mercados: no son aditivos); dinero real sin gate + /code-review + OK de Javi"}

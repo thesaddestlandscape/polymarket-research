@@ -1,0 +1,4 @@
+v1 (22-Oct): dos hashes distintos, ambos correctos:
+ - 4550b14b...ec0a7 = sha256 del FICHERO tal cual en disco (incluye el campo "hash_sha256_del_contenido_sin_este_campo"). Verificar:  sha256sum -c HASH_v1.txt
+ - 22296520...b4bb  = sha256 del contenido SIN ese campo, serializado con json.dumps(sort_keys=True, ensure_ascii=False, indent=1) (el que reporte en el informe). Es circular (el campo va dentro del fichero), por eso el hash valido es el del fichero.
+Desde v2 no hay campo hash dentro del JSON: la unica referencia es HASH.txt (sha256sum -c HASH.txt).

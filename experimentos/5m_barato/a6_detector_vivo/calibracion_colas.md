@@ -16,4 +16,17 @@
 ## Parte B — DATA_BLOCKED (n=0 rellenos reales)
 Los 932 pedidos reales de H47-A estaban a 0,01-0,03 (sin relleno por diseño; `verificada f=0`); el resto de ledgers (`pares_*`, `seco`) tienen `real:false`, rellenos simulados; la wallet 0x659a no tiene fills on-chain 16-20 Oct. Nada que calibrar. Datos reales útiles: acuse mediano 79 ms, visible en el WS 254 ms tras el envío (p90 573): L=85 ms es optimista con el camino H47. Para ±8 pp de tasa con p≈0,5 harán falta ~100 órdenes B; hasta H47-B no se declara ninguna cola calibrada.
 
-**Pendiente:** sensibilidad L=250 ms y ventana de explicación; SOL/XRP/ETH completos.
+
+
+## Parte A — TODAS las monedas (20-Oct ~16:30Z, `calib_colas/final_tabla.py`, tabla completa en `tabla_monedas.txt`/`tabla_monedas_alts.txt`)
+Mismo método (libro5, L=85 ms, ventana [-300,+150] ms, 4 días 17-20 Oct, ~852-859 mercados/moneda). c = fracción de la cola delantera que desaparece por cancelación; IC90 por 4 días (pocos días: IC orientativo).
+| Moneda | n pujas | c prop (IC90 días) | c lo-hi | f* hi/prop/lo | Cola recomendada (rango) |
+|---|---|---|---|---|---|
+| BTC | 2248 | 0,900 (0,876-0,923) | 0,844-0,922 | 0,1/0,3/0,7 | base (opt..base) |
+| ETH | 2382 | 0,966 (0,937-0,995) | 0,942-0,970 | 0,1/0,2/0,5 | base (opt..base) |
+| SOL | 2431 | 0,968 (0,953-0,984) | 0,915-0,973 | 0,2/0,2/0,9 | base (opt..cons) |
+| XRP | 2505 | 0,966 (0,959-0,973) | 0,893-0,972 | 0,2/0,3/0,5 | base (opt..base) |
+| DOGE | 2508 | 0,974 (0,962-0,987) | 0,914-0,981 | 0,1/0,1/0,4 | base (opt..base) |
+| BNB | 2353 | 0,967 (0,948-0,986) | 0,913-0,973 | 0,4/0,4/0,9 | base (base..cons) |
+Relleno final (prop): BTC 0,98, ETH 0,93, SOL 0,88, XRP 0,82, DOGE 0,73, BNB 0,70 (las alts tienen menos relleno; la distancia opt/base/cons es pequeña, <0,03, salvo BTC 0,07 a opt). Caveat: ETH/SOL/XRP/DOGE/BNB sin sensibilidades L/ventana; el reparto delante/detrás sigue sin resolverse.
+**Sensibilidades BTC (solo día 19, 2 días-bloque, mercados alternos, IC90 muy ancho):** L=79: c prop 0,871 (0,72-1,02); L=254: 0,893 (0,77-1,01); ventana 1000 ms y 150 ms: 0,871 (0,72-1,02) idéntico. Cola recomendada sigue siendo base en todas. Conclusión: c≈0,87-0,90 no depende de L ni de la ventana dentro de lo medible. Parte B sigue DATA_BLOCKED.

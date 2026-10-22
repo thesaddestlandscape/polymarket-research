@@ -2,22 +2,22 @@
  "job": "contabilidad_wallet_dedicada",
  "codigo_sha256": "09bd4c81fcb01472",
  "wallet": "0x659a40FF9920fEBc5a66836213040924343d297F",
- "inicio": "2026-10-21T10:08:15Z",
- "fin": "2026-10-21T10:08:41Z",
+ "inicio": "2026-10-22T09:46:52Z",
+ "fin": "2026-10-22T09:47:15Z",
  "sin_red": false,
  "cobertura": {
   "onchain": {
    "metodo": "completo_desde_bloque_0",
    "desde_bloque": 0,
-   "hasta_bloque": 95914619,
-   "transferencias_pusd_wallet": 101,
+   "hasta_bloque": 95971361,
+   "transferencias_pusd_wallet": 196,
    "duplicados_descartados": 0,
    "primer_movimiento_utc": "2026-10-09T15:28:52Z",
-   "ultimo_movimiento_utc": "2026-10-21T09:56:59Z"
+   "ultimo_movimiento_utc": "2026-10-22T09:26:03Z"
   },
   "desenlaces_inferidos_de_redeem": 0,
   "actividad_data_api": {
-   "filas": 100,
+   "filas": 195,
    "tipos": [
     "REDEEM",
     "TRADE"
@@ -25,25 +25,25 @@
    "ventana": "ventanas diarias desde 2026-10-01 (wallet sin movimientos antes del 09-Oct segun on-chain)"
   },
   "desenlaces_gamma": {
-   "mercados": 76,
-   "resueltos": 76,
+   "mercados": 150,
+   "resueltos": 150,
    "otros": {}
   },
   "rewards_y_rebates": "ninguna entrada de pUSD distinta de depositos y redenciones observada; si Polymarket paga rebates/rewards de maker fuera de esta wallet o con retraso NO es verificable aqui",
   "conciliacion_ledger_B": {
-   "mercados_con_fill_en_ledger": 72,
-   "mercados_con_fill_onchain": 73,
-   "acciones_ledger": 409.057365,
-   "acciones_onchain": 414.057365,
-   "n_discrepancias": 1
+   "mercados_con_fill_en_ledger": 143,
+   "mercados_con_fill_onchain": 147,
+   "acciones_ledger": 760.616791,
+   "acciones_onchain": 777.022194,
+   "n_discrepancias": 4
   }
  },
  "cuadre_ok": true,
  "estado": "COMPLETE",
  "entradas_sha256": {
-  "pusd_logs.json": "ee7e5669fc67ba38",
-  "actividad.json": "a9d48bcb733334d3",
-  "desenlaces.json": "1680752283634fe0"
+  "pusd_logs.json": "548bc59a3339154c",
+  "actividad.json": "6f210caa74b1bfa2",
+  "desenlaces.json": "80054c1200d14317"
  },
  "reproducir": "nice -n 19 ionice -c3 python3 /root/polymarket-research/experimentos/5m_barato/contabilidad_wallet_dedicada/actualizar.py",
  "errores": []

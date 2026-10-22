@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys,glob,json,os,collections,time
-sys.path.insert(0,'/tmp/claude-0/-root-polymarket-research/06f7b0e2-eafc-4b79-84cd-46f932c672b1/scratchpad')
+sys.path.insert(0,'/root/polymarket-research/experimentos/5m_barato/a6_detector_vivo/calib_colas')
 import analiza as A
 coin=sys.argv[1]
 C=A.C

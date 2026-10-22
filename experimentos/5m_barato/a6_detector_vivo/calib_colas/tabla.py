@@ -1,6 +1,6 @@
 import sys
 sys.argv=[sys.argv[0],sys.argv[1] if len(sys.argv)>1 else 'BTC','x']+sys.argv[2:]
-exec(open('/tmp/claude-0/-root-polymarket-research/06f7b0e2-eafc-4b79-84cd-46f932c672b1/scratchpad/agrega.py').read().split("if __name__=='__main__':")[0])
+exec(open('/root/polymarket-research/experimentos/5m_barato/a6_detector_vivo/calib_colas/agrega.py').read().split("if __name__=='__main__':")[0])
 kind=sys.argv[3] if len(sys.argv)>3 else 'g'
 def line(rs,tit):
     n=len(rs)

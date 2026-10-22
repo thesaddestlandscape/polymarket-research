@@ -1,6 +1,6 @@
 import sys,os,json
 coinsl=sys.argv[1].split(','); tag=sys.argv[2] if len(sys.argv)>2 else ''
-src=open('/tmp/claude-0/-root-polymarket-research/06f7b0e2-eafc-4b79-84cd-46f932c672b1/scratchpad/agrega.py').read().split("if __name__=='__main__':")[0]
+src=open('/root/polymarket-research/experimentos/5m_barato/a6_detector_vivo/calib_colas/agrega.py').read().split("if __name__=='__main__':")[0]
 src=src.replace("sys.argv[1].split(',')",repr(coinsl)).replace("muestras_{c}.ndjson","muestras_{c}"+tag+".ndjson")
 exec(src)
 rows=[r for r in rows if r.get('kind','g')=='g']

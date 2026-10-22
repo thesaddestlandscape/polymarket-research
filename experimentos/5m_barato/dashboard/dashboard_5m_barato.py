@@ -472,7 +472,7 @@ function rend1(D){const p=$('p1');p.textContent='';const c=D.contabilidad;if(c.e
   ['PnL realizado total',(n.realizado_total>=0?'+':'')+f(n.realizado_total),n.realizado_total>=0?'ok':'no'],['No realizado (MTM)',f(n.no_realizado_mtm)],['Saldo - capital',f(n.saldo_menos_capital_neto)],
   ['EV ponderado /EUR',f(n.ev_ponderado_por_euro,3)],['Comisiones',f(n.comisiones_pagadas,4)],['Posiciones / filas',f(n.n_posiciones,0)+' / '+f(n.n_filas_fill,0)],['Ganadoras por redimir',f(n.ganadoras_por_redimir_pusd)]]));
  const cols=[{t:'',l:1,g:r=>r.experimento!==undefined?r.experimento:('Tanda B '+r.tanda)},{t:'filas',g:r=>f(r.n_filas,0)},{t:'pos',g:r=>f(r.n_posiciones,0)},{t:'liq',g:r=>f(r.n_posiciones_liquidadas,0)},
-  {t:'gan/perd',g:r=>r.ganadoras_posiciones+'/'+r.perdedoras_posiciones},{t:'coste',g:r=>f(r.coste_total)},{t:'PnL realizado',g:r=>sg(r.pnl_realizado)},{t:'sin 2 mejores',g:r=>sg(r.pnl_realizado_sin_2_mejores_posiciones)},
+  {t:'gan/perd',g:r=>r.ganadoras_posiciones+'/'+r.perdedoras_posiciones},{t:'coste',g:r=>f(r.coste_total)},{t:'PnL realizado',g:r=>sg(r.pnl_realizado)},{t:'sin 2 mejores',g:r=>(r.ganadoras_posiciones!==undefined&&r.ganadoras_posiciones<2)?'n/d (<2 gan.)':sg(r.pnl_realizado_sin_2_mejores_posiciones)},
   {t:'EV pond./EUR',g:r=>f(r.ev_ponderado_por_euro,3)},{t:'abierto (coste)',g:r=>f(r.coste_abierto_pendiente)},{t:'MTM',g:r=>sg(r.pnl_no_realizado_mtm)},{t:'inicio',l:1,g:r=>r.inicio_utc||''}];
  p.appendChild(el('h2',null,'PnL por experimento'));p.appendChild(tabla(cols,c.por_experimento||[]));
  p.appendChild(el('h2',null,'PnL por tanda de B'));p.appendChild(tabla(cols,c.tandas_B||[]));

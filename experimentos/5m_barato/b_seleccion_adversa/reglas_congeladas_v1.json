@@ -1,0 +1,126 @@
+{
+ "alcance": "Pujas maker de B (H47-B) en ETH/SOL/XRP 5m, banda 0,10-0,30, T 60-300. Solo reduce seleccion adversa; no crea EV positivo.",
+ "combinacion_evaluada": "R1 = R1a AND R1b",
+ "datos_origen": {
+  "poblacion": "units_*.pkl de scripts/build_units.py (on-chain fills 09-21 Oct, makers sin nosotros, primeras 5 acc por maker-mercado-lado; 113.918 unidades, 110.069 EUR)",
+  "simulador": "datos/sim/sim_*.npz de scripts/sim_tape.py (cinta, B-like, contrafactico; 10.706 mercados)",
+  "split": "A 09-13 / B 14-17 / C 18-21 (scan3) y 09-15 / 16-21 (scan_units, scan_sim)"
+ },
+ "estado": "EXPLORATORY/PROMISING-debil: congelada para evaluacion FORWARD en poblacion on-chain; NO autorizada para B real (requiere gate + /code-review + OK Javi)",
+ "forward_gate": {
+  "criterio": "dif EV(pujar)-EV(descartar) por EUR > 0 con IC90 por dias > 0, n unidades descartadas >= 5.000, sin los 2 mejores dias > 0",
+  "fuente": "onchain_fills diarios (retencion 4 d: extraer cada dia) + build_units",
+  "multiplicidad": "2 reglas -> Bonferroni alfa 0,05/2 sobre la diferencia",
+  "periodo_minimo_dias": 10
+ },
+ "hash_sha256_del_contenido_sin_este_campo": "22296520783df1d16ea1c3494df6a31e2316af064b86c3ca8188cecd6911b4bb",
+ "limitaciones": [
+  "C no es virgen respecto a R1 (se vieron t_C de los candidatos replicados antes de fijar R1): requiere forward",
+  "EV(pujar) en C sigue ~0 (IC incluye 0): reduce perdida, no demuestra edge",
+  "vol30 en poblacion = bloques on-chain (hora de casado ~ bloque-2,4 s +-1,5 s); en B debe leerse del WS del CLOB: equivalencia sin medir",
+  "poblacion = fills de otros makers, no nuestras pujas; no contiene el contrafactico de no rellenadas"
+ ],
+ "no_incluidas_rechazadas_o_inconclusas": [
+  "act!=XRP (H62 sigue su preregistro)",
+  "T tardio",
+  "Binance en contra",
+  "profundidad de puja delta",
+  "modelo logit multi-rasgo",
+  "inf120",
+  "lado contrario",
+  "salida +5 s"
+ ],
+ "reglas": [
+  {
+   "def": "NO pujar (cancelar/no repegar) si las acciones casadas en ESE mercado (ambos lados) en los 30 s anteriores (hora de casado <= t_decision - 4 s) suman < 26",
+   "evidencia_poblacion": {
+    "A": {
+     "EV_descartar": -0.065,
+     "EV_pujar": 0.051,
+     "p_fw": 0.01,
+     "t": 4.03
+    },
+    "B": {
+     "EV_descartar": 0.012,
+     "EV_pujar": 0.077,
+     "t": 2.02
+    },
+    "C": {
+     "EV_descartar": -0.102,
+     "EV_pujar": -0.047,
+     "t": 1.72
+    }
+   },
+   "evidencia_simulador": "sh30>=30 / sh30>=10 / v30>=5 / lastage<=15: p_fw 0,003-0,013 en 09-15; holdout 16-21 t 2,08-2,55 (misma direccion)",
+   "falsador": "forward >=10 dias: EV(pujar)-EV(descartar) <= 0 o IC90 por dias incluye 0; o desaparece al medir vol30 con el WS del CLOB en vez de on-chain",
+   "id": "R1a_ACTIVIDAD",
+   "umbral_origen": "cuantil 0,10 de vol30 en descubrimiento A (25,98); redondeado a 26 antes de ver B/C"
+  },
+  {
+   "def": "NO pujar entre 00:00 y 03:59 UTC",
+   "evidencia_poblacion": {
+    "A": {
+     "EV_descartar": -0.03,
+     "EV_pujar": 0.053,
+     "p_fw": 0.027,
+     "t": 3.52
+    },
+    "B": {
+     "EV_descartar": 0.026,
+     "EV_pujar": 0.077,
+     "t": 1.73
+    },
+    "C": {
+     "EV_descartar": -0.226,
+     "EV_pujar": -0.019,
+     "t": 7.39
+    }
+   },
+   "evidencia_simulador": "NO concordante en descubrimiento (t 0,002), holdout t 1,79",
+   "falsador": "forward >=10 dias: noche no peor que resto por dias (hoy 11/13 dias peor, ETH EV -0,127 IC90d (-0,221,-0,031), SOL/XRP sin efecto)",
+   "id": "R1b_NOCHE",
+   "umbral_origen": "bloque hb=0 de 6 bloques de 4 h (familia completa en el max-estadistico)"
+  }
+ ],
+ "resultados_R1": {
+  "ABC_pujar": {
+   "EV": 0.054,
+   "IC90_dias": [
+    0.019,
+    0.09
+   ],
+   "dias_pos": "8/13",
+   "sin2mejoresdias": 0.027
+  },
+  "C_pujar_IC90_dias": [
+   -0.041,
+   0.067
+  ],
+  "euro_retenido": "73-74% (C: 71%)",
+  "poblacion_pujar_vs_todas": {
+   "A": [
+    0.07,
+    0.04
+   ],
+   "ABC": [
+    0.054,
+    0.025
+   ],
+   "B": [
+    0.08,
+    0.069
+   ],
+   "C": [
+    -0.009,
+    -0.055
+   ]
+  },
+  "simulador_ABC": {
+   "EV_R1": -0.144,
+   "EV_base": -0.173,
+   "PnL_R1_EUR_5acc": -1156,
+   "PnL_base_EUR_5acc": -1942
+  }
+ },
+ "version": "SA-R1-22oct2026"
+}
