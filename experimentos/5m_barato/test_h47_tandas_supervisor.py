@@ -58,6 +58,7 @@ def W(tmp_path, monkeypatch):
     monkeypatch.setattr(S, "LOG", tmp_path / "sup.log")
     monkeypatch.setattr(S, "STOP", tmp_path / "STOP")
     monkeypatch.setattr(S, "PROC", tmp_path / "proc")
+    monkeypatch.setattr(S, "ROTACION_AUTOMATICA", True)       # los tests de rotacion la ejercen; en produccion va a False (22-Oct)
     (tmp_path / "proc").mkdir()
     S.CONT.update(ilegible=0, exc=0)
     S.AVISOS_T.clear()
@@ -558,3 +559,22 @@ def test_ordenes_vivas_cuenta_solo_desde_el_ultimo_arranque(W):
     W.escribe("fuera_libro", dt=-700, oid="a")
     W.escribe("post_rechazada", dt=-600, oid="c")
     assert S.ordenes_vivas() == ["b"]
+
+
+def test_rotacion_desactivada_no_rota_ni_cierra_ni_relanza(W, monkeypatch):
+    monkeypatch.setattr(S, "ROTACION_AUTOMATICA", False)
+    # B parada por `parada`: avisa y no relanza
+    arranque(W, suelo=20.0, dt=-2000)
+    W.escribe("fin_ejecucion", dt=-100, pujas=100, kill=None, parada="tanda agotada")
+    W.viva, W.saldo = False, 20.5
+    assert S.ciclo() == "agotada_sin_rotar"
+    assert W.lanzados == 0 and not W.runs
+    # B viva pero agotada: no la cierra
+    W.viva, W.pid, W.saldo = True, 4242, 20.5
+    W.escribe("bloqueo_suelo_saldo", dt=-1200)
+    assert S.ciclo() == "agotada_sin_rotar"
+    assert not W.kills and not W.runs
+
+
+def test_relanza_con_n_500():
+    assert "--n 500" in open(S.__file__).read() and "--n 230" not in open(S.__file__).read()

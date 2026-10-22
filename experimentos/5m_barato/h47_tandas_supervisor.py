@@ -39,6 +39,7 @@ SALDO_DURO = 12.0              # preregistrado: por debajo no se relanza nada
 GANANCIA_ASEGURAR = 6.0        # saldo >= suelo + 6 -> reiniciar para subir el suelo
 ROTACION_MARGEN_AGOTADA = 1.5  # = experimento_maker_h47.ROTACION_MARGEN_AGOTADA
 PRESUPUESTO = 5.0              # = H47 PRESUPUESTO_UTIL (suelo tras un reinicio = saldo_base - presupuesto)
+ROTACION_AUTOMATICA = False   # 22-Oct (Javi): el reseteo de suelo con dinero real lo hace la sesion principal, no este proceso
 GRACIA_ARRANQUE_S = 600        # tras (re)arrancar B no se juzga "agotada" hasta pasados estos s
 TERM_ESPERA_S = 900            # espera tras SIGTERM (H47 cancela, verifica y escribe fin_ejecucion); NO se escala a SIGKILL
 MAX_LANZ_HORA = 4              # tope de lanzamientos de B por hora (ledger: eventos `config`)
@@ -354,7 +355,7 @@ def saldo():
 
 def lanzar():
     salida = DL / f"h47_real_B_{datetime.now(timezone.utc):%Y%m%d_%H%M}_sup.out"
-    cmd = f"cd {DEV} && nice -n 10 {PY} experimento_maker_h47.py --escalon B --n 230 --confirmo-dinero-real >> {salida} 2>&1"
+    cmd = f"cd {DEV} && nice -n 10 {PY} experimento_maker_h47.py --escalon B --n 500 --confirmo-dinero-real >> {salida} 2>&1"
     subprocess.run(["screen", "-dmS", "h47B", "bash", "-c", cmd])
     LANZ_T.append(ahora())
     log(f"lanzado h47B -> {salida.name}")
@@ -446,13 +447,17 @@ def ciclo():
     viva = screen_viva()
     if not viva:
         if fin_por_tope():
-            avisar("B termino limpio por el tope --n (230): NO relanzo; decidir con Javi (nuevo tope o cierre)", "tope", 6 * 3600)
+            avisar("B termino limpio por el tope --n (500): NO relanzo; decidir con Javi (nuevo tope o cierre)", "tope", 6 * 3600)
             log("fin por tope --n: no relanzo")
             return "tope"
         if pausado():
             log("pausa activa: B caido, no actuo")
             return "pausa"
         if parada_sin_reseteo():
+            if not ROTACION_AUTOMATICA:
+                avisar(f"h47B parado por 'parada' (tanda agotada, saldo {s:.2f}, suelo {suelo:.2f}): NO roto; hace falta --reiniciar-suelo (chief)", "agotada_manual", 1800)
+                log("tanda agotada: rotacion automatica desactivada, NO relanzo")
+                return "agotada_sin_rotar"
             log(f"h47B parado por 'parada' (tanda agotada, saldo {s:.2f}, suelo {suelo:.2f}): rotar tanda")
             rotar_y_relanzar()
             return "rotar"
@@ -468,6 +473,9 @@ def ciclo():
         if s - suelo >= ROTACION_MARGEN_AGOTADA:
             log(f"bloqueo viejo pero saldo-suelo {s - suelo:.2f} >= margen {ROTACION_MARGEN_AGOTADA}: no cierro")
             return "no_agotada"
+        if not ROTACION_AUTOMATICA:
+            avisar(f"B vivo pero tanda agotada (saldo {s:.2f}, suelo {suelo:.2f}): NO cierro ni roto; hace falta --reiniciar-suelo (chief)", "agotada_manual", 1800)
+            return "agotada_sin_rotar"
         vivas = ordenes_vivas()
         if vivas:
             avisar(f"tanda agotada pero B con {len(vivas)} orden(es) viva(s) en el ledger: no cierro", "vivas", 1800)
