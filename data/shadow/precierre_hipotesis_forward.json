@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-21T07:29:01+00:00",
+ "generado_utc": "2026-10-22T07:31:19+00:00",
  "corte": "2026-09-30T13:30",
  "hipotesis": {
   "H1 SOLITARIO 5m (contrario)": {
@@ -11,12 +11,12 @@
     "dias_positivos": 0
    },
    "forward": {
-    "n": 1183,
-    "dias": 22,
-    "ev": -0.2281,
+    "n": 1244,
+    "dias": 23,
+    "ev": -0.2285,
     "ic90": [
-     -0.3244,
-     -0.1429
+     -0.3233,
+     -0.1457
     ],
     "dias_positivos": 3
    },
@@ -35,14 +35,14 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 327,
-    "dias": 22,
-    "ev": -0.0159,
+    "n": 350,
+    "dias": 23,
+    "ev": -0.0153,
     "ic90": [
-     -0.0758,
-     0.0537
+     -0.0739,
+     0.0514
     ],
-    "dias_positivos": 10
+    "dias_positivos": 11
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -59,12 +59,12 @@
     "dias_positivos": 5
    },
    "forward": {
-    "n": 352,
-    "dias": 22,
-    "ev": 0.0147,
+    "n": 366,
+    "dias": 23,
+    "ev": 0.0138,
     "ic90": [
-     -0.0193,
-     0.0463
+     -0.0197,
+     0.043
     ],
     "dias_positivos": 16
    },
@@ -83,14 +83,14 @@
     "dias_positivos": 6
    },
    "forward": {
-    "n": 2573,
-    "dias": 22,
-    "ev": 0.0015,
+    "n": 2694,
+    "dias": 23,
+    "ev": -0.0002,
     "ic90": [
-     -0.0103,
-     0.0137
+     -0.0133,
+     0.0131
     ],
-    "dias_positivos": 11
+    "dias_positivos": 12
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -107,33 +107,33 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 740,
-    "dias": 21,
-    "ev": 0.0267,
+    "n": 771,
+    "dias": 22,
+    "ev": 0.0198,
     "ic90": [
-     0.0064,
-     0.0483
+     -0.0036,
+     0.0438
     ],
     "dias_positivos": 13
    },
-   "confirmada": true,
+   "confirmada": false,
    "ev_minimo_dinero_real": false
   },
   "H7 TWAP 15m + tomadora mismo lado": {
    "antes": {
-    "n": 20,
-    "dias": 1,
-    "ev": -0.0718,
+    "n": 0,
+    "dias": 0,
+    "ev": null,
     "ic90": null,
     "dias_positivos": 0
    },
    "forward": {
-    "n": 2544,
+    "n": 2603,
     "dias": 22,
-    "ev": 0.0031,
+    "ev": 0.0,
     "ic90": [
-     -0.0086,
-     0.015
+     -0.0132,
+     0.0151
     ],
     "dias_positivos": 11
    },
@@ -142,24 +142,24 @@
   },
   "H7b TWAP 15m SIN tomadora (control)": {
    "antes": {
-    "n": 597,
+    "n": 617,
     "dias": 6,
-    "ev": 0.0357,
+    "ev": 0.0322,
     "ic90": [
-     0.0196,
-     0.0502
+     0.0139,
+     0.0468
     ],
     "dias_positivos": 6
    },
    "forward": {
-    "n": 35,
-    "dias": 14,
-    "ev": -0.1339,
+    "n": 97,
+    "dias": 16,
+    "ev": -0.0095,
     "ic90": [
-     -0.2989,
-     0.0288
+     -0.1981,
+     0.0474
     ],
-    "dias_positivos": 7
+    "dias_positivos": 9
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -173,12 +173,12 @@
     "dias_positivos": 0
    },
    "forward": {
-    "n": 135,
+    "n": 141,
     "dias": 21,
-    "ev": -0.0181,
+    "ev": -0.015,
     "ic90": [
-     -0.0839,
-     0.0569
+     -0.079,
+     0.0567
     ],
     "dias_positivos": 11
    },

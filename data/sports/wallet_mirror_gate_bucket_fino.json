@@ -5,36 +5,6 @@
    "malo_confirmado"
   ]
  },
- "Tennis#FADE": {
-  "n_dias": 29,
-  "pnl_sin_mejores_dias": -0.7855,
-  "robusto_dias": false,
-  "lo": 0.03,
-  "hi": 0.08,
-  "n": 102,
-  "pnl_medio": -0.5291,
-  "diff_vs_resto": -0.5089,
-  "p_valor": 0.02,
-  "split_half_diff": [
-   -0.038,
-   -0.9798
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": -0.722,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   -0.8643,
-   -0.0543
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.07547,
-  "veredicto_crudo_hoy": "malo_confirmado",
-  "historial_crudo": [
-   "malo_confirmado"
-  ],
-  "veredicto": "malo_confirmado"
- },
  "CS#FADE": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
@@ -65,36 +35,6 @@
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 88,
   "g_kelly_f10": -0.07541,
-  "veredicto_crudo_hoy": "malo_confirmado",
-  "historial_crudo": [
-   "malo_confirmado"
-  ],
-  "veredicto": "malo_confirmado"
- },
- "Tennis#SEGUIR": {
-  "n_dias": 39,
-  "pnl_sin_mejores_dias": -0.7379,
-  "robusto_dias": false,
-  "lo": 0.09,
-  "hi": 0.14,
-  "n": 150,
-  "pnl_medio": -0.5674,
-  "diff_vs_resto": -0.5536,
-  "p_valor": 0.002,
-  "split_half_diff": [
-   -0.706,
-   -0.4013
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": -0.6388,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   -0.8157,
-   -0.2945
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.07239,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -246,6 +186,78 @@
    "malo_confirmado"
   ],
   "veredicto": "malo_confirmado"
+ },
+ "NBA#SEGUIR": {
+  "n_dias": 10,
+  "pnl_sin_mejores_dias": 0.252,
+  "robusto_dias": true,
+  "lo": 0.29,
+  "hi": 0.34,
+  "n": 49,
+  "pnl_medio": 0.5605,
+  "diff_vs_resto": 0.5812,
+  "p_valor": 0.0205,
+  "split_half_diff": [
+   0.7532,
+   0.416
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": 0.5219,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   0.1707,
+   0.9383
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 50,
+  "g_kelly_f10": 0.04304,
+  "veredicto_crudo_hoy": "bueno_confirmado",
+  "historial_crudo": [
+   "bueno_confirmado"
+  ],
+  "veredicto": "sin_concluir"
+ },
+ "ucl-otros#FADE": {
+  "n_dias": 3,
+  "pnl_sin_mejores_dias": null,
+  "robusto_dias": false,
+  "lo": 0.05,
+  "hi": 0.1,
+  "n": 53,
+  "pnl_medio": 1.4789,
+  "diff_vs_resto": 1.4565,
+  "p_valor": 0.0105,
+  "split_half_diff": [
+   1.7875,
+   1.1377
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": 1.1428,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   0.2866,
+   2.7925
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 94,
+  "g_kelly_f10": 0.05702,
+  "veredicto_crudo_hoy": "bueno_confirmado",
+  "historial_crudo": [
+   "bueno_confirmado"
+  ],
+  "veredicto": "sin_concluir"
+ },
+ "Tennis#FADE": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ]
+ },
+ "Tennis#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ]
  },
  "Dota#FADE": {
   "veredicto": "sin_concluir",

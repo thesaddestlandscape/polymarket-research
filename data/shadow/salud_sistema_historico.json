@@ -1,55 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-05T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 210,
-      "resolve_postmortem_p50_s": 6.0,
-      "resolve_postmortem_p95_s": 11.0,
-      "resolve_postmortem_max_s": 2728.0,
-      "n_ciclos_live_trade": 2527,
-      "hueco_live_trade_max_s": 1130.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 29,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 48.0,
-      "gb_libres": 37.9,
-      "git_gb": 0.0,
-      "data_gb": 16.01,
-      "datalogs_gb": 2.93
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.29,
-      "ram_pct_libre": 34.8
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 391,
-      "n_results_total": 72704
-    },
-    "carga_sistema": {
-      "load1": 11.63,
-      "load5": 10.36,
-      "load15": 10.08,
-      "nproc": 2,
-      "ratio5": 5.18,
-      "n_procesos_total": 261
-    },
-    "git_push": {
-      "commits_sin_pushear": 1665
-    },
-    "anomalias": [
-      "⏱️ ciclo resolve+postmortem tardó 2728s (umbral 120s)",
-      "🔥 CPU sobresuscrita: load5=10.36 en 2 cores (ratio=5.18x, umbral 3.0x) -- 261 procesos vivos",
-      "📡 git push atascado: 1665 commits locales sin llegar a GitHub (umbral 15) -- riesgo de pérdida si el VPS cae"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-05T17:05:14+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 218,
@@ -12887,6 +12837,232 @@
       "🔥 CPU sobresuscrita: load5=14.57 en 4 cores (ratio=3.64x, umbral 3.0x) -- 272 procesos vivos",
       "💀 10 OOM-kill(s) del kernel en 24h: systemd(pid 3924723, 0.0MB), (sd-pam)(pid 3924725, 0.0MB), python(pid 264317, 961.6MB), python(pid 359987, 2807.8MB), python(pid 360100, 2289.2MB), systemd(pid 493346, 2.0MB), python(pid 248511, 743.0MB), python3(pid 503021, 740.8MB), python(pid 518272, 2953.2MB), python(pid 528397, 1145.6MB)",
       "🚨 vigía roto: vigia_gate_bucket_propio.log (última ejecución falló, mtime 2026-10-21T07:18:02+00:00) -- subprocess.TimeoutExpired: Command '['/usr/bin/python3', '/root/polymarket-research/analisis_gate_bucket_propio_28jul.py']' timed out after 900 seconds"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-22T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 29,
+      "resolve_postmortem_p50_s": 133.0,
+      "resolve_postmortem_p95_s": 224.2,
+      "resolve_postmortem_max_s": 525.8,
+      "resolve_postmortem_duraciones_s": [
+        123.5,
+        103.5,
+        124.1,
+        123.9,
+        209.7,
+        165.5,
+        175.6,
+        122.4,
+        130.2,
+        121.4,
+        133.0,
+        525.8,
+        125.4,
+        224.2,
+        122.1,
+        145.9,
+        122.5,
+        189.8,
+        158.5,
+        143.5,
+        110.8,
+        117.8,
+        116.7,
+        219.4,
+        166.4,
+        138.4,
+        141.8,
+        129.2,
+        138.0
+      ],
+      "n_ciclos_live_trade": 1202,
+      "hueco_live_trade_max_s": 75.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 20,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 88.0,
+      "gb_libres": 8.84,
+      "git_gb": 0.0,
+      "data_gb": 17.93,
+      "datalogs_gb": 14.29
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 2.43,
+      "ram_pct_libre": 32.1
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 766,
+      "n_results_total": 1113293
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 19.82,
+      "load5": 20.37,
+      "load15": 21.23,
+      "nproc": 4,
+      "ratio5": 5.09,
+      "n_procesos_total": 270
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 18,
+      "eventos": [
+        {
+          "ts": "Oct 21 12:34:33",
+          "pid": "530456",
+          "nombre": "python",
+          "rss_mb": 1617.7
+        },
+        {
+          "ts": "Oct 21 13:09:43",
+          "pid": "574851",
+          "nombre": "python",
+          "rss_mb": 535.6
+        },
+        {
+          "ts": "Oct 21 22:17:18",
+          "pid": "783401",
+          "nombre": "python",
+          "rss_mb": 3294.0
+        },
+        {
+          "ts": "Oct 21 22:21:10",
+          "pid": "783708",
+          "nombre": "python",
+          "rss_mb": 1462.6
+        },
+        {
+          "ts": "Oct 22 00:29:14",
+          "pid": "821343",
+          "nombre": "python3",
+          "rss_mb": 1859.5
+        },
+        {
+          "ts": "Oct 22 00:30:42",
+          "pid": "734253",
+          "nombre": "python",
+          "rss_mb": 973.3
+        },
+        {
+          "ts": "Oct 22 04:00:18",
+          "pid": "822084",
+          "nombre": "python",
+          "rss_mb": 897.5
+        },
+        {
+          "ts": "Oct 22 06:26:24",
+          "pid": "928528",
+          "nombre": "python3",
+          "rss_mb": 1378.9
+        },
+        {
+          "ts": "Oct 22 06:34:13",
+          "pid": "931562",
+          "nombre": "python3",
+          "rss_mb": 2114.4
+        },
+        {
+          "ts": "Oct 22 06:39:18",
+          "pid": "630237",
+          "nombre": "python",
+          "rss_mb": 1227.2
+        },
+        {
+          "ts": "Oct 22 07:11:27",
+          "pid": "938715",
+          "nombre": "systemd",
+          "rss_mb": 2.2
+        },
+        {
+          "ts": "Oct 22 07:11:27",
+          "pid": "938717",
+          "nombre": "(sd-pam)",
+          "rss_mb": 1.7
+        },
+        {
+          "ts": "Oct 22 07:11:27",
+          "pid": "933137",
+          "nombre": "python",
+          "rss_mb": 1337.3
+        },
+        {
+          "ts": "Oct 22 07:12:24",
+          "pid": "887421",
+          "nombre": "python",
+          "rss_mb": 896.3
+        },
+        {
+          "ts": "Oct 22 07:19:21",
+          "pid": "943697",
+          "nombre": "python",
+          "rss_mb": 972.2
+        },
+        {
+          "ts": "Oct 22 07:39:33",
+          "pid": "953127",
+          "nombre": "python",
+          "rss_mb": 2256.1
+        },
+        {
+          "ts": "Oct 22 07:45:04",
+          "pid": "946815",
+          "nombre": "python",
+          "rss_mb": 1214.7
+        },
+        {
+          "ts": "Oct 22 07:49:00",
+          "pid": "955292",
+          "nombre": "python",
+          "rss_mb": 1768.2
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 2,
+      "vigias": [
+        {
+          "log": "vigia_gate_bucket_propio.log",
+          "mtime_utc": "2026-10-22T07:18:02+00:00",
+          "ultima_linea_fallo": "subprocess.TimeoutExpired: Command '['/usr/bin/python3', '/root/polymarket-research/analisis_gate_bucket_propio_28jul.py']' timed out after 900 seconds"
+        },
+        {
+          "log": "vigia_resolution_sniper_precierre.log",
+          "mtime_utc": "2026-10-22T07:18:07+00:00",
+          "ultima_linea_fallo": "ERROR TimeoutExpired: analisis_gate_riguroso_resolution_sniper_precierre_02sep.py tras 364 s (última duración 121 s)"
+        }
+      ]
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 1,
+      "gates": [
+        {
+          "gate": "gate_bucket_propio.json",
+          "antiguedad_h": 48.7,
+          "maximo_h": 30.0
+        }
+      ]
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 526s (umbral 400s)",
+      "🔥 CPU sobresuscrita: load5=20.37 en 4 cores (ratio=5.09x, umbral 3.0x) -- 270 procesos vivos",
+      "💀 18 OOM-kill(s) del kernel en 24h: python(pid 530456, 1617.7MB), python(pid 574851, 535.6MB), python(pid 783401, 3294.0MB), python(pid 783708, 1462.6MB), python3(pid 821343, 1859.5MB), python(pid 734253, 973.3MB), python(pid 822084, 897.5MB), python3(pid 928528, 1378.9MB), python3(pid 931562, 2114.4MB), python(pid 630237, 1227.2MB), systemd(pid 938715, 2.2MB), (sd-pam)(pid 938717, 1.7MB), python(pid 933137, 1337.3MB), python(pid 887421, 896.3MB), python(pid 943697, 972.2MB), python(pid 953127, 2256.1MB), python(pid 946815, 1214.7MB), python(pid 955292, 1768.2MB)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): gate_bucket_propio.json 48.7h (máx 30.0h)",
+      "🚨 vigía roto: vigia_gate_bucket_propio.log (última ejecución falló, mtime 2026-10-22T07:18:02+00:00) -- subprocess.TimeoutExpired: Command '['/usr/bin/python3', '/root/polymarket-research/analisis_gate_bucket_propio_28jul.py']' timed out after 900 seconds",
+      "🚨 vigía roto: vigia_resolution_sniper_precierre.log (última ejecución falló, mtime 2026-10-22T07:18:07+00:00) -- ERROR TimeoutExpired: analisis_gate_riguroso_resolution_sniper_precierre_02sep.py tras 364 s (última duración 121 s)"
     ],
     "estado": "ANOMALIA"
   }
