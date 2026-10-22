@@ -15,7 +15,7 @@ for d in DAYS:
     of = f'{OUT}/simv2_{d}.npz'
     if os.path.exists(of): print(d, 'ya'); continue
     z = np.load(MS + f'ms_{d}.npz', allow_pickle=True); toks = z['tokens']
-    meta = pd.DataFrame(z['tmap'], columns=['act', 'marco', 'mid', 'fin', 'lado']); meta['finE'] = pd.to_datetime(meta.fin, utc=True).astype('int64') // 10**9; meta['mid'] = meta.mid.astype(np.int64)
+    meta = pd.DataFrame(z['tmap'], columns=['act', 'marco', 'mid', 'fin', 'lado']); meta['finE'] = pd.to_datetime(meta.fin, utc=True).map(lambda x: int(x.timestamp())); meta['mid'] = meta.mid.astype(np.int64)
     qk, qt = z['q_k'], z['q_t'] + int(z['t0']); qv = [z['q_v%d' % j] for j in range(4)]; bounds = np.searchsorted(qk, np.arange(len(toks) + 1))
     t5 = {(r.mid, r.lado): i for i, r in enumerate(meta.itertuples()) if r.marco == '5min'}
     t15 = {(r.act, r.finE, r.lado): i for i, r in enumerate(meta.itertuples()) if r.marco == '15min'}

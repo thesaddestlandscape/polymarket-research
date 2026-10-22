@@ -70,3 +70,15 @@ Este registro es un estado de control, no una certificación. Todo número debe 
 
 ## 21-Oct — H62 «B sin XRP» (preregistro: experimentos/5m_barato/b_lecciones_wallets/PREREGISTRO_H62_B_SIN_XRP.md, 2026-10-21T10:42:45Z)
 Hipótesis: XRP en maker barato 5m rinde menos que ETH+SOL (población 09-19: −0,065, IC90 días (−0,124,−0,010); B real −0,084 n=21). Solo medición forward desde el preregistro; gate ≥10 días, IC90 por días < 0; B real no se toca. Origen: POSTMORTEM_B.md / LECCIONES_B.md.
+
+## 22-Oct 11:50Z — SUBESTRATEGIA «BTC-200K» (orden de Javi; owner chief; objetivo 200.000 €/año en BTC 5m barato; todas EXPLORATORY, sin gate superado)
+Mandato: superar a los bots más rápidos en la parte TOMADORA de BTC y del resto de monedas; en la parte MAKER, atacar donde la velocidad es ventaja estructural (alta 68 ms, cancelación 60 ms, sin taker delay). Gates intactos; dinero real solo con `/code-review` + OK Javi + peldaño micro-real. Plan y cola: `docs/PLAN_EQUIPO_22OCT.md`.
+
+| ID | Palanca | Pregunta falsable | Primer paso |
+|---|---|---|---|
+| H63 | Filtro de selección adversa PROPIO de BTC para el maker (R2/R3 no replica en BTC: −0,030, n=36.407) | ¿Algún rasgo previo al relleno (Binance, flujo de tomadores, saltos Chainlink, bid15 en ms, L2) separa rellenos buenos de malos en BTC con EV ponderado >0, 10 días, IC90 por días>0, placebo e inversión peores? | Simulador de libro real de `b_seleccion_adversa`, split por días |
+| H64 | Maker→tomador una-vía-por-evento (= H54) y H23 con re-puja a 150 ms, en BTC | ¿Maker primero y tomador solo si el maker no se ha rellenado a ≤ t_disparo+60 ms rinde más que cada brazo solo, sobre eventos emparejados? | Demostración re-puja en curso (DEMOSTRACION_REPUJA.md) |
+| H65 | Tomador BTC a la velocidad del suelo: V4/V7 en F3-ready + H59 colchón + H53 umbral | ¿Cuánto del 62 %→40 % es latencia propia (reducible a ~180-215 ms de suelo físico) y cuánto rival/selección? ¿Qué hacen los bots más rápidos (quién consume los asks en <150 ms, H24) y se alcanza su L? | F2 relanzado 22-Oct 11:09Z: medir L = casado − recepción con relojes del exchange; auditar todo el camino (decisión, firma, envío, conexión caliente, precarga) |
+| H66 | Capacidad hacia 200 k€: tamaño, cola y capital | ¿Qué fracción del bote BTC (12,1 k$/día; 4,5 % ≈ 200 k€/año) es alcanzable y con qué EV por € mínimo? | Modelo de capacidad (objetivo-200k) con las cifras de H63-H65 |
+| H67 | Ingeniería inversa de las wallets que ganan en BTC (= H09/H24/H30) | ¿Qué mecanismo (maker direccional, ventana, cancelación) explica su PnL y qué versión propia, con cola y selección acotadas, lo supera en replay emparejado OOS? | Informe wallet-intelligence; nunca copiar fills tardíos |
+| H68 | Tomador a velocidad de suelo en TODAS las monedas | ¿El mismo camino caliente de F2 captura V4/V7-equivalentes en ETH/SOL/XRP/DOGE/BNB? | F2 alts (`--sin-firma` hoy): activar firma tras medir RAM/CPU |

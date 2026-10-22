@@ -1,0 +1,2 @@
+Verificacion v2:  cd /root/polymarket-research/experimentos/5m_barato/b_seleccion_adversa && sha256sum -c HASH.txt
+El hash es el del FICHERO reglas_congeladas.json tal cual (sin campo hash interno). La v1 sigue en reglas_congeladas_v1.json + HASH_v1.txt.

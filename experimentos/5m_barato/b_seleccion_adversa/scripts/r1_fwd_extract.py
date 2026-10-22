@@ -7,9 +7,9 @@ Solo escribe si la cobertura de desenlace >= 99 %; si no, sale con codigo 3 (se 
 import sys, os, json, time, gzip, requests
 import numpy as np, pandas as pd
 from datetime import datetime, timedelta, timezone
-DL = '/root/polymarket-research-datalogs/'; OUTD = DL + 'sa_r1/'; os.makedirs(OUTD, exist_ok=True)
+DL = '/root/polymarket-research-datalogs/'; TAG = os.environ.get('SA_TAG', ''); OUTD = DL + 'sa_r1/' + (TAG + '/' if TAG else ''); os.makedirs(OUTD, exist_ok=True)
 EX = '0xe111180000d2663c0091e4f400237545b87b996b'; US = '0x659a40ff9920febc5a66836213040924343d297f'
-COINS = ('eth', 'sol', 'xrp')
+COINS = tuple(os.environ.get('SA_COINS', 'eth,sol,xrp').split(','))
 def gmap(d):
     f = OUTD + f'gmap_{d}.json'
     old = json.load(open(f)) if os.path.exists(f) else {}

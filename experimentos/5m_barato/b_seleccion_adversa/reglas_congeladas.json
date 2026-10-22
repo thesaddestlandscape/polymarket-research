@@ -1,126 +1,124 @@
 {
- "alcance": "Pujas maker de B (H47-B) en ETH/SOL/XRP 5m, banda 0,10-0,30, T 60-300. Solo reduce seleccion adversa; no crea EV positivo.",
- "combinacion_evaluada": "R1 = R1a AND R1b",
- "datos_origen": {
-  "poblacion": "units_*.pkl de scripts/build_units.py (on-chain fills 09-21 Oct, makers sin nosotros, primeras 5 acc por maker-mercado-lado; 113.918 unidades, 110.069 EUR)",
-  "simulador": "datos/sim/sim_*.npz de scripts/sim_tape.py (cinta, B-like, contrafactico; 10.706 mercados)",
-  "split": "A 09-13 / B 14-17 / C 18-21 (scan3) y 09-15 / 16-21 (scan_units, scan_sim)"
+ "alcance": "Pujas maker de B (H47-B) ETH/SOL/XRP 5m, banda 0,10-0,30, T 60-300. NO se aplica a BTC (no replica: ver btc).",
+ "btc": {
+  "etiqueta": "REJECTED para BTC (n=36.407 unidades A)",
+  "resultado": "NO replica: BTC 5m 17-21 Oct (n=156.968 unidades, 165.961 EUR): EV todas -0,052; A -0,030 (IC90 dias (-0,213,+0,161)); no-A -0,059; por dia A: +0,138/-0,450/-0,078/+0,012/+0,296"
  },
- "estado": "EXPLORATORY/PROMISING-debil: congelada para evaluacion FORWARD en poblacion on-chain; NO autorizada para B real (requiere gate + /code-review + OK Javi)",
- "forward_gate": {
-  "criterio": "dif EV(pujar)-EV(descartar) por EUR > 0 con IC90 por dias > 0, n unidades descartadas >= 5.000, sin los 2 mejores dias > 0",
-  "fuente": "onchain_fills diarios (retencion 4 d: extraer cada dia) + build_units",
-  "multiplicidad": "2 reglas -> Bonferroni alfa 0,05/2 sobre la diferencia",
-  "periodo_minimo_dias": 10
+ "estado": "EXPLORATORY/PROMISING solo ETH/SOL/XRP 5m; congelada para FORWARD (medicion). NO autorizada para B real: exige gate forward + /code-review + OK de Javi.",
+ "forward": {
+  "dias_forward": ">= 2026-10-22",
+  "falsadores": [
+   "la diferencia desaparece en forward",
+   "desaparece al medir el bid15 con el WS del CLOB que B usaria en vivo (hoy se mide con el registro ms = mismo feed)",
+   "el EV de lo cotizado con A no supera 0 en 20 dias (reduce perdida pero no crea edge)"
+  ],
+  "fuente": "cron 10:40Z scripts/r1_fwd_cron.sh: on-chain D-1 -> units_D; registro ms D-1 -> ms_D.npz -> units2_D (datalogs/sa_r1, sa_ms; fuera de git)",
+  "gate": "CONFIRMADA si >=10 dias, n descartado >=5.000 unidades, IC95 por dias de EV(pujar)-EV(descartar) > 0 (Bonferroni 2 reglas primarias) y EV de la diferencia sin los 2 mejores dias > 0; REFUTADA si >=10 dias y IC90 sup <= 0; NO_CONFIRMADA a los 20 dias",
+  "registro_ms_rota_a_5_dias": true
  },
- "hash_sha256_del_contenido_sin_este_campo": "22296520783df1d16ea1c3494df6a31e2316af064b86c3ca8188cecd6911b4bb",
- "limitaciones": [
-  "C no es virgen respecto a R1 (se vieron t_C de los candidatos replicados antes de fijar R1): requiere forward",
-  "EV(pujar) en C sigue ~0 (IC incluye 0): reduce perdida, no demuestra edge",
-  "vol30 en poblacion = bloques on-chain (hora de casado ~ bloque-2,4 s +-1,5 s); en B debe leerse del WS del CLOB: equivalencia sin medir",
-  "poblacion = fills de otros makers, no nuestras pujas; no contiene el contrafactico de no rellenadas"
- ],
- "no_incluidas_rechazadas_o_inconclusas": [
-  "act!=XRP (H62 sigue su preregistro)",
-  "T tardio",
-  "Binance en contra",
-  "profundidad de puja delta",
-  "modelo logit multi-rasgo",
-  "inf120",
-  "lado contrario",
-  "salida +5 s"
- ],
+ "irreducible_medido": {
+  "con_R3_sim": "rellenas +0,123 frente a cotizadas ~+0,11: la brecha se cierra en ETH/SOL/XRP dentro del simulador (no demostrado en forward)",
+  "sim_cinta_v1": "0,237 EUR/EUR (EV cotizadas +0,064 vs rellenas -0,173)",
+  "sim_libro_real_17_21": "0,259 (EV cotizadas +0,114 vs rellenas -0,146; fidelidad: relleno 76 % vs 61-72 % real, acierto 18,8 % vs 25 %, precio 0,220 vs 0,207)"
+ },
+ "rechazadas_con_libro_real_n": {
+  "bid_no_baja_5s": [
+   2121,
+   -0.221
+  ],
+  "cancelar_si_bid15_baja_5s": [
+   2463,
+   -0.199
+  ],
+  "confirmacion_previa_bid_sube": [
+   1605,
+   -0.239
+  ],
+  "profundidad k=0..6": [
+   4311,
+   "-0.14 a -0.17 plano"
+  ],
+  "scalp/cobertura lado contrario m=1..5c": [
+   3269,
+   -0.336
+  ],
+  "spread<=0.01": [
+   2599,
+   -0.168
+  ],
+  "top_bid_size>=100": [
+   657,
+   -0.203
+  ]
+ },
  "reglas": [
   {
-   "def": "NO pujar (cancelar/no repegar) si las acciones casadas en ESE mercado (ambos lados) en los 30 s anteriores (hora de casado <= t_decision - 4 s) suman < 26",
-   "evidencia_poblacion": {
-    "A": {
-     "EV_descartar": -0.065,
-     "EV_pujar": 0.051,
-     "p_fw": 0.01,
-     "t": 4.03
+   "def": "Cotizar SOLO si bid_15m(mismo lado, misma moneda, 15m que contiene al 5m) - precio_de_puja <= 0,03 (en t_decision). Sin dato de 15m => no cotizar.",
+   "evidencia": {
+    "multiplicidad": "max-estadistico en 245 reglas, p_fw (gap15<=0, mismo rasgo) 0,003 en 17-19 y t_h 5,2 en 20-21",
+    "poblacion_17_21_oct_ETH_SOL_XRP": {
+     "A": {
+      "disc_17_19": [
+       0.042,
+       5969
+      ],
+      "hold_20_21": [
+       0.147,
+       2826
+      ],
+      "todo": [
+       0.076,
+       8795
+      ]
+     },
+     "noA": {
+      "disc": -0.099,
+      "hold": -0.077,
+      "por_dia_5_de_5_negativo": true
+     }
     },
-    "B": {
-     "EV_descartar": 0.012,
-     "EV_pujar": 0.077,
-     "t": 2.02
-    },
-    "C": {
-     "EV_descartar": -0.102,
-     "EV_pujar": -0.047,
-     "t": 1.72
+    "sensibilidad_umbral": "EV(hold) A<=0,00 +0,169 ... <=0,05 +0,139, <=0,08 +0,096, <=0,12 +0,037; escalon nitido en 0,05-0,12",
+    "simulador_libro_real": {
+     "A": 0.068,
+     "A_y_R1": {
+      "EV": 0.123,
+      "IC90_dias": [
+       0.07,
+       0.179
+      ],
+      "dias_pos": "5/5",
+      "sin2": 0.064
+     },
+     "base": -0.146
     }
    },
-   "evidencia_simulador": "sh30>=30 / sh30>=10 / v30>=5 / lastage<=15: p_fw 0,003-0,013 en 09-15; holdout 16-21 t 2,08-2,55 (misma direccion)",
-   "falsador": "forward >=10 dias: EV(pujar)-EV(descartar) <= 0 o IC90 por dias incluye 0; o desaparece al medir vol30 con el WS del CLOB en vez de on-chain",
-   "id": "R1a_ACTIVIDAD",
-   "umbral_origen": "cuantil 0,10 de vol30 en descubrimiento A (25,98); redondeado a 26 antes de ver B/C"
+   "id": "R2_NIVEL15 (primaria)",
+   "mecanismo": "si el bid del 15m del mismo lado esta mas de 3c por encima de nuestra puja, el 5m esta 'barato' frente a su gemelo 15m: es la relacion anidada que explotan los rivales (V4) y los rellenos que recibimos son los barridos informados"
   },
   {
-   "def": "NO pujar entre 00:00 y 03:59 UTC",
-   "evidencia_poblacion": {
-    "A": {
-     "EV_descartar": -0.03,
-     "EV_pujar": 0.053,
-     "p_fw": 0.027,
-     "t": 3.52
+   "def": "R2_NIVEL15 AND (acciones casadas en el mercado en los 30 s previos por WS >= 26) AND hora UTC >= 4",
+   "evidencia": {
+    "lectura0_pre_forward": "21-Oct tras 10:08Z (no vista al fijar A): A n=1285 EV +0,652 vs no-A n=3043 +0,044 (un dia, regimen favorable)",
+    "poblacion_17_21": {
+     "EV": 0.114,
+     "IC90_dias": [
+      0.079,
+      0.155
+     ],
+     "dias_pos": "5/5",
+     "n": 6579,
+     "retenido_EUR": 0.19,
+     "sin2": 0.09,
+     "unid_dia": 1316
     },
-    "B": {
-     "EV_descartar": 0.026,
-     "EV_pujar": 0.077,
-     "t": 1.73
-    },
-    "C": {
-     "EV_descartar": -0.226,
-     "EV_pujar": -0.019,
-     "t": 7.39
-    }
+    "simulador": 0.123
    },
-   "evidencia_simulador": "NO concordante en descubrimiento (t 0,002), holdout t 1,79",
-   "falsador": "forward >=10 dias: noche no peor que resto por dias (hoy 11/13 dias peor, ETH EV -0,127 IC90d (-0,221,-0,031), SOL/XRP sin efecto)",
-   "id": "R1b_NOCHE",
-   "umbral_origen": "bloque hb=0 de 6 bloques de 4 h (familia completa en el max-estadistico)"
+   "id": "R3_COMBINADA (secundaria)"
+  },
+  {
+   "def": "ver reglas_congeladas_v1.json; se siguen midiendo como controles",
+   "id": "R1a/R1b (v1)"
   }
  ],
- "resultados_R1": {
-  "ABC_pujar": {
-   "EV": 0.054,
-   "IC90_dias": [
-    0.019,
-    0.09
-   ],
-   "dias_pos": "8/13",
-   "sin2mejoresdias": 0.027
-  },
-  "C_pujar_IC90_dias": [
-   -0.041,
-   0.067
-  ],
-  "euro_retenido": "73-74% (C: 71%)",
-  "poblacion_pujar_vs_todas": {
-   "A": [
-    0.07,
-    0.04
-   ],
-   "ABC": [
-    0.054,
-    0.025
-   ],
-   "B": [
-    0.08,
-    0.069
-   ],
-   "C": [
-    -0.009,
-    -0.055
-   ]
-  },
-  "simulador_ABC": {
-   "EV_R1": -0.144,
-   "EV_base": -0.173,
-   "PnL_R1_EUR_5acc": -1156,
-   "PnL_base_EUR_5acc": -1942
-  }
- },
- "version": "SA-R1-22oct2026"
+ "version": "SA-R2-22oct2026 (v2; supera a reglas_congeladas_v1.json, que se conserva con su HASH_v1.txt)"
 }

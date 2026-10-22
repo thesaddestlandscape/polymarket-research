@@ -13,15 +13,23 @@ def all_fills(d, S):
         F = F[(F.is_tk == 0) & F.act.isin(COINS)].drop(columns=['is_tk'])
         F['mkt'] = F.mkt.astype(np.int64); F['des'] = F.mkt.astype(str).map(DES)
     else:
-        gm = json.load(open(S + ('/gmap19.json' if d == '2026-10-19' else '/gmap.json')))
+        import os, sys
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        gp = '/root/polymarket-research-datalogs/sa_r1/gmap_%s.json' % d
+        if not os.path.exists(gp):
+            import r1_fwd_extract as X; X.gmap(d)
+        gm = json.load(open(gp))
         tok = {}
         for slug, v in gm.items():
             st = int(slug.rsplit('-', 1)[1]); coin = slug.split('-')[0].upper()
             for t, l in zip(v['toks'], ('YES', 'NO')): tok[t] = (coin, int(v['id']), st + 300, l, v['des'])
         cols = ['tipo', 'bloque', 'ts', 'tx', 'li', 'oh', 'maker', 'taker', 'side', 'tok', 'maker_amt', 'taker_amt', 'fee']
-        F = pd.read_csv(S + f'/alt_{d[8:]}.csv', header=None, names=cols, dtype={'tok': str, 'tx': str, 'maker': str, 'taker': str},
-                        usecols=['tipo', 'ts', 'tx', 'maker', 'taker', 'side', 'tok', 'maker_amt', 'taker_amt'])
-        F = F[(F.tipo == 'F') & (F.taker.str.lower() != EX) & F.tok.isin(tok.keys())].copy()
+        parts = []
+        for ch in pd.read_csv('/root/polymarket-research-datalogs/onchain_fills_%s.csv.gz' % d, header=0, names=cols, dtype={'tok': str, 'tx': str, 'maker': str, 'taker': str},
+                              usecols=['tipo', 'ts', 'tx', 'maker', 'taker', 'side', 'tok', 'maker_amt', 'taker_amt'], chunksize=500000, on_bad_lines='skip'):
+            ch = ch[(ch.tipo == 'F') & (ch.taker.str.lower() != EX) & ch.tok.isin(tok.keys())]
+            if len(ch): parts.append(ch.copy())
+        F = pd.concat(parts, ignore_index=True)
         F['maker'] = F.maker.str.lower(); F['taker'] = F.taker.str.lower()
         for i, c in enumerate(['act', 'mkt', 'fin', 'lado', 'des']): F[c] = F.tok.map(lambda t, i=i: tok[t][i])
         F = F.drop(columns=['tipo', 'tok'])

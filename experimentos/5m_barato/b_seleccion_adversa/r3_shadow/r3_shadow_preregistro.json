@@ -1,0 +1,28 @@
+{
+ "id": "R3-SHADOW-PREREG-22oct2026",
+ "estado": "PROPUESTO por el ingeniero; vale cuando el chief/Javi lo aprueben y se congele con HASH_PREREG.txt (sha256 del fichero entero). No relaja ni sustituye reglas_congeladas.json v2: lo ADAPTA al brazo vivo (unidad = relleno simulado del gemelo de B, no unidad on-chain de otros makers).",
+ "regla_bajo_prueba": "reglas_congeladas.json v2: R2_NIVEL15 (primaria) y R3_COMBINADA (secundaria). Parametros duros en r3_regla.py: R2_MAX_MILS=30, VOL30_MIN=26, HORA_MIN=4",
+ "universo": "ETH/SOL/XRP 5m; politica BASE = gemelo de B (H35 DEEP_PEG, k ETH 2/SOL 1/XRP 1, T 298..60); BTC excluida (REJECTED en v2)",
+ "dia_valido": "dia UTC (por cierre del mercado) con >=80 % de los 864 mercados esperados (3 monedas x 288) con mkt_fin completo=true; un dia con menos cobertura NO cuenta (missing != 0)",
+ "unidad": "relleno simulado por (mercado, trader); EV = sum(pnl)/sum(coste) ponderado por EUR; pnl = acc*(gana) - acc*precio (maker sin comision; rebate 20 % NO sumado); desenlace OFICIAL gamma closed=true; fills sin desenlace se excluyen y se cuentan",
+ "escenarios_de_relleno": {"primario_y_obligatorio": ["cons_x", "cons_r"], "cota_optimista_solo_informativa": ["opt_x"], "nota": "la regla solo se da por confirmada si pasa en cons_x Y en cons_r (el reloj del exchange no puede ser lo que la sostiene)"},
+ "metricas": {
+  "DIF": "EV(fills de BASE con flag R_i=true al pujar) - EV(fills de BASE con flag R_i=false al pujar), i en {R2, R3}; remuestreo de DIAS (bloques)",
+  "EV_POLITICA": "EV de los fills de la politica R_i ejecutada en vivo (la que cancela/no cotiza cuando la regla es falsa)",
+  "contra_B_real": "informativo (n pequeno): EV de los rellenos de B real segun el flag de la regla en su puja_post (emparejado por slug+lado y hora mas cercana <=10 s); no entra en el veredicto"
+ },
+ "veredicto_por_regla": {
+  "CONFIRMADA": "dias_validos>=10 AND n_fills_flag_true>=200 AND n_fills_flag_false>=500 AND IC95_dias(DIF).inf>0 AND DIF_sin_2_mejores_dias>0 AND IC95_dias(EV_POLITICA).inf>0 AND EV_POLITICA_sin_2_mejores_dias>0, en cons_x Y en cons_r. (IC95 = Bonferroni de 2 reglas primarias, como en reglas_congeladas.json; se informa tambien el IC90)",
+  "REDUCE_PERDIDA": "dias_validos>=10 AND IC95(DIF).inf>0 pero EV_POLITICA no >0: la regla separa pero no crea edge (falsador 3 de reglas_congeladas.json)",
+  "REFUTADA": "dias_validos>=10 AND IC90(DIF).sup<=0 en cons_x",
+  "NO_CONFIRMADA": "dias_validos>=20 sin CONFIRMADA ni REFUTADA",
+  "ACUMULANDO": "resto"
+ },
+ "falsadores_adicionales": [
+  "el efecto desaparece si bid15 se mide con el WS que B usara en vivo (este brazo YA lo mide asi; si desaparece aqui, muere)",
+  "EV de la politica R3 <= 0 con IC95 sup < 0 en 20 dias",
+  "la retencion de volumen de la politica (EUR R3 / EUR BASE) cae por debajo del 5 %: la regla no escala"
+ ],
+ "siguiente_paso_si_CONFIRMADA": "NO es dinero: /code-review MEDIUM de b_r3/experimento_maker_h47_r3.py + OK de Javi + peldaño micro-real (wallet dedicada, tope 5 EUR)",
+ "umbrales_propuestos_sin_aprobar": ["80 % de cobertura diaria", "n_fills_flag_true>=200 y flag_false>=500", "exigir cons_x Y cons_r"]
+}

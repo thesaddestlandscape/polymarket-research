@@ -16,16 +16,21 @@ def boot(g, n=5000, seed=3):
     return np.quantile(e, .05), np.quantile(e, .95), np.quantile(e, .025), np.quantile(e, .975)
 def main():
     tg = '--telegram' in sys.argv
-    fs = sorted(f for f in glob.glob(OUTD + 'units_*.csv.gz') if f[-17:-7] >= FWD0)
+    f2 = {f[-17:-7]: f for f in glob.glob(OUTD + 'units2_*.csv.gz')}
+    fs = sorted(f2.get(f[-17:-7], f) for f in glob.glob(OUTD + 'units_*.csv.gz') if f[-17:-7] >= FWD0)
     os.makedirs(OUTD, exist_ok=True); est_f = OUTD + 'estado_forward.json'; prev = json.load(open(est_f)) if os.path.exists(est_f) else {}
     if not fs:
         print('sin dias forward todavia'); res = {'dias': 0, 'reglas': {}}
     else:
         U = pd.concat([pd.read_csv(f) for f in fs], ignore_index=True); res = {'dias': int(U.dia.nunique()), 'ultimo_dia': U.dia.max(), 'n_unidades': len(U), 'eur': round(float(U.c.sum())), 'EV_todas': float(U.p.sum() / U.c.sum()), 'reglas': {}}
         U['R1'] = U.R1a & U.R1b
-        for nm in ('R1a', 'R1b', 'R1'):
-            m = U[nm].values
-            g = pd.DataFrame({'pp': U.p[m].groupby(U.dia[m]).sum(), 'pc': U.c[m].groupby(U.dia[m]).sum(), 'dp': U.p[~m].groupby(U.dia[~m]).sum(), 'dc': U.c[~m].groupby(U.dia[~m]).sum()}).dropna()
+        if 'A' in U:
+            U['A'] = U['A'].fillna(False).astype(bool); U['A_R1ws'] = U.A & U.R1ws.fillna(False).astype(bool)
+        for nm in [x for x in ('R1a', 'R1b', 'R1', 'A', 'A_R1ws') if x in U]:
+            m = U[nm].astype(bool).values
+            if nm in ('A', 'A_R1ws'): U2 = U[U.b15.notna()]; m = U2[nm].astype(bool).values; Ux = U2
+            else: Ux = U
+            g = pd.DataFrame({'pp': Ux.p[m].groupby(Ux.dia[m]).sum(), 'pc': Ux.c[m].groupby(Ux.dia[m]).sum(), 'dp': Ux.p[~m].groupby(Ux.dia[~m]).sum(), 'dc': Ux.c[~m].groupby(Ux.dia[~m]).sum()}).dropna()
             if len(g) == 0: continue
             g['dif'] = g.pp / g.pc - g.dp / g.dc
             evp = g.pp.sum() / g.pc.sum(); evd = g.dp.sum() / g.dc.sum(); lo90, hi90, lo95, hi95 = boot(g)

@@ -113,6 +113,9 @@ SCREENS = {
     # junto a h23_shadow.py; detector/h43 en a6_detector_vivo: si se editan hay que reiniciar a mano (--restart h23shadow).
     "h23shadow": {"entry": "experimentos/5m_barato/h23_maker/h23_shadow.py",
                   "probe": "log:logs/h23_shadow.log:h23_shadow arrancando"},
+    # 22-Oct: sombra DRY-RUN H23 v3 (re-puja 150 ms vs placebo), ver pipeline_watchdog.py::SCREEN_RESTART. Si se edita h23_shadow_v3.py: --restart h23shadowv3.
+    "h23shadowv3": {"entry": "experimentos/5m_barato/h23_maker/v3/h23_shadow_v3.py",
+                    "probe": "log:logs/h23_shadow_v3.log:h23_shadow_v3"},
     # 21-Oct: dashboard 5m barato SOLO LECTURA, puerto 8892 (ver pipeline_watchdog.py::SCREEN_RESTART). 401 = vivo (tiene auth).
     "dash5m": {"entry": "experimentos/5m_barato/dashboard/dashboard_5m_barato.py", "probe": "http:8892"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).

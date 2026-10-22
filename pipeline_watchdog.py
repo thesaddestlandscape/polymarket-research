@@ -236,6 +236,9 @@ SCREEN_RESTART = {
     # h23shadow (20-Oct, OK Javi): sombra DRY-RUN del maker H23 con cancelación a 60 ms (BTC 5m), solo lectura (WS público + gamma), sin
     # órdenes ni claves -> nice 5 (como a6shadow: con 19 el WS se quedaba sin CPU) y SIN choom. Salida gz en datalogs/h23_shadow/ (14 d).
     "h23shadow": f"cd {REPO}/experimentos/5m_barato/h23_maker && nice -n 5 {REPO}/.venv/bin/python -I h23_shadow.py >> {REPO}/logs/h23_shadow.log 2>&1",
+    # h23shadowv3 (22-Oct, Javi: "todos los datos de H23"): sombra DRY-RUN con la palanca H69 (re-puja a 150 ms vs placebo 1,5 s), copia de h23_shadow.py v1 que sigue
+    # intacto. Solo lectura (WS publico + gamma), sin ordenes ni claves -> nice 5 y SIN choom. Sale solo si RSS>400 MB (reinicio seguro). Salida gz en datalogs/h23_shadow_v3/.
+    "h23shadowv3": f"cd {REPO}/experimentos/5m_barato/h23_maker/v3 && nice -n 5 {REPO}/.venv/bin/python -I h23_shadow_v3.py >> {REPO}/logs/h23_shadow_v3.log 2>&1",
     # dash5m (21-Oct, orden de Javi): dashboard 5m barato SOLO LECTURA (contabilidad wallet dedicada, B real, vigias), puerto 8892, auth HTTP
     # Basic de data/live/.env. No envia ordenes ni toca screens/suelos. nice 10 como "dash". Sin choom (no mueve dinero). RAM < 150 MB.
     "dash5m": f"cd {REPO} && nice -n 10 .venv/bin/python experimentos/5m_barato/dashboard/dashboard_5m_barato.py >> logs/dashboard_5m_barato.log 2>&1",
@@ -377,7 +380,7 @@ def check_screens() -> dict[str, bool]:
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "dash5m"]}
+                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre"]}
     except Exception:
         return {}
 

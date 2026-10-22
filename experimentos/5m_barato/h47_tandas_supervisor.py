@@ -336,7 +336,9 @@ def tanda_agotada_inactiva(t=None, ventana_s=600):
         tt = _ts(e)
         if tt is None:
             continue
-        if tp in ("puja_post", "intencion_post", "intencion_cancel") and t_puja is None:
+        # 22-Oct: intencion_cancel NO es actividad de puja: es la limpieza de la puja previa y llega ~0,3 s DESPUES del ultimo
+        # bloqueo_suelo_saldo; contarla hacia t_puja hacia t_bloq < t_puja y la tanda agotada nunca se detectaba.
+        if tp in ("puja_post", "intencion_post") and t_puja is None:
             t_puja = tt
         elif tp == "bloqueo_suelo_saldo" and t_bloq is None:
             t_bloq = tt

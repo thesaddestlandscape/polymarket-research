@@ -1,12 +1,12 @@
 {
  "schema_version": 1,
- "generado_utc": "2026-10-22T09:47:15Z",
+ "generado_utc": "2026-10-22T11:34:16Z",
  "wallet": "0x659a40FF9920fEBc5a66836213040924343d297F",
  "saldo": {
-  "pusd_onchain": 30.786717,
-  "bloque": 95971361,
-  "ts_utc": "2026-10-22T09:46:53Z",
-  "suma_movimientos": 30.786717
+  "pusd_onchain": 26.826677,
+  "bloque": 95975641,
+  "ts_utc": "2026-10-22T11:33:53Z",
+  "suma_movimientos": 26.826677
  },
  "capital": {
   "depositos": 19.0,
@@ -14,17 +14,17 @@
   "depositado_neto": 19.0
  },
  "pnl": {
-  "realizado_total": 11.938626,
-  "no_realizado_mtm": 0,
-  "total_efectivo_mas_posiciones": 11.938626,
-  "saldo_menos_capital_neto": 11.786717,
+  "realizado_total": 9.738953,
+  "no_realizado_mtm": -1.550596,
+  "total_efectivo_mas_posiciones": 8.188357,
+  "saldo_menos_capital_neto": 7.826677,
   "ganadoras_por_redimir_pusd": 0.151909,
   "comisiones_pagadas": 0.04275,
-  "n_filas_fill": 159,
-  "n_posiciones": 150,
-  "euro_por_fila_liquidada": 0.075086,
-  "euro_por_posicion_liquidada": 0.079591,
-  "ev_ponderado_por_euro": 0.065138
+  "n_filas_fill": 181,
+  "n_posiciones": 170,
+  "euro_por_fila_liquidada": 0.055022,
+  "euro_por_posicion_liquidada": 0.058317,
+  "ev_ponderado_por_euro": 0.048084
  },
  "por_experimento": [
   {
@@ -52,27 +52,27 @@
    "experimento": "F1 medir_camino_caliente (15-Oct)"
   },
   {
-   "pnl_realizado_sin_2_mejores_posiciones": -6.448624,
-   "n_filas": 156,
-   "n_posiciones": 147,
-   "n_posiciones_liquidadas": 147,
-   "n_filas_liquidadas": 156,
-   "n_filas_abiertas_o_pendientes": 0,
-   "ganadoras_posiciones": 34,
-   "perdedoras_posiciones": 113,
-   "acciones": 777.022194,
-   "coste_total": 162.86903,
-   "coste_liquidado": 162.86903,
-   "payout_liquidado": 174.220406,
-   "pnl_realizado": 11.351376,
+   "pnl_realizado_sin_2_mejores_posiciones": -8.648297,
+   "n_filas": 178,
+   "n_posiciones": 167,
+   "n_posiciones_liquidadas": 164,
+   "n_filas_liquidadas": 174,
+   "n_filas_abiertas_o_pendientes": 4,
+   "ganadoras_posiciones": 37,
+   "perdedoras_posiciones": 127,
+   "acciones": 882.977794,
+   "coste_total": 183.886539,
+   "coste_liquidado": 182.126172,
+   "payout_liquidado": 191.277875,
+   "pnl_realizado": 9.151703,
    "comisiones": 0.0,
-   "coste_abierto_pendiente": 0,
-   "valor_mtm_abierto": 0,
-   "pnl_no_realizado_mtm": 0,
+   "coste_abierto_pendiente": 1.760367,
+   "valor_mtm_abierto": 0.209771,
+   "pnl_no_realizado_mtm": -1.550596,
    "mtm_faltante": 0,
-   "ev_ponderado_por_euro": 0.069696,
-   "euro_por_fila": 0.072765,
-   "euro_por_posicion": 0.07722,
+   "ev_ponderado_por_euro": 0.050249,
+   "euro_por_fila": 0.052596,
+   "euro_por_posicion": 0.055803,
    "experimento": "H47-B"
   },
   {
@@ -585,16 +585,142 @@
    "euro_por_posicion": -0.521844,
    "tanda": 18,
    "inicio_utc": "2026-10-22T09:05:31Z",
-   "fin_utc": null,
+   "fin_utc": "2026-10-22T10:02:03Z",
    "origen": "tanda 17 agotada"
+  },
+  {
+   "pnl_realizado_sin_2_mejores_posiciones": -2.5,
+   "n_filas": 5,
+   "n_posiciones": 4,
+   "n_posiciones_liquidadas": 4,
+   "n_filas_liquidadas": 5,
+   "n_filas_abiertas_o_pendientes": 0,
+   "ganadoras_posiciones": 0,
+   "perdedoras_posiciones": 4,
+   "acciones": 24.997469,
+   "coste_total": 4.589671,
+   "coste_liquidado": 4.589671,
+   "payout_liquidado": 0.0,
+   "pnl_realizado": -4.589671,
+   "comisiones": 0.0,
+   "coste_abierto_pendiente": 0,
+   "valor_mtm_abierto": 0,
+   "pnl_no_realizado_mtm": 0,
+   "mtm_faltante": 0,
+   "ev_ponderado_por_euro": -1.0,
+   "euro_por_fila": -0.917934,
+   "euro_por_posicion": -1.147418,
+   "tanda": 19,
+   "inicio_utc": "2026-10-22T10:02:03Z",
+   "fin_utc": "2026-10-22T10:37:17Z",
+   "origen": "tanda 18 de 5 USD agotada; reanudación tras Rescale Hetzner "
+  },
+  {
+   "pnl_realizado_sin_2_mejores_posiciones": -4.67,
+   "n_filas": 10,
+   "n_posiciones": 10,
+   "n_posiciones_liquidadas": 10,
+   "n_filas_liquidadas": 10,
+   "n_filas_abiertas_o_pendientes": 0,
+   "ganadoras_posiciones": 3,
+   "perdedoras_posiciones": 7,
+   "acciones": 53.057469,
+   "coste_total": 11.447471,
+   "coste_liquidado": 11.447471,
+   "payout_liquidado": 17.057469,
+   "pnl_realizado": 5.609998,
+   "comisiones": 0.0,
+   "coste_abierto_pendiente": 0,
+   "valor_mtm_abierto": 0,
+   "pnl_no_realizado_mtm": 0,
+   "mtm_faltante": 0,
+   "ev_ponderado_por_euro": 0.490064,
+   "euro_por_fila": 0.561,
+   "euro_por_posicion": 0.561,
+   "tanda": 20,
+   "inicio_utc": "2026-10-22T10:37:17Z",
+   "fin_utc": "2026-10-22T11:21:36Z",
+   "origen": "tanda 19 de 5 USD agotada; siguiente ronda, OK Javi"
+  },
+  {
+   "pnl_realizado_sin_2_mejores_posiciones": -1.3,
+   "n_filas": 7,
+   "n_posiciones": 6,
+   "n_posiciones_liquidadas": 3,
+   "n_filas_liquidadas": 3,
+   "n_filas_abiertas_o_pendientes": 4,
+   "ganadoras_posiciones": 0,
+   "perdedoras_posiciones": 3,
+   "acciones": 27.900662,
+   "coste_total": 4.980367,
+   "coste_liquidado": 3.22,
+   "payout_liquidado": 0.0,
+   "pnl_realizado": -3.22,
+   "comisiones": 0.0,
+   "coste_abierto_pendiente": 1.760367,
+   "valor_mtm_abierto": 0.209771,
+   "pnl_no_realizado_mtm": -1.550596,
+   "mtm_faltante": 0,
+   "ev_ponderado_por_euro": -1.0,
+   "euro_por_fila": -1.073333,
+   "euro_por_posicion": -1.073333,
+   "tanda": 21,
+   "inicio_utc": "2026-10-22T11:21:36Z",
+   "fin_utc": null,
+   "origen": "tanda 20 de 5 USD agotada; siguiente ronda, OK Javi"
   }
  ],
  "posiciones_abiertas": {
-  "n_filas": 0,
-  "coste": 0,
-  "valor_mtm": 0,
-  "valor_data_api_value": 0,
-  "detalle": []
+  "n_filas": 4,
+  "coste": 1.760367,
+  "valor_mtm": 0.209771,
+  "valor_data_api_value": 0.1748,
+  "detalle": [
+   {
+    "mercado": "sol-updown-5m-1792668300",
+    "outcome": "Down",
+    "acciones": 2.56,
+    "coste": 0.5632,
+    "mtm_precio": 0,
+    "valor_mtm": 0.0,
+    "estado": "pendiente_desenlace",
+    "experimento": "H47-B",
+    "tanda_B": 21
+   },
+   {
+    "mercado": "xrp-updown-5m-1792668300",
+    "outcome": "Down",
+    "acciones": 1.348309,
+    "coste": 0.148314,
+    "mtm_precio": 0,
+    "valor_mtm": 0.0,
+    "estado": "abierta",
+    "experimento": "H47-B",
+    "tanda_B": 21
+   },
+   {
+    "mercado": "sol-updown-5m-1792668600",
+    "outcome": "Down",
+    "acciones": 0.71,
+    "coste": 0.1065,
+    "mtm_precio": 0.03,
+    "valor_mtm": 0.0213,
+    "estado": "abierta",
+    "experimento": "H47-B",
+    "tanda_B": 21
+   },
+   {
+    "mercado": "sol-updown-5m-1792668600",
+    "outcome": "Down",
+    "acciones": 6.282353,
+    "coste": 0.942353,
+    "mtm_precio": 0.03,
+    "valor_mtm": 0.188471,
+    "estado": "abierta",
+    "experimento": "H47-B",
+    "tanda_B": 21
+   }
+  ]
  },
  "cuadre": {
   "ok": true,
@@ -630,7 +756,7 @@
    {
     "nombre": "valoracion_abiertas_vs_data_api_value(informativo)",
     "ok": true,
-    "diferencia_pusd": -0.151909
+    "diferencia_pusd": -0.18688
    },
    {
     "nombre": "sin_ventas_ni_otros_tipos_no_modelados",
@@ -647,15 +773,15 @@
   "onchain": {
    "metodo": "completo_desde_bloque_0",
    "desde_bloque": 0,
-   "hasta_bloque": 95971361,
-   "transferencias_pusd_wallet": 196,
+   "hasta_bloque": 95975641,
+   "transferencias_pusd_wallet": 221,
    "duplicados_descartados": 0,
    "primer_movimiento_utc": "2026-10-09T15:28:52Z",
-   "ultimo_movimiento_utc": "2026-10-22T09:26:03Z"
+   "ultimo_movimiento_utc": "2026-10-22T11:32:02Z"
   },
   "desenlaces_inferidos_de_redeem": 0,
   "actividad_data_api": {
-   "filas": 195,
+   "filas": 220,
    "tipos": [
     "REDEEM",
     "TRADE"
@@ -663,20 +789,273 @@
    "ventana": "ventanas diarias desde 2026-10-01 (wallet sin movimientos antes del 09-Oct segun on-chain)"
   },
   "desenlaces_gamma": {
-   "mercados": 150,
-   "resueltos": 150,
-   "otros": {}
+   "mercados": 170,
+   "resueltos": 167,
+   "otros": {
+    "abierto": 2,
+    "desconocido": 1
+   }
   },
   "rewards_y_rebates": "ninguna entrada de pUSD distinta de depositos y redenciones observada; si Polymarket paga rebates/rewards de maker fuera de esta wallet o con retraso NO es verificable aqui",
   "conciliacion_ledger_B": {
-   "mercados_con_fill_en_ledger": 143,
-   "mercados_con_fill_onchain": 147,
-   "acciones_ledger": 760.616791,
-   "acciones_onchain": 777.022194,
-   "n_discrepancias": 4
+   "mercados_con_fill_en_ledger": 162,
+   "mercados_con_fill_onchain": 167,
+   "acciones_ledger": 859.580038,
+   "acciones_onchain": 882.977794,
+   "n_discrepancias": 5
   }
  },
  "ultimos_movimientos": [
+  {
+   "fecha_utc": "2026-10-22T11:32:02Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -0.942353,
+   "saldo_acumulado": 26.826677,
+   "mercado": "sol-updown-5m-1792668600",
+   "experimento": "H47-B",
+   "tanda_B": 21,
+   "tx": "0x48e104eed9e6835ba9745362c5178ede62e8945a1ad643113fc1460bf83d04af"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:32:02Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -0.1065,
+   "saldo_acumulado": 27.76903,
+   "mercado": "sol-updown-5m-1792668600",
+   "experimento": "H47-B",
+   "tanda_B": 21,
+   "tx": "0x320bfec02cf45b567d0910d2015da79fe116556fec2ce6ab8512fa9f5b7abd75"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:28:14Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -0.148314,
+   "saldo_acumulado": 27.87553,
+   "mercado": "xrp-updown-5m-1792668300",
+   "experimento": "H47-B",
+   "tanda_B": 21,
+   "tx": "0x01a10f470d6e970a84ceb1fcaecd95cbe1bbee22652dcd9d5c4dd5240bc34f55"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:27:18Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -0.5632,
+   "saldo_acumulado": 28.023844,
+   "mercado": "sol-updown-5m-1792668300",
+   "experimento": "H47-B",
+   "tanda_B": 21,
+   "tx": "0xc622e5d44765d9b814a1903f7e99ffb4d6c37b5c555b940e12465fb5d3d69f65"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:22:59Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.14,
+   "saldo_acumulado": 28.587044,
+   "mercado": "sol-updown-5m-1792668000",
+   "experimento": "H47-B",
+   "tanda_B": 21,
+   "tx": "0x09078b49dba93b99f29d6bd39ba688aa922041713113220f1a844221e82bcb57"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:22:54Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -0.78,
+   "saldo_acumulado": 29.727044,
+   "mercado": "xrp-updown-5m-1792668000",
+   "experimento": "H47-B",
+   "tanda_B": 21,
+   "tx": "0xda8d621250a9d9e2ee7c99a6267666d90da7f89d561e352a464706c506639730"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:22:14Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.3,
+   "saldo_acumulado": 30.507044,
+   "mercado": "eth-updown-5m-1792668000",
+   "experimento": "H47-B",
+   "tanda_B": 21,
+   "tx": "0x06505eaa37f2487768f6589ab27ea40ed00050759b23ec20f2b1f0c1860fb95d"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:07:47Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.02,
+   "saldo_acumulado": 31.807044,
+   "mercado": "sol-updown-5m-1792667100",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x928c43f891d0534ac5aad29fed0753384efa65f13f19c16362676a891a826c24"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:02:11Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.05,
+   "saldo_acumulado": 32.827044,
+   "mercado": "eth-updown-5m-1792666800",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x36b17f86692304bb08401138478b15ebc1c49cf1fda66270c59fcdbc4ae701cc"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:01:36Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.2,
+   "saldo_acumulado": 33.877044,
+   "mercado": "sol-updown-5m-1792666800",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x1626a66cee520a12c5f91d50cf0ba398e1acfc94ce8e34682d9fda09e15bd4c1"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:01:12Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.45,
+   "saldo_acumulado": 35.077044,
+   "mercado": "xrp-updown-5m-1792666800",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x4a4751f53cce7e2f7eeb00fd882bb947d3b96a312cf8e9afcd25b01dd89f9f87"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:01:02Z",
+   "tipo": "REDENCION",
+   "importe_pusd": 7.0,
+   "saldo_acumulado": 36.527044,
+   "mercado": "eth-updown-5m-1792666500",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0xd3211d8563a487449b410335cedbe923b8d6be8ce3b29177d08c42b97d5db060"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:56:29Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.12,
+   "saldo_acumulado": 29.527044,
+   "mercado": "eth-updown-5m-1792666500",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x287b94b47cc2ebc07f0f6b266361f588c620fcfeb08b66cdd56110efee89c658"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:56:21Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.2,
+   "saldo_acumulado": 30.647044,
+   "mercado": "sol-updown-5m-1792666500",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0xee115b2731d0cc01e2ad73e0259347b5217fd76be849b228ecf12c6aee338db4"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:56:21Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.3,
+   "saldo_acumulado": 31.847044,
+   "mercado": "xrp-updown-5m-1792666500",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x5c465c575948841eb3f344e53dacd7be4d4dfd0f934a3b31106528c26a1ad7e5"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:51:33Z",
+   "tipo": "REDENCION",
+   "importe_pusd": 5.057469,
+   "saldo_acumulado": 33.147044,
+   "mercado": "eth-updown-5m-1792665900",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x4ae58e3944110c6ec778297226e47adf837cbced9f94acc50d54cf374de09fad"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:51:30Z",
+   "tipo": "REDENCION",
+   "importe_pusd": 5.0,
+   "saldo_acumulado": 28.089575,
+   "mercado": "sol-updown-5m-1792665900",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0xea6414448b6683250bb3a9f6d99836c90971b2a32314ccc254093c6a1403356d"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:50:12Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.4,
+   "saldo_acumulado": 23.089575,
+   "mercado": "sol-updown-5m-1792666200",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x62bf63e8ef0fe15fbaf1b61d3ba4ed2ac83c5213c295115af794a72e5abf6c71"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:46:38Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -0.657471,
+   "saldo_acumulado": 24.489575,
+   "mercado": "eth-updown-5m-1792665900",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x18878fb0beab389dacb5d1a56026d1c426928695a90be5413214346469212a30"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:46:38Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.05,
+   "saldo_acumulado": 25.147046,
+   "mercado": "sol-updown-5m-1792665900",
+   "experimento": "H47-B",
+   "tanda_B": 20,
+   "tx": "0x9f905375e6d29c1dd8d64f45b290766d4077ffef8fcf23e5458462d5ace038ae"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:12:05Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.05,
+   "saldo_acumulado": 26.197046,
+   "mercado": "eth-updown-5m-1792663800",
+   "experimento": "H47-B",
+   "tanda_B": 19,
+   "tx": "0x7e486ba7011022e0eafbfb3e0ea231ab89e1a0cffdc720da7bcab50ed724eecb"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:07:48Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.05,
+   "saldo_acumulado": 27.247046,
+   "mercado": "sol-updown-5m-1792663500",
+   "experimento": "H47-B",
+   "tanda_B": 19,
+   "tx": "0x04f137e21f8b513c7e561f7eeee728fa82fee79c3392906b376f0e1541c75653"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:07:44Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.45,
+   "saldo_acumulado": 28.297046,
+   "mercado": "xrp-updown-5m-1792663500",
+   "experimento": "H47-B",
+   "tanda_B": 19,
+   "tx": "0xcfad0e7b353b71498314de40b93b0c9159dee71b72f4ffe1de42a7a97353cd2a"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:06:20Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -0.3822,
+   "saldo_acumulado": 29.747046,
+   "mercado": "eth-updown-5m-1792663500",
+   "experimento": "H47-B",
+   "tanda_B": 19,
+   "tx": "0x289d1e2690cb53a226cb73a18ea2e1b319da38842dd69f81e840d1cbbbbce90b"
+  },
+  {
+   "fecha_utc": "2026-10-22T10:06:20Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -0.657471,
+   "saldo_acumulado": 30.129246,
+   "mercado": "eth-updown-5m-1792663500",
+   "experimento": "H47-B",
+   "tanda_B": 19,
+   "tx": "0x40910f472609d680626b11925003702b620799acb8330885103bb2359e80a32e"
+  },
   {
    "fecha_utc": "2026-10-22T09:26:03Z",
    "tipo": "COMPRA",
@@ -926,256 +1305,6 @@
    "experimento": "H47-B",
    "tanda_B": 16,
    "tx": "0x39027244f0b1d27220fa3d9b490cacfb25a7051befa74e928df32595944c774a"
-  },
-  {
-   "fecha_utc": "2026-10-22T08:00:53Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.0,
-   "saldo_acumulado": 38.438213,
-   "mercado": "xrp-updown-5m-1792656000",
-   "experimento": "H47-B",
-   "tanda_B": 16,
-   "tx": "0x6321442442d1dcc417fb0e50a18449f70ec5e33fb66080046d047c7849eaf0ad"
-  },
-  {
-   "fecha_utc": "2026-10-22T08:00:53Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.25,
-   "saldo_acumulado": 39.438213,
-   "mercado": "sol-updown-5m-1792656000",
-   "experimento": "H47-B",
-   "tanda_B": 16,
-   "tx": "0x312e884f9c4d7e193d982cc8206e45ab9f666b0854f426e7dbf30fc816c9d086"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:56:08Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.1,
-   "saldo_acumulado": 40.688213,
-   "mercado": "eth-updown-5m-1792655700",
-   "experimento": "H47-B",
-   "tanda_B": 16,
-   "tx": "0x2625054511ef8ce1cba025870c6e62176aa05290fb084609199c19e5f97a5d74"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:55:57Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.12,
-   "saldo_acumulado": 41.788213,
-   "mercado": "sol-updown-5m-1792655700",
-   "experimento": "H47-B",
-   "tanda_B": 16,
-   "tx": "0x66e80b61d4ed554ec07d54630a54fd27c827b42354b358dfe5709fcbdd6ec5d8"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:51:32Z",
-   "tipo": "REDENCION",
-   "importe_pusd": 5.0,
-   "saldo_acumulado": 42.908213,
-   "mercado": "sol-updown-5m-1792655100",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0x85c2942d1309c90671b28b7a642f5798acd0f04594e617e6098368cb419a49b5"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:46:30Z",
-   "tipo": "REDENCION",
-   "importe_pusd": 5.0,
-   "saldo_acumulado": 37.908213,
-   "mercado": "eth-updown-5m-1792654800",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0xd00bd82e7227aa07331903de586502d54bf5f7808ffe8c48dcabde73aa7aaa22"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:45:42Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.15,
-   "saldo_acumulado": 32.908213,
-   "mercado": "xrp-updown-5m-1792655100",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0x06b3f0e8f957fabf9dec071b9e0de63da5192856785282b998ba385e8f067b5f"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:45:27Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.2,
-   "saldo_acumulado": 34.058213,
-   "mercado": "sol-updown-5m-1792655100",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0x5be39c1cf4ea771aab8ebd1e8dc1ba86dc672d6a2ca48565acc0d993523d2776"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:41:44Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.15,
-   "saldo_acumulado": 35.258213,
-   "mercado": "eth-updown-5m-1792654800",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0xd6deeaea331f7e989a4469ce9bea32a9b61e0535bfcedc52aeb7a1bf29c2a82d"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:41:32Z",
-   "tipo": "REDENCION",
-   "importe_pusd": 5.0,
-   "saldo_acumulado": 36.408213,
-   "mercado": "sol-updown-5m-1792654500",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0x3b4f87036e13c33aab2a8142d97ce35a5b07c408a97529d67fd8047496d2ca7b"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:38:15Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.02,
-   "saldo_acumulado": 31.408213,
-   "mercado": "eth-updown-5m-1792654500",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0x138ebb94130489f18944518e5d5b48ff655d6ecc01228ce9fa5429e150281942"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:37:47Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.2,
-   "saldo_acumulado": 32.428213,
-   "mercado": "sol-updown-5m-1792654500",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0xe4ce20eb118a8833dd16c4ef781a5480e90dd555a593ea746ab62b460a48ab0c"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:37:45Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.08,
-   "saldo_acumulado": 33.628213,
-   "mercado": "xrp-updown-5m-1792654500",
-   "experimento": "H47-B",
-   "tanda_B": 15,
-   "tx": "0xdcb91500d821daac95af56ab962a210f3a6751f625c0bffb77517a087269abbf"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:32:50Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.4,
-   "saldo_acumulado": 34.708213,
-   "mercado": "eth-updown-5m-1792654200",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0xb851abea5550cc4f9df4e6061adf3eada349fc8c70fe8da64160bd357086e088"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:31:56Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.4,
-   "saldo_acumulado": 36.108213,
-   "mercado": "sol-updown-5m-1792654200",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0xa74f30b6908685102e82921bbb7bfeeef76365ca947ac5e30b06726749944452"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:26:53Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.3,
-   "saldo_acumulado": 37.508213,
-   "mercado": "eth-updown-5m-1792653900",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0x77134b9d40b98d4b818ebf43b182101dea10faf15c57ed03f2703f17552f24da"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:26:32Z",
-   "tipo": "REDENCION",
-   "importe_pusd": 1.829266,
-   "saldo_acumulado": 38.808213,
-   "mercado": "eth-updown-5m-1792653600",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0xb5b5e517d5473ff4b2608c60fafc50fce8e84706fea675aed57e8f2773c31af7"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:21:29Z",
-   "tipo": "REDENCION",
-   "importe_pusd": 5.0,
-   "saldo_acumulado": 36.978947,
-   "mercado": "xrp-updown-5m-1792653300",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0xf9477a5627d3a9afd49e0ae487b3983f3cfbdc9ce5cfc697504af77b3a7c6613"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:21:17Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.02,
-   "saldo_acumulado": 31.978947,
-   "mercado": "sol-updown-5m-1792653600",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0xb6dbad4d3184ab9bd105fbf6ca24d4ee22723ec2fe03a3bcc236ecdc11137afb"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:21:15Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -0.329268,
-   "saldo_acumulado": 32.998947,
-   "mercado": "eth-updown-5m-1792653600",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0x9285cbc63fd41fa003108884a2c9b6bb1adbec471602833d56b4168cab9c7df8"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:18:47Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.12,
-   "saldo_acumulado": 33.328215,
-   "mercado": "eth-updown-5m-1792653300",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0x6ca2c14cb9218fca475690d4d5ee7ba1907fe945e09a34f85e0afa58b06b8804"
-  },
-  {
-   "fecha_utc": "2026-10-22T07:18:18Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.0,
-   "saldo_acumulado": 34.448215,
-   "mercado": "xrp-updown-5m-1792653300",
-   "experimento": "H47-B",
-   "tanda_B": 14,
-   "tx": "0x2537ee9477acf3cd5ed284748aa1404a7404f3f48d4537c70b442ab054b0f744"
-  },
-  {
-   "fecha_utc": "2026-10-21T12:30:18Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.35,
-   "saldo_acumulado": 35.448215,
-   "mercado": "eth-updown-5m-1792585800",
-   "experimento": "H47-B",
-   "tanda_B": 13,
-   "tx": "0xcccf9176f2306359d4cfcff9ace4538d3501a4e1d3182d1c38f4a4ad13d73458"
-  },
-  {
-   "fecha_utc": "2026-10-21T12:27:17Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -0.380952,
-   "saldo_acumulado": 36.798215,
-   "mercado": "sol-updown-5m-1792585500",
-   "experimento": "H47-B",
-   "tanda_B": 13,
-   "tx": "0xb70488945df5571563a985e8a3a5c8d40be6feba045e0d0028cc6bedff802f35"
-  },
-  {
-   "fecha_utc": "2026-10-21T12:26:56Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.4,
-   "saldo_acumulado": 37.179167,
-   "mercado": "eth-updown-5m-1792585500",
-   "experimento": "H47-B",
-   "tanda_B": 13,
-   "tx": "0xdd4b6656c810a3e71f85763e02fe7cf72ae408cdb43e90f8b6af0efb69c4e9ea"
   }
  ],
  "serie_diaria": [
@@ -1285,11 +1414,11 @@
   },
   {
    "fecha": "2026-10-22",
-   "saldo_cierre_pusd": 30.786717,
+   "saldo_cierre_pusd": 26.826677,
    "depositos_acum": 19.0,
-   "pnl_liquidado_dia": -4.661498,
-   "pnl_liquidado_acum": 11.938626,
-   "n_movimientos": 47
+   "pnl_liquidado_dia": -6.861171,
+   "pnl_liquidado_acum": 9.738953,
+   "n_movimientos": 72
   }
  ],
  "no_atribuido": {
