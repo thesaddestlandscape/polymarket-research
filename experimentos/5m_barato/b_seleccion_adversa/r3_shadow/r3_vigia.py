@@ -122,7 +122,7 @@ def dias_en(dirn, prefijo):
 
 
 def cargar(dirn, desde, con_prueba=False):
-    mkts, fin, fills, des, smp, decs = {}, {}, [], {}, [], []
+    mkts, fin, fills, des, smp, decs, fint = {}, {}, [], {}, [], [], []
     for d in dias_en(dirn, "r3_shadow"):
         if d < desde:
             continue
@@ -140,13 +140,15 @@ def cargar(dirn, desde, con_prueba=False):
                 smp.append(r)
             elif t == "dec":
                 decs.append(r)
+            elif t == "fin_t":
+                fint.append(r)
     for d in dias_en(dirn, "r3_desenlaces"):
         if d < desde:
             continue
         for r in S.leer_gz_tolerante(Path(dirn) / f"r3_desenlaces_{d}.jsonl.gz"):
             if r.get("tipo") == "des":
                 des[r["slug"]] = r
-    return mkts, fin, fills, des, smp, decs
+    return mkts, fin, fills, des, smp, decs, fint
 
 
 def dia_de(cierre):
@@ -207,7 +209,7 @@ def tabla_fills(fills, fin, des, validos):
     return out, excl
 
 
-def b_real(ledger, smp, decs, des):
+def b_real(ledger, smp, decs, des, fin=None, fills=None, fint=None):
     """INFORMATIVO: rellenos de B real segun el flag de R2/R3 en su puja_post (emparejado por slug+lado, fila del brazo shadow mas cercana <= 10 s)."""
     p = Path(ledger)
     if not p.exists():
@@ -248,12 +250,26 @@ def b_real(ledger, smp, decs, des):
         c["rellenos"] += 1
         c["coste"] += coste
         c["pnl"] += acc * (1.0 if lado == w else 0.0) - coste
-    return {"disponible": True, "nota": "informativo, n pequeno, no entra en el veredicto", "por_flag": {k: {**v, "ev": (v["pnl"] / v["coste"] if v["coste"] > 0 else None)} for k, v in g.items()}}
+    # fidelidad del gemelo: ¿el BASE simulado rellena donde B real relleno? (solo mercados completos del shadow; matriz real x simulado)
+    acuerdo = {}
+    if fin is not None and fills is not None and fint is not None:
+        llen = {(f["slug"], f["lado"], f["esc"]) for f in fills if f["pol"] == "BASE"}
+        pujo = {(r["slug"], r["lado"]) for r in fint if r["pol"] == "BASE" and r["esc"] == "cons_x" and r["n_post"] > 0}
+        for esc in ("cons_x", "cons_r", "opt_x"):
+            m = Counter()
+            for (slug, lado), f in finb.items():
+                if not (fin.get(slug) or {}).get("completo") or (slug, lado) not in pujo:
+                    m["sin_comparable"] += 1
+                    continue
+                m[f"real_{'si' if (f.get('rellenos') or []) else 'no'}__sim_{'si' if (slug, lado, esc) in llen else 'no'}"] += 1
+            acuerdo[esc] = dict(m)
+    return {"disponible": True, "nota": "informativo, n pequeno, no entra en el veredicto", "acuerdo_relleno_real_vs_simulado": acuerdo,
+            "por_flag": {k: {**v, "ev": (v["pnl"] / v["coste"] if v["coste"] > 0 else None)} for k, v in g.items()}}
 
 
 # ------------------------------------------------------------------ informe
 def informe(dirn, desde="2026-10-22", ledger=LEDGER_B, con_prueba=False):
-    mkts, fin, fills, des, smp, decs = cargar(dirn, desde, con_prueba)
+    mkts, fin, fills, des, smp, decs, fint = cargar(dirn, desde, con_prueba)
     cob = cobertura(mkts, fin, des, fills)
     validos = {d for d, c in cob.items() if c["valido"]}
     filas, excl = tabla_fills(fills, fin, des, validos)
@@ -279,7 +295,7 @@ def informe(dirn, desde="2026-10-22", ledger=LEDGER_B, con_prueba=False):
     n_s = len(smp)
     res["muestreo"] = {"n_smp": n_s, "r2_true": (sum(1 for s in smp if s.get("r2")) / n_s if n_s else None), "r3_true": (sum(1 for s in smp if s.get("r3")) / n_s if n_s else None),
                        "motivos_r3_no": dict(Counter(s.get("m3") for s in smp if not s.get("r3")).most_common(6))}
-    res["contra_B_real"] = b_real(ledger, smp, decs, des)
+    res["contra_B_real"] = b_real(ledger, smp, decs, des, fin, fills, fint)
     return res
 
 

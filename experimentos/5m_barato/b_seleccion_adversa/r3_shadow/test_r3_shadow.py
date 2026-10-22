@@ -516,3 +516,23 @@ def test_desenlaces_idempotente_y_abandona_a_las_6h(tmp_path, monkeypatch):
 def test_cron_script_sintaxis():
     import subprocess
     assert subprocess.run(["bash", "-n", str(AQUI / "r3_cron.sh")]).returncode == 0
+
+
+def test_b_real_empareja_por_flag_y_mide_acuerdo_de_relleno(tmp_path):
+    slug = f"eth-updown-5m-{INI}"
+    led = tmp_path / "led.jsonl"
+    lineas = [{"real": True, "escalon": "B", "tipo": "puja_post", "slug": slug, "lado": "YES", "t_dec": INI + 10.0, "precio": 0.18},
+              {"real": True, "escalon": "B", "tipo": "puja_fin", "slug": slug, "lado": "YES", "coin": "eth", "k": 2, "n_ordenes": 1, "fin_puja": "relleno",
+               "rellenos": [{"acc": 5.0, "precio": 0.18}]}]
+    led.write_text("\n".join(json.dumps(x) for x in lineas) + "\n")
+    smp = [{"tipo": "smp", "slug": slug, "lado": "YES", "r": int((INI + 12) * 1000), "r2": True, "r3": False}]
+    des = {slug: {"ganador": "YES"}}
+    fin = {slug: {"completo": True}}
+    fills = [{"slug": slug, "lado": "YES", "pol": "BASE", "esc": "cons_x"}]
+    fint = [{"slug": slug, "lado": "YES", "pol": "BASE", "esc": "cons_x", "n_post": 1}]
+    out = V.b_real(str(led), smp, [], des, fin, fills, fint)
+    assert out["disponible"] and out["por_flag"]["R2=true,R3=false"]["rellenos"] == 1
+    assert abs(out["por_flag"]["R2=true,R3=false"]["pnl"] - (5.0 - 0.9)) < 1e-9
+    assert out["acuerdo_relleno_real_vs_simulado"]["cons_x"] == {"real_si__sim_si": 1}
+    assert out["acuerdo_relleno_real_vs_simulado"]["cons_r"] == {"real_si__sim_no": 1}
+    assert V.b_real(str(tmp_path / "no_existe.jsonl"), [], [], {}) == {"disponible": False}
