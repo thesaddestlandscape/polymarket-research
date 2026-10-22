@@ -1,45 +1,38 @@
 {
-  "BTC": {
-    "smart_money_consensus": -0.0866,
-    "n_trades_smart": 889,
-    "n_wallets_smart": 10,
-    "smart_money_consensus_ponderado": 0.039,
-    "n_wallets_smart_ponderado": 10
-  },
-  "ETH": {
-    "smart_money_consensus": -0.2245,
-    "n_trades_smart": 49,
-    "n_wallets_smart": 6,
-    "smart_money_consensus_ponderado": -0.3563,
-    "n_wallets_smart_ponderado": 6
-  },
-  "SOL": {
-    "smart_money_consensus": -0.1,
-    "n_trades_smart": 60,
+  "DOGE": {
+    "smart_money_consensus": 0.4,
+    "n_trades_smart": 10,
     "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.121,
+    "smart_money_consensus_ponderado": -0.0189,
     "n_wallets_smart_ponderado": 3
   },
-  "BNB": {
-    "smart_money_consensus": 0.75,
-    "n_trades_smart": 8,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.9912,
-    "n_wallets_smart_ponderado": 1
+  "ETH": {
+    "smart_money_consensus": 0.0085,
+    "n_trades_smart": 355,
+    "n_wallets_smart": 7,
+    "smart_money_consensus_ponderado": -0.1782,
+    "n_wallets_smart_ponderado": 7
   },
-  "DOGE": {
-    "smart_money_consensus": 1.0,
-    "n_trades_smart": 4,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 1.0,
-    "n_wallets_smart_ponderado": 1
+  "BTC": {
+    "smart_money_consensus": -0.0842,
+    "n_trades_smart": 1485,
+    "n_wallets_smart": 10,
+    "smart_money_consensus_ponderado": -0.0882,
+    "n_wallets_smart_ponderado": 10
   },
   "XRP": {
-    "smart_money_consensus": -0.3333,
-    "n_trades_smart": 3,
+    "smart_money_consensus": 0.5,
+    "n_trades_smart": 4,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.1467,
+    "smart_money_consensus_ponderado": 0.481,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-10-22T10:03:49+00:00"
+  "SOL": {
+    "smart_money_consensus": 0.0455,
+    "n_trades_smart": 44,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": 0.0045,
+    "n_wallets_smart_ponderado": 2
+  },
+  "_actualizado": "2026-10-22T10:26:43+00:00"
 }
