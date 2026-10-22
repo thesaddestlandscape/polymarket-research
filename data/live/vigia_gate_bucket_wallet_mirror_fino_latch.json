@@ -72,11 +72,11 @@
   "hi": 0.07,
   "n": 53,
   "pnl_medio": 2.918,
-  "diff_vs_resto": 2.9196,
+  "diff_vs_resto": 2.9195,
   "p_valor": 0.0,
   "split_half_diff": [
-   3.7462,
-   2.1237
+   3.7461,
+   2.1236
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 2.0936,
@@ -104,11 +104,11 @@
   "hi": 0.24,
   "n": 78,
   "pnl_medio": -0.4223,
-  "diff_vs_resto": -0.3729,
-  "p_valor": 0.0295,
+  "diff_vs_resto": -0.3734,
+  "p_valor": 0.036,
   "split_half_diff": [
-   -0.492,
-   -0.2538
+   -0.4925,
+   -0.2543
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.4795,
@@ -182,11 +182,11 @@
   "hi": 0.69,
   "n": 57,
   "pnl_medio": -0.3588,
-  "diff_vs_resto": -0.3212,
-  "p_valor": 0.006,
+  "diff_vs_resto": -0.3217,
+  "p_valor": 0.0115,
   "split_half_diff": [
-   -0.229,
-   -0.4102
+   -0.2296,
+   -0.4107
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.3746,
@@ -212,11 +212,11 @@
   "hi": 0.31,
   "n": 57,
   "pnl_medio": -0.6449,
-  "diff_vs_resto": -0.5868,
-  "p_valor": 0.0,
+  "diff_vs_resto": -0.5891,
+  "p_valor": 0.0005,
   "split_half_diff": [
-   -0.694,
-   -0.4834
+   -0.6962,
+   -0.4856
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7039,
@@ -236,24 +236,24 @@
  },
  "SEGUIR#BTC#5min#0": {
   "n_dias": 50,
-  "pnl_sin_mejores_dias": -0.602,
+  "pnl_sin_mejores_dias": -0.6034,
   "robusto_dias": false,
   "lo": 0.0,
   "hi": 0.05,
-  "n": 1435,
-  "pnl_medio": -0.4618,
-  "diff_vs_resto": -0.4327,
+  "n": 1440,
+  "pnl_medio": -0.4636,
+  "diff_vs_resto": -0.4351,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.4593,
-   -0.4062
+   -0.462,
+   -0.4082
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.5266,
+  "pnl_medio_loo": -0.5282,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.6627,
-   -0.2336
+   -0.6695,
+   -0.2416
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -304,11 +304,11 @@
   "hi": 0.1,
   "n": 160,
   "pnl_medio": -0.5141,
-  "diff_vs_resto": -0.4617,
-  "p_valor": 0.0,
+  "diff_vs_resto": -0.462,
+  "p_valor": 0.0005,
   "split_half_diff": [
-   -0.4046,
-   -0.5187
+   -0.405,
+   -0.5191
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.5954,
@@ -336,25 +336,25 @@
   "fecha_historial": "2026-10-07"
  },
  "SEGUIR#ETH#5min#1": {
-  "n_dias": 15,
-  "pnl_sin_mejores_dias": -0.5562,
+  "n_dias": 16,
+  "pnl_sin_mejores_dias": -0.5159,
   "robusto_dias": false,
   "lo": 0.39,
   "hi": 0.44,
-  "n": 46,
-  "pnl_medio": -0.3881,
-  "diff_vs_resto": -0.3371,
-  "p_valor": 0.0175,
+  "n": 48,
+  "pnl_medio": -0.3624,
+  "diff_vs_resto": -0.3114,
+  "p_valor": 0.0305,
   "split_half_diff": [
-   -0.0312,
-   -0.643
+   -0.0695,
+   -0.5532
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.4292,
+  "pnl_medio_loo": -0.4012,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.6417,
-   -0.1269
+   -0.6058,
+   -0.1089
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 64,
