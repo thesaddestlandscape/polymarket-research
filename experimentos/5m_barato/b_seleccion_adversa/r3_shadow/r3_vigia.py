@@ -34,10 +34,10 @@ class PreregInvalido(RuntimeError):
     pass
 
 
-def cargar_prereg(prereg=PREREG, hash_file=HASH_PREREG):
+def cargar_prereg(prereg=None, hash_file=None):
     """Parametros del gate desde el preregistro CONGELADO. Fail-closed (PreregInvalido) si falta HASH_PREREG.txt, el sha256 del fichero entero no coincide, falta/sobra
     alguna clave de `parametros_gate` o el JSON pide algo que este codigo no implementa. Devuelve (params, sha256 completo)."""
-    prereg, hash_file = Path(prereg), Path(hash_file)
+    prereg, hash_file = Path(prereg or PREREG), Path(hash_file or HASH_PREREG)
     try:
         esperado = hash_file.read_text().split()[0].strip().lower()
     except (OSError, IndexError) as e:
@@ -321,7 +321,7 @@ def b_real(ledger, smp, decs, des, fin=None, fills=None, fint=None):
 
 
 # ------------------------------------------------------------------ informe
-def informe(dirn, desde="2026-10-22", ledger=LEDGER_B, con_prueba=False, prereg=PREREG, hash_file=HASH_PREREG):
+def informe(dirn, desde="2026-10-22", ledger=LEDGER_B, con_prueba=False, prereg=None, hash_file=None):
     P, sha = cargar_prereg(prereg, hash_file)              # PreregInvalido si el preregistro no es el congelado: no se calcula nada
     mkts, fin, fills, des, smp, decs, fint = cargar(dirn, desde, con_prueba)
     cob = cobertura(mkts, fin, des, fills, P)

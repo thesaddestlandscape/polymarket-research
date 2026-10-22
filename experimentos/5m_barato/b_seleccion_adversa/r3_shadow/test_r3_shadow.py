@@ -536,3 +536,335 @@ def test_b_real_empareja_por_flag_y_mide_acuerdo_de_relleno(tmp_path):
     assert out["acuerdo_relleno_real_vs_simulado"]["cons_x"] == {"real_si__sim_si": 1}
     assert out["acuerdo_relleno_real_vs_simulado"]["cons_r"] == {"real_si__sim_no": 1}
     assert V.b_real(str(tmp_path / "no_existe.jsonl"), [], [], {}) == {"disponible": False}
+
+
+# ================================================================ CORRECCIONES POST-REVIEW 22-Oct (hallazgos 1-3, 6-10; el 4 y el 5 estan en b_r3/test_experimento_maker_h47_r3.py)
+import asyncio  # noqa: E402
+import hashlib  # noqa: E402
+
+
+def mk_multi(coins=("eth", "sol", "xrp"), ini=INI):
+    """Varios mercados 5m en UN mismo Nucleo (los topes de B son globales). Cada mercado con sus 4 libros (mismos nombres de token: son Libros distintos)."""
+    rows = []
+    nuc = R.Nucleo(rows.append)
+    ms = {}
+    for coin in coins:
+        mk5 = {"slug": f"{coin}-updown-5m-{ini}", "id": "5", "up": UP, "down": DN}
+        mk15 = {"slug": f"{coin}-updown-15m-{ini // 900 * 900}", "id": "15", "up": U15, "down": D15}
+        ms[coin] = nuc.nuevo(coin, ini, mk5, mk15, int((ini - 20) * 1000))
+        libros(ms[coin], ini - 20, bid5=0.20, ask5=0.22, bid15=0.21)
+    return nuc, ms, rows
+
+
+def correr_multi(nuc, ms, t0, t1, paso=0.1):
+    t = t0
+    while t <= t1 + 1e-9:
+        for m in ms.values():
+            m.vivo(t)
+        nuc.tick(t)
+        t = round(t + paso, 6)
+
+
+# ---- 1 (ALTO): tick_size_change del 15m NO para el mercado 5m
+def test_h1_tick_size_change_de_tokens_15m_no_para_el_mercado_5m():
+    nuc, m, rows = mk("eth")
+    preparar_vol(m, INI)
+    libros(m, INI + 3, bid5=0.20, ask5=0.22, bid15=0.98, ask15=0.99)
+    correr(nuc, m, INI + 3, INI + 4)
+    assert tr(m, "BASE").orden
+    for tk in (U15, D15):                                            # el 15m cerca de 0/1 pasa a tick 0,001: B no lo ve (solo vigila los 5m)
+        m.on_msg({"event_type": "tick_size_change", "asset_id": tk, "old_tick_size": "0.01", "new_tick_size": "0.001"}, INI + 4.05)
+    correr(nuc, m, INI + 4.1, INI + 8)
+    assert m.lib.tick_cambiado is False and m.lib.tick15_cambiado is True and m.parar_motivo is None
+    assert tr(m, "BASE").orden is not None and not tr(m, "BASE").parado
+    # y el del 5m (cualquiera de sus dos tokens) sigue parando como B
+    for tk in (UP, DN):
+        nuc2, m2, _ = mk("sol")
+        libros(m2, INI - 20)
+        correr(nuc2, m2, INI + 3, INI + 3.5)
+        m2.on_msg({"event_type": "tick_size_change", "asset_id": tk}, INI + 3.6)
+        correr(nuc2, m2, INI + 3.7, INI + 4.2)
+        assert m2.parar_motivo == "tick_cambiado" and tr(m2, "BASE").orden is None
+
+
+def test_h1_libro_sin_toks5_mantiene_el_comportamiento_antiguo():
+    lib = R.Libro(["a", "b"])
+    lib.aplicar({"event_type": "tick_size_change", "asset_id": "a"}, 1.0)
+    assert lib.tick_cambiado is True and lib.tick15_cambiado is False
+
+
+# ---- 2 (ALTO): la cache del 15m no guarda resultados falsy
+def test_h2_cache15_no_cachea_none_ni_errores_y_reintenta():
+    llamadas = []
+    respuestas = [None, {}, RuntimeError("gamma 500"), {"slug": "x", "id": "1", "up": "u", "down": "d"}]
+
+    def fetch(coin, marco, ini):
+        llamadas.append((coin, marco, ini))
+        r = respuestas.pop(0) if respuestas else {"slug": "otro"}
+        if isinstance(r, Exception):
+            raise r
+        return r
+
+    async def corre():
+        loop = asyncio.get_running_loop()
+        cache = {}
+        assert await S.mk15_cacheado(cache, "eth", 900, loop, fetch) is None and cache == {}
+        assert await S.mk15_cacheado(cache, "eth", 900, loop, fetch) in (None, {}) and cache == {}
+        with pytest.raises(RuntimeError):
+            await S.mk15_cacheado(cache, "eth", 900, loop, fetch)
+        assert cache == {}
+        v = await S.mk15_cacheado(cache, "eth", 900, loop, fetch)
+        assert v["slug"] == "x" and cache == {("eth", 900): v}
+        n = len(llamadas)
+        assert await S.mk15_cacheado(cache, "eth", 900, loop, fetch) is v and len(llamadas) == n, "valido: cacheado, sin red"
+        assert llamadas[0] == ("eth", "15m", 900)
+    asyncio.run(corre())
+
+
+# ---- 3: topes de B en el brazo shadow
+def test_h3_topes_de_b_identicos():
+    H, X = _importar_b()
+    assert R.MAX_VIVAS == H.MAX_VIVAS and (R.MAX_ORDENES_PUJA, R.MAX_ORDENES_TOTAL) == (H.MAX_ORDENES_PUJA, H.MAX_ORDENES_TOTAL)
+
+
+def test_h3_tope_por_puja_cierra_la_puja_y_se_cuenta(monkeypatch):
+    monkeypatch.setattr(R, "MAX_ORDENES_PUJA", 2)
+    nuc, m, rows = mk("sol")
+    preparar_vol(m, INI)
+    libros(m, INI + 3, bid5=0.20, ask5=0.22, bid15=0.21)
+    correr(nuc, m, INI + 3, INI + 4)
+    t = tr(m, "BASE")
+    px = 0.20
+    now = INI + 4.1
+    for _ in range(3):                                               # el top sube 1c cada vez: repega => 2 pujas y la 3a se bloquea
+        px = round(px + 0.01, 2)
+        libros(m, now, bid5=px, ask5=round(px + 0.02, 2), bid15=0.21)
+        correr(nuc, m, now, now + 2.2)
+        now += 2.3
+    assert t.n_post == 2 and t.orden is None and t.cerrado and t.fin_puja == "tope_ordenes"
+    assert t.bloq["tope_ordenes_puja"]["ep"] == 1 and t.bloq["tope_ordenes_puja"]["repost"] >= 1
+    d = [r for r in filas(rows, "dec", pol="BASE", esc="cons_x") if r.get("motivo") == "tope_ordenes_puja"]
+    assert len(d) == 1 and d[0]["repost"] is True
+    assert nuc.stats["bloq_tope_ordenes_puja"] >= 1
+    nuc.cerrar(m, now)
+    assert filas(rows, "fin_t", pol="BASE", esc="cons_x")[0]["bloq"]["tope_ordenes_puja"]["ep"] == 1
+
+
+def test_h3_tope_de_pujas_de_otros_mercados(monkeypatch):
+    monkeypatch.setattr(R, "MAX_VIVAS", 2)
+    nuc, ms, rows = mk_multi()
+    correr_multi(nuc, ms, INI + 3, INI + 4)
+    assert tr(ms["eth"], "BASE").orden and tr(ms["sol"], "BASE").orden
+    x = tr(ms["xrp"], "BASE")
+    assert x.orden is None and x.bloq["tope_vivas_pujas"]["ep"] == 1 and x.n_post == 0
+    d = filas(rows, "dec", pol="BASE", esc="cons_x", slug=ms["xrp"].slug, motivo="tope_vivas_pujas")
+    assert len(d) == 1 and d[0]["repost"] is False and d[0]["otras"] == 2
+    # el tope es por (politica, escenario): las demas politicas del mismo mercado tienen su propia cuenta y tambien se llenan de 2 en 2
+    assert tr(ms["xrp"], "BASE", "opt_x").orden is None
+    # al liberarse una puja (relleno que cierra) la bloqueada puede cotizar
+    o = tr(ms["eth"], "BASE").orden
+    ms["eth"].on_msg(trade(UP, 0.15, 20, "SELL", ts=o["t_post"] + 0.5), o["t_post"] + 0.5)
+    correr_multi(nuc, ms, INI + 4.1, INI + 8)
+    assert tr(ms["eth"], "BASE").cerrado and tr(ms["xrp"], "BASE").orden is not None
+
+
+def test_h3_tope_de_ordenes_vivas_suma_vivas_y_pendientes(monkeypatch):
+    monkeypatch.setattr(R, "MAX_VIVAS", 2)
+    nuc, ms, rows = mk_multi()
+    e, s_, x = (tr(ms[c], "BASE") for c in ("eth", "sol", "xrp"))
+    s_.orden, x.pend = {"tok": UP, "precio": 0.19}, [{"tok": UP, "precio": 0.19, "t_cancel": INI}]         # 1 viva + 1 cancelada sin asentar = 2 en el libro
+    s_.n_post = x.n_post = 1
+    e.n_post, e.tok = 1, UP                                          # eth ya pujo antes: no pasa por el tope de "otras pujas" sino por el de ordenes vivas
+    assert nuc.ordenes_vivas("BASE", "cons_x") == 2
+    ms["eth"].vivo(INI + 3)
+    e._decidir(ms["eth"], ms["eth"].fin - INI - 3, INI + 3, nuc.emit, nuc)
+    assert e.orden is None and e.bloq["tope_vivas"]["ep"] == 1
+
+
+def test_h3_tope_total_por_dia_y_reinicio_de_dia(monkeypatch):
+    monkeypatch.setattr(R, "MAX_ORDENES_TOTAL", 1)
+    nuc, ms, rows = mk_multi(("eth", "sol"))
+    correr_multi(nuc, ms, INI + 3, INI + 4)
+    assert tr(ms["eth"], "BASE").orden and tr(ms["sol"], "BASE").orden is None
+    assert tr(ms["sol"], "BASE").bloq["tope_ordenes_total"]["ep"] == 1
+    assert nuc.total_dia("BASE", "cons_x", INI + 3) == 1 and nuc.total_dia("BASE", "cons_x", INI + 86400 + 3) == 0, "el contador es por dia UTC"
+    nuc.contar_post("BASE", "cons_x", INI + 86400 + 3)
+    assert ("BASE", "cons_x", datetime.fromtimestamp(INI, timezone.utc).date().isoformat()) not in nuc.posts_dia, "solo el dia vigente"
+
+
+def test_h3_sin_topes_el_comportamiento_de_antes_no_cambia():
+    nuc, ms, rows = mk_multi()
+    correr_multi(nuc, ms, INI + 3, INI + 4)
+    assert all(tr(m, "BASE").orden for m in ms.values())            # 3 mercados vivos (< MAX_VIVAS=5): ningun bloqueo
+    assert not any(t.bloq for m in ms.values() for t in m.traders)
+
+
+# ---- 8: corte de arranque_tarde derivado de PRE_S
+def test_h8_arranque_tarde_corte_derivado_de_pre_s():
+    assert S.PRE_S == R.PRE_S and R.ARRANQUE_TOL_S == float(R.PRE_S)
+    corte = INI - R.PRE_S + R.ARRANQUE_TOL_S
+    assert corte == INI, "corte explicito: la apertura del 5m"
+    for t, tarde in ((INI - 25, False), (INI - 1, False), (INI, False), (INI + 0.5, True), (INI + 5, True), (INI + 60, True)):
+        nuc, m, _ = mk("eth", t_ms=int(t * 1000))
+        assert m.arranque_tarde is tarde, t
+    # la fila `mkt` lo registra
+    nuc, m, rows = mk("eth", t_ms=int((INI + 3) * 1000))
+    assert filas(rows, "mkt")[0]["arranque_tarde"] is True
+
+
+# ---- 9: lectura de logs filtrada por tipo antes de parsear, en streaming
+def test_h9_leer_gz_filtra_por_tipo_antes_de_json_loads_y_tolera_truncado(tmp_path, monkeypatch):
+    out = S.Salida(tmp_path)
+    for i in range(50):
+        out.put({"k": f"dec|{i}", "tipo": "dec", "r": INI * 1000, "slug": "s", "pad": "x" * 50})
+        out.put({"k": f"smp|{i}", "tipo": "smp", "r": INI * 1000, "slug": "s"})
+        if i % 10 == 0:
+            out.put({"k": f"fill|{i}", "tipo": "fill", "r": INI * 1000, "slug": "s", "feat_post": {"tipo": "dec"}})
+    out.cerrar()
+    out.put({"k": "mkt_fin|s", "tipo": "mkt_fin", "r": INI * 1000, "slug": "s"})
+    out._vaciar()                                                    # 2o miembro gzip anadido
+    f = next(tmp_path.glob("r3_shadow_*.jsonl.gz"))
+    with open(f, "ab") as fh:
+        fh.write(gzip.compress(b'{"k":"trunc|1","tipo":"fill","pad":"' + bytes(random.Random(2).randbytes(300)).hex().encode() + b'"}\n')[:-40])    # miembro truncado
+    todas = list(S.leer_gz_tolerante(f))
+    assert sum(1 for r in todas if r["tipo"] == "fill") == 5 and any(r["tipo"] == "mkt_fin" for r in todas)
+    llamadas = []
+    orig = S.json.loads
+    monkeypatch.setattr(S.json, "loads", lambda t, *a, **k: (llamadas.append(1), orig(t, *a, **k))[1])
+    sel = list(S.leer_gz_tolerante(f, tipos=("fill", "mkt_fin")))
+    assert {r["tipo"] for r in sel} == {"fill", "mkt_fin"} and len(sel) == 6
+    assert len(llamadas) <= 7, "solo se parsean las lineas candidatas (fills, mkt_fin y, como mucho, el truncado), no las 100 de dec/smp"
+    assert list(S.leer_gz_tolerante(tmp_path / "no_existe.gz")) == []
+
+
+def test_h9_resolvedor_usa_el_filtro_por_tipo(tmp_path, monkeypatch):
+    pedidos = []
+    orig = S.leer_gz_tolerante
+    monkeypatch.setattr(D.S, "leer_gz_tolerante", lambda p, tipos=None: (pedidos.append(tipos), orig(p, tipos=tipos))[1])
+    D.main(["--dir", str(tmp_path), "--dias", "0"])
+    assert ("mkt_fin", "fill") in pedidos and ("des",) in pedidos
+
+
+# ---- 10: n_true / n_false solo de los dias de la interseccion
+def test_h10_n_flag_solo_cuenta_los_dias_de_la_interseccion():
+    def fila(dia, flag, pnl=1.0):
+        return {"dia": dia, "pnl": pnl, "coste": 1.0, "R3": flag}
+    rows = [fila("d1", True)] * 3 + [fila("d1", False)] * 4 + [fila("d2", True)] * 50 + [fila("d3", False)] * 70
+    r = V.dif_dias(rows, "R3")
+    assert r["dias"] == 1 and r["n_true"] == 3 and r["n_false"] == 4
+    assert r["n_true_total"] == 53 and r["n_false_total"] == 74
+    # y el veredicto usa el n de la interseccion: con 200/500 'totales' pero poca interseccion, no confirma
+    P = V.params()
+    e = {"dif": {"n_true": 3, "n_false": 4, "dif": 0.5, "ic95": [0.1, 0.9], "ic90": [0.1, 0.9], "dif_sin2": 0.4},
+         "ev": {"ev": 0.2, "ic95": [0.1, 0.3], "ev_sin2": 0.1}}
+    v, _ = V.veredicto_regla(12, {"cons_x": e, "cons_r": e}, P)
+    assert v != "CONFIRMADA"
+
+
+# ---- 7: preregistro congelado: umbrales leidos del JSON y fail-closed por hash
+def test_h7_hash_prereg_coincide_y_umbrales_iguales_a_los_aprobados():
+    h = V.HASH_PREREG.read_text().split()
+    assert h[0] == hashlib.sha256(V.PREREG.read_bytes()).hexdigest() and h[1] == "r3_shadow_preregistro.json"
+    j = json.loads(V.PREREG.read_text())
+    assert "umbrales_propuestos_sin_aprobar" not in j and j["correccion_post_review_22oct"]["umbrales_cambiados"] is False
+    P, sha = V.cargar_prereg()
+    assert sha == h[0]
+    assert (P["dias_min"], P["dias_no_conf"], P["n_true_min"], P["n_false_min"], P["cobertura_dia_min"], P["esperados_dia"]) == (10, 20, 200, 500, 0.80, 864)
+    assert (P["bootstrap_n"], P["seed_ev"], P["seed_dif"], P["mejores_dias_excluidos"], P["ic_confirmada"], P["ic_refutada"]) == (4000, 1, 3, 2, "ic95", "ic90")
+    assert P["escenarios_primarios"] == ["cons_x", "cons_r"]
+
+
+def _prereg_copia(tmp_path, mod=None, hash_ok=True, borra_hash=False):
+    j = json.loads(V.PREREG.read_text())
+    if mod:
+        mod(j)
+    p = tmp_path / "pre.json"
+    p.write_text(json.dumps(j, indent=1))
+    hf = tmp_path / "HASH.txt"
+    if not borra_hash:
+        hf.write_text(f"{hashlib.sha256(p.read_bytes()).hexdigest() if hash_ok else '0' * 64}  pre.json\n")
+    return p, hf
+
+
+def test_h7_falla_cerrado_si_el_hash_no_coincide_o_falta_o_claves_raras(tmp_path):
+    p, hf = _prereg_copia(tmp_path)
+    assert V.cargar_prereg(p, hf)[0]["dias_min"] == 10
+    p2, hf2 = _prereg_copia(tmp_path, hash_ok=False)
+    with pytest.raises(V.PreregInvalido, match="sha256"):
+        V.cargar_prereg(p2, hf2)
+    p3, hf3 = _prereg_copia(tmp_path, borra_hash=True)
+    with pytest.raises(V.PreregInvalido, match="HASH_PREREG"):
+        V.cargar_prereg(p3, hf3)
+    p4, hf4 = _prereg_copia(tmp_path, mod=lambda j: j["parametros_gate"].pop("n_true_min"))
+    with pytest.raises(V.PreregInvalido, match="claves"):
+        V.cargar_prereg(p4, hf4)
+    p5, hf5 = _prereg_copia(tmp_path, mod=lambda j: j["parametros_gate"].update(ic_confirmada="ic90"))
+    with pytest.raises(V.PreregInvalido, match="solo implementa"):
+        V.cargar_prereg(p5, hf5)
+    # tocar el preregistro DESPUES de congelarlo (hash viejo) => el informe no se calcula
+    p6, hf6 = _prereg_copia(tmp_path)
+    j = json.loads(p6.read_text()); j["parametros_gate"]["dias_min"] = 3; p6.write_text(json.dumps(j))
+    d = tmp_path / "datos"
+    sembrar(d, ["2026-10-23"])
+    with pytest.raises(V.PreregInvalido):
+        V.informe(d, desde="2026-10-22", ledger="/nonexistent", prereg=p6, hash_file=hf6)
+
+
+def test_h7_los_umbrales_salen_del_json_no_del_codigo(tmp_path):
+    dias = [f"2026-10-{d}" for d in range(23, 31)] + ["2026-11-01", "2026-11-02", "2026-11-03"]
+    d = tmp_path / "d"
+    sembrar(d, dias, fills_por_dia=300, sesgo=0.25)
+    assert V.informe(d, desde="2026-10-22", ledger="/nonexistent")["reglas"]["R3"]["veredicto"] == "CONFIRMADA"
+    p, hf = _prereg_copia(tmp_path, mod=lambda j: j["parametros_gate"].update(n_true_min=10 ** 6))         # umbral imposible, hash coherente
+    res = V.informe(d, desde="2026-10-22", ledger="/nonexistent", prereg=p, hash_file=hf)
+    assert res["reglas"]["R3"]["veredicto"] != "CONFIRMADA" and "n_fills" in " ".join(res["reglas"]["R3"]["motivos"]) + str(res["reglas"]["R3"]["motivos"])
+    p2, hf2 = _prereg_copia(tmp_path, mod=lambda j: j["parametros_gate"].update(esperados_dia=3000))       # cobertura exigida sobre otro esperado => ningun dia valido
+    assert V.informe(d, desde="2026-10-22", ledger="/nonexistent", prereg=p2, hash_file=hf2)["dias_validos"] == 0
+
+
+def test_h7_main_sale_2_si_el_prereg_es_invalido_y_no_toca_el_latch(tmp_path, monkeypatch, capsys):
+    p, hf = _prereg_copia(tmp_path, hash_ok=False)
+    monkeypatch.setattr(V, "PREREG", p)
+    monkeypatch.setattr(V, "HASH_PREREG", hf)
+    d = tmp_path / "datos"
+    sembrar(d, ["2026-10-23"])
+    llamado = []
+    rc = V.main(["--dir", str(d), "--ledger", "/nonexistent", "--telegram"], enviar=lambda m: llamado.append(m) or True)
+    assert rc == 2 and llamado == [] and not (d / "estado_r3_shadow.json").exists()
+    assert "PREREGISTRO INVALIDO" in capsys.readouterr().err
+
+
+# ---- 6: el latch se escribe DESPUES de enviar con exito
+def _datos_confirmada(tmp_path):
+    d = tmp_path / "datos"
+    sembrar(d, [f"2026-10-{x}" for x in range(23, 31)] + ["2026-11-01", "2026-11-02", "2026-11-03"], fills_por_dia=300, sesgo=0.25)
+    return d
+
+
+def test_h6_latch_solo_avanza_si_telegram_confirma(tmp_path):
+    d = _datos_confirmada(tmp_path)
+    args = ["--dir", str(d), "--ledger", "/nonexistent", "--telegram"]
+    est = d / "estado_r3_shadow.json"
+    enviados = []
+    assert V.main(args, enviar=lambda m: enviados.append(m) or False) == 1                     # Telegram devuelve False
+    assert json.loads(est.read_text())["firma"] == {} and len(enviados) == 1
+    def lanza(m):
+        raise OSError("red caida")
+    assert V.main(args, enviar=lanza) == 1                                                      # Telegram lanza
+    assert json.loads(est.read_text())["firma"] == {}
+    assert V.main(args, enviar=lambda m: enviados.append(m) or True) == 0                       # ahora si: avisa y avanza
+    assert json.loads(est.read_text())["firma"]["R3"] == "CONFIRMADA" and len(enviados) == 2
+    assert V.main(args, enviar=lambda m: enviados.append(m) or True) == 0                       # mismo veredicto: sin aviso (latch por veredicto)
+    assert len(enviados) == 2
+
+
+def test_h6_sin_telegram_no_consume_el_latch_y_acumulando_inicial_es_silencioso(tmp_path):
+    d = _datos_confirmada(tmp_path)
+    assert V.main(["--dir", str(d), "--ledger", "/nonexistent"]) == 0                           # corrida manual sin --telegram
+    assert json.loads((d / "estado_r3_shadow.json").read_text())["firma"] == {}                 # el aviso sigue pendiente
+    d2 = tmp_path / "d2"
+    sembrar(d2, ["2026-10-23"])
+    llam = []
+    assert V.main(["--dir", str(d2), "--ledger", "/nonexistent", "--telegram"], enviar=lambda m: llam.append(m) or True) == 0
+    f = json.loads((d2 / "estado_r3_shadow.json").read_text())["firma"]
+    assert f == {"R2": "ACUMULANDO", "R3": "ACUMULANDO"} and llam == []
