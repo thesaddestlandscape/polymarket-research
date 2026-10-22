@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-22T06:13:42+00:00",
+ "generado_utc": "2026-10-22T06:18:53+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -48,9 +48,9 @@
   },
   "60min": {
    "usd_long": 415.01,
-   "usd_short": 217525.69,
-   "n": 11,
-   "imbalance": 0.9962
+   "usd_short": 214804.9,
+   "n": 10,
+   "imbalance": 0.9961
   }
  },
  "DOGE": {
@@ -74,8 +74,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 29508.26,
-   "n": 5,
+   "usd_short": 8447.49,
+   "n": 4,
    "imbalance": 1.0
   }
  },
@@ -152,8 +152,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 10261.42,
-   "n": 7,
+   "usd_short": 8185.8,
+   "n": 6,
    "imbalance": 1.0
   }
  },
