@@ -48,7 +48,7 @@
   },
   "archivo": {
    "ok": false,
-   "detalle": "RechazoPolitica: HTTP 403",
+   "detalle": "HTTPError: 410 Client Error: Gone for url: https://1rpc.io/matic",
    "desde": 1792657386.1792798,
    "ultimo_aviso": 1792657386.1792798
   },
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-22T08:23:06+00:00"
+ "_actualizado_utc": "2026-10-22T09:23:08+00:00"
 }
