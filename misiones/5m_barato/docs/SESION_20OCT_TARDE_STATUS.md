@@ -79,3 +79,12 @@ Reglas: un agente a la vez; prompts cortos con punteros; no leer transcripts ni 
 - Aritmética honesta hacia 200 k€: el ritmo es ≈0,4 rellenos/día en BTC A+B; a 2 € y EV ≈+1,0 son ≈1 €/día (~360 €/año). La palanca no es el EV por relleno sino FRECUENCIA y CAPITAL (más monedas, más brazos, más tamaño dentro de la profundidad), cf. LIBRO_OBJETIVO_200K.md (cuello = capacidad).
 - Cola ahora: 1) selección adversa de B exhaustivo (agente a055bc5b9400410c3, en curso). 2) Agente «H61b integrar y exprimir» (brazo shadow C emparejado con v3, aggTrade live vs registro, extender a ETH/SOL/XRP/alts y a más brazos, cálculo de capacidad hacia 200 k€) — se lanza al terminar el 1. 3) DOGE/BNB + demostración re-puja 150 ms (brazo shadow v3). 4) H55/H53. 5) H5M. 6) /code-review H59.
 - B real: tanda 13 en marcha (VEZ 12, base 32,85); kill falso de 11:37Z rearmado con --rearmar-kill; el siguiente reseteo exige KILL limpio y cero pujas sin verificar (parar B y resetear en un solo comando).
+
+## 9. SESIÓN 22-OCT (07:00Z) — cola de agentes escalonada y B
+- Estado verificado: B tanda 13 AGOTADA desde 12:30Z del 21-Oct (último `bloqueo_suelo_saldo`: saldo 36,80, mínimo 34,66); B lleva ~18 h sin postear (674 mercados sin puja). PnL realizado wallet dedicada +16,60 (cuadre 0). Siguiente reseteo: `VEZ 13`. El agente de selección adversa (a055bc5b9400410c3) NO está vivo: solo dejó `b_seleccion_adversa/scripts/build_units.py`; se relanza desde ahí.
+- Cola, UN agente a la vez, cada uno con presupuesto y entrega fija; el siguiente solo arranca cuando el anterior entregó su MD:
+  1. Selección adversa de B (event-causality-analyst, sonnet, ≤250k tokens): reanuda `build_units.py`; entrega `b_seleccion_adversa/INFORME.md` + reglas JSON congeladas.
+  2. H61b integrar/exprimir (alpha-researcher + execution-engineer secuencial, ≤250k): brazo shadow C, extensión a ETH/SOL/XRP, capacidad hacia 200 k€.
+  3. DOGE/BNB (`kill -CONT 501622` si sigue pausado) + demostración re-puja 150 ms (vigía con gate del PREREGISTRO).
+  4. H55/H53 captura. 5. H5M captura (B ≥30 rellenos). 6. /code-review H59.
+- Reglas de ahorro: prompts ≤15 líneas con punteros a ficheros; sin polling ni lectura de transcripts; agentes mecánicos (extracción, tablas) en haiku/sonnet; validator/red-team solo al cierre de cada hito; yo leo solo el MD final.
