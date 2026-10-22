@@ -1,6 +1,6 @@
 {
  "id": "R3-SHADOW-PREREG-22oct2026",
- "estado": "PROPUESTO por el ingeniero; vale cuando el chief/Javi lo aprueben y se congele con HASH_PREREG.txt (sha256 del fichero entero). No relaja ni sustituye reglas_congeladas.json v2: lo ADAPTA al brazo vivo (unidad = relleno simulado del gemelo de B, no unidad on-chain de otros makers).",
+ "estado": "APROBADO Y CONGELADO el 2026-10-22 por Javi (OK explicito en sesion) y el chief; umbrales de cobertura (>=80 %), n (flag-true >=200, flag-false >=500), cons_x Y cons_r e IC95 aprobados tal cual. RE-CONGELADO el 2026-10-22 (correccion post /code-review, ver `correccion_post_review_22oct`; sin cambiar ningun umbral ni criterio y antes de analizar ningun dato forward). Cualquier cambio posterior = version nueva y OOS nuevo. Hash del fichero entero en HASH_PREREG.txt (sha256sum -c HASH_PREREG.txt). No relaja ni sustituye reglas_congeladas.json v2: lo ADAPTA al brazo vivo (unidad = relleno simulado del gemelo de B, no unidad on-chain de otros makers).",
  "regla_bajo_prueba": "reglas_congeladas.json v2: R2_NIVEL15 (primaria) y R3_COMBINADA (secundaria). Parametros duros en r3_regla.py: R2_MAX_MILS=30, VOL30_MIN=26, HORA_MIN=4",
  "universo": "ETH/SOL/XRP 5m; politica BASE = gemelo de B (H35 DEEP_PEG, k ETH 2/SOL 1/XRP 1, T 298..60); BTC excluida (REJECTED en v2)",
  "dia_valido": "dia UTC (por cierre del mercado) con >=80 % de los 864 mercados esperados (3 monedas x 288) con mkt_fin completo=true; un dia con menos cobertura NO cuenta (missing != 0)",
@@ -12,7 +12,7 @@
   "contra_B_real": "informativo (n pequeno): EV de los rellenos de B real segun el flag de la regla en su puja_post (emparejado por slug+lado y hora mas cercana <=10 s); no entra en el veredicto"
  },
  "veredicto_por_regla": {
-  "CONFIRMADA": "dias_validos>=10 AND n_fills_flag_true>=200 AND n_fills_flag_false>=500 AND IC95_dias(DIF).inf>0 AND DIF_sin_2_mejores_dias>0 AND IC95_dias(EV_POLITICA).inf>0 AND EV_POLITICA_sin_2_mejores_dias>0, en cons_x Y en cons_r. (IC95 = Bonferroni de 2 reglas primarias, como en reglas_congeladas.json; se informa tambien el IC90)",
+  "CONFIRMADA": "dias_validos>=10 AND n_fills_flag_true>=200 AND n_fills_flag_false>=500 (contados en los dias de la interseccion usados en DIF) AND IC95_dias(DIF).inf>0 AND DIF_sin_2_mejores_dias>0 AND IC95_dias(EV_POLITICA).inf>0 AND EV_POLITICA_sin_2_mejores_dias>0, en cons_x Y en cons_r. (IC95 = Bonferroni de 2 reglas primarias, como en reglas_congeladas.json; se informa tambien el IC90)",
   "REDUCE_PERDIDA": "dias_validos>=10 AND IC95(DIF).inf>0 pero EV_POLITICA no >0: la regla separa pero no crea edge (falsador 3 de reglas_congeladas.json)",
   "REFUTADA": "dias_validos>=10 AND IC90(DIF).sup<=0 en cons_x",
   "NO_CONFIRMADA": "dias_validos>=20 sin CONFIRMADA ni REFUTADA",
@@ -24,5 +24,30 @@
   "la retencion de volumen de la politica (EUR R3 / EUR BASE) cae por debajo del 5 %: la regla no escala"
  ],
  "siguiente_paso_si_CONFIRMADA": "NO es dinero: /code-review MEDIUM de b_r3/experimento_maker_h47_r3.py + OK de Javi + peldaño micro-real (wallet dedicada, tope 5 EUR)",
- "umbrales_propuestos_sin_aprobar": ["80 % de cobertura diaria", "n_fills_flag_true>=200 y flag_false>=500", "exigir cons_x Y cons_r"]
+ "parametros_gate": {
+  "nota": "Valores que LEE r3_vigia.py (cargar_prereg) y que antes estaban fijos en su codigo; son los mismos umbrales aprobados, ahora dentro del fichero hasheado. El vigia falla cerrado si el sha256 de este fichero != HASH_PREREG.txt.",
+  "esperados_dia": 864,
+  "cobertura_dia_min": 0.80,
+  "dias_min": 10,
+  "dias_no_conf": 20,
+  "n_true_min": 200,
+  "n_false_min": 500,
+  "bootstrap_n": 4000,
+  "seed_ev": 1,
+  "seed_dif": 3,
+  "mejores_dias_excluidos": 2,
+  "ic_confirmada": "ic95",
+  "ic_refutada": "ic90",
+  "escenarios_primarios": ["cons_x", "cons_r"]
+ },
+ "correccion_post_review_22oct": {
+  "fecha": "2026-10-22",
+  "hash_anterior": "d596b3807b9cb9e65714def04d926e95865542de981a971baeb9bede170943fc",
+  "motivo": "/code-review high de R2/R3 (hallazgos 7 y 10): (7) el vigia tenia los umbrales fijos en el codigo y no verificaba el hash del preregistro, y el JSON conservaba la clave obsoleta `umbrales_propuestos_sin_aprobar` (ya aprobados); (10) n_flag_true/n_flag_false se contaban sobre TODOS los fills y no solo sobre los dias de la interseccion que entran en DIF.",
+  "cambios": ["anadida la seccion parametros_gate (umbrales ya aprobados, sin modificar ninguno)", "eliminada la clave obsoleta umbrales_propuestos_sin_aprobar", "aclarado que n_fills_flag_true / n_fills_flag_false se cuentan solo en los dias de la interseccion usados en DIF (el vigia informa tambien los totales)", "estado: re-congelado"],
+  "umbrales_cambiados": false,
+  "aclaracion_de_conteo": "unica diferencia de criterio: n_flag_true/n_flag_false cuentan solo los fills de los dias de la interseccion (mas estricto que contar todos; nunca mas laxo)",
+  "datos_forward_analizados_antes_de_la_correccion": false,
+  "evidencia_sin_datos_analizados": "el brazo shadow arranco a las 11:42Z del 22-Oct; el primer dia valido es el 23-Oct; el vigia (cron 10:50Z) no se ha ejecutado nunca (no existe estado_r3_shadow.json)"
+ }
 }

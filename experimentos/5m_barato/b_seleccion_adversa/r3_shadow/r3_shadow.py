@@ -37,7 +37,7 @@ SALIDA_DEFECTO = "/root/polymarket-research-datalogs/r3_shadow"
 GAMMA = "https://gamma-api.polymarket.com/markets"
 WS_URL = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
 MONEDAS = ("eth", "sol", "xrp")
-PRE_S = 25                 # se suscribe 25 s antes de abrir el 5m
+PRE_S = R.PRE_S            # se suscribe PRE_S s antes de abrir el 5m (fuente unica: r3_regla.PRE_S, de la que deriva el corte arranque_tarde)
 RETENCION_DIAS, RELEER_DIAS = 45, 3
 RSS_MAX_MB = 450
 TICK_S = 0.1
@@ -106,26 +106,31 @@ class Salida:
         self._vaciar()
 
 
-def leer_gz_tolerante(path):
-    """Lee miembros gzip concatenados; tolera un ultimo miembro truncado (proceso muerto a mitad de escritura)."""
+def leer_gz_tolerante(path, tipos=None):
+    """Lee miembros gzip concatenados EN STREAMING (memoria plana: antes cada miembro copiaba el resto del fichero en `unused_data`, O(miembros x tamano)); tolera un ultimo
+    miembro truncado o corrupto (proceso muerto a mitad de escritura: se devuelve lo anterior y se para). `tipos` (iterable de str): solo las filas de esos tipos; el filtro es
+    una busqueda de subcadena sobre la linea ANTES de json.loads (las filas se escriben compactas: `"tipo":"fill"`), y despues se verifica el valor parseado."""
+    pats = None if tipos is None else tuple(f'"tipo":"{t}"'.encode() for t in tipos)
+    ok = None if tipos is None else frozenset(tipos)
     try:
-        data = open(path, "rb").read()
+        f = gzip.open(path, "rb")
     except OSError:
         return
-    while data:
-        d = zlib.decompressobj(31)
-        try:
-            txt = d.decompress(data)
-        except zlib.error:
-            return
-        for ln in txt.decode(errors="replace").splitlines():
+    try:
+        for raw in f:
+            if pats is not None and not any(p in raw for p in pats):
+                continue
             try:
-                yield json.loads(ln)
+                row = json.loads(raw.decode(errors="replace"))
             except ValueError:
                 continue
-        data = d.unused_data
-        if not d.eof:
-            return
+            if ok is not None and row.get("tipo") not in ok:
+                continue
+            yield row
+    except (EOFError, OSError, zlib.error):
+        return
+    finally:
+        f.close()
 
 
 def restaurar(dirn, ahora_s, prefijo="r3_shadow", dias=RELEER_DIAS):
@@ -172,6 +177,19 @@ def mercado_gamma(coin, marco, ini):
     if [o.lower() for o in out] != ["up", "down"] or len(toks) != 2:
         raise ValueError(f"{slug}: outcomes {out} inesperados (fail-closed)")
     return {"slug": slug, "id": str(m["id"]), "up": toks[0], "down": toks[1]}
+
+
+async def mk15_cacheado(cache15, coin, ini15, loop, fetch=None):
+    """mercado 15m (coin, ini15) con cache SOLO de resultados validos: un None/{}/error de gamma (el 15m aun no listado) NO se cachea y se reintenta en la siguiente vuelta
+    (antes se guardaba el None y el 5m entero quedaba sin R2/R3 mientras durara el 15m). Devuelve el mercado o None; las excepciones suben al llamador (backoff por slug)."""
+    k = (coin, ini15)
+    v = cache15.get(k)
+    if v:
+        return v
+    v = await loop.run_in_executor(None, fetch or mercado_gamma, coin, "15m", ini15)
+    if v:
+        cache15[k] = v
+    return v
 
 
 async def vigilar(nuc, m, parar, fin_ms):
@@ -264,7 +282,8 @@ async def principal(args, nuc, vistos, terminados, parar):
         nuc.emit({"k": f"mkt_fin|{s}", "tipo": "mkt_fin", "r": ahora_ms(), "slug": s, "coin": coin, "cierre": ini + 300, "completo": False, "arranque_tarde": None,
                   "huecos": None, "reconex": None, "n_msgs": None, "n_smp": None, "n_dec": None, "parada": "reinicio_proceso"})
     nuc.emit({"k": f"inicio|{ahora_ms()}", "tipo": "inicio", "r": ahora_ms(), "pid": os.getpid(), "minutos": args.minutos, "emitidos": len(nuc.emitidos), "version": R.VERSION,
-              "config": {"R2_MAX_MILS": R.R2_MAX_MILS, "VOL30_MIN": R.VOL30_MIN, "HORA_MIN": R.HORA_MIN, "T_INI": R.T_INI, "T_STOP": R.T_STOP, "k": R.K_POR_MONEDA,
+              "config": {"topes_b": {"max_vivas": R.MAX_VIVAS, "ordenes_puja": R.MAX_ORDENES_PUJA, "ordenes_total_dia": R.MAX_ORDENES_TOTAL}, "arranque_tarde_corte": "ini-PRE_S+TOL",
+                         "PRE_S": R.PRE_S, "ARRANQUE_TOL_S": R.ARRANQUE_TOL_S, "R2_MAX_MILS": R.R2_MAX_MILS, "VOL30_MIN": R.VOL30_MIN, "HORA_MIN": R.HORA_MIN, "T_INI": R.T_INI, "T_STOP": R.T_STOP, "k": R.K_POR_MONEDA,
                          "escenarios": list(R.ESCENARIOS), "politicas": list(R.POLITICAS)}})
     while not parar.is_set() and (t_fin is None or time.time() < t_fin):
         ahora = time.time()
@@ -279,9 +298,7 @@ async def principal(args, nuc, vistos, terminados, parar):
                 ini15 = ini // 900 * 900
                 try:
                     mk5 = await loop.run_in_executor(None, mercado_gamma, coin, "5m", ini)
-                    if (coin, ini15) not in cache15:
-                        cache15[(coin, ini15)] = await loop.run_in_executor(None, mercado_gamma, coin, "15m", ini15)
-                    mk15 = cache15[(coin, ini15)]
+                    mk15 = await mk15_cacheado(cache15, coin, ini15, loop)
                 except Exception as e:
                     n = fallos.get(slug, (0, 0))[0] + 1
                     fallos[slug] = (n, ahora + min(2 * n, 15))

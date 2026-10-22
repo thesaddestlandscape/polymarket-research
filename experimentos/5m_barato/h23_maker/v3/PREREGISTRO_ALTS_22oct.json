@@ -1,0 +1,17 @@
+{
+ "id": "H70-ALTS (extension de H69 / H60 a ETH,SOL,XRP,DOGE,BNB)",
+ "fecha_utc": "2026-10-22T12:00Z",
+ "escrito_antes_de": "mirar ningun EV, PnL ni acierto de las alts en la celda primaria v3 (solo se han mirado recuentos de cobertura y la validacion v3==v2 fila a fila en ETH 10-Oct). El replay v3 de alts 06-21 Oct esta calculandose en el momento de escribir.",
+ "estado": "EXPLORATORY · solo replay/dry-run · NADA real · propuesta al chief: no vigente hasta que la congele",
+ "regla": "IDENTICA a H69/v3: h23_regla_v3 hash 3eeff503cf0a75c9 (brazos A 0,05 / B 0,02, mq, p_limite, cota bid15, re-puja 150 ms, universo p en [0,10;0,60], sin puja nueva con T<=12 s, tamano real, un relleno cierra). Prohibido cambiar umbrales por moneda.",
+ "celda_primaria": "cola base, alta 79 ms, cancelacion 60 ms, sizing real, cierre primer, r150, rebate 20 %, fee 0,07, hora de RECEPCION, desenlace oficial (sin desenlace = missing)",
+ "unidad": "posicion = un relleno por (moneda, cierre, brazo)",
+ "periodos": {"DISC": "06-18 Oct (13 dias; ya vistos por el replay v2 de ETH/SOL/XRP/DOGE/BNB: descriptivo, NO cuenta)", "OOS_replay": "19-21 Oct (replay v3 sobre el registro maker_ms; con marca de cierres con hueco)", "FORWARD": ">= 22-Oct: shadow h23_shadow_v3r (decisiones en vivo, transporte robusto) y replay `pares` sobre el registro propio. Es el unico periodo que cuenta para el gate junto con OOS_replay limpio."},
+ "hipotesis": "H70: sobre las 5 alts agrupadas, r150 (re-puja 150 ms) tiene EV ponderado por EUR >= +0,05 y conserva >= 1,4x los rellenos de r1500 (mismo criterio pareado de H69). Hipotesis secundaria (descriptiva): por moneda.",
+ "contrastes_primarios": ["ALTS5_A", "ALTS5_B"],
+ "multiplicidad": "2 contrastes primarios (pool A, pool B); las 10 celdas por moneda x brazo son DESCRIPTIVAS y no se declara significativa ninguna (Bonferroni x2 sobre el pool).",
+ "gate_dry_run": {"por_moneda_y_brazo": "el MISMO gate de H69 §4 (n>=40 posiciones, >=10 dias, EV pond>=+0,10 segun config.gate, IC90 por dias>0, sin 2 mejores>0), SE REPORTA aunque no sea alcanzable (ritmo medido ~0,1-0,3 rellenos/dia por moneda)", "pool_ALTS5": "mismo gate numerico sobre el pool + ninguna moneda >40 % de las posiciones + >=3 monedas con >=1 posicion + fiabilidad: >=70 % de las posiciones en cierres SIN hueco de transporte"},
+ "calidad_de_datos": "Cada cierre se etiqueta limpio / con hueco (h23_huecos_ws para el registro maker_ms; g del registro propio para pares). Resultado PRIMARIO = todos los cierres con datos; SENSIBILIDAD obligatoria = solo cierres limpios y solo cierres con hueco. Si primario y limpio difieren en signo del EV pond -> la etiqueta es INCIERTO, no PROMISING. Un relleno dentro de un hueco de la conexion 15m/5m de su mercado es DUDOSO (el estado de bid15 estaba obsoleto).",
+ "kill": "EV pond del pool sin 2 mejores dias < -0,15 con n>=20 -> se deja de ampliar cobertura de esa rama.",
+ "dinero_real": "NINGUNO. Este preregistro no autoriza ni lanza nada."
+}

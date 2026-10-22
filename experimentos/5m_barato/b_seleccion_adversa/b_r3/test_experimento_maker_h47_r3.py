@@ -284,3 +284,159 @@ def test_seguridad_estatica_sin_secretos_ni_cambios_a_b():
     assert not re.search(r"\.env|private_key|PRIVATE_KEY|api_secret|seed", codigo)
     assert Path(H.__file__).resolve() == Path("/root/polymarket-research-dev/experimento_maker_h47.py")
     assert "experimento_maker_h47.py" not in re.findall(r"open\([^)]*\)", codigo)
+
+
+# ---------------------------------------------------------------- post-review 22-Oct: hallazgos 4 y 5
+def _fetch_ok(llamadas):
+    def f(coin, ini15):
+        llamadas.append((coin, ini15))
+        return {"up": f"{coin}U15", "down": f"{coin}D15", "slug": f"{coin}-updown-15m-{ini15}"}
+    return f
+
+
+def _libro15_falso(toks):
+    return T.lib_falso(0.21, 0.23, toks[0], toks[1])
+
+
+def ex_con_fakes(nombre, fetch=None):
+    ex = nuevo_r3(nombre)
+    llam = []
+    ex._fetch15 = fetch or _fetch_ok(llam)
+    ex._nuevo_libro15 = _libro15_falso
+    return ex, llam
+
+
+def ctx_5m(ex, monkeypatch, coin="eth", ini=None):
+    """Contexto creado por crear_ctx REAL (sin WS: X.Libro falso). Devuelve (ctx, ini)."""
+    lib5 = T.lib_falso(0.20, 0.22, "tU", "tD")                       # se construye ANTES de parchear X.Libro (lib_falso lo usa como clase)
+
+    class LibroFalso(X.Libro):                                       # subclase: object.__new__(X.Libro) de lib_falso sigue valiendo tras el parche
+        def __new__(cls, toks, registrar_trades=False):
+            return lib5
+    monkeypatch.setattr(X, "Libro", LibroFalso)
+    ini = ini or int(time.time()) // 300 * 300
+    mk = {"slug": f"{coin}-updown-5m-{ini}", "id": "1", "fin": ini + 300, "toks": {"Up": "tU", "Down": "tD"}, "coin": coin, "ini": ini, "min_size": 5}
+    return ex.crear_ctx(coin, mk), ini
+
+
+def test_hallazgo4_crear_ctx_no_toca_la_red_ni_bloquea_y_sin_15m_no_cotiza(monkeypatch):
+    V.hora_utc = lambda now: 12
+    ex = nuevo_r3("h4a")
+
+    toques = []
+
+    def prohibido(*a, **k):
+        toques.append(a)                                             # (un raise lo tragaria un except: se registra y se afirma)
+        raise RuntimeError("red")
+    ex._fetch15 = prohibido
+    ex._nuevo_libro15 = prohibido
+    monkeypatch.setattr(V, "mercado_15m", prohibido)
+    t0 = time.time()
+    c, ini = ctx_5m(ex, monkeypatch)
+    assert toques == [], "crear_ctx NO debe consultar gamma ni abrir el WS del 15m (bloquearia el bucle de decision)"
+    assert c is not None and time.time() - t0 < 1.0
+    assert c.lib15 is None and c.k15 == ("eth", ini // 900 * 900)
+    c.t_inicio = time.time() - 120
+    c.mk["ini"] = time.time() - 100
+    decidir(ex, c)
+    assert posts(ex) == [], "sin libro 15m => fail-closed"
+
+
+def test_hallazgo4_libro15_compartido_por_coin_y_ventana_y_adjuntado_sin_red(monkeypatch):
+    V.hora_utc = lambda now: 12
+    ex, llam = ex_con_fakes("h4b")
+    ahora = time.time()
+    ini15 = int(ahora // 900 * 900)
+    assert ex.preparar_libros15(ahora) == 3 and sorted(llam) == [("eth", ini15), ("sol", ini15), ("xrp", ini15)]
+    assert ex.preparar_libros15(ahora + 1) == 0 and len(llam) == 3, "ya creados: ni gamma ni WS otra vez"
+    cs = []
+    for off in (0, 300, 600):                                       # los 3 mercados 5m de la ventana de 15m comparten el mismo libro
+        c, _ = ctx_5m(ex, monkeypatch, "eth", ini15 + off)
+        assert c.lib15 is not None and c.tok15 == {c.up: "ethU15", c.dn: "ethD15"}
+        cs.append(c)
+    assert cs[0].lib15 is cs[1].lib15 is cs[2].lib15
+    # liberar un contexto 5m NO cierra el libro compartido
+    ex.liberar_ctx(cs[0])
+    assert cs[1].lib15.parar is False and cs[0].lib15 is None
+    # eventos del hilo -> ledger, desde el hilo principal
+    ex._drenar_ev15()
+    assert len(ev("r3_libro15")) == 3
+
+
+def test_hallazgo4_reintentos_con_backoff_y_el_ctx_se_adjunta_cuando_aparece(monkeypatch):
+    V.hora_utc = lambda now: 12
+    estado = {"n": 0}
+
+    def fetch(coin, ini15):
+        estado["n"] += 1
+        if estado["n"] == 1:
+            return None                                              # 15m aun no listado
+        if estado["n"] == 2:
+            raise RuntimeError("gamma 500")
+        return {"up": "eU", "down": "eD", "slug": "eth-updown-15m-x"}
+    ex, _ = ex_con_fakes("h4c", fetch)
+    ex.monedas = ("eth",)
+    ahora = time.time()
+    c, _ = ctx_5m(ex, monkeypatch)
+    assert ex.preparar_libros15(ahora) == 0 and estado["n"] == 1
+    assert ex.preparar_libros15(ahora + 1.0) == 0 and estado["n"] == 1, "backoff de 2 s: no se reintenta antes"
+    assert ex.preparar_libros15(ahora + 2.1) == 0 and estado["n"] == 2
+    assert ex.preparar_libros15(ahora + 3.0) == 0 and estado["n"] == 2, "backoff de 5 s tras el 2.o fallo"
+    assert ex.preparar_libros15(ahora + 7.2) == 1 and estado["n"] == 3
+    ex._adjuntar15(c)
+    assert c.lib15 is not None and c.tok15[c.up] == "eU"
+    ex._drenar_ev15()
+    assert [e["n"] for e in ev("r3_sin_libro15")] == [1] and ev("r3_libro15")[0]["intentos"] == 3
+
+
+def test_hallazgo4_libro15_muerto_se_recrea_y_los_ctx_se_reenganchan_y_caducan_los_viejos(monkeypatch):
+    ex, llam = ex_con_fakes("h4d")
+    ex.monedas = ("eth",)
+    ahora = time.time()
+    ini15 = int(ahora // 900 * 900)
+    ex.preparar_libros15(ahora)
+    c, _ = ctx_5m(ex, monkeypatch, "eth", ini15)
+    viejo = c.lib15
+    viejo.hilo = type("H", (), {"is_alive": staticmethod(lambda: False)})()      # el hilo WS murio
+    assert ex.preparar_libros15(ahora + 1) == 1 and len(llam) == 2 and viejo.parar is True
+    ex._adjuntar15(c)
+    assert c.lib15 is not viejo and c.lib15 is ex._lib15[("eth", ini15)]["lib"]
+    nuevo = c.lib15
+    ex.preparar_libros15(ahora + 1000)                               # la ventana ya caduco (+60 s de margen): se cierra y se limpia
+    assert ("eth", ini15) not in ex._lib15 and nuevo.parar is True
+
+
+def test_hallazgo4_hilo_prepara_fuera_del_bucle_y_run_lo_apaga(monkeypatch):
+    ex, llam = ex_con_fakes("h4e")
+    monkeypatch.setattr(V, "LIBRO15_PERIODO_S", 0.01)
+    ex._hilo15 = V.threading.Thread(target=ex._bucle15, daemon=True)
+    ex._hilo15.start()
+    t_lim = time.time() + 3
+    while len(ex._lib15) < 3 and time.time() < t_lim:
+        time.sleep(0.02)
+    ex._stop15.set()
+    ex._hilo15.join(2)
+    assert len(ex._lib15) == 3 and not ex._hilo15.is_alive()
+
+
+def test_hallazgo5_decidir_limpia_la_evaluacion_rancia(monkeypatch):
+    V.hora_utc = lambda now: 12
+    ex = nuevo_r3("h5a")
+    c = ctx15(ex, bid5=0.40, ask5=0.42)                              # fuera de banda: B no llama a objetivo_h35
+    ex._r3_ultimo = {"slug": c.mk["slug"], "regla": "R3", "obj": 0.18, "ok": True, "motivo": None}      # de un ciclo anterior
+    decidir(ex, c)
+    assert ex._r3_ultimo is None and posts(ex) == []
+    # y ningun evento logueado en este decidir lleva el r3 rancio
+    assert not any("r3" in e for e in ev() if e.get("tipo") in V.LOG_EVENTOS_R3)
+
+
+def test_hallazgo5_post_exige_que_la_evaluacion_sea_del_mismo_precio():
+    ex = nuevo_r3("h5b")
+    c = ctx15(ex)
+    ex._r3_ultimo = {"slug": c.mk["slug"], "regla": "R3", "obj": 0.18, "ok": True, "motivo": None, "v": V.VERSION_R3}
+    assert ex.post(c.mk["slug"], c.up, "YES", 0.17, 5.0, 0.0) is None            # evaluada para 0,18, se intenta 0,17
+    b = ev("r3_bloqueo_post")
+    assert len(b) == 1 and b[0]["r3"]["motivo"] == "obj_distinto_precio" and b[0]["r3"]["precio_post"] == 0.17
+    assert ev("r3_decision") == []
+    h = ex.post(c.mk["slug"], c.up, "YES", 0.18, 5.0, 0.0)                         # mismo precio: pasa (seco)
+    assert h is not None and len(ev("r3_decision")) == 1

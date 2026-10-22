@@ -1,15 +1,15 @@
 # Resumen por experimento -- wallet dedicada 0x659a40FF9920fEBc5a66836213040924343d297F
 
-Generado 2026-10-22T11:34:16Z por actualizar.py. Fuente: pUSD on-chain (hasta bloque 95975641) + data-api + gamma + ledgers. Cifras en pUSD (~ USD).
+Generado 2026-10-22T11:58:55Z por actualizar.py. Fuente: pUSD on-chain (hasta bloque 95976628) + data-api + gamma + ledgers. Cifras en pUSD (~ USD).
 
-Saldo on-chain 26.826677 (2026-10-22T11:33:53Z); capital depositado neto 19.00; cuadre OK (dif 0.0).
+Saldo on-chain 21.906677 (2026-10-22T11:58:33Z); capital depositado neto 19.00; cuadre OK (dif 0.0).
 
 ## PnL por experimento (PnL realizado = mercados con desenlace oficial: payout - coste incl. comision; abiertas aparte, nunca en el realizado)
 
 | experimento | filas | posiciones (liq.) | ganadoras/perdedoras | coste liq. | payout liq. | PnL realizado | PnL sin 2 mejores pos. | EV pond. por EUR | EUR/fila | comisiones | abiertas/pend.: coste | MTM abierto |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | F1 medir_camino_caliente (15-Oct) | 3 | 3 (3) | 3/0 | 20.41 | 21.00 | +0.59 | +0.20 | +0.029 | +0.196 | 0.0428 | 0.00 | 0.00 |
-| H47-B | 178 | 167 (164) | 37/127 | 182.13 | 191.28 | +9.15 | -8.65 | +0.050 | +0.053 | 0.0000 | 1.76 | 0.21 |
+| H47-B | 182 | 171 (171) | 37/134 | 188.81 | 191.28 | +2.47 | -15.33 | +0.013 | +0.014 | 0.0000 | 0.00 | 0.00 |
 | H47-A | 0 | 0 (0) | 0/0 | 0.00 | 0.00 | +0.00 | n/d | n/d | n/d | 0.0000 | 0.00 | 0.00 |
 
 PnL realizado sin las 2 mejores posiciones = trampa 'PnL concentrado en 1-2 episodios' (CLAUDE.md raiz): una muestra de pocos aciertos baratos domina el total.
@@ -38,26 +38,26 @@ PnL realizado sin las 2 mejores posiciones = trampa 'PnL concentrado en 1-2 epis
 | 18 | 2026-10-22T09:05:31Z | 2026-10-22T10:02:03Z | 9 | 9 | 1/8 | 9.69 | -4.70 | -0.485 | -0.522 | 0.00 | 0.00 |
 | 19 | 2026-10-22T10:02:03Z | 2026-10-22T10:37:17Z | 5 | 4 | 0/4 | 4.59 | -4.59 | -1.000 | -0.918 | 0.00 | 0.00 |
 | 20 | 2026-10-22T10:37:17Z | 2026-10-22T11:21:36Z | 10 | 10 | 3/7 | 11.45 | +5.61 | +0.490 | +0.561 | 0.00 | 0.00 |
-| 21 | 2026-10-22T11:21:36Z | abierta | 7 | 3 | 0/3 | 3.22 | -3.22 | -1.000 | -1.073 | 1.76 | 0.21 |
+| 21 | 2026-10-22T11:21:36Z | 2026-10-22T11:42:11Z | 7 | 6 | 0/6 | 4.98 | -4.98 | -1.000 | -0.711 | 0.00 | 0.00 |
+| 22 | 2026-10-22T11:42:11Z | abierta | 4 | 4 | 0/4 | 4.92 | -4.92 | -1.000 | -1.230 | 0.00 | 0.00 |
 
 ## Cuadre
 
 - OK  saldo_movimientos_vs_balanceOf_mismo_bloque: {"diferencia_pusd": 0.0}
-- OK  identidad_efectivo_vs_suma_por_fills(PnL): {"diferencia_pusd": 0.0}
+- OK  identidad_efectivo_vs_suma_por_fills(PnL): {"diferencia_pusd": -0.0}
 - OK  redenciones_onchain_vs_payout_ganadoras_redimidas: {"diferencia_pusd": 0.0}
 - OK  importes_onchain_vs_actividad_por_tx: {"anomalias": []}
 - OK  actividad_sin_transferencia_onchain: {"n": 0}
-- OK  valoracion_abiertas_vs_data_api_value(informativo): {"diferencia_pusd": -0.18688}
+- OK  valoracion_abiertas_vs_data_api_value(informativo): {"diferencia_pusd": -0.151909}
 - OK  sin_ventas_ni_otros_tipos_no_modelados: {}
 - OK  fills_sin_atribuir: {"n": 0}
 
 ## Conciliacion ledger H47-B vs on-chain (acciones por mercado)
 
-Mercados con fill: ledger 162, on-chain 167; acciones ledger 859.580038 vs on-chain 882.977794; discrepancias 5.
+Mercados con fill: ledger 167, on-chain 171; acciones ledger 887.572391 vs on-chain 903.977794; discrepancias 4.
 - eth-updown-5m-1792566300: ledger None vs on-chain 5.0
 - eth-updown-5m-1792654200: ledger None vs on-chain 5.0
 - sol-updown-5m-1792654200: ledger None vs on-chain 5.0
-- sol-updown-5m-1792668600: ledger None vs on-chain 6.992353
 - xrp-updown-5m-1792577700: ledger None vs on-chain 1.405403
 
 ## Limites

@@ -66,13 +66,13 @@ def main(argv=None):
     cerrados, con_fill, ya = {}, set(), set()
     for i in range(a.dias, -1, -1):
         dia = (hoy - timedelta(days=i)).isoformat()
-        for row in S.leer_gz_tolerante(d / f"r3_shadow_{dia}.jsonl.gz"):
+        for row in S.leer_gz_tolerante(d / f"r3_shadow_{dia}.jsonl.gz", tipos=("mkt_fin", "fill")):      # solo 2 tipos de ~10: dec/smp (la mayoria) ni se parsean
             t = row.get("tipo")
             if t == "mkt_fin":
                 cerrados[row["slug"]] = row["cierre"]
             elif t == "fill":
                 con_fill.add(row["slug"])
-        for row in S.leer_gz_tolerante(d / f"r3_desenlaces_{dia}.jsonl.gz"):
+        for row in S.leer_gz_tolerante(d / f"r3_desenlaces_{dia}.jsonl.gz", tipos=("des",)):
             if row.get("tipo") == "des":
                 ya.add(row["slug"])
     pend = [s for s, c in cerrados.items() if s not in ya and c + ESPERA_CIERRE_S < ahora]

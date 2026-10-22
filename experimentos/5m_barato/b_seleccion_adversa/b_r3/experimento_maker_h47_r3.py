@@ -21,7 +21,9 @@ Uso: .venv/bin/python experimentos/5m_barato/b_seleccion_adversa/b_r3/experiment
 import argparse
 import hashlib
 import json
+import queue
 import sys
+import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -39,6 +41,9 @@ B_SHA_REVISADO = "c82f5dc5f304b8a699fa576309f42baf062f46098c0fdd7ce47cb29f435e36
 ESCALON_LEDGER = "B_R3"
 VERSION_R3 = "R3-22oct2026-v1"
 LOG_EVENTOS_R3 = ("puja_post", "repega", "cancela_banda")
+LIBRO15_ANTICIPO_S = 90.0        # el 15m SIGUIENTE se prepara (gamma + WS) 90 s antes de empezar: B lanza el 5m 30 s antes de abrir
+LIBRO15_PERIODO_S = 1.0          # cadencia del hilo de preparacion (fuera del bucle de decision)
+LIBRO15_BACKOFF_S = (2.0, 5.0, 15.0)     # reintentos tras un fallo de gamma/WS (el ultimo se repite)
 
 
 def sha_b():
@@ -92,6 +97,15 @@ class Exp47R3(H.Exp47):
         self._r3_ctx = None
         self._r3_ultimo = None
         self._r3_err = 0
+        # libros 15m COMPARTIDOS por (moneda, inicio del 15m): los 3 mercados 5m de una ventana de 15m usan el mismo; se crean en un hilo aparte, NUNCA en el bucle de decision
+        self._lib15 = {}                 # (coin, ini15) -> {"lib": X.Libro, "m15": {up, down, slug}, "t": creado}
+        self._lk15 = threading.Lock()
+        self._fallo15 = {}               # (coin, ini15) -> (n fallos, proximo intento)
+        self._ev15 = queue.SimpleQueue() # eventos del hilo -> ledger, escritos por el hilo principal (el ledger no es seguro entre hilos)
+        self._stop15 = threading.Event()
+        self._hilo15 = None
+        self._fetch15 = mercado_15m                              # inyectables en tests (sin red)
+        self._nuevo_libro15 = lambda toks: X.Libro(toks)
         super().__init__(real, escalon, n_max, t_stop, size, min_nocional, monedas, presupuesto, max_vivas)
 
     # -- ledger: etiqueta de variante y rasgos de la regla en cada decision
@@ -104,28 +118,129 @@ class Exp47R3(H.Exp47):
             ev.update({"regla": self.regla, "version_r3": VERSION_R3, "b_sha": sha_b()[:16], "r2_max_mils": RR.R2_MAX_MILS, "vol30_min": RR.VOL30_MIN, "hora_min": RR.HORA_MIN})
         super()._log47(ev)
 
-    # -- contexto: libro del 15m del mismo mercado
+    # -- libros 15m: hilo de preparacion (gamma + WS) fuera del bucle de decision, compartidos por (moneda, ini15), con reintentos
+    def claves15(self, ahora):
+        cur = int(ahora // 900 * 900)
+        ks = [(coin, cur) for coin in self.monedas]
+        if ahora >= cur + 900 - LIBRO15_ANTICIPO_S:
+            ks += [(coin, cur + 900) for coin in self.monedas]
+        return ks
+
+    @staticmethod
+    def _libro_vivo(lib):
+        try:
+            return bool(lib.hilo.is_alive()) and lib.error is None
+        except Exception:
+            return False
+
+    def preparar_libros15(self, ahora):
+        """Crea los libros 15m que faltan (o cuyo hilo WS murio) y limpia los de ventanas pasadas. Sincrono (lo llama el hilo `_bucle15`; tests, directamente).
+        Fallos: backoff 2/5/15 s y evento `r3_sin_libro15` (1.o, 5.o y 20.o fallo); nunca lanza por un fallo de red. Devuelve cuantos libros creo."""
+        creados = 0
+        for k in self.claves15(ahora):
+            with self._lk15:
+                e = self._lib15.get(k)
+            if e is not None:
+                if self._libro_vivo(e["lib"]):
+                    continue
+                with self._lk15:
+                    self._lib15.pop(k, None)
+                try:
+                    e["lib"].parar = True
+                except Exception:
+                    pass
+                self._ev15.put({"tipo": "r3_libro15_muerto", "coin": k[0], "ini15": k[1]})
+            n_f, prox = self._fallo15.get(k, (0, 0.0))
+            if ahora < prox:
+                continue
+            try:
+                m15 = self._fetch15(k[0], k[1])
+                if not m15:
+                    raise LookupError("15m no listado todavia en gamma")
+                lib = self._nuevo_libro15([m15["up"], m15["down"]])
+            except Exception as ex:
+                n_f += 1
+                self._fallo15[k] = (n_f, ahora + LIBRO15_BACKOFF_S[min(n_f, len(LIBRO15_BACKOFF_S)) - 1])
+                if n_f in (1, 5, 20):
+                    self._ev15.put({"tipo": "r3_sin_libro15", "coin": k[0], "ini15": k[1], "n": n_f, "e": f"{type(ex).__name__}: {str(ex)[:120]}"})
+                continue
+            with self._lk15:
+                self._lib15[k] = {"lib": lib, "m15": m15, "t": ahora}
+            self._fallo15.pop(k, None)
+            self._ev15.put({"tipo": "r3_libro15", "coin": k[0], "ini15": k[1], "slug": m15.get("slug"), "intentos": n_f + 1})
+            creados += 1
+        with self._lk15:
+            viejos = [k for k in self._lib15 if k[1] + 900 < ahora - 60]
+            libs = [self._lib15.pop(k)["lib"] for k in viejos]
+        for lib in libs:
+            try:
+                lib.parar = True
+            except Exception:
+                pass
+        for k in [k for k in self._fallo15 if k[1] + 900 < ahora - 60]:
+            del self._fallo15[k]
+        return creados
+
+    def _bucle15(self):
+        while not self._stop15.wait(LIBRO15_PERIODO_S):
+            try:
+                self.preparar_libros15(time.time())
+            except Exception as ex:                                  # el hilo no muere: lo registra y sigue
+                self._ev15.put({"tipo": "r3_error_hilo15", "e": f"{type(ex).__name__}: {str(ex)[:120]}"})
+
+    def _drenar_ev15(self):
+        """Pasa al ledger (hilo principal) los eventos del hilo de libros 15m."""
+        try:
+            while True:
+                self._log47(self._ev15.get_nowait())
+        except queue.Empty:
+            pass
+
+    def lanzar_mercados(self, ahora):
+        self._drenar_ev15()
+        return super().lanzar_mercados(ahora)
+
+    def run(self, duracion_max_s=None):
+        self._hilo15 = threading.Thread(target=self._bucle15, daemon=True, name="r3_libros15")
+        self._hilo15.start()
+        try:
+            return super().run(duracion_max_s)
+        finally:
+            self._stop15.set()
+            self._hilo15.join(timeout=3)
+            with self._lk15:
+                libs = [e["lib"] for e in self._lib15.values()]
+                self._lib15.clear()
+            for lib in libs:
+                try:
+                    lib.parar = True
+                except Exception:
+                    pass
+            self._drenar_ev15()
+
+    # -- contexto: el libro del 15m se ADJUNTA (lookup sin red) en vez de crearse aqui
     def crear_ctx(self, coin, mk):
         c = super().crear_ctx(coin, mk)
         if c is None:
             return None
         c.lib15, c.tok15 = None, {}
-        try:
-            m15 = mercado_15m(coin, int(mk["ini"]) // 900 * 900)
-            if m15:
-                c.lib15 = X.Libro([m15["up"], m15["down"]])
-                c.tok15 = {c.up: m15["up"], c.dn: m15["down"]}
-        except Exception as ex:
-            c.lib15 = None
-            self._log47({"tipo": "r3_sin_libro15", "slug": mk["slug"], "e": f"{type(ex).__name__}: {str(ex)[:120]}"})
+        c.k15 = (coin, int(mk["ini"]) // 900 * 900)
+        self._adjuntar15(c)
         return c
 
+    def _adjuntar15(self, c):
+        """Si el hilo ya tiene el libro 15m de este contexto (o lo ha recreado), lo adjunta; si no, el contexto sigue sin 15m => la regla NO cotiza (fail-closed)."""
+        k = getattr(c, "k15", None)
+        if k is None:
+            return
+        with self._lk15:
+            e = self._lib15.get(k)
+        if e is not None and c.lib15 is not e["lib"]:
+            c.lib15 = e["lib"]
+            c.tok15 = {c.up: e["m15"]["up"], c.dn: e["m15"]["down"]}
+
     def liberar_ctx(self, c):
-        try:
-            if getattr(c, "lib15", None) is not None:
-                c.lib15.parar = True
-        except Exception:
-            pass
+        c.lib15 = None                                               # el libro 15m es COMPARTIDO: lo cierra el hilo al caducar la ventana, no un 5m que termina
         super().liberar_ctx(c)
 
     # -- la regla, aplicada al objetivo de B
@@ -133,6 +248,7 @@ class Exp47R3(H.Exp47):
         """(ok, info). Nunca lanza: cualquier fallo => (False, info con motivo)."""
         info = {"slug": c.mk["slug"], "regla": self.regla, "obj": obj, "ok": False, "motivo": None, "v": VERSION_R3}
         try:
+            self._adjuntar15(c)
             l15 = getattr(c, "lib15", None)
             f = {"fresco": False, "b15m": None, "cruzado15": False, "objm": H.mils(obj), "vol30": vol30(c, now), "hora": hora_utc(now)}
             if l15 is not None and tok in c.tok15:
@@ -153,6 +269,7 @@ class Exp47R3(H.Exp47):
     def decidir(self, c, T, ahora):
         orig = H.objetivo_h35
         self._r3_ctx = (c, ahora)
+        self._r3_ultimo = None                                       # sin evaluacion rancia de un ciclo/mercado anterior: lo que se loguee o autorice sale de ESTE decidir
 
         def objetivo_con_regla(bid, ask, k):
             o = orig(bid, ask, k)
@@ -173,10 +290,13 @@ class Exp47R3(H.Exp47):
         finally:
             H.objetivo_h35 = orig
             self._r3_ctx = None
+            self._r3_ultimo = None
 
     def post(self, slug, tok, lado, precio, size, cola, **kw):
         """Antes de cualquier POST (real o seco) queda en el ledger la decision con los rasgos de la regla (bid15 al pujar)."""
         u = self._r3_ultimo if (self._r3_ultimo and self._r3_ultimo.get("slug") == slug) else {"slug": slug, "ok": False, "motivo": "sin_evaluacion"}
+        if u.get("ok") and (u.get("obj") is None or abs(float(u["obj"]) - float(precio)) > 1e-9):
+            u = dict(u, ok=False, motivo="obj_distinto_precio", precio_post=precio)    # la evaluacion es de OTRO objetivo: no autoriza este precio
         if not u.get("ok"):                                           # defensa en profundidad: nunca se envia con la regla en falso
             self._log47({"tipo": "r3_bloqueo_post", "slug": slug, "precio": precio, "r3": u})
             return None

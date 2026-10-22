@@ -1,12 +1,12 @@
 {
  "schema_version": 1,
- "generado_utc": "2026-10-22T11:34:16Z",
+ "generado_utc": "2026-10-22T11:58:55Z",
  "wallet": "0x659a40FF9920fEBc5a66836213040924343d297F",
  "saldo": {
-  "pusd_onchain": 26.826677,
-  "bloque": 95975641,
-  "ts_utc": "2026-10-22T11:33:53Z",
-  "suma_movimientos": 26.826677
+  "pusd_onchain": 21.906677,
+  "bloque": 95976628,
+  "ts_utc": "2026-10-22T11:58:33Z",
+  "suma_movimientos": 21.906677
  },
  "capital": {
   "depositos": 19.0,
@@ -14,17 +14,17 @@
   "depositado_neto": 19.0
  },
  "pnl": {
-  "realizado_total": 9.738953,
-  "no_realizado_mtm": -1.550596,
-  "total_efectivo_mas_posiciones": 8.188357,
-  "saldo_menos_capital_neto": 7.826677,
+  "realizado_total": 3.058586,
+  "no_realizado_mtm": 0,
+  "total_efectivo_mas_posiciones": 3.058586,
+  "saldo_menos_capital_neto": 2.906677,
   "ganadoras_por_redimir_pusd": 0.151909,
   "comisiones_pagadas": 0.04275,
-  "n_filas_fill": 181,
-  "n_posiciones": 170,
-  "euro_por_fila_liquidada": 0.055022,
-  "euro_por_posicion_liquidada": 0.058317,
-  "ev_ponderado_por_euro": 0.048084
+  "n_filas_fill": 185,
+  "n_posiciones": 174,
+  "euro_por_fila_liquidada": 0.016533,
+  "euro_por_posicion_liquidada": 0.017578,
+  "ev_ponderado_por_euro": 0.014619
  },
  "por_experimento": [
   {
@@ -52,27 +52,27 @@
    "experimento": "F1 medir_camino_caliente (15-Oct)"
   },
   {
-   "pnl_realizado_sin_2_mejores_posiciones": -8.648297,
-   "n_filas": 178,
-   "n_posiciones": 167,
-   "n_posiciones_liquidadas": 164,
-   "n_filas_liquidadas": 174,
-   "n_filas_abiertas_o_pendientes": 4,
+   "pnl_realizado_sin_2_mejores_posiciones": -15.328664,
+   "n_filas": 182,
+   "n_posiciones": 171,
+   "n_posiciones_liquidadas": 171,
+   "n_filas_liquidadas": 182,
+   "n_filas_abiertas_o_pendientes": 0,
    "ganadoras_posiciones": 37,
-   "perdedoras_posiciones": 127,
-   "acciones": 882.977794,
-   "coste_total": 183.886539,
-   "coste_liquidado": 182.126172,
+   "perdedoras_posiciones": 134,
+   "acciones": 903.977794,
+   "coste_total": 188.806539,
+   "coste_liquidado": 188.806539,
    "payout_liquidado": 191.277875,
-   "pnl_realizado": 9.151703,
+   "pnl_realizado": 2.471336,
    "comisiones": 0.0,
-   "coste_abierto_pendiente": 1.760367,
-   "valor_mtm_abierto": 0.209771,
-   "pnl_no_realizado_mtm": -1.550596,
+   "coste_abierto_pendiente": 0,
+   "valor_mtm_abierto": 0,
+   "pnl_no_realizado_mtm": 0,
    "mtm_faltante": 0,
-   "ev_ponderado_por_euro": 0.050249,
-   "euro_por_fila": 0.052596,
-   "euro_por_posicion": 0.055803,
+   "ev_ponderado_por_euro": 0.013089,
+   "euro_por_fila": 0.013579,
+   "euro_por_posicion": 0.014452,
    "experimento": "H47-B"
   },
   {
@@ -643,84 +643,66 @@
    "origen": "tanda 19 de 5 USD agotada; siguiente ronda, OK Javi"
   },
   {
-   "pnl_realizado_sin_2_mejores_posiciones": -1.3,
+   "pnl_realizado_sin_2_mejores_posiciones": -4.268853,
    "n_filas": 7,
    "n_posiciones": 6,
-   "n_posiciones_liquidadas": 3,
-   "n_filas_liquidadas": 3,
-   "n_filas_abiertas_o_pendientes": 4,
+   "n_posiciones_liquidadas": 6,
+   "n_filas_liquidadas": 7,
+   "n_filas_abiertas_o_pendientes": 0,
    "ganadoras_posiciones": 0,
-   "perdedoras_posiciones": 3,
+   "perdedoras_posiciones": 6,
    "acciones": 27.900662,
    "coste_total": 4.980367,
-   "coste_liquidado": 3.22,
+   "coste_liquidado": 4.980367,
    "payout_liquidado": 0.0,
-   "pnl_realizado": -3.22,
+   "pnl_realizado": -4.980367,
    "comisiones": 0.0,
-   "coste_abierto_pendiente": 1.760367,
-   "valor_mtm_abierto": 0.209771,
-   "pnl_no_realizado_mtm": -1.550596,
+   "coste_abierto_pendiente": 0,
+   "valor_mtm_abierto": 0,
+   "pnl_no_realizado_mtm": 0,
    "mtm_faltante": 0,
    "ev_ponderado_por_euro": -1.0,
-   "euro_por_fila": -1.073333,
-   "euro_por_posicion": -1.073333,
+   "euro_por_fila": -0.711481,
+   "euro_por_posicion": -0.830061,
    "tanda": 21,
    "inicio_utc": "2026-10-22T11:21:36Z",
-   "fin_utc": null,
+   "fin_utc": "2026-10-22T11:42:11Z",
    "origen": "tanda 20 de 5 USD agotada; siguiente ronda, OK Javi"
+  },
+  {
+   "pnl_realizado_sin_2_mejores_posiciones": -2.8,
+   "n_filas": 4,
+   "n_posiciones": 4,
+   "n_posiciones_liquidadas": 4,
+   "n_filas_liquidadas": 4,
+   "n_filas_abiertas_o_pendientes": 0,
+   "ganadoras_posiciones": 0,
+   "perdedoras_posiciones": 4,
+   "acciones": 21,
+   "coste_total": 4.92,
+   "coste_liquidado": 4.92,
+   "payout_liquidado": 0.0,
+   "pnl_realizado": -4.92,
+   "comisiones": 0.0,
+   "coste_abierto_pendiente": 0,
+   "valor_mtm_abierto": 0,
+   "pnl_no_realizado_mtm": 0,
+   "mtm_faltante": 0,
+   "ev_ponderado_por_euro": -1.0,
+   "euro_por_fila": -1.23,
+   "euro_por_posicion": -1.23,
+   "tanda": 22,
+   "inicio_utc": "2026-10-22T11:42:11Z",
+   "fin_utc": null,
+   "origen": "tanda 21 de 5 USD agotada; siguiente ronda, OK Javi"
   }
  ],
  "posiciones_abiertas": {
-  "n_filas": 4,
-  "coste": 1.760367,
-  "valor_mtm": 0.209771,
-  "valor_data_api_value": 0.1748,
-  "detalle": [
-   {
-    "mercado": "sol-updown-5m-1792668300",
-    "outcome": "Down",
-    "acciones": 2.56,
-    "coste": 0.5632,
-    "mtm_precio": 0,
-    "valor_mtm": 0.0,
-    "estado": "pendiente_desenlace",
-    "experimento": "H47-B",
-    "tanda_B": 21
-   },
-   {
-    "mercado": "xrp-updown-5m-1792668300",
-    "outcome": "Down",
-    "acciones": 1.348309,
-    "coste": 0.148314,
-    "mtm_precio": 0,
-    "valor_mtm": 0.0,
-    "estado": "abierta",
-    "experimento": "H47-B",
-    "tanda_B": 21
-   },
-   {
-    "mercado": "sol-updown-5m-1792668600",
-    "outcome": "Down",
-    "acciones": 0.71,
-    "coste": 0.1065,
-    "mtm_precio": 0.03,
-    "valor_mtm": 0.0213,
-    "estado": "abierta",
-    "experimento": "H47-B",
-    "tanda_B": 21
-   },
-   {
-    "mercado": "sol-updown-5m-1792668600",
-    "outcome": "Down",
-    "acciones": 6.282353,
-    "coste": 0.942353,
-    "mtm_precio": 0.03,
-    "valor_mtm": 0.188471,
-    "estado": "abierta",
-    "experimento": "H47-B",
-    "tanda_B": 21
-   }
-  ]
+  "n_filas": 0,
+  "coste": 0,
+  "valor_mtm": 0,
+  "valor_data_api_value": 0,
+  "detalle": []
  },
  "cuadre": {
   "ok": true,
@@ -736,7 +718,7 @@
    {
     "nombre": "identidad_efectivo_vs_suma_por_fills(PnL)",
     "ok": true,
-    "diferencia_pusd": 0.0
+    "diferencia_pusd": -0.0
    },
    {
     "nombre": "redenciones_onchain_vs_payout_ganadoras_redimidas",
@@ -756,7 +738,7 @@
    {
     "nombre": "valoracion_abiertas_vs_data_api_value(informativo)",
     "ok": true,
-    "diferencia_pusd": -0.18688
+    "diferencia_pusd": -0.151909
    },
    {
     "nombre": "sin_ventas_ni_otros_tipos_no_modelados",
@@ -773,15 +755,15 @@
   "onchain": {
    "metodo": "completo_desde_bloque_0",
    "desde_bloque": 0,
-   "hasta_bloque": 95975641,
-   "transferencias_pusd_wallet": 221,
+   "hasta_bloque": 95976628,
+   "transferencias_pusd_wallet": 225,
    "duplicados_descartados": 0,
    "primer_movimiento_utc": "2026-10-09T15:28:52Z",
-   "ultimo_movimiento_utc": "2026-10-22T11:32:02Z"
+   "ultimo_movimiento_utc": "2026-10-22T11:53:56Z"
   },
   "desenlaces_inferidos_de_redeem": 0,
   "actividad_data_api": {
-   "filas": 220,
+   "filas": 224,
    "tipos": [
     "REDEEM",
     "TRADE"
@@ -789,23 +771,60 @@
    "ventana": "ventanas diarias desde 2026-10-01 (wallet sin movimientos antes del 09-Oct segun on-chain)"
   },
   "desenlaces_gamma": {
-   "mercados": 170,
-   "resueltos": 167,
-   "otros": {
-    "abierto": 2,
-    "desconocido": 1
-   }
+   "mercados": 174,
+   "resueltos": 174,
+   "otros": {}
   },
   "rewards_y_rebates": "ninguna entrada de pUSD distinta de depositos y redenciones observada; si Polymarket paga rebates/rewards de maker fuera de esta wallet o con retraso NO es verificable aqui",
   "conciliacion_ledger_B": {
-   "mercados_con_fill_en_ledger": 162,
-   "mercados_con_fill_onchain": 167,
-   "acciones_ledger": 859.580038,
-   "acciones_onchain": 882.977794,
-   "n_discrepancias": 5
+   "mercados_con_fill_en_ledger": 167,
+   "mercados_con_fill_onchain": 171,
+   "acciones_ledger": 887.572391,
+   "acciones_onchain": 903.977794,
+   "n_discrepancias": 4
   }
  },
  "ultimos_movimientos": [
+  {
+   "fecha_utc": "2026-10-22T11:53:56Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.4,
+   "saldo_acumulado": 21.906677,
+   "mercado": "eth-updown-5m-1792669800",
+   "experimento": "H47-B",
+   "tanda_B": 22,
+   "tx": "0xea7c7547a88658a7968ad36d2f92166e268b62dd424ce3fe046221d8f3a5f30c"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:47:21Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.1,
+   "saldo_acumulado": 23.306677,
+   "mercado": "sol-updown-5m-1792669500",
+   "experimento": "H47-B",
+   "tanda_B": 22,
+   "tx": "0xd1b7ed7bed38880f303c01243a60a0a0b641a2a4943e97980b9f138e6e6cad5b"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:47:08Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.02,
+   "saldo_acumulado": 24.406677,
+   "mercado": "xrp-updown-5m-1792669500",
+   "experimento": "H47-B",
+   "tanda_B": 22,
+   "tx": "0x2648fa63d492b7b540fb200c03d1be0ed91c9660776a8ee11ae38cef3915a25b"
+  },
+  {
+   "fecha_utc": "2026-10-22T11:46:36Z",
+   "tipo": "COMPRA",
+   "importe_pusd": -1.4,
+   "saldo_acumulado": 25.426677,
+   "mercado": "eth-updown-5m-1792669500",
+   "experimento": "H47-B",
+   "tanda_B": 22,
+   "tx": "0x56e3ecedebc10d1156a1ab56df9ffd1db0b69a4e1b8378493e6e92f0fd26be25"
+  },
   {
    "fecha_utc": "2026-10-22T11:32:02Z",
    "tipo": "COMPRA",
@@ -1265,46 +1284,6 @@
    "experimento": "H47-B",
    "tanda_B": 16,
    "tx": "0xa9245e662c3b44da646aeb3468818cbe5ce94add0e3b295f55ba51d68a3f7505"
-  },
-  {
-   "fecha_utc": "2026-10-22T08:10:38Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -0.708139,
-   "saldo_acumulado": 41.223317,
-   "mercado": "sol-updown-5m-1792656600",
-   "experimento": "H47-B",
-   "tanda_B": 16,
-   "tx": "0xdbe17121564383e17b3c71fc75906773cc095bc32e68df0254d48345a93d8c45"
-  },
-  {
-   "fecha_utc": "2026-10-22T08:10:12Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -1.05,
-   "saldo_acumulado": 41.931456,
-   "mercado": "eth-updown-5m-1792656600",
-   "experimento": "H47-B",
-   "tanda_B": 16,
-   "tx": "0xb38b3fedeea3a7e49018292299992560d39d5c4add71597ef05b59bd0b48953e"
-  },
-  {
-   "fecha_utc": "2026-10-22T08:02:05Z",
-   "tipo": "COMPRA",
-   "importe_pusd": -0.456757,
-   "saldo_acumulado": 42.981456,
-   "mercado": "eth-updown-5m-1792656000",
-   "experimento": "H47-B",
-   "tanda_B": 16,
-   "tx": "0x051c52d7e2bf6c74fa5cb3f152929d98cb54817d9959a637f03d58572d8c9fb2"
-  },
-  {
-   "fecha_utc": "2026-10-22T08:01:32Z",
-   "tipo": "REDENCION",
-   "importe_pusd": 5.0,
-   "saldo_acumulado": 43.438213,
-   "mercado": "eth-updown-5m-1792655700",
-   "experimento": "H47-B",
-   "tanda_B": 16,
-   "tx": "0x39027244f0b1d27220fa3d9b490cacfb25a7051befa74e928df32595944c774a"
   }
  ],
  "serie_diaria": [
@@ -1414,11 +1393,11 @@
   },
   {
    "fecha": "2026-10-22",
-   "saldo_cierre_pusd": 26.826677,
+   "saldo_cierre_pusd": 21.906677,
    "depositos_acum": 19.0,
-   "pnl_liquidado_dia": -6.861171,
-   "pnl_liquidado_acum": 9.738953,
-   "n_movimientos": 72
+   "pnl_liquidado_dia": -13.541538,
+   "pnl_liquidado_acum": 3.058586,
+   "n_movimientos": 76
   }
  ],
  "no_atribuido": {

@@ -25,7 +25,7 @@ import math
 from collections import deque
 from datetime import datetime, timezone
 
-VERSION = 1
+VERSION = 2          # v2 (22-Oct, post /code-review): tick solo de tokens 5m, topes de B (vivas/puja/total), corte arranque_tarde derivado de PRE_S
 K_POR_MONEDA = {"eth": 2, "sol": 1, "xrp": 1}
 T_INI, T_STOP = 298.0, 60.0
 LAT_POST_S, LAT_CANCEL_S = 0.07, 0.06
@@ -44,6 +44,14 @@ POLITICAS = ("BASE", "R2", "R3")
 ESCENARIOS = {"cons_x": ("x", False), "cons_r": ("r", False), "opt_x": ("x", True)}   # clave -> (reloj, cola_cero)
 ESC_PRIMARIO = "cons_x"
 MUESTREO_S = 5.0
+# --- topes de B (experimento_maker_h47.py: MAX_VIVAS, MAX_ORDENES_PUJA, MAX_ORDENES_TOTAL). test_topes_de_b_identicos las compara con el modulo de B (si B cambia, falla).
+MAX_VIVAS = 5                     # ordenes vivas + canceladas sin asentar a la vez (por politica x escenario, TODOS los mercados) y pujas de OTROS mercados al abrir una
+MAX_ORDENES_PUJA, MAX_ORDENES_TOTAL = 400, 20000    # ordenes por puja; total: B lo cuenta en toda su ejecucion (<= 500 pujas); aqui el proceso es perpetuo => POR DIA UTC y por (politica, escenario)
+# NO aplicables en un brazo virtual: enfriar_tok (cooldown tras un 4xx REAL del exchange), 5 rechazos seguidos, saldo/suelo/presupuesto (dinero), N=500 pujas.
+# --- cobertura de la vigilancia: el brazo se suscribe PRE_S s antes de abrir el 5m (r3_shadow.PRE_S la reexporta)
+PRE_S = 25
+ARRANQUE_TOL_S = float(PRE_S)     # tolerancia sobre la suscripcion prevista (ini - PRE_S): corte = ini - PRE_S + ARRANQUE_TOL_S = la APERTURA (ini). Un mercado que se empieza a vigilar
+                                  # despues de abrir no tiene la ventana de vol30 ni el libro de las primeras decisiones (T=298 es ini+2 s): queda `arranque_tarde` => completo=false.
 
 
 # ------------------------------------------------------------------ reglas puras (copia de experimento_maker_h47; ver test_gemelo_identico_a_b)
@@ -109,7 +117,11 @@ def _r(x, n=4):
 
 # ------------------------------------------------------------------ libro L2 (formato del WS de mercado del CLOB; mismo parseo que X.Libro de B)
 class Libro:
-    def __init__(self, toks):
+    def __init__(self, toks, toks5=None):
+        """`toks5` = tokens del mercado 5m (los unicos que B vigila): un `tick_size_change` de ellos para el mercado; el de un token 15m (cerca de 0/1 cambia a 0,001) NO.
+        Sin `toks5` (tests/uso simple) todos los tokens cuentan como 5m."""
+        self.toks5 = frozenset(toks if toks5 is None else toks5)
+        self.tick15_cambiado = False            # informativo: un tick distinto en el 15m (b15 extremo), no para el mercado
         self.L = {t: {"bids": {}, "asks": {}} for t in toks}
         self.snap = set()                       # tokens con snapshot desde la ultima (re)conexion
         self.trades = {t: [] for t in toks}     # (recepcion_s, hora_exchange_s, precio, tamano, lado_TOMADOR)
@@ -125,7 +137,10 @@ class Libro:
         et = m.get("event_type")
         tk = m.get("asset_id")
         if et == "tick_size_change" and tk in self.L:
-            self.tick_cambiado = True
+            if tk in self.toks5:
+                self.tick_cambiado = True
+            else:
+                self.tick15_cambiado = True
             return False
         if et == "last_trade_price" and tk in self.L:
             try:
@@ -222,7 +237,7 @@ class Mercado:
         self.par = {self.up: self.dn, self.dn: self.up}
         self.lado = {self.up: "YES", self.dn: "NO"}
         self.t15 = {self.up: self.u15, self.dn: self.d15}
-        self.lib = Libro([self.up, self.dn, self.u15, self.d15])
+        self.lib = Libro([self.up, self.dn, self.u15, self.d15], toks5=(self.up, self.dn))
         self.t_conexion = None          # recepcion del primer mensaje con libro (ventana de vol30 valida 30 s despues)
         self.ult_msg = 0.0
         self.vol = deque()              # (recepcion_s, tamano) de last_trade_price de los 2 tokens 5m
@@ -230,8 +245,9 @@ class Mercado:
         self.reconex = 0
         self.huecos = 0
         self.parar_motivo = None
-        self.arranque_tarde = (t_ms_ahora / 1000.0) > (self.ini - 20) + 25.0      # se empezo a vigilar > 25 s tras lo previsto
+        self.arranque_tarde = (t_ms_ahora / 1000.0) > (self.ini - PRE_S) + ARRANQUE_TOL_S      # se empezo a vigilar despues de la apertura (ver ARRANQUE_TOL_S)
         self.traders = [Trader(p, e) for p in POLITICAS for e in ESCENARIOS]
+        self.tr = {(t.pol, t.esc): t for t in self.traders}
         self.ult_smp = 0.0
         self.n_smp = 0
         self.cerrado = False
@@ -357,6 +373,27 @@ class Trader:
         self.motivo_prev = "__ini__"
         self.fin_puja = None
         self.fills = 0
+        self.bloq = {}                  # motivo -> {"ep": episodios (transiciones a bloqueado), "ticks": decisiones bloqueadas, "repost": de ellos, cuantos eran repegados}
+
+    def en_libro(self):
+        """Como Exp47.pujas_en_libro de B: orden viva, cancelacion sin asentar, o puja activa (ya posteada, sin cerrar ni parar) pendiente de reponer."""
+        return self.orden is not None or bool(self.pend) or (self.tok is not None and self.n_post > 0 and not self.cerrado and not self.parado)
+
+    def n_ordenes_vivas(self):
+        return (1 if self.orden is not None else 0) + len(self.pend)
+
+    def _bloquear(self, m, now, emit, nuc, tok, f, motivo, extra=None):
+        """Tope de B que habria impedido esta (re)puja: se cuenta (episodios y ticks) y se loguea una vez por episodio (dedupe por motivo_prev)."""
+        b = self.bloq.setdefault(motivo, {"ep": 0, "ticks": 0, "repost": 0})
+        b["ticks"] += 1
+        if self.n_post > 0:
+            b["repost"] += 1
+        if self.motivo_prev != motivo:
+            self.motivo_prev = motivo
+            b["ep"] += 1
+            if nuc is not None:
+                nuc.stats["bloq_" + motivo] = nuc.stats.get("bloq_" + motivo, 0) + 1
+            self._dec(m, now, emit, "no_cotiza", tok, f, motivo, dict(extra or {}, repost=self.n_post > 0, n_post=self.n_post))
 
     # -- helpers de log
     def _dec(self, m, now, emit, accion, tok, f, motivo=None, extra=None):
@@ -394,7 +431,7 @@ class Trader:
                   "feat_post": _fl(o.get("feat_post")), "feat_det": _fl(o.get("feat_det")), "motivo_cancel": o.get("motivo_cancel")})
 
     # -- ciclo (10 Hz, como el LOOP_S=0,1 de B)
-    def paso(self, m, now, emit):
+    def paso(self, m, now, emit, nuc=None):
         T = m.fin - now
         poll = (now - self.ult_poll) >= POLL_S
         if poll:
@@ -421,9 +458,9 @@ class Trader:
                 self._cancelar(m, now, emit, motivo_parada)
         if self.parado or self.cerrado or T > T_INI:
             return
-        self._decidir(m, T, now, emit)
+        self._decidir(m, T, now, emit, nuc)
 
-    def _decidir(self, m, T, now, emit):
+    def _decidir(self, m, T, now, emit, nuc=None):
         tok = self.tok or m.elegir_cara()
         if tok is None:
             return
@@ -459,6 +496,21 @@ class Trader:
             return
         if now - self.t_accion < MIN_ENTRE_ACCIONES_S or T <= T_STOP + 2:
             return
+        # --- topes de B (mismo orden que Exp47.decidir): pujas de OTROS mercados al abrir la primera de este, ordenes vivas+canceladas, por puja, total
+        if self.n_post == 0 and nuc is not None:
+            otras = nuc.pujas_otras(self.pol, self.esc, m.slug)
+            if otras >= MAX_VIVAS:
+                return self._bloquear(m, now, emit, nuc, tok, f, "tope_vivas_pujas", {"otras": otras})
+        if nuc is not None:
+            vivas = nuc.ordenes_vivas(self.pol, self.esc)
+            if vivas >= MAX_VIVAS:
+                return self._bloquear(m, now, emit, nuc, tok, f, "tope_vivas", {"vivas": vivas})
+        if self.n_post >= MAX_ORDENES_PUJA:
+            self.cerrado = True                       # B: c.fin_puja = "tope_ordenes"; e["cerrado"] = True
+            self.fin_puja = self.fin_puja or "tope_ordenes"
+            return self._bloquear(m, now, emit, nuc, tok, f, "tope_ordenes_puja")
+        if nuc is not None and nuc.total_dia(self.pol, self.esc, now) >= MAX_ORDENES_TOTAL:
+            return self._bloquear(m, now, emit, nuc, tok, f, "tope_ordenes_total")
         size = tamano_orden(obj)
         if size is None:
             if self.motivo_prev != "tamano":
@@ -467,6 +519,8 @@ class Trader:
             return
         cola = 0.0 if self.cola_cero else m.lib.nivel(tok, obj)
         self.n_post += 1
+        if nuc is not None:
+            nuc.contar_post(self.pol, self.esc, now)
         self.tok = self.tok or tok
         self.orden = {"tok": tok, "precio": obj, "size": size, "t_post": now, "cola": cola, "f": 0.0, "n": self.n_post, "feat_post": f, "t_det": None}
         self.t_accion = now
@@ -487,6 +541,26 @@ class Nucleo:
         self.prueba = prueba
         self.mercados = {}
         self.stats = {}
+        self.posts_dia = {}             # (pol, esc, dia UTC) -> ordenes enviadas (virtuales); se pierde al reiniciar (sesgo: menos bloqueos)
+
+    # -- carga de (politica, escenario) en TODOS los mercados abiertos: los topes de B son globales a la ejecucion
+    def _trs(self, pol, esc):
+        return [m.tr[(pol, esc)] for m in self.mercados.values() if not m.cerrado]
+
+    def pujas_otras(self, pol, esc, slug):
+        return sum(1 for m in self.mercados.values() if not m.cerrado and m.slug != slug and m.tr[(pol, esc)].en_libro())
+
+    def ordenes_vivas(self, pol, esc):
+        return sum(t.n_ordenes_vivas() for t in self._trs(pol, esc))
+
+    def total_dia(self, pol, esc, now):
+        return self.posts_dia.get((pol, esc, datetime.fromtimestamp(now, timezone.utc).date().isoformat()), 0)
+
+    def contar_post(self, pol, esc, now):
+        k = (pol, esc, datetime.fromtimestamp(now, timezone.utc).date().isoformat())
+        self.posts_dia[k] = self.posts_dia.get(k, 0) + 1
+        for kk in [kk for kk in self.posts_dia if kk[2] < k[2]]:        # solo el dia vigente
+            del self.posts_dia[kk]
 
     def emit(self, row):
         k = row["k"]
@@ -519,7 +593,7 @@ class Nucleo:
                 m.huecos += 1
             for tr in m.traders:
                 try:
-                    tr.paso(m, now, self.emit)
+                    tr.paso(m, now, self.emit, self)
                 except Exception as e:                       # una excepcion no mata el proceso: se registra y ese trader se para
                     tr.parado = True
                     self.stats["error_trader"] = self.stats.get("error_trader", 0) + 1
@@ -554,7 +628,7 @@ class Nucleo:
         m.cerrado = True
         for tr in m.traders:
             self.emit({"k": f"fin_t|{m.slug}|{tr.pol}|{tr.esc}", "tipo": "fin_t", "r": int(now * 1000), "slug": m.slug, "coin": m.coin, "pol": tr.pol, "esc": tr.esc,
-                       "n_post": tr.n_post, "acc": round(tr.llenas, 4), "coste": round(tr.coste, 4), "fin_puja": tr.fin_puja,
+                       "n_post": tr.n_post, "acc": round(tr.llenas, 4), "coste": round(tr.coste, 4), "fin_puja": tr.fin_puja, "bloq": tr.bloq or None,
                        "lado": m.lado.get(tr.tok) if tr.tok else None})
         completo = (not m.arranque_tarde) and m.huecos == 0 and m.parar_motivo is None and motivo is None
         self.emit({"k": f"mkt_fin|{m.slug}", "tipo": "mkt_fin", "r": int(now * 1000), "slug": m.slug, "coin": m.coin, "cierre": m.fin, "completo": completo,
