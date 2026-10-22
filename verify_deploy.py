@@ -116,6 +116,10 @@ SCREENS = {
     # 22-Oct: sombra DRY-RUN H23 v3 (re-puja 150 ms vs placebo), ver pipeline_watchdog.py::SCREEN_RESTART. Si se edita h23_shadow_v3.py: --restart h23shadowv3.
     "h23shadowv3": {"entry": "experimentos/5m_barato/h23_maker/v3/h23_shadow_v3.py",
                     "probe": "log:logs/h23_shadow_v3.log:h23_shadow_v3"},
+    # 22-Oct: brazo shadow R2/R3 de la seleccion adversa de B (DRY-RUN puro, ver pipeline_watchdog.py::SCREEN_RESTART). r3_regla.py vive junto a r3_shadow.py:
+    # si se edita hay que reiniciar a mano (--restart r3shadow).
+    "r3shadow": {"entry": "experimentos/5m_barato/b_seleccion_adversa/r3_shadow/r3_shadow.py",
+                 "probe": "log:logs/r3_shadow.log:r3_shadow arrancando"},
     # 21-Oct: dashboard 5m barato SOLO LECTURA, puerto 8892 (ver pipeline_watchdog.py::SCREEN_RESTART). 401 = vivo (tiene auth).
     "dash5m": {"entry": "experimentos/5m_barato/dashboard/dashboard_5m_barato.py", "probe": "http:8892"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
