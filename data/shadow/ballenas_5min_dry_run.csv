@@ -44028,3 +44028,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-10-23T08:27:32+00:00,DOGE,6038051,0x27e4cf8d025ac0ba073a04452024ace83c09d5db5b3d635b8cab090e3a9b6303,2026-10-23T08:30:00Z,0.28,-0.0719,1.0,3,147.6,,,,3,False,banda_ok py=0.280 rest_lo=2.15 rest_hi=3.90
 2026-10-23T08:31:43+00:00,ETH,6038056,0xeaecf117e8d37f0a47e3c6ec309e1e12574609aac6f0ec7a66c5b8d7edcff9bc,2026-10-23T08:35:00Z,0.38,0.0042,1.0,5,196.8,,,,36,False,banda_ok py=0.380 rest_lo=2.07 rest_hi=4.57
 2026-10-23T08:32:06+00:00,SOL,6038061,0x77a47f4ce6a8728e6774d8c48fca523fe19b8ae9a2be9b2e880c39904f974a1a,2026-10-23T08:35:00Z,0.32,-0.0064,1.0,3,173.8,,,,8,False,banda_ok py=0.320 rest_lo=2.05 rest_hi=4.50
+2026-10-23T08:38:03+00:00,ETH,6038113,0x7bfdf8b3a8a6becbf1ec463e93cde07777fa48e9f4690243d54be5adced08ece,2026-10-23T08:40:00Z,0.09,-0.0003,1.0,3,116.5,,,,35,False,banda_ok py=0.090 rest_lo=1.07 rest_hi=3.07
