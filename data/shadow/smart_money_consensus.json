@@ -1,45 +1,38 @@
 {
   "BTC": {
-    "smart_money_consensus": 0.1226,
-    "n_trades_smart": 832,
-    "n_wallets_smart": 12,
-    "smart_money_consensus_ponderado": 0.0396,
-    "n_wallets_smart_ponderado": 12
-  },
-  "ETH": {
-    "smart_money_consensus": -0.0588,
-    "n_trades_smart": 153,
-    "n_wallets_smart": 7,
-    "smart_money_consensus_ponderado": 0.1543,
-    "n_wallets_smart_ponderado": 7
-  },
-  "XRP": {
-    "smart_money_consensus": -1.0,
-    "n_trades_smart": 2,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -1.0,
-    "n_wallets_smart_ponderado": 2
+    "smart_money_consensus": -0.0292,
+    "n_trades_smart": 1232,
+    "n_wallets_smart": 8,
+    "smart_money_consensus_ponderado": -0.038,
+    "n_wallets_smart_ponderado": 8
   },
   "SOL": {
-    "smart_money_consensus": 0.0323,
-    "n_trades_smart": 93,
+    "smart_money_consensus": -0.1268,
+    "n_trades_smart": 142,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": -0.1945,
+    "n_wallets_smart_ponderado": 3
+  },
+  "ETH": {
+    "smart_money_consensus": -0.0921,
+    "n_trades_smart": 152,
     "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": 0.1509,
+    "smart_money_consensus_ponderado": 0.0015,
     "n_wallets_smart_ponderado": 5
   },
   "DOGE": {
-    "smart_money_consensus": -0.5385,
-    "n_trades_smart": 13,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.2158,
-    "n_wallets_smart_ponderado": 2
-  },
-  "BNB": {
-    "smart_money_consensus": -0.2,
-    "n_trades_smart": 5,
+    "smart_money_consensus": -1.0,
+    "n_trades_smart": 1,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.8752,
+    "smart_money_consensus_ponderado": -1.0,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-10-23T23:10:41+00:00"
+  "XRP": {
+    "smart_money_consensus": -1.0,
+    "n_trades_smart": 1,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -1.0,
+    "n_wallets_smart_ponderado": 1
+  },
+  "_actualizado": "2026-10-23T23:33:19+00:00"
 }
