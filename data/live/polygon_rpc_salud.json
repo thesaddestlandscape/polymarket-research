@@ -53,10 +53,10 @@
    "ultimo_aviso": 1792768983.797785
   },
   "latest": {
-   "ok": false,
-   "detalle": "RechazoPolitica: HTTP 403",
-   "desde": 1792772584.3612556,
-   "ultimo_aviso": 1792772584.3612556
+   "ok": true,
+   "detalle": "",
+   "desde": 1792776190.8769515,
+   "ultimo_aviso": 1792776190.8769515
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-23T16:23:04+00:00"
+ "_actualizado_utc": "2026-10-23T17:23:10+00:00"
 }
