@@ -1111,7 +1111,11 @@
   "avisado": false
  },
  "0x7af0515790acddb3cf7b9adb0f809d43efdf509d#LoL": {
-  "avisado": false
+  "avisado": true,
+  "hit_hist": 86.6,
+  "hit_reciente": 55.0,
+  "n_reciente": 20,
+  "telegram_ok": true
  },
  "0xda164a1aa5a166021fd2bb6dc1e54881f58aac2b#LoL": {
   "avisado": false
@@ -1143,11 +1147,7 @@
   "avisado": false
  },
  "0x79ae097215202b5d01f98e4479fb219102469a4a#CS": {
-  "avisado": true,
-  "hit_hist": 74.0,
-  "hit_reciente": 40.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x4d1452faf4de78b990e6ec7b9d69217c1df636fd#LoL": {
   "avisado": true,
@@ -1363,11 +1363,7 @@
   "avisado": false
  },
  "0xd619b68e64f256f8ddd185b261c8679eacf0c461#NHL": {
-  "avisado": true,
-  "hit_hist": 86.2,
-  "hit_reciente": 50.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x882c2e9d90d28e02a15be0d7f8d3636994305d07#mex-otros": {
   "avisado": true,
@@ -1384,32 +1380,16 @@
   "telegram_ok": true
  },
  "0x216050de6080fac3926226b2b8ce3d5544784c78#CS": {
-  "avisado": true,
-  "hit_hist": 57.3,
-  "hit_reciente": 15.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0xc9bfc7986767173b4f1c3fc9b2c6b255fc7381c0#CS": {
-  "avisado": true,
-  "hit_hist": 63.4,
-  "hit_reciente": 30.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x2b46bb71681777202368d095196f266944a1684d#NBA": {
-  "avisado": true,
-  "hit_hist": 66.0,
-  "hit_reciente": 25.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x821dab0565ebf5b327f51db06223fdcfe01acf16#col1-otros": {
-  "avisado": true,
-  "hit_hist": 54.1,
-  "hit_reciente": 20.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x74f1b8944c7b10f7239e3dda0de6b8ee42e816a8#crint-otros": {
   "avisado": true,
@@ -1422,6 +1402,62 @@
   "avisado": true,
   "hit_hist": 60.7,
   "hit_reciente": 25.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xf1ef8705e9f63c790c6fffd6329aea7011718cd6#CS": {
+  "avisado": true,
+  "hit_hist": 84.3,
+  "hit_reciente": 40.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x83c82ead85134e9beb0324af7196991068153b6c#CS": {
+  "avisado": true,
+  "hit_hist": 67.3,
+  "hit_reciente": 30.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xc646a607c992b4fff5b124d6ec8efd2dd970e394#Dota": {
+  "avisado": true,
+  "hit_hist": 87.0,
+  "hit_reciente": 55.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x3e1ac4bede0a559fc47e78e8a74adeeb6f704d5c#NBA": {
+  "avisado": true,
+  "hit_hist": 58.8,
+  "hit_reciente": 25.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xd4a40515779fc89b5e2be5cc2e988bc8335a3c66#NFL": {
+  "avisado": true,
+  "hit_hist": 90.8,
+  "hit_reciente": 55.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x6c26cb64a32797edcb0bdf29ed10de0f7ec698b9#Tennis": {
+  "avisado": true,
+  "hit_hist": 82.9,
+  "hit_reciente": 45.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x8f41129e43ebfbfe6075d0804f3b2bb763b3260e#Tennis": {
+  "avisado": true,
+  "hit_hist": 48.2,
+  "hit_reciente": 15.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x60c1f86859f2724effffffd4cae4bb0259190438#unl-ganador": {
+  "avisado": true,
+  "hit_hist": 100.0,
+  "hit_reciente": 60.0,
   "n_reciente": 20,
   "telegram_ok": true
  }
