@@ -1,53 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-05T17:05:14+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 218,
-      "resolve_postmortem_p50_s": 6.0,
-      "resolve_postmortem_p95_s": 11.0,
-      "resolve_postmortem_max_s": 217.0,
-      "n_ciclos_live_trade": 2622,
-      "hueco_live_trade_max_s": 364.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 20,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 54.0,
-      "gb_libres": 33.38,
-      "git_gb": 0.0,
-      "data_gb": 20.29,
-      "datalogs_gb": 3.35
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.9,
-      "ram_pct_libre": 51.1
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 394,
-      "n_results_total": 75071
-    },
-    "carga_sistema": {
-      "load1": 5.44,
-      "load5": 6.01,
-      "load15": 5.75,
-      "nproc": 2,
-      "ratio5": 3.0,
-      "n_procesos_total": 231
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [
-      "⏱️ ciclo resolve+postmortem tardó 217s (umbral 120s)"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-06T07:08:01+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 245,
@@ -13063,6 +13015,214 @@
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): gate_bucket_propio.json 48.7h (máx 30.0h)",
       "🚨 vigía roto: vigia_gate_bucket_propio.log (última ejecución falló, mtime 2026-10-22T07:18:02+00:00) -- subprocess.TimeoutExpired: Command '['/usr/bin/python3', '/root/polymarket-research/analisis_gate_bucket_propio_28jul.py']' timed out after 900 seconds",
       "🚨 vigía roto: vigia_resolution_sniper_precierre.log (última ejecución falló, mtime 2026-10-22T07:18:07+00:00) -- ERROR TimeoutExpired: analisis_gate_riguroso_resolution_sniper_precierre_02sep.py tras 364 s (última duración 121 s)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-23T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 134,
+      "resolve_postmortem_p50_s": 90.2,
+      "resolve_postmortem_p95_s": 182.4,
+      "resolve_postmortem_max_s": 808.8,
+      "resolve_postmortem_duraciones_s": [
+        271.1,
+        169.0,
+        155.4,
+        125.7,
+        166.6,
+        808.8,
+        155.4,
+        183.2,
+        172.7,
+        103.1,
+        70.7,
+        144.0,
+        117.4,
+        69.0,
+        71.2,
+        73.5,
+        80.6,
+        134.1,
+        115.6,
+        74.9,
+        84.9,
+        85.4,
+        73.5,
+        154.2,
+        113.4,
+        82.3,
+        88.5,
+        81.7,
+        87.6,
+        169.0,
+        132.6,
+        80.8,
+        88.3,
+        91.6,
+        85.6,
+        170.7,
+        133.4,
+        103.3,
+        100.3,
+        98.1,
+        111.8,
+        182.4,
+        145.0,
+        105.5,
+        97.2,
+        124.9,
+        100.2,
+        179.3,
+        152.8,
+        125.1,
+        99.1,
+        98.1,
+        88.1,
+        163.9,
+        134.5,
+        82.8,
+        84.1,
+        82.6,
+        86.4,
+        145.6,
+        114.2,
+        90.2,
+        82.6,
+        86.2,
+        90.7,
+        159.4,
+        134.3,
+        85.7,
+        87.7,
+        87.3,
+        92.7,
+        160.2,
+        117.9,
+        82.7,
+        85.7,
+        86.1,
+        89.4,
+        173.9,
+        141.1,
+        93.4,
+        83.6,
+        92.5,
+        83.4,
+        151.7,
+        116.9,
+        83.3,
+        80.7,
+        83.8,
+        83.6,
+        162.4,
+        112.4,
+        74.3,
+        70.7,
+        73.7,
+        78.0,
+        85.6,
+        357.4,
+        75.5,
+        69.9,
+        96.1,
+        78.7,
+        70.8,
+        379.4,
+        76.1,
+        70.0,
+        75.3,
+        70.0,
+        74.1,
+        309.3,
+        67.4,
+        71.9,
+        71.4,
+        71.8,
+        69.5,
+        125.9,
+        108.7,
+        73.7,
+        72.5,
+        75.0,
+        75.9,
+        129.4,
+        110.0,
+        75.3,
+        73.4,
+        76.4,
+        76.5,
+        140.1,
+        113.0,
+        71.7,
+        83.5,
+        74.0,
+        74.8,
+        129.0,
+        110.9
+      ],
+      "n_ciclos_live_trade": 4713,
+      "hueco_live_trade_max_s": 274.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 22,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 93.0,
+      "gb_libres": 5.21,
+      "git_gb": 0.0,
+      "data_gb": 17.53,
+      "datalogs_gb": 18.85
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 8.16,
+      "ram_pct_libre": 53.5
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 767,
+      "n_results_total": 1127329
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 6.92,
+      "load5": 5.97,
+      "load15": 6.46,
+      "nproc": 8,
+      "ratio5": 0.75,
+      "n_procesos_total": 312
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 0,
+      "eventos": []
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 1,
+      "vigias": [
+        {
+          "log": "vigia_wallet_mirror_seleccion_ab.log",
+          "mtime_utc": "2026-10-23T07:44:05+00:00",
+          "ultima_linea_fallo": "Traceback (most recent call last):"
+        }
+      ]
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 809s (umbral 400s)",
+      "💾 disco al 93% (5.21GB libres)",
+      "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-23T07:44:05+00:00) -- Traceback (most recent call last):"
     ],
     "estado": "ANOMALIA"
   }
