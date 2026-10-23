@@ -1,22 +1,22 @@
 {
- "actualizado_utc": "2026-10-22T09:40:37+00:00",
+ "actualizado_utc": "2026-10-23T09:40:09+00:00",
  "fok_reales": {
-  "enviadas": 28,
+  "enviadas": 29,
   "muertas": 12,
   "muertas_resueltas": 12,
   "muertas_que_ganarian": 10
  },
  "offsets": {
   "5m#-47": {
-   "n": 11,
+   "n": 12,
    "pendientes": 0,
-   "dias": 6,
-   "acierto": 0.727,
-   "ask_medio": 0.519,
-   "ev_eur": 0.617,
+   "dias": 7,
+   "acierto": 0.667,
+   "ask_medio": 0.527,
+   "ev_eur": 0.482,
    "ic90_cierre": [
-    -0.008,
-    1.269
+    -0.109,
+    1.103
    ]
   },
   "5m#-46": {
@@ -46,20 +46,20 @@
   "5m#emparejado": {
    "senales_T45": 12,
    "tambien_a_T47": 5,
-   "solo_a_T47": 6,
+   "solo_a_T47": 7,
    "comunes_resueltos": 5,
    "dif_ev_T47_menos_T45": 0.046
   },
   "15m#-47": {
-   "n": 13,
+   "n": 14,
    "pendientes": 0,
    "dias": 8,
-   "acierto": 0.846,
-   "ask_medio": 0.755,
-   "ev_eur": 0.148,
+   "acierto": 0.786,
+   "ask_medio": 0.758,
+   "ev_eur": 0.066,
    "ic90_cierre": [
-    -0.144,
-    0.376
+    -0.228,
+    0.321
    ]
   },
   "15m#-46": {
@@ -75,21 +75,21 @@
    ]
   },
   "15m#-45": {
-   "n": 11,
+   "n": 13,
    "pendientes": 0,
-   "dias": 7,
-   "acierto": 0.727,
-   "ask_medio": 0.722,
-   "ev_eur": 0.024,
+   "dias": 9,
+   "acierto": 0.615,
+   "ask_medio": 0.701,
+   "ev_eur": -0.134,
    "ic90_cierre": [
-    -0.318,
-    0.367
+    -0.44,
+    0.209
    ]
   },
   "15m#emparejado": {
-   "senales_T45": 11,
+   "senales_T45": 13,
    "tambien_a_T47": 4,
-   "solo_a_T47": 9,
+   "solo_a_T47": 10,
    "comunes_resueltos": 4,
    "dif_ev_T47_menos_T45": 0.064
   }
@@ -118,23 +118,23 @@
    "bajar_escalon": false
   },
   "15m": {
-   "n": 5,
-   "dias": 4,
-   "pnl_eur": 0.95,
-   "ev_eur": 0.095,
+   "n": 6,
+   "dias": 5,
+   "pnl_eur": -1.15,
+   "ev_eur": -0.096,
    "ic90_dias": [
-    -0.177,
-    0.486
+    -0.442,
+    0.367
    ],
-   "ev_sin_2_mejores": -0.177,
-   "ev_ultimas_20": 0.095,
-   "enviadas": 7,
+   "ev_sin_2_mejores": -0.395,
+   "ev_ultimas_20": -0.096,
+   "enviadas": 8,
    "fok_muertas": 2,
-   "fok_muertas_pct": 0.286,
+   "fok_muertas_pct": 0.25,
    "gates": {
     "n>=40": false,
     "dias>=10": false,
-    "EV>=+0,05": true,
+    "EV>=+0,05": false,
     "IC90_dias>0": false,
     "sin_2_mejores>0": false,
     "FOK_muertas<=20%": false
