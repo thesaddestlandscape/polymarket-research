@@ -1,3 +1,4 @@
 timestamp_utc,activo,marco,slug,market_id,condition_id,ts_end,offset_s,direccion_implicita,ask_implicita,direccion_fade,ask_fade,profundidad_fade_eur,ratio_fade_vs_stake,mejor_ask_fade,n_niveles_fade
 2026-10-23T05:20:00.221+00:00,SOL,5min,sol-updown-5m-1792732500,6036310,0x1b1e8a5031a148a730aa21cfc607c282ae7e53fc98cf5aedc04155ad2cfe3d1a,1792732800,0,Down,0.53,Up,0.8,0.0,0.0,0.85,3
 2026-10-23T05:20:01.206+00:00,SOL,5min,sol-updown-5m-1792732500,6036310,0x1b1e8a5031a148a730aa21cfc607c282ae7e53fc98cf5aedc04155ad2cfe3d1a,1792732800,1,Down,0.53,Up,0.85,13.17,12.5,0.85,3
+2026-10-23T10:50:00.316+00:00,DOGE,5min,doge-updown-5m-1792752300,6038953,0x45fbb6e80e669c48e5b41fc840b65b20c80ca0756c1697ffa42d718e75937a2a,1792752600,0,Up,0.94,Down,0.96,264.28,251.7,0.96,4
