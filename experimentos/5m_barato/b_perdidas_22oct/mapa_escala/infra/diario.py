@@ -7,14 +7,14 @@ import infra_lib as L, extrae_onchain_ext as E, tp1 as P, n4 as N4
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--hoy', default=None); ap.add_argument('--sin-espera', action='store_true'); ap.add_argument('--solo-tp1', action='store_true'); a = ap.parse_args()
     hoy = a.hoy or dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%d'); L.INFRA.mkdir(parents=True, exist_ok=True)
-    man = dict(job=f'mapa_infra_{L.now()}', inicio=L.now(), hoy=hoy, estado='RUNNING', parametros=dict(fwd=[L.FWD0, L.FWD1], maxload=7.0, ventana_prohibida='06:00-09:15Z, 22:15-22:30Z'),
+    man = dict(job=f'mapa_infra_{L.now()}', inicio=L.now(), hoy=hoy, estado='RUNNING', parametros=dict(fwd=[L.FWD0, L.FWD1], maxload=8.0, ventana_prohibida='06:00-09:15Z, 22:15-22:30Z'),
                codigo=L.sha_code([__file__, E.__file__, P.__file__, L.__file__, os.path.join(os.path.dirname(__file__), 'tokmap.py'), N4.__file__]), dias_extraccion={}, dias_tp1={})
     if L.en_ventana_prohibida() and not a.sin_espera:
         man.update(estado='BLOCKED', motivo='ventana horaria prohibida'); L.atomic_json(L.INFRA / 'run_manifest.json', man); L.log('ventana prohibida: no se lanza'); return 0
-    if not a.sin_espera and not L.esperar_carga(7.0, 45):
+    if not a.sin_espera and not L.esperar_carga(8.0, 45):
         st = L.read_json(L.INFRA / 'skip_streak.json', {'n': 0}); st['n'] += 1; L.atomic_json(L.INFRA / 'skip_streak.json', st)
-        man.update(estado='BLOCKED', motivo=f'load5>7 durante 45 min (racha {st["n"]})'); L.atomic_json(L.INFRA / 'run_manifest.json', man); L.log(man['motivo'])
-        if st['n'] >= 2: L.telegram(f"MAPA-ESCALA infra: {st['n']} dias seguidos sin ejecutar por carga (load5>7). El on-chain rota a ~5 d: riesgo de perder dias. Ver {L.INFRA}/run_manifest.json")
+        man.update(estado='BLOCKED', motivo=f'load5>=8 durante 45 min (racha {st["n"]})'); L.atomic_json(L.INFRA / 'run_manifest.json', man); L.log(man['motivo'])
+        if st['n'] >= 2: L.telegram(f"MAPA-ESCALA infra: {st['n']} dias seguidos sin ejecutar por carga (load5>=8). El on-chain rota a ~5 d: riesgo de perder dias. Ver {L.INFRA}/run_manifest.json")
         return 0
     L.atomic_json(L.INFRA / 'skip_streak.json', {'n': 0}); rc = 0; alertas = []
     if not a.solo_tp1:

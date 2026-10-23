@@ -24,6 +24,7 @@ def rep(nom, X, skip, ref=None, perm=True, extra=''):
     evc = {a: round(float(X.p.values[~skip & (X.act.values == a)].sum() / max(X.c.values[~skip & (X.act.values == a)].sum(), 1e-9)), 3) for a in COINS}
     P(f'{nom}: skip {s["n_skip"]}/{s["n"]} ret {s["ret"]:.3f} | EV_all {s["ev_all"]:+.4f} EV_ret {s["ev_ret"]:+.4f} [{elo:+.3f},{ehi:+.3f}] EV_skip {s["ev_skip"]:+.4f} | dPnL {s["dpnl"]:+.1f} IC90cierre [{lo:+.1f},{hi:+.1f}] p_perm {pp:.4f} | dias+ {(dd>0).sum()}/{len(dd)} sin2mejores {sin2:+.1f} | haircut50 {s["dpnl"]/2:+.1f} | dPnL/moneda {{{", ".join(f"{k}:{v:+.1f}" for k,v in pc_.items())}}} EVret/moneda {evc} {extra}')
     return dict(s, ic=(lo, hi), p=pp, sin2=float(sin2), dias_pos=int((dd > 0).sum()), dias=int(len(dd)), por_moneda=pc_)
+MGRID = [0.0, 0.01, 0.02, 0.03, 0.04, 0.06]
 OUT = {}
 # ---------------- G-Q1: prediccion
 P('\n== G-Q1 prediccion (fuera de muestra, TEST 17-21): logloss/Brier medios, AUC; diferencias pareadas q - benchmark, IC90 por cierre (negativo = q mejor) ==')
@@ -37,14 +38,14 @@ for d in sorted(D.dia.unique()):
         sel = mk & (D.act.values == a); q_r3[sel] = np.where(r3[sel], m1, m0)
 D['q_R3'] = q_r3; mid5 = D.mid5.values; has_mid = np.isfinite(mid5)
 P('cobertura mid5', has_mid.mean().round(4))
-for nm in ['q_MAP', 'q_LOG', 'q_HGB', 'q_LOGF', 'q_HGBF', 'q_R3']:
+for nm in ['q_MAP', 'q_LOG', 'q_HGB', 'q_LOGF', 'q_R3']:
     q = D[nm].values; ll = lossd(y, q, np.full(len(y), 0.5), 'll') * 0
     llm = -(y * np.log(np.clip(q, 1e-3, 1 - 1e-3)) + (1 - y) * np.log(1 - np.clip(q, 1e-3, 1 - 1e-3))).mean(); br = ((q - y) ** 2).mean()
     P(f'  {nm}: logloss {llm:.5f} Brier {br:.5f} AUC {roc_auc_score(y, q):.4f}')
 pcv = D.pc.values; P(f'  precio pc: logloss {-(y*np.log(pcv)+(1-y)*np.log(1-pcv)).mean():.5f} Brier {((pcv-y)**2).mean():.5f} AUC {roc_auc_score(y, pcv):.4f}')
 qm = np.clip(mid5, 0.01, 0.99); mm = has_mid
 P(f'  mid5 (n={mm.sum()}): logloss {-(y[mm]*np.log(qm[mm])+(1-y[mm])*np.log(1-qm[mm])).mean():.5f} Brier {((qm[mm]-y[mm])**2).mean():.5f} AUC {roc_auc_score(y[mm], mid5[mm]):.4f}')
-for nm in ['q_MAP', 'q_LOG', 'q_HGB', 'q_LOGF', 'q_HGBF']:
+for nm in ['q_MAP', 'q_LOG', 'q_HGB', 'q_LOGF']:
     for bn, b in [('mid5', qm), ('pc', pcv), ('MAP', D.q_MAP.values), ('R3-ind', D.q_R3.values)]:
         if bn == 'MAP' and nm == 'q_MAP': continue
         ok = np.isfinite(b) & np.isfinite(D[nm].values) & (has_mid if bn == 'mid5' else True)
@@ -67,7 +68,7 @@ def inv_skip(X, qv, frac_eur):
 si = inv_skip(D, D[qn].values, 1 - res['primaria']['ret']); res['inversion'] = rep('  inversion (saltar cola ALTA del edge, mismo EUR)', D, si, perm=False)
 # otras familias en rejilla (descriptivo)
 P('-- rejilla completa de familias x m en TEST (DESCRIPTIVA, multiplicidad declarada) --')
-for nm in ['q_MAP', 'q_LOG', 'q_HGB', 'q_LOGF', 'q_HGBF']:
+for nm in ['q_MAP', 'q_LOG', 'q_HGB', 'q_LOGF']:
     for m in MGRID:
         sk = D.pc.values > D[nm].values - m; s = stats(D, sk); lo, hi = boot(-D.p.values * sk, cl)
         P(f'   {nm:7s} m={m:.2f}: skip {s["n_skip"]:5d} ret {s["ret"]:.3f} EV_ret {s["ev_ret"]:+.4f} EV_skip {s["ev_skip"]:+.4f} dPnL {s["dpnl"]:+8.1f} IC90 [{lo:+.1f},{hi:+.1f}]')

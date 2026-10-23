@@ -4,7 +4,7 @@ extraer_onchain_15m.extraer() del repo (no se reescribe: se importa y se le inye
 Causa raiz del hueco 22-Oct: el mapa de tokens salia del m15_registro del dia, que quedo en .tmp truncado (extraer_registro_15m no captura
 zlib.error en un maker_ms corrupto) -> 3.550 de ~7.000 tokens 5m -> m5_onchain_22 de 2 MB en vez de ~125 MB.
 Uso: extrae_onchain_ext.py DIA [DIA ...] [--marcos 5min,15min,...] [--forzar]   (idempotente: solo rehace lo que falta o esta truncado)
-Salida: volumen/{m5,m15}_onchain (existentes, 60 d por archivo_volumen), volumen/{m60,m240,m24h}_onchain (nuevos, retencion propia 60 d).
+Salida: volumen/{m5,m15}_onchain (existentes, 60 d por archivo_volumen), volumen/agentes_datos/mapa_infra/{m60,m240,m24h}_onchain (nuevos, retencion propia 60 d).
 Manifest: datalogs/mapa_infra/runs/extract_<DIA>.json. Codigos de salida: 0 todo COMPLETE/ya existia; 3 algun PARTIAL/BLOCKED; 1 fallo."""
 import sys, io, re, os, json, contextlib, statistics, argparse, datetime as dt
 sys.path.insert(0, '/root/polymarket-research')
@@ -13,7 +13,7 @@ import infra_lib as L, tokmap as T
 MARCOS = ['5min', '15min', '60min', '240min', '24h']
 ESPERADO = {'5min': 6500, '15min': 2200}   # tokens/dia observados 6.986-7.022 y 2.348-2.364 (18..21-Oct)
 FRAC_TRUNC = 0.6        # fichero 5m/15m < 60 % de la mediana de los 7 dias previos = truncado
-def carpeta(m): return L.VOL / f'{L.PREF[m]}_onchain'
+def carpeta(m): return L.VOL / f'{L.PREF[m]}_onchain' if m in ('5min', '15min') else L.AGENT / 'mapa_infra' / f'{L.PREF[m]}_onchain'   # 5m/15m: carpetas existentes del volumen
 def destino(m, d): return carpeta(m) / f'{L.PREF[m]}_onchain_{d}.csv.gz'
 def estado_previo(m, d):
     """None si falta; 'ok' si existe y plausible; 'truncado' si es <60 % de la mediana de los 7 dias previos (solo 5m/15m)."""

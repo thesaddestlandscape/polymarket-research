@@ -31,7 +31,7 @@ def main():
     arg = sys.argv[1] if len(sys.argv) > 1 else 'ayer'
     D = (dt.datetime.utcnow().date() - dt.timedelta(days=1)).isoformat() if arg == 'ayer' else arg
     os.makedirs(OUTD, exist_ok=True); lock = open(f'{ROOT}/etiquetas_dfuerte.lock', 'w'); fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    M = json.load(open(os.path.join(HERE, '..', 'MODELO_CONGELADO.json'))); pk = os.path.join(HERE, '..', M['pickle'])
+    M = json.load(open(os.path.join(HERE, '..', 'MODELO_CANDIDATO.json'))); pk = M['pickle']
     if hashlib.sha256(open(pk, 'rb').read()).hexdigest() != M['sha256_pickle']: fail('sha del modelo no coincide')
     kind, fams, model, CUT = pickle.load(open(pk, 'rb'))[M['modelo']]
     d0 = dt.date.fromisoformat(D); days = [(d0 - dt.timedelta(days=k)).isoformat() for k in range(WARM, -1, -1)]; Z = {c: [] for c in COINS}

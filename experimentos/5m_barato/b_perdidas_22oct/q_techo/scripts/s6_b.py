@@ -10,7 +10,7 @@ def P(*a):
 p = pd.read_csv('/root/polymarket-research/experimentos/5m_barato/contabilidad_wallet_dedicada/posiciones.csv'); p = p[p.experimento == 'H47-B'].copy()
 p = p[p.estado.isin(['liquidada_ganada', 'liquidada_perdida'])].copy()
 p['act'] = p.mercado.str.split('-').str[0].str.upper(); p['sg'] = np.where(p.outcome == 'Up', 1.0, -1.0); p['lado_c'] = np.where(p.sg > 0, 'YES', 'NO')
-p['ts'] = pd.to_datetime(p.fecha_primer_fill_utc, utc=True).astype('int64') / 1e9; p['fin'] = p.mercado.str.rsplit('-', n=1).str[1].astype(int) + 300
+p['ts'] = (pd.to_datetime(p.fecha_primer_fill_utc, utc=True) - pd.Timestamp('1970-01-01', tz='UTC')).dt.total_seconds(); p['fin'] = p.mercado.str.rsplit('-', n=1).str[1].astype(int) + 300
 p['pc'] = p.precio_medio; p['c'] = p.coste; p['p'] = p.pnl_realizado; p['gana_f'] = (p.estado == 'liquidada_ganada').astype(float); p['cierre'] = p.fin; p['dia'] = p.fecha_primer_fill_utc.str[:10]; p['tobs'] = p.ts - 4
 p = p[p.act.isin(COINS)].reset_index(drop=True)
 # Binance r60f

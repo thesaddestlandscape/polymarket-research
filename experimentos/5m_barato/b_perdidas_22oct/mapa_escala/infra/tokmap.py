@@ -26,10 +26,13 @@ def escanea(fichero, fresco_min=20):
         return json.loads((d / (key + '.k.json')).read_text()), meta
     if time.time() - st.st_mtime < fresco_min * 60:
         return {}, dict(skipped='en_escritura')
-    ok = subprocess.run(f"gzip -t '{fichero}' 2>/dev/null", shell=True).returncode == 0     # integridad completa (CPU, nice del llamador)
+    # integridad: 'unexpected end of file' = cola cortada por un reinicio (NORMAL en los maker_ms, solo se pierden los ultimos segundos);
+    # cualquier otro error (invalid ... / crc) = corrupcion A MEDIA CORRIENTE: ahi se pierden k posteriores -> truncado real.
+    pt = subprocess.run(f"gzip -t '{fichero}'", shell=True, capture_output=True, text=True); err = pt.stderr.lower()
+    ok = pt.returncode == 0 or ('unexpected end of file' in err and 'invalid' not in err and 'crc' not in err and 'not in gzip' not in err)
     tm = _parsea(_k_de(fichero))
     (d / (key + '.k.json.tmp')).write_text(json.dumps(tm)); os.replace(d / (key + '.k.json.tmp'), d / (key + '.k.json'))
-    meta = dict(size=st.st_size, mtime=int(st.st_mtime), n_tokens=len(tm), gzip_ok=ok, truncado=(not ok), escaneado=L.now())
+    meta = dict(size=st.st_size, mtime=int(st.st_mtime), n_tokens=len(tm), gzip_ok=ok, cola_cortada=(pt.returncode != 0 and ok), truncado=(not ok), gzip_err=pt.stderr.strip()[:120], escaneado=L.now())
     idx = L.read_json(d / 'indice.json', {}); idx[key] = meta; L.atomic_json(d / 'indice.json', idx)
     return tm, meta
 def tokens_dia(dia, marcos=('5min', '15min', '60min')):

@@ -4,7 +4,8 @@ import os, json, hashlib, subprocess, sys, time, datetime as dt
 from pathlib import Path
 ROOT = Path(os.environ.get('MAPA_INFRA_ROOT', '/root/polymarket-research-datalogs'))   # tests lo redirigen
 VOL = Path(os.environ.get('MAPA_INFRA_VOL', '/mnt/HC_Volume_106538179'))
-INFRA = ROOT / 'mapa_infra'; TP1 = ROOT / 'mapa_tp1'
+AGENT = VOL / 'agentes_datos'      # el disco raiz (datalogs) esta al 96 %: todo lo que pesa va al volumen
+INFRA = AGENT / 'mapa_infra'; TP1 = AGENT / 'mapa_tp1'; INFORMES = ROOT / 'mapa_tp1_informes'   # INFORMES: solo txt pequenos en datalogs
 REPO = Path('/root/polymarket-research')
 EXCH = '0xe111180000d2663c0091e4f400237545b87b996b'
 FWD0, FWD1 = '2026-10-24', '2026-11-02'            # PREREG_TESTS.md: 10 dias forward
@@ -32,10 +33,10 @@ def telegram(texto):
     except Exception as e:
         log(f'telegram FALLO {type(e).__name__}: {e}'); return False
 def load5(): return os.getloadavg()[1]
-def esperar_carga(maxload=7.0, max_min=45):
+def esperar_carga(maxload=8.0, max_min=45):
     """Espera (sleep, sin consumir nada) a load5 <= maxload; devuelve False si se agota el tiempo."""
     t0 = time.time()
-    while load5() > maxload:
+    while load5() >= maxload:
         if time.time() - t0 > max_min * 60: return False
         time.sleep(60)
     return True

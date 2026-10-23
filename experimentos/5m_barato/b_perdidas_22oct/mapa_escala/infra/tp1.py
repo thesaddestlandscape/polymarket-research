@@ -16,7 +16,9 @@ NICHOS = {
 EDG = np.array([0.01, 0.05, 0.10, 0.20, 0.30, 0.50, 0.70, 0.90, 0.99]); TEDG = np.array([-5, 60, 150, 300, 900, 3600])
 NDIAS = 10; COB_MIN = 0.995; MIN_TOK = {'5min': 6500, '15min': 2200}   # tokens/dia observados 6.986-7.022 y 2.348-2.364 (18..21-Oct)
 def dirs(): return L.TP1 / 'dia'
-def onchain(marco, d): return L.VOL / f'{L.PREF[marco]}_onchain' / f'{L.PREF[marco]}_onchain_{d}.csv.gz'
+def onchain(marco, d):
+    import extrae_onchain_ext as E
+    return E.destino(marco, d)
 # ---------------------------------------------------------------- dia
 def calcula_marco(d, marco, tk):
     ids = set(tk); cols = ['tipo', 'ts_est', 'tx', 'log_index', 'maker', 'taker', 'side', 'token_id', 'maker_amt', 'taker_amt']
@@ -161,14 +163,14 @@ def informe(ev, hoy):
 def cmd_eval(telegram=False):
     hoy = dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%d'); des = L.read_json(L.TP1 / 'des.json', {}); ev = evalua(des, hoy)
     txt = informe(ev, hoy); L.TP1.mkdir(parents=True, exist_ok=True)
-    (L.TP1 / f'informe_{hoy}.txt').write_text(txt + '\n'); (L.TP1 / 'informe_ultimo.txt').write_text(txt + '\n'); L.atomic_json(L.TP1 / 'eval_ultimo.json', ev); print(txt)
+    L.INFORMES.mkdir(parents=True, exist_ok=True); [(b / f'informe_{hoy}.txt').write_text(txt + '\n') or (b / 'informe_ultimo.txt').write_text(txt + '\n') for b in (L.TP1, L.INFORMES)]; L.atomic_json(L.TP1 / 'eval_ultimo.json', ev); print(txt)
     if telegram:                    # SOLO al cerrar el gate (veredicto definitivo), una vez por nicho
         latch = L.read_json(L.TP1 / 'telegram_latch.json', {})
         for k, r in ev.items():
             v = r['veredicto']
             if v in ('PASA', 'NO_PASA') or v.startswith('INCOMPLETO'):
                 if latch.get(k) != v:
-                    ok = L.telegram(f"MAPA-ESCALA TP1 {k} {r['nombre']}: {v} (EXPLORATORY; {r['n_validos']} dias validos). EV {r.get('ev', float('nan')):+.4f} gate {r['gate_ev']}, IC90 dias {r.get('ic90_dias')}, dias+ {r.get('dias_pos')}, sin5 {r.get('ev_sin5')}. Informe: datalogs/mapa_tp1/informe_ultimo.txt")
+                    ok = L.telegram(f"MAPA-ESCALA TP1 {k} {r['nombre']}: {v} (EXPLORATORY; {r['n_validos']} dias validos). EV {r.get('ev', float('nan')):+.4f} gate {r['gate_ev']}, IC90 dias {r.get('ic90_dias')}, dias+ {r.get('dias_pos')}, sin5 {r.get('ev_sin5')}. Informe: datalogs/mapa_tp1_informes/informe_ultimo.txt")
                     if ok: latch[k] = v
         L.atomic_json(L.TP1 / 'telegram_latch.json', latch)
     return ev

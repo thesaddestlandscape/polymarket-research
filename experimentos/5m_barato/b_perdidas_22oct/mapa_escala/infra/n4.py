@@ -100,7 +100,7 @@ def cmd_backfill():
     C = pd.concat(frames, ignore_index=True); R = minera(C, dias_ok, '2026-10-13', forward=False); R = refina(R, C)
     R.to_csv(out / 'n4_backfill_celdas.csv', index=False)
     txt = texto(R, 'N4 BACKFILL DESCRIPTIVO (NO forward, NO gatea)', len(dias_ok), f'dias {dias_ok[0]}..{dias_ok[-1]} (cobertura desenlace por dia: min {min(meta[d] for d in dias_ok):.4f}); h1 = 06..13, h2 = resto')
-    (out / 'n4_backfill_informe.txt').write_text(txt + '\n'); print(txt)
+    (out / 'n4_backfill_informe.txt').write_text(txt + '\n'); L.INFORMES.mkdir(parents=True, exist_ok=True); (L.INFORMES / 'n4_backfill_informe.txt').write_text(txt + '\n'); print(txt)
 def cmd_eval(telegram=False):
     hoy = dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%d'); des = L.read_json(L.TP1 / 'des.json', {}); W = L.dias(L.FWD0, L.FWD1); frames = []; ok = []; estados = {}
     for d in W:
@@ -120,9 +120,9 @@ def cmd_eval(telegram=False):
             latch = L.read_json(L.TP1 / 'n4_telegram_latch.json', {})
             for _, r in R[X_].iterrows():
                 k = f"{r.coin}|{r.bucket}|{r['T']}|{r.lado}"
-                if k not in latch and L.telegram(f"MAPA-ESCALA N4 (5m 0.00-0.10) CRUZA el gate (EXPLORATORY): {k} EV {r.ev:+.3f}, IC90 cierre lo {r.ic_lo_cierre:+.3f}, dias+ {r.dias_pos}/10, sin5 {r.ev_sin5:+.3f}, q_BH {r.q_bh:.3f}, top1 wallet {r.top1_wallet:.0%}, {r.cierres} cierres. Ver datalogs/mapa_tp1/n4_informe_ultimo.txt"): latch[k] = L.now()
+                if k not in latch and L.telegram(f"MAPA-ESCALA N4 (5m 0.00-0.10) CRUZA el gate (EXPLORATORY): {k} EV {r.ev:+.3f}, IC90 cierre lo {r.ic_lo_cierre:+.3f}, dias+ {r.dias_pos}/10, sin5 {r.ev_sin5:+.3f}, q_BH {r.q_bh:.3f}, top1 wallet {r.top1_wallet:.0%}, {r.cierres} cierres. Ver datalogs/mapa_tp1_informes/n4_informe_ultimo.txt"): latch[k] = L.now()
             L.atomic_json(L.TP1 / 'n4_telegram_latch.json', latch)
-    (L.TP1 / f'n4_informe_{hoy}.txt').write_text(txt + '\n'); (L.TP1 / 'n4_informe_ultimo.txt').write_text(txt + '\n'); print(txt)
+    L.INFORMES.mkdir(parents=True, exist_ok=True); [(b / f'n4_informe_{hoy}.txt').write_text(txt + '\n') or (b / 'n4_informe_ultimo.txt').write_text(txt + '\n') for b in (L.TP1, L.INFORMES)]; print(txt)
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(); ap.add_argument('cmd', choices=['backfill', 'eval']); ap.add_argument('--telegram', action='store_true'); a = ap.parse_args()
     cmd_backfill() if a.cmd == 'backfill' else cmd_eval(a.telegram)

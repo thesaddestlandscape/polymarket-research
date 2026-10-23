@@ -19,7 +19,7 @@ _F9 = ['rv_in', 'maxr_in', 'eff_in', 'zT', 'last', 'retr', 'imb_in', 'vol_in', '
 _keep = ['coin', 'tmin', 'dia', 'src', 'T', 'con', 'q', 'pcon', 'y', 'win', 'R', 'rpre', 'o', 's60', 'win_oficial'] + DL.FEATS + [c for c in _F9 + _F10 if c in U.columns]
 U = U[list(dict.fromkeys(_keep))]
 for _c in DL.FEATS + [c for c in _F9 + _F10 if c in U.columns]: U[_c] = U[_c].astype('float32')
-W2 = bool(os.environ.get('WAVE2')); TAG = ('_w2' if W2 else '') + ('_synth' if os.environ.get('SYNTH') else '')
+W2 = bool(os.environ.get('WAVE2')); TAG = ('_abl' if os.environ.get('CTRLG2') else '') + ('_ctrl' if os.environ.get('CTRLG') else '') + ('_w2' if W2 else '') + ('_synth' if os.environ.get('SYNTH') else '')
 if os.environ.get('SYNTH'):
     U['win'] = (np.random.default_rng(5).random(len(U)) < U.q).astype(float); U['y'] = np.where(U.con == 1, U.win, 1 - U.win)
 U['lpc'] = np.log(U.pcon / (1 - U.pcon)); U['e'] = U.win - U.q
@@ -30,6 +30,8 @@ U = U[(U.src == 'reciente') | (U.dia < day(2026, 9, 1))]
 MODELS = {f'M{i+1}': ('LOG', [f]) for i, f in enumerate(['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8'])}
 MODELS['M9'] = ('LOG', list(DL.FAM)); MODELS['M10'] = ('GBM', list(DL.FAM)); MODELS['M11'] = ('LOGCON', list(DL.FAM))
 CTRL = {'C0': ('LOG', ['COIN'])}
+if os.environ.get('CTRLG2'): MODELS = {f'G{i}': ('GBM', [f'F{i}']) for i in range(1, 7)}; MODELS['GnoF8'] = ('GBM', [f for f in DL.FAM if f != 'F8']); MODELS['GnoF7'] = ('GBM', [f for f in DL.FAM if f != 'F7']); MODELS['GnoF78'] = ('GBM', [f for f in DL.FAM if f not in ('F7', 'F8')]); CTRL = {}
+if os.environ.get('CTRLG'): MODELS = {'M10': ('GBM', list(DL.FAM)), 'M9': ('LOG', list(DL.FAM))}; CTRL = {'C0G': ('GBM', ['COIN']), 'C7G': ('GBM', ['F7']), 'C8G': ('GBM', ['F8']), 'C0': ('LOG', ['COIN'])}
 F9 = ['rv_in', 'maxr_in', 'eff_in', 'zT', 'last', 'retr', 'imb_in', 'vol_in', 'hl_in']; F10 = ['rc12_all', 'rc36_all', 'rc36_coin', 'e12_all', 'e36_all', 'e36_coin']
 FAMX = {**DL.FAM, 'F9': F9, 'F10': F10}
 if os.environ.get('WAVE2'): MODELS = {'M12': ('LOG', ['F9']), 'M13': ('LOG', list(FAMX)), 'M14': ('GBM', list(FAMX))}
