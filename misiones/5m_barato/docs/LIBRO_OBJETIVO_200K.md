@@ -30,6 +30,14 @@ Python 19-Oct 13:30Z: se por cierre = 0,154 del IC90 del vigía; EV máximo con 
    (`data/live/balance_real.json` 19-Oct 13:25Z; `pusd_onchain` 50,80 → ~9 $ sin conciliar con `free_usdc`); dedicada 19,59 pUSD (memoria 17-Oct,
    NO re-verificada: la dirección completa solo está en la credencial, que no se lee). Toda rampa es decisión de Javi.
 
+## Nota 22-Oct 15:40Z (risk-economics, fila R3 de B; fuente `experimentos/5m_barato/b_perdidas_22oct/r3_escalado/INFORME.md`)
+- **R3 (B maker ETH/SOL/XRP con bid15 ≤3c + vol30 ≥26 + hora ≥4)**: peldaño 2-4 (forward shadow congelado, 1ª lectura 02-Nov); validado 0.
+  Simulador E1 17-22 Oct: separa (DIF +0,253, placebo p=0,003, 5/6 días) pero política −0,041 IC90 días (−0,132,+0,049); recalibrado a B real
+  (59 % de sus rellenos son en cola al precio, +0,19, que el simulador no modela) ≈ +0,07 (rango −0,19..+0,35). Capacidad 130 rellenos/día,
+  136 €/día a 5 acc; K≤20 aguanta (−0,017), K=50 no (−0,066); banda 0,30-0,50 REJECTED (−0,192). **Anual: 0 / ~1,5 k / ~11 k** (K=20) + rebate ≤1,3 k;
+  sustituye al «15-25 k» de `b_seleccion_adversa/INFORME.md §F` (flujo de todos los makers, no capturable). Capital: P1 a 5 acc necesita 56-73 $ para 300 rellenos
+  con P(DD)≤10 % (hoy 5,12 $ ⇒ solo maquinaria/concordancia). Variante exploratoria propuesta: R3 + hora <16 UTC (2 instrumentos, 7/9 días-instrumento).
+
 ## Qué ha cambiado en la 3ª pasada (19-Oct 06:50Z → 13:30Z)
 
 Fuentes: `experimentos/5m_barato/validacion_19oct/informe.md` (06:44Z), `h43_auditoria_datos/informe.md` (07:39Z), `v4_comprar_lo_bueno/salidas/*.txt`

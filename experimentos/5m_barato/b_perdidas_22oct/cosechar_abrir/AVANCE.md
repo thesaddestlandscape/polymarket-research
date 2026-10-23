@@ -1,0 +1,5 @@
+# AVANCE cosechar_abrir (22-Oct ~17:20Z)
+HECHO: (1) estado 16-Oct: cosechar v1/v2 BTC ya estaban COMPLETOS y REJECTED (H10/H11/H32); lo "sin terminar" era alts + fidelidad. (2) on-chain wallets 05-21 (s1,s2,s2b; datos/s2*.txt). (3) calibracion de cola con ordenes reales de B (s4; datos/s4_calib_B.txt). (4) simulador cosechar_sim.py + 9 tests OK. (5) prereg + addendum con sha (prereg/).
+EN CURSO (procesos en background, script run_s3.sh extrae ms5_<moneda>_<dia>.npz a DL/m5_cosechar_abrir; run_s5.sh simula cada dia al aparecer el npz). Estado: ls DL/m5_cosechar_abrir | grep -c sim_BTC (17 dias = completo).
+FALTA: cuando haya 17 dias -> `python3 scripts/s6_analisis.py --solo-desc` (elige politicas en DESC 05-14), luego `python3 scripts/s6_analisis.py` (OOS 15-21), `python3 scripts/s7_fidelidad.py`; escribir INFORME.md. Todo con nice -n 19 ionice -c3, ulimit -v 3000000, fuera de 06-09Z.
+Si run_s3/run_s5 mueren: relanzar los .sh (idempotentes: omiten dias hechos; s3 no tiene salto si npz existen).

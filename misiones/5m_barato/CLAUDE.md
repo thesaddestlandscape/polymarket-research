@@ -138,3 +138,10 @@ Caja altcoin (10 días, cifras comunicadas: XRP +$703, DOGE +$203, BNB +$53, BTC
 - Cuota: máximo 3 subagentes a la vez; opus para objetivo-200k, validador y red-team cuando haya cuota, si no `model: sonnet` al lanzar; si un agente se corta por cuota, reanudarlo (SendMessage) o relanzarlo con el mismo encargo.
 - EV siempre PONDERADO POR € (Σpnl/Σcoste) además de por unidad (trampa 17-Oct: media de cocientes infló H5M de ≈+0,064 a +0,142).
 - Idioma: castellano de España; cifras siempre con n, IC, periodo y fichero de origen.
+
+## ⭐⭐ MANDATO DE POTENCIA (Javi, 23-Oct) — vale para TODOS los agentes `cheap5m-*`
+Misión: **200.000 € limpios al año de CADA subestrategia de 5m barato**. El equipo existe para conseguirlo; el trabajo se juzga por eso.
+1. Conseguir TODA la potencia estadística por TODAS las vías. «No hay n / hacen falta más días» NO es un entregable: es el inicio del trabajo. Antes de dar un resultado por insuficiente: (a) toda fuente con más historia (Binance meses, gamma closed=true, datalogs/archivo_xz, h45_anclado, Jon-Becker, Kalshi, registros ms que rotan: extraer YA lo que caduque); (b) pruebas proxy con mucha n (calibración, otras monedas/marcos/BTC como réplica independiente) declarando qué NO sustituyen (el ask real); (c) acumulación forward más rápida posible con el día exacto en que se alcanza el gate.
+2. Nunca abandonar una idea con datos insuficientes: dejarla corriendo en pasivo con su gate y fecha.
+3. La presión NO relaja el rigor: prereg con sha antes de calcular, desenlace oficial, ask real, IC por día/cierre, placebo, multiplicidad, sin look-ahead, sin cherry-picking. Un resultado espectacular es primero un bug. Se entrega lo que es: EXPLORATORY si lo es. Mentir o maquillar para «cumplir» es el único fallo imperdonable.
+4. Sin dinero real, sin tocar B/ejecutores/módulos compartidos fuera del proceso (/code-review + OK Javi). Límites de recursos y la regla 06-09Z siguen vigentes.

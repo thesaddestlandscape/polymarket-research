@@ -39,13 +39,14 @@ Con N y EV medidos el techo por fila es 0,2-12 k€/año. Los 200 k solo salen d
 
 ## ADENDA 20-Oct (chief, Javi: "cada céntimo se reinvierte en sí misma; escalarlo sin más capital")
 Regla: 100 % de las ganancias de cada subestrategia se reinvierte en esa misma subestrategia (stake de cada peldaño = fracción de Kelly de SU bankroll).
-Modelo (Kelly completo, f* = EV/σ², σ² = 4,2 por € y relleno según h5m_rampa): crecimiento diario g = n·EV²/σ² (n = entradas independientes con EV>0 por día). Stake final para 200 k€/año: s = 200.000/(EV·365·n).
-| n/día | EV/€ | g (Kelly) | stake final | días desde 2 € (Kelly / ½ Kelly) |
-|---|---|---|---|---|
-| 2,8 | 0,08 | 0,43 %/d | 2.446 € | 1.666 / 3.332 |
-| 2,8 | 0,04 | 0,11 %/d | 4.892 € | 7.315 |
-| 10 | 0,08 | 1,52 %/d | 685 € | 383 / 766 |
-| 20 | 0,08 | 3,05 %/d | 342 € | 169 / 338 |
-| 50 | 0,08 | 7,62 %/d | 137 € | 55 / 111 |
-| 50 | 0,04 | 1,90 %/d | 274 € | 258 / 517 |
+Modelo (Kelly completo, f* = EV/σ², σ² = 4,2 por € y relleno según h5m_rampa): crecimiento diario g = n·EV²/(2σ²) [CORREGIDO 22-Oct: antes sin el 2; con ½ Kelly g = 3/8·n·EV²/σ²] (n = entradas independientes con EV>0 por día). Stake final para 200 k€/año: s = 200.000/(EV·365·n).
+| n/día | EV/€ | g (Kelly) | g (½ Kelly) | stake final | días desde 2 € (Kelly / ½ Kelly) |
+|---|---|---|---|---|---|
+| 2,8 | 0,08 | 0,21 %/d | 0,16 %/d | 2.446 € | 3.332 / 4.443 |
+| 2,8 | 0,04 | 0,05 %/d | 0,04 %/d | 4.892 € | 14.629 / 19.506 |
+| 10 | 0,08 | 0,76 %/d | 0,57 %/d | 685 € | 766 / 1.021 |
+| 20 | 0,08 | 1,52 %/d | 1,14 %/d | 342 € | 338 / 450 |
+| 50 | 0,08 | 3,81 %/d | 2,86 %/d | 137 € | 111 / 148 |
+| 50 | 0,04 | 0,95 %/d | 0,71 %/d | 274 € | 517 / 689 |
+*Tabla CORREGIDA el 22-Oct-2026 (chief, derivación verificada: g(f)=f·μ−f²σ²/2 → f*=μ/σ², g*=μ²/(2σ²) por entrada; a ½ Kelly g=3/8·μ²/σ² = 75 % del Kelly, no 50 %). La tabla original duplicaba g y subestimaba los días ×2 (Kelly) y ×1,33 (½ Kelly). Además n debe ser la efectiva por cierre (ver ADENDA_22OCT_B_R3.md) y con stake mínimo de 1,05 $ hace falta bankroll ≥ ~63 $ (Kelly) / ~126 $ (½ Kelly) con EV +0,07 para no sobreapostar.*
 Conclusión de diseño: sin capital externo, la velocidad la fijan n (oportunidades independientes/día) y EV (crece al cuadrado). Para llegar a ≥200 k€/año en ≤12 meses cada subestrategia necesita ≈20-50 entradas/día con EV ≥0,08 REAL (no el de n pequeño) Y que el stake final (137-342 €/entrada) quepa en la profundidad. Trabajo del equipo = fabricar n y EV: (1) 6 monedas × marcos 5m/15m/60m/4h × todas las ventanas anidadas; (2) variantes de entrada con más EV por selección (modelo de selección de cierres, AUC 0,75); (3) varias subestrategias no correlacionadas por mercado (sin doble conteo); (4) reinversión diaria automática por peldaño con gates y kill; (5) medir profundidad por banda para el techo de stake. Cada peldaño sigue exigiendo gates + /code-review + OK Javi.

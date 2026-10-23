@@ -1,0 +1,43 @@
+# S1 — Control de misma edad: ¿la retirada de competidores antes del print es selección adversa o supervivencia? (23-Oct-2026)
+Estado: **EXPLORATORY**, solo lectura (B, ejecutores, crons, config sin tocar; sin órdenes, claves ni RPC). nice 19 ionice -c3, ulimit 4 GB, salida 1,5 MB (+datos en datalogs/control_misma_edad). Prereg congelado ANTES de calcular: `prereg/PREREG_S1.md` (sha256 5f1aab59…, `sha256sum -c prereg/PREREG_S1.sha256`). Rol QA: no toco B ni propongo cambios; las "palancas" son hipótesis para el chief.
+
+## 0. Respuesta corta
+1. **El «60 % sin nadie a −100 ms» (y el F 73 % vs R 11 % de `cola_posicion/datos/control_b.txt`, «veredicto A») es mayoritariamente supervivencia/mecánica, no firma demostrada.** Para que un print nos alcance la cola DELANTE tiene que haber desaparecido: 143/146 rellenos de B (98 %) tienen la cola despejada y el relleno llega mediana 0,24 s después del despeje. El contraste F-R lo garantiza por construcción; el diseño previo no puede rechazar «competidores ciegos». Además «otros en el nivel» incluye a los de DETRÁS (sin restricción mecánica).
+2. **Control no mecánico (población, 3 días, ETH/SOL/XRP 5m): sí hay una retirada real específica de los prints, pero estrecha (≤300 ms) y pequeña, y no se ve con antelación útil.** Prints (E) vs instantes de control del mismo nivel top (C), banda 0,10-0,30: Δ(retirada) = **+5,8 pp a −150 ms** (IC90 cierre +4,2..+7,0; 3/3 días; 3/3 monedas; placebo p<0,001) pero **+0,2 pp a −300 ms** (−0,8..+1,3; p=0,33) y +0,1 pp a −500 ms. En 0,30-0,70: +8,4 / +2,8 / +1,8 pp (150/300/500 ms; el efecto a 300-500 ms existe en ETH y SOL, no en XRP; a −1000 ms ≈0). Regla preregistrada ⇒ **«FIRMA REAL NO ACCIONABLE»** en 0,10-0,30 (la banda de B).
+3. **No hay selección adversa económica demostrada.** EV de rellenos hipotéticos de cada print con/sin retirada previa (a −300 ms), banda 0,10-0,30: **+0,106 (n=1.847) con retirada vs −0,003 (n=9.949) sin ella: Δ +0,095, IC90 cierre (−0,043,+0,213)** — signo contrario al de la hipótesis y sin significación. Banda 0,30-0,70: Δ −0,033 (IC90 cierre −0,077..+0,011; placebo p=0,043 ⇒ no cumple la regla por cierre). En B (descriptivo, n=47 rellenos con EXIT medible): con retirada −0,529 (n=14, 1 acierto) vs sin +0,104 (n=33); Fisher p=0,23; IC90 cierre del Δ (−1,75,+0,53): ruido.
+4. **¿Cancelar con la señal?** En 0,10-0,30 evitaría rellenos de EV +0,106 (perder dinero bueno) y costaría ~14 % de la exposición: **REJECTED como palanca en la banda de B**. En 0,30-0,70 los evitados rinden −0,068 (IC90 cierre −0,102..−0,035) pero los conservados siguen en −0,037 y Δ2 no pasa IC por cierre: **EXPLORATORY**, y B no opera esa banda.
+
+## 1. Método (resumen; detalle en el prereg)
+Reloj de recepción del libro5 (`cola_vs_cruce/mk`, bids, libro unificado), parser = `cola_posicion/scripts/d1_l2_motor.carga` (compartido con el otro agente: un fallo de parseo sería común; la comprobación indirecta es que a −150 ms reproduzco su F 0,733 / R 0,106 sobre B con n=45/681). Señal EXIT(u): S(u−850)≥5 y [S(u−850) − consumido por prints − S(u)] ≥ 80 % S(u−850); u = t*−τ, τ∈{150,300,500,1000} ms; accionable preregistrado τ≥300 ms. E = 48.904 prints (T 50-300 s, nivel = mejor bid en t*−300), C = 16.244 instantes de control (≤3 por E, mismo mercado-token-nivel, ±60 s, sin print en [t−2 s,t+3 s], mismas condiciones). Estratos moneda × precio 0,05 × T3 × talla; IC90 bootstrap por cierre (fin del 5m) y por día; placebo por permutación de etiqueta dentro de estrato (2.000). Desenlace oficial inferido de `pop_units` (cobertura 96,5 % de los prints; ganador inequívoco en 4.674 mercados; sin resolver = missing). Fill hipotético = min(acc,10) acc, sin fee ni rebate maker. Ficheros: `scripts/s1_extrae.py`, `s2_analisis.py`, `s3_b.py`, `s4_sens.py`; salidas `datos/s2_poblacion.txt`, `s3_b.txt`, `s4_sens.txt` (+ csv de eventos).
+
+## 2. Resultados
+**H1 (Δ retirada E−C, `datos/s2_poblacion.txt`)**: banda A τ150 +0,058 (E 18,5 % vs C 10,8 %), τ300 +0,002, τ500 +0,001, τ1000 −0,010; banda B +0,084 / +0,028 / +0,018 / +0,004. Por día banda A τ150: +0,047/+0,054/+0,067; sin ningún día +0,053..+0,059. Por moneda banda A τ150: ETH +0,056, SOL +0,050, XRP +0,080 (XRP también +0,038 a 300 ms). La retirada se concentra en los 150-300 ms previos al print, coherente con causa común (movimiento de Binance, cancelaciones durante el taker delay ~145 ms) o con tomador que cancela+barre; con estos datos no se distinguen. Razón de verosimilitud ≈1,7: la señal también aparece en el 10,8 % del tiempo SIN print.
+**H2/H3 (`s2_poblacion.txt`)**: ver §0.3-4. Δ2 banda A: τ150 −0,021, τ300 +0,095, τ500 +0,105, τ1000 −0,068 (todos IC90 cierre cruzando 0; signo inestable). Banda B: −0,014/−0,033/+0,001/−0,032.
+**H4 (B, `datos/s3_b.txt`; 3.158 órdenes con token y libro, 146 rellenos con print localizado, 60 con edad ≥1,2 s)**:
+- (a) ahead_ub(t*−100)≤0,5 en 85 % de F frente a «otros»≤0,5 en 78 %: la diferencia con el 60 % anterior es el criterio (edad ≥1,2 s) y los de detrás; el despeje de cola delante es casi universal.
+- (b) tasa de relleno por 100 s de exposición con cola despejada según tiempo desde el despeje: [0-0,3 s) 26,1 (n=79 rellenos, 303 s) · [0,3-0,85) 15,5 (38) · [0,85-2) 3,3 (8) · ≥2 s 4,7 (18). Con la cola presente: 3 rellenos en 2.658 s. El relleno llega casi siempre justo tras el despeje: es la espera del primer tomador tras la retirada (más el posible cluster temporal), no una firma separable aquí.
+- (c) EXIT en F / R / RC (R con cola despejada): τ150 0,733 / 0,106 / 0,275 (F−R +0,63; F−RC +0,46, IC90 cierre +0,34..+0,58); τ300 0,298 / 0,100 / 0,227 (F−R +0,20; **F−RC +0,07, IC90 −0,06..+0,19**); τ500 0,146 / 0,096 / 0,232 (F−RC −0,09); τ1000 0,104 / 0,112 / 0,243 (F−RC −0,14). Es decir: el contraste previo sale gigante a −150 ms, desaparece a −300/−500 ms al controlar la mecánica y no hay retirada observable segundos antes.
+- (d) EV descriptivo de rellenos de B por EXIT: ver §0.3 (n 5-33 por celda; no decide).
+
+## 3. Veredicto por reclamación
+| Reclamación | Etiqueta | Motivo |
+|---|---|---|
+| «La competencia se retira antes del print (60 % sin nadie a −100 ms)» es firma de selección adversa | **No demostrada; en gran parte supervivencia/mecánica** | Condicionado al relleno la cola delante ha de haber desaparecido (98 %); F-R no discrimina |
+| Existe retirada específica de los prints | EXPLORATORY (real, pequeña, ≤300 ms) | E−C +5,8 pp a −150 ms, 3/3 días y monedas; ≈0 a −300/−500 ms en 0,10-0,30 |
+| Es observable ANTES con lead útil | REJECTED en 0,10-0,30 (τ≥300 ms); sin evidencia a 150 ms | Δ1(300)=+0,2 pp; LR ≈1,7 |
+| Los rellenos tras retirada pierden más | NO soportado | Δ2 banda A +0,095 (IC cruza 0); banda B −0,033 no pasa IC por cierre |
+| Cancelar al ver la retirada mejora B | REJECTED (banda A) / EXPLORATORY (banda B) | evitados EV +0,106 (A) |
+Veredicto de control_b.txt («A: firma de selección adversa»): **no se sostiene como lo formuló** (diseño mecánico; n(F)=45; 3 días).
+
+## 4. Límites y sesgos
+- 3 días (20-22 Oct, 22 parcial hasta ~14:40Z), régimen de día domina; IC por día con 3 clusters solo informativo. n(F de B con EXIT medible)=45-48; potencia mínima: no se puede decidir nada sobre B solo.
+- Hora de recepción: el nivel parpadea y el drop precede al print 10-60 ms; τ entre 150 y 300 ms no se evaluó (¿200-250 ms accionable?). El efecto a −150 ms puede contener aún cancelaciones disparadas por el propio barrido (orden de mensajes).
+- EV hipotético de la cinta no es el EV de B (cola, tamaño, rebate +20 % del fee, repega); H2 usa todos los prints, no solo los que casan con nuestra posición; sin fee de maker ni rebate. Cobertura de desenlace 96,5 % (no 100 %); missing excluido, no cero.
+- Umbral 80 %/850 ms, banda 0,05 de precio y leads fijados; sensibilidad a umbral 60/90 % y por T no ejecutada. Por moneda y sin-día son post-hoc declarados. Parser L2 compartido con el otro agente.
+- No se validó con ancla on-chain la hora de cada print (no hecho aquí).
+
+## 5. Reparación mínima / siguiente paso (para el chief, sin tocar B)
+Medir pasivamente la retirada a τ=150-250 ms con el libro WS en vivo de B (etiqueta por orden, sin actuar) y su EV por € ponderado en ≥10 días; solo si Δ2<0 con IC por cierre <0 con τ≥ latencia real de cancelación (60 ms RTT + detección) tendría sentido un prerregistro de «cancelar con retirada». Mientras tanto, no basar ninguna regla de B en la lectura «60 % sin nadie a −100 ms».
+
+## 6. Reproducir
+`cd scripts; nice -n 19 ionice -c3 python3 s1_extrae.py` (≈4 min, 3 procesos) → `s2_analisis.py` → `s3_b.py` → `s4_sens.py`. Entradas: `cola_vs_cruce/mk` (datalogs), `cola_posicion/datos/{pop_units_*,b_l2.csv}`, `datalogs/cola_posicion/{ordenes_b.json,snap/ledger_B.jsonl}`.

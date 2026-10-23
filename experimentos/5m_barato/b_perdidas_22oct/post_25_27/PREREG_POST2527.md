@@ -1,0 +1,24 @@
+# PREREG POST-25-27 (23-Oct-2026 ~09:30Z) - postmortem de las tandas r25-r27 de B como prueba fuera de muestra
+Congelado ANTES de calcular ningun EV/PnL con etiquetas de reglas sobre las posiciones del 23-Oct. Solo lectura. Sin ordenes, claves ni commits. B/ejecutores/modulos intactos.
+Lo ya mirado antes de este prereg (declarado): PnL de las tandas por tanda y por posicion en `contabilidad_wallet_dedicada` (16 posiciones 23-Oct: 1 ganadora, 15 perdedoras) y los h_w1 que L1 imprimio en su cron.log (4 de 16). NO se habia calculado ningun contraste de reglas.
+Nomenclatura: r25/r26/r27 = ficheros `h47_real_B_20261023_{0630,0750,0850}_r2x.out` = tandas "25/26/27" de Javi = tandas 26/27/28 de la numeracion de `contabilidad_wallet_dedicada` (se numera por suelo_reiniciado). Se usa r25/r26/r27.
+## Unidades (separadas)
+orden (puja_post del ledger), fill (movimiento on-chain COMPRA), posicion (mercado, outcome; unidad de EV/PnL; fuente `posiciones.csv` de la contabilidad), cierre (fin del 5m; unidad de cluster para IC/permutacion), dia.
+EV = sum(pnl)/sum(coste) ponderado por EUR (no media de cocientes). PnL en pUSD. Fee maker 0; rebate NO sumado (se estima aparte como cota y se declara no cobrado).
+## Reglas candidatas evaluadas SOBRE LAS POSICIONES REALES de B (descriptivo: n=16 en 23-Oct; ninguna decide nada)
+RL0 = saltar posicion con h_w1==1 (L1: clase a_favor y |rpre|>=7,7 bps). RL1 = h_w1==1 & R-TEND==TREND. RL2 = h_w1==1 & R in {TREND,MIXTO}. (R de `regimen_lib`, etiquetas recalculadas para el 23-Oct con la misma funcion, bookTicker de recepcion; version=sha de regimen_lib.)
+RB2 = saltar si NO (bid15 mismo lado - precio de puja <= 0,03) en la ultima muestra del brazo r3shadow anterior o igual al t_dec de la orden (maximo 6 s de antiguedad; si no hay muestra = missing, no se salta ni se cuenta como pasada). RB3 = RB2 y ademas vol30>=26 y hora UTC>=4.
+S1p (PROXY, NO es E1b) = saltar si el mid de Binance (bookTicker, recepcion) se movio >=2 bps EN CONTRA del lado comprado en los 2 s previos a la deteccion del relleno (t_deteccion del ledger); sin t_det = missing.
+Cada regla se aplica a la posicion (si se hubiera saltado la orden, se pierde esa posicion entera: sustitucion/re-puja NO modelada = declarado, sesgo hacia OVERSTATE de evitables).
+Para cada regla: n saltadas, coste saltado, PnL saltado, dPnL = -PnL(saltadas) (+ = ahorro), coste de oportunidad = ganancias perdidas = sum(max(pnl,0) saltadas), EV retenido, y p de permutacion (mismo n de saltos al azar dentro del conjunto de posiciones evaluadas, 20.000 sorteos, una cola dPnL>=obs). Multiplicidad: familia de 6 reglas, Bonferroni x6 (p<0,0083). Con n=16 nada pasa; se reporta igualmente.
+## Comparacion con el mercado (selección adversa vs azar vs sesgo)
+M1 (nulo calibrado a poblacion): para cada posicion de B, p_win = tasa de acierto de la poblacion on-chain 17-22 Oct (`etiquetado_pasivo_B/poblacion/pob_*`, es_b=0, ETH/SOL/XRP, banda 0,10-0,30) en el cubo de precio (0,02) de la posicion; PnL nulo simulado 100.000 veces con win independiente por MERCADO-LADO; p = P(PnL nulo <= PnL observado). Se reporta para: posiciones r25-r27, 23-Oct completo, B 20-22 (descriptivo, visto), B total. La poblacion incluye la seleccion adversa de los makers (los rellenos), por lo que M1 contesta "B perdio mas que el maker medio a su mismo precio?".
+M2 (gemelo r3shadow): EV del gemelo BASE (cons_x primario, cons_r, opt_x) en TODOS los mercados completos del 23-Oct con desenlace oficial (r3_desenlaces), global y en la ventana 06:30-08:56Z de B, por moneda; y emparejado en los mercados donde B pujo: pnl B vs pnl gemelo.
+M3 (regimen del dia): tasa de acierto de los longshots rellenados del gemelo el 23-Oct vs 17-22 Oct, e IC por cierre.
+M4 (sesgos de B): B vs poblacion por lado (YES/NO), moneda, cubo de precio 0,05 y hora; reparto de coste. Una diferencia solo se reporta con IC90 por cierre; sin n>=40 por celda es descriptiva.
+## Gate L1 (conteo, sin cambiar PREREG_L1)
+Dias forward con posiciones resueltas, posiciones por clase y n que falta para >=40 en h_w1=1; ritmo de B en posiciones/dia (min/med/max de los 4 dias de ledger) y dia estimado de alcance SI B operase. El reloj de B corre solo con B operando (B parado: saldo 3,41 < minimo 6).
+## Contabilidad
+Cuadre saldo on-chain <-> ledger <-> posiciones: reproducido independientemente a partir de `movimientos.csv` y `posiciones.csv` (suma de movimientos = saldo; payout = redenciones; PnL = payout - coste), mas conciliacion de acciones ledger vs on-chain por mercado en 23-Oct. Cualquier diferencia > 0,01 pUSD o 0,5 acc = parar y surfacear.
+## Palancas (parte 5)
+Se listan con evidencia y n efectivo tomados de los informes citados (no se recalculan aqui salvo lo indicado) y con ruta de potencia; ninguna se promociona. Etiquetas: REJECTED / DATA_BLOCKED / EXPLORATORY / PROMISING.

@@ -1,0 +1,4 @@
+# Addendum 1 al preregistro (22-Oct ~16:50Z, ANTES de simular los dias 05-16 y de abrir ningun resultado OOS)
+- Declaracion: tras el preregistro se hizo UNA prueba de humo de tiempo/humo de `s5_run_sim.py` en ETH 17-Oct (dia OOS): 287 mercados, EV/€ de las politicas PAR en BASE entre -8 % y -10 %, JOIN -12,6 %; no se uso para cambiar nada. Despues se anadio `q15/cost15/pnl15` (rellenos con match <= t0+13,5 s) a la salida para el punto 5 (comparar con T>285 on-chain, bloque ~2,4 s tras el casado), y se corrigio la tolerancia de igualdad de precios float32 (EPS 1e-6) en cosechar_sim.py y s4_calib_B.py (la calibracion se re-ejecuto; mismos resultados dentro de ±0,01).
+- Aclaracion de la cobertura: "sin_datos" = mercado sin q en los 20 s previos a t0+50 ms.
+- Codigo CONGELADO (sha256 abajo). Cualquier cambio posterior = addendum con motivo, y si se ha visto algun resultado de 15-21 Oct, version nueva con OOS 22-Oct en adelante.
