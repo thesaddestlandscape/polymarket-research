@@ -1,75 +1,75 @@
 {
- "generado_utc": "2026-10-23T08:00:01+00:00",
+ "generado_utc": "2026-10-24T08:00:01+00:00",
  "buckets": {
   "LoL#SEGUIR[0.09,0.14)#ventana_fina": {
-   "n_senales": 50,
-   "n_wallets_distintas": 40,
-   "n_mercados_distintos": 50,
+   "n_senales": 51,
+   "n_wallets_distintas": 41,
+   "n_mercados_distintos": 51,
    "top5_wallets": [
     {
      "wallet": "0x5d40576be2e9c61d283f4fd80d7a5ccf2331ba95",
      "n": 3,
-     "pct": 6.0
+     "pct": 5.9
     },
     {
      "wallet": "0xfe67df6e0c585e50cbe8bdcad804d980c6b8a2e8",
      "n": 3,
-     "pct": 6.0
+     "pct": 5.9
     },
     {
      "wallet": "0x10ef48324b3ebc06d9137794c70285e8e37a7d7b",
      "n": 2,
-     "pct": 4.0
+     "pct": 3.9
     },
     {
      "wallet": "0x3e1a3bf6d7f7c15cdd0f8d5f44574472c701d21f",
      "n": 2,
-     "pct": 4.0
+     "pct": 3.9
     },
     {
      "wallet": "0x8f9bd16a4968cba6af5761ac5dbe345a51ab8b23",
      "n": 2,
-     "pct": 4.0
+     "pct": 3.9
     }
    ],
-   "top1_wallet_pct": 6.0,
+   "top1_wallet_pct": 5.9,
    "top1_mercado_pct": 2.0,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "malo_confirmado"
   },
   "LoL#FADE[0.11,0.16)#ventana_fina": {
-   "n_senales": 53,
+   "n_senales": 54,
    "n_wallets_distintas": 38,
-   "n_mercados_distintos": 53,
+   "n_mercados_distintos": 54,
    "top5_wallets": [
     {
      "wallet": "0x58f8f1138be2192696378629fc9aa23c7910dc70",
      "n": 4,
-     "pct": 7.5
+     "pct": 7.4
+    },
+    {
+     "wallet": "0x1c29705c62a6435b5d45c382530012b14c5a167e",
+     "n": 4,
+     "pct": 7.4
     },
     {
      "wallet": "0xfe787d2da716d60e8acff57fb87eb13cd4d10319",
      "n": 3,
-     "pct": 5.7
+     "pct": 5.6
     },
     {
      "wallet": "0x47c8481b56addccbb8022dea26dd907cd22d86bc",
      "n": 3,
-     "pct": 5.7
-    },
-    {
-     "wallet": "0x1c29705c62a6435b5d45c382530012b14c5a167e",
-     "n": 3,
-     "pct": 5.7
+     "pct": 5.6
     },
     {
      "wallet": "0x9c4db21669d5c5b48c0655761b4fedd646e6168c",
      "n": 2,
-     "pct": 3.8
+     "pct": 3.7
     }
    ],
-   "top1_wallet_pct": 7.5,
+   "top1_wallet_pct": 7.4,
    "top1_mercado_pct": 1.9,
    "alerta_wallet": false,
    "alerta_mercado": false,
@@ -258,7 +258,7 @@
    "top1_mercado_pct": 2.4,
    "alerta_wallet": true,
    "alerta_mercado": false,
-   "veredicto_gate": "sin_concluir"
+   "veredicto_gate": "bueno_confirmado"
   },
   "unl-otros#FADE[0.10,0.15)#ventana_fina": {
    "n_senales": 37,
