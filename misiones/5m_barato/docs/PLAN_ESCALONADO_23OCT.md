@@ -26,3 +26,17 @@ Q-TECHO = techo de precio por orden con q calibrada al fill (debe batir al mid y
 - Gate previo a variante de B: forward 10 días (L1/L1b/P-REAL, evaluable ~2-3 Nov) + /code-review + OK Javi. B sin dinero (3,41 $) hasta la recarga.
 - Orden: PRIMERO masterizar B (R0/R2/combinación + AS + escalado a 200k); DESPUÉS H39b (sigue en pausa).
 - X-SALIDA: ninguna regla de salida a nivel de curva crea EV (candidata = NINGUNA); B real EV −0,068/€, Kelly 0; hueco ≥189 k€/año; capital y EV son las palancas.
+
+## Cola 24-Oct (Javi: optimizar tokens; el chief NO lee informes largos, solo las 5 líneas finales)
+Reglas de lanzamiento: 1 agente con tokens a la vez (2 solo si el 2º es CPU/runner); tope ~120 k tokens y 45 min; sonnet; el agente escribe INFORME.md en su carpeta y devuelve ≤5 líneas (veredicto, n, ΔPnL, hueco 200 k€, siguiente). El chief lanza el siguiente SOLO al entregar el anterior.
+1. AS-TOMADOR: cerrar INFORME.md (a1-a6 hechos, falta informe; prereg+ADENDA1, K=4, alfa 0,0125).
+2. D-FUERTE ronda 3: cerrar informe (AUC techo ~0,55).
+3. TP1-INFRA: extracción on-chain 22-23 Oct + cron TP1.
+4. L1 etiquetado pasivo: solo comprobar crons (sin agente).
+5. P-REAL BTC (tras 26-Oct 13:00Z con cuota reseteada), Q-TECHO/C2, red-team final, objetivo-200k libro.
+
+## Regla 24-Oct (Javi): todo veredicto de agente lo reverifica OTRO agente con los datos crudos antes de darse por bueno
+Informe → verificación independiente (red-team/validator, recomputa desde parquet/CSV crudos, no desde los JSON del autor) → solo entonces cuenta. Orden: AS-TOMADOR (en curso), D-FUERTE r3, TP1.
+
+## Modelo por tarea (Javi 24-Oct): Opus 5.5 permitido si la tarea lo necesita, con presupuesto
+Sonnet por defecto (extracción, scripts, informes). Opus 5.5 solo para: red-team/verificación de veredictos que decidan dinero, diseño de variantes de B con /code-review, y análisis estadístico con riesgo de falso positivo. Con Opus: prompt corto con rutas exactas, tope ~80 k tokens, un solo agente Opus a la vez, respuesta final ≤5 líneas, detalle a fichero.

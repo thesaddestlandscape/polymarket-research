@@ -30,6 +30,13 @@ Python 19-Oct 13:30Z: se por cierre = 0,154 del IC90 del vigía; EV máximo con 
    (`data/live/balance_real.json` 19-Oct 13:25Z; `pusd_onchain` 50,80 → ~9 $ sin conciliar con `free_usdc`); dedicada 19,59 pUSD (memoria 17-Oct,
    NO re-verificada: la dirección completa solo está en la credencial, que no se lee). Toda rampa es decisión de Javi.
 
+## Nota 24-Oct 10:50Z (capacidad y diseño de volumen; fuente `experimentos/5m_barato/b_perdidas_22oct/capacidad_diseno/INFORME.md`, scripts c1-c7)
+- **Validado 0; defendible hoy 6,3 k€/año (conservador, sin 60m de 4 días), ≈0,3 k base con la brecha propia de B (−0,053), 98 k «base sin brecha» NO defendible; hueco 193,7 k€.** Celdas disjuntas, cuota anclada a lo medido (0,4 % = R3 5 acc; 0,9 % = R3 K20), EV = mínimo de IC90 días / sin 2 mejores días / OOS. Opt 765 k (cuota 3 % no medida) no se cita.
+- Volumen: flujo maker 5m 5,3 M€/día; nicho B 33,9 k€/día; B real 55 €/día (0,16 %), EV propio −0,072 (n=202). 200 k€ exige 49,8 k€/día a EV +0,011, 11 k a +0,05, 5,5 k a +0,10.
+- **Rebate maker 20 % verificado REAL** (data-api `MAKER_REBATE`, pago diario 00:45Z, pagado/inferido 1,01-1,76 en makers >50 k€/16 d) **con umbral ≈1 €/día por wallet** (100 % de pago con inferido ≥1,0, n=437 maker-días; la dedicada tiene 0 pagos porque B acumula ≈0,6 €/día). Rewards LP 5m/15m = 0 (`rates: null`). El rebate es ~63 % del PnL de los 702 makers 5m.
+- Existe un tipo de ganador persistente: grandes makers BTC 5m (top-35 por PnL en DESC: OOS +0,0081 sin rebate / +0,0131 con él sobre 1,74 M€/día; `0x21f4` +42 k€ en 16 d, 8/8 días). Selección por resultado, 8 días OOS, nuestros simuladores no lo reproducen: ahí está la apuesta (fidelidad de cola, E1), no en más alts a 5 acc.
+- Rechazado/descartable con n: bandas 5m 0,01-0,10 (−0,008, OOS −0,057), 15m 0,10-0,30 y 0,50-0,70, pares/cosechar, 60m 0,10-0,30 (−0,366), tomador, K=50.
+
 ## Nota 22-Oct 15:40Z (risk-economics, fila R3 de B; fuente `experimentos/5m_barato/b_perdidas_22oct/r3_escalado/INFORME.md`)
 - **R3 (B maker ETH/SOL/XRP con bid15 ≤3c + vol30 ≥26 + hora ≥4)**: peldaño 2-4 (forward shadow congelado, 1ª lectura 02-Nov); validado 0.
   Simulador E1 17-22 Oct: separa (DIF +0,253, placebo p=0,003, 5/6 días) pero política −0,041 IC90 días (−0,132,+0,049); recalibrado a B real
