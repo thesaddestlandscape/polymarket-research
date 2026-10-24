@@ -1,45 +1,45 @@
 {
-  "SOL": {
-    "smart_money_consensus": -0.6,
-    "n_trades_smart": 5,
+  "ETH": {
+    "smart_money_consensus": -0.019,
+    "n_trades_smart": 210,
     "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.2411,
+    "smart_money_consensus_ponderado": -0.1617,
     "n_wallets_smart_ponderado": 3
   },
   "BTC": {
-    "smart_money_consensus": -0.0189,
-    "n_trades_smart": 1007,
-    "n_wallets_smart": 9,
-    "smart_money_consensus_ponderado": -0.0202,
-    "n_wallets_smart_ponderado": 9
+    "smart_money_consensus": -0.1972,
+    "n_trades_smart": 284,
+    "n_wallets_smart": 7,
+    "smart_money_consensus_ponderado": -0.323,
+    "n_wallets_smart_ponderado": 7
   },
-  "ETH": {
-    "smart_money_consensus": -0.3469,
-    "n_trades_smart": 49,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": -0.3688,
-    "n_wallets_smart_ponderado": 5
+  "SOL": {
+    "smart_money_consensus": -0.1,
+    "n_trades_smart": 20,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": -0.4354,
+    "n_wallets_smart_ponderado": 2
   },
   "DOGE": {
-    "smart_money_consensus": -1.0,
-    "n_trades_smart": 1,
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 16,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -1.0,
+    "smart_money_consensus_ponderado": -0.2589,
     "n_wallets_smart_ponderado": 1
   },
   "BNB": {
-    "smart_money_consensus": -1.0,
-    "n_trades_smart": 7,
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 2,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -1.0,
+    "smart_money_consensus_ponderado": -0.0659,
     "n_wallets_smart_ponderado": 1
   },
   "XRP": {
-    "smart_money_consensus": 1.0,
-    "n_trades_smart": 1,
+    "smart_money_consensus": 0.5,
+    "n_trades_smart": 8,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 1.0,
+    "smart_money_consensus_ponderado": 0.7023,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-10-24T15:50:58+00:00"
+  "_actualizado": "2026-10-24T16:25:34+00:00"
 }
