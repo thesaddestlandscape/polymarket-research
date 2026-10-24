@@ -1,6 +1,6 @@
 {
  "cutoff_utc": "2026-09-29T09:29:27+00:00",
- "generado_utc": "2026-10-23T08:50:15+00:00",
+ "generado_utc": "2026-10-24T08:50:13+00:00",
  "items": [
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_NO",
@@ -8,11 +8,11 @@
    "n_hist": 41,
    "ev_hist": 0.6267,
    "fill_libro_real": 0.42,
-   "n_fwd": 60,
+   "n_fwd": 62,
    "dias_fwd": 19,
-   "ev_fwd": 0.0009,
-   "ic_lo_fwd": -0.2526,
-   "veredicto": "sin_concluir"
+   "ev_fwd": -0.0314,
+   "ic_lo_fwd": -0.2608,
+   "veredicto": "refutado_forward"
   },
   {
    "tupla": "GBM_LATE_15M_TARDIO#SOL#15min#BUY_NO",
@@ -20,10 +20,10 @@
    "n_hist": 45,
    "ev_hist": 0.4318,
    "fill_libro_real": 0.35,
-   "n_fwd": 69,
-   "dias_fwd": 19,
-   "ev_fwd": 0.1211,
-   "ic_lo_fwd": -0.1668,
+   "n_fwd": 67,
+   "dias_fwd": 18,
+   "ev_fwd": 0.0956,
+   "ic_lo_fwd": -0.2055,
    "veredicto": "sin_concluir"
   },
   {
@@ -32,10 +32,10 @@
    "n_hist": 44,
    "ev_hist": 0.3542,
    "fill_libro_real": null,
-   "n_fwd": 71,
-   "dias_fwd": 21,
-   "ev_fwd": -0.1585,
-   "ic_lo_fwd": -0.3692,
+   "n_fwd": 75,
+   "dias_fwd": 20,
+   "ev_fwd": -0.1649,
+   "ic_lo_fwd": -0.39,
    "veredicto": "refutado_forward"
   },
   {
@@ -44,10 +44,10 @@
    "n_hist": 40,
    "ev_hist": 0.3379,
    "fill_libro_real": 0.307,
-   "n_fwd": 28,
+   "n_fwd": 29,
    "dias_fwd": 13,
-   "ev_fwd": -0.0532,
-   "ic_lo_fwd": -0.4956,
+   "ev_fwd": -0.0355,
+   "ic_lo_fwd": -0.4488,
    "veredicto": "refutado_forward"
   },
   {
@@ -56,10 +56,10 @@
    "n_hist": 58,
    "ev_hist": 0.2717,
    "fill_libro_real": 0.218,
-   "n_fwd": 60,
+   "n_fwd": 65,
    "dias_fwd": 20,
-   "ev_fwd": -0.03,
-   "ic_lo_fwd": -0.1985,
+   "ev_fwd": -0.0658,
+   "ic_lo_fwd": -0.2235,
    "veredicto": "refutado_forward"
   },
   {
@@ -68,10 +68,10 @@
    "n_hist": 82,
    "ev_hist": 0.2616,
    "fill_libro_real": 0.606,
-   "n_fwd": 164,
-   "dias_fwd": 18,
-   "ev_fwd": -0.1392,
-   "ic_lo_fwd": -0.2582,
+   "n_fwd": 165,
+   "dias_fwd": 17,
+   "ev_fwd": -0.1751,
+   "ic_lo_fwd": -0.2801,
    "veredicto": "refutado_forward"
   },
   {
@@ -80,10 +80,10 @@
    "n_hist": 114,
    "ev_hist": 0.2597,
    "fill_libro_real": 0.338,
-   "n_fwd": 160,
+   "n_fwd": 161,
    "dias_fwd": 21,
-   "ev_fwd": -0.1569,
-   "ic_lo_fwd": -0.2893,
+   "ev_fwd": -0.13,
+   "ic_lo_fwd": -0.2834,
    "veredicto": "refutado_forward"
   },
   {
@@ -92,10 +92,10 @@
    "n_hist": 121,
    "ev_hist": 0.2135,
    "fill_libro_real": 0.413,
-   "n_fwd": 101,
+   "n_fwd": 104,
    "dias_fwd": 20,
-   "ev_fwd": 0.067,
-   "ic_lo_fwd": -0.064,
+   "ev_fwd": 0.0899,
+   "ic_lo_fwd": -0.0486,
    "veredicto": "sin_concluir"
   },
   {
@@ -104,10 +104,10 @@
    "n_hist": 76,
    "ev_hist": 0.2029,
    "fill_libro_real": 0.274,
-   "n_fwd": 84,
-   "dias_fwd": 20,
-   "ev_fwd": 0.0652,
-   "ic_lo_fwd": -0.074,
+   "n_fwd": 91,
+   "dias_fwd": 21,
+   "ev_fwd": 0.0262,
+   "ic_lo_fwd": -0.1057,
    "veredicto": "sin_concluir"
   },
   {
@@ -116,10 +116,10 @@
    "n_hist": 62,
    "ev_hist": 0.1559,
    "fill_libro_real": 0.107,
-   "n_fwd": 52,
+   "n_fwd": 48,
    "dias_fwd": 16,
-   "ev_fwd": -0.0784,
-   "ic_lo_fwd": -0.1996,
+   "ev_fwd": -0.1296,
+   "ic_lo_fwd": -0.2448,
    "veredicto": "refutado_forward"
   },
   {
@@ -140,11 +140,11 @@
    "n_hist": 94,
    "ev_hist": 0.1357,
    "fill_libro_real": null,
-   "n_fwd": 190,
+   "n_fwd": 200,
    "dias_fwd": 21,
-   "ev_fwd": 0.0008,
-   "ic_lo_fwd": -0.0874,
-   "veredicto": "sin_concluir"
+   "ev_fwd": -0.0017,
+   "ic_lo_fwd": -0.0926,
+   "veredicto": "refutado_forward"
   },
   {
    "tupla": "FAVORITO_CONFIRMADO#ETH#60min#BUY_NO",
@@ -152,10 +152,10 @@
    "n_hist": 138,
    "ev_hist": 0.1217,
    "fill_libro_real": 0.607,
-   "n_fwd": 177,
+   "n_fwd": 176,
    "dias_fwd": 21,
-   "ev_fwd": -0.0214,
-   "ic_lo_fwd": -0.1325,
+   "ev_fwd": -0.0431,
+   "ic_lo_fwd": -0.1465,
    "veredicto": "refutado_forward"
   },
   {
@@ -164,10 +164,10 @@
    "n_hist": 115,
    "ev_hist": 0.1131,
    "fill_libro_real": 0.186,
-   "n_fwd": 207,
+   "n_fwd": 208,
    "dias_fwd": 21,
-   "ev_fwd": 0.061,
-   "ic_lo_fwd": 0.0085,
+   "ev_fwd": 0.0607,
+   "ic_lo_fwd": 0.0077,
    "veredicto": "sin_concluir"
   },
   {
@@ -176,10 +176,10 @@
    "n_hist": 116,
    "ev_hist": 0.1042,
    "fill_libro_real": 0.628,
-   "n_fwd": 93,
+   "n_fwd": 89,
    "dias_fwd": 17,
-   "ev_fwd": 0.0313,
-   "ic_lo_fwd": -0.1217,
+   "ev_fwd": 0.0243,
+   "ic_lo_fwd": -0.1219,
    "veredicto": "sin_concluir"
   }
  ]
