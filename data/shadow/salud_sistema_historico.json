@@ -1,72 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-06T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 245,
-      "resolve_postmortem_p50_s": 6.0,
-      "resolve_postmortem_p95_s": 106.0,
-      "resolve_postmortem_max_s": 217.0,
-      "n_ciclos_live_trade": 3002,
-      "hueco_live_trade_max_s": 364.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 20,
-      "stale": [
-        "dash",
-        "control",
-        "observadores",
-        "polyactivity",
-        "libroambos",
-        "ballenas_fast",
-        "ballenas_5m",
-        "ballenas_15m",
-        "favaltaconv",
-        "fav15mexec",
-        "fav60mexec",
-        "favbtc60mno",
-        "walletmirror",
-        "wmexec",
-        "gbmlate15m",
-        "updowngbmtardio"
-      ]
-    },
-    "disco": {
-      "pct_usado": 55.0,
-      "gb_libres": 32.61,
-      "git_gb": 0.0,
-      "data_gb": 20.13,
-      "datalogs_gb": 3.91
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.68,
-      "ram_pct_libre": 45.1
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 397,
-      "n_results_total": 78519
-    },
-    "carga_sistema": {
-      "load1": 9.66,
-      "load5": 8.46,
-      "load15": 7.78,
-      "nproc": 2,
-      "ratio5": 4.23,
-      "n_procesos_total": 225
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [
-      "⏱️ ciclo resolve+postmortem tardó 217s (umbral 120s)",
-      "⚠️ screens STALE (código en disco != código cargado): dash, control, observadores, polyactivity, libroambos, ballenas_fast, ballenas_5m, ballenas_15m, favaltaconv, fav15mexec, fav60mexec, favbtc60mno, walletmirror, wmexec, gbmlate15m, updowngbmtardio",
-      "🔥 CPU sobresuscrita: load5=8.46 en 2 cores (ratio=4.23x, umbral 3.0x) -- 225 procesos vivos"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-07T07:08:01+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 262,
@@ -13223,6 +13156,214 @@
       "⏱️ ciclo resolve+postmortem tardó 809s (umbral 400s)",
       "💾 disco al 93% (5.21GB libres)",
       "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-23T07:44:05+00:00) -- Traceback (most recent call last):"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-24T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 136,
+      "resolve_postmortem_p50_s": 86.2,
+      "resolve_postmortem_p95_s": 152.3,
+      "resolve_postmortem_max_s": 165.1,
+      "resolve_postmortem_duraciones_s": [
+        74.9,
+        86.0,
+        73.9,
+        70.0,
+        133.4,
+        112.1,
+        78.6,
+        84.1,
+        75.3,
+        77.9,
+        140.5,
+        131.2,
+        82.3,
+        81.0,
+        83.6,
+        87.4,
+        145.4,
+        163.2,
+        80.6,
+        83.7,
+        72.5,
+        79.5,
+        141.2,
+        111.5,
+        91.3,
+        90.1,
+        82.5,
+        90.9,
+        136.3,
+        115.1,
+        82.0,
+        79.8,
+        78.0,
+        79.2,
+        142.9,
+        129.0,
+        86.4,
+        82.7,
+        87.5,
+        85.2,
+        142.9,
+        123.9,
+        85.9,
+        83.8,
+        85.0,
+        94.5,
+        148.0,
+        114.8,
+        79.6,
+        81.1,
+        81.1,
+        84.3,
+        152.3,
+        120.6,
+        97.0,
+        79.3,
+        81.2,
+        86.5,
+        154.0,
+        127.9,
+        81.6,
+        88.7,
+        80.3,
+        86.7,
+        162.2,
+        117.0,
+        89.2,
+        91.6,
+        89.2,
+        83.8,
+        152.9,
+        120.3,
+        86.9,
+        86.0,
+        87.9,
+        91.2,
+        158.6,
+        125.1,
+        86.2,
+        85.3,
+        88.6,
+        79.8,
+        150.2,
+        133.0,
+        88.5,
+        87.8,
+        88.1,
+        91.4,
+        165.1,
+        137.2,
+        85.8,
+        74.2,
+        85.2,
+        71.2,
+        139.0,
+        120.3,
+        75.0,
+        71.4,
+        76.1,
+        73.2,
+        131.5,
+        115.6,
+        74.3,
+        72.8,
+        74.8,
+        72.8,
+        133.8,
+        108.0,
+        75.7,
+        74.3,
+        73.5,
+        76.1,
+        132.9,
+        106.0,
+        76.2,
+        79.0,
+        76.4,
+        79.2,
+        134.7,
+        119.1,
+        75.0,
+        77.8,
+        78.4,
+        76.7,
+        140.2,
+        121.7,
+        79.6,
+        94.3,
+        80.9,
+        73.4,
+        144.7,
+        116.9,
+        82.0,
+        80.2,
+        81.8,
+        80.0
+      ],
+      "n_ciclos_live_trade": 4876,
+      "hueco_live_trade_max_s": 65.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 22,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 74.0,
+      "gb_libres": 18.8,
+      "git_gb": 0.0,
+      "data_gb": 17.7,
+      "datalogs_gb": 4.75
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 7.47,
+      "ram_pct_libre": 49.1
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 767,
+      "n_results_total": 1141372
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 4.18,
+      "load5": 4.74,
+      "load15": 5.14,
+      "nproc": 8,
+      "ratio5": 0.59,
+      "n_procesos_total": 293
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 0,
+      "eventos": []
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 1,
+      "vigias": [
+        {
+          "log": "vigia_wallet_mirror_seleccion_ab.log",
+          "mtime_utc": "2026-10-24T07:44:06+00:00",
+          "ultima_linea_fallo": "Traceback (most recent call last):"
+        }
+      ]
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-24T07:44:06+00:00) -- Traceback (most recent call last):"
     ],
     "estado": "ANOMALIA"
   }
