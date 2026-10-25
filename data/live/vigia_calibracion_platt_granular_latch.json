@@ -1598,5 +1598,13 @@
   "LIQUIDACIONES_15M#SOL#15min": {
     "n": 201,
     "confirmado": true
+  },
+  "LIQUIDACIONES_15M#BTC": {
+    "n": 200,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_15M#BTC#15min": {
+    "n": 200,
+    "confirmado": true
   }
 }
