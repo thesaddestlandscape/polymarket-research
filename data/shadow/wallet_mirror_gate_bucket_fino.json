@@ -95,11 +95,11 @@
     "hi": 0.07,
     "n": 74,
     "pnl_medio": 1.8062,
-    "diff_vs_resto": 1.8152,
+    "diff_vs_resto": 1.8147,
     "p_valor": 0.0,
     "split_half_diff": [
-      2.3431,
-      1.2873
+      2.3425,
+      1.2868
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 1.2036,
@@ -134,11 +134,11 @@
     "hi": 0.21,
     "n": 44,
     "pnl_medio": 0.7036,
-    "diff_vs_resto": 0.8041,
-    "p_valor": 0.0025,
+    "diff_vs_resto": 0.8035,
+    "p_valor": 0.0005,
     "split_half_diff": [
-      1.1145,
-      0.4936
+      1.114,
+      0.493
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 0.6059,
@@ -215,24 +215,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 54,
-    "pnl_sin_mejores_dias": -0.5289,
+    "pnl_sin_mejores_dias": -0.5319,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 1805,
-    "pnl_medio": -0.4208,
-    "diff_vs_resto": -0.3862,
+    "n": 1816,
+    "pnl_medio": -0.4243,
+    "diff_vs_resto": -0.3897,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.3772,
-      -0.3952
+      -0.3811,
+      -0.3984
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.4723,
+    "pnl_medio_loo": -0.4755,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6108,
-      -0.2133
+      -0.6219,
+      -0.2182
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -291,11 +291,11 @@
     "hi": 0.06,
     "n": 288,
     "pnl_medio": -0.5663,
-    "diff_vs_resto": -0.5183,
+    "diff_vs_resto": -0.5182,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.4099,
-      -0.6267
+      -0.4098,
+      -0.6266
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.6735,
@@ -330,11 +330,11 @@
     "hi": 0.35,
     "n": 40,
     "pnl_medio": -0.5517,
-    "diff_vs_resto": -0.4901,
-    "p_valor": 0.0015,
+    "diff_vs_resto": -0.4899,
+    "p_valor": 0.0005,
     "split_half_diff": [
-      -0.4809,
-      -0.4993
+      -0.4807,
+      -0.499
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.6217,
