@@ -1,7 +1,7 @@
 {
- "actualizado_utc": "2026-10-25T09:40:06+00:00",
+ "actualizado_utc": "2026-10-26T09:40:06+00:00",
  "fok_reales": {
-  "enviadas": 29,
+  "enviadas": 30,
   "muertas": 12,
   "muertas_resueltas": 12,
   "muertas_que_ganarian": 10
@@ -51,47 +51,47 @@
    "dif_ev_T47_menos_T45": 0.046
   },
   "15m#-47": {
-   "n": 17,
+   "n": 19,
    "pendientes": 0,
-   "dias": 11,
-   "acierto": 0.765,
-   "ask_medio": 0.761,
-   "ev_eur": 0.021,
+   "dias": 12,
+   "acierto": 0.737,
+   "ask_medio": 0.766,
+   "ev_eur": -0.023,
    "ic90_cierre": [
-    -0.233,
-    0.25
+    -0.292,
+    0.208
    ]
   },
   "15m#-46": {
-   "n": 18,
+   "n": 19,
    "pendientes": 0,
-   "dias": 9,
-   "acierto": 0.833,
-   "ask_medio": 0.725,
-   "ev_eur": 0.149,
+   "dias": 10,
+   "acierto": 0.842,
+   "ask_medio": 0.729,
+   "ev_eur": 0.152,
    "ic90_cierre": [
-    -0.084,
-    0.372
+    -0.069,
+    0.365
    ]
   },
   "15m#-45": {
-   "n": 14,
+   "n": 15,
    "pendientes": 0,
-   "dias": 10,
-   "acierto": 0.643,
-   "ask_medio": 0.703,
-   "ev_eur": -0.1,
+   "dias": 11,
+   "acierto": 0.667,
+   "ask_medio": 0.712,
+   "ev_eur": -0.081,
    "ic90_cierre": [
-    -0.389,
-    0.233
+    -0.36,
+    0.23
    ]
   },
   "15m#emparejado": {
-   "senales_T45": 14,
-   "tambien_a_T47": 5,
-   "solo_a_T47": 12,
-   "comunes_resueltos": 5,
-   "dif_ev_T47_menos_T45": 0.018
+   "senales_T45": 15,
+   "tambien_a_T47": 6,
+   "solo_a_T47": 13,
+   "comunes_resueltos": 6,
+   "dif_ev_T47_menos_T45": 0.019
   }
  },
  "rampa": {
@@ -118,19 +118,19 @@
    "bajar_escalon": false
   },
   "15m": {
-   "n": 6,
-   "dias": 5,
-   "pnl_eur": -1.15,
-   "ev_eur": -0.096,
+   "n": 7,
+   "dias": 6,
+   "pnl_eur": -0.33,
+   "ev_eur": -0.024,
    "ic90_dias": [
-    -0.442,
-    0.367
+    -0.349,
+    0.39
    ],
-   "ev_sin_2_mejores": -0.395,
-   "ev_ultimas_20": -0.096,
-   "enviadas": 8,
+   "ev_sin_2_mejores": -0.235,
+   "ev_ultimas_20": -0.024,
+   "enviadas": 9,
    "fok_muertas": 2,
-   "fok_muertas_pct": 0.25,
+   "fok_muertas_pct": 0.222,
    "gates": {
     "n>=40": false,
     "dias>=10": false,
