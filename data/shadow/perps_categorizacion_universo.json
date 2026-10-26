@@ -1,22 +1,22 @@
 {
- "generado_utc": "2026-10-25T00:25:03+00:00",
+ "generado_utc": "2026-10-26T00:25:03+00:00",
  "p95_notional_por_categoria": {
-  "crypto_major": 9717.33,
-  "index": 11463.44,
+  "crypto_major": 9885.11,
+  "index": 11490.58,
   "equity": 9542.36,
-  "commodity": 8948.5,
-  "crypto_memecoin": 5292.22
+  "commodity": 8725.03,
+  "crypto_memecoin": 5084.78
  },
  "wallets": {
   "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4": {
-   "n_total_fills": 18586,
-   "notional_total": 24834215.45,
+   "n_total_fills": 19038,
+   "notional_total": 25726252.89,
    "categoria_dominante": "index",
-   "pct_notional_dominante": 38.5,
+   "pct_notional_dominante": 40.2,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 97.5,
-   "n_grandes_jugadas": 389,
+   "pct_taker": 97.6,
+   "n_grandes_jugadas": 409,
    "grandes_jugadas_top5": [
     {
      "notional": 147107.09,
@@ -56,14 +56,14 @@
    ]
   },
   "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec": {
-   "n_total_fills": 10983,
-   "notional_total": 50197716.91,
+   "n_total_fills": 11116,
+   "notional_total": 50531162.7,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 61.4,
+   "pct_notional_dominante": 61.5,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 19.7,
-   "n_grandes_jugadas": 1580,
+   "pct_taker": 19.6,
+   "n_grandes_jugadas": 1599,
    "grandes_jugadas_top5": [
     {
      "notional": 101144.98,
@@ -103,14 +103,14 @@
    ]
   },
   "0xa5dD645f2367C990e7d993E46F28870Bd5812E4f": {
-   "n_total_fills": 4996,
-   "notional_total": 18893557.55,
+   "n_total_fills": 5018,
+   "notional_total": 18938258.31,
    "categoria_dominante": "equity",
-   "pct_notional_dominante": 48.2,
+   "pct_notional_dominante": 48.1,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 88.5,
-   "n_grandes_jugadas": 768,
+   "n_grandes_jugadas": 765,
    "grandes_jugadas_top5": [
     {
      "notional": 41672.59,
@@ -150,14 +150,14 @@
    ]
   },
   "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7": {
-   "n_total_fills": 16988,
-   "notional_total": 62506190.28,
+   "n_total_fills": 17203,
+   "notional_total": 62961421.78,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 67.8,
+   "pct_notional_dominante": 68.0,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 8.8,
-   "n_grandes_jugadas": 2499,
+   "n_grandes_jugadas": 2504,
    "grandes_jugadas_top5": [
     {
      "notional": 101485.04,
@@ -204,7 +204,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 32.8,
-   "n_grandes_jugadas": 2813,
+   "n_grandes_jugadas": 2831,
    "grandes_jugadas_top5": [
     {
      "notional": 134818.13,
@@ -244,10 +244,10 @@
    ]
   },
   "0x9c6c85323Ae3E695bA36D17c86f3ec2242cF712A": {
-   "n_total_fills": 2170,
-   "notional_total": 1908942.26,
+   "n_total_fills": 2236,
+   "notional_total": 1947571.16,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 91.5,
+   "pct_notional_dominante": 91.7,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 100.0,
@@ -291,13 +291,13 @@
    ]
   },
   "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746": {
-   "n_total_fills": 22233,
-   "notional_total": 2335976.53,
+   "n_total_fills": 22698,
+   "notional_total": 2377767.89,
    "categoria_dominante": "crypto_major",
    "pct_notional_dominante": 50.0,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 90.7,
+   "pct_taker": 90.8,
    "n_grandes_jugadas": 0,
    "grandes_jugadas_top5": []
   },
@@ -309,7 +309,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 12.1,
-   "n_grandes_jugadas": 196,
+   "n_grandes_jugadas": 195,
    "grandes_jugadas_top5": [
     {
      "notional": 130361.74,
@@ -349,14 +349,14 @@
    ]
   },
   "0xfc1B24B1749F71b797029C34F5fa30D528539107": {
-   "n_total_fills": 42624,
-   "notional_total": 78038229.72,
+   "n_total_fills": 44871,
+   "notional_total": 83019954.3,
    "categoria_dominante": "commodity",
-   "pct_notional_dominante": 48.7,
+   "pct_notional_dominante": 47.4,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 84.1,
-   "n_grandes_jugadas": 1299,
+   "pct_taker": 83.2,
+   "n_grandes_jugadas": 1372,
    "grandes_jugadas_top5": [
     {
      "notional": 130361.74,
@@ -462,14 +462,14 @@
    ]
   },
   "0xB91a9C277b0d26A5ea763994152CB35AB725360E": {
-   "n_total_fills": 12086,
-   "notional_total": 31386890.36,
+   "n_total_fills": 12107,
+   "notional_total": 31452406.23,
    "categoria_dominante": "equity",
-   "pct_notional_dominante": 54.6,
+   "pct_notional_dominante": 54.4,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 87.9,
-   "n_grandes_jugadas": 623,
+   "n_grandes_jugadas": 631,
    "grandes_jugadas_top5": [
     {
      "notional": 120020.14,
@@ -527,7 +527,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 56.6,
-   "n_grandes_jugadas": 938,
+   "n_grandes_jugadas": 940,
    "grandes_jugadas_top5": [
     {
      "notional": 195808.27,
@@ -574,33 +574,18 @@
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 59.5,
-   "n_grandes_jugadas": 2,
-   "grandes_jugadas_top5": [
-    {
-     "notional": 9841.3,
-     "categoria": "crypto_major",
-     "symbol": "HYPE-USD",
-     "ts": "2026-07-30T12:25:10+00:00",
-     "pnl": "0"
-    },
-    {
-     "notional": 9804.96,
-     "categoria": "crypto_major",
-     "symbol": "HYPE-USD",
-     "ts": "2026-07-30T11:41:01+00:00",
-     "pnl": "0"
-    }
-   ]
+   "n_grandes_jugadas": 0,
+   "grandes_jugadas_top5": []
   },
   "0x7930Ee98013FA1aEaC08872A88E677dc925aD132": {
-   "n_total_fills": 14867,
-   "notional_total": 21422715.46,
+   "n_total_fills": 15183,
+   "notional_total": 21676276.47,
    "categoria_dominante": "commodity",
-   "pct_notional_dominante": 46.3,
+   "pct_notional_dominante": 45.8,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 84.0,
-   "n_grandes_jugadas": 359,
+   "n_grandes_jugadas": 364,
    "grandes_jugadas_top5": [
     {
      "notional": 141358.51,
@@ -640,20 +625,27 @@
    ]
   },
   "0xB6287efe7A7702402dd8342963DBEfE51e44F2EB": {
-   "n_total_fills": 23745,
-   "notional_total": 43357294.4,
+   "n_total_fills": 24071,
+   "notional_total": 44751856.16,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 70.0,
+   "pct_notional_dominante": 70.6,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 90.7,
-   "n_grandes_jugadas": 1212,
+   "pct_taker": 90.8,
+   "n_grandes_jugadas": 1242,
    "grandes_jugadas_top5": [
     {
      "notional": 103038.01,
      "categoria": "crypto_major",
      "symbol": "HYPE-USD",
      "ts": "2026-09-18T01:02:49+00:00",
+     "pnl": "0"
+    },
+    {
+     "notional": 102182.45,
+     "categoria": "crypto_major",
+     "symbol": "HYPE-USD",
+     "ts": "2026-10-25T15:45:57+00:00",
      "pnl": "0"
     },
     {
@@ -671,18 +663,11 @@
      "pnl": "0"
     },
     {
-     "notional": 70060.76,
+     "notional": 98611.3,
      "categoria": "crypto_major",
      "symbol": "HYPE-USD",
-     "ts": "2026-09-21T13:26:39+00:00",
-     "pnl": "-825.0343709125477853885520144"
-    },
-    {
-     "notional": 69960.33,
-     "categoria": "crypto_major",
-     "symbol": "HYPE-USD",
-     "ts": "2026-09-10T17:12:53+00:00",
-     "pnl": "-150.39552451834265366481991359"
+     "ts": "2026-10-25T15:45:57+00:00",
+     "pnl": "0"
     }
    ]
   },
@@ -694,7 +679,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 88.0,
-   "n_grandes_jugadas": 394,
+   "n_grandes_jugadas": 402,
    "grandes_jugadas_top5": [
     {
      "notional": 115339.48,
@@ -774,7 +759,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 83.8,
-   "n_grandes_jugadas": 219,
+   "n_grandes_jugadas": 228,
    "grandes_jugadas_top5": [
     {
      "notional": 136991.95,
@@ -821,7 +806,7 @@
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 2.0,
-   "n_grandes_jugadas": 48,
+   "n_grandes_jugadas": 49,
    "grandes_jugadas_top5": [
     {
      "notional": 40026.83,
@@ -927,14 +912,14 @@
    ]
   },
   "0x44a3E929C68Fe1441583549f64abC72E278E6E49": {
-   "n_total_fills": 713,
-   "notional_total": 2704807.4,
+   "n_total_fills": 715,
+   "notional_total": 2706379.92,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 72.7,
+   "pct_notional_dominante": 72.6,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 7.0,
-   "n_grandes_jugadas": 57,
+   "pct_taker": 7.3,
+   "n_grandes_jugadas": 56,
    "grandes_jugadas_top5": [
     {
      "notional": 170525.62,
@@ -1246,7 +1231,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 100.0,
-   "n_grandes_jugadas": 18,
+   "n_grandes_jugadas": 17,
    "grandes_jugadas_top5": [
     {
      "notional": 19478.11,
@@ -1380,14 +1365,14 @@
    ]
   },
   "0xb1555E1589dcfd5fC89fBd4a9DC11C9C7bf30bd9": {
-   "n_total_fills": 974,
-   "notional_total": 6777357.2,
+   "n_total_fills": 1065,
+   "notional_total": 7025924.0,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 38.5,
+   "pct_notional_dominante": 37.8,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 28.7,
-   "n_grandes_jugadas": 207,
+   "pct_taker": 27.0,
+   "n_grandes_jugadas": 216,
    "grandes_jugadas_top5": [
     {
      "notional": 102115.71,
@@ -1411,18 +1396,18 @@
      "pnl": "453.35920"
     },
     {
+     "notional": 101090.86,
+     "categoria": "index",
+     "symbol": "SP500-USD",
+     "ts": "2026-10-25T10:29:52+00:00",
+     "pnl": "151.58268908876345021864931200"
+    },
+    {
      "notional": 100753.68,
      "categoria": "equity",
      "symbol": "TSLA-USD",
      "ts": "2026-10-17T02:10:54+00:00",
      "pnl": "0"
-    },
-    {
-     "notional": 100745.09,
-     "categoria": "equity",
-     "symbol": "TSLA-USD",
-     "ts": "2026-10-17T02:07:58+00:00",
-     "pnl": "59.089828"
     }
    ]
   },
@@ -1521,14 +1506,14 @@
    ]
   },
   "0xfBC597F3d88702B66a5cA79068b93659dDE7Da0B": {
-   "n_total_fills": 5800,
-   "notional_total": 15670947.09,
+   "n_total_fills": 7295,
+   "notional_total": 18370751.51,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 86.3,
+   "pct_notional_dominante": 85.2,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 45.0,
-   "n_grandes_jugadas": 519,
+   "pct_taker": 43.3,
+   "n_grandes_jugadas": 607,
    "grandes_jugadas_top5": [
     {
      "notional": 128289.78,
@@ -1568,14 +1553,14 @@
    ]
   },
   "0xBf1715b4095bCC65fF07287BA037Bd9Ea425D4BF": {
-   "n_total_fills": 1458,
-   "notional_total": 4480221.49,
+   "n_total_fills": 1485,
+   "notional_total": 4634519.12,
    "categoria_dominante": "equity",
    "pct_notional_dominante": 100.0,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 0.0,
-   "n_grandes_jugadas": 84,
+   "n_grandes_jugadas": 90,
    "grandes_jugadas_top5": [
     {
      "notional": 50052.74,
@@ -1622,7 +1607,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 0.0,
-   "n_grandes_jugadas": 5,
+   "n_grandes_jugadas": 6,
    "grandes_jugadas_top5": [
     {
      "notional": 9999.99,
@@ -1669,7 +1654,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 0.0,
-   "n_grandes_jugadas": 6,
+   "n_grandes_jugadas": 7,
    "grandes_jugadas_top5": [
     {
      "notional": 9999.95,
