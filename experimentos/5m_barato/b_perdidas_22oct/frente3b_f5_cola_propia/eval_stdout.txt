@@ -1,0 +1,28 @@
+L10_bb_f0 {'fills_test': 12862, 'coste_test': 13721.051782400002, 'ev_test': -0.04070711795698094}
+   H1_a_H2 exc 6 IC90d (-14.7,16.3) d+ 5/7 sin2 -39 EVm -0.058 EVr -0.054 EVt -0.055 inv 0 perm p 0.423 (media -7, p95 92) fills 5724
+   H2_a_H1 exc 75 IC90d (-3.2,22.0) d+ 5/8 sin2 8 EVm -0.085 EVr -0.019 EVt -0.029 inv -143 perm p 0.189 (media 9, p95 128) fills 7138
+   WF_A1 exc 196 IC90d (3.3,22.9) d+ 12/15 sin2 116 EVm -0.074 EVr -0.016 EVt -0.041 inv -162
+   CB_H1_a_H2 exc -3 IC90d (-17.3,16.3) d+ 3/7 sin2 -53 EVm -0.051 EVr -0.057 EVt -0.055 inv -47 perm p 0.525 (media -1, p95 101) fills 5724
+   CB_H2_a_H1 exc -13 IC90d (-20.5,17.3) d+ 4/8 sin2 -82 EVm -0.027 EVr -0.032 EVt -0.029 inv -26 perm p 0.515 (media -4, p95 103) fills 7138
+   WF_CB exc 61 IC90d (-8.1,16.3) d+ 8/15 sin2 -29 EVm -0.051 EVr -0.036 EVt -0.041 inv -121
+L10_bb_f1 {'fills_test': 4146, 'coste_test': 4281.641687880001, 'ev_test': -0.006225339910028251}
+   H1_a_H2 exc 4 IC90d (-14.3,15.4) d+ 3/7 sin2 -40 EVm -0.021 EVr -0.010 EVt -0.016 inv 0 perm p 0.377 (media -7, p95 48) fills 1675
+   H2_a_H1 exc 27 IC90d (-7.3,14.0) d+ 4/8 sin2 -8 EVm -0.017 EVr +0.034 EVt -0.000 inv -23 perm p 0.295 (media -9, p95 93) fills 2471
+   WF_A1 exc -162 IC90d (-18.4,-3.2) d+ 2/15 sin2 -207 EVm +0.090 EVr -0.066 EVt -0.006 inv 137
+L10_c1_f0 {'fills_test': 5593, 'coste_test': 5624.63669051, 'ev_test': -0.05682242713547081}
+   H1_a_H2 exc -35 IC90d (-18.3,8.3) d+ 4/7 sin2 -62 EVm +0.015 EVr -0.058 EVt -0.039 inv 5 perm p 0.689 (media -3, p95 57) fills 2332
+   H2_a_H1 exc -19 IC90d (-12.3,7.6) d+ 4/8 sin2 -55 EVm -0.060 EVr -0.084 EVt -0.070 inv 40 perm p 0.672 (media 3, p95 73) fills 3261
+   WF_A1 exc -117 IC90d (-14.3,-1.4) d+ 4/15 sin2 -136 EVm +0.023 EVr -0.090 EVt -0.057 inv 115
+L3_bb_f0 {'fills_test': 12759, 'coste_test': 13574.39174447, 'ev_test': -0.0387800694410086}
+   H1_a_H2 exc -9 IC90d (-11.6,9.0) d+ 4/7 sin2 -33 EVm -0.049 EVr -0.054 EVt -0.052 inv 34 perm p 0.426 (media -12, p95 85) fills 5686
+   H2_a_H1 exc -209 IC90d (-44.9,-7.3) d+ 2/8 sin2 -240 EVm +0.071 EVr -0.067 EVt -0.028 inv 130 perm p 0.984 (media -3, p95 102) fills 7073
+   WF_A1 exc 148 IC90d (-2.5,22.3) d+ 11/15 sin2 44 EVm -0.064 EVr -0.021 EVt -0.039 inv -124
+L3_bb_f1 {'fills_test': 4026, 'coste_test': 4169.60360304, 'ev_test': -0.005047623717673145}
+   H1_a_H2 exc -9 IC90d (-16.1,13.7) d+ 3/7 sin2 -50 EVm -0.029 EVr -0.047 EVt -0.038 inv 23 perm p 0.672 (media 2, p95 63) fills 1633
+   H2_a_H1 exc 64 IC90d (-3.7,19.6) d+ 5/8 sin2 6 EVm -0.024 EVr +0.100 EVt +0.017 inv -13 perm p 0.148 (media 18, p95 83) fills 2393
+   WF_A1 exc -16 IC90d (-8.7,6.5) d+ 7/15 sin2 -67 EVm +0.002 EVr -0.012 EVt -0.005 inv -7
+L3_c1_f0 {'fills_test': 5503, 'coste_test': 5537.76581286, 'ev_test': -0.05446850535996577}
+   H1_a_H2 exc -39 IC90d (-21.9,10.8) d+ 4/7 sin2 -72 EVm +0.027 EVr -0.058 EVt -0.036 inv 33 perm p 0.803 (media 1, p95 78) fills 2306
+   H2_a_H1 exc -36 IC90d (-19.4,10.5) d+ 4/8 sin2 -75 EVm -0.023 EVr -0.082 EVt -0.067 inv 52 perm p 0.803 (media -1, p95 74) fills 3197
+   WF_A1 exc -119 IC90d (-15.4,-0.5) d+ 5/15 sin2 -147 EVm +0.031 EVr -0.087 EVt -0.054 inv 174
+CRITERIOS primaria {'H1_a_H2': {'c1': True, 'c2': False, 'c3': False, 'c4': False, 'c5': False, 'medible': True}, 'H2_a_H1': {'c1': True, 'c2': False, 'c3': True, 'c4': True, 'c5': False, 'medible': True}}
