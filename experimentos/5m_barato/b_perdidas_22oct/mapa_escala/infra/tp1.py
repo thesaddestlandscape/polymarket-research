@@ -57,7 +57,9 @@ def dia(d, forzar=False):
     for m in marcos:
         st = ex.get(m, {}).get('estado', 'sin_manifest_extraccion')
         man['fuentes'][m] = dict(bytes=onchain(m, d).stat().st_size, estado_extraccion=st, n_tokens=len(tks[m]))
-        if not (st.startswith('COMPLETE') or st == 'sin_manifest_extraccion'): valido = False; motivos.append(f'extraccion {m}={st}')
+        mot = ex.get(m, {}).get('motivo', '')
+        if st == 'PARTIAL' and mot.startswith('maker_ms corrupto'): man.setdefault('advertencias', []).append(f'{m}: {mot[:160]}')   # corrupcion a media corriente de un crudo: dia valido si el mapa de tokens tiene >= MIN_TOK (se comprueba abajo)
+        elif not (st.startswith('COMPLETE') or st == 'sin_manifest_extraccion'): valido = False; motivos.append(f'extraccion {m}={st}')
         if st == 'sin_manifest_extraccion':       # extraido por el cron antiguo de las 04:10: comprobar plausibilidad por tamano
             import extrae_onchain_ext as E
             if E.estado_previo(m, d) != 'ok': valido = False; motivos.append(f'{m} on-chain truncado por tamano')

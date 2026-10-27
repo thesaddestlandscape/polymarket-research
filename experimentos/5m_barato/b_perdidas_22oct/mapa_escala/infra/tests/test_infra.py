@@ -42,10 +42,13 @@ class T1(unittest.TestCase):
         self.assertEqual(len(tk['5min']), 4); self.assertEqual(len(tk['15min']), 2); self.assertEqual(info['truncados'], [])
         idx1 = json.load(open(L.INFRA / 'tokmap/indice.json')); tk2, _ = T.tokens_dia('2026-10-24', ['5min', '15min'])
         self.assertEqual(tk, tk2); self.assertEqual(idx1, json.load(open(L.INFRA / 'tokmap/indice.json')))
-    def test_gz_corrupto_se_marca_truncado(self):
-        prepara('2026-10-24'); f = f'{L.ROOT}/maker_ms_2026-10-24_222.csv.gz'
-        wgz(f, 'tipo,t_ms,id,c1,c2,c3,c4,c5\n' + k('zz', 'SOL', '5min', 'M9', 1792800000, 'YES') + ''.join(f'q,{i},tok,1,2,3,4,5\n' for i in range(20000)))
-        raw = open(f, 'rb').read(); open(f, 'wb').write(raw[:len(raw) // 2]); t = time.time() - 7200; os.utime(f, (t, t))   # corte
+    def test_gz_cola_cortada_vs_corrupto_midstream(self):
+        prepara('2026-10-24'); f = f'{L.ROOT}/maker_ms_2026-10-24_222.csv.gz'; body = 'tipo,t_ms,id,c1,c2,c3,c4,c5\n' + k('zz', 'SOL', '5min', 'M9', 1792800000, 'YES') + ''.join(f'q,{i},tok{i},1,2,3,4,5\n' for i in range(200000))
+        wgz(f, body); raw = open(f, 'rb').read(); old = time.time() - 7200
+        open(f, 'wb').write(raw[:len(raw) - 40]); os.utime(f, (old, old))                     # cola cortada por reinicio: NORMAL
+        tk, info = T.tokens_dia('2026-10-24', ['5min']); self.assertEqual(info['truncados'], []); self.assertIn('zz', tk['5min'])
+        idx = json.load(open(L.INFRA / 'tokmap/indice.json'))['maker_ms_2026-10-24_222.csv.gz']; self.assertTrue(idx['cola_cortada'])
+        ba = bytearray(raw); ba[len(ba) // 2: len(ba) // 2 + 64] = b'\xff' * 64; open(f, 'wb').write(bytes(ba)); os.utime(f, (old + 5, old + 5))   # corrupcion a media corriente
         tk, info = T.tokens_dia('2026-10-24', ['5min']); self.assertIn('maker_ms_2026-10-24_222.csv.gz', info['truncados'])
     def test_fichero_en_escritura_se_salta(self):
         prepara('2026-10-24'); wgz(f'{L.ROOT}/maker_ms_2026-10-24_333.csv.gz', 'x\n' + k('qq', 'SOL', '5min', 'M8', 1792800000, 'YES'), utime_old=False)

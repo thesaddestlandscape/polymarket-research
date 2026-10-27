@@ -8,7 +8,7 @@ OUT = '/root/polymarket-research-datalogs/regimen_5m/dfuerte'; TSEL = int(sys.ar
 RNG = np.random.default_rng(20261024); NB = 2000; PHIS = [0.10, 0.25, 0.50]
 O = pd.read_pickle(f'{OUT}/oos_T{TSEL}{os.environ.get("TAGF","")}.pkl'); O['qb'] = (O.pcon / 0.05).round().astype(int)
 O['s_C1'] = np.where(O.R == 'TREND', -1.0, np.where(O.R == 'REVERT', 1.0, 0.0)); O['s_C1'] = O.s_C1 + 0.0
-W2 = os.environ.get('TAGF', '').startswith('_w2'); MODS = ['M12', 'M13', 'M14'] if W2 else [f'M{i}' for i in range(1, 12)]; KM = len(MODS)
+W2 = os.environ.get('TAGF', '').startswith('_w2'); R3 = os.environ.get('TAGF', '').startswith('_r3'); MODS = ['M15', 'M16', 'M17'] if R3 else (['M12', 'M13', 'M14'] if W2 else [f'M{i}' for i in range(1, 12)]); KM = 17 if R3 else len(MODS)
 def auc_strat(df, s, boot_days=False):
     r = df.groupby('qb')[s].rank(method='average'); y = df.y.values
     d = pd.DataFrame({'qb': df.qb.values, 'r': r.values, 'y': y})

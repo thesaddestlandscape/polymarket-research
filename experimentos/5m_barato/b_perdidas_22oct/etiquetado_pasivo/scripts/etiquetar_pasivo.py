@@ -119,6 +119,17 @@ def clase(x):
     return 'a_favor' if x > 0 else 'en_contra'
 
 
+def acc_orden(rellenos, tardios):
+    """acc_llena de una orden = suma de rellenos UNICOS. Un `relleno_tardio` queda registrado tambien dentro de puja_fin.rellenos (tardio=True):
+    sumar ambos duplicaba la cantidad (16/194 ordenes rellenas el 20-23 Oct, acc_o = 2*acc). Cada tardio del ledger se descuenta una vez si ya figura en rellenos."""
+    rs = [r for r in rellenos.values()]; acc = sum(r['acc'] for r in rs)
+    ya = [r['acc'] for r in rs if r.get('tardio')]
+    for a in tardios:
+        if a in ya: ya.remove(a)          # ya contado dentro de puja_fin.rellenos
+        else: acc += a
+    return acc
+
+
 def cargar_fuentes():
     """Devuelve (ordenes, posiciones) como listas de dict. Lee el ledger tolerando una ultima linea a medias."""
     post, tok, rell, tard, nbad = {}, {}, {}, {}, 0
@@ -138,7 +149,7 @@ def cargar_fuentes():
     ordenes = []
     for oid, d in post.items():
         slug = d['slug']; fin = float(slug.rsplit('-', 1)[1]) + 300.0
-        acc = sum(r['acc'] for r in rell.get(oid, {}).values()) + sum(tard.get(oid, []))
+        acc = acc_orden(rell.get(oid, {}), tard.get(oid, []))
         ordenes.append(dict(unidad='orden', id=oid, mercado=slug, token=tok.get(oid), coin=d['coin'].upper(), lado=d['lado'],
                             outcome='Up' if d['lado'] == 'YES' else 'Down', precio=d['precio'], acc=d['size'], acc_llena=acc, coste=np.nan,
                             t0=float(d['t_dec']), t0_fuente='t_dec', fin_s=fin, dia=dt.datetime.fromtimestamp(float(d['t_dec']), dt.timezone.utc).strftime('%Y-%m-%d')))
@@ -175,7 +186,12 @@ def etiquetar(desde):
                      clase_rpre=clase(rpre), clase_r900=clase(r900), bn_edad_max_s=edad, etiquetado_utc=ts, resuelto=0)
             f['h_w1'] = int(f['clase_rpre'] == 'a_favor' and f['abs_rpre'] >= UMBRAL_BPS)
     N = pd.DataFrame(nuevas)
-    tocados = set()
+    tocados = set(); acc_ok = {f['id']: f['acc_llena'] for f in ordenes}; corregidas = 0
+    for d, x in exist.items():       # auto-correccion idempotente de acc_llena (bug de doble conteo de rellenos tardios, 26-Oct)
+        m = (x.unidad == 'orden') & x.id.isin(acc_ok)
+        ok = x.id.map(acc_ok); mal = m & ((x.acc_llena.fillna(0) - ok).abs() > 1e-9)
+        if mal.any(): x.loc[mal, 'acc_llena'] = ok[mal]; corregidas += int(mal.sum()); tocados.add(d); exist[d] = x; escribir_atomico(x[COLS], os.path.join(OUT, f'etiquetado_B_{d}.csv.gz'))
+    if corregidas: log(f'acc_llena corregida en {corregidas} ordenes existentes')
     for d, x in exist.items():
         add = N[N.dia == d] if len(N) else N
         out = pd.concat([x, add[[c for c in COLS if c in add]]], ignore_index=True) if len(add) else x

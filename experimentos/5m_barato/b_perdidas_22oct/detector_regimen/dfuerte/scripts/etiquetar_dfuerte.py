@@ -41,8 +41,8 @@ def main():
         for c in COINS: Z[c].append(z[c])
     m0 = calendar.timegm(dt.date.fromisoformat(days[0]).timetuple()) // 60 + 1
     ZZ = {c: (m0, np.concatenate(Z[c])) for c in COINS}
-    d0m = calendar.timegm(d0.timetuple()) // 60; tm = d0m + 5 * np.arange(288)
-    W = DL.all_features(ZZ, COINS, tm=tm)
+    d0m = calendar.timegm(d0.timetuple()) // 60; tm = d0m - 15 * 1440 + 5 * np.arange(16 * 288)   # rejilla completa: las referencias de 14 d se calculan sobre ella
+    W = DL.all_features(ZZ, COINS, tm=tm); W = W[W.tmin >= d0m].reset_index(drop=True)
     cols = list(dict.fromkeys(['lpc'] + sum([DL.FAM[f] for f in fams], [])))
     out = W[['coin', 'tmin', 'rpre', 'o', 'R', 's60']].copy(); out['dia'] = D
     for p in PGRID:

@@ -126,6 +126,8 @@ Caja altcoin (10 días, cifras comunicadas: XRP +$703, DOGE +$203, BNB +$53, BTC
 - `cheap5m-statistical-validator`: validación independiente.
 - `cheap5m-risk-economics`: plan económico de portafolio para alcanzar 200k mediante la suma de subestrategias de 5m barato, dentro de recursos existentes, con contabilidad rigurosa.
 - `cheap5m-red-team-auditor`: intento independiente de refutar conclusiones.
+- `cheap5m-reverse-engineer` (26-Oct): último recurso para problemas bloqueados; docs en `docs/reverse-engineering/`; no puede autocertificar SOLVED.
+- `polymarket-quantum-alpha-miner` (26-Oct, Opus, effort max): ARQUITECTO de alpha; interviene ANTES de aceptar una estrategia o modificar una regla importante y REVISA tras el experimento; los especialistas implementan, validan y refutan sus propuestas; no autocertifica (alcance: solo 5m barato por ahora).
 
 ## 6. Etiquetas permitidas
 
@@ -137,6 +139,7 @@ Caja altcoin (10 días, cifras comunicadas: XRP +$703, DOGE +$203, BNB +$53, BTC
 - No editar `ejecutor_rapido.py` sin `/code-review` en MEDIUM + tests: lo usa `medir_camino_caliente.py`, que envía órdenes reales.
 - Cuota: máximo 3 subagentes a la vez; opus para objetivo-200k, validador y red-team cuando haya cuota, si no `model: sonnet` al lanzar; si un agente se corta por cuota, reanudarlo (SendMessage) o relanzarlo con el mismo encargo.
 - EV siempre PONDERADO POR € (Σpnl/Σcoste) además de por unidad (trampa 17-Oct: media de cocientes infló H5M de ≈+0,064 a +0,142).
+- Auto-print (26-Oct, calibracion_etiqueta/v2/v3_cancelacion): una etiqueta de relleno validada reproduciendo NUESTRAS órdenes se calibra en parte con nuestros propios prints del feed. Replay de B en TEST: AUC 0,787 → 0,704 al quitar sus prints (ΔAUC contra el placebo +90 s: 0,14 → 0,07, con el IC90 cruzando 0). Antes de usar la etiqueta para órdenes contrafactuales (P, otro precio o momento), repetir la validación sin los prints propios.
 - Idioma: castellano de España; cifras siempre con n, IC, periodo y fichero de origen.
 
 ## ⭐⭐ MANDATO DE POTENCIA (Javi, 23-Oct) — vale para TODOS los agentes `cheap5m-*`

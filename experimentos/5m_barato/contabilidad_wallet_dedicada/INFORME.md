@@ -1,11 +1,11 @@
-# INFORME contabilidad wallet dedicada (0x659a40FF...) -- generado 2026-10-22T11:58:55Z
+# INFORME contabilidad wallet dedicada (0x659a40FF...) -- generado 2026-10-27T05:59:39Z
 
-Saldo on-chain 21.9067 pUSD (bloque 95976628, 2026-10-22T11:58:33Z); depositado neto 19.00; saldo - capital = +2.91.
-PnL realizado total +3.06 (n=185 filas, 174 posiciones); no realizado MTM +0.00; ganadoras por redimir 0.15; comisiones 0.0428.
-Por experimento: F1 medir_camino_caliente (15-Oct): PnL realizado +0.59 (filas 3, EV pond. +0.029/EUR) | H47-A: PnL realizado +0.00 (filas 0, EV pond. n/d/EUR) | H47-B: PnL realizado +2.47 (filas 182, EV pond. +0.013/EUR). Tandas B en resumen_por_experimento.md.
+Saldo on-chain 3.4124 pUSD (bloque 96250254, 2026-10-27T05:59:12Z); depositado neto 19.00; saldo - capital = -15.59.
+PnL realizado total -15.44 (n=218 filas, 205 posiciones); no realizado MTM +0.00; ganadoras por redimir 0.15; comisiones 0.0428.
+Por experimento: F1 medir_camino_caliente (15-Oct): PnL realizado +0.59 (filas 3, EV pond. +0.029/EUR) | H47-A: PnL realizado +0.00 (filas 0, EV pond. n/d/EUR) | H47-B: PnL realizado -16.02 (filas 215, EV pond. -0.072/EUR). Tandas B en resumen_por_experimento.md.
 CUADRE: CIERRA (dif 0.0 pUSD; sin motivo pendiente). Detalle en estado_dashboard.json::cuadre.comprobaciones.
-Fuente/cobertura: pUSD Transfer (eth_getLogs, completo_desde_bloque_0, bloque 0..95976628, 225 movimientos) + data-api /activity (224 filas) + gamma (desenlaces 174/174).
-Conciliacion ledger H47-B vs on-chain: 887.572391 vs 903.977794 acciones, 4 discrepancias. No atribuido: 0 fills.
+Fuente/cobertura: pUSD Transfer (eth_getLogs, completo_desde_bloque_0, bloque 0..96250254, 260 movimientos) + data-api /activity (259 filas) + gamma (desenlaces 205/205).
+Conciliacion ledger H47-B vs on-chain: 1055.890755 vs 1072.296158 acciones, 4 discrepancias. No atribuido: 0 fills.
 Sin sesgo de supervivencia: cada fill se resuelve con desenlace oficial (gamma); sin desenlace = abierta/pendiente (aparte, valorada a curPrice).
 Rewards/rebates: ninguna entrada distinta de deposito/redencion; no verificable si se pagan fuera o con retraso.
 
