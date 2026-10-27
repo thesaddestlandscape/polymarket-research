@@ -32,3 +32,15 @@ def test_datos_reales_cuadran_con_posiciones():
     g = o.groupby(['mercado', 'outcome']).agg(acc=('acc_llena', 'sum'), n=('id', 'size'))
     exceso = [(k, float(a), float(pos[k]['acciones'])) for k, a in g.acc.items() if k in pos and a > float(pos[k]['acciones']) + 1e-6]
     assert not exceso, exceso[:5]                                        # acc de ordenes NUNCA mayor que la posicion (el bug daba exactamente 2x)
+
+def test_sin_puja_fin_usa_lectura(tmp_path):
+    """27-Oct: 7 ordenes B (20-22 Oct) rellenas sin evento puja_fin -> acc_llena debe salir de `lectura`/`verificada`, sin duplicar si hay puja_fin."""
+    m = cargar({'L1_OUT': str(tmp_path / 'o')})
+    ev = [dict(tipo='puja_post', oid='a', slug='eth-updown-5m-1000', coin='eth', lado='YES', precio=0.2, size=5.0, t_dec=1.0), dict(tipo='lectura', oid='a', f=5.0),
+          dict(tipo='puja_post', oid='b', slug='eth-updown-5m-2000', coin='eth', lado='YES', precio=0.2, size=5.0, t_dec=1.0), dict(tipo='verificada', oid='b', f=1.4),
+          dict(tipo='puja_post', oid='c', slug='eth-updown-5m-3000', coin='eth', lado='YES', precio=0.2, size=5.0, t_dec=1.0), dict(tipo='lectura', oid='c', f=5.0),
+          dict(tipo='puja_fin', slug='eth-updown-5m-3000', lado='YES', rellenos=[dict(oid='c', t_deteccion=3.0, acc=5.0)])]
+    p = tmp_path / 'l.jsonl'; p.write_text('\n'.join(json.dumps(e) for e in ev) + '\n')
+    m.LEDGER = str(p); m.POSIC = str(tmp_path / 'pos.csv'); open(m.POSIC, 'w').write('mercado,outcome,tanda_B\n')
+    o, _, _ = m.cargar_fuentes(); a = {x['id']: x['acc_llena'] for x in o}
+    assert a == {'a': 5.0, 'b': 1.4, 'c': 5.0}

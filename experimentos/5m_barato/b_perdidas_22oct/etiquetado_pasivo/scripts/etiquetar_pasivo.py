@@ -133,6 +133,7 @@ def acc_orden(rellenos, tardios):
 def cargar_fuentes():
     """Devuelve (ordenes, posiciones) como listas de dict. Lee el ledger tolerando una ultima linea a medias."""
     post, tok, rell, tard, nbad = {}, {}, {}, {}, 0
+    lec, ver = {}, {}          # respaldo cuando el mercado no tiene puja_fin (7 posiciones 20-22 Oct, 27-Oct)
     tdet = {}
     for l in open(LEDGER):
         try: d = json.loads(l)
@@ -146,10 +147,13 @@ def cargar_fuentes():
                 rell.setdefault(r['oid'], {})[(r['t_deteccion'], r['acc'])] = r
                 tdet.setdefault((d['slug'], out), []).append(r['t_deteccion'])
         elif t == 'relleno_tardio': tard.setdefault(d['oid'], []).append(d.get('acc') or 0)
+        elif t == 'lectura': lec[d['oid']] = max(lec.get(d['oid'], 0), d.get('f') or 0)
+        elif t == 'verificada': ver[d['oid']] = max(ver.get(d['oid'], 0), d.get('f') or 0)
     ordenes = []
     for oid, d in post.items():
         slug = d['slug']; fin = float(slug.rsplit('-', 1)[1]) + 300.0
         acc = acc_orden(rell.get(oid, {}), tard.get(oid, []))
+        if acc == 0: acc = max(lec.get(oid, 0), ver.get(oid, 0))      # sin puja_fin: relleno por lectura/verificada
         ordenes.append(dict(unidad='orden', id=oid, mercado=slug, token=tok.get(oid), coin=d['coin'].upper(), lado=d['lado'],
                             outcome='Up' if d['lado'] == 'YES' else 'Down', precio=d['precio'], acc=d['size'], acc_llena=acc, coste=np.nan,
                             t0=float(d['t_dec']), t0_fuente='t_dec', fin_s=fin, dia=dt.datetime.fromtimestamp(float(d['t_dec']), dt.timezone.utc).strftime('%Y-%m-%d')))
