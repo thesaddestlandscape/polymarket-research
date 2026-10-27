@@ -1,0 +1,10 @@
+2026-10-05 56980 cob 1.0
+2026-10-06 165285 cob 1.0
+2026-10-07 181497 cob 1.0
+2026-10-08 188042 cob 1.0
+2026-10-09 161165 cob 1.0
+2026-10-10 146452 cob 1.0
+2026-10-11 146712 cob 1.0
+7d: >=2 dias+ (regla prereg literal) | takers 141 en test 87 | unidades 6877 frac_eur 0.0755 | EXCESO -0.0033 IC90 cierre [-0.0101, 0.0029] | EV_IN 0.0701 | placebo(pool activo) media 0.0007 p95 0.0085 p_emp 0.799
+7d: >=4/7 dias+ | takers 61 en test 44 | unidades 4102 frac_eur 0.0465 | EXCESO -0.0036 IC90 cierre [-0.0092, 0.0021] | EV_IN 0.1033 | placebo(pool activo) media 0.0004 p95 0.0061 p_emp 0.881
+7d: sin condicion de dias | takers 173 en test 98 | unidades 7239 frac_eur 0.0802 | EXCESO -0.0008 IC90 cierre [-0.0073, 0.0056] | EV_IN 0.0394 | placebo(pool activo) media 0.001 p95 0.0099 p_emp 0.633

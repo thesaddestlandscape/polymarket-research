@@ -1,0 +1,57 @@
+=== 1. Seleccion adversa: acierto rellenas vs NO rellenas (pujas.csv, unidad puja mercado-lado, desenlace gamma)
+tramo=1: rellenas 14/62=0.226 (precio post 0.252)  no rellenas 11/30=0.367 (precio 0.260)  Fisher p=0.2112
+tramo=2: rellenas 17/54=0.315 (precio post 0.250)  no rellenas 16/38=0.421 (precio 0.235)  Fisher p=0.3780
+tramo=3: rellenas 5/50=0.100 (precio post 0.246)  no rellenas 14/41=0.341 (precio 0.243)  Fisher p=0.0084
+t22=20-21 Oct: rellenas 25/102=0.245 (precio post 0.251)  no rellenas 23/60=0.383 (precio 0.244)  Fisher p=0.0756
+t22=22-Oct: rellenas 11/64=0.172 (precio post 0.246)  no rellenas 18/49=0.367 (precio 0.246)  Fisher p=0.0288
+coin=ETH: rellenas 13/62=0.210 (precio post 0.257)  no rellenas 16/30=0.533 (precio 0.245)  Fisher p=0.0035
+coin=SOL: rellenas 13/55=0.236 (precio post 0.247)  no rellenas 14/38=0.368 (precio 0.243)  Fisher p=0.2450
+coin=XRP: rellenas 10/49=0.204 (precio post 0.242)  no rellenas 11/41=0.268 (precio 0.246)  Fisher p=0.6176
+brecha (no rell - rell) tramo3 +0.241 vs tramos1-2 +0.130; diferencia +0.112, p perm (tramo barajado) 0.362
+
+=== 2. Tasa base Up de TODOS los 5m ETH/SOL/XRP (twap60 oficial cierre>=apertura), por dia
+            size   mean
+dia                    
+2026-10-20   432  0.530
+2026-10-21   840  0.500
+2026-10-22   522  0.454
+      size   mean
+coin             
+ETH    598  0.480
+SOL    598  0.497
+XRP    598  0.505
+B: acierto Up 0.178 n 101  Down 0.257 n 74
+B lado por dia (n, acierto):
+           size       mean       
+lado         NO YES     NO    YES
+dia                              
+2026-10-20   17  20  0.235  0.200
+2026-10-21   38  34  0.263  0.235
+2026-10-22   19  47  0.263  0.128
+
+=== 3. Forward de spread<=0,02 al pujar (hipotesis declarada con 209 pujas, corte 22-Oct 08:57Z)
+antes del corte (descubrimiento) spread<=0,02=False: n=43 gan=6 eur=47.57 pnl=-20.13 EV=-0.423
+antes del corte (descubrimiento) spread<=0,02=True: n=94 gan=27 eur=104.60 pnl=+37.18 EV=+0.355
+DESPUES del corte (forward) spread<=0,02=False: n=13 gan=1 eur=15.94 pnl=-10.94 EV=-0.687
+DESPUES del corte (forward) spread<=0,02=True: n=25 gan=3 eur=25.48 pnl=-8.42 EV=-0.331
+
+=== 4. Salida condicionada post-relleno (EXPLORATORIA; H40 REJECTED 36/36 con n grande). Venta al mid_30s - x, comision 0,07*p*(1-p)*acc
+bn_post30<=-3 spread/2=0.01: n=34 ganadoras vendidas=0 mid30 medio=0.079 -> vender +11.14 vs mantener +0.00: delta +11.14 EUR; esperado por mid (sum acc*mid30) 13.60
+bn_post30<=-3 spread/2=0.02: n=34 ganadoras vendidas=0 mid30 medio=0.079 -> vender +9.59 vs mantener +0.00: delta +9.59 EUR; esperado por mid (sum acc*mid30) 13.60
+bn_post30<=-1 spread/2=0.01: n=58 ganadoras vendidas=2 mid30 medio=0.088 -> vender +22.50 vs mantener +11.00: delta +11.50 EUR; esperado por mid (sum acc*mid30) 27.10
+bn_post30<=-1 spread/2=0.02: n=58 ganadoras vendidas=2 mid30 medio=0.088 -> vender +19.62 vs mantener +11.00: delta +8.62 EUR; esperado por mid (sum acc*mid30) 27.10
+mov_post30_cl<=-3 spread/2=0.01: n=38 ganadoras vendidas=1 mid30 medio=0.079 -> vender +12.66 vs mantener +6.00: delta +6.66 EUR; esperado por mid (sum acc*mid30) 15.45
+mov_post30_cl<=-3 spread/2=0.02: n=38 ganadoras vendidas=1 mid30 medio=0.079 -> vender +10.89 vs mantener +6.00: delta +4.89 EUR; esperado por mid (sum acc*mid30) 15.45
+mov_post10_cl<=-2 spread/2=0.01: n=42 ganadoras vendidas=3 mid30 medio=0.120 -> vender +23.00 vs mantener +16.00: delta +7.00 EUR; esperado por mid (sum acc*mid30) 26.62
+mov_post10_cl<=-2 spread/2=0.02: n=42 ganadoras vendidas=3 mid30 medio=0.120 -> vender +20.92 vs mantener +16.00: delta +4.92 EUR; esperado por mid (sum acc*mid30) 26.62
+bn_post5<=-2 spread/2=0.01: n=13 ganadoras vendidas=0 mid30 medio=0.098 -> vender +6.10 vs mantener +0.00: delta +6.10 EUR; esperado por mid (sum acc*mid30) 7.26
+bn_post5<=-2 spread/2=0.02: n=13 ganadoras vendidas=0 mid30 medio=0.098 -> vender +5.38 vs mantener +0.00: delta +5.38 EUR; esperado por mid (sum acc*mid30) 7.26
+(sobre 152 de 175 posiciones con mid_30s en el ledger; faltan 23)
+
+=== 5. Concentracion: cierres con >=2 posiciones (misma apuesta)
+cierres 94 con >=2 pos 56 pos en ellos 137 todas perdidas en cierres multi 34 pnl cierres multi -15.24
+top5 posiciones pnl [8.9, 8.9, 7.92, 6.88, 5.88] suma 38.48 | perdida media -1.116 ganancia media 4.1
+breakeven hit = precio medio 0.209 hit real 0.211
+2026-10-20 hit 0.216 vs precio 0.224 n=37 P(hit<=obs | p=precio)=0.549
+2026-10-21 hit 0.250 vs precio 0.217 n=72 P(hit<=obs | p=precio)=0.797
+2026-10-22 hit 0.167 vs precio 0.211 n=66 P(hit<=obs | p=precio)=0.237

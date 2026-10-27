@@ -1,0 +1,37 @@
+# Verificacion independiente D-FUERTE ronda 3 (24-Oct, ~09:35-10:15Z) - solo lectura, nice 19, RAM max 950 MB, sin tocar B/live
+Scripts propios (esta carpeta): v1_poblacion_etiquetas.py, v2_walkforward_auc.py (v2_out.txt), v3_perps_timing.py, v4_pista_mid.py (v4_out.txt), v5_exceso.py (v5_out.txt). Reproducir: `OMP_NUM_THREADS=2 nice -n 19 ionice -c3 python3 -I vN_*.py`.
+Alcance: parto de los klines crudos (full_*.npz, perp_*.npz) para poblacion/etiquetas/alineacion de tiempo; los 64+15+13 rasgos los tomo de units_*_r3.pkl (NO los he recomputado uno a uno: NO VERIFICABLE la ausencia de fuga en cada rasgo, solo controles indirectos). Reentreno M14/M17/M16/M10 con mi propio walk-forward (mismos hiperparametros del informe, split estricto: train dia < inicio de mes - 1, assert).
+## Cifras
+| Cifra del informe | Mi valor | Estado |
+|---|---|---|
+| Poblacion: 60.002 unidades FASE T, 171 d | 60.002, 171 d; poblacion total 184.364 reconstruida de klines: 0 unidades de mas/menos, q/win/con/rpre identicos (dif max 0) en las 4 fuentes (v1) | REPRODUCE |
+| Etiqueta proxy (Binance) | vs desenlace oficial en dic-ene: concordancia 97,8 % (n=10.288, 229 discordantes). Ruido de etiqueta 2,2 % comun a todo; el resto de periodos solo proxy | REPRODUCE (limitacion) |
+| AUC_strat M17 FASE T 0,554 (IC90 dias 0,546-0,561) | 0,5542 (0,5476-0,5611) | REPRODUCE |
+| AUC M14 0,555 / M10 0,544 | 0,5547 (0,5475-0,5615) / 0,5444 (0,5366-0,5506) | REPRODUCE |
+| 0/8 meses >=0,60; rango 0,536-0,582 | M17 por mes 0,572 0,563 0,536 0,537 0,582 0,548 0,547 0,556: 0/8 >=0,60 | REPRODUCE |
+| Perps solos M16 = 0,506 | 0,5059 (IC90 0,5003-0,5117); solo monedas con perps 0,5125 (n=43.575) | REPRODUCE (nota: el limite inferior roza 0,500; senal minuscula pero no nula, 0,006-0,012) |
+| Ganancia perps M17 vs M14 ~0 | M17-M14 = -0,0006 (IC90 -0,0010/-0,0002) pareado por dias | REPRODUCE (ganancia nula/ligeramente negativa) |
+| Inversion / placebo | inversion 0,4458; score permutado en dia x moneda x qb 0,5092; **etiquetas permutadas en ENTRENAMIENTO -> 0,4885 (0,4833-0,4935)** | REPRODUCE inversion. Matiz: el suelo placebo no es 0,50; el sesgo de la estratificacion con permutacion deja 0,489-0,509. El exceso real sobre placebo es ~0,045-0,065, no 0,055 limpio |
+| AUC pooled sin estratificar | 0,786 (inutil: lo domina el precio) | informativo; la estratificada es la correcta |
+| Perps con marca de RECEPCION | Son klines REST historicos: no existe hora de recepcion, solo cierre de barra. Indexado igual que spot (+1 min al open): correlacion cruzada de retornos 1m spot vs perp: lag 0 = 0,982-0,994, lags +-1,2 ~ 0 (BTC/ETH/XRP, 2 periodos) -> sin desfase ni fuga de 1 barra. Funding en multiplos exactos de 8 h (fundingTime <= t_o, valor conocido). | Alineacion REPRODUCE; "recepcion" NO VERIFICABLE (no existe en ese dato). En vivo habria ~cientos de ms de retraso no modelado |
+| Cobertura perps | BNB/DOGE=NaN siempre; backfill 66,6 % de unidades con perps; solo 72,6 % (43.575/60.002) de FASE T tiene perps | REPRODUCE; M17 y M14 sobre la misma poblacion 0,5535 vs 0,5540 |
+| Exceso dPnL M17 phi*=0,5: +178,5 EUR, IC90 dias +128/+229, 117/171 dias+ | +178,5; IC90 (+129,7/+229,4); 117/171 | REPRODUCE (exacto) |
+| Dependencia de dia x moneda | mejor dia +6,7 (4 %); sin 2 mejores dias +165,2; sin 5 mejores +147,3; 10 mejores dias = 33 %; todos los meses >0 (marzo 0,5; mayo 69,9 = 39 %); las 6 monedas >0 (11,9-42,3); 42 de 941 celdas dia x moneda suman el 50 % (cola gruesa normal) | NO concentrado en un dia. Veredicto tecnico: el exceso es "ancho" |
+| C3 (permutar s dentro de dia x moneda) = +28 (-20/+74): "no se distingue del nivel dia x moneda" | media de 100 permutaciones -1,3 (sd 28): el nivel dia x moneda explica ~0 % del exceso; su +28 era una sola permutacion dentro del ruido (sd 28) | NO REPRODUCE la lectura (la mia: el exceso es especifico de la ventana, no del nivel diario). No cambia el veredicto |
+| Inversion del exceso | -190 (informe -178,5) | REPRODUCE (signo y orden) |
+| Valor en EUR "1 accion, precio de modelo, sin fricciones" | Ahorro extra de comision al saltar: +208 EUR a 1 acc. (el proxy lo ignora). El precio real del ask no es q: informe ya admite NO replica en baratas 5-14 Oct (-84/-223 EUR) | NO VERIFICABLE en dinero real (no he recomputado f3_real); sin cambio |
+| Pista mid5 a T=180 s: univariables AUC mid 0,539 / dis 0,535 / |dis| 0,557; s_M10 0,556 (10 d, n=2.767) | 0,540 / 0,536 / 0,557 / 0,556 (n=2.762 con mid) | REPRODUCE |
+| Apilado +0,0225 (LOG, IC90 +0,005/+0,039) | spec prereg (open+T): +0,0236, IC90 dias (-0,003/+0,050) en mi implementacion (n=2.762, 10 dias) | Punto REPRODUCE; IC inferior NO REPRODUCE (mi IC cruza 0) |
+## Pista del mid: mecanica y placebo (v4)
+- corr(mid5_con_T, movimiento propio de la ventana zo) = 0,934; corr(mid_apertura, zo) = 0,032. El mid a T "ya contiene" el movimiento: es la cotizacion del mismo evento que predice, no un detector previo. Un mid PREDICHO solo con (q, z, vol, moneda) por validacion cruzada por dias (R2 0,88) obtiene AUC univariable 0,545 >= 0,540 del mid real: el AUC univariable es mecanico. El residuo mid-mecanico: AUC 0,527 (no nulo, 10 dias).
+- Apilado: +mecanico -0,002 (-0,005/+0,000); placebos (mid permutado en dia x moneda x qb; mid de la ventana de 5 min antes) -0,003 / -0,004; spec mecanica -0,012; solo apertura -0,004. +mid solo +0,007 (-0,024/+0,041); +residuo +0,009 (-0,018/+0,040); spec prereg +0,024 (-0,003/+0,050). Nada con IC90 por dias > 0; 10 dias, 1 solo regimen, multiples especificaciones (>=10 miradas) sin correccion.
+- EV al mid (sin spread ni comision): media y-mid = -0,032 (IC90 -0,051/-0,013); y-q = -0,016 (-0,038/+0,002). Brier: mid 0,1486 PEOR que q 0,1391 (el mid de 5m es ruidoso; la media q/mid 0,1390). El mid a T no es un precio mas "justo" que Phi(z) en esta poblacion.
+- Tercil de desacuerdo: EV al mid +0,089 (dis bajo, 84 % unidades CON, n=921), -0,050, -0,134. Es composicion CON/CONTRA y post-hoc (10 d, sin placebo, sin ask, sin comision): lo anoto como pista NO validada, no como hallazgo.
+- Marca de tiempo: el extractor `r3b_mid_extract.sh` usa la hora de EXCHANGE (campo 2 de las filas q), no la de recepcion (campo 8, +49 ms en la muestra vista): look-ahead de decenas-cientos de ms (MINOR; no verificado a escala).
+## Veredicto
+El NULO de D-FUERTE ronda 3 se sostiene: AUC fuera de muestra 0,554 (M17) con split estricto, perps sin ganancia (-0,0006), perps solos 0,506, 0/8 meses >=0,60, placebo/inversion consistentes, +178,5 EUR exacto y no concentrado. **No cambia el veredicto.** Hallazgos que matizan, no invalidan:
+1. [MODERATE] Lectura de C3: el +178 SI parece especifico de ventana (C3 mio -1,3), no del nivel dia x moneda; pero es dinero a precio de modelo con 1 accion y no replica en precios reales baratos. Sigue sin valer para B.
+2. [MINOR] Placebo de etiquetas permutadas 0,4885 (<0,5): hay que comparar siempre con el placebo, no con 0,50.
+3. [MINOR] Pista del mid: mecanica en el AUC univariable, apilado ns con placebos igual de ns; IC inferior de +0,0225 no reproduce. Cierre correcto: acumular mid a T con >=30 d, hora de recepcion y ask real antes de gastar mas.
+4. [MINOR] Mid con hora de exchange, perps sin hora de recepcion (REST historico), etiqueta proxy (97,8 % de concordancia).
+5. No verificado: fuga rasgo a rasgo (usan barras <= io; los de ventana F9 usan barras <= io+3 = T, coherente con decision a T), f3_real (precios reales), f9_techo_v2 desde cotizaciones crudas, cifras de 15m (cobertura 0).

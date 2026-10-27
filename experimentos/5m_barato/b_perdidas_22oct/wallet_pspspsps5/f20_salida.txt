@@ -1,0 +1,37 @@
+dias ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11', '2026-10-12', '2026-10-13', '2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23', '2026-10-24'] fills 1722769 W 13616
+
+== H-A. Modelo de q calibrada (logit) ajustado SOLO con la poblacion ex-W de DESC, 1er fill por unidad, n=12717 ==
+{'logit(p)': np.float64(0.929), 'zs': np.float64(0.61), 'zs^2': np.float64(0.217), 'T/100': np.float64(0.165), 'm10s': np.float64(-0.018), 'dip': np.float64(0.133), 'BTC': np.float64(-0.041), 'ETH': np.float64(-0.023)} intercepto -0.075
+Phi(zs) crudo vs acierto real en DESC (1er fill): medio Phi 0.232, precio medio 0.070, acierto 0.079
+
+-- DESC: q^/p medio  poblacion 1.255  W 1.105 | q^ medio pob 0.0466 W 0.0509 | acierto pob 0.0406 W 0.0567 | precio pob 0.0398 W 0.0476
+  pob q^/p (0.71,1.05]           fills  428801 $   237015 EV +0.030 (np.float64(-0.08), np.float64(0.16)) hit/p 1.04 dias 8
+    W  q^/p (0.71,1.05]          fills    3541 $     3216 EV +0.296 (np.float64(0.13), np.float64(0.47)) hit/p 1.21 dias 8
+  pob q^/p (1.05,1.20]           fills  257280 $   118109 EV +0.002 (np.float64(-0.11), np.float64(0.1)) hit/p 1.03 dias 8
+    W  q^/p (1.05,1.20]          fills    2496 $     2045 EV +0.266 (np.float64(0.02), np.float64(0.5)) hit/p 1.07 dias 8
+  pob q^/p (1.20,1.43]           fills   85761 $    37465 EV +0.070 (np.float64(-0.07), np.float64(0.22)) hit/p 0.85 dias 8
+    W  q^/p (1.20,1.43]          fills     517 $      444 EV -0.064 (np.float64(-0.63), np.float64(0.6)) hit/p 1.06 dias 8
+  pob q^/p (1.43,1.98]           fills   42879 $    19588 EV +0.015 (np.float64(-0.67), np.float64(0.7)) hit/p 0.84 dias 8
+    W  q^/p (1.43,1.98]          fills     138 $      147 EV +2.949 (np.float64(-0.88), np.float64(5.46)) hit/p 4.08 dias 8
+  pob q^/p (1.98,375.53]         fills   42880 $    20359 EV +0.122 (np.float64(-0.31), np.float64(0.47)) hit/p 1.26 dias 8
+    W  q^/p (1.98,375.53]        fills     114 $      139 EV -0.681 (np.float64(-1.0), np.float64(0.04)) hit/p 2.73 dias 7
+  calibracion por quintil de q^ (pob):  [(np.float64(0.011), np.float32(0.009)), (np.float64(0.022), np.float32(0.014)), (np.float64(0.038), np.float32(0.033)), (np.float64(0.059), np.float32(0.059)), (np.float64(0.103), np.float32(0.089))]
+  regla r>=tau(1.43): poblacion                                  fills   85761 $    39947 EV +0.069 (np.float64(-0.34), np.float64(0.41)) hit/p 1.04 dias 8
+                      W                                  fills     252 $      286 EV +1.181 (np.float64(-0.78), np.float64(2.36)) hit/p 3.65 dias 8
+  W fuera de la regla:                                  fills    6554 $     5705 EV +0.257 (np.float64(0.13), np.float64(0.37)) hit/p 1.15 dias 8
+
+-- HOLD: q^/p medio  poblacion 1.259  W 1.160 | q^ medio pob 0.0461 W 0.0447 | acierto pob 0.0340 W 0.0512 | precio pob 0.0397 W 0.0407
+  pob q^/p (0.74,1.04]           fills  425580 $   270953 EV -0.094 (np.float64(-0.26), np.float64(0.09)) hit/p 0.84 dias 8
+    W  q^/p (0.74,1.04]          fills    3259 $     3456 EV +0.521 (np.float64(0.22), np.float64(0.84)) hit/p 1.30 dias 8
+  pob q^/p (1.04,1.19]           fills  255351 $   132373 EV -0.114 (np.float64(-0.29), np.float64(0.08)) hit/p 0.85 dias 8
+    W  q^/p (1.04,1.19]          fills    2420 $     2139 EV +0.422 (np.float64(0.07), np.float64(0.79)) hit/p 1.29 dias 7
+  pob q^/p (1.19,1.46]           fills   85134 $    42267 EV -0.011 (np.float64(-0.37), np.float64(0.38)) hit/p 0.87 dias 8
+    W  q^/p (1.19,1.46]          fills     679 $      542 EV -0.397 (np.float64(-0.73), np.float64(0.01)) hit/p 1.07 dias 7
+  pob q^/p (1.46,2.24]           fills   42537 $    21852 EV +0.087 (np.float64(-0.63), np.float64(0.98)) hit/p 1.03 dias 8
+    W  q^/p (1.46,2.24]          fills     239 $      204 EV -0.663 (np.float64(-1.0), np.float64(0.05)) hit/p 1.14 dias 7
+  pob q^/p (2.24,388.42]         fills   42558 $    21058 EV -0.127 (np.float64(-0.85), np.float64(1.07)) hit/p 0.96 dias 7
+    W  q^/p (2.24,388.42]        fills     213 $      169 EV -0.988 (np.float64(-1.0), np.float64(-0.96)) hit/p 0.26 dias 7
+  calibracion por quintil de q^ (pob):  [(np.float64(0.011), np.float32(0.008)), (np.float64(0.023), np.float32(0.016)), (np.float64(0.038), np.float32(0.025)), (np.float64(0.058), np.float32(0.048)), (np.float64(0.101), np.float32(0.073))]
+  regla r>=tau(1.43): poblacion                                  fills   89958 $    45324 EV +0.044 (np.float64(-0.65), np.float64(0.95)) hit/p 1.02 dias 8
+                      W                                  fills     494 $      409 EV -0.827 (np.float64(-1.0), np.float64(-0.46)) hit/p 0.73 dias 7
+  W fuera de la regla:                                  fills    6316 $     6101 EV +0.414 (np.float64(0.2), np.float64(0.65)) hit/p 1.28 dias 8

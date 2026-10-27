@@ -1,0 +1,14 @@
+filas 3998 unidad {'orden': 3796, 'posicion': 202} dias {'2026-10-20': 442, '2026-10-21': 1193, '2026-10-22': 1823, '2026-10-23': 540}
+ordenes 3796 duplicados id 0 resuelto {1: 3796}
+P(fill) por orden 0.0511 (n=3796, rellenas 194)
+P(fill) por dia {'2026-10-20': {'mean': 0.0889, 'sum': 36, 'size': 405}, '2026-10-21': {'mean': 0.0607, 'sum': 68, 'size': 1121}, '2026-10-22': {'mean': 0.043, 'sum': 75, 'size': 1746}, '2026-10-23': {'mean': 0.0286, 'sum': 15, 'size': 524}}
+P(fill) ponderada por acc 0.0504
+con desenlace 3796 de 3796
+fill=0 n=3602 hit=0.2349 precio=0.2113 hit-p=+0.0236
+fill=1 n=194 hit=0.1959 precio=0.2126 hit-p=-0.0168
+estratos con ambos 118 rellenas cubiertas 194
+brecha emparejada (rellena-no) -0.0566
+unidad mercado-lado fill=0 n=342 hit=0.2836 p=0.2236 hit-p=+0.0601
+unidad mercado-lado fill=1 n=194 hit=0.1959 p=0.2126 hit-p=-0.0168
+brecha hit-p unidad rellena-no -0.0768 IC90 (-0.1219,-0.0349) cierres 129
+EV rellenas (acc_llena*gana - acc_llena*precio)/coste: -0.0016 n=194 coste=231.65

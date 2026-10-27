@@ -1,0 +1,13 @@
+cotizaciones YES 2438703 17 dias; por tf {'5min': 2438703}
+unidades 4450 cobertura mid5_open 0.951 mid15_open 0.0 mid5_T 0.952
+fidelidad prices-history vs registro (n=300): corr apertura 0.174, |dif| mediana apertura 0.0700, corr T 0.864, |dif| mediana T 0.1150
+SETS efectivos {'base': ['s_M10'], 'open': ['s_M10', 'mid5_con_open', 'spr5_open'], 'open+T': ['s_M10', 'mid5_con_open', 'spr5_open', 'mid5_con_T', 'dis', 'adis']}
+
+TEST dias 2026-10-12..2026-10-21 (10 d), unidades 2767; AUC_strat del s_M10 ya existente (sin reentrenar): 0.5558
+LOG base [lpc,s_M10]: AUC 0.5522
+LOG +open: AUC 0.5494  ganancia -0.0027 IC90 dias (-0.0063,+0.0011)
+LOG +open+T: AUC 0.5747  ganancia +0.0225 IC90 dias (+0.0051,+0.0391)
+GBM base [lpc,s_M10]: AUC 0.5399
+GBM +open: AUC 0.5472  ganancia +0.0073 IC90 dias (+0.0001,+0.0155)
+GBM +open+T: AUC 0.5702  ganancia +0.0304 IC90 dias (+0.0086,+0.0493)
+AUC univariable (estratificada) de las nuevas senales en TEST: mid5_con_open 0.494, mid15_con_open -1.155, gap15_5 -1.155, spr5_open 0.496, mid5_con_T 0.539, dis 0.535, adis 0.557

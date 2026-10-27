@@ -1,0 +1,49 @@
+
+=== S_C pop 17-22 Oct: unidades |rpre|>=7,7 con rasgos 18868, CON 8673, dias 6, cierres 1388, PnL CON -933.1 EUR, coste CON 8519 ===
+  DETECTOR phi=0.10            n   997 coste    1122 EV salt -0.217 dPnL   +243.0 IC90cierre (+12.9,+467.3) placebo media +125.9 p 0.017  EXCESO +117.1
+  DETECTOR phi=0.25            n  2130 coste    2321 EV salt -0.164 dPnL   +381.5 IC90cierre (-10.8,+744.4) placebo media +263.9 p 0.053  EXCESO +117.6
+  DETECTOR phi=0.50            n  4055 coste    4250 EV salt -0.115 dPnL   +490.2 IC90cierre (-76.9,+1085.0) placebo media +470.7 p 0.387  EXCESO +19.5
+  INVERSION 1-phi*             n  4618 coste    4269 EV salt -0.104 dPnL   +442.8 IC90cierre (-121.4,+1033.3) placebo media +455.0 p 0.553  EXCESO -12.2
+  R-TEND R1 (CON&TREND)        n  1952 coste    1908 EV salt -0.308 dPnL   +588.7 IC90cierre (+218.8,+954.4) placebo media +288.9 p 0.000  EXCESO +299.8
+  INCONDICIONAL CON            n  8673 coste    8519 EV salt -0.110 dPnL   +933.1 IC90cierre (-42.1,+1850.9) placebo media +933.1 p 0.850  EXCESO -0.0
+            dP_det  dP_R1  dP_inc  n_det
+dia                                     
+2026-10-17   156.9   48.4   258.5  460.0
+2026-10-18   192.7  211.3   350.2  708.0
+2026-10-19   191.9  246.9   570.3  810.0
+2026-10-20   -52.3  142.8   -89.4  925.0
+2026-10-21    65.4  -79.3    33.2  745.0
+2026-10-22   -64.4   18.6  -189.8  407.0
+
+=== S_C pop TEST 20-22 Oct: unidades |rpre|>=7,7 con rasgos 9492, CON 4366, dias 3, cierres 659, PnL CON +245.9 EUR, coste CON 4274 ===
+  DETECTOR phi=0.10            n   520 coste     584 EV salt -0.114 dPnL    +66.5 IC90cierre (-103.7,+231.0) placebo media -19.7 p 0.023  EXCESO +86.2
+  DETECTOR phi=0.25            n  1084 coste    1172 EV salt -0.057 dPnL    +67.2 IC90cierre (-209.1,+351.5) placebo media -45.1 p 0.017  EXCESO +112.3
+  DETECTOR phi=0.50            n  2077 coste    2164 EV salt +0.024 dPnL    -51.2 IC90cierre (-521.2,+377.7) placebo media -95.4 p 0.227  EXCESO +44.2
+  INVERSION 1-phi*             n  2289 coste    2110 EV salt +0.092 dPnL   -194.7 IC90cierre (-658.5,+250.1) placebo media -146.9 p 0.790  EXCESO -47.8
+  R-TEND R1 (CON&TREND)        n   831 coste     823 EV salt -0.100 dPnL    +82.1 IC90cierre (-192.5,+350.1) placebo media -13.2 p 0.027  EXCESO +95.3
+  INCONDICIONAL CON            n  4366 coste    4274 EV salt +0.058 dPnL   -245.9 IC90cierre (-1042.2,+480.3) placebo media -245.9 p 0.893  EXCESO -0.0
+            dP_det  dP_R1  dP_inc  n_det
+dia                                     
+2026-10-20   -52.3  142.8   -89.4  925.0
+2026-10-21    65.4  -79.3    33.2  745.0
+2026-10-22   -64.4   18.6  -189.8  407.0
+
+=== S_C baratas 5-14 Oct (banda 0,10-0,20, normalizado 5 acc): unidades |rpre|>=7,7 con rasgos 53038, CON 23931, dias 10, cierres 2282, PnL CON +1241.5 EUR, coste CON 18786 ===
+  DETECTOR phi=0.10            n  1345 coste    1217 EV salt +0.114 dPnL   -138.2 IC90cierre (-573.3,+246.2) placebo media -174.2 p 0.287  EXCESO +35.9
+  DETECTOR phi=0.25            n  4340 coste    3762 EV salt +0.157 dPnL   -589.7 IC90cierre (-1489.5,+311.8) placebo media -505.5 p 0.770  EXCESO -84.2
+  DETECTOR phi=0.50            n  9336 coste    7837 EV salt +0.137 dPnL  -1074.9 IC90cierre (-2629.5,+277.1) placebo media -852.4 p 0.960  EXCESO -222.6
+  INVERSION 1-phi*             n 14595 coste   10950 EV salt +0.015 dPnL   -166.6 IC90cierre (-1689.9,+1301.4) placebo media -388.0 p 0.040  EXCESO +221.4
+  R-TEND R1 (CON&TREND)        n  5745 coste    4540 EV salt +0.018 dPnL    -81.9 IC90cierre (-1259.5,+925.4) placebo media -166.8 p 0.240  EXCESO +84.9
+  INCONDICIONAL CON            n 23931 coste   18786 EV salt +0.066 dPnL  -1241.5 IC90cierre (-3370.3,+985.9) placebo media -1241.5 p 1.000  EXCESO -0.0
+            dP_det  dP_R1  dP_inc   n_det
+dia                                      
+2026-10-05    -4.9  -17.4   118.3   113.0
+2026-10-06    37.2  -24.8    50.2   393.0
+2026-10-07    91.3  -42.0  -104.4  1089.0
+2026-10-08  -145.2  -91.1  -218.8  1719.0
+2026-10-09  -229.0   80.1  -583.1   843.0
+2026-10-10    41.2   25.8    87.1   122.0
+2026-10-11    65.1  204.3   286.7   664.0
+2026-10-12  -730.5  284.1  -736.6  1596.0
+2026-10-13  -262.0 -305.7  -377.6  1440.0
+2026-10-14    61.8 -195.3   236.9  1357.0

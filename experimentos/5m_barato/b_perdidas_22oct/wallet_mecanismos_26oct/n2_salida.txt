@@ -1,0 +1,32 @@
+cobertura 1.0
+cuota nido $ 0.327 cobertura refs 0.975
+
+M p[0,0.3) todo EV +0.287 IC90d (+0.159,+0.409) n=5825 $=32330 hit/p=1.30 dias=10
+  no-nido EV +0.239 IC90d (+0.059,+0.423) n=3955 $=23367 hit/p=1.29 dias=10
+  nido s  EV +0.012 IC90d (-0.398,+0.462) n=866 $=3849 hit/p=1.52 dias=10  cuota s=0.52
+  nido ¬s EV +0.267 IC90d (-0.130,+0.767) n=672 $=3538 hit/p=0.83 dias=10
+
+M p[0.3,0.7) todo EV +0.026 IC90d (-0.014,+0.061) n=7692 $=188644 hit/p=1.00 dias=11
+  no-nido EV +0.017 IC90d (-0.041,+0.060) n=4886 $=123506 hit/p=0.99 dias=10
+  nido s  EV +0.146 IC90d (+0.024,+0.279) n=698 $=17441 hit/p=1.06 dias=11  cuota s=0.32
+  nido ¬s EV +0.062 IC90d (+0.001,+0.103) n=1580 $=37811 hit/p=1.03 dias=10
+
+M p[0.7,1.01) todo EV +0.020 IC90d (-0.001,+0.042) n=5638 $=354656 hit/p=1.01 dias=11
+  no-nido EV +0.025 IC90d (+0.009,+0.040) n=3460 $=239710 hit/p=1.01 dias=10
+  nido s  EV -0.011 IC90d (-0.102,+0.068) n=725 $=41965 hit/p=1.03 dias=11  cuota s=0.44
+  nido ¬s EV +0.070 IC90d (+0.034,+0.116) n=1103 $=52635 hit/p=1.01 dias=10
+
+T p[0,0.3) todo EV -0.134 IC90d (-0.359,+0.102) n=409 $=6403 hit/p=1.08 dias=10
+  no-nido EV -0.114 IC90d (-0.437,+0.239) n=299 $=4348 hit/p=1.01 dias=10
+  nido s  EV -0.093 IC90d (-0.832,+0.568) n=69 $=1321 hit/p=1.29 dias=10  cuota s=0.68
+  nido ¬s EV -0.544 IC90d (-0.931,-0.270) n=30 $=618 hit/p=1.17 dias=7
+
+T p[0.3,0.7) todo EV -0.096 IC90d (-0.175,-0.041) n=1395 $=88604 hit/p=1.01 dias=10
+  no-nido EV -0.098 IC90d (-0.218,-0.027) n=925 $=57770 hit/p=0.99 dias=10
+  nido s  EV -0.150 IC90d (-0.341,+0.061) n=224 $=14703 hit/p=1.01 dias=10  cuota s=0.59
+  nido ¬s EV -0.058 IC90d (-0.294,+0.204) n=170 $=10267 hit/p=1.05 dias=10
+
+T p[0.7,1.01) todo EV -0.026 IC90d (-0.060,+0.012) n=657 $=50673 hit/p=0.98 dias=10
+  no-nido EV -0.023 IC90d (-0.052,+0.003) n=460 $=36505 hit/p=0.97 dias=10
+  nido s  EV -0.024 IC90d (-0.247,+0.151) n=105 $=6821 hit/p=1.02 dias=10  cuota s=0.56
+  nido ¬s EV -0.000 IC90d (-0.171,+0.120) n=61 $=5254 hit/p=1.07 dias=9

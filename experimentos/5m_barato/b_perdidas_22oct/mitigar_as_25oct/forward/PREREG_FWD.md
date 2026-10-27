@@ -1,0 +1,14 @@
+# PREREG FWD-A1 — forward pasivo de F5 (A1/mitigar_as_25oct), regla congelada (26-Oct-2026). Escrito ANTES de procesar ningun dia >= 24-Oct. Solo lectura, 0 EUR.
+Hipotesis unica (la que paso PREREG_A1 en 06-23 Oct, ver INFORME.md): marcar los rellenos de bid poblacionales cuyo F5 = log1p(tamano del ask del token del maker, ultima fila q por RECEPCION <= r-100 ms)
+cae en el tercil ALTO del TRAIN original 06-08 Oct (`regla_congelada.json`: cortes 3.5264 / 4.7174; marcar F5 > 2o corte; inversion = tercil medio, el de mayor EV en ese TRAIN). Sin reajuste de cortes en el forward.
+Poblacion y unidad: identicas a PREREG_A1 / E1D (print t, banda q en (0,10;0,30], ultimos 300 s del mercado 5m, desenlace OFICIAL gamma closed=true, convencion SELL->bid de s, BUY->bid del opuesto a 1-p, pnl=(gana-q)*acc, coste=q*acc).
+Grupo primario: ETH/SOL/XRP (ALL3). Replica descriptiva: BTC/DOGE/BNB con el MISMO corte (si el signo no se repite no se promueve). Por moneda siempre.
+Dias: ficheros m5_registro_D con D >= 2026-10-24, cerrados (escritos tras el fin de D, sin cambios en 30 min). Un dia solo cuenta si la cobertura de desenlace por coste >= 99,5 % (si no: PENDING_DESENLACE, se reintenta; nunca se rellena con supuestos).
+Codigo: `forward/forward_a1.py` (estado() y F1..F8 copiados fielmente de a1_rasgos.py; rellenos de e1d_pob.py sin Binance), idempotente: cache atomica por dia + manifiesto; el CSV se regenera desde las caches.
+Variantes por dia y grupo (forward_diario.csv): global (EXCESO_d = f*Σpnl_d − Σpnl_marcados, f = coste marcado/coste total); base_F2xmonedaxhora (placebo ESTRATIFICADO dentro del dia: celdas decil de F2 (cortes TRAIN) x moneda x hora UTC; pedido red-team 26-Oct);
+nivel_bajo_mejor_bid / nivel_al_mejor_bid (descriptivo: bajo el mejor bid = tipo B); inversion; tau=250 ms; tasa de disparo en instantes de control (r−U[5,30] s) frente a pre-relleno.
+Gate (grupo ALL3, variante global; con >=10 dias nuevos, ~04-Nov), TODO a la vez: (1) ΣEXCESO>0 e IC90 por dias (t) inferior>0; (2) p unilateral por dias <0,05 (hipotesis unica K=1; se informa tambien contra 0,05/8);
+(3) sin los 2 mejores dias >0; (4) INVERSION ΣEXCESO<0; (5) >=2/3 de los dias con EXCESO>0; (6) IC90 bootstrap por CIERRE (1000, semilla 20261026) inferior>0; (7) EV€ retenido − EV€ total, IC90 dias inferior>0;
+(RT) la variante base_F2xmonedaxhora tambien con ΣEXCESO>0 e IC90 dias inferior>0. Pasar = CONFIRMADO-forward EN POBLACION; NO es la capacidad de B (nivel bajo el mejor bid se reporta aparte) ni autoriza dinero real.
+No pasa = el hallazgo se degrada a REJECTED para rasgos L1. Menos de 10 dias = EN CURSO, descriptivo, sin veredicto. Las cifras del RESUMEN antes del dia 10 no se usan para decidir parar o seguir.
+Limites: unidad print (no orden con cola); placebo sustractivo; exige reaccionar <=100-150 ms desde recepcion del q + cancelacion 60 ms (sin medir con ordenes propias); 06-23 Oct es in-sample del hallazgo.

@@ -1,0 +1,28 @@
+
+##### entrena DESC (pob ex-W n=600000) -> prueba HOLD (pob 788426, W 6776)
+log-loss pob  solo-precio 0.14154 | con rasgos 0.14187 | AUC 0.7096 -> 0.7071
+coef (std): {'lp': np.float64(0.97), 'zs_cl': np.float64(0.074), 'zs_bn': np.float64(0.01), 'm10_cl': np.float64(-0.028), 'imb_s': np.float64(0.012), 'basis_s': np.float64(0.082), 'zb': np.float64(-0.057), 'lnT': np.float64(0.064)}
+log-loss W   solo-precio 0.18935 | con rasgos 0.18975 | AUC 0.7162 -> 0.7138
+quintil q/p (cortes de la pob): [0.74 0.86 0.97 1.08]
+  Q1  POB n  157695 $   60054 EV -0.020 (-0.33,+0.28) hit/p 1.01 | W n   779 $   691 EV +0.040 hit/p 1.22 | %$ W 10.7% vs pob 12.7% | mean q/p pob 0.66 W 0.66
+  Q2  POB n  157684 $   65646 EV -0.162 (-0.36,+0.01) hit/p 0.76 | W n  1194 $   960 EV +0.308 hit/p 1.03 | %$ W 14.8% vs pob 13.9% | mean q/p pob 0.80 W 0.81
+  Q3  POB n  157678 $   87469 EV -0.095 (-0.27,+0.07) hit/p 0.76 | W n  1395 $  1206 EV +0.597 hit/p 1.30 | %$ W 18.6% vs pob 18.5% | mean q/p pob 0.92 W 0.92
+  Q4  POB n  157685 $  118875 EV -0.106 (-0.27,+0.04) hit/p 0.82 | W n  1313 $  1374 EV +0.261 hit/p 1.05 | %$ W 21.2% vs pob 25.2% | mean q/p pob 1.02 W 1.03
+  Q5  POB n  157684 $  139834 EV -0.060 (-0.16,+0.04) hit/p 0.93 | W n  2095 $  2243 EV +0.366 hit/p 1.39 | %$ W 34.6% vs pob 29.6% | mean q/p pob 1.19 W 1.22
+  regla ex ante 'q/p en el quintil superior' sobre pob: EV -0.060 IC90 dias (-0.15,+0.04) n=157684 (8 dias)
+  top 5%: EV +0.042 IC90 (-0.09,+0.19) n=39422
+  placebo (q permutada por dia, quintil superior): EV media -0.126 sd 0.055
+
+##### entrena HOLD (pob ex-W n=600000) -> prueba DESC (pob 781431, W 6794)
+log-loss pob  solo-precio 0.16068 | con rasgos 0.16174 | AUC 0.7253 -> 0.7186
+coef (std): {'lp': np.float64(0.919), 'zs_cl': np.float64(1.162), 'zs_bn': np.float64(-1.239), 'm10_cl': np.float64(-0.028), 'imb_s': np.float64(-0.007), 'basis_s': np.float64(-0.374), 'zb': np.float64(-0.038), 'lnT': np.float64(-0.038)}
+log-loss W   solo-precio 0.20724 | con rasgos 0.20825 | AUC 0.6970 -> 0.7000
+quintil q/p (cortes de la pob): [0.73 0.8  0.86 0.92]
+  Q1  POB n  156290 $   50938 EV -0.091 (-0.28,+0.10) hit/p 0.92 | W n  1497 $   986 EV -0.002 hit/p 1.12 | %$ W 16.5% vs pob 12.3% | mean q/p pob 0.64 W 0.64
+  Q2  POB n  156288 $   60916 EV -0.159 (-0.29,-0.05) hit/p 0.88 | W n  1473 $  1096 EV -0.235 hit/p 0.80 | %$ W 18.3% vs pob 14.7% | mean q/p pob 0.77 W 0.77
+  Q3  POB n  156288 $   80027 EV +0.081 (-0.08,+0.23) hit/p 1.02 | W n  1442 $  1351 EV +0.516 hit/p 1.01 | %$ W 22.6% vs pob 19.4% | mean q/p pob 0.83 W 0.83
+  Q4  POB n  156294 $  108627 EV +0.257 (+0.15,+0.38) hit/p 1.17 | W n  1434 $  1555 EV +0.626 hit/p 1.46 | %$ W 26.0% vs pob 26.3% | mean q/p pob 0.89 W 0.88
+  Q5  POB n  156271 $  112603 EV -0.077 (-0.16,-0.01) hit/p 0.98 | W n   948 $   998 EV +0.400 hit/p 1.40 | %$ W 16.7% vs pob 27.3% | mean q/p pob 1.11 W 1.03
+  regla ex ante 'q/p en el quintil superior' sobre pob: EV -0.077 IC90 dias (-0.16,-0.01) n=156271 (8 dias)
+  top 5%: EV +0.151 IC90 (-0.11,+0.40) n=39072
+  placebo (q permutada por dia, quintil superior): EV media -0.239 sd 0.030

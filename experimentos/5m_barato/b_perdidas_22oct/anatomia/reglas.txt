@@ -1,0 +1,36 @@
+--- tr15 (bps firmado hacia nuestro lado; + = la tendencia nos favorece)
+                    n    hit  precio     pnl       c     EV               dias
+tr15b                                                                         
+(-16.136, -4.733]  43  0.256   0.198  16.429  45.552  0.361  +1.20/+0.85/-0.60
+(-4.733, 4.722]    43  0.233   0.220   3.868  49.127  0.079  -1.00/+0.66/+0.18
+(-76.53, -16.136]  44  0.182   0.222  -9.286  48.751 -0.190  +0.05/-0.52/-0.15
+(4.722, 60.703]    43  0.186   0.226 -11.231  48.068 -0.234  +0.51/-0.36/-0.57
+spearman con gana 0.008
+--- tr60 (bps firmado hacia nuestro lado; + = la tendencia nos favorece)
+                      n    hit  precio     pnl       c     EV               dias
+tr60b                                                                           
+(-110.652, -35.751]  44  0.227   0.221   0.349  50.476  0.007  +0.04/+0.03/-0.04
+(-15.152, 13.558]    43  0.209   0.212   0.711  47.754  0.015  -0.09/-0.11/+0.20
+(-35.751, -15.152]   43  0.279   0.212  16.143  45.850  0.352  +0.49/+1.42/-0.37
+(13.558, 74.892]     44  0.114   0.218 -23.122  48.117 -0.481  +0.01/-0.42/-1.00
+spearman con gana -0.106
+
+=== Walk-forward: 49 celdas con n>=15 en 20-21 Oct (n=109); se eligen las 5 de peor EV y se miden en 22-Oct (n=66) sin re-elegir
+sprb=(0.021, 0.041]: train n=20 EV -0.468 | 22-Oct veto n=13 pnl -9.61 EV -0.658  resto n=53 EV -0.151
+distb=(-8, -6]: train n=21 EV -0.451 | 22-Oct veto n=14 pnl +4.76 EV +0.339  resto n=52 EV -0.397
+fvgb=(0.03, 1.0]: train n=15 EV -0.371 | 22-Oct veto n=11 pnl -1.36 EV -0.102  resto n=55 EV -0.288
+tr60b=(13.558, 74.892]: train n=32 EV -0.299 | 22-Oct veto n=12 pnl -12.48 EV -1.000  resto n=54 EV -0.098
+btcpre30b=(-99.0, -3.0]: train n=18 EV -0.232 | 22-Oct veto n=22 pnl -8.65 EV -0.337  resto n=44 EV -0.208
+(placebo: 5 celdas al azar con n>=15 en train, mismo test, 2000 sorteos)
+EUR evitado medio por veto en 22-Oct: elegidas +5.47 vs placebo media +5.87 p95 +12.25; P(placebo>=elegidas)=0.521
+
+=== Contabilidad de vetos (IN-SAMPLE, 175 posiciones; neto = -pnl de lo vetado)
+V1 hora 08-11 UTC: veta n=87 (50%, 93.6 EUR coste) | perdidas evitadas +80.19 | ganancias renunciadas 47.57 (13 ganadoras) | NETO +32.61 EUR | neto por dia -2.4/+11.3/+23.8 | EV resto +0.303 (n=88)
+V2 precio >=0,25: veta n=59 (34%, 75.5 EUR coste) | perdidas evitadas +63.74 | ganancias renunciadas 31.13 (10 ganadoras) | NETO +32.61 EUR | neto por dia +3.4/+6.7/+22.5 | EV resto +0.257 (n=116)
+V3 spread al pujar >0,02: veta n=56 (32%, 63.5 EUR coste) | perdidas evitadas +55.73 | ganancias renunciadas 24.66 (7 ganadoras) | NETO +31.07 EUR | neto por dia -2.9/+21.8/+12.2 | EV resto +0.221 (n=119)
+V4 XRP: veta n=50 (29%, 52.5 EUR coste) | perdidas evitadas +42.51 | ganancias renunciadas 38.95 (10 ganadoras) | NETO +3.57 EUR | neto por dia -1.2/+0.6/+4.2 | EV resto +0.009 (n=125)
+V5 Binance 30 s previo en contra (-4,-1] bps: veta n=54 (31%, 61.6 EUR coste) | perdidas evitadas +53.13 | ganancias renunciadas 31.83 (7 ganadoras) | NETO +21.30 EUR | neto por dia +3.2/-4.3/+22.5 | EV resto +0.144 (n=121)
+V6 lado Up: veta n=101 (58%, 112.3 EUR coste) | perdidas evitadas +92.44 | ganancias renunciadas 68.82 (18 ganadoras) | NETO +23.62 EUR | neto por dia +3.4/-4.1/+24.4 | EV resto +0.262 (n=74)
+V7 tendencia 60 min en contra (cuartil inferior tr60): veta n=44 (25%, 50.5 EUR coste) | perdidas evitadas +39.35 | ganancias renunciadas 39.70 (10 ganadoras) | NETO -0.35 EUR | neto por dia -0.6/-0.5/+0.7 | EV resto -0.019 (n=131)
+V8 tendencia 15 min en contra (cuartil inferior tr15): veta n=44 (25%, 48.8 EUR coste) | perdidas evitadas +40.23 | ganancias renunciadas 30.94 (8 ganadoras) | NETO +9.29 EUR | neto por dia -0.8/+7.0/+3.1 | EV resto +0.048 (n=131)
+V1|V3: veta n=108 (62%, 117.9 EUR coste) | perdidas evitadas +102.27 | ganancias renunciadas 55.32 (15 ganadoras) | NETO +46.94 EUR | neto por dia -1.7/+22.9/+25.7 | EV resto +0.590 (n=67)

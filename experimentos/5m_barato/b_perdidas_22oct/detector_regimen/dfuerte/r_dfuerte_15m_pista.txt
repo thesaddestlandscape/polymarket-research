@@ -1,0 +1,35 @@
+cotizaciones 15m YES (recepcion) 2268602 dias 18 monedas ['BNB', 'BTC', 'DOGE', 'ETH', 'SOL', 'XRP']
+cobertura mid15_open 0.947 mid15_T 0.933 (n unidades 4450)
+
+== (1) 15m cruzado: descriptivo (test 2026-10-12..2026-10-21, 10 d, unidades 2767; con mid15_T 2702) ==
+corr(mid15_con_T, zo) 0.452 | corr(mid5_con_T, zo) 0.934 | corr(mid15_con_open, zo) -0.040 | R2 mid15 por (lpc,zo,vol,slot) 0.461
+AUC_strat univariable (inversion = 1-AUC): s_M10 0.556 (n=2767) | pcon 0.517 (n=2767) | mid15_con_open 0.474 (n=2747) | gap15_5 0.484 (n=2743) | mid15_con_T 0.497 (n=2702) | dis15 0.494 (n=2702) | gapT 0.477 (n=2698) | mech15 0.492 (n=2702) | resid15 0.500 (n=2702) | resid5 0.527 (n=2762) | dis_M10 0.519 (n=2762) | dis15_M10 0.484 (n=2702) | adis_M10 0.561 (n=2762) | dis 0.536 (n=2762)
+
+== apilado logistico walk-forward (entrena con dias previos; test 2026-10-12..2026-10-21, n=2767, 10 d) base [lpc,s_M10] AUC 0.5568; inversion base 0.4432 ==
+  +15m_open              AUC 0.5430 ganancia -0.0138 IC90 dias (-0.0254,-0.0044)
+  +15m_T                 AUC 0.5457 ganancia -0.0112 IC90 dias (-0.0207,-0.0023)
+  +15m_open+T            AUC 0.5451 ganancia -0.0117 IC90 dias (-0.0240,-0.0020)
+  +5m_T                  AUC 0.5655 ganancia +0.0087 IC90 dias (-0.0221,+0.0425)
+  +5m+15m_T              AUC 0.5668 ganancia +0.0100 IC90 dias (-0.0198,+0.0391)
+  +resid5                AUC 0.5654 ganancia +0.0085 IC90 dias (-0.0207,+0.0405)
+  +resid15               AUC 0.5521 ganancia -0.0047 IC90 dias (-0.0087,-0.0009)
+  +resid5+15             AUC 0.5632 ganancia +0.0063 IC90 dias (-0.0220,+0.0350)
+  +dis_M10 (5m)          AUC 0.5651 ganancia +0.0083 IC90 dias (-0.0201,+0.0429)
+  +dis_M10 (5m+15m)      AUC 0.5627 ganancia +0.0059 IC90 dias (-0.0219,+0.0393)
+  PLACEBO 15m_T shuf     AUC 0.5565 ganancia -0.0003 IC90 dias (-0.0044,+0.0045)
+  PLACEBO 5m_T shuf      AUC 0.5518 ganancia -0.0050 IC90 dias (-0.0091,-0.0013)
+
+== permutacion dia x moneda x qb (150 perms) del bloque mid; p una cola de la ganancia ==
+  perm 50
+  perm 100
+  perm 150
+  +15m_T       ganancia real -0.0112 | null media -0.0033 sd 0.0046 | p(null >= real) = 0.960 (Bonferroni x12 specs = 1.00)
+  +5m_T        ganancia real +0.0087 | null media -0.0035 sd 0.0035 | p(null >= real) = 0.007 (Bonferroni x12 specs = 0.08)
+  +5m+15m_T    ganancia real +0.0100 | null media -0.0060 sd 0.0054 | p(null >= real) = 0.013 (Bonferroni x12 specs = 0.16)
+
+== desagregado moneda x marco (ganancia AUC_strat sobre base; test; IC90 por dias) ==
+  +5m_T      BTC n=554 +0.000 (-0.047,+0.061) | ETH n=706 +0.022 (-0.025,+0.079) | SOL n=762 +0.005 (-0.032,+0.052) | XRP n=745 -0.002 (-0.042,+0.036)
+  +15m_T     BTC n=554 -0.017 (-0.028,-0.005) | ETH n=706 -0.006 (-0.037,+0.021) | SOL n=762 -0.021 (-0.043,-0.003) | XRP n=745 -0.007 (-0.027,+0.017)
+  +5m+15m_T  BTC n=554 -0.002 (-0.047,+0.049) | ETH n=706 +0.025 (-0.022,+0.087) | SOL n=762 -0.002 (-0.039,+0.042) | XRP n=745 +0.004 (-0.034,+0.046)
+  +resid5    BTC n=554 +0.001 (-0.051,+0.055) | ETH n=706 +0.018 (-0.029,+0.065) | SOL n=762 +0.002 (-0.034,+0.049) | XRP n=745 +0.009 (-0.027,+0.043)
+  +resid15   BTC n=554 +0.001 (-0.014,+0.015) | ETH n=706 +0.005 (-0.016,+0.026) | SOL n=762 -0.017 (-0.036,+0.000) | XRP n=745 +0.002 (-0.015,+0.018)

@@ -1,0 +1,31 @@
+{
+ "dia": "2026-10-23",
+ "niveles_bid": 5861,
+ "a": {
+  "n_ordenes_B": 524,
+  "recuperadas_episodio": 26,
+  "frac": 0.04961832061068702,
+  "alta_visible_250ms": 519,
+  "nivel_vacio_al_alta": 118,
+  "dt_alta_ms_p10_50_90": [
+   35.641650390625,
+   52.0416259765625,
+   85.2340087890625
+  ],
+  "n_dt": 524
+ },
+ "cota_positivos": {
+  "order_hash_ajenos_rellenados_bid_banda": 722,
+  "fills": 1123,
+  "tokens": 43
+ },
+ "b": {
+  "episodios_unicos_banda_sin_B": 10345,
+  "solapados_con_B": 334,
+  "positivos": 699,
+  "negativos_cancelados": 9646,
+  "positivos_con_2_o_mas_order_hash": 136,
+  "frac_no_degenerado": 0.19456366237482117,
+  "positivos_1hash_tamano_cuadra": 41
+ }
+}

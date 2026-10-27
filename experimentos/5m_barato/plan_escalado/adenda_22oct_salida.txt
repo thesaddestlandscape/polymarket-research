@@ -1,0 +1,45 @@
+sigma2 por EUR (p=0.208) = 3.81; stake minimo por relleno 1.05 $
+
+## 1. n efectivo
+B real liquidadas 185 coste 203.38 pnl -5.10 EVpond -0.0251
+B EV por dia {'2026-10-20': 0.07, '2026-10-21': 0.166, '2026-10-22': -0.257}
+B EV IC90 por cierre (-0.289,+0.266)
+B real 20-Oct 11:40Z..22-Oct 15:45Z (~2,15 dias calendario, ~7 h activas/dia): rellenos 185 (86.0/dia) cierres 101 (47.0/dia) ICC 0.264 IC90(0.037,0.471) n_eff/dia 67.4 IC90(59.0,82.6) DEFF 1.28
+  2026-10-21 completo: rellenos 72 cierres 40 n_eff(ICC .261) 56.5 (ICC .04 68.8; .45 50.2; 1 = 40)
+  2026-10-22 completo: rellenos 76 cierres 41 n_eff(ICC .261) 59.5 (ICC .04 72.6; .45 52.5; 1 = 41)
+B real con print: rellenos 166 cierres 88 por dia {'2026-10-20': 36, '2026-10-21': 66, '2026-10-22': 64} cierres/dia {'2026-10-20': 19, '2026-10-21': 36, '2026-10-22': 33} EV +0.016
+B real R3 verdadero: rellenos 37 cierres 26 por dia {'2026-10-20': 11, '2026-10-21': 10, '2026-10-22': 16} cierres/dia {'2026-10-20': 8, '2026-10-21': 8, '2026-10-22': 10} EV +0.410
+simulador BASE 17-21 (capacidad, 1 puja por mercado-lado): rellenos 2799 (559.8/dia) cierres 1337 (267.4/dia) ICC 0.484 IC90(0.435,0.533) n_eff/dia 353.3 IC90(341.8,365.4) DEFF 1.58
+  EV diario [-0.219, -0.222, -0.291, -0.098, -0.033] var entre dias / var esperada iid por cierre = 1.20 (5 dias: estimacion debil)
+simulador R3 17-21 (capacidad, 1 puja por mercado-lado): rellenos 652 (130.4/dia) cierres 443 (88.6/dia) ICC 0.561 IC90(0.436,0.677) n_eff/dia 99.1 IC90(95.7,103.5) DEFF 1.32
+  EV diario [0.1, -0.168, -0.16, -0.08, 0.154] var entre dias / var esperada iid por cierre = 0.59 (5 dias: estimacion debil)
+
+## 2. Escalado por escenario (Kelly correcto; s_min 1,05 $; techo de profundidad K=20 -> coste medio 2,44 $/relleno, EV -0,017; R3_escalado §4.1)
+esc | EV | rell/dia | n_eff/dia | f*Kelly/relleno | W_min Kelly / 1/2K $ | g(5$, f=21%) | g Kelly %/d | g 1/2K %/d | dias W_min->techo K20 (K/half) | dias 5$->techo sin minimo (K/half) | EUR/anio en techo K20 | stake 200k $/relleno (acc) | cabe K20?
+B actual pesimista (sim BASE) | -0.180 | 73 | 57 | 0 | inf | -0.095 | 0 | 0 | nunca | nunca | 0 | — | —
+B actual base (real, fresco) | -0.025 | 73 | 57 | 0 | inf | -0.069 | 0 | 0 | nunca | nunca | 0 | — | —
+B actual base +rebate (si se paga) | -0.014 | 73 | 57 | 0 | inf | -0.067 | 0 | 0 | nunca | nunca | 0 | — | —
+B actual optimista (=gate) | +0.050 | 73 | 57 | 1.03 % | 102 / 203 | -0.056 | 1.89 | 1.42 | 45 / 60 | 204 / 321 | 2,144 | 227 (1083) | NO x93
+B 24 h optimista (=gate, cap. sim) | +0.050 | 560 | 354 | 0.83 % | 126 / 253 | -0.056 | 11.64 | 8.73 | 7 / 10 | 35 / 55 | 16,448 | 30 (141) | NO x12
+R3 pesimista (politica sim) | -0.041 | 26 | 22 | 0 | inf | -0.071 | 0 | 0 | nunca | nunca | 0 | — | —
+R3 base retencion (+0,03) | +0.030 | 50 | 40 | 0.63 % | 167 / 333 | -0.059 | 0.47 | 0.35 | 178 / 238 | 920 / 1422 | 579 | 843 (4014) | NO x346
+R3 base recalibrado (+0,07) | +0.070 | 50 | 40 | 1.47 % | 71 / 143 | -0.052 | 2.57 | 1.93 | 33 / 44 | 136 / 217 | 2,359 | 207 (985) | NO x85
+R3 base recal. cap. completa | +0.070 | 130 | 98 | 1.39 % | 75 / 151 | -0.052 | 6.34 | 4.75 | 13 / 18 | 56 / 89 | 6,132 | 80 (379) | NO x33
+R3 optimista (+0,11) cap. completa | +0.110 | 130 | 98 | 2.19 % | 48 / 96 | -0.046 | 15.65 | 11.74 | 5 / 7 | 20 / 32 | 10,761 | 45 (216) | NO x19
+R3 cota alta IC (+0,35) cap. compl. | +0.350 | 130 | 98 | 6.96 % | 15 / 30 | -0.005 | 158.42 | 118.82 | 1 / 1 | 1 / 2 | 38,530 | 13 (60) | NO x5
+
+## 3. Que haria falta (techo K=20, 2,44 $/relleno, deterioro 0,017)
+EV +0.05: rellenos/dia para 200 k = 6,809 (x52 la capacidad R3 de 3 alts; ~157 moneda-marco a 43,5 R3/dia) ; para 20 k (10 %) = 681 (x5.2)
+EV +0.07: rellenos/dia para 200 k = 4,240 (x33 la capacidad R3 de 3 alts; ~97 moneda-marco a 43,5 R3/dia) ; para 20 k (10 %) = 424 (x3.3)
+EV +0.11: rellenos/dia para 200 k = 2,416 (x19 la capacidad R3 de 3 alts; ~56 moneda-marco a 43,5 R3/dia) ; para 20 k (10 %) = 242 (x1.9)
+EV +0.20: rellenos/dia para 200 k = 1,228 (x9 la capacidad R3 de 3 alts; ~28 moneda-marco a 43,5 R3/dia) ; para 20 k (10 %) = 123 (x0.9)
+EV +0.35: rellenos/dia para 200 k = 675 (x5 la capacidad R3 de 3 alts; ~16 moneda-marco a 43,5 R3/dia) ; para 20 k (10 %) = 67 (x0.5)
+EV necesario para que R3 a capacidad completa (130/dia, K20) de 20 k: 0.190 ; 50 k: 0.449 ; 200 k: 1.746
+
+## 4. Correccion del PLAN_MAESTRO ADENDA 20-Oct (sigma2 4,2; dias desde 2 EUR hasta stake final)
+n 2.8 EV 0.08: stake 2446 | plan Kelly 1666 d (g 0.43%) | correcto Kelly 3332 d (g 0.21%) | correcto 1/2K 4443 d
+n 2.8 EV 0.04: stake 4892 | plan Kelly 7315 d (g 0.11%) | correcto Kelly 14629 d (g 0.05%) | correcto 1/2K 19506 d
+n 10 EV 0.08: stake 685 | plan Kelly 383 d (g 1.52%) | correcto Kelly 766 d (g 0.76%) | correcto 1/2K 1021 d
+n 20 EV 0.08: stake 342 | plan Kelly 169 d (g 3.05%) | correcto Kelly 338 d (g 1.52%) | correcto 1/2K 450 d
+n 50 EV 0.08: stake 137 | plan Kelly 55 d (g 7.62%) | correcto Kelly 111 d (g 3.81%) | correcto 1/2K 148 d
+n 50 EV 0.04: stake 274 | plan Kelly 258 d (g 1.90%) | correcto Kelly 517 d (g 0.95%) | correcto 1/2K 689 d

@@ -1,0 +1,38 @@
+{
+ "job_id": "cf_tomadores_informados_B",
+ "codigo_sha256": {
+  "cf_diario.py": "4043a43b20e3309a",
+  "cf_lib.py": "e81145b748ce3fd7",
+  "build_set.py": "098e1de700e944aa"
+ },
+ "parametros": {
+  "desde": "2026-10-22",
+  "hasta": "2026-10-23",
+  "tag": "dryrun",
+  "sin_pob": false,
+  "rehacer": false,
+  "reps": 3000,
+  "perms": 5000
+ },
+ "hasta_efectivo": "2026-10-23",
+ "entradas": {
+  "movimientos.csv": "23800ea1ffa03740",
+  "posiciones.csv": "8a2e9e18c2daf3d9",
+  "set_I": "1466a608b4e4334d6a377bceebccc0e947c345124a69fc124973d522413a63fb",
+  "set_V": "ac7d6a0b23706c5d5b1945a9aaf3eadb2b5fcc17add373279ea56182aec77d02"
+ },
+ "inicio_epoch": 1792835858.176672,
+ "fin_epoch": 1792835863.6479938,
+ "estado": "COMPLETE",
+ "cobertura": {
+  "fills_B_ledger_en_ventana": 98,
+  "tx_unicos": 98,
+  "duplicados_tx": 0,
+  "sin_taker": 0,
+  "tx_multi_taker": 0,
+  "pendientes_sin_liquidar": 0,
+  "fills_validos": 98,
+  "coste_validos": 99.917542
+ },
+ "comando": "nice -n 19 ionice -c3 python3 -I /root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/as_tomador/contrafactual/scripts/cf_diario.py --desde 2026-10-22 --hasta 2026-10-23 --tag dryrun"
+}

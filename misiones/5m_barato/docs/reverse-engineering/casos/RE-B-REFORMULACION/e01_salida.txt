@@ -1,0 +1,26 @@
+ordenes con libro+desenlace 3796 de puja_post 3796
+Q1 P(fill) orden 0.0514  puja 0.5357 (n=364 pujas)  mercado 0.5357 (n=364)  ordenes/puja 10.4
+   dia 2026-10-20 pujas 53 P(fill puja) 0.679
+   dia 2026-10-21 pujas 124 P(fill puja) 0.548
+   dia 2026-10-22 pujas 152 P(fill puja) 0.493
+   dia 2026-10-23 pujas 35 P(fill puja) 0.457
+Q2 base {'ev': -0.0612, 'spread': 0.107, 'U': 0.0357, 'sel': 0.048, 'cond': -0.2162, 'mf_pp': -0.0125, 'cost': 213.3254, 'n': 195}
+   IC90 ev     (-0.3170, 0.2095)
+   IC90 spread (0.1019, 0.1125)
+   IC90 U      (-0.1552, 0.2327)
+   IC90 sel    (-0.2107, 0.3144)
+   IC90 cond   (-0.4292, -0.0160)
+   cierres 129
+   dia 2026-10-20 {'ev': 0.099, 'spread': 0.1, 'U': -0.08, 'sel': -0.102, 'cond': 0.102, 'mf_pp': 0.022, 'cost': 41.844, 'n': 36}
+   dia 2026-10-21 {'ev': 0.162, 'spread': 0.108, 'U': 0.199, 'sel': 0.27, 'cond': -0.216, 'mf_pp': 0.033, 'cost': 74.364, 'n': 68}
+   dia 2026-10-22 {'ev': -0.242, 'spread': 0.111, 'U': 0.064, 'sel': 0.087, 'cond': -0.44, 'mf_pp': -0.048, 'cost': 80.274, 'n': 75}
+   dia 2026-10-23 {'ev': -0.584, 'spread': 0.101, 'U': -0.493, 'sel': -0.69, 'cond': 0.004, 'mf_pp': -0.116, 'cost': 16.843, 'n': 16}
+   coin ETH {'ev': 0.035, 'spread': 0.133, 'U': 0.134, 'sel': 0.186, 'cond': -0.285, 'mf_pp': 0.007, 'cost': 83.974, 'n': 75}
+   coin SOL {'ev': -0.047, 'spread': 0.081, 'U': 0.134, 'sel': 0.174, 'cond': -0.301, 'mf_pp': -0.01, 'cost': 67.644, 'n': 62}
+   coin XRP {'ev': -0.207, 'spread': 0.1, 'U': -0.158, 'sel': -0.211, 'cond': -0.096, 'mf_pp': -0.044, 'cost': 61.707, 'n': 58}
+nivel (c bajo mejor bid) ordenes [(-2, 1), (-1, 2), (0, 12), (1, 2405), (2, 1363), (3, 9), (4, 3), (15, 1)]
+   nivel 1c: ordenes 2405 P(fill) 0.049 EV_f -0.111 coste 127.5
+   nivel 2c: ordenes 1363 P(fill) 0.054 EV_f 0.047 coste 83.0
+Q3 posiciones B n=202 coste 221.30 pnl -16.02 EV -0.0724 | ordenes coste 213.33 EV -0.0612
+Q4 coste relleno por dia {'2026-10-20': 43.0, '2026-10-21': 78.4, '2026-10-22': 83.1, '2026-10-23': 16.8}
+Q4 p media rellenos 0.205 rebate por EUR si cobra 0,2*0,07*(1-p) = 0.0111

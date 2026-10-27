@@ -1,0 +1,13 @@
+base AUC 0.5568 (n=2767, 10 d)
+  +mech5 (mid predicho solo con movimiento)  ganancia -0.0020 IC90 dias (-0.0043,-0.0000)
+  +mid5_T                                    ganancia +0.0110 IC90 dias (-0.0108,+0.0362)
+  +resid5 (mid - mecanico)                   ganancia +0.0085 IC90 dias (-0.0195,+0.0412)
+  +mech5+resid5                              ganancia +0.0073 IC90 dias (-0.0195,+0.0378)
+permutacion residuo dia x moneda x qb (200): real +0.0085, null media -0.0034 sd 0.0037, p una cola 0.005 (Bonferroni x12 = 0.06)
+EV al mid (y - mid5_T, sin spread ni comision) por tercil del residuo (post-hoc, descriptivo):
+                n  ev_mid  ev_pcon     hit
+t                                         
+resid bajo  921.0  0.0858  -0.0353  0.3518
+medio       920.0 -0.0457  -0.0310  0.4837
+alto        921.0 -0.1349   0.0174  0.5646
+IC90 dias del EV al mid, tercil alto: [-0.1774, -0.0986]

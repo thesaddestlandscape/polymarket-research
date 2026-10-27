@@ -1,0 +1,73 @@
+Fills M BTC 5m px_ef 0,1-0,9 17-21 Oct: 3116252; wallets 3342; wallet 0x21f4c1a1: 53457 fills, 1387 mercados, acc medio 22.23, px_ef medio 0.497, EV +0.0158; otros n 3116252 EV -0.0060
+cobertura indicadores wallet: {'r300': 1.0, 'r60': 1.0, 'r900': 1.0, 'rop': 1.0, 'rpre': 1.0, 'b15': 0.958, 'f60': 1.0}
+cobertura por dia (r300, rpre, b15):
+            r300  rpre    b15
+dia                          
+2026-10-17   1.0   1.0  0.962
+2026-10-18   1.0   1.0  0.970
+2026-10-19   1.0   1.0  0.940
+2026-10-20   1.0   1.0  0.952
+2026-10-21   1.0   1.0  0.963
+
+===== P1 cuota CON: WALLET (0x21f4c1a1): fills 53457, mercados 1387
+ ind  cw_DESC  exp_DESC  dif_DESC       ic_DESC  difW_DESC  n_DESC  cw_TEST  exp_TEST  dif_TEST       ic_TEST  difW_TEST  n_TEST
+r300    0.532     0.514     0.018 (+0.7,+2.8)pp      0.028   25382    0.541     0.513     0.028 (+1.9,+3.7)pp      0.027   27918
+ r60    0.549     0.516     0.033 (+2.2,+4.5)pp      0.048   24175    0.568     0.517     0.051 (+4.1,+6.1)pp      0.057   27497
+r900    0.543     0.523     0.021 (+1.0,+3.0)pp      0.023   25444    0.524     0.507     0.018 (+0.9,+2.6)pp      0.017   27974
+ rop    0.545     0.528     0.017 (+0.6,+2.7)pp      0.030   23205    0.552     0.518     0.034 (+2.5,+4.3)pp      0.034   26688
+rpre    0.521     0.513     0.008 (-0.1,+1.7)pp      0.011   25454    0.509     0.501     0.008 (+0.0,+1.6)pp      0.010   27993
+ b15    0.503     0.493     0.009 (+0.1,+1.8)pp      0.019   24363    0.528     0.508     0.020 (+1.2,+2.9)pp      0.023   26815
+ f60    0.420     0.475    -0.055 (-6.7,-4.1)pp     -0.036   25406    0.495     0.493     0.001 (-0.9,+1.2)pp      0.015   27879
+  placebo TEST r300: obs +2.80 pp, placebo medio +0.00 (sd 0.24); p una cola (sentido DESC) 0.000; p max-estadistico 0.000
+  placebo TEST r60: obs +5.10 pp, placebo medio -0.01 (sd 0.25); p una cola (sentido DESC) 0.000; p max-estadistico 0.000
+  placebo TEST r900: obs +1.77 pp, placebo medio +0.00 (sd 0.23); p una cola (sentido DESC) 0.000; p max-estadistico 0.000
+  placebo TEST rop: obs +3.39 pp, placebo medio +0.01 (sd 0.21); p una cola (sentido DESC) 0.000; p max-estadistico 0.000
+  placebo TEST rpre: obs +0.82 pp, placebo medio +0.01 (sd 0.22); p una cola (sentido DESC) 0.000; p max-estadistico 0.003
+  placebo TEST b15: obs +2.02 pp, placebo medio +0.01 (sd 0.21); p una cola (sentido DESC) 0.000; p max-estadistico 0.000
+  placebo TEST f60: obs +0.11 pp, placebo medio +0.01 (sd 0.26); p una cola (sentido DESC) 0.642; p max-estadistico 0.999
+
+===== P1 cuota CON: CONTROL (0xaa1a4f31): fills 59902, mercados 1411
+ ind  cw_DESC  exp_DESC  dif_DESC       ic_DESC  difW_DESC  n_DESC  cw_TEST  exp_TEST  dif_TEST       ic_TEST  difW_TEST  n_TEST
+r300    0.480     0.491    -0.011 (-1.7,-0.5)pp     -0.012   34725    0.468     0.482    -0.014 (-2.3,-0.6)pp     -0.007   24953
+ r60    0.462     0.479    -0.017 (-2.3,-1.1)pp     -0.011   32424    0.451     0.484    -0.033 (-4.1,-2.5)pp     -0.014   24611
+r900    0.487     0.494    -0.007 (-1.2,-0.2)pp     -0.010   34837    0.476     0.489    -0.013 (-2.1,-0.5)pp     -0.007   25026
+ rop    0.456     0.474    -0.018 (-2.4,-1.3)pp     -0.015   32016    0.450     0.477    -0.027 (-3.4,-2.0)pp     -0.019   24053
+rpre    0.494     0.498    -0.004 (-0.9,+0.1)pp     -0.006   34859    0.487     0.496    -0.010 (-1.7,-0.2)pp     -0.003   25042
+ b15    0.476     0.481    -0.005 (-1.0,-0.0)pp     -0.006   33478    0.463     0.477    -0.014 (-2.2,-0.6)pp     -0.008   23398
+ f60    0.512     0.502     0.010 (+0.4,+1.7)pp      0.015   32612    0.518     0.511     0.007 (-0.3,+1.7)pp     -0.000   23588
+
+===== P1 cuota CON: CONTROL (0x41e2e1cc): fills 56912, mercados 1313
+ ind  cw_DESC  exp_DESC  dif_DESC       ic_DESC  difW_DESC  n_DESC  cw_TEST  exp_TEST  dif_TEST       ic_TEST  difW_TEST  n_TEST
+r300    0.498     0.489     0.009 (+0.3,+1.5)pp      0.007   36865    0.494     0.483     0.012 (+0.5,+1.9)pp      0.004   19853
+ r60    0.468     0.472    -0.003 (-1.0,+0.3)pp     -0.002   34758    0.470     0.462     0.008 (+0.0,+1.6)pp      0.011   19605
+r900    0.503     0.502     0.002 (-0.4,+0.7)pp      0.003   36965    0.503     0.495     0.008 (+0.1,+1.5)pp      0.008   19902
+ rop    0.479     0.474     0.005 (-0.1,+1.0)pp      0.004   34750    0.473     0.461     0.012 (+0.5,+1.9)pp      0.013   19449
+rpre    0.505     0.506    -0.001 (-0.6,+0.4)pp      0.002   36990    0.508     0.507     0.002 (-0.5,+0.9)pp      0.002   19922
+ b15    0.482     0.482    -0.001 (-0.6,+0.5)pp      0.001   35521    0.491     0.480     0.011 (+0.4,+1.8)pp      0.009   18546
+ f60    0.495     0.504    -0.009 (-1.6,-0.3)pp     -0.007   36930    0.498     0.493     0.004 (-0.4,+1.3)pp      0.002   19819
+
+== P1 por dia (dif cuota CON wallet - esperada, pp)
+  r300: 10-17: +1.8 | 10-18: +2.5 | 10-19: +1.0 | 10-20: +2.7 | 10-21: +2.9
+  rpre: 10-17: +0.1 | 10-18: +1.9 | 10-19: +0.0 | 10-20: +1.0 | 10-21: +0.6
+  r900: 10-17: +1.9 | 10-18: +3.1 | 10-19: +1.1 | 10-20: +1.5 | 10-21: +2.0
+
+===== P2 tamano de fill / nº fills por (mercado,lado) segun CON/CONTRA (wallet vs otros)
+  r300 wallet: acc medio CON 23.25 CONTRA 21.05 | n fills por (mercado,lado) CON 15.0 CONTRA 13.8 | n CON 28602 CONTRA 24708
+  r300 otros: acc medio CON 12.70 CONTRA 11.91 | n fills por (mercado,lado) CON 569.2 CONTRA 546.9 | n CON 1582904 CONTRA 1521411
+  rpre wallet: acc medio CON 22.15 CONTRA 22.33 | n fills por (mercado,lado) CON 20.9 CONTRA 20.0 | n CON 27521 CONTRA 25936
+  rpre otros: acc medio CON 12.43 CONTRA 12.19 | n fills por (mercado,lado) CON 1095.5 CONTRA 1064.8 | n CON 1579780 CONTRA 1536472
+  rop wallet: acc medio CON 23.96 CONTRA 20.68 | n fills por (mercado,lado) CON 13.9 CONTRA 12.9 | n CON 27390 CONTRA 22513
+  rop otros: acc medio CON 12.77 CONTRA 11.82 | n fills por (mercado,lado) CON 528.7 CONTRA 511.6 | n CON 1495708 CONTRA 1442209
+
+===== P2 mercado: parte de acciones en el lado A FAVOR de la tendencia previa (rpre) -- wallet vs el resto de makers del MISMO mercado; n mercados 1387
+  DESC: n 834 cuota CON wallet 0.522 otros 0.506 dif +1.65 pp IC90 cierre (+0.0,+3.1)
+  TEST: n 553 cuota CON wallet 0.523 otros 0.514 dif +0.89 pp IC90 cierre (-0.5,+2.2)
+  placebo TEST (tendencia permutada dentro del dia): obs +0.89 pp, placebo -0.03 (sd 0.80), p dos colas 0.248
+  lado del residuo A FAVOR de la tendencia previa (DESC): 0.549 (n 834) IC90 cierre (0.520,0.577); ponderado por res_frac 0.548
+  lado del residuo A FAVOR de la tendencia previa (TEST): 0.530 (n 553) IC90 cierre (0.497,0.564); ponderado por res_frac 0.574
+
+(b) PRECIO/COLA: edge frente al mid del token (c por acc; >0 = compra por debajo del mid) y EV/€ en exceso sobre otros makers de los mismos estratos (dia x Tb x px_ef 0,05)
+  [mid5_f] DESC: n fills 25447 edge wallet +1.14c, esperado +0.81c, dif +0.33c IC90 cierre (+0.24,+0.44) | EV wallet +0.0158, exceso EV/€ vs estratos +0.0205 IC90 (+0.0001,+0.0395)
+  [mid5_f] TEST: n fills 27981 edge wallet +1.25c, esperado +0.77c, dif +0.48c IC90 cierre (+0.40,+0.55) | EV wallet +0.0158, exceso EV/€ vs estratos +0.0150 IC90 (+0.0014,+0.0297)
+  [mid5_t0] DESC: n fills 25312 edge wallet +1.86c, esperado +1.28c, dif +0.58c IC90 cierre (+0.33,+0.84) | EV wallet +0.0158, exceso EV/€ vs estratos +0.0205 IC90 (+0.0005,+0.0414)
+  [mid5_t0] TEST: n fills 27952 edge wallet +3.22c, esperado +1.32c, dif +1.89c IC90 cierre (+1.66,+2.11) | EV wallet +0.0158, exceso EV/€ vs estratos +0.0150 IC90 (-0.0006,+0.0285)

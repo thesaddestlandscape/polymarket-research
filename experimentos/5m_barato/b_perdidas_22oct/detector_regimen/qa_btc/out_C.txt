@@ -1,0 +1,43 @@
+dias cargados 2026-10-05 2026-10-23 19 tokens 63300
+cobertura desenlace por dia (T180 lag250 todos tokens):
+dia     2026-10-05  2026-10-06  2026-10-07  2026-10-08  2026-10-09  2026-10-10  2026-10-11  2026-10-12  2026-10-13  2026-10-14  2026-10-15  2026-10-16  2026-10-17  2026-10-18  2026-10-19  2026-10-20  2026-10-21  2026-10-22  2026-10-23
+tok       1200.000    3456.000    3456.000     3456.00    3456.000    3448.000    3452.000    3448.000    3446.000    3438.000    3444.000    3448.000    3456.000    3450.000    3448.000     3450.00    3450.000    3448.000    3450.000
+des          1.000       1.000       1.000        1.00       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000        1.00       1.000       1.000       1.000
+rpre         0.997       0.994       0.997        1.00       0.995       0.956       0.962       0.999       0.999       1.000       1.000       0.999       0.986       1.000       0.999        1.00       1.000       0.993       1.000
+vivo         0.932       0.973       0.984        0.97       0.983       0.983       0.969       0.970       0.962       0.965       0.966       0.969       0.970       0.975       0.972        0.97       0.977       0.974       0.968
+ask_ok       0.950       1.000       1.000        1.00       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000        1.00       1.000       1.000       1.000
+Interaccion BTC-alts T=120 05-23 por cierre: +0.070 IC90 (-0.130,+0.257) p2 0.536
+Interaccion BTC-alts T=120 05-23 por dia: +0.070 IC90 (-0.094,+0.217) p2 0.469
+bloques circulares de 2 dias ALTS 05-23: Delta -0.187 IC90 (-0.291,-0.086) P(Delta*>=0) 0.002
+bloques circulares de 3 dias ALTS 05-23: Delta -0.187 IC90 (-0.269,-0.105) P(Delta*>=0) 0.000
+bloques circulares de 5 dias ALTS 05-23: Delta -0.187 IC90 (-0.259,-0.130) P(Delta*>=0) 0.000
+bloques circulares de 2 dias BTC 05-23: Delta +0.256 IC90 (+0.019,+0.492) P(Delta*>=0) 0.967
+bloques circulares de 3 dias BTC 05-23: Delta +0.256 IC90 (+0.005,+0.518) P(Delta*>=0) 0.953
+bloques circulares de 5 dias BTC 05-23: Delta +0.256 IC90 (-0.016,+0.533) P(Delta*>=0) 0.938
+bloques circulares de 2 dias ALTS 05-21: Delta -0.234 IC90 (-0.347,-0.137) P(Delta*>=0) 0.000
+bloques circulares de 3 dias ALTS 05-21: Delta -0.234 IC90 (-0.347,-0.141) P(Delta*>=0) 0.000
+bloques circulares de 5 dias ALTS 05-21: Delta -0.234 IC90 (-0.349,-0.142) P(Delta*>=0) 0.000
+bloques circulares de 2 dias BTC 05-21: Delta +0.228 IC90 (-0.035,+0.496) P(Delta*>=0) 0.921
+bloques circulares de 3 dias BTC 05-21: Delta +0.228 IC90 (-0.077,+0.529) P(Delta*>=0) 0.886
+bloques circulares de 5 dias BTC 05-21: Delta +0.228 IC90 (-0.117,+0.563) P(Delta*>=0) 0.856
+  ETH 05-21: n CON 479 CONTRA 468 (cierres 947, dias 17) EV(CON) -0.128 EV(CONTRA) +0.102 Delta -0.230 IC90cierre (-0.444,-0.022) IC90dia (-0.418,-0.065)
+  ETH 22-23: n CON 63 CONTRA 72 (cierres 135, dias 2) EV(CON) +0.439 EV(CONTRA) +0.010 Delta +0.429 IC90cierre (-0.216,+1.129) IC90dia (+0.258,+0.600)
+  SOL 05-21: n CON 508 CONTRA 529 (cierres 1037, dias 17) EV(CON) -0.168 EV(CONTRA) +0.094 Delta -0.262 IC90cierre (-0.461,-0.061) IC90dia (-0.458,-0.063)
+  SOL 22-23: n CON 80 CONTRA 68 (cierres 148, dias 2) EV(CON) +0.258 EV(CONTRA) -0.154 Delta +0.412 IC90cierre (-0.149,+0.957) IC90dia (+0.254,+0.546)
+  XRP 05-21: n CON 523 CONTRA 521 (cierres 1044, dias 17) EV(CON) -0.181 EV(CONTRA) +0.031 Delta -0.212 IC90cierre (-0.413,-0.009) IC90dia (-0.374,-0.056)
+  XRP 22-23: n CON 62 CONTRA 68 (cierres 130, dias 2) EV(CON) -0.190 EV(CONTRA) +0.191 Delta -0.381 IC90cierre (-0.976,+0.230) IC90dia (-0.641,+0.034)
+  BNB 05-21: n CON 391 CONTRA 364 (cierres 755, dias 17) EV(CON) -0.352 EV(CONTRA) -0.072 Delta -0.280 IC90cierre (-0.499,-0.064) IC90dia (-0.551,-0.035)
+  BNB 22-23: n CON 41 CONTRA 51 (cierres 92, dias 2) EV(CON) -0.268 EV(CONTRA) -0.158 Delta -0.110 IC90cierre (-0.703,+0.506) IC90dia (-0.193,-0.070)
+  DOGE 05-21: n CON 523 CONTRA 521 (cierres 1044, dias 17) EV(CON) -0.176 EV(CONTRA) -0.023 Delta -0.153 IC90cierre (-0.350,+0.044) IC90dia (-0.326,+0.015)
+  DOGE 22-23: n CON 56 CONTRA 71 (cierres 127, dias 2) EV(CON) -0.528 EV(CONTRA) +0.458 Delta -0.987 IC90cierre (-1.534,-0.397) IC90dia (-0.987,-0.970)
+  BTC 05-21: n CON 410 CONTRA 394 (cierres 804, dias 17) EV(CON) +0.043 EV(CONTRA) -0.185 Delta +0.228 IC90cierre (+0.007,+0.448) IC90dia (+0.021,+0.441)
+  BTC 22-23: n CON 50 CONTRA 48 (cierres 98, dias 2) EV(CON) +0.196 EV(CONTRA) -0.266 Delta +0.462 IC90cierre (-0.155,+1.077) IC90dia (+0.419,+0.502)
+dEV R0 (EV sin CON - EV todo) ALTS 05-21 por cierre: +0.0594 IC90 (+0.0236,+0.0962)
+dEV R0 (EV sin CON - EV todo) ALTS 05-21 por dia: +0.0594 IC90 (+0.0287,+0.0939)
+dEV R0 (EV sin CON - EV todo) ALTS 22-23 por cierre: -0.0704 IC90 (-0.2014,+0.0615)
+dEV R0 (EV sin CON - EV todo) ALTS 22-23 por dia: -0.0704 IC90 (-0.0948,-0.0552)
+dEV R0 (EV sin CON - EV todo) ALTS 05-23 por cierre: +0.0453 IC90 (+0.0105,+0.0803)
+dEV R0 (EV sin CON - EV todo) ALTS 05-23 por dia: +0.0453 IC90 (+0.0133,+0.0793)
+dEV R0 (EV sin CON - EV todo) BTC 05-23 por cierre: -0.0338 IC90 (-0.0799,+0.0120)
+dEV R0 (EV sin CON - EV todo) BTC 05-23 por dia: -0.0338 IC90 (-0.0731,+0.0096)
+dEV R0 diario alts: media +0.0489 sd 0.0933; dias>0 13/19

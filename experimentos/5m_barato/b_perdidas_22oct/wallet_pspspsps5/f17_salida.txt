@@ -1,0 +1,41 @@
+dias ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11', '2026-10-12', '2026-10-13', '2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23', '2026-10-24'] fills 1722769 W 13616
+-- DESC POBLACION (% de $ por acciones por delante en la cola) {'0 (primero)': 26.700000762939453, '0-20': 21.100000381469727, '20-100': 25.0, '>100': 27.200000762939453}
+  delante 0 (primero)            fills  266125 $   115538 EV +0.121 (np.float64(0.07), np.float64(0.17)) hit/p 1.06 dias 8
+  delante 0-20                   fills  218689 $    91176 EV +0.036 (np.float64(-0.04), np.float64(0.12)) hit/p 1.04 dias 8
+  delante 20-100                 fills  190482 $   108216 EV +0.051 (np.float64(-0.02), np.float64(0.12)) hit/p 1.00 dias 8
+  delante >100                   fills  182305 $   117605 EV -0.086 (np.float64(-0.23), np.float64(0.06)) hit/p 0.94 dias 8
+  volumen del nivel en el bloque <=20 fills  257509 $    57783 EV +0.058 (np.float64(0.02), np.float64(0.09)) hit/p 1.07 dias 8
+  volumen del nivel en el bloque 20-100 fills  257617 $   122306 EV +0.055 (np.float64(-0.02), np.float64(0.13)) hit/p 1.01 dias 8
+  volumen del nivel en el bloque 100-400 fills  225500 $   155950 EV +0.011 (np.float64(-0.06), np.float64(0.1)) hit/p 0.99 dias 8
+  volumen del nivel en el bloque >400 fills  116975 $    96496 EV +0.010 (np.float64(-0.16), np.float64(0.19)) hit/p 0.95 dias 8
+-- DESC W (% de $ por acciones por delante en la cola) {'0 (primero)': 32.099998474121094, '0-20': 23.200000762939453, '20-100': 23.799999237060547, '>100': 20.799999237060547}
+  delante 0 (primero)            fills    3030 $     1926 EV +0.319 (np.float64(0.11), np.float64(0.52)) hit/p 1.20 dias 8
+  delante 0-20                   fills    1786 $     1393 EV +0.372 (np.float64(0.19), np.float64(0.5)) hit/p 1.13 dias 8
+  delante 20-100                 fills    1218 $     1429 EV +0.072 (np.float64(-0.38), np.float64(0.55)) hit/p 1.09 dias 8
+  delante >100                   fills     772 $     1244 EV +0.458 (np.float64(-0.13), np.float64(1.06)) hit/p 1.54 dias 8
+  volumen del nivel en el bloque <=20 fills    2753 $      808 EV +0.227 (np.float64(0.08), np.float64(0.4)) hit/p 1.14 dias 8
+  volumen del nivel en el bloque 20-100 fills    2295 $     2287 EV +0.113 (np.float64(-0.07), np.float64(0.27)) hit/p 1.06 dias 8
+  volumen del nivel en el bloque 100-400 fills    1254 $     1888 EV +0.316 (np.float64(0.08), np.float64(0.56)) hit/p 1.35 dias 8
+  volumen del nivel en el bloque >400 fills     504 $     1008 EV +0.760 (np.float64(0.16), np.float64(1.4)) hit/p 2.21 dias 8
+-- HOLD POBLACION (% de $ por acciones por delante en la cola) {'0 (primero)': 23.200000762939453, '0-20': 18.600000381469727, '20-100': 25.299999237060547, '>100': 32.900001525878906}
+  delante 0 (primero)            fills  253068 $   113426 EV -0.110 (np.float64(-0.23), np.float64(0.0)) hit/p 0.88 dias 8
+  delante 0-20                   fills  192368 $    91088 EV -0.112 (np.float64(-0.22), np.float64(-0.01)) hit/p 0.82 dias 8
+  delante 20-100                 fills  192081 $   123483 EV -0.109 (np.float64(-0.24), np.float64(0.01)) hit/p 0.81 dias 8
+  delante >100                   fills  213643 $   160505 EV -0.035 (np.float64(-0.2), np.float64(0.11)) hit/p 0.92 dias 8
+  volumen del nivel en el bloque <=20 fills  223892 $    48288 EV -0.135 (np.float64(-0.24), np.float64(-0.04)) hit/p 0.86 dias 8
+  volumen del nivel en el bloque 20-100 fills  236025 $   118210 EV -0.165 (np.float64(-0.27), np.float64(-0.05)) hit/p 0.80 dias 8
+  volumen del nivel en el bloque 100-400 fills  247353 $   187711 EV -0.089 (np.float64(-0.26), np.float64(0.06)) hit/p 0.86 dias 8
+  volumen del nivel en el bloque >400 fills  143890 $   134294 EV +0.007 (np.float64(-0.14), np.float64(0.13)) hit/p 0.98 dias 8
+-- HOLD W (% de $ por acciones por delante en la cola) {'0 (primero)': 25.5, '0-20': 18.899999618530273, '20-100': 24.5, '>100': 31.0}
+  delante 0 (primero)            fills    2667 $     1660 EV +0.411 (np.float64(0.14), np.float64(0.7)) hit/p 1.17 dias 7
+  delante 0-20                   fills    1700 $     1231 EV +0.031 (np.float64(-0.29), np.float64(0.43)) hit/p 1.10 dias 8
+  delante 20-100                 fills    1315 $     1598 EV +0.579 (np.float64(0.21), np.float64(0.98)) hit/p 1.57 dias 7
+  delante >100                   fills    1128 $     2021 EV +0.269 (np.float64(-0.13), np.float64(0.74)) hit/p 1.39 dias 7
+  volumen del nivel en el bloque <=20 fills    2322 $      544 EV +0.045 (np.float64(-0.33), np.float64(0.47)) hit/p 1.16 dias 7
+  volumen del nivel en el bloque 20-100 fills    2166 $     1920 EV +0.179 (np.float64(-0.14), np.float64(0.53)) hit/p 1.16 dias 8
+  volumen del nivel en el bloque 100-400 fills    1464 $     2326 EV +0.803 (np.float64(0.54), np.float64(1.05)) hit/p 1.62 dias 7
+  volumen del nivel en el bloque >400 fills     858 $     1720 EV -0.028 (np.float64(-0.45), np.float64(0.39)) hit/p 1.16 dias 7
+
+== emparejado por (moneda, precio, tiempo, cola-por-delante) ==
+DESC EV pop emparejada +0.090 | EV W +0.301 | brecha +0.211
+HOLD EV pop emparejada -0.099 | EV W +0.336 | brecha +0.435

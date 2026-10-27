@@ -1,0 +1,12 @@
+DESC elim  +0.0116/EUR IC90 cierre (-0.0161,+0.0397) por dia +14.8 -1.1 +6.6
+DESC sust  +0.0201/EUR IC90 cierre (+0.0159,+0.0245) por dia +6.8 +12.7 +16.0
+TEST elim  +0.0182/EUR IC90 cierre (-0.0136,+0.0491) por dia +27.4 -9.5 +9.5
+TEST sust  +0.0234/EUR IC90 cierre (+0.0182,+0.0286) por dia +14.6 +11.7 +8.7
+ALL elim  +0.0146/EUR IC90 cierre (-0.0066,+0.0352) por dia +14.8 -1.1 +6.6 +27.4 -9.5 +9.5
+ALL sust  +0.0216/EUR IC90 cierre (+0.0183,+0.0249) por dia +6.8 +12.7 +16.0 +14.6 +11.7 +8.7
+acierto eliminadas +0.0pp -> eliminacion +47.7 EUR, total +118.1 EUR = +0.0363/EUR del coste base
+acierto eliminadas +2.0pp -> eliminacion +4.9 EUR, total +75.3 EUR = +0.0231/EUR del coste base
+acierto eliminadas +3.3pp -> eliminacion -23.0 EUR, total +47.4 EUR = +0.0146/EUR del coste base
+acierto eliminadas +4.5pp -> eliminacion -48.6 EUR, total +21.8 EUR = +0.0067/EUR del coste base
+adelanto senal->relleno base (ms) en quitados: p10/p25/p50/p75/p90 [  33.  104.  210.  466. 1097.] frac <300 ms 0.6148571428571429
+Fisher B real senal 3/20 vs 29/124: p=0.565

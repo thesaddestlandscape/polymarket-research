@@ -1,0 +1,101 @@
+{'feat': 'R1', 'q': 3, 'group': None, 'dP': 7164, 'EXC': 16091, 'p': np.float64(0.004), 'p_circ': np.float64(0.0015), 'sin2': 6562, 'diaspos': '13/16', 'ret': np.float64(0.67), 'k': 3739, 'n': 13815, 'best': ['2026-10-19', '2026-10-20'], 'top1': 6626}
+           dia    k    n      dP     exd   lv
+0   2026-10-08   59  864  -564.0   -17.0  [0]
+1   2026-10-09  246  864   161.0  1526.0  [0]
+2   2026-10-10  721  863 -3098.0 -1319.0  [0]
+3   2026-10-11  525  862   -85.0   402.0  [0]
+4   2026-10-12   67  863   203.0   753.0  [0]
+5   2026-10-13   72  863 -4839.0 -3206.0  [0]
+6   2026-10-14  295  862 -1417.0   543.0  [1]
+7   2026-10-15   48  862  1661.0  1729.0  [0]
+8   2026-10-16   99  864  2613.0  2431.0  [0]
+9   2026-10-17  581  864  -447.0   994.0  [0]
+10  2026-10-18  224  864   343.0   360.0  [0]
+11  2026-10-19  157  864  3176.0  2903.0  [0]
+12  2026-10-20  110  864  8837.0  6626.0  [0]
+13  2026-10-21  159  864   685.0  1452.0  [0]
+14  2026-10-22  155  864  -962.0    36.0  [0]
+15  2026-10-23  221  864   895.0   877.0  [0]
+R1 base                      dP   +7164 dP_sin2mej   -4850 dP_sin20oct   -1673 dPdias+ 9/16 | EXC  +16091 p 0.0090 pcirc 0.0050 sin2  +6562 dias+ 13/16 ret 0.67 k 3739/13815
+R1 inversion(mejor)          dP  -39640 dP_sin2mej  -42465 dP_sin20oct  -40775 dPdias+ 3/16 | EXC  -18949 p 0.9810 pcirc 0.9910 sin2 -23426 dias+ 3/16 ret 0.67 k 5098/13815
+R1 tercil por moneda         dP   -3261 dP_sin2mej  -15198 dP_sin20oct  -13969 dPdias+ 7/16 | EXC   +6198 p 0.2650 pcirc 0.3470 sin2   +555 dias+ 11/16 ret 0.66 k 4636/13815
+R1 tercil por bloque 4h      dP  -18146 dP_sin2mej  -26284 dP_sin20oct  -25111 dPdias+ 5/16 | EXC   -9630 p 0.8620 pcirc 0.7770 sin2 -15492 dias+ 5/16 ret 0.63 k 4741/13815
+R1 relativo 24h              dP   +9891 dP_sin2mej   -2646 dP_sin20oct   +1324 dPdias+ 9/16 | EXC  +25017 p 0.0020 pcirc 0.0060 sin2 +16311 dias+ 13/16 ret 0.65 k 4803/13815
+R1 solo ETH                  dP   -1200 dP_sin2mej  -13813 dP_sin20oct  -12423 dPdias+ 7/16 | EXC   +5487 p 0.2550 pcirc 0.3430 sin2   +986 dias+ 9/16 ret 0.64 k 1673/4605
+R1 solo SOL                  dP      +5 dP_sin2mej   -2054 dP_sin20oct    +442 dPdias+ 10/16 | EXC   +1827 p 0.1510 pcirc 0.1600 sin2   -216 dias+ 10/16 ret 0.75 k 1197/4606
+R1 solo XRP                  dP   -2066 dP_sin2mej   -3029 dP_sin20oct   -1988 dPdias+ 6/16 | EXC   -1486 p 0.9490 pcirc 0.9670 sin2  -2061 dias+ 6/16 ret 0.62 k 1766/4604
+R1 sin ETH+SOL (=XRP)        dP   -2066 dP_sin2mej   -3029 dP_sin20oct   -1988 dPdias+ 6/16 | EXC   -1486 p 0.9490 pcirc 0.9670 sin2  -2061 dias+ 6/16 ret 0.62 k 1766/4604
+R1 sin ETH                   dP   -1191 dP_sin2mej   -3296 dP_sin20oct    -575 dPdias+ 10/16 | EXC    +740 p 0.3410 pcirc 0.3640 sin2   -856 dias+ 8/16 ret 0.75 k 2423/9210
+R1 q4 peor cuartil           dP   +5847 dP_sin2mej   -5179 dP_sin20oct   -1937 dPdias+ 8/16 | EXC   +7860 p 0.1280 pcirc 0.1390 sin2  +2326 dias+ 10/16 ret 0.78 k 2979/13815
+R1 q5 peor quintil           dP   +7313 dP_sin2mej   -3405 dP_sin20oct    -736 dPdias+ 8/16 | EXC  +13789 p 0.0270 pcirc 0.0240 sin2  +6085 dias+ 11/16 ret 0.79 k 2701/13815
+R1 q2 mitad                  dP  +10955 dP_sin2mej   -5879 dP_sin20oct   -1888 dPdias+ 8/16 | EXC  +21921 p 0.0030 pcirc 0.0040 sin2 +11558 dias+ 13/16 ret 0.54 k 5775/13815
+R1 q3 fijo T0                dP   +7880 dP_sin2mej   -4134 dP_sin20oct    -958 dPdias+ 9/16 | EXC  +15192 p 0.0060 pcirc 0.0050 sin2  +5663 dias+ 12/16 ret 0.69 k 3496/13815
+V5 (5 min)                   dP   +7019 dP_sin2mej   -3683 dP_sin20oct    +480 dPdias+ 9/16 | EXC  +21001 p 0.0040 pcirc 0.0070 sin2 +12230 dias+ 11/16 ret 0.69 k 3710/13815
+V30 (30 min)                 dP   +1472 dP_sin2mej  -10410 dP_sin20oct   -6898 dPdias+ 9/16 | EXC  +15759 p 0.0130 pcirc 0.0090 sin2  +5762 dias+ 11/16 ret 0.63 k 4267/13815
+R2 (60 min)                  dP   -1844 dP_sin2mej  -14486 dP_sin20oct  -12229 dPdias+ 8/16 | EXC  +12509 p 0.0600 pcirc 0.0780 sin2   +107 dias+ 11/16 ret 0.67 k 3812/13815
+R1 ret 30 s                  dP   +3454 dP_sin2mej   -7108 dP_sin20oct   -3245 dPdias+ 8/16 | EXC  +10545 p 0.0610 pcirc 0.0660 sin2  +2663 dias+ 12/16 ret 0.7 k 3621/13815
+R1 solo L-V                  dP   +9956 dP_sin2mej   -4880 dP_sin20oct     -99 dPdias+ 9/14 | EXC  +14644 p 0.0190 pcirc 0.0320 sin2  +4803 dias+ 8/14 ret 0.72 k 2414/10362
+R1 solo fin de semana        dP   -1705 dP_sin2mej   -1697 dP_sin20oct   -1705 dPdias+ 1/3 | EXC    -860 p 0.6940 pcirc 0.5830 sin2   -834 dias+ 1/3 ret 0.69 k 470/1728
+R1 sin 20-Oct                dP   -1911 dP_sin2mej   -7701 dP_sin20oct   -1911 dPdias+ 8/15 | EXC   +9064 p 0.0650 pcirc 0.0180 sin2  +3730 dias+ 12/15 ret 0.67 k 3581/12951
+R1 stale<=0,05               dP   +7534 dP_sin2mej   -4771 dP_sin20oct   -1315 dPdias+ 8/16 | EXC  +16568 p 0.0070 pcirc 0.0020 sin2  +7144 dias+ 13/16 ret 0.67 k 3471/13086
+R1 por moneda fijo T0        dP   +1864 dP_sin2mej    -569 dP_sin20oct    +777 dPdias+ 11/16 | EXC   +8081 p 0.0840 pcirc 0.0290 sin2  +3916 dias+ 11/16 ret 0.77 k 3412/13815
+R1 por bloque4h fijo T0      dP   -1773 dP_sin2mej   -8160 dP_sin20oct   -7292 dPdias+ 5/16 | EXC   +5454 p 0.2110 pcirc 0.1090 sin2   +223 dias+ 10/16 ret 0.7 k 3429/13815
+R1 por moneda x 4h fijo T0   dP    +536 dP_sin2mej   -1811 dP_sin20oct    -322 dPdias+ 10/16 | EXC   +6701 p 0.1300 pcirc 0.0600 sin2  +3433 dias+ 12/16 ret 0.79 k 3362/13815
+      frac_salt
+coin           
+ETH    0.374593
+SOL    0.162180
+XRP    0.222415
+sk     coin
+False  SOL     0.37
+       XRP     0.35
+       ETH     0.28
+True   ETH     0.49
+       XRP     0.29
+       SOL     0.21
+Name: proportion, dtype: float64
+por hora UTC frac saltada: {0: 0.29, 1: 0.18, 2: 0.18, 3: 0.28, 4: 0.43, 5: 0.33, 6: 0.31, 7: 0.32, 8: 0.25, 9: 0.28, 10: 0.34, 11: 0.27, 12: 0.22, 13: 0.16, 14: 0.11, 15: 0.08, 16: 0.04, 17: 0.11, 18: 0.22, 19: 0.23, 20: 0.26, 21: 0.4, 22: 0.31, 23: 0.46}
+dow frac saltada: {0: 0.13, 1: 0.11, 2: 0.12, 3: 0.1, 4: 0.22, 5: 0.75, 6: 0.43}
+               ev        pnl       coste
+coin sk                                 
+ETH  False  0.138  37975.812  275186.219
+     True  -0.049  -7995.305  163542.013
+SOL  False  0.081  10080.846  123723.881
+     True  -0.026   -635.660   24674.151
+XRP  False  0.013    559.236   42763.372
+     True   0.055    751.193   13576.233
+20-Oct saltadas por moneda/hora:
+coin  hora
+ETH   4      -3752.0
+      5      -1563.0
+      23     -1557.0
+      21     -1106.0
+      0       -610.0
+      7       -207.0
+      10      -172.0
+      12      -143.0
+Name: pnl, dtype: float64
+B sin ventana en mascara 0 de 183
+               n    pnl  coste  pnl_saltado  n_salt
+dia                                                
+2026-10-20  37.0  -0.48  40.48        -2.85     3.0
+2026-10-21  72.0   6.26  71.79        -6.90    10.0
+2026-10-22  74.0 -14.78  66.61        -8.10    16.0
+onchain filas tokens 5m E/S/X 299814 side {0: 268060, 1: 31754} taker top {'0xe111180000d2663c0091e4f400237545b87b996b': 85690, '0x0c7c5204404e9d5402d258fedac59c7212bae4cb': 6712}
+onchain side0 en banda: filas 37988 acciones 537419 | convencion: filas 15046 acciones 178197
+maker BUY en banda on-chain: filas 27481 acciones 341805 coste 69077 | convencion t: filas 15046 acciones 178197 coste 35595
+ratio acciones conv/onchain 0.521
+            c_oc       c_cv      r
+bajo                              
+False  54623.414  27803.086  0.509
+True   14237.577   7791.957  0.547
+        c_oc       c_cv      r
+t                             
+0  26107.771  13613.520  0.521
+1  22687.663  11545.783  0.509
+2  20065.558  10435.740  0.520
+           c_oc       c_cv      r
+coin                             
+ETH   45158.912  24785.100  0.549
+SOL   16434.229   7455.418  0.454
+XRP    7267.851   3354.525  0.462

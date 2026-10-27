@@ -1,0 +1,14 @@
+W<0.10: MM antes EV +0.361 (+0.095,+0.580) n=2279 hit/p=1.32 | MM solo después EV +4.648 (+3.221,+6.144) n=555 hit/p=4.82 | MM nunca EV -0.400 (-0.510,-0.256) n=5223 hit/p=0.68
+W0.10-0.40: MM antes EV +0.475 (+0.282,+0.725) n=2848 hit/p=1.35 | MM solo después EV +0.920 (+0.675,+1.151) n=1499 hit/p=1.85 | MM nunca EV -0.248 (-0.373,-0.152) n=2618 hit/p=0.80
+POB<0.10: MM antes EV +0.107 (+0.017,+0.201) n=544165 hit/p=1.08 | MM solo después EV +1.894 (+1.057,+2.814) n=53419 hit/p=2.93 | MM nunca EV -0.520 (-0.619,-0.424) n=361614 hit/p=0.55
+
+--- ex ante estricto (MM antes vs AÚN NO), por moneda ---
+W<0.10 BTC: MM antes EV +0.637 (+0.319,+0.913) n=1499 hit/p=1.62 | aún no EV +0.343 (-0.392,+1.026) n=1021 hit/p=1.36
+W<0.10 ETH: MM antes EV -0.514 (-0.913,-0.055) n=707 hit/p=0.60 | aún no EV +0.390 (+0.088,+0.716) n=3755 hit/p=1.11
+W<0.10 SOL: MM antes EV -0.349 (-1.000,+0.938) n=73 hit/p=0.41 | aún no EV +0.225 (-0.364,+0.879) n=1002 hit/p=1.25
+W0.10-0.40 BTC: MM antes EV +0.424 (+0.276,+0.640) n=2086 hit/p=1.32 | aún no EV +0.278 (-0.145,+0.543) n=1691 hit/p=1.29
+W0.10-0.40 ETH: MM antes EV +0.675 (+0.067,+1.009) n=708 hit/p=1.50 | aún no EV +0.263 (+0.080,+0.450) n=1622 hit/p=1.23
+W0.10-0.40 SOL: MM antes EV -0.434 (-0.873,+0.115) n=54 hit/p=0.85 | aún no EV +0.130 (-0.155,+0.468) n=804 hit/p=1.05
+POB<0.10 BTC: MM antes EV +0.117 (+0.014,+0.220) n=509159 hit/p=1.10 | aún no EV -0.122 (-0.336,+0.098) n=212073 hit/p=0.92
+POB<0.10 ETH: MM antes EV -0.075 (-0.512,+0.364) n=25190 hit/p=0.78 | aún no EV +0.288 (-0.045,+0.575) n=84187 hit/p=1.17
+POB<0.10 SOL: MM antes EV -0.225 (-0.595,+0.238) n=6485 hit/p=0.99 | aún no EV +0.200 (-0.076,+0.448) n=46121 hit/p=1.01

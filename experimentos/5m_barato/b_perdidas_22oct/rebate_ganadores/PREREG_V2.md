@@ -1,0 +1,7 @@
+# PREREG sim v2 (ESCALERA + TAMAÑO + INVENTARIO) — congelado antes de evaluar en días de evaluación (24-Oct)
+Días de CONSTRUCCIÓN (ya vistos con v1): 20, 21, 22-Oct. Días de EVALUACIÓN (no usados para construir/elegir): 18, 19, 23-Oct. Muestra: 1 de cada 3 mercados BTC 5m (fin//300 %3==0). Ventana T (60,300], desenlace oficial, rebate 0,014(1-p)·coste.
+Política: por lado (YES/NO), en T=298 s (+85 ms) con el mejor bid b dentro de [0,05,0,95]: 4 niveles b, b-0,01, b-0,02, b-0,03 (precio ≥0,02), 50 acc por nivel (200/lado), cola = tamaño visible en ese nivel al postear, consumida por trades (cola T+D: cancelaciones proporcionales). Relleno: trade SELL a precio<nivel llena todo; ==nivel consume cola. Inventario: si acc_lado − acc_otro > 150 se cancelan (65 ms) los niveles sin rellenar del lado y no se repone. Cancelación total en T=60 s.
+Variantes: V2A sin seguimiento; V2B seguimiento (si el mejor bid cambia y han pasado ≥1 s desde la última colocación: cancela 65 ms + repone la escalera 85 ms, pierde cola).
+Elección de variante: la de menor |error| medio frente al EV(+reb) real de las 3 wallets, SOLO en los días de construcción. Se evalúa SOLO esa en 18, 19, 23. Sin más ajustes.
+Criterio (Javi): por día, |EV_sim − EV_real| ≤ 0,005 y mismo signo, para cada wallet; éxito = mayoría de días medibles (≥2/3) para cada wallet.
+Mercado válido: libro con bids conocido en T=298 s en ambos tokens (aplicado también al real).

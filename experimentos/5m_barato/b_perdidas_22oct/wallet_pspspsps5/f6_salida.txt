@@ -1,0 +1,38 @@
+fills<0.10 TODOS                   fills  16311 unid  5493 coste    15085 pnl    5052 EV +0.335 IC90dias [0.184 0.487] | hit(cuenta) 5.31% vs p(cuenta) 4.40% | EV con rebate +0.348 | sin 2 mejores dias PnL 3442
+  pura (unidad entera <0.10)       fills  10493 unid  3973 coste     9085 pnl     394 EV +0.043 IC90dias [-0.16   0.274] | hit(cuenta) 3.50% vs p(cuenta) 3.68% | EV con rebate +0.057 | sin 2 mejores dias PnL -1022
+  escalera (unidad con fills>=0.10) fills   5818 unid  1520 coste     6001 pnl    4658 EV +0.776 IC90dias [0.523 1.022] | hit(cuenta) 8.58% vs p(cuenta) 5.71% | EV con rebate +0.789 | sin 2 mejores dias PnL 3186
+  escalera, 1er fill bajo (nf=1) vacio
+  escalera nf>=2                   fills   5818 unid  1520 coste     6001 pnl    4658 EV +0.776 IC90dias [0.521 1.028] | hit(cuenta) 8.58% vs p(cuenta) 5.71% | EV con rebate +0.789 | sin 2 mejores dias PnL 3186
+  BTC todos                        fills   6400 unid  1655 coste     8576 pnl    3359 EV +0.392 IC90dias [0.167 0.625] | hit(cuenta) 6.81% vs p(cuenta) 5.02% | EV con rebate +0.405 | sin 2 mejores dias PnL 1859
+  BTC escalera                     fills   2992 unid   658 coste     3964 pnl    3294 EV +0.831 IC90dias [0.467 1.205] | hit(cuenta) 10.36% vs p(cuenta) 6.14% | EV con rebate +0.844 | sin 2 mejores dias PnL 1873
+  ETH todos                        fills   7380 unid  2392 coste     5019 pnl     716 EV +0.143 IC90dias [-0.097  0.376] | hit(cuenta) 4.02% vs p(cuenta) 4.02% | EV con rebate +0.156 | sin 2 mejores dias PnL -19
+  ETH escalera                     fills   2313 unid   601 coste     1720 pnl    1015 EV +0.590 IC90dias [0.116 1.107] | hit(cuenta) 6.40% vs p(cuenta) 5.28% | EV con rebate +0.603 | sin 2 mejores dias PnL 349
+  SOL todos                        fills   2531 unid  1446 coste     1491 pnl     977 EV +0.656 IC90dias [0.157 1.206] | hit(cuenta) 5.25% vs p(cuenta) 3.97% | EV con rebate +0.669 | sin 2 mejores dias PnL 380
+  SOL escalera                     fills    513 unid   261 coste      317 pnl     349 EV +1.101 IC90dias [-0.041  2.151] | hit(cuenta) 7.99% vs p(cuenta) 5.18% | EV con rebate +1.114 | sin 2 mejores dias PnL 26
+  DESC 05-14 todos                 fills   8057 unid  2647 coste     7024 pnl    2498 EV +0.356 IC90dias [0.184 0.485] | hit(cuenta) 5.73% vs p(cuenta) 4.67% | EV con rebate +0.369 | sin 2 mejores dias PnL 1159
+  DESC 05-14 escalera              fills   3259 unid   844 coste     3145 pnl    3291 EV +1.046 IC90dias [0.752 1.328] | hit(cuenta) 9.21% vs p(cuenta) 5.73% | EV con rebate +1.060 | sin 2 mejores dias PnL 1819
+  DESC 05-14 pura                  fills   4798 unid  1803 coste     3879 pnl    -793 EV -0.204 IC90dias [-0.348 -0.085] | hit(cuenta) 3.38% vs p(cuenta) 3.95% | EV con rebate -0.191 | sin 2 mejores dias PnL -892
+  HOLD 15-24 todos                 fills   8254 unid  2846 coste     8061 pnl    2554 EV +0.317 IC90dias [0.075 0.572] | hit(cuenta) 4.89% vs p(cuenta) 4.14% | EV con rebate +0.330 | sin 2 mejores dias PnL 943
+  HOLD 15-24 escalera              fills   2559 unid   676 coste     2856 pnl    1367 EV +0.479 IC90dias [0.172 0.815] | hit(cuenta) 7.78% vs p(cuenta) 5.70% | EV con rebate +0.492 | sin 2 mejores dias PnL 586
+  HOLD 15-24 pura                  fills   5695 unid  2170 coste     5205 pnl    1186 EV +0.228 IC90dias [-0.098  0.604] | hit(cuenta) 3.60% vs p(cuenta) 3.44% | EV con rebate +0.241 | sin 2 mejores dias PnL -229
+
+  fills [0.00,0.02) escalera       fills    430 unid   276 coste      328 pnl     142 EV +0.432 IC90dias [-0.735  2.136] | hit(cuenta) 1.63% vs p(cuenta) 1.09% | EV con rebate +0.446 | sin 2 mejores dias PnL -170
+  fills [0.00,0.02) pura           fills   2398 unid  1507 coste     1676 pnl     126 EV +0.075 IC90dias [-0.416  0.625] | hit(cuenta) 1.08% vs p(cuenta) 1.08% | EV con rebate +0.089 | sin 2 mejores dias PnL -419
+  fills [0.02,0.05) escalera       fills   1880 unid   829 coste     1778 pnl    2004 EV +1.127 IC90dias [0.677 1.534] | hit(cuenta) 5.16% vs p(cuenta) 3.34% | EV con rebate +1.140 | sin 2 mejores dias PnL 1344
+  fills [0.02,0.05) pura           fills   5121 unid  2491 coste     4269 pnl     700 EV +0.164 IC90dias [-0.107  0.42 ] | hit(cuenta) 3.14% vs p(cuenta) 3.07% | EV con rebate +0.178 | sin 2 mejores dias PnL -107
+  fills [0.05,0.10) escalera       fills   3508 unid  1205 coste     3894 pnl    2513 EV +0.645 IC90dias [0.455 0.841] | hit(cuenta) 11.26% vs p(cuenta) 7.55% | EV con rebate +0.658 | sin 2 mejores dias PnL 1712
+  fills [0.05,0.10) pura           fills   2974 unid  1417 coste     3140 pnl    -433 EV -0.138 IC90dias [-0.307  0.042] | hit(cuenta) 6.05% vs p(cuenta) 6.82% | EV con rebate -0.125 | sin 2 mejores dias PnL -684
+
+== escalera: forma tipica (unidades con algun fill<0.10 y fills>=0.10) ==
+unidades escalera 1520 coste 22891 pnl -231 EV -0.010 hit 10.2% ; pmax mediana 0.17 ; n fills mediana 7 ; T primer fill mediana 181 s
+EV de ESTAS unidades enteras (todos sus fills)  - incluye fills altos
+  pmax [0.10,0.30): unid 1229 coste 13458 pnl 1383 EV +0.103 hit 8.9%
+  pmax [0.30,0.60): unid 249 coste 6681 pnl -1034 EV -0.155 hit 12.9%
+  pmax [0.60,1.01): unid 42 coste 2752 pnl -579 EV -0.210 hit 33.3%
+
+$ medio por fill: <0.10 0.92 ; 0.10-0.40 2.20 ; 0.40-0.60 4.11 ; >=0.60 23.43
+rebate maker estimado total $1100 sobre coste $421770 (0.26%) ; PnL+rebate 14215
+fills >=0.90                       fills   6066 unid  2548 coste   267555 pnl    3320 EV +0.012 IC90dias [0.004 0.02 ] | hit(cuenta) 96.06% vs p(cuenta) 94.94% | EV con rebate +0.013 | sin 2 mejores dias PnL 1900
+fills 0.80-0.90                    fills   3470 unid  1002 coste    43701 pnl    -709 EV -0.016 IC90dias [-0.051  0.018] | hit(cuenta) 84.61% vs p(cuenta) 85.18% | EV con rebate -0.014 | sin 2 mejores dias PnL -1301
+
+PnL por clase de fill: <0.10 puro 394 ; <0.10 escalera 4658 ; 0.10-0.40 5450 ; 0.40-0.90 -707 ; >=0.90 3320

@@ -1,0 +1,17 @@
+{
+ "estado": "CANDIDATO (NO congelado: no cumple AUC>=0,60); solo para forward de medicion",
+ "modelo": "M10",
+ "pickle": "/mnt/HC_Volume_106538179/agentes_datos/dfuerte/modelo_candidato_M10.pkl",
+ "sha256_pickle": "3bbc5ce778168a7accdb7a2520e4059a1ae8e1a8deafc3a039e320555c01ef85",
+ "lib_sha256": "9f3d2958b8bd89746f89ae0593a0a6d636049febc94c46f1ee0180dc8864e4d4",
+ "phi_estrella": 0.5,
+ "phi_recomendado_real": 0.25,
+ "cortes_entrenamiento_hasta_2026-08-17": {
+  "q10": -0.05659696812264402,
+  "q25": -0.04471389763491733,
+  "q50": -0.032867038493163095,
+  "q75": -0.02174011787721807,
+  "q90": -0.011088110918817944
+ },
+ "regla": "saltar unidad CON (|rpre|>=7,7) si s_hat(p_con=precio) <= corte q25 (phi 0,25) [q10 mas conservador, q50 = phi* de FASE D]"
+}

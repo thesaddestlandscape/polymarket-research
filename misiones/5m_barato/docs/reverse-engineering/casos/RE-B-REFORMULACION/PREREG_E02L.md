@@ -1,0 +1,7 @@
+# PREREG E-RE-BR-02L — ¿cuándo se materializa el coste de condicionamiento (COND) de B? (escrito ANTES de calcular; manda mtime+sha)
+Motivo: E-RE-BR-01 dio COND −0,216 €/€ (IC90 cierre −0,43..−0,02) como componente dominante. E02 completo (on-chain×libro5_bajos) es pesado y la carga está >4; esta versión ligera usa SOLO el ledger de B (puja_fin.rellenos: mid0, mid_5s, mid_30s, mid_120s, tras_cancel, espera_s; reloj de recepción) + desenlace oficial de etiquetado_B (gana_lado por mercado-lado).
+Unidad: relleno detectado (oid), peso w = acc·precio. Deltas de mid desde mid0: D5, D30, D120, DG = gana − mid0; markout del relleno al precio: (mid_h − precio). Todos /Σw (por €). IC90 bootstrap 2.000 por cierre (sufijo del slug). Faltantes = missing (se reporta n).
+Decisiones:
+R1 Si D5/DG ≥ 0,5 (mitad o más de la deriva hasta el desenlace ya ocurrió a 5 s del relleno) ⇒ el coste es MICROESTRUCTURAL (barrido) ⇒ la única palanca es cancelación/anticipación en ms (familia E1c/A1/E02) y E02 completo merece la carga. Si D5/DG ≤ 0,25 ⇒ el coste es DIRECCIONAL posterior (información) ⇒ la cancelación rápida no lo arregla; palanca = selección/régimen (R0/R1) o nada. Entre ambos: mixto.
+R2 tras_cancel: si los rellenos «en vuelo tras la intención de cancelar» pesan ≥25 % del € y su EV es peor que el resto en >0,10 €/€ ⇒ palanca de LATENCIA de cancelación (medible). Si no, se descarta como palanca principal.
+R3 Consistencia: Σw y n frente a E-RE-BR-01 (195 órdenes rellenas): diferencias se reportan.

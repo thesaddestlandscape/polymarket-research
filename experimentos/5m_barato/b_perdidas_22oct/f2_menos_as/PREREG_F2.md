@@ -1,0 +1,12 @@
+# PREREG F2 (24-Oct-2026 ~12:00Z, escrito ANTES de calcular nada por celda de 0,05)
+Pregunta: ¿en qué moneda x marco x bucket(0,05) el relleno MAKER (EV condicional a relleno, AS incluida por construcción) es positivo y persistente?
+Fuente: rellenos on-chain MAKER (taker != exchange 0xe111...), m5_onchain/m15_onchain 06..23-Oct (18 d), 60m/4h/24h 18..23-Oct (6 d). Desenlace OFICIAL (des.json mapa-escala + maker_ms_desenlaces_cache + gamma closed=true); cobertura se declara.
+Unidad: (mercado, lado comprado, bucket 0,05 del precio pc del lado comprado); venta a q = compra del contrario a 1-q. Solo T al cierre en (60 s, L] (L=300/900/3600/14400/86400), igual que mapa-escala. pc en [0,01;0,99).
+Métrica: EV = Σpnl/Σcoste (ponderado por €), maker sin fee; rebate INFERIDO 0,014(1-pc) por € reportado APARTE. Variante "primeras 5 acc" de cada unidad (por orden ts, log_index) como proxy de lo que cobra un maker pequeño, reportada aparte.
+Particiones: DESC = 06..14-Oct, HOLD = 15..23-Oct (5m/15m); 60m/4h/24h solo descriptivo (6 d < 10 d).
+Celdas: coin in {BTC,ETH,SOL,XRP,DOGE,BNB} x marco in {5m,15m} x 19 buckets (K = nº de celdas con >=40 cierres y >=10 días en el periodo completo; se declara). Agregados ALL/ALT3 como lectura, NO entran en K.
+IC90: bootstrap de días (2000) y de cierres (cluster por fin, 1000). Sin los 2 mejores días y sin los 5 mejores cierres. p unilateral (EV<=0) por bootstrap de días; BH-FDR q<0,10 sobre las K celdas.
+CANDIDATA = EV_DESC>0 con >=20 cierres DESC, y en HOLD: >=40 cierres, EV_HOLD>0 con IC90 días lo>0 (HOLD, 9 d) o p_BH(HOLD, sobre las seleccionadas en DESC)<0,10; y sin 2 mejores días HOLD>0. Todo lo demás: DESCRIPTIVA / NEGATIVA.
+Placebo/inversión de la regla de selección: top-k celdas por EV_DESC (k=nº pasan filtro de n) -> EV_HOLD pooled, frente a k celdas aleatorias (1000) y a las k peores.
+Capacidad: flujo maker €/día de la celda (coste medio por día) = techo absorbido por todos los makers; €/año a escala B = (a) 5 acc por unidad, 1 unidad por mercado-lado-bucket que haya tenido fill (proxy opt.), (b) 1 % y 5 % de cuota del flujo; EV usado: conservador=min(IC90 lo días HOLD,sin2días HOLD,0) -> 0 si no >0; base=EV_HOLD*0,28 (retención mapa-escala); opt=EV_HOLD. Brecha de ejecución de B (-0,053) como estrés separado.
+AS filled vs no-filled: solo con vida_puja_virtual_5m.py (5m, banda 0,10-0,30, T 60-300) en 1-2 días; el resto: dato que falta (no hay pujas sin relleno en on-chain).

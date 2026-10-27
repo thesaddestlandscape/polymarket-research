@@ -1,0 +1,61 @@
+cobertura 0.9999935949169261
+
+== 0x0567e29d38639457037e61e7cf17eecea06c5e16 ordenes 1358 usd 75058 pnl 559 fee 92 EV/€ +0.007 compra 1.00 usd/orden 55.3 dias 19
+   pb (0.95, 0.99]: 81% usd ev +0.007 n 1183; (0.99, 1.0]: 16% usd ev +0.009 n 130
+   tb (10.0, 30.0]: 10% usd ev +0.004 n 125; (30.0, 60.0]: 90% usd ev +0.008 n 1232
+   act BNB: 4% usd ev +0.004 n 111; BTC: 46% usd ev +0.001 n 416; DOGE: 4% usd ev +0.013 n 125; ETH: 22% usd ev +0.009 n 312; SOL: 13% usd ev +0.014 n 208; XRP: 11% usd ev +0.020 n 186
+
+== 0x129246beaac356e104c397f0985c11b7469be5a6 ordenes 7776 usd 180846 pnl 13636 fee 5758 EV/€ +0.075 compra 1.00 usd/orden 23.3 dias 19
+   pb (0.1, 0.2]: 2% usd ev +0.281 n 428; (0.2, 0.3]: 5% usd ev +0.087 n 662; (0.3, 0.5]: 28% usd ev +0.073 n 2487; (0.5, 0.7]: 47% usd ev +0.036 n 2809; (0.7, 0.9]: 16% usd ev +0.016 n 1103
+   tb (30.0, 60.0]: 12% usd ev +0.192 n 949; (60.0, 150.0]: 44% usd ev +0.073 n 3428; (150.0, 300.0]: 44% usd ev +0.021 n 3346
+   act BTC: 99% usd ev +0.076 n 7531
+
+== 0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d ordenes 38585 usd 591445 pnl 6881 fee 9048 EV/€ +0.012 compra 0.88 usd/orden 15.3 dias 19
+   pb (0.3, 0.5]: 8% usd ev +0.059 n 5109; (0.5, 0.7]: 17% usd ev -0.002 n 6868; (0.7, 0.9]: 31% usd ev -0.004 n 10008; (0.9, 0.95]: 13% usd ev +0.002 n 3229; (0.95, 0.99]: 26% usd ev -0.001 n 5536
+   tb (10.0, 30.0]: 6% usd ev +0.043 n 1335; (30.0, 60.0]: 14% usd ev +0.033 n 4004; (60.0, 150.0]: 37% usd ev +0.012 n 13718; (150.0, 300.0]: 43% usd ev +0.000 n 19358
+   act BTC: 45% usd ev +0.020 n 10553; ETH: 20% usd ev +0.006 n 8917; SOL: 19% usd ev +0.004 n 9575; XRP: 16% usd ev +0.005 n 9540
+
+== 0x31ae027e6fd37d471ab4938fc69797443a27ab5e ordenes 1852 usd 250047 pnl -588 fee 135 EV/€ -0.002 compra 1.00 usd/orden 135.0 dias 19
+   pb (0.95, 0.99]: 50% usd ev -0.009 n 963; (0.99, 1.0]: 50% usd ev +0.004 n 887
+   tb (10.0, 30.0]: 3% usd ev -0.004 n 98; (30.0, 60.0]: 52% usd ev +0.001 n 1474; (60.0, 150.0]: 45% usd ev -0.006 n 280
+   act BNB: 2% usd ev -0.001 n 358; BTC: 87% usd ev -0.003 n 501; DOGE: 4% usd ev +0.006 n 465; ETH: 3% usd ev +0.009 n 121; SOL: 3% usd ev -0.007 n 204
+
+== 0x48ac40fc545cf327edd5365435c3a9f385614a7e ordenes 3313 usd 836540 pnl 7770 fee 1515 EV/€ +0.009 compra 1.00 usd/orden 252.5 dias 19
+   pb (0.7, 0.9]: 3% usd ev -0.026 n 609; (0.9, 0.95]: 3% usd ev +0.009 n 225; (0.95, 0.99]: 75% usd ev +0.008 n 1512; (0.99, 1.0]: 18% usd ev +0.009 n 325
+   tb (5.0, 10.0]: 2% usd ev +0.019 n 45; (10.0, 30.0]: 7% usd ev -0.011 n 106; (30.0, 60.0]: 10% usd ev +0.009 n 628; (60.0, 150.0]: 66% usd ev +0.010 n 1591; (150.0, 300.0]: 14% usd ev +0.011 n 932
+   act BTC: 86% usd ev +0.009 n 1179; ETH: 5% usd ev +0.010 n 811; SOL: 3% usd ev +0.008 n 375; XRP: 5% usd ev +0.012 n 634
+
+== 0x5e2b9261b0c4f697b55bf921ff2bc227183d9101 ordenes 50943 usd 331776 pnl 7325 fee 4634 EV/€ +0.022 compra 0.87 usd/orden 6.5 dias 19
+   pb (0.1, 0.2]: 3% usd ev +0.128 n 4571; (0.2, 0.3]: 3% usd ev +0.073 n 4137; (0.3, 0.5]: 7% usd ev +0.038 n 6806; (0.5, 0.7]: 10% usd ev +0.027 n 6381; (0.7, 0.9]: 25% usd ev -0.010 n 11674; (0.9, 0.95]: 13% usd ev +0.007 n 4605; (0.95, 0.99]: 34% usd ev +0.007 n 8046; (0.99, 1.0]: 3% usd ev -0.006 n 610
+   tb (10.0, 30.0]: 4% usd ev +0.083 n 1359; (30.0, 60.0]: 12% usd ev +0.074 n 4572; (60.0, 150.0]: 42% usd ev +0.025 n 19306; (150.0, 300.0]: 42% usd ev +0.001 n 25502
+   act BTC: 58% usd ev +0.032 n 25168; ETH: 28% usd ev +0.012 n 16030; SOL: 6% usd ev -0.007 n 4381; XRP: 8% usd ev +0.006 n 5364
+
+== 0x5f82d812ff98372347ac9504a6474f033451463b ordenes 244 usd 15468 pnl -665 fee 217 EV/€ -0.043 compra 0.91 usd/orden 63.4 dias 11
+   pb (0.5, 0.7]: 21% usd ev -0.165 n 53; (0.7, 0.9]: 43% usd ev -0.024 n 116; (0.9, 0.95]: 15% usd ev +0.033 n 36; (0.95, 0.99]: 6% usd ev +0.003 n 20; (0.99, 1.0]: 12% usd ev -0.001 n 6
+   tb (-1000000000.0, 0.0]: 12% usd ev -0.001 n 7; (60.0, 150.0]: 35% usd ev -0.100 n 111; (150.0, 300.0]: 51% usd ev +0.003 n 122
+   act BTC: 100% usd ev -0.043 n 244
+
+== 0x75cc3b63a2f2423085e10706c78b494017b93ce1 ordenes 49560 usd 360152 pnl 6793 fee 5174 EV/€ +0.019 compra 1.00 usd/orden 7.3 dias 19
+   pb (0.3, 0.5]: 6% usd ev +0.075 n 4913; (0.5, 0.7]: 14% usd ev +0.015 n 8179; (0.7, 0.9]: 35% usd ev -0.003 n 16407; (0.9, 0.95]: 14% usd ev -0.003 n 4898; (0.95, 0.99]: 25% usd ev +0.005 n 6896
+   tb (10.0, 30.0]: 4% usd ev +0.129 n 1194; (30.0, 60.0]: 11% usd ev +0.041 n 3962; (60.0, 150.0]: 37% usd ev +0.018 n 16367; (150.0, 300.0]: 48% usd ev +0.006 n 27872
+   act BTC: 68% usd ev +0.023 n 26785; ETH: 15% usd ev +0.017 n 10993; SOL: 7% usd ev +0.008 n 5241; XRP: 9% usd ev +0.004 n 6541
+
+== 0x87e3bbacf3b9a5f86fa1e9c8f01e4d1fc16f3cd2 ordenes 250 usd 281917 pnl 2990 fee 222 EV/€ +0.011 compra 1.00 usd/orden 1127.7 dias 19
+   pb (0.95, 0.99]: 91% usd ev +0.011 n 216; (0.99, 1.0]: 9% usd ev +0.009 n 34
+   tb (10.0, 30.0]: 6% usd ev +0.012 n 19; (30.0, 60.0]: 58% usd ev +0.010 n 145; (60.0, 150.0]: 36% usd ev +0.011 n 86
+   act BTC: 100% usd ev +0.011 n 248
+
+== 0x8e777ef6a33550aad76fd6d0b2808860c79025f8 ordenes 252 usd 286135 pnl 1012 fee 228 EV/€ +0.004 compra 1.00 usd/orden 1135.5 dias 19
+   pb (0.95, 0.99]: 89% usd ev +0.003 n 213; (0.99, 1.0]: 11% usd ev +0.009 n 38
+   tb (10.0, 30.0]: 11% usd ev +0.011 n 33; (30.0, 60.0]: 56% usd ev -0.002 n 131; (60.0, 150.0]: 33% usd ev +0.010 n 88
+   act BTC: 100% usd ev +0.004 n 251
+
+== 0xab36e68001b55b97207d14e75fd7d922afc238da ordenes 1489 usd 110960 pnl 1004 fee 243 EV/€ +0.009 compra 1.00 usd/orden 74.5 dias 19
+   pb (0.95, 0.99]: 98% usd ev +0.010 n 1461
+   tb (30.0, 60.0]: 12% usd ev +0.014 n 174; (60.0, 150.0]: 79% usd ev +0.008 n 1178; (150.0, 300.0]: 8% usd ev +0.007 n 124
+   act BTC: 100% usd ev +0.009 n 1489
+
+== 0xdd025c52ea733161bb226aa195b66f2b167fe59f ordenes 503 usd 31685 pnl 42 fee 194 EV/€ +0.001 compra 0.95 usd/orden 63.0 dias 19
+   pb (0.7, 0.9]: 24% usd ev +0.016 n 123; (0.9, 0.95]: 69% usd ev +0.010 n 341; (0.95, 0.99]: 6% usd ev -0.139 n 26
+   tb (30.0, 60.0]: 5% usd ev +0.072 n 26; (60.0, 150.0]: 72% usd ev +0.002 n 378; (150.0, 300.0]: 22% usd ev -0.016 n 92
+   act BTC: 100% usd ev +0.001 n 503

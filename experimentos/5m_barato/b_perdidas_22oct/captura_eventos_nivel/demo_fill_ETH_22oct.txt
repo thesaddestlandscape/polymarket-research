@@ -1,0 +1,304 @@
+
+=== fill 0x83b1b2e9df ETH mkt 6011041 YES p=0.03 acc=20.0 bloque~13:03:31.500 T-al-cierre=88s  [ALTA_EXACTA]
+    huecos G en ventana: ninguno
+    hora_recv     exch_ms->recv   tam_nivel  delta     clasificacion
+    13:01:39.674     46ms      890.31        nan  
+    13:01:49.347     90ms      923.65      33.34  alta
+    13:01:49.416     82ms      963.65      40.00  alta
+    13:01:49.701    117ms      930.31     -33.34  baja SIN T (cancelacion)
+    13:01:49.801    173ms      890.31     -40.00  baja SIN T (cancelacion)
+    13:01:49.807    100ms      720.31    -170.00  baja SIN T (cancelacion)
+    13:01:50.013     39ms      753.65      33.34  alta
+    13:01:55.656     46ms      793.65      40.00  alta
+    13:01:55.753     40ms      753.65     -40.00  baja SIN T (cancelacion)
+    13:01:55.763     41ms      833.65      80.00  alta
+    13:01:55.974     37ms      873.65      40.00  alta
+    13:01:56.954     46ms      833.65     -40.00  baja SIN T (cancelacion)
+    13:02:00.125    183ms      753.65     -80.00  baja SIN T (cancelacion)
+    13:02:00.131     90ms      923.65     170.00  alta
+    13:02:03.674    108ms      890.31     -33.34  baja SIN T (cancelacion)
+    13:02:05.190     41ms      970.31      80.00  alta
+    13:02:05.568     60ms      890.31     -80.00  baja SIN T (cancelacion)
+    13:02:14.306     39ms      970.31      80.00  alta
+    13:02:15.837     56ms      890.31     -80.00  baja SIN T (cancelacion)
+    13:02:21.751     42ms      923.65      33.34  alta
+    13:02:22.417     39ms      753.65    -170.00  baja SIN T (cancelacion)
+    13:02:24.916     48ms      923.65     170.00  alta
+    13:02:27.047     39ms      753.65    -170.00  baja SIN T (cancelacion)
+    13:02:29.179     38ms      923.65     170.00  alta
+    13:02:29.458     39ms      890.31     -33.34  baja SIN T (cancelacion)
+    13:02:32.798     45ms      970.31      80.00  alta
+    13:02:36.183     59ms      890.31     -80.00  baja SIN T (cancelacion)
+    13:02:43.302     51ms      923.65      33.34  alta
+    13:02:43.566     42ms      890.31     -33.34  baja SIN T (cancelacion)
+    13:02:43.665     39ms      930.31      40.00  alta
+    13:02:43.709     70ms     1010.31      80.00  alta
+    13:02:43.807     41ms      840.31    -170.00  baja SIN T (cancelacion)
+    13:02:43.900     39ms      800.31     -40.00  baja SIN T (cancelacion)
+    13:02:44.072     37ms      840.31      40.00  alta
+    13:02:44.965     39ms      800.31     -40.00  baja SIN T (cancelacion)
+    13:02:45.080     41ms      840.31      40.00  alta
+    13:02:45.356     39ms      800.31     -40.00  baja SIN T (cancelacion)
+    13:02:45.551     38ms      840.31      40.00  alta
+    13:02:45.587     38ms      800.31     -40.00  baja SIN T (cancelacion)
+    13:02:45.860     42ms      840.31      40.00  alta
+    13:02:45.911     46ms      760.31     -80.00  baja SIN T (cancelacion)
+    13:02:46.406     40ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:46.612     38ms      760.31      40.00  alta
+    13:02:46.647     41ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:47.125     41ms      760.31      40.00  alta
+    13:02:47.195     37ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:47.232     39ms      760.31      40.00  alta
+    13:02:47.327     37ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:47.782     40ms      760.31      40.00  alta
+    13:02:47.861     38ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:47.995     38ms      760.31      40.00  alta
+    13:02:48.002     38ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:48.105     41ms      760.31      40.00  alta
+    13:02:49.582     40ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:49.716     38ms      760.31      40.00  alta
+    13:02:49.724     38ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:49.784     38ms      760.31      40.00  alta
+    13:02:50.686     41ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:52.080     41ms      760.31      40.00  alta
+    13:02:54.956     40ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:56.149     44ms      760.31      40.00  alta
+    13:02:56.280     41ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:56.370     39ms      760.31      40.00  alta
+    13:02:56.529     41ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:02:58.675     44ms      890.31     170.00  alta
+    13:02:59.041     42ms      720.31    -170.00  baja SIN T (cancelacion)
+    13:03:00.256     37ms      760.31      40.00  alta
+    13:03:00.326     39ms      720.31     -40.00  baja SIN T (cancelacion)
+    13:03:00.606     38ms      760.31      40.00  alta
+    13:03:01.081    115ms      840.31      80.00  alta
+    13:03:01.267     44ms      760.31     -80.00  baja SIN T (cancelacion)
+    13:03:01.268     44ms      708.31     -52.00  baja SIN T (cancelacion)
+    13:03:01.300     42ms     1597.19     888.88  alta
+    13:03:02.024     40ms      708.31    -888.88  baja SIN T (cancelacion)
+    13:03:02.086     48ms      718.31      10.00  alta
+    13:03:02.129     38ms      708.31     -10.00  baja SIN T (cancelacion)
+    13:03:03.112     39ms      733.31      25.00  alta
+    13:03:03.146     38ms      708.31     -25.00  baja SIN T (cancelacion)
+    13:03:05.266     53ms     1013.31     300.00  alta
+    13:03:05.448     40ms      708.31    -300.00  baja SIN T (cancelacion)
+    13:03:08.710     41ms     1024.31     300.00  alta
+    13:03:08.762     48ms      724.31    -300.00  baja SIN T (cancelacion)
+    13:03:08.840     46ms     1024.31     300.00  alta
+    13:03:08.890     49ms      724.31    -300.00  baja SIN T (cancelacion)
+    13:03:09.024     38ms      744.31      20.00  ALTA ==acc (posible W)
+    13:03:09.623     55ms      749.31      10.00  alta
+    13:03:10.255     37ms      739.31     -10.00  baja SIN T (cancelacion)
+    13:03:10.346     40ms      749.31      10.00  alta
+    13:03:10.362     51ms      739.31     -10.00  baja SIN T (cancelacion)
+    13:03:10.567     39ms      749.31      10.00  alta
+    13:03:10.633     38ms      739.31     -10.00  baja SIN T (cancelacion)
+    13:03:10.865     39ms     1039.31     300.00  alta
+    13:03:10.903     38ms      739.31    -300.00  baja SIN T (cancelacion)
+    13:03:11.160     45ms      894.31     150.00  alta
+    13:03:11.218     38ms      744.31    -150.00  baja SIN T (cancelacion)
+    13:03:11.306     42ms      894.31     150.00  alta
+    13:03:11.337     39ms      904.31      10.00  alta
+    13:03:12.112     47ms      749.31    -150.00  baja SIN T (cancelacion)
+    13:03:12.115     43ms      739.31     -10.00  baja SIN T (cancelacion)
+    13:03:12.159     49ms      719.31     -20.00  baja SIN T (cancelacion)
+    13:03:12.434     45ms     1009.31     300.00  alta
+    13:03:12.446     43ms      508.30    -501.01  baja SIN T (cancelacion)
+    13:03:12.507     39ms      208.30    -300.00  baja SIN T (cancelacion)
+    13:03:12.576     38ms      508.30     300.00  alta
+    13:03:12.613     39ms      208.30    -300.00  baja SIN T (cancelacion)
+    13:03:12.753     56ms      508.30     300.00  alta
+    13:03:13.920     37ms      534.30      20.00  ALTA ==acc (posible W)
+    13:03:13.937     39ms      559.30      25.00  alta
+    13:03:14.428     45ms      263.30    -300.00  baja SIN T (cancelacion)
+    13:03:14.511     47ms      558.30     300.00  alta
+    13:03:14.553     40ms      258.30    -300.00  baja SIN T (cancelacion)
+    13:03:14.613     37ms      564.30     300.00  alta
+    13:03:14.653     39ms      264.30    -300.00  baja SIN T (cancelacion)
+    13:03:14.735     42ms      558.30     300.00  alta
+    13:03:15.247     40ms      264.30    -300.00  baja SIN T (cancelacion)
+    13:03:15.534     48ms      238.30     -20.00  baja SIN T (cancelacion)
+    13:03:15.705     40ms      543.30     300.00  alta
+    13:03:15.801     38ms      558.30      15.00  alta
+    13:03:16.141     41ms      564.30     -10.00  baja SIN T (cancelacion)
+    13:03:16.186     38ms      574.30      10.00  alta
+    13:03:16.348     38ms      564.30     -10.00  baja SIN T (cancelacion)
+    13:03:16.386     38ms      574.30      10.00  alta
+    13:03:16.418     39ms      564.30     -10.00  baja SIN T (cancelacion)
+    13:03:16.426     40ms      574.30      10.00  alta
+    13:03:16.477     41ms      559.30     -15.00  baja SIN T (cancelacion)
+    13:03:16.507     49ms      544.30     -10.00  baja SIN T (cancelacion)
+    13:03:16.553     43ms      244.30    -300.00  baja SIN T (cancelacion)
+    13:03:16.595     39ms      213.30     -25.00  baja SIN T (cancelacion)
+    13:03:17.065     41ms      237.30      24.00  alta
+    13:03:17.249     38ms      219.30     -24.00  baja SIN T (cancelacion)
+    13:03:17.830     38ms      243.30      24.00  alta
+    13:03:18.658     39ms      219.30     -24.00  baja con T (relleno)
+    13:03:18.850     52ms      174.30     -40.00  baja con T (relleno)
+    13:03:18.889     69ms      224.30      50.00  alta
+    13:03:18.928    102ms      199.30     -25.00  baja con T (relleno)
+    13:03:18.928     95ms      150.30     -43.00  baja con T (relleno)
+    13:03:18.928     92ms      100.30     -50.00  baja con T (relleno)
+    13:03:18.930     55ms       11.00     -89.30  baja con T (relleno)
+    13:03:18.957     69ms       51.00      40.00  alta
+    13:03:19.088     99ms       95.00      50.00  alta
+    13:03:19.088     97ms       80.55     -14.45  baja con T (relleno)
+    13:03:19.118     53ms       70.48     -10.07  baja con T (relleno)
+    13:03:19.129     41ms       45.48     -25.00  baja con T (relleno)
+    13:03:19.325     53ms       86.44      40.00  alta
+    13:03:19.334     47ms       46.44     -40.00  baja con T (relleno)
+    13:03:19.337     48ms        6.00     -40.44  baja con T (relleno)
+    13:03:19.425     41ms       50.95      50.00  alta
+    13:03:19.479     42ms        0.95     -50.00  baja con T (relleno)
+    13:03:19.854     45ms       50.95      50.00  alta
+    13:03:19.909     53ms      217.95     167.00  alta
+    13:03:20.032     40ms      242.95      25.00  alta
+    13:03:20.132     44ms      282.95      40.00  alta
+    13:03:20.143     40ms      449.95     167.00  alta
+    13:03:20.169     45ms      439.95     -10.00  baja con T (relleno)
+    13:03:20.200     40ms      475.12      43.00  alta
+    13:03:20.325     38ms      442.00     -33.12  baja con T (relleno)
+    13:03:20.362     39ms      417.00     -25.00  baja con T (relleno)
+    13:03:20.416     40ms      467.00      50.00  alta
+    13:03:20.521     39ms      556.30      89.30  alta
+    13:03:20.559     39ms      587.30      25.00  alta
+    13:03:20.573     40ms      420.30    -167.00  baja con T (relleno)
+    13:03:20.580     44ms      253.30    -167.00  baja con T (relleno)
+    13:03:20.629     38ms      276.30      23.00  alta
+    13:03:20.823     37ms      231.30     -50.00  baja con T (relleno)
+    13:03:20.912     39ms      208.30     -23.00  baja con T (relleno)
+    13:03:20.963     39ms      230.30      22.00  alta
+    13:03:21.002     43ms      208.30     -22.00  baja con T (relleno)
+    13:03:21.258     39ms      230.30      22.00  alta
+    13:03:21.443     41ms      208.30     -22.00  baja SIN T (cancelacion)
+    13:03:22.035     39ms      227.30      19.00  alta
+    13:03:22.164     39ms      527.30     300.00  alta
+    13:03:22.214     43ms      227.30    -300.00  baja SIN T (cancelacion)
+    13:03:22.293     41ms      527.30     300.00  alta
+    13:03:22.350     42ms      232.30    -300.00  baja SIN T (cancelacion)
+    13:03:22.365     37ms      213.30     -19.00  baja SIN T (cancelacion)
+    13:03:22.447     69ms      513.30     300.00  alta
+    13:03:22.556     40ms      523.30      10.00  alta
+    13:03:22.941     49ms      218.30    -300.00  baja SIN T (cancelacion)
+    13:03:23.007     39ms      518.30     300.00  alta
+    13:03:23.184     81ms      223.30    -300.00  baja SIN T (cancelacion)
+    13:03:23.266     44ms      273.30      50.00  alta
+    13:03:23.288     40ms      223.30     -50.00  baja SIN T (cancelacion)
+    13:03:23.459     41ms      523.30     300.00  alta
+    13:03:23.553     56ms      223.30    -300.00  baja SIN T (cancelacion)
+    13:03:24.120     53ms      208.30     -10.00  baja SIN T (cancelacion)
+    13:03:24.345     43ms      165.30     -43.00  baja SIN T (cancelacion)
+    13:03:24.386     64ms      215.30      50.00  alta
+    13:03:24.497     56ms      264.30      43.00  alta
+    13:03:24.504     43ms      214.30     -50.00  baja SIN T (cancelacion)
+    13:03:25.210     55ms      238.30      24.00  alta
+    13:03:25.276     59ms      213.30     -25.00  baja SIN T (cancelacion)
+    13:03:25.778     44ms      513.30     300.00  alta
+    13:03:25.818     44ms      213.30    -300.00  baja SIN T (cancelacion)
+    13:03:26.062     39ms      513.30     300.00  alta
+    13:03:26.107     41ms      213.30    -300.00  baja SIN T (cancelacion)
+    13:03:26.197     55ms      513.30     300.00  alta
+    13:03:26.320     38ms      489.30     -24.00  baja SIN T (cancelacion)
+    13:03:26.731     38ms      514.30      25.00  alta
+    13:03:27.253     53ms      469.30     -40.00  baja SIN T (cancelacion)
+    13:03:27.253     43ms      444.30     -25.00  baja SIN T (cancelacion)
+    13:03:27.521     38ms      138.30    -300.00  baja SIN T (cancelacion)
+    13:03:27.579     38ms      183.30      40.00  alta
+    13:03:27.606     43ms      345.30     167.00  alta
+    13:03:27.867     45ms      369.30      24.00  alta
+    13:03:27.965     37ms      202.30    -167.00  baja SIN T (cancelacion)
+    13:03:28.256     40ms      502.30     300.00  alta
+    13:03:28.297     39ms      527.30      25.00  alta
+    13:03:28.306     42ms      552.30      25.00  alta
+    13:03:28.307     41ms      252.30    -300.00  baja SIN T (cancelacion)
+    13:03:28.346     38ms      227.30     -25.00  baja SIN T (cancelacion)
+    13:03:28.557     50ms      202.30     -25.00  baja SIN T (cancelacion)
+    13:03:28.557     38ms      162.30     -40.00  baja SIN T (cancelacion)
+    13:03:28.587     45ms      138.30     -24.00  baja SIN T (cancelacion)
+    13:03:28.630     38ms      438.30     300.00  alta
+    13:03:28.694     39ms      389.30     -43.00  baja SIN T (cancelacion)
+    13:03:28.695     40ms       89.30    -300.00  baja SIN T (cancelacion)
+    13:03:29.020     39ms      132.30      43.00  alta
+    13:03:29.103     39ms       89.30     -43.00  baja con T (relleno)
+    13:03:29.214     39ms      132.30      43.00  alta
+    13:03:29.354     42ms      157.30      25.00  alta
+    13:03:29.411     44ms      197.30      40.00  alta
+    13:03:29.729     43ms      157.30     -40.00  baja con T (relleno)
+    13:03:29.768     40ms      137.30     -20.00  baja con T (relleno)
+    13:03:29.798     44ms      162.30      25.00  alta
+    13:03:29.838     39ms      137.30     -25.00  baja con T (relleno)
+    13:03:29.905     46ms       68.00     -69.30  baja con T (relleno)
+    13:03:29.958     48ms       88.00      20.00  ALTA ==acc (posible W)
+    13:03:30.150     42ms       45.00     -43.00  baja con T (relleno)
+    13:03:30.282     40ms       52.00       7.00  alta
+    13:03:30.614     38ms       95.00      43.00  alta
+    13:03:30.616     39ms      184.30      89.30  alta
+    13:03:31.228     49ms      177.30      -7.00  baja SIN T (cancelacion)
+    13:03:31.352     38ms      217.30      40.00  alta
+    13:03:31.418     38ms      177.30     -40.00  baja SIN T (cancelacion)
+    13:03:31.494     44ms      217.30      40.00  alta
+    13:03:31.525     46ms      242.30      25.00  alta
+    13:03:31.591     53ms      202.30     -40.00  baja SIN T (cancelacion)
+    13:03:31.682     39ms      177.30     -25.00  baja SIN T (cancelacion)
+    13:03:32.198     41ms      202.30      25.00  alta
+    13:03:32.273     42ms      242.30      40.00  alta
+    13:03:32.319     39ms      217.30     -25.00  baja SIN T (cancelacion)
+    13:03:32.419     38ms      239.30      22.00  alta
+    13:03:32.695     55ms      264.30      25.00  alta
+    13:03:32.734     41ms      242.30     -22.00  baja SIN T (cancelacion)
+    13:03:33.552     46ms      202.30     -40.00  baja SIN T (cancelacion)
+    13:03:34.267     37ms      242.30      40.00  alta
+    13:03:34.405     38ms      202.30     -40.00  baja SIN T (cancelacion)
+    13:03:34.454     38ms      177.30     -25.00  baja SIN T (cancelacion)
+    13:03:34.852     42ms      152.30     -25.00  baja SIN T (cancelacion)
+    13:03:34.859     49ms      202.30      50.00  alta
+    13:03:34.878     42ms      113.00     -89.30  baja SIN T (cancelacion)
+    13:03:34.900     57ms       63.00     -50.00  baja SIN T (cancelacion)
+    13:03:34.912     53ms       20.00     -43.00  baja SIN T (cancelacion)
+    13:03:35.809     37ms       70.00      50.00  alta
+    13:03:35.979     38ms       20.00     -50.00  baja con T (relleno)
+    13:03:36.135     41ms       14.94      -5.06  baja con T (relleno)
+    13:03:36.389     40ms       64.94      50.00  alta
+    13:03:36.918     54ms      231.94     167.00  alta
+    13:03:37.881     96ms       64.94    -167.00  baja con T (relleno)
+    13:03:37.969     60ms       14.94     -50.00  baja con T (relleno)
+    13:03:38.028     61ms       57.94      43.00  alta
+    13:03:38.180     55ms        9.94     -43.00  baja con T (relleno)
+    13:03:38.482     41ms       52.94      43.00  alta
+    13:03:38.583     38ms        9.94     -43.00  baja con T (relleno)
+    13:03:38.673     41ms       52.94      43.00  alta
+    13:03:38.863     38ms      102.94      50.00  alta
+    13:03:39.000     38ms       59.94     -43.00  baja con T (relleno)
+    13:03:39.145     39ms        9.94     -50.00  baja con T (relleno)
+    13:03:39.273     39ms       59.94      50.00  alta
+    13:03:40.488     40ms        8.13     -50.00  baja con T (relleno)
+    13:03:40.636     43ms       51.13      43.00  alta
+    13:03:40.678     52ms        8.13     -43.00  baja con T (relleno)
+    13:03:48.003     47ms       40.00      40.00  alta
+    13:03:48.026     47ms       90.00      50.00  alta
+    13:03:48.037     44ms       50.00     -40.00  baja con T (relleno)
+    13:03:48.110     39ms       34.76     -21.24  baja con T (relleno)
+    13:03:48.177     38ms       59.76      25.00  alta
+    13:03:48.197     37ms       31.00     -28.76  baja con T (relleno)
+    13:03:48.219     41ms       74.00      43.00  alta
+    13:03:48.322     41ms       92.87      23.00  alta
+    13:03:48.322     40ms      182.17      89.30  alta
+    13:03:48.364     42ms      349.17     167.00  alta
+    13:03:48.690     38ms      182.17    -167.00  baja con T (relleno)
+    13:03:48.938     40ms      159.17     -23.00  baja con T (relleno)
+    13:03:49.176     40ms      326.17     167.00  alta
+    13:03:49.443     62ms      493.17     167.00  alta
+    13:03:49.583     50ms      326.17    -167.00  baja SIN T (cancelacion)
+    13:03:49.584     41ms      159.17    -167.00  baja SIN T (cancelacion)
+    13:03:50.173     38ms      182.17      23.00  alta
+    13:03:50.222     38ms      157.17     -25.00  baja SIN T (cancelacion)
+    13:03:50.309     39ms      324.17     167.00  alta
+    13:03:50.908     38ms      157.17    -167.00  baja SIN T (cancelacion)
+    13:03:51.012     40ms      324.17     167.00  alta
+    13:03:51.038     42ms      349.17      25.00  alta
+    13:03:51.262     39ms      182.17    -167.00  baja SIN T (cancelacion)
+    (+76 eventos menores de 0,5*acc fuera de +-2,5/6 s omitidos)
+    T  13:03:29.823  off_vs_bloque=-1677ms tam=20.0 mismo token
+
+RESUMEN
+{"tx": "0x83b1b2e9df9b4d659263d255207a93bf7d08f4f0f2e80e2a0125800f536a707b", "token": "1962439387..", "p": 0.03, "acc": 20.0, "t_fill": "13:03:31.500", "mkt": "6011041", "act": "ETH", "T_s": 88.5, "n_eventos_nivel": 480, "T_matches": 1, "clase_alta": "ALTA_EXACTA", "n_altas": 179, "n_bajas": 191, "n_bajas_sin_T": 139, "huecos": 0, "placebo_tam": false, "placebo_nivel": true, "caida_T_igual_acc": 20.0, "T_unico": true, "alineacion": "VENTANA", "reposo_s": 15.903, "alta_hora": "13:03:13.920", "T_offset_ms": -1677, "T_tam": 20.0}

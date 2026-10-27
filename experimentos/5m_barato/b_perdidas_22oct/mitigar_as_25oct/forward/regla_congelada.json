@@ -1,0 +1,38 @@
+{
+ "rasgo": "F5 = log1p(tamano del ask del token del maker) a tau = recepcion_print - 100 ms (estado = ultima fila q con recepcion <= tau, max 30 s)",
+ "cortes_F5_terciles_train": [
+  3.526360511779785,
+  4.717426776885986
+ ],
+ "tercil_marcado": 2,
+ "tercil_inversion": 1,
+ "ev_train_por_tercil": [
+  0.0851434518831099,
+  0.09878754039239658,
+  -0.0068949594858098325
+ ],
+ "marcar": "F5 > cortes[1] si tercil_marcado==2",
+ "F2_deciles_train": [
+  0.03205827437341214,
+  0.06849315017461777,
+  0.1224806964397431,
+  0.20000000298023224,
+  0.2996276766061783,
+  0.4166666567325592,
+  0.540221095085144,
+  0.6911764383316044,
+  0.8432389676570891
+ ],
+ "n_train": 67927,
+ "n_train_F5": 67840,
+ "dias_train": [
+  "2026-10-06",
+  "2026-10-07",
+  "2026-10-08"
+ ],
+ "train_sha256": {
+  "r_2026-10-06.pkl": "9cb4e5c32079808d03bcedaff5b0422cc006a81e660dc51f93b3519cbbc5f8fd",
+  "r_2026-10-07.pkl": "f97453e21334ce18ecae84ce9df743f9bb0214b4609cebf8940c43e8110213c2",
+  "r_2026-10-08.pkl": "44a666de3b6f21036f3f532bd851d9937aa9b3071a662ecfc3b1dfff0b4a30cc"
+ }
+}

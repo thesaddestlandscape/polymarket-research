@@ -1,0 +1,12 @@
+# PREREG FWD-R1 (reparado) — forward pasivo de «no operar en ventanas tranquilas» (E1D/R1), 26-Oct-2026. Escrito ANTES de procesar ningun dia >= 24-Oct. Solo lectura, 0 EUR.
+Sustituye a PREREG_E1D_FORWARD_R1.md tras el red-team (verificacion_redteam/VERIFICACION.md: R1 de PROMISING a NO PROBADO / probable confusor moneda+hora+fin de semana; sin el 20-Oct −1.673 $; sin 2 mejores dias −4.850 $).
+Universo: mercados 5m ETH/SOL/XRP (no BTC). Ventana = (moneda, mercado). R1 = desv. tipica (bps) de retornos log de 10 s del ultimo aggTrade Binance de su moneda (recepcion c[7]) en [t0−900 s, t0], t0 = fin−300 (copia de e1d_pob.py::vol;
+verificada contra e1d_dia_2026-10-23 antes de congelar). REGLA REPARADA: el corte c1 es el tercil 1/3 de R1 de su CELDA = moneda x bloque de 4 h UTC de t0 x (laborable | fin de semana), calculado con todas las ventanas de dias anteriores
+(historico E1D 05-23 Oct + forward expansivo). Celda con <60 ventanas previas: no se marca (se cuenta `sin_corte`). Si R1 <= c1 -> NO operar esa ventana (se descartan sus rellenos). INVERSION: saltar R1 > tercil 2/3 de la celda.
+Datos: caches del extractor unico `../forward/forward_a1.py` (prints_D = rellenos de bid poblacionales banda 0,10-0,30 con desenlace oficial; ventanas_D = R1 y fraccion de huecos Binance >10 s). Dias >= 24-Oct COMPLETE (cobertura de desenlace por coste >= 99,5 %).
+Metricas por dia: dPnL = −Σpnl de las ventanas saltadas (vs «operar siempre»); EXCESO = dPnL − E[azar] con E[azar] = −(k/n)·Σpnl_dia (saltar k de las n ventanas del dia al azar; p por 2000 simulaciones por dia, semilla 20261026);
+IC90 por CIERRE (2000 bootstrap de la suma por cierre).
+Gate (una hipotesis, alfa 0,05 una cola), TODO a la vez con >=10 dias nuevos (~04-Nov): (1) ΣEXCESO>0, p<0,05 e IC90 cierre inferior>0; (2) OBLIGATORIO (red-team): ΣdPnL>0 vs operar siempre Y tambien >0 sin el peor dia de operar-siempre,
+sin el dia de mayor dPnL («20-Oct equivalente») y sin los 2 mejores dias de dPnL; EXCESO>0 sin los 2 mejores dias; >=60 % de dias con EXCESO>0; INVERSION ΣEXCESO<0; (3) control de huecos: mismo signo (EXCESO>0 y dPnL>0) excluyendo ventanas con >5 % de puntos Binance de mas de 10 s;
+(4) ETH y SOL con EV€ ponderado de las ventanas saltadas < EV€ del resto (XRP no se exige); (5) si hay >=5 dias laborables: EXCESO>0 y dPnL>0 solo en laborables. Pasar NO autoriza dinero real: exige n>=150 propios + /code-review + OK Javi.
+Descriptivo: transferencia a rellenos propios (B) solo si hay n>=150 propios. Menos de 10 dias = EN CURSO sin veredicto.

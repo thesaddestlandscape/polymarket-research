@@ -1,0 +1,40 @@
+ledger: wallets con >=30 mercados BTC 5m en 17-21: 5010 de 16173; filas 5959582
+
+===== P4 ledger: wallet-mercado 1069540; 0x21f4 1391 mercados, vol 931,172, PnL/vol +0.0121, par +0.0611, residuo -0.0466, comision -0.0024, maker 810574/931172
+  DESC: n 840 PnL/vol +0.0078 IC90 cierre (-0.0041,+0.0201) par +0.0507 residuo -0.0399
+  TEST: n 551 PnL/vol +0.0165 IC90 cierre (+0.0060,+0.0267) par +0.0717 residuo -0.0535
+  por dia (PnL/vol | par | residuo | n mercados): 10-17: -0.0065|+0.0276|-0.0311|290 ; 10-18: +0.0220|+0.0628|-0.0381|278 ; 10-19: +0.0058|+0.0591|-0.0499|272 ; 10-20: +0.0256|+0.0860|-0.0583|279 ; 10-21: +0.0079|+0.0580|-0.0489|272
+
+(a) DIRECCION: residuo (lado pesado): EV por € de coste del residuo -0.2950 IC90 cierre (-0.3360,-0.2576); acierto del lado pesado ponderado por acciones 0.268 frente a precio medio pagado 0.380; n mercados 1391
+    placebo (des permutado entre mercados del mismo dia x 4 h, 2000): obs Σres -43413.9 $, placebo medio +45927.8 (sd 5937.8), p una cola 1.0000
+    residuo por dia (EV/€ residuo | acierto vs precio): 10-17: -0.128|0.385 vs 0.441 ; 10-18: -0.214|0.326 vs 0.415 ; 10-19: -0.296|0.247 vs 0.350 ; 10-20: -0.504|0.161 vs 0.325 ; 10-21: -0.390|0.227 vs 0.373
+
+(c) INVENTARIO: dosis-respuesta de res_frac -> PnL/vol del mercado (0x21f4)
+   res_frac <0,1: n 329 PnL/vol +0.0343 IC90 (+0.0204,+0.0484) par +0.0461 residuo -0.0099
+   res_frac 0,1-0,3: n 647 PnL/vol +0.0154 IC90 (+0.0055,+0.0258) par +0.0759 residuo -0.0582
+   res_frac 0,3-0,6: n 277 PnL/vol -0.0691 IC90 (-0.0946,-0.0407) par +0.0535 residuo -0.1189
+   res_frac >0,6: n 138 PnL/vol +0.0231 IC90 (-0.0452,+0.0860) par +0.0074 residuo +0.0193
+
+== pareadoras BTC (conducta en 17-19: >=30 mercados, >=60 % con ambos lados >=5 acc): 591 wallets; MEDIDAS en TEST 20-21
+  pareadoras sin 0x21f4: wallets 466 merc 89446 vol 12,503,456 PnL/vol -0.0023 IC90 cierre (-0.0063,+0.0020) par +0.0184 residuo -0.0126 comision -0.0081 coste_par med 0.990 res_frac med 0.14 maker 0.66
+  0x21f4 (TEST): wallets 1 merc 551 vol 460,991 PnL/vol +0.0165 IC90 cierre (+0.0056,+0.0259) par +0.0717 residuo -0.0535 comision -0.0017 coste_par med 0.924 res_frac med 0.16 maker 0.89
+  resto (direccionales/otros): wallets 3929 merc 353540 vol 14,880,124 PnL/vol -0.0142 IC90 cierre (-0.0180,-0.0103) par +0.0147 residuo -0.0181 comision -0.0108 coste_par med 0.974 res_frac med 1.00 maker 0.33
+  0x21f4 siempre (TEST): wallets 1 merc 551 vol 460,991 PnL/vol +0.0165 IC90 cierre (+0.0068,+0.0279) par +0.0717 residuo -0.0535 comision -0.0017 coste_par med 0.924 res_frac med 0.16 maker 0.89
+  top pareadoras por volumen TEST:
+               nm          vol      ev     par     res      pc      rf
+wallet                                                                
+0xeebde7a0  513.0  815319.2291  0.0007 -0.0299  0.0434  1.0597  0.3252
+0xe29042f5  575.0  507755.7232 -0.0019  0.0250 -0.0146  0.9740  0.0799
+0x41e2e1cc  448.0  484450.1925 -0.0091  0.0043  0.0028  0.9999  0.0379
+0x21f4c1a1  551.0  460990.5858  0.0165  0.0717 -0.0535  0.9242  0.1580
+0x764fd57b  571.0  455243.3996  0.0169  0.0723 -0.0528  0.9467  0.0990
+0xc53375ff  509.0  445814.6056  0.0025  0.0238  0.0045  0.9742  0.1115
+0x9d57c42e  522.0  369418.2413 -0.0040  0.0587 -0.0560  0.9339  0.1281
+0xaa1a4f31  575.0  355072.0807 -0.0014  0.0962 -0.0976  0.8917  0.1967
+0x5a06acba  520.0  273010.5117 -0.0039 -0.0003  0.0091  1.0125  0.0904
+0x0ca4e9d2  508.0  269414.2268  0.0062  0.0117  0.0195  0.9810  0.2291
+
+== P3 forma (todas las filas, 17-21): wallet / controles / pareadoras
+  0x21f4: fills 83582 maker 0.89 ventas 0.000 acc/fill med 13.0 px_ef med 0.430 T p10/50/90 [50.0, 168.0, 284.0]
+  0xaa1a: fills 81863 maker 1.00 ventas 0.000 acc/fill med 13.5 px_ef med 0.390 T p10/50/90 [57.0, 163.0, 298.0]
+  0x41e2: fills 100359 maker 0.71 ventas 0.000 acc/fill med 17.3 px_ef med 0.460 T p10/50/90 [61.0, 169.0, 273.0]

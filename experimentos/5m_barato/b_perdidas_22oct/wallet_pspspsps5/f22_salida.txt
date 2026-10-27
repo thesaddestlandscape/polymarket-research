@@ -1,0 +1,35 @@
+dias ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11', '2026-10-12', '2026-10-13', '2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23', '2026-10-24'] fills 1722769 W 13616
+-- DESC POBLACION por acciones del fill (% $): {'<=5': 11.699999809265137, '5-10': 11.899999618530273, '10-20': 17.899999618530273, '20-50': 25.299999237060547, '50-200': 23.799999237060547, '>200': 9.399999618530273}
+  acc <=5                        fills  425872 $    50659 EV +0.029 (np.float64(-0.04), np.float64(0.1)) hit/p 1.03 dias 8
+  acc 5-10                       fills  169985 $    51582 EV +0.009 (np.float64(-0.05), np.float64(0.07)) hit/p 1.00 dias 8
+  acc 10-20                      fills  122927 $    77451 EV +0.037 (np.float64(-0.01), np.float64(0.09)) hit/p 1.03 dias 8
+  acc 20-50                      fills   92303 $   109254 EV -0.004 (np.float64(-0.06), np.float64(0.06)) hit/p 1.00 dias 8
+  acc 50-200                     fills   40493 $   103139 EV -0.003 (np.float64(-0.13), np.float64(0.12)) hit/p 1.02 dias 8
+  acc >200                       fills    6021 $    40449 EV +0.216 (np.float64(-0.03), np.float64(0.45)) hit/p 1.21 dias 8
+-- DESC W por acciones del fill (% $): {'<=5': 4.099999904632568, '5-10': 9.199999809265137, '10-20': 10.300000190734863, '20-50': 42.400001525878906, '50-200': 28.399999618530273, '>200': 5.599999904632568}
+  acc <=5                        fills    1948 $      245 EV +0.147 (np.float64(-0.13), np.float64(0.46)) hit/p 1.06 dias 8
+  acc 5-10                       fills    1552 $      554 EV +0.043 (np.float64(-0.11), np.float64(0.19)) hit/p 1.09 dias 8
+  acc 10-20                      fills     935 $      614 EV +0.275 (np.float64(-0.07), np.float64(0.59)) hit/p 1.25 dias 8
+  acc 20-50                      fills    1416 $     2542 EV +0.336 (np.float64(0.13), np.float64(0.57)) hit/p 1.32 dias 8
+  acc 50-200                     fills     826 $     1703 EV +0.619 (np.float64(0.23), np.float64(1.04)) hit/p 1.69 dias 8
+  acc >200                       fills     129 $      333 EV -1.000 (np.float64(-1.0), np.float64(-1.0)) hit/p 0.00 dias 8
+-- HOLD POBLACION por acciones del fill (% $): {'<=5': 9.800000190734863, '5-10': 12.100000381469727, '10-20': 13.800000190734863, '20-50': 26.600000381469727, '50-200': 27.799999237060547, '>200': 9.899999618530273}
+  acc <=5                        fills  384262 $    47877 EV -0.181 (np.float64(-0.28), np.float64(-0.08)) hit/p 0.82 dias 8
+  acc 5-10                       fills  190151 $    59210 EV -0.144 (np.float64(-0.25), np.float64(-0.05)) hit/p 0.86 dias 8
+  acc 10-20                      fills  107858 $    67318 EV -0.123 (np.float64(-0.26), np.float64(0.01)) hit/p 0.88 dias 8
+  acc 20-50                      fills  109741 $   129961 EV -0.068 (np.float64(-0.18), np.float64(0.04)) hit/p 0.93 dias 8
+  acc 50-200                     fills   52155 $   135927 EV -0.091 (np.float64(-0.24), np.float64(0.04)) hit/p 0.90 dias 8
+  acc >200                       fills    6993 $    48211 EV +0.103 (np.float64(-0.1), np.float64(0.34)) hit/p 1.06 dias 8
+-- HOLD W por acciones del fill (% $): {'<=5': 2.799999952316284, '5-10': 5.300000190734863, '10-20': 8.0, '20-50': 39.79999923706055, '50-200': 36.0, '>200': 8.100000381469727}
+  acc <=5                        fills    1857 $      183 EV +0.028 (np.float64(-0.29), np.float64(0.37)) hit/p 1.24 dias 7
+  acc 5-10                       fills    1143 $      344 EV +0.195 (np.float64(-0.23), np.float64(0.65)) hit/p 1.18 dias 7
+  acc 10-20                      fills    1004 $      521 EV -0.111 (np.float64(-0.41), np.float64(0.27)) hit/p 0.93 dias 7
+  acc 20-50                      fills    1540 $     2592 EV +0.465 (np.float64(0.26), np.float64(0.66)) hit/p 1.41 dias 8
+  acc 50-200                     fills    1062 $     2342 EV +0.441 (np.float64(0.07), np.float64(0.83)) hit/p 1.48 dias 7
+  acc >200                       fills     204 $      528 EV -0.119 (np.float64(-1.0), np.float64(0.92)) hit/p 0.98 dias 7
+
+== emparejado por (moneda, precio, tiempo, tamano del fill) ==
+DESC EV pop emparejada -0.037 | EV W +0.301 | brecha +0.339
+HOLD EV pop emparejada -0.106 | EV W +0.336 | brecha +0.442
+DESC poblacion solo fills <=20 acc:                                  fills  718780 $   179690 EV +0.026 (np.float64(-0.03), np.float64(0.08)) hit/p 1.02 dias 8
+HOLD poblacion solo fills <=20 acc:                                  fills  682262 $   174395 EV -0.146 (np.float64(-0.27), np.float64(-0.03)) hit/p 0.84 dias 8

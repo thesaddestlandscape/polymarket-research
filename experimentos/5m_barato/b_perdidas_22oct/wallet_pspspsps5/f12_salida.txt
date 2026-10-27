@@ -1,0 +1,75 @@
+dias ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11', '2026-10-12', '2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23', '2026-10-24'] fills 1615632 W 12850
+
+## DESC<=14 dias 8
+  POBLACION sin W
+  todas <0.10                        fills  825159 $   419366 EV +0.063 (np.float64(-0.03), np.float64(0.16)) hit(cuenta) 4.11% p 3.97% dias 8
+  precio <.03                        fills  331261 $    93859 EV -0.210 (np.float64(-0.46), np.float64(0.02)) hit(cuenta) 1.12% p 1.41% dias 8
+  precio .03-.06                     fills  260437 $   119272 EV +0.103 (np.float64(-0.03), np.float64(0.25)) hit(cuenta) 4.04% p 3.95% dias 8
+  precio .06-.10                     fills  233461 $   206235 EV +0.163 (np.float64(0.07), np.float64(0.26)) hit(cuenta) 8.44% p 7.63% dias 8
+  tiempo T<90                        fills  424865 $   191909 EV +0.049 (np.float64(-0.13), np.float64(0.21)) hit(cuenta) 3.49% p 3.33% dias 8
+  tiempo T90-180                     fills  320596 $   169738 EV +0.079 (np.float64(-0.1), np.float64(0.27)) hit(cuenta) 4.52% p 4.33% dias 8
+  tiempo T>=180                      fills   79695 $    57719 EV +0.060 (np.float64(-0.26), np.float64(0.47)) hit(cuenta) 5.76% p 5.94% dias 7
+  moneda BTC                         fills  616354 $   353775 EV +0.052 (np.float64(-0.08), np.float64(0.19)) hit(cuenta) 4.31% p 4.14% dias 8
+  moneda ETH                         fills   95892 $    36329 EV +0.154 (np.float64(-0.2), np.float64(0.5)) hit(cuenta) 4.13% p 3.97% dias 8
+  moneda SOL                         fills   46397 $    13071 EV +0.175 (np.float64(-0.11), np.float64(0.48)) hit(cuenta) 3.26% p 3.14% dias 8
+  W
+  todas <0.10                        fills    6711 $     6089 EV +0.412 (np.float64(0.25), np.float64(0.54)) hit(cuenta) 6.03% p 4.84% dias 7
+  precio <.03                        fills    1615 $     1149 EV -0.075 (np.float64(-0.48), np.float64(0.53)) hit(cuenta) 1.11% p 1.50% dias 7
+  precio .03-.06                     fills    2401 $     1951 EV +0.587 (np.float64(0.26), np.float64(0.83)) hit(cuenta) 4.91% p 4.01% dias 7
+  precio .06-.10                     fills    2695 $     2989 EV +0.484 (np.float64(0.28), np.float64(0.69)) hit(cuenta) 9.98% p 7.58% dias 7
+  tiempo T<90                        fills    2503 $     2302 EV +0.324 (np.float64(0.08), np.float64(0.64)) hit(cuenta) 5.47% p 4.22% dias 7
+  tiempo T90-180                     fills    3394 $     2947 EV +0.344 (np.float64(-0.17), np.float64(0.79)) hit(cuenta) 5.92% p 4.89% dias 7
+  tiempo T>=180                      fills     814 $      839 EV +0.891 (np.float64(-0.21), np.float64(2.06)) hit(cuenta) 8.23% p 6.51% dias 7
+  moneda BTC                         fills    2520 $     3237 EV +0.519 (np.float64(0.06), np.float64(0.93)) hit(cuenta) 8.13% p 5.38% dias 6
+  moneda ETH                         fills    3423 $     2327 EV +0.251 (np.float64(-0.13), np.float64(0.62)) hit(cuenta) 4.38% p 4.53% dias 7
+  moneda SOL                         fills     768 $      525 EV +0.458 (np.float64(-0.24), np.float64(1.32)) hit(cuenta) 6.51% p 4.45% dias 7
+
+## HOLD>=15 dias 8
+  POBLACION sin W
+  todas <0.10                        fills  777623 $   443331 EV -0.133 (np.float64(-0.28), np.float64(-0.01)) hit(cuenta) 3.22% p 3.99% dias 8
+  precio <.03                        fills  301438 $    98194 EV -0.119 (np.float64(-0.22), np.float64(-0.03)) hit(cuenta) 1.07% p 1.41% dias 8
+  precio .03-.06                     fills  257166 $   137757 EV -0.255 (np.float64(-0.44), np.float64(-0.09)) hit(cuenta) 2.79% p 3.92% dias 8
+  precio .06-.10                     fills  219019 $   207381 EV -0.059 (np.float64(-0.21), np.float64(0.08)) hit(cuenta) 6.68% p 7.61% dias 8
+  tiempo T<90                        fills  368577 $   192420 EV -0.062 (np.float64(-0.29), np.float64(0.17)) hit(cuenta) 3.00% p 3.38% dias 8
+  tiempo T90-180                     fills  328292 $   193040 EV -0.121 (np.float64(-0.39), np.float64(0.19)) hit(cuenta) 3.33% p 4.25% dias 8
+  tiempo T>=180                      fills   80754 $    57871 EV -0.412 (np.float64(-0.62), np.float64(-0.08)) hit(cuenta) 3.78% p 5.72% dias 7
+  moneda BTC                         fills  610062 $   391874 EV -0.135 (np.float64(-0.28), np.float64(0.01)) hit(cuenta) 3.33% p 4.19% dias 8
+  moneda ETH                         fills   77021 $    29716 EV -0.251 (np.float64(-0.46), np.float64(0.0)) hit(cuenta) 2.81% p 3.63% dias 8
+  moneda SOL                         fills   37666 $     8797 EV -0.043 (np.float64(-0.2), np.float64(0.12)) hit(cuenta) 2.59% p 2.83% dias 8
+  W
+  todas <0.10                        fills    6139 $     6046 EV +0.177 (np.float64(-0.04), np.float64(0.41)) hit(cuenta) 4.68% p 4.21% dias 7
+  precio <.03                        fills    2222 $     1624 EV +0.041 (np.float64(-0.27), np.float64(0.28)) hit(cuenta) 1.35% p 1.54% dias 6
+  precio .03-.06                     fills    1988 $     1952 EV +0.167 (np.float64(-0.24), np.float64(0.55)) hit(cuenta) 3.82% p 3.87% dias 6
+  precio .06-.10                     fills    1929 $     2470 EV +0.276 (np.float64(0.11), np.float64(0.49)) hit(cuenta) 9.38% p 7.62% dias 7
+  tiempo T<90                        fills    2168 $     2050 EV +0.196 (np.float64(-0.15), np.float64(0.54)) hit(cuenta) 3.23% p 3.47% dias 6
+  tiempo T90-180                     fills    3192 $     3229 EV +0.317 (np.float64(-0.07), np.float64(0.79)) hit(cuenta) 5.76% p 4.24% dias 7
+  tiempo T>=180                      fills     779 $      767 EV -0.459 (np.float64(-0.7), np.float64(-0.14)) hit(cuenta) 4.24% p 6.11% dias 6
+  moneda BTC                         fills    3024 $     4153 EV +0.232 (np.float64(-0.06), np.float64(0.54)) hit(cuenta) 5.89% p 4.86% dias 6
+  moneda ETH                         fills    2089 $     1341 EV -0.239 (np.float64(-0.6), np.float64(0.14)) hit(cuenta) 2.49% p 3.46% dias 6
+  moneda SOL                         fills    1026 $      552 EV +0.778 (np.float64(0.14), np.float64(1.44)) hit(cuenta) 5.56% p 3.78% dias 7
+
+## TODO dias 16
+  POBLACION sin W
+  todas <0.10                        fills 1602782 $   862698 EV -0.038 (np.float64(-0.13), np.float64(0.05)) hit(cuenta) 3.68% p 3.98% dias 16
+  precio <.03                        fills  632699 $   192053 EV -0.164 (np.float64(-0.29), np.float64(-0.05)) hit(cuenta) 1.10% p 1.41% dias 16
+  precio .03-.06                     fills  517603 $   257029 EV -0.089 (np.float64(-0.22), np.float64(0.05)) hit(cuenta) 3.42% p 3.93% dias 16
+  precio .06-.10                     fills  452480 $   413616 EV +0.052 (np.float64(-0.05), np.float64(0.15)) hit(cuenta) 7.59% p 7.62% dias 16
+  tiempo T<90                        fills  793442 $   384330 EV -0.006 (np.float64(-0.16), np.float64(0.14)) hit(cuenta) 3.26% p 3.35% dias 16
+  tiempo T90-180                     fills  648888 $   362778 EV -0.027 (np.float64(-0.2), np.float64(0.16)) hit(cuenta) 3.92% p 4.29% dias 16
+  tiempo T>=180                      fills  160449 $   115590 EV -0.176 (np.float64(-0.42), np.float64(0.1)) hit(cuenta) 4.77% p 5.83% dias 14
+  moneda BTC                         fills 1226416 $   745648 EV -0.046 (np.float64(-0.15), np.float64(0.06)) hit(cuenta) 3.83% p 4.17% dias 16
+  moneda ETH                         fills  172913 $    66045 EV -0.028 (np.float64(-0.27), np.float64(0.24)) hit(cuenta) 3.54% p 3.82% dias 16
+  moneda SOL                         fills   84063 $    21868 EV +0.087 (np.float64(-0.09), np.float64(0.29)) hit(cuenta) 2.96% p 3.00% dias 16
+  W
+  todas <0.10                        fills   12850 $    12134 EV +0.295 (np.float64(0.15), np.float64(0.44)) hit(cuenta) 5.39% p 4.54% dias 14
+  precio <.03                        fills    3837 $     2773 EV -0.007 (np.float64(-0.25), np.float64(0.28)) hit(cuenta) 1.25% p 1.52% dias 13
+  precio .03-.06                     fills    4389 $     3902 EV +0.377 (np.float64(0.1), np.float64(0.62)) hit(cuenta) 4.42% p 3.95% dias 13
+  precio .06-.10                     fills    4624 $     5459 EV +0.390 (np.float64(0.23), np.float64(0.54)) hit(cuenta) 9.73% p 7.59% dias 14
+  tiempo T<90                        fills    4671 $     4353 EV +0.264 (np.float64(0.06), np.float64(0.48)) hit(cuenta) 4.43% p 3.87% dias 13
+  tiempo T90-180                     fills    6586 $     6176 EV +0.330 (np.float64(0.03), np.float64(0.66)) hit(cuenta) 5.85% p 4.58% dias 14
+  tiempo T>=180                      fills    1593 $     1606 EV +0.247 (np.float64(-0.4), np.float64(0.99)) hit(cuenta) 6.28% p 6.31% dias 13
+  moneda BTC                         fills    5544 $     7390 EV +0.358 (np.float64(0.11), np.float64(0.62)) hit(cuenta) 6.91% p 5.10% dias 12
+  moneda ETH                         fills    5512 $     3668 EV +0.072 (np.float64(-0.25), np.float64(0.37)) hit(cuenta) 3.66% p 4.12% dias 13
+  moneda SOL                         fills    1794 $     1077 EV +0.622 (np.float64(0.15), np.float64(1.12)) hit(cuenta) 5.96% p 4.07% dias 14
+
+W cuota $ pasivo<0.10 (BTC/ETH/SOL): 1.43%

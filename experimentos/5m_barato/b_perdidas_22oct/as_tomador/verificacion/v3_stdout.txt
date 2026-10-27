@@ -1,0 +1,34 @@
+compras B 215 tx unicos 215 2026-10-20T11:40:24Z 2026-10-23T08:56:00Z monedas {'ETH': 85, 'SOL': 71, 'XRP': 59}
+precio*size vs coste: max |dif| 3.198483700117549e-10 | rol: {'maker (inferido: sin comision)': 215}
+filas on-chain F maker==wallet dedicada 215 tx 215 dup (tx,li) 0
+tx con >1 taker distinto 0 | tx con >1 fila US 0
+compras con taker on-chain 215 / 215
+desajuste size ledger vs chain >0.01: 0 | coste >0.02: 0
+faltan: Empty DataFrame
+Columns: [fecha_utc, mercado]
+Index: []
+desenlace: ledger vs precierre_cache: comparables 215 discrepan 0 | sin desenlace ledger 0 | sin pre-cache 0
+PNL total fills (mio) por desenlace: -16.0229 | autor (alloc. posicion): -16.0229 | n 215
+n fills usables 215 cierres 112 coste 221.3 EV_total -0.0724 pnl -16.023
+por moneda: {'ETH': {'n': 85.0, 'EV': 0.032}, 'SOL': {'n': 71.0, 'EV': -0.081}, 'XRP': {'n': 59.0, 'EV': -0.212}}
+informados 09-18 neto 238 bruto 370 S_A (prereg, mis sets) 75
+S_A_prereg(mis sets) {"n_flag_fills": 14, "n_flag_cierres": 12, "n_flag_takers": 6, "frac_eur": 0.07210971864142492, "pnl_flag": -0.9579389999999994, "pnl_no": -15.064993999999999, "EV_flag": -0.06002899246575636, "EV_no": -0.07336507020363098, "EXCESO": -0.0009616608134583177, "IC90_cierre": [-0.05708235745596733, 0.047629034671600984], "p_perm_fill": 0.5382923415316937, "p_perm_taker_pool_B": 0.5308938212357528, "p_perm_taker_pool_activos": 0.6090781843631273, "n_pool": 52, "peores5_flag": [-1.45, -1.4, -1.3, -1.3, -1.25], "EXC_sin_1_peores_cierres_banderados": -0.00679769587229169, "EXC_sin_3_peores_cierres_banderados": -0.018334140501181928, "unidades_posicion": 202, "EXC_unidad_posicion": 0.0032872837153757883, "EV_pond_euro_vs_media_unidad": {"pond": -0.07240340939017267, "media": -0.017388369126886027}}
+informados 09-18 neto>=2% {"n_flag_fills": 29, "n_flag_cierres": 25, "n_flag_takers": 9, "frac_eur": 0.13689720012228784, "pnl_flag": -15.295461000000003, "pnl_no": -0.7274720000000023, "EV_flag": -0.5048763245424785, "EV_no": -0.0038086473045176187, "EXCESO": 0.06859476208565504, "IC90_cierre": [-0.003404636623230629, 0.14042304683680404], "p_perm_fill": 0.11077784443111378, "p_perm_taker_pool_B": 0.07538492301539693, "p_perm_taker_pool_activos": 0.14097180563887224, "n_pool": 52, "peores5_flag": [-1.4, -1.35, -1.35, -1.3, -1.3], "EXC_sin_1_peores_cierres_banderados": 0.05938460878936741, "EXC_sin_3_peores_cierres_banderados": 0.04363746833903756, "unidades_posicion": 202, "EXC_unidad_posicion": 0.07760237148582438, "EV_pond_euro_vs_media_unidad": {"pond": -0.07240340939017267, "media": -0.017388369126886027}}
+informados 09-18 bruto>=2% {"n_flag_fills": 105, "n_flag_cierres": 72, "n_flag_takers": 24, "frac_eur": 0.5034776104387291, "pnl_flag": -37.362533, "pnl_no": 21.3396, "EV_flag": -0.3353305719739621, "EV_no": 0.1942068025966246, "EXCESO": 0.26661021198679724, "IC90_cierre": [0.039140621784151765, 0.5147387173849362], "p_perm_fill": 0.028594281143771244, "p_perm_taker_pool_B": 0.003199360127974405, "p_perm_taker_pool_activos": 0.01979604079184163, "n_pool": 52, "peores5_flag": [-1.45, -1.45, -1.4, -1.4, -1.4], "EXC_sin_1_peores_cierres_banderados": 0.2517472576138981, "EXC_sin_3_peores_cierres_banderados": 0.2346434485815226, "unidades_posicion": 202, "EXC_unidad_posicion": 0.30351260757504184, "EV_pond_euro_vs_media_unidad": {"pond": -0.07240340939017267, "media": -0.017388369126886027}}
+                                             n   pnl      c
+taker                                                      
+0xc87ad64315a4a0dcedfb90cb830a73f1c9252ddd  11 -6.87  11.87
+0x424eb20fcd25113e3b98f42522a54580350b263b   5 -5.64   5.64
+0x95fa4cc0be88b13a60529a651d82f940f38466b3   2 -2.60   2.60
+0x43e7e4b6a5dc71663d12cbf16b28468095a5472a   2 -1.30   1.30
+0xe3eeb127d5763a6e4ad597f773f9d259c94d5176   1 -1.05   1.05
+0xa0e72d5575095199ae08ce0dce447f21b7249461   5 -0.61   5.61
+0x1486fcee55a48b0206a988108ef8adc5b8cc28f5   1 -0.49   0.49
+0x0e7cf63155fbe7a49720fa0b923446fafb1aa78c   1 -0.38   0.38
+dia  2026-10-20  2026-10-21  2026-10-22  2026-10-23
+n          5.00       12.00       11.00        1.00
+pnl        0.08       -6.75       -7.49       -1.14
+dia  2026-10-20  2026-10-21  2026-10-22  2026-10-23
+n         40.00       77.00       81.00       17.00
+pnl        3.01       13.01      -22.19       -9.84
+c         42.99       78.39       83.07       16.84

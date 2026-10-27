@@ -1,0 +1,24 @@
+TEST 2026-10-12..2026-10-21 (10 d) unidades con mid_T en test 2762 de 2767; total dias 17 n=4235
+AUC_strat univariable: s_M10 0.556 | mid5_con_T 0.540 | dis 0.536 | |dis| 0.557 | pcon (control, ~0.5) 0.517
+(a) media y - pcon (EV al precio del modelo) -0.0163 | media y - mid (EV al mid) -0.0316
+    IC90 dias (modelo, mid): [[-0.0376, -0.0505], [0.0015, -0.0133]]
+    Brier y~pcon 0.1391 | y~mid 0.1486 | y~0.5*(pcon+mid) 0.1390
+(b) R2 del mid explicado por (lpc, z, vol) fuera de muestra: 0.882 ; corr(mid, mech) 0.939
+    AUC_strat: mid 0.540 | mech (mid predicho solo con el movimiento) 0.545 | residuo mid-mech 0.527 | dis 0.536 | dis_mech 0.535
+(c) apilado logistico walk-forward, entrena con dias previos 5-11 Oct en adelante (dias 2026-10-12..2026-10-21, n=2762): base 0.5562 | +mid 0.5630 | +mech 0.5539 | +resid 0.5651 | +mid_shuf(placebo) 0.5532 | +mid_prev(placebo) 0.5521 | SPEC_PREREG open+T 0.5797 | SPEC solo T (mid,dis,adis) 0.5604 | SPEC mecanica (mech,dis_mech,adis_mech) 0.5447 | SPEC solo apertura 0.5521
+    ganancia +mid                 +0.0069 IC90 dias (-0.0243,+0.0412)
+    ganancia +mech                -0.0022 IC90 dias (-0.0052,+0.0003)
+    ganancia +resid               +0.0089 IC90 dias (-0.0183,+0.0401)
+    ganancia +mid_shuf(placebo)   -0.0030 IC90 dias (-0.0117,+0.0059)
+    ganancia +mid_prev(placebo)   -0.0040 IC90 dias (-0.0123,+0.0059)
+    ganancia SPEC_PREREG open+T   +0.0236 IC90 dias (-0.0032,+0.0498)
+    ganancia SPEC solo T (mid,dis,adis) +0.0042 IC90 dias (-0.0283,+0.0457)
+    ganancia SPEC mecanica (mech,dis_mech,adis_mech) -0.0115 IC90 dias (-0.0207,+0.0026)
+    ganancia SPEC solo apertura   -0.0040 IC90 dias (-0.0150,+0.0078)
+(d) corr(dis, zo) 0.330 ; corr(mid5_con_T, zo) 0.934 ; corr(mid5_con_open, zo) 0.032
+(e) EV al mid por tercil de desacuerdo (y - mid; sin comision ni spread):
+               n  ev_mid  ev_modelo     con
+dt                                         
+dis bajo   921.0  0.0894    -0.0425  0.8447
+dis medio  920.0 -0.0501    -0.0364  0.4946
+dis alto   921.0 -0.1341     0.0300  0.2421

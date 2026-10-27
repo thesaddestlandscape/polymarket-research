@@ -1,0 +1,1 @@
+ADENDA 1 (2026-10-25T11:20:33Z): bug de construccion hallado en smoke (6 mercados, 0 validos, ningun resultado visto): late binding de 'l' en el generador de heapq.merge (ambos tokens etiquetados NO). Corregido con lab() identico a f6_sim.py. Sin otro cambio.

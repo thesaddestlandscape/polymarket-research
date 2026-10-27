@@ -1,0 +1,24 @@
+conflictos con gana original 0 de 12182
+vidas 39593 por dia {'2026-10-24': 19948, '2026-10-25': 19645}
+cobertura gana 0.9997
+evaluables 39579
+cierres 576
+relleno_opt: P(fill)=0.8635 M_f=-0.0216 IC90[-0.0373 -0.0059] n=34176 | M_nf=+0.2587 IC90[0.241  0.2764] | brecha=-0.2803 | S=0.923 IC90[0.868 0.98 ]
+relleno_pes: P(fill)=0.4668 M_f=-0.0804 IC90[-0.0945 -0.066 ] n=18477 | M_nf=+0.1017 IC90[0.0826 0.1203] | brecha=-0.1821 | S=0.559 IC90[0.477 0.635]
+Q4 calibracion gana-mid0 -0.0139 IC90 [-0.0289  0.0013] ; gana-b todas +0.0167
+Q5 M_f(pes) -0.0804 (n=18477) − M_f(opt no pes) +0.0477 (n=15699) = -0.1281 IC90 [-0.1426 -0.1129]
+barrido entre rellenas opt: {0: {'mean': 0.1633, 'size': 1530}, 1: {'mean': -0.0302, 'size': 32646}}
+Q6 unidades anyfill=0: n=546 m=+0.6922 Spearman(k,m)=-0.011 p=0.799
+   por k: {Interval(0, 1, closed='right'): {'mean': 0.717, 'size': 383}, Interval(1, 3, closed='right'): {'mean': 0.659, 'size': 138}, Interval(3, 6, closed='right'): {'mean': 0.542, 'size': 22}, Interval(6, 12, closed='right'): {'mean': 0.106, 'size': 3}}
+Q6 unidades anyfill=1: n=4522 m=+0.0367 Spearman(k,m)=-0.011 p=0.441
+   por k: {Interval(0, 1, closed='right'): {'mean': 0.283, 'size': 177}, Interval(1, 3, closed='right'): {'mean': 0.212, 'size': 577}, Interval(3, 6, closed='right'): {'mean': 0.038, 'size': 1010}, Interval(6, 12, closed='right'): {'mean': -0.025, 'size': 1792}, Interval(12, 100, closed='right'): {'mean': -0.0, 'size': 966}}
+1a vida relleno_opt: M_f=-0.0226 (n=3666) M_nf=+0.2861 (n=1402)
+1a vida relleno_pes: M_f=-0.0910 (n=1776) M_nf=+0.1457 (n=3292)
+moneda BNB M_f opt +0.0035 (n=4364) M_nf +0.2010 (n=2200) calib +0.0075
+moneda BTC M_f opt -0.0159 (n=6006) M_nf +0.3598 (n=174) calib -0.0149
+moneda DOGE M_f opt -0.0267 (n=5563) M_nf +0.2403 (n=1551) calib -0.0117
+moneda ETH M_f opt -0.0212 (n=6194) M_nf +0.3626 (n=258) calib -0.0192
+moneda SOL M_f opt -0.0386 (n=5847) M_nf +0.3557 (n=410) calib -0.0322
+moneda XRP M_f opt -0.0244 (n=6202) M_nf +0.3469 (n=810) calib -0.0139
+dia 2026-10-24 M_f opt -0.0271 M_f pes -0.0862 M_nf opt +0.2646 calib -0.0178
+dia 2026-10-25 M_f opt -0.0159 M_f pes -0.0744 M_nf opt +0.2529 calib -0.0099

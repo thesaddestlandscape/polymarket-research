@@ -1,0 +1,60 @@
+perm 0
+perm 20
+perm 40
+perm 60
+perm 80
+P_pooled exc 11445 IC90d (411,1115) d+ 13/15 sin2 7800 sin3 6260 {'miss': 398, 'ev_marc': -0.0158, 'ev_ret': 0.0847, 'ev_todo': 0.0551, 'coste': 585293.4505, 'n': 254984, 'inversion_exc': -9701.0851}
+pooled_por_moneda ETH exc 8391 IC90d (297,822) d+ 13/15 sin2 5560 sin3 4352 coste 399412
+pooled_por_moneda SOL exc 2756 IC90d (9,359) d+ 12/15 sin2 1185 sin3 535 coste 134920
+pooled_por_moneda XRP exc 298 IC90d (-46,85) d+ 10/15 sin2 -191 sin3 -340 coste 50962
+pooled_por_franja 0 exc 2454 IC90d (-22,350) d+ 9/15 sin2 922 sin3 305 coste 131424
+pooled_por_franja 1 exc 1630 IC90d (-43,261) d+ 10/15 sin2 393 sin3 -13 coste 154312
+pooled_por_franja 2 exc 2101 IC90d (-53,333) d+ 7/15 sin2 381 sin3 -187 coste 143651
+pooled_por_franja 3 exc 5259 IC90d (189,512) d+ 14/15 sin2 3698 sin3 3027 coste 155906
+pooled_por_hora 0 exc -595 IC90d (-112,33) d+ 5/15 sin2 -1007 sin3 -1071 coste 24538
+pooled_por_hora 1 exc 31 IC90d (-75,79) d+ 8/15 sin2 -451 sin3 -608 coste 19633
+pooled_por_hora 2 exc 1382 IC90d (31,153) d+ 11/15 sin2 670 sin3 489 coste 19559
+pooled_por_hora 3 exc 695 IC90d (-5,98) d+ 9/15 sin2 219 sin3 94 coste 19558
+pooled_por_hora 4 exc -34 IC90d (-84,80) d+ 10/15 sin2 -479 sin3 -598 coste 25367
+pooled_por_hora 5 exc 976 IC90d (-31,161) d+ 11/15 sin2 56 sin3 -169 coste 22769
+pooled_por_hora 6 exc 486 IC90d (-30,95) d+ 8/15 sin2 -54 sin3 -261 coste 22179
+pooled_por_hora 7 exc -63 IC90d (-54,46) d+ 9/15 sin2 -333 sin3 -426 coste 30216
+pooled_por_hora 8 exc -303 IC90d (-96,55) d+ 4/15 sin2 -892 sin3 -1016 coste 22506
+pooled_por_hora 9 exc 1550 IC90d (-34,240) d+ 6/15 sin2 11 sin3 -231 coste 32006
+pooled_por_hora 10 exc -644 IC90d (-124,38) d+ 8/15 sin2 -1002 sin3 -1108 coste 22647
+pooled_por_hora 11 exc 604 IC90d (-30,110) d+ 8/15 sin2 16 sin3 -216 coste 24759
+pooled_por_hora 12 exc 649 IC90d (-11,98) d+ 8/15 sin2 134 sin3 -96 coste 25338
+pooled_por_hora 13 exc -82 IC90d (-57,46) d+ 7/15 sin2 -355 sin3 -481 coste 30773
+pooled_por_hora 14 exc -314 IC90d (-114,72) d+ 9/15 sin2 -689 sin3 -854 coste 24452
+pooled_por_hora 15 exc 378 IC90d (-40,90) d+ 7/15 sin2 -108 sin3 -302 coste 21605
+pooled_por_hora 16 exc 722 IC90d (-22,118) d+ 9/15 sin2 37 sin3 -128 coste 21782
+pooled_por_hora 17 exc 748 IC90d (-11,111) d+ 12/15 sin2 266 sin3 126 coste 19702
+pooled_por_hora 18 exc 1188 IC90d (19,140) d+ 12/15 sin2 644 sin3 431 coste 23245
+pooled_por_hora 19 exc 275 IC90d (-32,69) d+ 9/15 sin2 -204 sin3 -324 coste 21684
+pooled_por_hora 20 exc 1699 IC90d (39,187) d+ 12/15 sin2 790 sin3 624 coste 23809
+pooled_por_hora 21 exc 1222 IC90d (9,154) d+ 11/15 sin2 416 sin3 232 coste 30225
+pooled_por_hora 22 exc -4 IC90d (-54,53) d+ 9/15 sin2 -363 sin3 -500 coste 31546
+pooled_por_hora 23 exc 879 IC90d (-76,193) d+ 12/15 sin2 22 sin3 -219 coste 25396
+C_moneda exc 13811 IC90d (657,1184) d+ 13/15 sin2 10422 sin3 8896 {'miss': 398, 'ev_marc': -0.0377, 'ev_ret': 0.0889, 'ev_todo': 0.0551, 'coste': 585293.4505, 'n': 254984, 'inversion_exc': -5305.1389}
+   celda ('ETH',) exc 9457 IC90d (391,870) d+ 14/15 sin2 6435 sin3 5205 ev_marc -0.028 ev_ret 0.103 coste 399412 n 160119
+   celda ('SOL',) exc 3711 IC90d (108,387) d+ 12/15 sin2 2213 sin3 1590 ev_marc -0.057 ev_ret 0.07 coste 134920 n 62718
+   celda ('XRP',) exc 642 IC90d (-16,101) d+ 11/15 sin2 64 sin3 -38 ev_marc -0.052 ev_ret 0.026 coste 50962 n 32147
+CB_moneda_x_franja exc 10309 IC90d (464,911) d+ 14/15 sin2 7499 sin3 6463 {'miss': 398, 'ev_marc': -0.0088, 'ev_ret': 0.0798, 'ev_todo': 0.0551, 'coste': 585293.4505, 'n': 254984, 'inversion_exc': -6661.2957}
+   CB_moneda_x_franja sin_ETH exc 3270 IC90d (70,366) d+ 10/15 sin2 1920 sin3 1327 {'ev_marc': -0.0387, 'ev_ret': 0.0525, 'ev_todo': 0.0242}
+   CB_moneda_x_franja solo_ETH exc 7039 IC90d (269,669) d+ 13/15 sin2 4562 sin3 3936 {'ev_marc': 0.0076, 'ev_ret': 0.0917, 'ev_todo': 0.0696}
+   CB_moneda_x_franja al_mejor_bid exc 5240 IC90d (131,567) d+ 11/15 sin2 3082 sin3 2227 {'ev_marc': -0.0634, 'ev_ret': 0.0126, 'ev_todo': -0.0105}
+   CB_moneda_x_franja por_debajo_bid_tipoB exc 3242 IC90d (3,429) d+ 9/15 sin2 1025 sin3 445 {'ev_marc': 0.1248, 'ev_ret': 0.1924, 'ev_todo': 0.1743}
+   CB_moneda_x_franja tau250 exc 5544 IC90d (142,597) d+ 12/15 sin2 3323 sin3 2357 {'ev_marc': 0.0435, 'ev_ret': 0.0603, 'ev_todo': 0.0551}
+   celda ('ETH', 0) exc 621 IC90d (-46,129) d+ 9/15 sin2 43 sin3 -206 ev_marc -0.151 ev_ret -0.168 coste 86350 n 37708
+   celda ('ETH', 1) exc 1431 IC90d (-42,233) d+ 9/15 sin2 160 sin3 -270 ev_marc 0.186 ev_ret 0.201 coste 106656 n 40367
+   celda ('ETH', 2) exc 2816 IC90d (48,328) d+ 10/15 sin2 1553 sin3 939 ev_marc 0.087 ev_ret 0.282 coste 94788 n 41208
+   celda ('ETH', 3) exc 2171 IC90d (35,254) d+ 11/15 sin2 1177 sin3 764 ev_marc -0.09 ev_ret 0.017 coste 111617 n 40836
+   celda ('SOL', 0) exc 1608 IC90d (62,153) d+ 13/15 sin2 1130 sin3 937 ev_marc -0.127 ev_ret 0.121 coste 33329 n 15670
+   celda ('SOL', 1) exc -256 IC90d (-70,36) d+ 6/15 sin2 -547 sin3 -666 ev_marc -0.036 ev_ret -0.071 coste 35169 n 15811
+   celda ('SOL', 2) exc 44 IC90d (-73,79) d+ 7/15 sin2 -613 sin3 -720 ev_marc 0.031 ev_ret 0.044 coste 35725 n 16934
+   celda ('SOL', 3) exc 1320 IC90d (30,146) d+ 11/15 sin2 716 sin3 500 ev_marc -0.027 ev_ret 0.168 coste 30696 n 14303
+   celda ('XRP', 0) exc -51 IC90d (-26,19) d+ 9/15 sin2 -185 sin3 -242 ev_marc -0.052 ev_ret -0.038 coste 11745 n 7350
+   celda ('XRP', 1) exc 371 IC90d (-17,66) d+ 9/15 sin2 77 sin3 -44 ev_marc -0.092 ev_ret 0.09 coste 12487 n 8039
+   celda ('XRP', 2) exc -56 IC90d (-36,28) d+ 10/15 sin2 -187 sin3 -232 ev_marc -0.031 ev_ret -0.04 coste 13138 n 8533
+   celda ('XRP', 3) exc 290 IC90d (-11,49) d+ 9/15 sin2 -7 sin3 -87 ev_marc -0.032 ev_ret 0.086 coste 13593 n 8225
+  placebo {'real': 10308.55782424603, 'perm_media': -33.280174106944166, 'perm_sd': 2799.8164117537726, 'perm_p95': 3861.6471733830567, 'p_unilateral': 0.009900990099009901, 'n_perm': 100}

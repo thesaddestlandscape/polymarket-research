@@ -1,0 +1,96 @@
+T=180. FASE D: 80653 unidades, 260 dias, meses ['2025-04', '2025-05', '2025-06', '2025-07', '2025-08', '2025-09', '2025-10', '2025-11', '2025-12']
+FASE T: 60002 unidades, 171 dias, bloques ['2025-12T', '2026-01', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08']; RECIENTE: 7562 unidades, 30 dias
+
+== (a) AUC_strat OOS por modelo (D | T | RECIENTE; CON-solo en T) ==
+  M1   D 0.5162 | T 0.5098 | REC 0.5048 | T-CON 0.4730 T-CONTRA 0.5547
+  M2   D 0.5102 | T 0.5058 | REC 0.4835 | T-CON 0.4859 T-CONTRA 0.5301
+  M3   D 0.5122 | T 0.4980 | REC 0.5147 | T-CON 0.4807 T-CONTRA 0.5192
+  M4   D 0.5199 | T 0.5035 | REC 0.4937 | T-CON 0.4961 T-CONTRA 0.5125
+  M5   D 0.5127 | T 0.5031 | REC 0.5077 | T-CON 0.4909 T-CONTRA 0.5180
+  M6   D 0.5136 | T 0.5050 | REC 0.4984 | T-CON 0.4688 T-CONTRA 0.5491
+  M7   D 0.5035 | T 0.4915 | REC 0.4919 | T-CON 0.4926 T-CONTRA 0.4903
+  M8   D 0.5146 | T 0.5080 | REC 0.5069 | T-CON 0.4859 T-CONTRA 0.5348
+  M9   D 0.5220 | T 0.5020 | REC 0.5047 | T-CON 0.4900 T-CONTRA 0.5166
+  M10  D 0.5463 | T 0.5444 | REC 0.5555 | T-CON 0.5339 T-CONTRA 0.5573
+  M11  D 0.5102 | T 0.5025 | REC 0.5168 | T-CON 0.5511 T-CONTRA 0.4432
+  C0   D 0.5047 | T 0.4907 | REC 0.4992 | T-CON 0.4918 T-CONTRA 0.4893
+  C1   D 0.5061 | T 0.5042 | REC 0.5090 | T-CON 0.4934 T-CONTRA 0.5173
+
+REGLA PREREGISTRADA: modelo* = max AUC_strat en FASE D = M10 (D 0.5463)
+
+== (c) curva exceso de DeltaPnL vs tau (modelo*), FASE D (seleccion de phi*) ==
+  phi 0.10: n  4151 ( 9.8%) dP   +310.8 esp.placebo   +176.6 EXCESO   +134.1 IC90dias (+97.3,+171.3) p_plac 0.000 EVsalt -0.340 dias+ 168/260
+  phi 0.25: n 10372 (24.5%) dP   +635.9 esp.placebo   +438.4 EXCESO   +197.5 IC90dias (+152.7,+245.8) p_plac 0.000 EVsalt -0.277 dias+ 174/260
+  phi 0.50: n 21110 (49.9%) dP  +1089.7 esp.placebo   +876.4 EXCESO   +213.2 IC90dias (+163.0,+267.5) p_plac 0.000 EVsalt -0.237 dias+ 174/260
+phi* = 0.5 (max exceso en D)
+
+
+######## FASE T (TEST): modelo* M10, phi* 0.5 ########
+AUC_strat 0.5444 IC90dias (0.5373,0.5509)  | C1 R-TEND 0.5042 | C0 solo-precio+moneda 0.4907 | C2 inversion 0.4556
+I_det = Delta(tercil inf) - Delta(sup) = -0.5705 (Delta inf -0.5173, sup +0.0532) IC90dias (-0.7832,-0.3671) p2 0.0000 p1 0.0000; PERMUTACION p1 0.0010 (x11 = 0.011) [p bootstrap = liberal, descriptivo]
+   control C1 (I_R TREND-REVERT, mismas unidades): -0.0964 IC90 (-0.1767,-0.0073) p_boot2 0.0800; p_perm1 0.0040
+  por bloque (mes): n | AUC_strat | I_det(cortes del periodo)
+    2025-12T n   3530 dias  14 AUC 0.5654 I_det -1.0007
+    2026-01  n   7238 dias  28 AUC 0.5394 I_det -0.5211
+    2026-03  n   2081 dias   6 AUC 0.5420 I_det -0.6082
+    2026-04  n  11760 dias  30 AUC 0.5269 I_det -0.7449
+    2026-05  n  12109 dias  31 AUC 0.5658 I_det -0.5849
+    2026-06  n  11230 dias  25 AUC 0.5426 I_det -0.4781
+    2026-07  n   7036 dias  20 AUC 0.5486 I_det -0.5650
+    2026-08  n   5018 dias  17 AUC 0.5445 I_det -0.8710
+  meses con I_det<0: 8/8; meses con AUC>=0,60: 0/8
+  por moneda (I_det, p1 una cola):
+    BNB   n   7400 AUC 0.5633 I_det -0.9540 IC90 (-1.422,-0.499) p_perm 0.003
+    BTC   n   9432 AUC 0.5353 I_det -0.3050 IC90 (-0.713,+0.168) p_perm 0.123
+    DOGE  n   9027 AUC 0.5346 I_det -0.1877 IC90 (-0.641,+0.291) p_perm 0.269
+    ETH   n  10723 AUC 0.5536 I_det -0.6133 IC90 (-1.028,-0.185) p_perm 0.013
+    SOL   n  12128 AUC 0.5446 I_det -0.6416 IC90 (-1.102,-0.185) p_perm 0.003
+    XRP   n  11292 AUC 0.5423 I_det -0.7108 IC90 (-1.172,-0.298) p_perm 0.003
+  monedas con I_det<0 y p1<0,10: 4
+  curva exceso vs tau (modelo*):
+    phi 0.10: n  3501 (10.8%) dP   +289.2 esp.placebo   +192.4 EXCESO    +96.8 IC90dias (+63.4,+129.9) p_plac 0.000 EVsalt -0.348 dias+ 108/171
+    phi 0.25: n  8761 (27.1%) dP   +543.0 esp.placebo   +426.7 EXCESO   +116.3 IC90dias (+71.0,+161.2) p_plac 0.000 EVsalt -0.269 dias+ 101/171
+    phi 0.50: n 17063 (52.7%) dP   +918.2 esp.placebo   +790.3 EXCESO   +127.9 IC90dias (+76.4,+182.1) p_plac 0.000 EVsalt -0.242 dias+ 110/171
+  >> phi* 0.5: n 17063 (52.7%) dP   +918.2 esp.placebo   +790.3 EXCESO   +127.9 IC90dias (+76.4,+182.1) p_plac 0.000 EVsalt -0.242 dias+ 110/171
+  INVERSION phi* : n 15285 (47.3%) dP   +394.5 esp.placebo   +522.4 EXCESO   -127.9 IC90dias (-182.1,-76.4) p_plac 1.000 EVsalt -0.150 dias+ 60/171
+  C1 (saltar CON & TREND de R-TEND): n  6589 (20.4%) dP   +227.0 esp.placebo   +259.2 EXCESO    -32.1 IC90dias (-72.1,+9.3) p_plac 0.965 EVsalt -0.174 dias+ 71/171
+  C3 (s_hat permutado dentro de dia x moneda), phi*: n  9896 (30.6%) dP   +464.5 esp.placebo   +403.1 EXCESO    +61.4 IC90dias (+17.4,+104.3) p_plac 0.020 EVsalt -0.234 dias+ 94/171
+  CRITERIOS (1 AUC pooled>=0,60 y >=75% meses; 2 I_det p_x11<0,05; 3 signo>=75% meses; 3b >=2 monedas): {'AUC': False, 'I': np.True_, 'MESES': np.True_, 'MON': True}
+
+
+######## RECIENTE (modelo congelado, proxy): modelo* M10, phi* 0.5 ########
+AUC_strat 0.5555 IC90dias (0.5355,0.5710)  | C1 R-TEND 0.5090 | C0 solo-precio+moneda 0.4992 | C2 inversion 0.4445
+I_det = Delta(tercil inf) - Delta(sup) = -1.0112 (Delta inf -0.7575, sup +0.2537) IC90dias (-1.7683,-0.2906) p2 0.0190 p1 0.0095; PERMUTACION p1 0.0080 (x11 = 0.088) [p bootstrap = liberal, descriptivo]
+   control C1 (I_R TREND-REVERT, mismas unidades): -0.1605 IC90 (-0.3104,-0.0026) p_boot2 0.0920; p_perm1 0.1337
+  por bloque (mes): n | AUC_strat | I_det(cortes del periodo)
+    REC      n   7562 dias  30 AUC 0.5555 I_det -1.0112
+  meses con I_det<0: 1/1; meses con AUC>=0,60: 0/1
+  por moneda (I_det, p1 una cola):
+    BTC   n   1466 AUC 0.5582 I_det -2.4025 IC90 (-3.980,+0.344) p_perm 0.007
+    ETH   n   1813 AUC 0.5592 I_det -0.5417 IC90 (-2.429,+0.861) p_perm 0.120
+    SOL   n   2163 AUC 0.5516 I_det -1.4380 IC90 (-2.923,-0.259) p_perm 0.076
+    XRP   n   2120 AUC 0.5557 I_det -0.4440 IC90 (-1.841,+0.514) p_perm 0.206
+  monedas con I_det<0 y p1<0,10: 2
+  curva exceso vs tau (modelo*):
+    phi 0.10: n   471 (11.9%) dP    +36.6 esp.placebo    +25.6 EXCESO    +11.0 IC90dias (+0.2,+22.5) p_plac 0.060 EVsalt -0.322 dias+ 18/30
+    phi 0.25: n   991 (24.9%) dP    +65.1 esp.placebo    +48.8 EXCESO    +16.4 IC90dias (+4.7,+28.0) p_plac 0.025 EVsalt -0.281 dias+ 23/30
+    phi 0.50: n  1919 (48.3%) dP   +118.0 esp.placebo    +96.1 EXCESO    +21.9 IC90dias (+5.4,+37.9) p_plac 0.020 EVsalt -0.273 dias+ 20/30
+  >> phi* 0.5: n  1919 (48.3%) dP   +118.0 esp.placebo    +96.1 EXCESO    +21.9 IC90dias (+5.4,+37.9) p_plac 0.010 EVsalt -0.273 dias+ 20/30
+  INVERSION phi* : n  2055 (51.7%) dP    +44.2 esp.placebo    +66.1 EXCESO    -21.9 IC90dias (-37.9,-5.4) p_plac 1.000 EVsalt -0.125 dias+ 10/30
+  C1 (saltar CON & TREND de R-TEND): n  1034 (26.0%) dP    +55.5 esp.placebo    +49.2 EXCESO     +6.3 IC90dias (-10.6,+23.6) p_plac 0.260 EVsalt -0.274 dias+ 14/30
+  C3 (s_hat permutado dentro de dia x moneda), phi*: n  1102 (27.7%) dP    +44.1 esp.placebo    +48.0 EXCESO     -4.0 IC90dias (-18.8,+12.7) p_plac 0.670 EVsalt -0.200 dias+ 13/30
+  CRITERIOS (1 AUC pooled>=0,60 y >=75% meses; 2 I_det p_x11<0,05; 3 signo>=75% meses; 3b >=2 monedas): {'AUC': False, 'I': False, 'MESES': np.True_, 'MON': True}
+
+
+== Todos los modelos en FASE T: AUC y I_det (descriptivo) ==
+  M1   AUC_T 0.5098 | I_det +nan IC90 (+nan,+nan) p_boot2 0.000 p_perm1 0.003 x11 0.037
+  M2   AUC_T 0.5058 | I_det +nan IC90 (+nan,+nan) p_boot2 0.000 p_perm1 0.003 x11 0.037
+  M3   AUC_T 0.4980 | I_det +nan IC90 (+nan,+nan) p_boot2 0.000 p_perm1 0.003 x11 0.037
+  M4   AUC_T 0.5035 | I_det +0.4240 IC90 (-0.024,+0.890) p_boot2 0.117 p_perm1 0.864 x11 1.000
+  M5   AUC_T 0.5031 | I_det +nan IC90 (+nan,+nan) p_boot2 0.000 p_perm1 0.003 x11 0.037
+  M6   AUC_T 0.5050 | I_det +nan IC90 (+nan,+nan) p_boot2 0.000 p_perm1 0.003 x11 0.037
+  M7   AUC_T 0.4915 | I_det +nan IC90 (+nan,+nan) p_boot2 0.000 p_perm1 0.003 x11 0.037
+  M8   AUC_T 0.5080 | I_det +nan IC90 (+nan,+nan) p_boot2 0.000 p_perm1 0.003 x11 0.037
+  M9   AUC_T 0.5020 | I_det +0.0426 IC90 (-0.167,+0.224) p_boot2 0.817 p_perm1 0.186 x11 1.000
+  M10  AUC_T 0.5444 | I_det -0.5705 IC90 (-0.790,-0.371) p_boot2 0.000 p_perm1 0.003 x11 0.037
+  M11  AUC_T 0.5025 | I_det -0.0146 IC90 (-0.099,+0.053) p_boot2 0.667 p_perm1 0.066 x11 0.731

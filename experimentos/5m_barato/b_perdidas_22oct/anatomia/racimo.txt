@@ -1,0 +1,30 @@
+Fisher global rellenas 36/166 vs no rellenas 41/109: p=0.0058
+diferencia acierto no_rell - rell IC90 por cierre [0.058 0.256]
+cierres multi 56 mismo lado en todas 50 todo perdido 34 todo ganado 5 mixto 17
+esperado indep: todo perdido 31.6, todo ganado 1.6
+pares intra-cierre 106 corr 0.197
+n efectivo aprox 149.6
+22-Oct >=10:00Z: n 28 gan 3 precio 0.208 P(<=obs) 0.137 pnl -13.67
+sin top0: EV -0.012
+sin top2: EV -0.105
+sin top3: EV -0.147
+sin top5: EV -0.217
+sin 2026-10-20 EV -0.035
+sin 2026-10-21 EV -0.133
+sin 2026-10-22 EV +0.132
+pico 28.26 en pos 55 valle -2.32 final -2.32
+V9 solo 1a posicion por (cierre,lado): veta n=75 coste 79.2 | perdidas evitadas +65.85 | ganancias renunciadas 54.87 (13) | NETO +10.99 | EV vetado -0.139 vs conservado +0.076
+  2026-10-20 neto 5.34 n 14
+  2026-10-21 neto 1.69 n 31
+  2026-10-22 neto 3.96 n 30
+pnl por cierre: p5 -3.57 min -3.8 sd 3.46 n cierres 94
+segundo+ relleno: segundos tras el 1o del mismo cierre-lado: n 75 p10/p25/p50/p75 [ 0.26  4.08 24.87 47.65]  <0,2 s: 7  <1 s: 12  fuente t {'ledger_det': 72, 'onchain_bloque': 3}
+                n  gan    pnl       c     EV
+gapb                                        
+(-1.0, 0.2]     7  1.0 -3.040   8.040 -0.378
+(0.2, 1.0]      5  1.0  2.530   5.470  0.463
+(1.0, 5.0]      8  3.0  3.131   8.674  0.361
+(5.0, 30.0]    23  4.0 -5.848  24.292 -0.241
+(30.0, 400.0]  32  4.0 -7.759  32.759 -0.237
+EV vetado - conservado IC90 por cierre [-0.695  0.312]
+monedas del 2o relleno {'XRP': 26, 'SOL': 26, 'ETH': 23}  1o {'ETH': 45, 'SOL': 31, 'XRP': 24}

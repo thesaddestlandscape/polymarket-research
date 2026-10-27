@@ -1,0 +1,9 @@
+# PREREG R8 (aparte de PREREG.md) — 25-Oct-2026 ~12:35Z. EXPLORATORY. Escrito antes de calcular.
+Pedido del coordinador: tras el primer fill on-chain visible de una PERDEDORA persistente (roster SOLO con dias anteriores) en un mercado-lado, ¿vender el lado barato en los 5-60 s siguientes gana mas que el resto?
+- Datos: f6 T_D (ordenes tomadoras on-chain, 6 monedas, 5m) D=5..23 Oct + 24-Oct (b_sin_flujo/T_2026-10-24). Dias evaluados D=12..24 (hist D-7..D-1 completa). Desenlace oficial (cadena DES de s1); cobertura reportada.
+- Roster(D): tomador con, en D-7..D-1, n>=30 ordenes, >=200 $ de coste y z<=-2, z = Σpnl/sqrt(Σ acc^2 p(1-p)) (pnl a su precio de ejecucion, neto de fee; varianza Bernoulli de cada orden).
+- Evento: primer BUY de una perdedora del roster, en (mercado, lado s) con p<=0,35, en el dia D. t0 = ts on-chain (jitter ~2 s: la ventana empieza en t0+5 s).
+- Ventana de accion W = [t0+5, t0+60]. Posicion = VENDER s (maker) a los precios de los BUY de tomadores (cualquiera, excepto roster del dia) de ese mercado-lado en W (precio p_k, acciones acc_k): pnl = acc_k (p_k - win_s); capital = acc_k (1-p_k); sin fee (maker), rebate no sumado.
+- Control pareado: mismos mercado-lado, BUY de tomadores en la ventana equivalente DESPUES [t0+65, t0+120] y control de mercados SIN evento: mismo lado, mismo tramo de T (misma ventana de segundos desde apertura) y misma banda de p (0,05).
+- Medida: EV ponderado por capital Σpnl/Σcapital; unidad = CIERRE (mercado-lado del evento = 1 observacion); IC90 bootstrap por cierre y por dia; sin 2 mejores dias; placebo = roster barajado (mismos dias, tomadores no-roster con igual n de ordenes) 500 veces; mitades temporales.
+- Gate: n>=40 mercados-evento, >=10 dias, EV_W - EV_control > 0 con IC90 cierre > 0 y por dia > 0, sin 2 mejores dias > 0, placebo p<0,05. Si no cumple: sin senal.

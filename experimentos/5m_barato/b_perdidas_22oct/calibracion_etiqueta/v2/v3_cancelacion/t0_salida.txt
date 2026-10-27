@@ -1,0 +1,7 @@
+ordenes TUNE 1526 objetivo(libro q en t_dec)==precio: 0.894
+no rellenas con cancel 1417 con cambio predicho 1417
+react_todas 1489 pct 5/25/50/75/95 [  -4.   60.  145.  330. 1155.] |react|<=300ms 0.707 <-300 0.017 >1000 0.062
+react_norell 1417 pct 5/25/50/75/95 [  -5.   60.  146.  328. 1130.] |react|<=300ms 0.709 <-300 0.017 >1000 0.061
+post_half [ 37.  94. 346.]
+asentar 1349 [ 1553.  1635.  1757.  2950. 18907.]
+no rellenas: cancel real sin cambio predicho antes del T-60: 0 ; cancel real cerca de T-60 (cie-tci<62s): 1

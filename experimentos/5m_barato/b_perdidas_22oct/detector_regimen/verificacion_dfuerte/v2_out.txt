@@ -1,0 +1,23 @@
+unidades 178522 duplicados coin,tmin: 0
+2025-12T train 110958 test 3530 seg 15
+2026-01 train 114236 test 7238 seg 31
+2026-03 train 121726 test 2081 seg 48
+2026-04 train 123371 test 11760 seg 72
+2026-05 train 135211 test 12109 seg 97
+2026-06 train 147311 test 11230 seg 120
+2026-07 train 158906 test 7036 seg 145
+2026-08 train 165572 test 5018 seg 170
+FASE T n 60002 dias 171
+AUC_strat s_M10: 0.5444 IC90 dias (0.5366,0.5506)
+AUC_strat s_M14: 0.5547 IC90 dias (0.5475,0.5615)
+AUC_strat s_M17: 0.5542 IC90 dias (0.5476,0.5611)
+AUC_strat s_M16: 0.5059 IC90 dias (0.5003,0.5117)
+AUC_strat s_M17perm: 0.4885 IC90 dias (0.4833,0.4935)
+AUC_strat inv_M17: 0.4458 IC90 dias (0.4392,0.4522)
+M17-M14: -0.0006 IC90 dias (-0.0010,-0.0002)
+AUC placebo (score M17 permutado dia x moneda x qb): 0.5092
+AUC por mes M17: {'2025-12T': 0.572, '2026-01': 0.563, '2026-03': 0.536, '2026-04': 0.537, '2026-05': 0.582, '2026-06': 0.548, '2026-07': 0.547, '2026-08': 0.556}
+AUC por mes M14: {'2025-12T': 0.573, '2026-01': 0.563, '2026-03': 0.536, '2026-04': 0.538, '2026-05': 0.582, '2026-06': 0.548, '2026-07': 0.547, '2026-08': 0.556}
+AUC pooled SIN estratificar M17 (informativo): 0.786  qb fino 0.02: 0.5551
+cobertura monedas con perps por src (FASE T): {'backfill': 0.666, 'dic_ene': 1.0}  cuota por moneda: {'SOL': 0.202, 'XRP': 0.188, 'ETH': 0.179, 'BTC': 0.157, 'DOGE': 0.15, 'BNB': 0.123}
+  monedas con perps n=43575: M14 0.5540 M17 0.5535 M16 0.5125

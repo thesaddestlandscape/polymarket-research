@@ -1,0 +1,66 @@
+{
+ "job": "cf_diario",
+ "prereg_sha256": "f48526f98f030901",
+ "sets_sha256": {
+  "I": "1466a608b4e4334d6a377bceebccc0e947c345124a69fc124973d522413a63fb",
+  "V": "ac7d6a0b23706c5d5b1945a9aaf3eadb2b5fcc17add373279ea56182aec77d02"
+ },
+ "ventana": [
+  "2026-10-24",
+  "2026-10-23"
+ ],
+ "generado_utc": "2026-10-24T10:01:59Z",
+ "tag": "",
+ "evaluacion_valida_para_gates": true,
+ "cobertura_B": {
+  "fills_B_ledger_en_ventana": 0,
+  "tx_unicos": 0,
+  "duplicados_tx": 0,
+  "sin_taker": 0,
+  "tx_multi_taker": 0,
+  "pendientes_sin_liquidar": 0,
+  "fills_validos": 0,
+  "coste_validos": 0.0
+ },
+ "B": {
+  "I": {
+   "set": "SET_I",
+   "n_unidades": 0,
+   "estado": "SIN_DATOS",
+   "descriptivo_fill": {
+    "n_fills_flag": 0,
+    "EV_flag": null,
+    "EV_noflag": null,
+    "EXCESO_fill": null
+   },
+   "eta_n40": "indeterminado: B sin fills nuevos desde 2026-10-23T08:56:00Z"
+  },
+  "V": {
+   "set": "SET_V",
+   "n_unidades": 0,
+   "estado": "SIN_DATOS",
+   "descriptivo_fill": {
+    "n_fills_flag": 0,
+    "EV_flag": null,
+    "EV_noflag": null,
+    "EXCESO_fill": null
+   },
+   "eta_n40": "indeterminado: B sin fills nuevos desde 2026-10-23T08:56:00Z"
+  }
+ },
+ "POB": {
+  "I": {
+   "estado": "SIN_DATOS"
+  },
+  "V": {
+   "estado": "SIN_DATOS"
+  },
+  "cobertura": {
+   "dias_esperados": 0,
+   "dias_procesados": 0,
+   "dias_sin_archivo": [],
+   "unidades_sin_desenlace": 0
+  }
+ },
+ "estado_global_B": "BLOCKED_SIN_FLUJO"
+}

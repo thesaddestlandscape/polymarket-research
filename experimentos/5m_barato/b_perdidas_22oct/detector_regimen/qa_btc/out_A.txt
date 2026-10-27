@@ -1,0 +1,79 @@
+dias cargados 2026-10-05 2026-10-23 19 tokens 63300
+cobertura desenlace por dia (T180 lag250 todos tokens):
+dia     2026-10-05  2026-10-06  2026-10-07  2026-10-08  2026-10-09  2026-10-10  2026-10-11  2026-10-12  2026-10-13  2026-10-14  2026-10-15  2026-10-16  2026-10-17  2026-10-18  2026-10-19  2026-10-20  2026-10-21  2026-10-22  2026-10-23
+tok       1200.000    3456.000    3456.000     3456.00    3456.000    3448.000    3452.000    3448.000    3446.000    3438.000    3444.000    3448.000    3456.000    3450.000    3448.000     3450.00    3450.000    3448.000    3450.000
+des          1.000       1.000       1.000        1.00       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000        1.00       1.000       1.000       1.000
+rpre         0.997       0.994       0.997        1.00       0.995       0.956       0.962       0.999       0.999       1.000       1.000       0.999       0.986       1.000       0.999        1.00       1.000       0.993       1.000
+vivo         0.932       0.973       0.984        0.97       0.983       0.983       0.969       0.970       0.962       0.965       0.966       0.969       0.970       0.975       0.972        0.97       0.977       0.974       0.968
+ask_ok       0.950       1.000       1.000        1.00       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000        1.00       1.000       1.000       1.000
+
+## ALTS ETH/SOL/XRP (reproduccion P-REAL) [2026-10-05..2026-10-21] unidades U1 4597, dias 17, cierres 2987, coste 892, EV/EUR todas -0.0367; ask medio 0.184; CON 1510 CONTRA 1518 NEU 1569
+  H1 Delta: n CON 1510 CONTRA 1518 (cierres 2172, dias 17) EV(CON) -0.159 EV(CONTRA) +0.075 Delta -0.234 IC90cierre (-0.365,-0.100) IC90dia (-0.360,-0.111)
+      dias Delta<0 14/17, >0 3/17; sin 2 dias mas negativos -0.161; sin 2 dias mas positivos -0.307
+  [ALTS ETH/SOL/XRP (reproduccion P-REAL)] placebo de ventana (rpre permutado dentro de dia x moneda, 500 perm): Delta obs -0.234; media perm +0.003; p(Delta_perm<=obs) 0.000; p(Delta_perm>=obs) 1.000
+  [ALTS ETH/SOL/XRP (reproduccion P-REAL)] R0 CON: n saltadas 1510 (coste 291) EV saltadas -0.159; dP=-PnL saltadas +46.4 (x5 acc +232) IC90cierre (+19.5,+71.3); placebo media +9.8, p(dP_perm>=obs) 0.002 p(<=obs) 0.998; dias dP>0 16/17; sin 2 mejores dias +33.9
+        EV/EUR todo -0.037 -> retenido +0.023 (dEV +0.059, retiene 67 % del EUR)
+  [ALTS ETH/SOL/XRP (reproduccion P-REAL)] R1 CON&TREND: n saltadas 370 (coste 71) EV saltadas -0.314; dP=-PnL saltadas +22.4 (x5 acc +112) IC90cierre (+11.2,+33.3); placebo media +11.6, p(dP_perm>=obs) 0.022 p(<=obs) 0.978; dias dP>0 15/17; sin 2 mejores dias +16.6
+        EV/EUR todo -0.037 -> retenido -0.013 (dEV +0.024, retiene 92 % del EUR)
+  [ALTS ETH/SOL/XRP (reproduccion P-REAL)] R2 CON&(TREND|MIXTO): n saltadas 1073 (coste 207) EV saltadas -0.232; dP=-PnL saltadas +48.0 (x5 acc +240) IC90cierre (+27.1,+68.4); placebo media +11.7, p(dP_perm>=obs) 0.000 p(<=obs) 1.000; dias dP>0 16/17; sin 2 mejores dias +36.3
+        EV/EUR todo -0.037 -> retenido +0.022 (dEV +0.059, retiene 77 % del EUR)
+  [ALTS ETH/SOL/XRP (reproduccion P-REAL)] inversion R0 (saltar CONTRA, n 1518): dP -22.1; EV retenido -0.092
+
+## ALTS 22-23 Oct (OOS nuevo) [2026-10-22..2026-10-23] unidades U1 571, dias 2, cierres 365, coste 110, EV/EUR todas +0.0561; ask medio 0.182; CON 205 CONTRA 208 NEU 158
+  H1 Delta: n CON 205 CONTRA 208 (cierres 295, dias 2) EV(CON) +0.185 EV(CONTRA) +0.017 Delta +0.167 IC90cierre (-0.221,+0.575) IC90dia (+0.082,+0.289)
+      dias Delta<0 0/2, >0 2/2; sin 2 dias mas negativos +nan; sin 2 dias mas positivos +nan
+  [ALTS 22-23 Oct (OOS nuevo)] placebo de ventana (rpre permutado dentro de dia x moneda, 1000 perm): Delta obs +0.167; media perm -0.026; p(Delta_perm<=obs) 0.823; p(Delta_perm>=obs) 0.177
+  [ALTS 22-23 Oct (OOS nuevo)] R0 CON: n saltadas 205 (coste 39) EV saltadas +0.185; dP=-PnL saltadas -7.2 (x5 acc -36) IC90cierre (-19.7,+4.3); placebo media -1.6, p(dP_perm>=obs) 0.895 p(<=obs) 0.105; dias dP>0 0/2; sin 2 mejores dias +0.0
+        EV/EUR todo +0.056 -> retenido -0.014 (dEV -0.070, retiene 65 % del EUR)
+  [ALTS 22-23 Oct (OOS nuevo)] R1 CON&TREND: n saltadas 28 (coste 5) EV saltadas +0.118; dP=-PnL saltadas -0.6 (x5 acc -3) IC90cierre (-4.4,+3.0); placebo media -1.7, p(dP_perm>=obs) 0.256 p(<=obs) 0.744; dias dP>0 1/2; sin 2 mejores dias +0.0
+        EV/EUR todo +0.056 -> retenido +0.053 (dEV -0.003, retiene 95 % del EUR)
+  [ALTS 22-23 Oct (OOS nuevo)] R2 CON&(TREND|MIXTO): n saltadas 125 (coste 23) EV saltadas +0.418; dP=-PnL saltadas -9.7 (x5 acc -49) IC90cierre (-19.8,-0.1); placebo media -3.4, p(dP_perm>=obs) 0.961 p(<=obs) 0.039; dias dP>0 0/2; sin 2 mejores dias +0.0
+        EV/EUR todo +0.056 -> retenido -0.041 (dEV -0.097, retiene 79 % del EUR)
+  [ALTS 22-23 Oct (OOS nuevo)] inversion R0 (saltar CONTRA, n 208): dP -0.7; EV retenido +0.078
+
+## ALTS 05-23 [2026-10-05..2026-10-23] unidades U1 5168, dias 19, cierres 3352, coste 1002, EV/EUR todas -0.0265; ask medio 0.184; CON 1715 CONTRA 1726 NEU 1727
+  H1 Delta: n CON 1715 CONTRA 1726 (cierres 2467, dias 19) EV(CON) -0.119 EV(CONTRA) +0.068 Delta -0.187 IC90cierre (-0.308,-0.062) IC90dia (-0.309,-0.071)
+      dias Delta<0 14/19, >0 5/19; sin 2 dias mas negativos -0.117; sin 2 dias mas positivos -0.248
+  [ALTS 05-23] placebo de ventana (rpre permutado dentro de dia x moneda, 1000 perm): Delta obs -0.187; media perm +0.001; p(Delta_perm<=obs) 0.003; p(Delta_perm>=obs) 0.997
+  [ALTS 05-23] R0 CON: n saltadas 1715 (coste 330) EV saltadas -0.119; dP=-PnL saltadas +39.2 (x5 acc +196) IC90cierre (+11.3,+66.9); placebo media +8.4, p(dP_perm>=obs) 0.004 p(<=obs) 0.996; dias dP>0 16/19; sin 2 mejores dias +26.7
+        EV/EUR todo -0.027 -> retenido +0.019 (dEV +0.045, retiene 67 % del EUR)
+  [ALTS 05-23] R1 CON&TREND: n saltadas 398 (coste 77) EV saltadas -0.284; dP=-PnL saltadas +21.8 (x5 acc +109) IC90cierre (+9.7,+33.1); placebo media +10.0, p(dP_perm>=obs) 0.015 p(<=obs) 0.985; dias dP>0 16/19; sin 2 mejores dias +16.0
+        EV/EUR todo -0.027 -> retenido -0.005 (dEV +0.021, retiene 92 % del EUR)
+  [ALTS 05-23] R2 CON&(TREND|MIXTO): n saltadas 1198 (coste 230) EV saltadas -0.166; dP=-PnL saltadas +38.3 (x5 acc +192) IC90cierre (+15.3,+60.4); placebo media +8.4, p(dP_perm>=obs) 0.000 p(<=obs) 1.000; dias dP>0 16/19; sin 2 mejores dias +26.6
+        EV/EUR todo -0.027 -> retenido +0.015 (dEV +0.042, retiene 77 % del EUR)
+  [ALTS 05-23] inversion R0 (saltar CONTRA, n 1726): dP -22.8; EV retenido -0.074
+
+## BTC 05-21 (P-REAL) [2026-10-05..2026-10-21] unidades U1 1591, dias 17, cierres 1591, coste 309, EV/EUR todas -0.0107; ask medio 0.184; CON 410 CONTRA 394 NEU 787
+  H1 Delta: n CON 410 CONTRA 394 (cierres 804, dias 17) EV(CON) +0.043 EV(CONTRA) -0.185 Delta +0.228 IC90cierre (+0.007,+0.448) IC90dia (+0.021,+0.441)
+      dias Delta<0 7/17, >0 10/17; sin 2 dias mas negativos +0.325; sin 2 dias mas positivos +0.171
+  [BTC 05-21 (P-REAL)] placebo de ventana (rpre permutado dentro de dia x moneda, 1000 perm): Delta obs +0.228; media perm +0.020; p(Delta_perm<=obs) 0.932; p(Delta_perm>=obs) 0.068
+  [BTC 05-21 (P-REAL)] R0 CON: n saltadas 410 (coste 80) EV saltadas +0.043; dP=-PnL saltadas -3.4 (x5 acc -17) IC90cierre (-16.5,+9.2); placebo media -1.2, p(dP_perm>=obs) 0.626 p(<=obs) 0.374; dias dP>0 5/17; sin 2 mejores dias -8.7
+        EV/EUR todo -0.011 -> retenido -0.029 (dEV -0.019, retiene 74 % del EUR)
+  [BTC 05-21 (P-REAL)] R1 CON&TREND: n saltadas 123 (coste 24) EV saltadas +0.057; dP=-PnL saltadas -1.3 (x5 acc -7) IC90cierre (-8.8,+5.2); placebo media +1.2, p(dP_perm>=obs) 0.815 p(<=obs) 0.185; dias dP>0 9/17; sin 2 mejores dias -4.1
+        EV/EUR todo -0.011 -> retenido -0.016 (dEV -0.006, retiene 92 % del EUR)
+  [BTC 05-21 (P-REAL)] R2 CON&(TREND|MIXTO): n saltadas 315 (coste 60) EV saltadas +0.009; dP=-PnL saltadas -0.6 (x5 acc -3) IC90cierre (-12.2,+10.5); placebo media -0.7, p(dP_perm>=obs) 0.494 p(<=obs) 0.506; dias dP>0 6/17; sin 2 mejores dias -5.5
+        EV/EUR todo -0.011 -> retenido -0.016 (dEV -0.005, retiene 80 % del EUR)
+  [BTC 05-21 (P-REAL)] inversion R0 (saltar CONTRA, n 394): dP +14.3; EV retenido +0.048
+
+## BTC 22-23 Oct (OOS nuevo) [2026-10-22..2026-10-23] unidades U1 180, dias 2, cierres 180, coste 36, EV/EUR todas -0.2326; ask medio 0.192; CON 50 CONTRA 48 NEU 82
+  H1 Delta: n CON 50 CONTRA 48 (cierres 98, dias 2) EV(CON) +0.196 EV(CONTRA) -0.266 Delta +0.462 IC90cierre (-0.155,+1.077) IC90dia (+0.419,+0.502)
+      dias Delta<0 0/2, >0 2/2; sin 2 dias mas negativos +nan; sin 2 dias mas positivos +nan
+  [BTC 22-23 Oct (OOS nuevo)] placebo de ventana (rpre permutado dentro de dia x moneda, 1000 perm): Delta obs +0.462; media perm +0.026; p(Delta_perm<=obs) 0.905; p(Delta_perm>=obs) 0.095
+  [BTC 22-23 Oct (OOS nuevo)] R0 CON: n saltadas 50 (coste 11) EV saltadas +0.196; dP=-PnL saltadas -2.1 (x5 acc -11) IC90cierre (-7.3,+2.7); placebo media +2.3, p(dP_perm>=obs) 0.978 p(<=obs) 0.022; dias dP>0 0/2; sin 2 mejores dias +0.0
+        EV/EUR todo -0.233 -> retenido -0.414 (dEV -0.182, retiene 70 % del EUR)
+  [BTC 22-23 Oct (OOS nuevo)] R1 CON&TREND: n 6 (<20)
+  [BTC 22-23 Oct (OOS nuevo)] R2 CON&(TREND|MIXTO): n saltadas 26 (coste 5) EV saltadas +0.107; dP=-PnL saltadas -0.6 (x5 acc -3) IC90cierre (-4.4,+2.9); placebo media +0.9, p(dP_perm>=obs) 0.812 p(<=obs) 0.188; dias dP>0 0/2; sin 2 mejores dias +0.0
+        EV/EUR todo -0.233 -> retenido -0.292 (dEV -0.059, retiene 85 % del EUR)
+  [BTC 22-23 Oct (OOS nuevo)] inversion R0 (saltar CONTRA, n 48): dP +2.5; EV retenido -0.221
+
+## BTC 05-23 [2026-10-05..2026-10-23] unidades U1 1771, dias 19, cierres 1771, coste 346, EV/EUR todas -0.0341; ask medio 0.185; CON 460 CONTRA 442 NEU 869
+  H1 Delta: n CON 460 CONTRA 442 (cierres 902, dias 19) EV(CON) +0.061 EV(CONTRA) -0.194 Delta +0.256 IC90cierre (+0.059,+0.474) IC90dia (+0.060,+0.449)
+      dias Delta<0 7/19, >0 12/19; sin 2 dias mas negativos +0.342; sin 2 dias mas positivos +0.206
+  [BTC 05-23] placebo de ventana (rpre permutado dentro de dia x moneda, 1000 perm): Delta obs +0.256; media perm +0.029; p(Delta_perm<=obs) 0.945; p(Delta_perm>=obs) 0.055
+  [BTC 05-23] R0 CON: n saltadas 460 (coste 90) EV saltadas +0.061; dP=-PnL saltadas -5.6 (x5 acc -28) IC90cierre (-19.7,+8.8); placebo media +0.7, p(dP_perm>=obs) 0.814 p(<=obs) 0.186; dias dP>0 5/19; sin 2 mejores dias -10.8
+        EV/EUR todo -0.034 -> retenido -0.068 (dEV -0.034, retiene 74 % del EUR)
+  [BTC 05-23] R1 CON&TREND: n saltadas 129 (coste 25) EV saltadas +0.089; dP=-PnL saltadas -2.2 (x5 acc -11) IC90cierre (-9.7,+4.9); placebo media +1.4, p(dP_perm>=obs) 0.885 p(<=obs) 0.115; dias dP>0 9/19; sin 2 mejores dias -5.0
+        EV/EUR todo -0.034 -> retenido -0.044 (dEV -0.010, retiene 93 % del EUR)
+  [BTC 05-23] R2 CON&(TREND|MIXTO): n saltadas 341 (coste 66) EV saltadas +0.017; dP=-PnL saltadas -1.2 (x5 acc -6) IC90cierre (-13.1,+10.1); placebo media +0.2, p(dP_perm>=obs) 0.595 p(<=obs) 0.405; dias dP>0 6/19; sin 2 mejores dias -6.0
+        EV/EUR todo -0.034 -> retenido -0.046 (dEV -0.012, retiene 81 % del EUR)
+  [BTC 05-23] inversion R0 (saltar CONTRA, n 442): dP +16.9; EV retenido +0.020

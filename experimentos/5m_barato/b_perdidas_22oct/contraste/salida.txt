@@ -1,0 +1,168 @@
+PREREG hash coincide: True
+
+==================== I2 CINTA (datos/sim, 9-21 Oct) -- V9
+mercados 10706 cotizados 10665 rellenos 9334 (tasa 0.875) dias 13 EV base -0.173 acierto relleno 0.199
+--- I2 V9 primario k>=k1+2 (gap>=5 s): n=9334 vetados=4019 (43.1%) coste=11227.4 coste_vetado=4588.6 retiene 59.1% del coste
+    EV_todos -0.173 | EV_retenido -0.146 EV_vetado -0.212 Delta +0.066 | neto +973.65 (sin 2 mejores dias +706.10)
+    IC90 Delta por dia (+0.016,+0.114) por cierre (+0.012,+0.117) n_cierres=3548 | IC90 neto por dia (+747.59,+1185.30) por cierre (+736.58,+1202.60)
+    placebo estricto: neto medio +1473.52 p95 +1561.25 p=1.0000 neto sobre placebo -499.87 | simple: media +837.38 p=0.0780
+    dias Delta>0: 9/13 | <=19-Oct: n=8278 nv=3558 Delta +0.072 neto +900.40
+    por dia: 10-09:D+0.10/net+85.8/v333 10-10:D-0.10/net+22.1/v295 10-11:D+0.16/net+81.2/v316 10-12:D+0.11/net+86.8/v343 10-13:D+0.17/net+126.2/v323 10-14:D-0.07/net+20.4/v336 10-15:D+0.12/net+103.5/v346 10-16:D+0.02/net+51.6/v298 10-17:D+0.11/net+94.0/v314 10-18:D-0.01/net+87.4/v344 10-19:D+0.18/net+141.3/v310 10-20:D-0.10/net+20.9/v339 10-21:D+0.32/net+52.3/v122
+--- I2 V9 secundario k>=k1+1: n=9334 vetados=4602 (49.3%) coste=11227.4 coste_vetado=5275.8 retiene 53.0% del coste
+    EV_todos -0.173 | EV_retenido -0.147 EV_vetado -0.202 Delta +0.055 | neto +1065.75 (sin 2 mejores dias +751.80)
+    IC90 Delta por dia (+0.008,+0.107) por cierre (+0.006,+0.103) n_cierres=3548 | IC90 neto por dia (+845.20,+1306.48) por cierre (+826.27,+1305.92)
+    placebo estricto: neto medio +1602.54 p95 +1692.61 p=1.0000 neto sobre placebo -536.79 | simple: media +957.27 p=0.1334
+    dias Delta>0: 8/13 | <=19-Oct: n=8278 nv=4070 Delta +0.047 neto +951.65
+    por dia: 10-09:D+0.05/net+88.2/v398 10-10:D-0.07/net+35.7/v344 10-11:D+0.14/net+83.2/v358 10-12:D+0.07/net+84.2/v384 10-13:D+0.25/net+158.4/v366 10-14:D-0.05/net+31.0/v375 10-15:D-0.01/net+84.8/v396 10-16:D-0.05/net+44.0/v354 10-17:D+0.12/net+103.9/v349 10-18:D-0.09/net+82.8/v390 10-19:D+0.17/net+155.5/v356 10-20:D+0.01/net+51.1/v387 10-21:D+0.37/net+63.0/v145
+
+==================== I3 SIMV2 libro real (17-21 Oct) -- V3 y V9
+mercados 4311 cotizados 4311 rellenos 3269 (tasa 0.758) EV base -0.146  [referencia del informe SA para replicar: EV -0,146, tasa 0,76]  spread NaN en el paso de relleno: 0
+--- I3 V9 primario k>=k1+2: n=3269 vetados=1293 (39.6%) coste=3599.9 coste_vetado=1335.2 retiene 62.9% del coste
+    EV_todos -0.146 | EV_retenido -0.126 EV_vetado -0.180 Delta +0.054 | neto +240.20 (sin 2 mejores dias +95.55)
+    IC90 Delta por dia (-0.032,+0.151) por cierre (-0.041,+0.155) n_cierres=1391 | IC90 neto por dia (+87.05,+344.35) por cierre (+109.77,+367.56)
+    placebo estricto: neto medio +412.20 p95 +461.27 p=1.0000 neto sobre placebo -172.00 | simple: media +207.43 p=0.2794
+    dias Delta>0: 4/5 | <=19-Oct: n=1957 nv=771 Delta +0.056 neto +208.80
+    por dia: 10-17:D+0.10/net+64.2/v238 10-18:D+0.02/net+71.4/v275 10-19:D+0.05/net+73.2/v258 10-20:D-0.14/net-19.2/v279 10-21:D+0.26/net+50.6/v243
+--- I3 V9 secundario k>=k1+1: n=3269 vetados=1486 (45.5%) coste=3599.9 coste_vetado=1540.2 retiene 57.2% del coste
+    EV_todos -0.146 | EV_retenido -0.136 EV_vetado -0.159 Delta +0.023 | neto +245.20 (sin 2 mejores dias +82.65)
+    IC90 Delta por dia (-0.057,+0.106) por cierre (-0.071,+0.117) n_cierres=1391 | IC90 neto por dia (+101.35,+376.50) por cierre (+110.49,+378.26)
+    placebo estricto: neto medio +446.07 p95 +495.90 p=1.0000 neto sobre placebo -200.87 | simple: media +239.31 p=0.4443
+    dias Delta>0: 3/5 | <=19-Oct: n=1957 nv=887 Delta +0.034 neto +226.50
+    por dia: 10-17:D+0.06/net+64.0/v273 10-18:D-0.01/net+76.5/v317 10-19:D+0.06/net+86.0/v297 10-20:D-0.16/net-22.4/v313 10-21:D+0.18/net+41.1/v286
+--- I3 V3 particion por relleno (spread en el paso de relleno > 0,02): n=3269 vetados=474 (14.5%) coste=3599.9 coste_vetado=526.4 retiene 85.4% del coste
+    EV_todos -0.146 | EV_retenido -0.159 EV_vetado -0.069 Delta -0.090 | neto +36.40 (sin 2 mejores dias -28.35)
+    IC90 Delta por dia (-0.232,+0.092) por cierre (-0.235,+0.055) n_cierres=1391 | IC90 neto por dia (-42.15,+153.15) por cierre (-35.70,+108.85)
+    placebo estricto: neto medio +76.31 p95 +137.22 p=0.8661 neto sobre placebo -39.91 | simple: media +76.29 p=0.8461
+    dias Delta>0: 1/5 | <=19-Oct: n=1957 nv=274 Delta -0.028 neto +60.75
+    por dia: 10-17:D-0.10/net+9.1/v76 10-18:D+0.25/net+55.6/v115 10-19:D-0.33/net-4.0/v83 10-20:D-0.17/net-14.6/v101 10-21:D-0.14/net-9.8/v99
+RE-SIM V3 puerta por paso: cotizados 4225 (base 4311) rellenos 3015 (base 3269) | PnL -551.15 vs base -524.85 => cambio -26.30 EUR | EV -0.168 vs -0.146 | celdas con spread NaN (no vetadas): 0
+    placebo (filas de spread barajadas por dia-moneda): cambio medio +34.60 p95 +80.65  p(placebo>=real)=0.9795  cambio sobre placebo -60.90
+    por dia (PnL base -> puerta, n base -> n puerta): 10-17:-134.5->-141.3(628->584) 10-18:-173.5->-140.6(663->596) 10-19:-180.1->-200.7(666->614) 10-20:-13.3->-26.6(660->610) 10-21:-23.5->-42.1(652->611)
+RE-SIM V3 puerta de MERCADO (spread en la 1a cotizacion): mercados cotizados 3253/4311 rellenos 2574 PnL -340.10 vs -524.85 (cambio +184.75) EV -0.119
+    pujas (cotizadas) spread<=0,02: n=3253 rellenan 0.791 acierto de todas 0.278 acierto rellenadas 0.195 no rellenadas 0.589 EV_si_siempre_rellena +0.110
+    pujas (cotizadas) spread>0,02: n=1058 rellenan 0.657 acierto de todas 0.279 acierto rellenadas 0.161 no rellenadas 0.504 EV_si_siempre_rellena +0.125
+
+==================== I4 POBLACION units (9-21 Oct) -- V9 (decisor = maker)
+unidades 113918 EUR 110069 dias 13 EV +0.025 makers 723 grupos 99017 ts NaN 0
+grupos con >=2 unidades (otras monedas, mismo maker/cierre/lado): 13270 ; unidades en ellos 28171
+--- I4 V9 L=3 s (PRIMARIO): n=113918 vetados=13453 (11.8%) coste=110068.9 coste_vetado=12269.0 retiene 88.9% del coste
+    EV_todos +0.025 | EV_retenido +0.023 EV_vetado +0.041 Delta -0.017 | neto -499.23 (sin 2 mejores dias -864.68)
+    IC90 Delta por dia (-0.068,+0.032) por cierre (-0.060,+0.026) n_cierres=3576 | IC90 neto por dia (-1273.36,+285.36) por cierre (-1197.73,+171.58)
+    placebo estricto: neto medio +793.40 p95 +970.14 p=1.0000 neto sobre placebo -1292.63 | simple: media -375.20 p=0.7221
+    dias Delta>0: 5/13 | <=19-Oct: n=101712 nv=12274 Delta -0.010 neto -429.11
+    por dia: 10-09:D+0.07/net-52.3/v1590 10-10:D-0.16/net-210.6/v1113 10-11:D+0.05/net+75.9/v1307 10-12:D-0.07/net-167.2/v1296 10-13:D+0.16/net+187.9/v1350 10-14:D-0.14/net-251.8/v1072 10-15:D-0.08/net-152.8/v1136 10-16:D-0.04/net-63.7/v1048 10-17:D-0.00/net-9.9/v719 10-18:D-0.04/net+38.0/v791 10-19:D+0.17/net+177.5/v852 10-20:D-0.16/net-85.1/v894 10-21:D+0.11/net+15.0/v285
+    gaps (s) de unidades posteriores al 1o: n=14240 p10/25/50/75/90 [4.5, 13.4, 37.2, 79.3, 127.5]
+--- I4 V9 L=1 s (sens.): n=113918 vetados=14240 (12.5%) coste=110068.9 coste_vetado=13050.8 retiene 88.1% del coste
+    EV_todos +0.025 | EV_retenido +0.022 EV_vetado +0.048 Delta -0.025 | neto -621.58 (sin 2 mejores dias -1024.34)
+    IC90 Delta por dia (-0.073,+0.028) por cierre (-0.065,+0.017) n_cierres=3576 | IC90 neto por dia (-1436.41,+254.37) por cierre (-1332.19,+98.22)
+    placebo estricto: neto medio +717.42 p95 +903.65 p=1.0000 neto sobre placebo -1339.00 | simple: media -395.79 p=0.8543
+    dias Delta>0: 5/13 | <=19-Oct: n=101712 nv=13003 Delta -0.017 neto -538.33
+    por dia: 10-09:D+0.06/net-66.5/v1660 10-10:D-0.17/net-224.8/v1152 10-11:D+0.01/net+39.9/v1370 10-12:D-0.07/net-184.8/v1368 10-13:D+0.16/net+203.1/v1437 10-14:D-0.16/net-293.2/v1160 10-15:D-0.10/net-179.6/v1207 10-16:D-0.05/net-82.5/v1120 10-17:D-0.00/net-11.6/v772 10-18:D-0.01/net+62.0/v838 10-19:D+0.18/net+199.7/v919 10-20:D-0.16/net-91.0/v937 10-21:D+0.08/net+7.8/v300
+--- I4 V9 L=5 s (sens.): n=113918 vetados=12609 (11.1%) coste=110068.9 coste_vetado=11469.8 retiene 89.6% del coste
+    EV_todos +0.025 | EV_retenido +0.022 EV_vetado +0.050 Delta -0.028 | neto -578.36 (sin 2 mejores dias -869.73)
+    IC90 Delta por dia (-0.078,+0.018) por cierre (-0.073,+0.015) n_cierres=3576 | IC90 neto por dia (-1330.93,+110.18) por cierre (-1282.58,+82.63)
+    placebo estricto: neto medio +694.40 p95 +875.57 p=1.0000 neto sobre placebo -1272.76 | simple: media -345.18 p=0.8663
+    dias Delta>0: 6/13 | <=19-Oct: n=101712 nv=11503 Delta -0.022 neto -513.78
+    por dia: 10-09:D+0.07/net-48.0/v1499 10-10:D-0.18/net-215.4/v1050 10-11:D+0.03/net+51.3/v1232 10-12:D-0.07/net-161.2/v1218 10-13:D+0.13/net+150.7/v1267 10-14:D-0.17/net-263.6/v991 10-15:D-0.07/net-138.9/v1057 10-16:D-0.04/net-58.4/v982 10-17:D+0.01/net-2.5/v677 10-18:D-0.04/net+31.6/v746 10-19:D+0.13/net+140.6/v784 10-20:D-0.15/net-79.3/v839 10-21:D+0.11/net+14.7/v267
+I4 latencia (cuota de coste de unidades posteriores con gap>=L): {'cost_share_gap_ge_0.5': 1.0, 'cost_share_gap_ge_1': 1.0, 'cost_share_gap_ge_3': 0.9400930401362668, 'cost_share_gap_ge_5': 0.8788618149109303}
+
+==================== I4b POBLACION ms_units (17-21 Oct) -- V3
+unidades con spread 36116 (excluidas por spread NaN: 9) EV -0.042
+--- I4b V3 particion (spread en el relleno > 0,02): n=36116 vetados=4266 (11.8%) coste=34551.9 coste_vetado=4050.2 retiene 88.3% del coste
+    EV_todos -0.042 | EV_retenido -0.048 EV_vetado +0.007 Delta -0.055 | neto -27.18 (sin 2 mejores dias -169.23)
+    IC90 Delta por dia (-0.111,+0.019) por cierre (-0.153,+0.035) n_cierres=1272 | IC90 neto por dia (-285.80,+262.90) por cierre (-443.24,+361.46)
+    placebo estricto: neto medio +114.87 p95 +289.12 p=0.9105 neto sobre placebo -142.05 | simple: media +172.34 p=0.9645
+    dias Delta>0: 2/5 | <=19-Oct: n=23910 nv=2848 Delta -0.061 neto +6.68
+    por dia: 10-17:D-0.12/net-95.4/v862 10-18:D+0.04/net+123.2/v1084 10-19:D-0.12/net-21.2/v902 10-20:D-0.10/net-52.6/v1043 10-21:D+0.11/net+18.8/v375
+
+==================== I1 B REAL on-chain (DESCRIPTIVO, ORIGEN de las reglas, 20-22 Oct)
+posiciones 175 (en ledger 166, SIN puja_fin 9) PnL -2.32 EV -0.012
+--- I1 V9 L=1 s (PRIMARIO): n=175 vetados=63 (36.0%) coste=193.6 coste_vetado=65.7 retiene 66.1% del coste
+    EV_todos -0.012 | EV_retenido +0.064 EV_vetado -0.159 Delta +0.223 | neto +10.48 (sin 2 mejores dias +0.80)
+    IC90 Delta por dia (-0.036,+0.465) por cierre (-0.277,+0.709) n_cierres=94 | IC90 neto por dia (+6.19,+14.76) por cierre (-19.46,+37.38)
+    placebo estricto: neto medio +21.58 p95 +36.98 p=0.8751 neto sobre placebo -11.11 | simple: media +1.66 p=0.2799
+    dias Delta>0: 2/3 | <=19-Oct: n=0 nv=0 Delta na neto na
+    por dia: 10-20:D+0.19/net+0.8/v10 10-21:D+0.54/net+5.1/v27 10-22:D-0.13/net+4.6/v26
+--- I1 V9 L=0.5 s (sens.): n=175 vetados=66 (37.7%) coste=193.6 coste_vetado=69.0 retiene 64.4% del coste
+    EV_todos -0.012 | EV_retenido +0.027 EV_vetado -0.083 Delta +0.110 | neto +5.72 (sin 2 mejores dias -1.79)
+    IC90 Delta por dia (+0.008,+0.227) por cierre (-0.435,+0.643) n_cierres=94 | IC90 neto por dia (-1.68,+13.11) por cierre (-28.15,+37.91)
+    placebo estricto: neto medio +16.05 p95 +30.05 p=0.8563 neto sobre placebo -10.33 | simple: media +0.60 p=0.3832
+    dias Delta>0: 2/3 | <=19-Oct: n=0 nv=0 Delta na neto na
+    por dia: 10-20:D+0.32/net+1.9/v11 10-21:D+0.17/net-1.8/v28 10-22:D-0.08/net+5.6/v27
+--- I1 V9 L=3 s (sens.): n=175 vetados=58 (33.1%) coste=193.6 coste_vetado=60.7 retiene 68.6% del coste
+    EV_todos -0.012 | EV_retenido +0.112 EV_vetado -0.284 Delta +0.397 | neto +17.26 (sin 2 mejores dias -0.45)
+    IC90 Delta por dia (+0.118,+0.638) por cierre (-0.127,+0.866) n_cierres=94 | IC90 neto por dia (+7.49,+27.02) por cierre (-11.16,+42.09)
+    placebo estricto: neto medio +25.58 p95 +39.79 p=0.8423 neto sobre placebo -8.32 | simple: media +1.72 p=0.1337
+    dias Delta>0: 3/3 | <=19-Oct: n=0 nv=0 Delta na neto na
+    por dia: 10-20:D+0.03/net-0.5/v9 10-21:D+0.79/net+9.3/v24 10-22:D+0.12/net+8.4/v25
+I1 V9 L=0 (reproduccion del informe): vetados 75 neto +10.99 (informe: 75 / +10.99)
+    gaps de los posteriores al 1o: n=75 p10/25/50/75/90 [0.26, 4.08, 24.87, 47.65, 78.48]  cuota del coste con gap>=0,5/1/3 s: 0.870/0.829/0.766 | fuente de t: {'ledger_det': 72, 'onchain_bloque': 3}
+V3 B real: spread_post NaN 0 (de ellas SIN puja_fin: 0)
+--- I1 V3 (excluidas): n=175 vetados=56 (32.0%) coste=193.6 coste_vetado=63.5 retiene 67.2% del coste
+    EV_todos -0.012 | EV_retenido +0.221 EV_vetado -0.489 Delta +0.710 | neto +31.07 (sin 2 mejores dias -2.88)
+    IC90 Delta por dia (+0.097,+1.145) por cierre (+0.215,+1.198) n_cierres=94 | IC90 neto por dia (+6.44,+55.70) por cierre (+9.53,+51.06)
+    placebo estricto: neto medio +0.79 p95 +23.82 p=0.0165 neto sobre placebo +30.28 | simple: media +0.79 p=0.0090
+    dias Delta>0: 2/3 | <=19-Oct: n=0 nv=0 Delta na neto na
+    por dia: 10-20:D-0.35/net-2.9/v7 10-21:D+1.46/net+21.8/v26 10-22:D+0.31/net+12.2/v23
+--- I1 V3 (missing=no vetada): n=175 vetados=56 (32.0%) coste=193.6 coste_vetado=63.5 retiene 67.2% del coste
+    EV_todos -0.012 | EV_retenido +0.221 EV_vetado -0.489 Delta +0.710 | neto +31.07 (sin 2 mejores dias -2.88)
+    IC90 Delta por dia (+0.097,+1.145) por cierre (+0.230,+1.204) n_cierres=94 | IC90 neto por dia (+6.44,+55.70) por cierre (+10.33,+51.88)
+    placebo estricto: neto medio +0.55 p95 +20.59 p=0.0140 neto sobre placebo +30.52 | simple: media +2.29 p=0.0180
+    dias Delta>0: 2/3 | <=19-Oct: n=0 nv=0 Delta na neto na
+    por dia: 10-20:D-0.35/net-2.9/v7 10-21:D+1.46/net+21.8/v26 10-22:D+0.31/net+12.2/v23
+--- I1 V3 (missing=vetada): n=175 vetados=56 (32.0%) coste=193.6 coste_vetado=63.5 retiene 67.2% del coste
+    EV_todos -0.012 | EV_retenido +0.221 EV_vetado -0.489 Delta +0.710 | neto +31.07 (sin 2 mejores dias -2.88)
+    IC90 Delta por dia (+0.097,+1.145) por cierre (+0.238,+1.208) n_cierres=94 | IC90 neto por dia (+6.44,+55.70) por cierre (+10.31,+51.19)
+    placebo estricto: neto medio +1.20 p95 +23.40 p=0.0160 neto sobre placebo +29.87 | simple: media +0.96 p=0.0200
+    dias Delta>0: 2/3 | <=19-Oct: n=0 nv=0 Delta na neto na
+    por dia: 10-20:D-0.35/net-2.9/v7 10-21:D+1.46/net+21.8/v26 10-22:D+0.31/net+12.2/v23
+
+--- I1 POBLACION DE PUJAS (275 pujas del ledger con desenlace gamma)
+pujas 275 rellenas 166 con desenlace 275 spread NaN 0
+    spread<=0,02: pujas 189 rellenan 0.603 acierto rellenas 0.254 (n=114) no rellenas 0.387 (n=75) EV_si_siempre_rellena +0.243
+    spread>0,02: pujas 86 rellenan 0.605 acierto rellenas 0.135 (n=52) no rellenas 0.353 (n=34) EV_si_siempre_rellena -0.112
+V9 sobre pujas: cierres-lado con >=2 pujas 93; pujas en ellos 250
+
+==================== VEREDICTOS segun gate preregistrado
+{
+ "V9": {
+  "I2": {
+   "G1": true,
+   "G2": true,
+   "G3": false,
+   "G4": true,
+   "G5": true,
+   "G6": true
+  },
+  "I4": {
+   "G1": false,
+   "G2": false,
+   "G3": false,
+   "G4": false,
+   "G5": false,
+   "G6": true
+  },
+  "I3_delta_pos": true,
+  "latencia_I1": true,
+  "latencia_I4": true,
+  "veredicto": "NEGATIVO"
+ },
+ "V3": {
+  "I3": {
+   "G1": false,
+   "G2": false,
+   "G3": false,
+   "G4": false,
+   "G5": true
+  },
+  "I4b": {
+   "G1": false,
+   "G2": false,
+   "G3": false,
+   "G4": false,
+   "G5": true
+  },
+  "G6_mismo_signo": true,
+  "veredicto": "NEGATIVO"
+ }
+}

@@ -1,0 +1,112 @@
+PREREG v2 hash coincide: True
+
+===== R0 reproduccion 17-21 Oct
+  2026-10-17 {'n_orig': 863, 'n_nuevo': 863, 'comunes': 863, 'frac_comunes': 1.0, 'celdas_p_iguales': 1.0, 'celdas_minpc_iguales': 1.0, 'mercados_mismo_paso1': 1.0, 'mercados_mismo_spread_puerta': 1.0, 'side_igual': 1.0, 'win_igual': 1.0}
+  2026-10-18 {'n_orig': 863, 'n_nuevo': 862, 'comunes': 862, 'frac_comunes': 0.9988412514484357, 'celdas_p_iguales': 1.0, 'celdas_minpc_iguales': 1.0, 'mercados_mismo_paso1': 1.0, 'mercados_mismo_spread_puerta': 1.0, 'side_igual': 1.0, 'win_igual': 1.0}
+  2026-10-19 {'n_orig': 862, 'n_nuevo': 861, 'comunes': 861, 'frac_comunes': 0.9988399071925754, 'celdas_p_iguales': 1.0, 'celdas_minpc_iguales': 1.0, 'mercados_mismo_paso1': 1.0, 'mercados_mismo_spread_puerta': 1.0, 'side_igual': 1.0, 'win_igual': 1.0}
+  2026-10-20 {'n_orig': 863, 'n_nuevo': 862, 'comunes': 862, 'frac_comunes': 0.9988412514484357, 'celdas_p_iguales': 1.0, 'celdas_minpc_iguales': 1.0, 'mercados_mismo_paso1': 1.0, 'mercados_mismo_spread_puerta': 1.0, 'side_igual': 1.0, 'win_igual': 1.0}
+  2026-10-21 {'n_orig': 860, 'n_nuevo': 859, 'comunes': 859, 'frac_comunes': 0.9988372093023256, 'celdas_p_iguales': 1.0, 'celdas_minpc_iguales': 1.0, 'mercados_mismo_paso1': 1.0, 'mercados_mismo_spread_puerta': 1.0, 'side_igual': 1.0, 'win_igual': 1.0}
+--- I3/R0 puerta de mercado 17-21 (orig): n=3269 vetados=695 (21.3%) en 695/3269 mercados | retiene 79.3% EUR
+    EV base -0.146 | EV retenido -0.119 | EV vetado -0.248 | Delta +0.129 (sin 2 mejores dias +0.038) | neto +184.75 EUR
+    IC90 Delta dia (-0.006,+0.250) cierre (+0.008,+0.244) n_cierres=1391 | IC90 neto dia (+100.9,+278.7)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio -0.006 p=0.0140 | neto medio +110.4 p=0.0240 | neto-placebo +74.3 (sin 2 mejores dias +35.5)
+    dias Delta>0: 4/5 | por dia: 10-17:D+0.20/net+47.0/v121/n628 10-18:D+0.33/net+78.9/v149/n663 10-19:D-0.17/net+16.9/v144/n666 10-20:D+0.16/net+20.8/v130/n660 10-21:D+0.13/net+21.2/v151/n652
+--- I3/R0 puerta de mercado 17-21 (v3m): n=3265 vetados=694 (21.3%) en 694/3265 mercados | retiene 79.3% EUR
+    EV base -0.146 | EV retenido -0.120 | EV vetado -0.247 | Delta +0.128 (sin 2 mejores dias +0.035) | neto +184.00 EUR
+    IC90 Delta dia (-0.000,+0.239) cierre (+0.008,+0.246) n_cierres=1391 | IC90 neto dia (+100.2,+274.0)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio -0.007 p=0.0259 | neto medio +109.3 p=0.0379 | neto-placebo +74.7 (sin 2 mejores dias +36.0)
+    dias Delta>0: 4/5 | por dia: 10-17:D+0.20/net+47.0/v121/n628 10-18:D+0.33/net+78.9/v149/n662 10-19:D-0.17/net+16.1/v143/n665 10-20:D+0.15/net+20.8/v130/n659 10-21:D+0.13/net+21.2/v151/n651
+
+===== I5 simv3m OOS 09-16 Oct (PRIMARIO)
+cobertura: {'2026-10-09': {'simulados': 862, 'cotizados': 862, 'frac_864': 0.9977, 's1_nan': 0}, '2026-10-10': {'simulados': 855, 'cotizados': 855, 'frac_864': 0.9896, 's1_nan': 0}, '2026-10-11': {'simulados': 859, 'cotizados': 859, 'frac_864': 0.9942, 's1_nan': 0}, '2026-10-12': {'simulados': 860, 'cotizados': 860, 'frac_864': 0.9954, 's1_nan': 0}, '2026-10-13': {'simulados': 858, 'cotizados': 858, 'frac_864': 0.9931, 's1_nan': 0}, '2026-10-14': {'simulados': 857, 'cotizados': 857, 'frac_864': 0.9919, 's1_nan': 0}, '2026-10-15': {'simulados': 862, 'cotizados': 862, 'frac_864': 0.9977, 's1_nan': 0}, '2026-10-16': {'simulados': 861, 'cotizados': 861, 'frac_864': 0.9965, 's1_nan': 0}, '_duplicados_eliminados': 2}
+mercados cotizados 6873 rellenos 5359 (tasa 0.780) EV base -0.108; vetados 905 mercados (13.2%); favorables 4638 (67.5%); s1 NaN 0
+    distribucion spread_puerta (mercados): {0.01: 4638, 0.02: 1330, 0.03: 439, 0.04: 177, 0.05: 93, 0.06: 68, 0.07: 43, 0.08: 17, 0.09: 17, 0.1: 12, 0.11: 7, 0.12: 8}
+--- I5 H-V (vetar puerta > 0,02): n=5359 vetados=622 (11.6%) en 622/5359 mercados | retiene 88.6% EUR
+    EV base -0.108 | EV retenido -0.122 | EV vetado -0.001 | Delta -0.120 (sin 2 mejores dias -0.226) | neto +0.80 EUR
+    IC90 Delta dia (-0.240,+0.026) cierre (-0.258,+0.010) n_cierres=2252 | IC90 neto dia (-80.4,+102.1)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio +0.013 p=0.9670 | neto medio +83.1 p=0.9670 | neto-placebo -82.3 (sin 2 mejores dias -110.9)
+    dias Delta>0: 2/8 | por dia: 10-09:D-0.32/net-15.9/v68/n693 10-10:D-0.23/net-9.1/v78/n629 10-11:D+0.43/net+48.7/v81/n650 10-12:D+0.09/net+8.5/v43/n713 10-13:D-0.39/net-8.0/v49/n680 10-14:D-0.15/net-9.8/v72/n670 10-15:D-0.21/net-16.0/v128/n686 10-16:D-0.12/net+2.4/v103/n638
+--- I5 H-F (DeltaF = EV(favorables=0,01) - EV(resto)): n=5359 vetados=1613 (30.1%) en 1613/5359 mercados | retiene 70.1% EUR
+    EV base -0.108 | EV retenido -0.129 | EV vetado -0.060 | Delta -0.069 (sin 2 mejores dias -0.138) | neto +107.50 EUR
+    IC90 Delta dia (-0.161,+0.029) cierre (-0.162,+0.018) n_cierres=2252 | IC90 neto dia (-5.4,+244.1)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio +0.010 p=0.9495 | neto medio +209.1 p=0.9495 | neto-placebo -101.6 (sin 2 mejores dias -135.3)
+    dias Delta>0: 3/8 | por dia: 10-09:D-0.02/net+12.7/v196/n693 10-10:D-0.25/net-16.9/v190/n629 10-11:D+0.19/net+76.5/v206/n650 10-12:D+0.07/net+24.9/v164/n713 10-13:D-0.27/net+5.3/v190/n680 10-14:D+0.08/net+14.4/v197/n670 10-15:D-0.19/net-16.6/v257/n686 10-16:D-0.13/net+7.2/v213/n638
+    EV favorables absoluto: {'n': 3746, 'ev': -0.12854805435014585, 'ic90_dia': (-0.18013120402635924, -0.07898913592096375), 'ic90_cierre': (-0.18239639198056457, -0.07335216775876816), 'dias': 8}
+    cotizadas puerta<=0,02: n=5968 rellenan 0.794 acierto todas 0.279 acierto rellenadas 0.198 no rellenadas 0.591
+    cotizadas puerta>0,02: n=905 rellenan 0.687 acierto todas 0.318 acierto rellenadas 0.220 no rellenadas 0.534
+    cotizadas puerta=0,01: n=4638 rellenan 0.808 acierto todas 0.276 acierto rellenadas 0.196 no rellenadas 0.610
+    I5 ETH: n=1991 vetados 69 Delta -0.412 neto -24.8
+    I5 SOL: n=1873 vetados 179 Delta -0.077 neto -0.3
+    I5 XRP: n=1495 vetados 374 Delta -0.167 neto +26.0
+
+===== I6 poblacion (otros makers) con etiqueta de puerta de MERCADO
+filtros I6 09-16: {'unidades': 77793, 'con_desenlace': 77793, 'en_mercado_con_puerta': 77663, 'mismo_lado': 61806, 'tras_t_puerta': 54006} | EV 0.0641 makers 505
+--- I6 H-V 09-16 (PRIMARIO): n=54006 vetados=4521 (8.4%) en 773/6281 mercados | retiene 91.7% EUR
+    EV base +0.064 | EV retenido +0.050 | EV vetado +0.223 | Delta -0.174 (sin 2 mejores dias -0.308) | neto -937.65 EUR
+    IC90 Delta dia (-0.350,+0.007) cierre (-0.360,-0.001) n_cierres=2300 | IC90 neto dia (-1559.2,-230.5)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio +0.011 p=0.9755 | neto medio -225.4 p=0.9770 | neto-placebo -712.3 (sin 2 mejores dias -893.7)
+    dias Delta>0: 3/8 | por dia: 10-09:D-0.20/net-189.9/v667/n7947 10-10:D-0.43/net-221.8/v529/n6051 10-11:D+0.54/net+223.8/v497/n6608 10-12:D+0.00/net-26.3/v351/n6987 10-13:D-0.80/net-265.9/v410/n6966 10-14:D+0.08/net-74.2/v523/n6569 10-15:D-0.24/net-226.4/v851/n6731 10-16:D-0.27/net-156.9/v693/n6147
+--- I6 H-F 09-16 (DeltaF): n=54006 vetados=12019 (22.3%) en 1965/6281 mercados | retiene 77.9% EUR
+    EV base +0.064 | EV retenido +0.052 | EV vetado +0.107 | Delta -0.055 (sin 2 mejores dias -0.147) | neto -1199.49 EUR
+    IC90 Delta dia (-0.186,+0.079) cierre (-0.163,+0.060) n_cierres=2300 | IC90 neto dia (-2214.3,-69.9)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio +0.011 p=0.8656 | neto medio -625.2 p=0.8656 | neto-placebo -574.3 (sin 2 mejores dias -953.6)
+    dias Delta>0: 3/8 | por dia: 10-09:D-0.07/net-291.7/v1739/n7947 10-10:D-0.36/net-411.7/v1250/n6051 10-11:D+0.23/net+256.4/v1519/n6608 10-12:D+0.23/net+129.1/v1267/n6987 10-13:D-0.24/net-196.8/v1522/n6966 10-14:D+0.26/net-26.3/v1390/n6569 10-15:D-0.19/net-377.4/v1839/n6731 10-16:D-0.27/net-281.1/v1493/n6147
+
+===== SECUNDARIOS (no deciden)
+filtros I6 17-21: {'unidades': 36125, 'con_desenlace': 36125, 'en_mercado_con_puerta': 36069, 'mismo_lado': 29397, 'tras_t_puerta': 25726}
+--- I6 H-V 17-21 (solapado con descubrimiento): n=25726 vetados=3663 (14.2%) en 805/3472 mercados | retiene 86.5% EUR
+    EV base -0.067 | EV retenido -0.055 | EV vetado -0.147 | Delta +0.092 (sin 2 mejores dias -0.012) | neto +466.81 EUR
+    IC90 Delta dia (-0.028,+0.232) cierre (-0.067,+0.249) n_cierres=1266 | IC90 neto dia (+233.4,+871.8)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio -0.062 p=0.0419 | neto medio +44.7 p=0.0419 | neto-placebo +422.1 (sin 2 mejores dias +228.7)
+    dias Delta>0: 4/5 | por dia: 10-17:D+0.02/net+42.4/v772/n5052 10-18:D+0.33/net+258.0/v909/n5740 10-19:D-0.11/net+68.6/v798/n6065 10-20:D+0.06/net+59.8/v783/n6379 10-21:D+0.24/net+38.0/v401/n2490
+--- I6 H-V 09-16 sin restriccion de hora: n=61806 vetados=5059 (8.2%) en 795/6482 mercados | retiene 92.0% EUR
+    EV base +0.070 | EV retenido +0.059 | EV vetado +0.196 | Delta -0.137 (sin 2 mejores dias -0.257) | neto -941.87 EUR
+    IC90 Delta dia (-0.316,+0.026) cierre (-0.305,+0.031) n_cierres=2302 | IC90 neto dia (-1678.7,-203.6)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio +0.019 p=0.9581 | neto medio -254.3 p=0.9581 | neto-placebo -687.6 (sin 2 mejores dias -880.3)
+    dias Delta>0: 3/8 | por dia: 10-09:D-0.15/net-181.6/v738/n9012 10-10:D-0.36/net-248.8/v621/n7188 10-11:D+0.48/net+238.3/v580/n7651 10-12:D+0.00/net-39.6/v373/n8027 10-13:D-0.78/net-298.4/v452/n7922 10-14:D+0.07/net-64.2/v569/n7433 10-15:D-0.25/net-258.1/v949/n7603 10-16:D-0.10/net-89.5/v777/n6970
+--- I6 H-V 09-16 ambos lados, sin hora: n=77663 vetados=6515 (8.4%) en 875/6783 mercados | retiene 91.7% EUR
+    EV base +0.057 | EV retenido +0.050 | EV vetado +0.133 | Delta -0.083 (sin 2 mejores dias -0.179) | neto -826.01 EUR
+    IC90 Delta dia (-0.213,+0.054) cierre (-0.206,+0.048) n_cierres=2303 | IC90 neto dia (-1560.7,-33.9)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio +0.020 p=0.9421 | neto medio -237.9 p=0.9401 | neto-placebo -588.1 (sin 2 mejores dias -847.8)
+    dias Delta>0: 3/8 | por dia: 10-09:D-0.04/net-114.5/v911/n11105 10-10:D-0.35/net-314.0/v858/n9009 10-11:D+0.37/net+225.1/v666/n9588 10-12:D+0.03/net-25.3/v444/n10008 10-13:D-0.54/net-268.9/v576/n10022 10-14:D+0.18/net+22.1/v786/n9554 10-15:D-0.10/net-186.8/v1180/n9509 10-16:D-0.13/net-163.8/v1094/n8868
+--- I5+I3 13 dias (09-21) H-V: n=8624 vetados=1316 (15.3%) en 1316/8624 mercados | retiene 85.1% EUR
+    EV base -0.122 | EV retenido -0.121 | EV vetado -0.129 | Delta +0.008 (sin 2 mejores dias -0.066) | neto +184.80 EUR
+    IC90 Delta dia (-0.112,+0.117) cierre (-0.076,+0.096) n_cierres=3643 | IC90 neto dia (+20.2,+362.4)
+    placebo (etiqueta de mercado barajada en dia-moneda-6h): Delta medio +0.012 p=0.5250 | neto medio +195.2 p=0.5788 | neto-placebo -10.4 (sin 2 mejores dias -53.0)
+    dias Delta>0: 6/13 | por dia: 10-09:D-0.32/net-15.9/v68/n693 10-10:D-0.23/net-9.1/v78/n629 10-11:D+0.43/net+48.7/v81/n650 10-12:D+0.09/net+8.5/v43/n713 10-13:D-0.39/net-8.0/v49/n680 10-14:D-0.15/net-9.8/v72/n670 10-15:D-0.21/net-16.0/v128/n686 10-16:D-0.12/net+2.4/v103/n638 10-17:D+0.20/net+47.0/v121/n628 10-18:D+0.33/net+78.9/v149/n662 10-19:D-0.17/net+16.1/v143/n665 10-20:D+0.15/net+20.8/v130/n659 10-21:D+0.13/net+21.2/v151/n651
+
+===== GATES (PREREG v2 §4-§5)
+{
+ "R0_ok": true,
+ "cobertura_ok": true,
+ "HV": {
+  "I5": {
+   "G1": false,
+   "G2": false,
+   "G3": false,
+   "G4": false,
+   "G5": true,
+   "G6": true,
+   "G7": false
+  },
+  "I6": {
+   "G1": false,
+   "G2": false,
+   "G3": false,
+   "G4": false,
+   "G5": true,
+   "G6": true
+  },
+  "veredicto": "REFUTADA"
+ },
+ "HF": {
+  "gates": {
+   "I5_ev_fav_pos": false,
+   "I5_deltaF": false,
+   "I6_deltaF": false,
+   "n": true
+  },
+  "veredicto": "REFUTADA"
+ },
+ "alfa": 0.0125
+}

@@ -1,0 +1,17 @@
+fills 1737193 W 14451 tomadores distintos 15114 | W: tomadores distintos 2322
+POB top1/top10/top50 tomador % del $: [np.float64(2.2), np.float64(14.8), np.float64(36.4)]
+W top1/top10/top50 tomador % del $: [np.float64(3.5), np.float64(19.3), np.float64(44.6)]
+tomadores con >=20 fills a W y >=20 a otros: 156 | $ a W cubierto 58.0% del $ de W
+DESC W    (mismos tomadores)    n    4212 $    3670 EV -0.007 IC90 (np.float64(-0.25), np.float64(0.2)) hit/p 1.00
+DESC otros (mismos tomadores)   n  296560 $  162275 EV -0.068 IC90 (np.float64(-0.18), np.float64(0.05)) hit/p 1.00
+DESC W    (resto tomadores)     n    3065 $    2805 EV +0.866 IC90 (np.float64(0.58), np.float64(1.17)) hit/p 1.51
+DESC otros (resto tomadores)    n  586285 $  302822 EV +0.132 IC90 (np.float64(0.06), np.float64(0.21)) hit/p 1.07
+HOLD W    (mismos tomadores)    n    3953 $    4127 EV +0.202 IC90 (np.float64(-0.08), np.float64(0.49)) hit/p 1.13
+HOLD otros (mismos tomadores)   n  302383 $  215785 EV -0.060 IC90 (np.float64(-0.22), np.float64(0.11)) hit/p 0.85
+HOLD W    (resto tomadores)     n    3221 $    2851 EV +0.353 IC90 (np.float64(-0.13), np.float64(1.01)) hit/p 1.25
+HOLD otros (resto tomadores)    n  537144 $  286789 EV -0.136 IC90 (np.float64(-0.28), np.float64(0.01)) hit/p 0.83
+media ponderada por $W de EV por tomador: a W +0.103 | a otros -0.025 | n tomadores 156 | tomadores con evW>evO: 42%
+DESC W top-20 tomadores: 17.2% del $, EV -0.538 | resto EV +0.560
+DESC POB top-20 tomadores: 18.6% del $, EV -0.171 | resto EV +0.116
+HOLD W top-20 tomadores: 28.0% del $, EV +0.157 | resto EV +0.305
+HOLD POB top-20 tomadores: 24.8% del $, EV -0.061 | resto EV -0.117

@@ -1,0 +1,3 @@
+# NO INSTALADO (pendiente de OK de Javi/chief). 10:20Z (fuera de 06-09Z; el m5_onchain de D se cierra ~04:10Z de D+1). Evalua 24-Oct..ayer.
+20 10 * * * bash -c 'cd /root/polymarket-research && ulimit -v 3000000 && nice -n 19 ionice -c3 python3 -I experimentos/5m_barato/b_perdidas_22oct/as_tomador/contrafactual/scripts/cf_diario.py >> /root/polymarket-research-datalogs/cf_tomadores_informados.log 2>&1 || echo "$(date -u +%FT%TZ) cf_diario FALLO" >> /root/polymarket-research-datalogs/cf_tomadores_informados.log'
+# Salida: .../contrafactual/salidas/cf_resumen_ultimo.json (+ cf_resumen_AAAA-MM-DD.json, cf_unidades_B.csv, cf_serie_diaria_B.csv, pob/pob_D.csv, run_manifest.json). Pico RAM medido 279 MB (1 dia POB), 156 MB en caliente.

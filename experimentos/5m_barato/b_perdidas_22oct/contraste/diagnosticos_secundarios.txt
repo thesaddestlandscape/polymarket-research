@@ -1,0 +1,12 @@
+I2 cinta: grupos con >=2 rellenos 3099 | 1.o: n=3099 EV -0.336 | posteriores: n=5101 EV -0.207 | EV(1.o)-EV(posteriores) -0.129 IC90 por cierre (-0.172,-0.089) [ + = el 1.o es MEJOR; V9 solo ayuda si <0 ]
+   rellenos en grupo unitario (1 sola moneda del cierre-lado): n=1134 EV +0.424 | en grupos >=2: n=8200 EV -0.258
+I3 simv2: grupos con >=2 rellenos 1097 | 1.o: n=1097 EV -0.355 | posteriores: n=1694 EV -0.163 | EV(1.o)-EV(posteriores) -0.192 IC90 por cierre (-0.268,-0.123) [ + = el 1.o es MEJOR; V9 solo ayuda si <0 ]
+I3 V3 puerta de MERCADO (particion de rellenos por spread en la 1.a cotizacion >0,02): n=3269 vetados=695 (21.3%) EV_ret -0.119 EV_vet -0.248 Delta +0.129 IC90 dia (+0.009,+0.241) cierre (+0.014,+0.249) neto +184.8 placebo +115.2 p=0.033 dias Delta>0 4/5
+   por dia: 10-17:D+0.20/net+47.0/v121 10-18:D+0.33/net+78.9/v149 10-19:D-0.17/net+16.9/v144 10-20:D+0.16/net+20.8/v130 10-21:D+0.13/net+21.2/v151
+   re-sim puerta de mercado: cambio de PnL +184.8 EUR; placebo (veto de mercado barajado por dia-moneda) media +121.8 p95 +186.9; p=0.0570; vetados 1058/4311 mercados
+I3 (spread en el paso de relleno) EV por spread: <=0,01: n=2171 EV -0.159 | 0,02: n=624 EV -0.157 | 0,03: n=265 EV -0.231 | >=0,04: n=209 EV +0.134
+I4b (spread en el relleno) EV por spread: <=0,01: n=26024 EV -0.071 | 0,02: n=5825 EV +0.053 | 0,03: n=2140 EV +0.021 | >=0,04: n=2126 EV -0.007
+I4 poblacion: grupos con >=2 rellenos 13270 | 1.o: n=13270 EV -0.150 | posteriores: n=14901 EV +0.044 | EV(1.o)-EV(posteriores) -0.193 IC90 por cierre (-0.229,-0.159) [ + = el 1.o es MEJOR; V9 solo ayuda si <0 ]
+I4 V9 L=3 s solo makers con >=20 grupos multi-moneda (44 makers, n=63391): EV_ret +0.019 EV_vet +0.044 Delta -0.025 IC90 dia (-0.075,+0.026) cierre (-0.067,+0.019) neto -527.3 placebo estricto +757.2 p=1.000
+I4 V9 L=3 s solo makers con >=100 grupos multi-moneda (26 makers, n=57592): EV_ret +0.021 EV_vet +0.047 Delta -0.027 IC90 dia (-0.077,+0.021) cierre (-0.072,+0.018) neto -521.9 placebo estricto +639.5 p=1.000
+I1 B real: grupos con >=2 rellenos 53 | 1.o: n=53 EV -0.215 | posteriores: n=75 EV -0.139 | EV(1.o)-EV(posteriores) -0.076 IC90 por cierre (-0.572,+0.430) [ + = el 1.o es MEJOR; V9 solo ayuda si <0 ]

@@ -1,0 +1,3 @@
+# ADENDA E-RE-CG-01b (antes de calcular; manda mtime+sha): censo de TOMADORES completo desde f6 T_D.parquet mientras el censo maker+tomador (c1) espera load5<4 (bloqueado de 10:21 a 13:03Z con load 4,3-7,1)
+Datos: `VOL/agentes_datos/f6/T_2026-10-{05..23}.parquet` = TODAS las órdenes tomadoras (taker==exchange) de TODOS los 5m de las 6 monedas (extracción f6 e1 desde m5_onchain). Desenlace = unión de caches (sin red). pnl por orden = compra acc·1{gana} − usd (venta usd − acc·1{gana}) − fee.
+Reglas Q1/Q2 de PREREG_E01 aplicadas a la parte tomadora: SEL = 05-14, TEST = 15-23. Además, por clase de mecanismo (banda p × tramo T) EV/€ de la población tomadora vs del roster persistente (descriptivo).

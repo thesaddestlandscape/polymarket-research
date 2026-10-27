@@ -1,0 +1,32 @@
+pob cobertura desenlace 1.0000
+cobertura refs en nido: 0.98
+
+[<0.10] W  todo: EV +0.335 IC90d (+0.181,+0.489) n=16311 $=15085 hit/p=1.21 dias=20
+   no-nido: EV +0.304 IC90d (+0.181,+0.443) n=12855 $=11857 hit/p=1.17 dias=19
+   nido   : EV +0.449 IC90d (-0.057,+0.919) n=3456 $=3228 hit/p=1.35 dias=20  cuota$ lado s=0.51
+   nido s : EV +0.613 IC90d (-0.118,+1.414) n=1678 $=1469 hit/p=1.50 dias=19
+   nido ¬s: EV +0.386 IC90d (-0.145,+0.910) n=1434 $=1393 hit/p=1.22 dias=20
+
+[<0.10] POB  todo: EV -0.022 IC90d (-0.110,+0.051) n=1859463 $=1001533 hit/p=0.94 dias=17
+   no-nido: EV +0.002 IC90d (-0.095,+0.086) n=1246766 $=669315 hit/p=0.97 dias=15
+   nido   : EV -0.071 IC90d (-0.253,+0.105) n=612697 $=332218 hit/p=0.90 dias=17  cuota$ lado s=0.48
+   nido s : EV -0.035 IC90d (-0.337,+0.229) n=263026 $=140901 hit/p=0.96 dias=16
+   nido ¬s: EV -0.211 IC90d (-0.422,+0.043) n=281182 $=151529 hit/p=0.78 dias=17
+
+[0.10-0.40] W  todo: EV +0.165 IC90d (+0.071,+0.272) n=15037 $=33079 hit/p=1.13 dias=19
+   no-nido: EV +0.245 IC90d (+0.126,+0.356) n=11323 $=24139 hit/p=1.21 dias=19
+   nido   : EV -0.051 IC90d (-0.257,+0.205) n=3714 $=8939 hit/p=0.93 dias=19  cuota$ lado s=0.50
+   nido s : EV +0.107 IC90d (-0.209,+0.469) n=1586 $=3861 hit/p=1.06 dias=19
+   nido ¬s: EV -0.184 IC90d (-0.450,+0.111) n=1587 $=3854 hit/p=0.81 dias=19
+
+[0.40-0.90] W  todo: EV -0.007 IC90d (-0.051,+0.040) n=14914 $=106050 hit/p=1.00 dias=20
+   no-nido: EV +0.012 IC90d (-0.037,+0.055) n=7463 $=52536 hit/p=1.03 dias=19
+   nido   : EV -0.025 IC90d (-0.091,+0.032) n=7451 $=53514 hit/p=0.98 dias=20  cuota$ lado s=0.46
+   nido s : EV -0.028 IC90d (-0.111,+0.048) n=2828 $=20590 hit/p=0.98 dias=20
+   nido ¬s: EV +0.029 IC90d (-0.044,+0.093) n=3460 $=24614 hit/p=1.03 dias=19
+
+[>=0.90] W  todo: EV +0.012 IC90d (+0.004,+0.020) n=6066 $=267555 hit/p=1.01 dias=19
+   no-nido: EV +0.011 IC90d (-0.002,+0.021) n=3629 $=169786 hit/p=1.01 dias=19
+   nido   : EV +0.015 IC90d (+0.003,+0.026) n=2437 $=97769 hit/p=1.02 dias=19  cuota$ lado s=0.56
+   nido s : EV +0.019 IC90d (+0.008,+0.029) n=1192 $=48821 hit/p=1.01 dias=19
+   nido ¬s: EV +0.020 IC90d (+0.005,+0.033) n=969 $=38933 hit/p=1.02 dias=19

@@ -1,0 +1,20 @@
+
+=== fase T: EV/EUR por regimen del dia (BTC ex-post) x tendencia previa; CON/CONTRA global y dentro de la clase del detector (BAD=tercil inf de s_hat) ===
+dir_dia  pretend  n   %BAD |  EV(CON) EV(CONTRA) Delta | BAD: EV(CON) EV(CONTRA) Delta | GOOD: EV(CON) EV(CONTRA) Delta | skip CON&s<=c0.25: dP exceso-aprox
+ALCISTA  rpre+  12316  34.2 | -0.124 -0.190 +0.066 | -0.168 +0.187 -0.355 | -0.301 -0.277 -0.024
+ALCISTA  rpre-  11055  33.0 | -0.264 +0.015 -0.279 | -0.309 +0.553 -0.862 | -0.246 -0.070 -0.176
+BAJISTA  rpre+  11772  33.2 | -0.243 -0.188 -0.055 | -0.276 +0.126 -0.401 | +0.159 -0.244 +0.403
+BAJISTA  rpre-  13075  33.3 | -0.225 +0.001 -0.227 | -0.236 +0.407 -0.643 | -0.144 -0.090 -0.054
+LATERAL  rpre+   5784  32.7 | -0.066 -0.194 +0.127 | -0.125 +0.201 -0.326 | +0.205 -0.286 +0.491
+LATERAL  rpre-   6000  33.1 | -0.275 -0.111 -0.164 | -0.284 +0.072 -0.356 | -0.281 -0.160 -0.120
+dias por regimen: {'ALCISTA': 66, 'BAJISTA': 67, 'LATERAL': 38}
+
+=== fase R: EV/EUR por regimen del dia (BTC ex-post) x tendencia previa; CON/CONTRA global y dentro de la clase del detector (BAD=tercil inf de s_hat) ===
+dir_dia  pretend  n   %BAD |  EV(CON) EV(CONTRA) Delta | BAD: EV(CON) EV(CONTRA) Delta | GOOD: EV(CON) EV(CONTRA) Delta | skip CON&s<=c0.25: dP exceso-aprox
+ALCISTA  rpre+   1451  30.3 | -0.130 -0.130 +0.000 | -0.211 +1.178 -1.390 | +nan -0.263 +nan
+ALCISTA  rpre-   1345  33.1 | -0.345 +0.065 -0.411 | -0.488 +0.580 -1.068 | +nan -0.006 +nan
+BAJISTA  rpre+   1311  35.1 | -0.272 -0.263 -0.009 | -0.382 +nan +nan | +nan -0.258 +nan
+BAJISTA  rpre-   1548  35.3 | -0.126 -0.073 -0.053 | -0.157 +0.581 -0.738 | +nan -0.119 +nan
+LATERAL  rpre+    980  32.7 | -0.192 -0.047 -0.145 | -0.226 +nan +nan | +nan -0.031 +nan
+LATERAL  rpre-    927  33.5 | -0.161 -0.057 -0.104 | -0.181 -0.059 -0.122 | +nan -0.035 +nan
+dias por regimen: {'ALCISTA': 12, 'BAJISTA': 10, 'LATERAL': 8}

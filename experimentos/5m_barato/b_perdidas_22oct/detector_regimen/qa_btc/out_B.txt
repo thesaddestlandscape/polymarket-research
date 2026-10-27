@@ -1,0 +1,97 @@
+dias cargados 2026-10-05 2026-10-23 19 tokens 63300
+cobertura desenlace por dia (T180 lag250 todos tokens):
+dia     2026-10-05  2026-10-06  2026-10-07  2026-10-08  2026-10-09  2026-10-10  2026-10-11  2026-10-12  2026-10-13  2026-10-14  2026-10-15  2026-10-16  2026-10-17  2026-10-18  2026-10-19  2026-10-20  2026-10-21  2026-10-22  2026-10-23
+tok       1200.000    3456.000    3456.000     3456.00    3456.000    3448.000    3452.000    3448.000    3446.000    3438.000    3444.000    3448.000    3456.000    3450.000    3448.000     3450.00    3450.000    3448.000    3450.000
+des          1.000       1.000       1.000        1.00       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000        1.00       1.000       1.000       1.000
+rpre         0.997       0.994       0.997        1.00       0.995       0.956       0.962       0.999       0.999       1.000       1.000       0.999       0.986       1.000       0.999        1.00       1.000       0.993       1.000
+vivo         0.932       0.973       0.984        0.97       0.983       0.983       0.969       0.970       0.962       0.965       0.966       0.969       0.970       0.975       0.972        0.97       0.977       0.974       0.968
+ask_ok       0.950       1.000       1.000        1.00       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000       1.000        1.00       1.000       1.000       1.000
+
+## Delta diario (unidad: cierre-lado, ask real, T180+250ms)
+            nCON_alts  nCTR_alts  Delta_alts  nCON_btc  nCTR_btc  Delta_btc
+2026-10-05       33.0       21.0      -0.032      10.0       7.0     -1.160
+2026-10-06       79.0       91.0      -0.716      32.0      30.0     -0.398
+2026-10-07       93.0      105.0      -0.059      24.0      34.0     -0.670
+2026-10-08       97.0      104.0      -0.327      31.0      26.0      0.098
+2026-10-09       84.0      105.0       0.267      25.0      36.0     -0.168
+2026-10-10       60.0       67.0      -0.535       6.0       8.0      1.455
+2026-10-11       63.0       73.0      -0.290      11.0      12.0      1.501
+2026-10-12      101.0       91.0      -0.230      32.0      26.0      0.788
+2026-10-13       99.0      112.0       0.150      24.0      36.0      0.793
+2026-10-14      109.0       95.0      -0.231      35.0      28.0      0.828
+2026-10-15      109.0       92.0      -0.292      34.0      31.0      0.440
+2026-10-16       86.0      119.0       0.096      22.0      32.0     -0.245
+2026-10-17       70.0       80.0      -0.455      11.0       6.0      1.118
+2026-10-18       96.0      102.0      -0.409      23.0      21.0     -0.055
+2026-10-19      115.0       68.0      -0.177      31.0      14.0      0.480
+2026-10-20      110.0       97.0      -0.090      28.0      25.0     -0.233
+2026-10-21      106.0       96.0      -0.796      31.0      22.0      0.176
+2026-10-22      103.0      115.0       0.082      25.0      23.0      0.419
+2026-10-23      102.0       93.0       0.289      25.0      25.0      0.502
+corr Pearson dia alts-BTC -0.19 (n 19); Spearman -0.19 p 0.424
+  alts 05-21: dias 17, Delta<0 en 14; test de signos bilateral p 0.013; media diaria -0.243 sd 0.289; t-test dias p(bilateral) 0.003
+  alts 05-23: dias 19, Delta<0 en 14; test de signos bilateral p 0.064; media diaria -0.198 sd 0.306; t-test dias p(bilateral) 0.011
+  BTC 05-21: dias 17, Delta<0 en 7; test de signos bilateral p 0.629; media diaria +0.279 sd 0.741; t-test dias p(bilateral) 0.140
+  BTC 05-23: dias 19, Delta<0 en 7; test de signos bilateral p 0.359; media diaria +0.298 sd 0.701; t-test dias p(bilateral) 0.080
+Interaccion (Delta_BTC - Delta_alts) 05-21 por cierre: +0.463 IC90 (+0.228,+0.696) p2(bootstrap) 0.002 clusters 2415
+Interaccion (Delta_BTC - Delta_alts) 05-21 por dia: +0.463 IC90 (+0.226,+0.704) p2(bootstrap) 0.003 clusters 17
+Interaccion (Delta_BTC - Delta_alts) 05-23 por cierre: +0.442 IC90 (+0.229,+0.660) p2(bootstrap) 0.001 clusters 2738
+Interaccion (Delta_BTC - Delta_alts) 05-23 por dia: +0.442 IC90 (+0.222,+0.652) p2(bootstrap) 0.001 clusters 19
+
+## Sensibilidades (post-hoc, descriptivas). Delta [IC90 cierre] ; n CON/CONTRA
+  BTC T=180 lag=250 ask 05-23: n CON 460 CONTRA 442 (cierres 902, dias 19) EV(CON) +0.061 EV(CONTRA) -0.194 Delta +0.256 IC90cierre (+0.059,+0.474) IC90dia (+0.060,+0.449)
+  BTC T=180 lag=0 ask 05-23: n CON 462 CONTRA 450 (cierres 912, dias 19) EV(CON) +0.019 EV(CONTRA) -0.164 Delta +0.183 IC90cierre (-0.024,+0.393) IC90dia (-0.003,+0.375)
+  BTC T=180 lag=1000 ask 05-23: n CON 436 CONTRA 440 (cierres 876, dias 19) EV(CON) +0.048 EV(CONTRA) -0.158 Delta +0.205 IC90cierre (-0.013,+0.420) IC90dia (-0.050,+0.451)
+  BTC T=120 lag=250 ask 05-23: n CON 552 CONTRA 538 (cierres 1090, dias 19) EV(CON) -0.064 EV(CONTRA) +0.083 Delta -0.147 IC90cierre (-0.345,+0.051) IC90dia (-0.363,+0.065)
+  BTC T=120 lag=0 ask 05-23: n CON 557 CONTRA 549 (cierres 1106, dias 19) EV(CON) -0.058 EV(CONTRA) +0.076 Delta -0.134 IC90cierre (-0.326,+0.067) IC90dia (-0.346,+0.079)
+  BTC T=120 lag=1000 ask 05-23: n CON 550 CONTRA 542 (cierres 1092, dias 19) EV(CON) -0.122 EV(CONTRA) +0.071 Delta -0.194 IC90cierre (-0.383,-0.003) IC90dia (-0.400,+0.005)
+  BTC bid 05-23: n CON 460 CONTRA 442 (cierres 902, dias 19) EV(CON) +0.190 EV(CONTRA) -0.099 Delta +0.289 IC90cierre (+0.069,+0.531) IC90dia (+0.072,+0.503)
+  BTC print 05-23: n CON 460 CONTRA 442 (cierres 902, dias 19) EV(CON) +0.101 EV(CONTRA) -0.162 Delta +0.264 IC90cierre (+0.058,+0.491) IC90dia (+0.061,+0.466)
+  BTC asz>=5 acc 05-23: n CON 457 CONTRA 440 (cierres 897, dias 19) EV(CON) +0.067 EV(CONTRA) -0.190 Delta +0.258 IC90cierre (+0.049,+0.476) IC90dia (+0.062,+0.452)
+  BTC asz>=20 acc 05-23: n CON 436 CONTRA 425 (cierres 861, dias 19) EV(CON) +0.095 EV(CONTRA) -0.198 Delta +0.293 IC90cierre (+0.070,+0.511) IC90dia (+0.086,+0.495)
+  BTC ask[0.10,0.15) 05-23: n CON 150 CONTRA 138 (cierres 288, dias 19) EV(CON) -0.256 EV(CONTRA) -0.363 Delta +0.107 IC90cierre (-0.318,+0.532) IC90dia (-0.214,+0.406)
+  BTC ask[0.15,0.20) 05-23: n CON 108 CONTRA 106 (cierres 214, dias 19) EV(CON) -0.022 EV(CONTRA) -0.313 Delta +0.291 IC90cierre (-0.180,+0.747) IC90dia (-0.222,+0.857)
+  BTC ask[0.20,0.25) 05-23: n CON 93 CONTRA 106 (cierres 199, dias 19) EV(CON) -0.065 EV(CONTRA) -0.106 Delta +0.041 IC90cierre (-0.368,+0.445) IC90dia (-0.342,+0.432)
+  BTC ask[0.25,0.30) 05-23: n CON 109 CONTRA 92 (cierres 201, dias 19) EV(CON) +0.395 EV(CONTRA) -0.079 Delta +0.475 IC90cierre (+0.092,+0.863) IC90dia (+0.234,+0.725)
+  BTC mitad A 05-13: n CON 195 CONTRA 215 (cierres 410, dias 9) EV(CON) +0.079 EV(CONTRA) -0.124 Delta +0.203 IC90cierre (-0.115,+0.518) IC90dia (-0.153,+0.566)
+  BTC mitad B 14-23: n CON 265 CONTRA 227 (cierres 492, dias 10) EV(CON) +0.048 EV(CONTRA) -0.261 Delta +0.309 IC90cierre (+0.039,+0.596) IC90dia (+0.127,+0.485)
+  BTC umbral CON/CONTRA 4.7 bps: n CON 609 CONTRA 582 (cierres 1191, dias 19) EV(CON) +0.066 EV(CONTRA) -0.104 Delta +0.170 IC90cierre (-0.022,+0.355) IC90dia (+0.014,+0.329)
+  BTC umbral CON/CONTRA 7.7 bps: n CON 460 CONTRA 442 (cierres 902, dias 19) EV(CON) +0.061 EV(CONTRA) -0.194 Delta +0.256 IC90cierre (+0.059,+0.474) IC90dia (+0.060,+0.449)
+  BTC umbral CON/CONTRA 11 bps: n CON 344 CONTRA 316 (cierres 660, dias 19) EV(CON) +0.006 EV(CONTRA) -0.145 Delta +0.151 IC90cierre (-0.098,+0.393) IC90dia (-0.089,+0.375)
+  BTC umbral CON/CONTRA 15 bps: n CON 227 CONTRA 221 (cierres 448, dias 19) EV(CON) +0.082 EV(CONTRA) -0.088 Delta +0.170 IC90cierre (-0.138,+0.459) IC90dia (-0.135,+0.443)
+  BTC umbral CON/CONTRA 20 bps: n CON 147 CONTRA 143 (cierres 290, dias 19) EV(CON) +0.097 EV(CONTRA) -0.051 Delta +0.148 IC90cierre (-0.246,+0.530) IC90dia (-0.368,+0.547)
+  ALTS T=180 lag=250 ask 05-23: n CON 1715 CONTRA 1726 (cierres 2467, dias 19) EV(CON) -0.119 EV(CONTRA) +0.068 Delta -0.187 IC90cierre (-0.308,-0.062) IC90dia (-0.309,-0.071)
+  ALTS T=180 lag=0 ask 05-23: n CON 1727 CONTRA 1748 (cierres 2487, dias 19) EV(CON) -0.136 EV(CONTRA) +0.076 Delta -0.211 IC90cierre (-0.337,-0.085) IC90dia (-0.323,-0.102)
+  ALTS T=180 lag=1000 ask 05-23: n CON 1680 CONTRA 1745 (cierres 2480, dias 19) EV(CON) -0.159 EV(CONTRA) +0.069 Delta -0.228 IC90cierre (-0.352,-0.098) IC90dia (-0.371,-0.091)
+  ALTS T=120 lag=250 ask 05-23: n CON 2119 CONTRA 2319 (cierres 2895, dias 19) EV(CON) -0.127 EV(CONTRA) +0.090 Delta -0.218 IC90cierre (-0.332,-0.105) IC90dia (-0.335,-0.094)
+  ALTS T=120 lag=0 ask 05-23: n CON 2133 CONTRA 2313 (cierres 2915, dias 19) EV(CON) -0.123 EV(CONTRA) +0.086 Delta -0.209 IC90cierre (-0.321,-0.093) IC90dia (-0.325,-0.089)
+  ALTS T=120 lag=1000 ask 05-23: n CON 2140 CONTRA 2315 (cierres 2909, dias 19) EV(CON) -0.126 EV(CONTRA) +0.034 Delta -0.160 IC90cierre (-0.277,-0.049) IC90dia (-0.281,-0.035)
+  ALTS bid 05-23: n CON 1715 CONTRA 1726 (cierres 2467, dias 19) EV(CON) +0.023 EV(CONTRA) +0.241 Delta -0.218 IC90cierre (-0.361,-0.073) IC90dia (-0.361,-0.083)
+  ALTS print 05-23: n CON 1443 CONTRA 1448 (cierres 2201, dias 19) EV(CON) -0.040 EV(CONTRA) +0.082 Delta -0.122 IC90cierre (-0.253,+0.005) IC90dia (-0.252,+0.007)
+  ALTS asz>=5 acc 05-23: n CON 1705 CONTRA 1721 (cierres 2460, dias 19) EV(CON) -0.113 EV(CONTRA) +0.071 Delta -0.184 IC90cierre (-0.308,-0.057) IC90dia (-0.306,-0.069)
+  ALTS asz>=20 acc 05-23: n CON 1254 CONTRA 1194 (cierres 1919, dias 19) EV(CON) -0.121 EV(CONTRA) +0.096 Delta -0.218 IC90cierre (-0.369,-0.066) IC90dia (-0.382,-0.052)
+  ALTS ask[0.10,0.15) 05-23: n CON 578 CONTRA 550 (cierres 998, dias 19) EV(CON) -0.304 EV(CONTRA) +0.090 Delta -0.394 IC90cierre (-0.648,-0.133) IC90dia (-0.670,-0.106)
+  ALTS ask[0.15,0.20) 05-23: n CON 444 CONTRA 458 (cierres 824, dias 19) EV(CON) -0.036 EV(CONTRA) +0.149 Delta -0.185 IC90cierre (-0.431,+0.069) IC90dia (-0.471,+0.061)
+  ALTS ask[0.20,0.25) 05-23: n CON 373 CONTRA 376 (cierres 693, dias 19) EV(CON) -0.155 EV(CONTRA) +0.012 Delta -0.167 IC90cierre (-0.387,+0.047) IC90dia (-0.435,+0.102)
+  ALTS ask[0.25,0.30) 05-23: n CON 320 CONTRA 342 (cierres 619, dias 19) EV(CON) -0.007 EV(CONTRA) +0.034 Delta -0.041 IC90cierre (-0.253,+0.171) IC90dia (-0.232,+0.148)
+  ALTS mitad A 05-13: n CON 709 CONTRA 769 (cierres 1083, dias 9) EV(CON) -0.139 EV(CONTRA) +0.044 Delta -0.183 IC90cierre (-0.373,+0.003) IC90dia (-0.370,-0.013)
+  ALTS mitad B 14-23: n CON 1006 CONTRA 957 (cierres 1384, dias 10) EV(CON) -0.104 EV(CONTRA) +0.087 Delta -0.191 IC90cierre (-0.363,-0.015) IC90dia (-0.355,-0.035)
+  ALTS umbral CON/CONTRA 4.7 bps: n CON 2029 CONTRA 2051 (cierres 2852, dias 19) EV(CON) -0.125 EV(CONTRA) +0.060 Delta -0.185 IC90cierre (-0.301,-0.072) IC90dia (-0.298,-0.077)
+  ALTS umbral CON/CONTRA 7.7 bps: n CON 1715 CONTRA 1726 (cierres 2467, dias 19) EV(CON) -0.119 EV(CONTRA) +0.068 Delta -0.187 IC90cierre (-0.308,-0.062) IC90dia (-0.309,-0.071)
+  ALTS umbral CON/CONTRA 11 bps: n CON 1433 CONTRA 1436 (cierres 2089, dias 19) EV(CON) -0.078 EV(CONTRA) +0.090 Delta -0.168 IC90cierre (-0.300,-0.028) IC90dia (-0.295,-0.044)
+  ALTS umbral CON/CONTRA 15 bps: n CON 1140 CONTRA 1131 (cierres 1683, dias 19) EV(CON) -0.055 EV(CONTRA) +0.055 Delta -0.110 IC90cierre (-0.270,+0.047) IC90dia (-0.243,+0.013)
+  ALTS umbral CON/CONTRA 20 bps: n CON 815 CONTRA 814 (cierres 1227, dias 19) EV(CON) -0.099 EV(CONTRA) +0.023 Delta -0.122 IC90cierre (-0.308,+0.061) IC90dia (-0.291,+0.032)
+
+## Delta por regimen R (dentro de CON/CONTRA)
+  BTC R=TREND: n CON 129 CONTRA 105 (cierres 234, dias 19) EV(CON) +0.089 EV(CONTRA) -0.026 Delta +0.115 IC90cierre (-0.327,+0.536) IC90dia (-0.269,+0.507)
+  BTC R=MIXTO: n CON 212 CONTRA 221 (cierres 433, dias 19) EV(CON) -0.026 EV(CONTRA) -0.163 Delta +0.137 IC90cierre (-0.178,+0.442) IC90dia (-0.126,+0.418)
+  BTC R=REVERT: n CON 114 CONTRA 106 (cierres 220, dias 18) EV(CON) +0.153 EV(CONTRA) -0.387 Delta +0.541 IC90cierre (+0.149,+0.937) IC90dia (+0.021,+1.051)
+  ALTS R=TREND: n CON 398 CONTRA 385 (cierres 647, dias 19) EV(CON) -0.284 EV(CONTRA) +0.057 Delta -0.341 IC90cierre (-0.587,-0.098) IC90dia (-0.564,-0.134)
+  ALTS R=MIXTO: n CON 800 CONTRA 783 (cierres 1315, dias 19) EV(CON) -0.108 EV(CONTRA) +0.159 Delta -0.267 IC90cierre (-0.444,-0.081) IC90dia (-0.453,-0.076)
+  ALTS R=REVERT: n CON 514 CONTRA 558 (cierres 894, dias 19) EV(CON) -0.013 EV(CONTRA) -0.051 Delta +0.038 IC90cierre (-0.181,+0.253) IC90dia (-0.102,+0.180)
+  BTC bloque UTC 00-06: n CON 102 CONTRA 130 (cierres 232, dias 18) EV(CON) +0.050 EV(CONTRA) -0.343 Delta +0.392 IC90cierre (-0.015,+0.772) IC90dia (+0.052,+0.707)
+  BTC bloque UTC 06-12: n CON 106 CONTRA 98 (cierres 204, dias 17) EV(CON) +0.029 EV(CONTRA) -0.002 Delta +0.031 IC90cierre (-0.434,+0.490) IC90dia (-0.343,+0.401)
+  BTC bloque UTC 12-18: n CON 153 CONTRA 104 (cierres 257, dias 19) EV(CON) +0.171 EV(CONTRA) -0.260 Delta +0.430 IC90cierre (+0.007,+0.831) IC90dia (+0.097,+0.775)
+  BTC bloque UTC 18-24: n CON 99 CONTRA 110 (cierres 209, dias 19) EV(CON) -0.062 EV(CONTRA) -0.125 Delta +0.064 IC90cierre (-0.352,+0.499) IC90dia (-0.263,+0.393)
+leave-one-day-out ALTS: min -0.217 max -0.150
+leave-one-day-out BTC: min +0.212 max +0.315

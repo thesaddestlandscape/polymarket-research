@@ -1,0 +1,9 @@
+unidades con mid reconstruido 4641 dias 23 2026-05-01 2026-08-17 edad mediana del punto de apertura (s) 50.0
+TEST 2026-08-02..2026-08-17 (16 d, 3205 unidades); AUC s_M10 sin reentrenar 0.5449
+LOG base: AUC 0.5256
+LOG +open: AUC 0.5238 ganancia -0.0018 IC90 dias (-0.0051,+0.0017)
+LOG +open+T: AUC 0.5231 ganancia -0.0025 IC90 dias (-0.0260,+0.0175)
+GBM base: AUC 0.4938
+GBM +open: AUC 0.4941 ganancia +0.0003 IC90 dias (-0.0046,+0.0049)
+GBM +open+T: AUC 0.5029 ganancia +0.0091 IC90 dias (-0.0107,+0.0291)
+univariable: mid_con_open 0.507, mid_con_T 0.523, dis 0.520, adis 0.503, dmid 0.520

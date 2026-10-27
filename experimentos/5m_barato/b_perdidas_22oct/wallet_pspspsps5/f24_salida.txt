@@ -1,0 +1,40 @@
+dias ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11', '2026-10-12', '2026-10-13', '2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23', '2026-10-24'] fills 1722769 W 13616
+== celda tamano x zs: poblacion ex-W vs W, DESC/HOLD (fills <0.10, todas monedas) ==
+  DESC POB acc <=20 zs -2..-1    fills  289995 $    68690 EV -0.017 (np.float64(-0.09), np.float64(0.07)) hit/p 0.98 dias 8
+  DESC W acc <=20 zs -2..-1      fills    1665 $      434 EV -0.061 (np.float64(-0.24), np.float64(0.07)) hit/p 1.03 dias 8
+  DESC POB acc <=20 zs -1..0     fills  296043 $    84121 EV +0.111 (np.float64(0.04), np.float64(0.19)) hit/p 1.11 dias 8
+  DESC W acc <=20 zs -1..0       fills    2504 $      934 EV +0.245 (np.float64(0.04), np.float64(0.45)) hit/p 1.11 dias 8
+  DESC POB acc 20-200 zs -2..-1  fills   54575 $    83967 EV -0.049 (np.float64(-0.19), np.float64(0.08)) hit/p 0.97 dias 8
+  DESC W acc 20-200 zs -2..-1    fills     923 $     1638 EV +0.374 (np.float64(0.08), np.float64(0.6)) hit/p 1.39 dias 8
+  DESC POB acc 20-200 zs -1..0   fills   47926 $    88243 EV +0.145 (np.float64(0.01), np.float64(0.28)) hit/p 1.13 dias 8
+  DESC W acc 20-200 zs -1..0     fills    1064 $     2240 EV +0.732 (np.float64(0.38), np.float64(1.19)) hit/p 1.53 dias 8
+  DESC POB acc >200 zs -2..-1    fills    2296 $    14054 EV -0.196 (np.float64(-0.61), np.float64(0.25)) hit/p 0.90 dias 8
+  DESC W acc >200 zs -2..-1      fills      65 $      168 EV -1.000 (np.float64(-1.0), np.float64(-1.0)) hit/p 0.00 dias 8
+  DESC POB acc >200 zs -1..0     fills    1895 $    16591 EV +0.658 (np.float64(0.15), np.float64(1.22)) hit/p 1.65 dias 8
+  DESC W acc >200 zs -1..0       n=10
+  HOLD POB acc <=20 zs -2..-1    fills  310276 $    75698 EV -0.221 (np.float64(-0.37), np.float64(-0.06)) hit/p 0.77 dias 8
+  HOLD W acc <=20 zs -2..-1      fills    2102 $      473 EV -0.093 (np.float64(-0.49), np.float64(0.29)) hit/p 1.06 dias 7
+  HOLD POB acc <=20 zs -1..0     fills  239989 $    71599 EV -0.104 (np.float64(-0.27), np.float64(0.06)) hit/p 0.89 dias 8
+  HOLD W acc <=20 zs -1..0       fills    1364 $      481 EV +0.281 (np.float64(-0.13), np.float64(0.75)) hit/p 1.34 dias 7
+  HOLD POB acc 20-200 zs -2..-1  fills   72281 $   115701 EV -0.162 (np.float64(-0.35), np.float64(0.01)) hit/p 0.82 dias 8
+  HOLD W acc 20-200 zs -2..-1    fills    1289 $     2319 EV +0.286 (np.float64(-0.29), np.float64(0.93)) hit/p 1.29 dias 7
+  HOLD POB acc 20-200 zs -1..0   fills   51593 $    99612 EV -0.030 (np.float64(-0.29), np.float64(0.2)) hit/p 0.98 dias 8
+  HOLD W acc 20-200 zs -1..0     fills     880 $     1964 EV +0.942 (np.float64(0.33), np.float64(1.44)) hit/p 1.70 dias 8
+  HOLD POB acc >200 zs -2..-1    fills    2846 $    19795 EV -0.201 (np.float64(-0.44), np.float64(0.1)) hit/p 0.80 dias 7
+  HOLD W acc >200 zs -2..-1      fills     122 $      316 EV +0.468 (np.float64(-1.0), np.float64(2.19)) hit/p 1.64 dias 7
+  HOLD POB acc >200 zs -1..0     fills    1911 $    16035 EV +0.504 (np.float64(-0.42), np.float64(1.34)) hit/p 1.22 dias 7
+  HOLD W acc >200 zs -1..0       n=17
+
+== por moneda en la celda acc 20-200 & zs -1..0 ==
+  DESC POB BTC                   fills   37985 $    76349 EV +0.154 (np.float64(0.01), np.float64(0.3)) hit/p 1.14 dias 8
+  DESC W BTC                     fills     435 $     1053 EV +0.687 (np.float64(0.25), np.float64(1.29)) hit/p 1.70 dias 6
+  DESC POB ETH                   fills    6426 $     8364 EV +0.053 (np.float64(-0.16), np.float64(0.29)) hit/p 1.02 dias 8
+  DESC W ETH                     fills     521 $      975 EV +0.714 (np.float64(-0.06), np.float64(1.5)) hit/p 1.33 dias 8
+  DESC POB SOL                   fills    1394 $     1583 EV +0.187 (np.float64(-0.18), np.float64(0.69)) hit/p 1.00 dias 8
+  DESC W SOL                     fills     108 $      212 EV +1.040 (np.float64(-0.18), np.float64(2.52)) hit/p 1.69 dias 8
+  HOLD POB BTC                   fills   44150 $    90240 EV -0.017 (np.float64(-0.32), np.float64(0.26)) hit/p 1.00 dias 8
+  HOLD W BTC                     fills     582 $     1398 EV +1.047 (np.float64(0.31), np.float64(1.67)) hit/p 1.94 dias 7
+  HOLD POB ETH                   fills    4630 $     6678 EV -0.198 (np.float64(-0.49), np.float64(0.13)) hit/p 0.88 dias 8
+  HOLD W ETH                     fills     194 $      367 EV -0.218 (np.float64(-0.77), np.float64(0.36)) hit/p 0.70 dias 7
+  HOLD POB SOL                   fills    1208 $     1299 EV +0.092 (np.float64(-0.36), np.float64(0.62)) hit/p 1.02 dias 8
+  HOLD W SOL                     fills     104 $      198 EV +2.347 (np.float64(1.03), np.float64(3.32)) hit/p 1.99 dias 8

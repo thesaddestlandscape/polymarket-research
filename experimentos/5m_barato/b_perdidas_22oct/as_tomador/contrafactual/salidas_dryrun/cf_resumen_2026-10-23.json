@@ -1,0 +1,338 @@
+{
+ "job": "cf_diario",
+ "prereg_sha256": "f48526f98f030901",
+ "sets_sha256": {
+  "I": "1466a608b4e4334d6a377bceebccc0e947c345124a69fc124973d522413a63fb",
+  "V": "ac7d6a0b23706c5d5b1945a9aaf3eadb2b5fcc17add373279ea56182aec77d02"
+ },
+ "ventana": [
+  "2026-10-22",
+  "2026-10-23"
+ ],
+ "generado_utc": "2026-10-24T09:57:43Z",
+ "tag": "dryrun",
+ "evaluacion_valida_para_gates": false,
+ "cobertura_B": {
+  "fills_B_ledger_en_ventana": 98,
+  "tx_unicos": 98,
+  "duplicados_tx": 0,
+  "sin_taker": 0,
+  "tx_multi_taker": 0,
+  "pendientes_sin_liquidar": 0,
+  "fills_validos": 98,
+  "coste_validos": 99.917542
+ },
+ "B": {
+  "I": {
+   "set": "SET_I",
+   "n_unidades": 93,
+   "n_unidades_flag": 38,
+   "n_cierres": 52,
+   "n_cierres_flag": 27,
+   "n_dias": 2,
+   "n_dias_con_flag_y_noflag": 2,
+   "coste": 99.91754200000001,
+   "pnl": -32.035807000000005,
+   "frac_eur_flag": 0.42536294577782935,
+   "EV_total": -0.3206224488588801,
+   "EV_flag": -0.292785736503564,
+   "EV_ret": -0.34122798740051646,
+   "media_unidad_total": -0.2825325286245248,
+   "EXCESO": -0.02060553854163638,
+   "IC90_cierre": [
+    -0.3053619278883442,
+    0.24574209725274085
+   ],
+   "exceso_diario": {
+    "2026-10-22": -0.052907525096405617,
+    "2026-10-23": 0.16371600539620768
+   },
+   "dias_excluidos_top2": [
+    "2026-10-23",
+    "2026-10-22"
+   ],
+   "EXCESO_sin_2_mejores_dias": null,
+   "por_moneda": {
+    "ETH": {
+     "n_unid": 37,
+     "n_flag": 17,
+     "EV_total": -0.03041692466222578,
+     "EXCESO": 0.39519492513566856
+    },
+    "SOL": {
+     "n_unid": 30,
+     "n_flag": 7,
+     "EV_total": -0.531577676053798,
+     "EXCESO": -0.26430230839878865
+    },
+    "XRP": {
+     "n_unid": 26,
+     "n_flag": 14,
+     "EV_total": -0.4796992852709408,
+     "EXCESO": -0.1216533861689591
+    }
+   },
+   "top_tomador_frac_eur_flag": 0.16908512273294746,
+   "n_tomadores_flag": 16,
+   "top_dia_frac_pnl_flag_abs": 0.6174786846827778,
+   "placebo_pool_I_observados": [
+    0.5686862627474505,
+    43
+   ],
+   "placebo_pool_todos_observados": [
+    0.5680863827234554,
+    44
+   ],
+   "placebo_p_por_fill_permutando_banderas": 0.5451516161279574,
+   "gates": {
+    "G1_n_cierres_flag>=40": false,
+    "G2_dias>=10": false,
+    "G3_IC90_cierre_inf>0": false,
+    "G4_EXCESO_sin_2_mejores>0": false,
+    "G5_placebo_p<0.05": false,
+    "G6_signo>0_en_>=2_de_3_monedas": false,
+    "G7_concentracion(top_tomador<=30%,top_dia<=40%)": false
+   },
+   "estado": "EN_CURSO",
+   "descriptivo_fill": {
+    "n_fills_flag": 43,
+    "EV_flag": -0.30944562193701514,
+    "EV_noflag": -0.3292495230264195,
+    "EXCESO_fill": -0.008627074167539495
+   },
+   "eta_n40": "a ritmo observado (13.5 cierres flag por dia con fills): G1 (n>=40) faltan 1.0 dias de B activo; G2 (>=10 dias) faltan 8 dias; necesarios max = 8.0 dias de B ACTIVO (solo si B tiene fills esos dias)"
+  },
+  "V": {
+   "set": "SET_V",
+   "n_unidades": 93,
+   "n_unidades_flag": 43,
+   "n_cierres": 52,
+   "n_cierres_flag": 30,
+   "n_dias": 2,
+   "n_dias_con_flag_y_noflag": 2,
+   "coste": 99.91754200000001,
+   "pnl": -32.035807000000005,
+   "frac_eur_flag": 0.49114632944032977,
+   "EV_total": -0.3206224488588801,
+   "EV_flag": -0.3875089268004201,
+   "EV_ret": -0.2560635195815355,
+   "media_unidad_total": -0.2825325286245248,
+   "EXCESO": 0.06455892927734458,
+   "IC90_cierre": [
+    -0.248337896999154,
+    0.3637569743478776
+   ],
+   "exceso_diario": {
+    "2026-10-22": 0.015119105110134978,
+    "2026-10-23": 0.31104968065594246
+   },
+   "dias_excluidos_top2": [
+    "2026-10-23",
+    "2026-10-22"
+   ],
+   "EXCESO_sin_2_mejores_dias": null,
+   "por_moneda": {
+    "ETH": {
+     "n_unid": 37,
+     "n_flag": 16,
+     "EV_total": -0.03041692466222578,
+     "EXCESO": 0.3665545726512951
+    },
+    "SOL": {
+     "n_unid": 30,
+     "n_flag": 11,
+     "EV_total": -0.531577676053798,
+     "EXCESO": -0.2159658339386572
+    },
+    "XRP": {
+     "n_unid": 26,
+     "n_flag": 16,
+     "EV_total": -0.4796992852709408,
+     "EXCESO": -0.03106833257970415
+    }
+   },
+   "top_tomador_frac_eur_flag": 0.1464381215570712,
+   "n_tomadores_flag": 18,
+   "top_dia_frac_pnl_flag_abs": 0.6208588624766751,
+   "placebo_pool_I_observados": [
+    0.3129374125174965,
+    43
+   ],
+   "placebo_pool_todos_observados": [
+    0.3169366126774645,
+    44
+   ],
+   "placebo_p_por_fill_permutando_banderas": 0.37387537487504163,
+   "gates": {
+    "G1_n_cierres_flag>=40": false,
+    "G2_dias>=10": false,
+    "G3_IC90_cierre_inf>0": false,
+    "G4_EXCESO_sin_2_mejores>0": false,
+    "G5_placebo_p<0.05": false,
+    "G6_signo>0_en_>=2_de_3_monedas": false,
+    "G7_concentracion(top_tomador<=30%,top_dia<=40%)": false
+   },
+   "estado": "EN_CURSO",
+   "descriptivo_fill": {
+    "n_fills_flag": 47,
+    "EV_flag": -0.3915158547557629,
+    "EV_noflag": -0.25130485300448824,
+    "EXCESO_fill": 0.06931759585439179
+   },
+   "eta_n40": "a ritmo observado (15.0 cierres flag por dia con fills): G1 (n>=40) faltan 0.7 dias de B activo; G2 (>=10 dias) faltan 8 dias; necesarios max = 8.0 dias de B ACTIVO (solo si B tiene fills esos dias)"
+  }
+ },
+ "POB": {
+  "I": {
+   "set": "POB_SET_I",
+   "n_unidades": 14153,
+   "n_unidades_flag": 4135,
+   "n_cierres": 575,
+   "n_cierres_flag": 562,
+   "n_dias": 2,
+   "n_dias_con_flag_y_noflag": 2,
+   "coste": 13549.096412767714,
+   "pnl": 756.0914842322851,
+   "frac_eur_flag": 0.31484652179359923,
+   "EV_total": 0.055803830838475524,
+   "EV_flag": -0.03033449807996223,
+   "EV_ret": 0.09538671863768655,
+   "media_unidad_total": 0.07473521393910154,
+   "EXCESO": 0.03958288779921103,
+   "IC90_cierre": [
+    0.010373077638962143,
+    0.06763939097991196
+   ],
+   "exceso_diario": {
+    "2026-10-22": 0.03582344184919836,
+    "2026-10-23": 0.04406586612414515
+   },
+   "dias_excluidos_top2": [
+    "2026-10-23",
+    "2026-10-22"
+   ],
+   "EXCESO_sin_2_mejores_dias": null,
+   "por_moneda": {
+    "ETH": {
+     "n_unid": 7495,
+     "n_flag": 2342,
+     "EV_total": 0.11521849627036419,
+     "EXCESO": 0.06641059038749071
+    },
+    "SOL": {
+     "n_unid": 4233,
+     "n_flag": 1119,
+     "EV_total": 0.016256395781083705,
+     "EXCESO": 0.022621849575720963
+    },
+    "XRP": {
+     "n_unid": 2425,
+     "n_flag": 674,
+     "EV_total": -0.07424943071124894,
+     "EXCESO": -0.0059310903974620355
+    }
+   },
+   "top_tomador_frac_eur_flag": 0.15649455672804244,
+   "n_tomadores_flag": 219,
+   "top_dia_frac_pnl_flag_abs": 0.816583733039703,
+   "placebo_pool_I_observados": [
+    0.021995600879824034,
+    668
+   ],
+   "placebo_pool_todos_observados": [
+    0.0061987602479504095,
+    849
+   ],
+   "placebo_p_por_fill_permutando_banderas": 0.0003332222592469177,
+   "gates": {
+    "G1_n_cierres_flag>=40": true,
+    "G2_dias>=10": false,
+    "G3_IC90_cierre_inf>0": true,
+    "G4_EXCESO_sin_2_mejores>0": false,
+    "G5_placebo_p<0.05": true,
+    "G6_signo>0_en_>=2_de_3_monedas": true,
+    "G7_concentracion(top_tomador<=30%,top_dia<=40%)": false
+   },
+   "estado": "EN_CURSO"
+  },
+  "V": {
+   "set": "POB_SET_V",
+   "n_unidades": 14153,
+   "n_unidades_flag": 5499,
+   "n_cierres": 575,
+   "n_cierres_flag": 571,
+   "n_dias": 2,
+   "n_dias_con_flag_y_noflag": 2,
+   "coste": 13549.096412767714,
+   "pnl": 756.0914842322851,
+   "frac_eur_flag": 0.4139881526083078,
+   "EV_total": 0.055803830838475524,
+   "EV_flag": 0.07471001979314475,
+   "EV_ret": 0.04244755097306941,
+   "media_unidad_total": 0.07473521393910154,
+   "EXCESO": -0.013356279865406114,
+   "IC90_cierre": [
+    -0.054439963312691964,
+    0.024171053208370537
+   ],
+   "exceso_diario": {
+    "2026-10-22": -0.024439887577512642,
+    "2026-10-23": 0.0007030990698729291
+   },
+   "dias_excluidos_top2": [
+    "2026-10-23",
+    "2026-10-22"
+   ],
+   "EXCESO_sin_2_mejores_dias": null,
+   "por_moneda": {
+    "ETH": {
+     "n_unid": 7495,
+     "n_flag": 2754,
+     "EV_total": 0.11521849627036419,
+     "EXCESO": -0.023073794748871015
+    },
+    "SOL": {
+     "n_unid": 4233,
+     "n_flag": 1923,
+     "EV_total": 0.016256395781083705,
+     "EXCESO": 0.006302469285033644
+    },
+    "XRP": {
+     "n_unid": 2425,
+     "n_flag": 822,
+     "EV_total": -0.07424943071124894,
+     "EXCESO": -0.01660472277742528
+    }
+   },
+   "top_tomador_frac_eur_flag": 0.20932745334401445,
+   "n_tomadores_flag": 117,
+   "top_dia_frac_pnl_flag_abs": 0.9103842893934537,
+   "placebo_pool_I_observados": [
+    0.8740251949610078,
+    668
+   ],
+   "placebo_pool_todos_observados": [
+    0.8962207558488302,
+    849
+   ],
+   "placebo_p_por_fill_permutando_banderas": 0.8437187604131956,
+   "gates": {
+    "G1_n_cierres_flag>=40": true,
+    "G2_dias>=10": false,
+    "G3_IC90_cierre_inf>0": false,
+    "G4_EXCESO_sin_2_mejores>0": false,
+    "G5_placebo_p<0.05": false,
+    "G6_signo>0_en_>=2_de_3_monedas": false,
+    "G7_concentracion(top_tomador<=30%,top_dia<=40%)": false
+   },
+   "estado": "EN_CURSO"
+  },
+  "cobertura": {
+   "dias_esperados": 2,
+   "dias_procesados": 2,
+   "dias_sin_archivo": [],
+   "unidades_sin_desenlace": 0
+  }
+ },
+ "estado_global_B": "EN_CURSO"
+}

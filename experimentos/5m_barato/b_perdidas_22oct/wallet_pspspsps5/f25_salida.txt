@@ -1,0 +1,15 @@
+fills 52558 W 4930 (pob = muestra 8 %)
+
+markout medio del spot (bps con signo del lado; + = el spot se mueve A FAVOR del lado comprado) por celda zs x tamano
+  zs -2..-1  acc <=20    POB n 16665  mo3 -0.35 mo10 -0.41 mo30 -0.47 mo60 -0.36 | acierto 0.033
+  zs -2..-1  acc <=20    W   n  1391  mo3 -0.31 mo10 -0.34 mo30 -0.33 mo60 -0.44 | acierto 0.052
+  zs -2..-1  acc 20-200  POB n  3294  mo3 -0.30 mo10 -0.38 mo30 -0.45 mo60 -0.25 | acierto 0.030
+  zs -2..-1  acc 20-200  W   n   767  mo3 -0.32 mo10 -0.35 mo30 -0.49 mo60 -0.43 | acierto 0.047
+  zs -1..0   acc <=20    POB n 14772  mo3 -0.36 mo10 -0.45 mo30 -0.54 mo60 -0.52 | acierto 0.050
+  zs -1..0   acc <=20    W   n  1410  mo3 -0.68 mo10 -0.80 mo30 -0.85 mo60 -0.86 | acierto 0.074
+  zs -1..0   acc 20-200  POB n  2628  mo3 -0.28 mo10 -0.37 mo30 -0.41 mo60 -0.35 | acierto 0.040
+  zs -1..0   acc 20-200  W   n   631  mo3 -0.56 mo10 -0.60 mo30 -0.63 mo60 -0.70 | acierto 0.106
+TODO POB mo3 -0.38 mo10 -0.45 mo30 -0.55 mo60 -0.46
+TODO W   mo3 -0.49 mo10 -0.56 mo30 -0.75 mo60 -0.90
+
+W celda (zs -1..0, acc 20-200): n 631 ; acierto con mo30>0: 0.257 (n 210) vs mo30<=0: 0.031 (n 421)

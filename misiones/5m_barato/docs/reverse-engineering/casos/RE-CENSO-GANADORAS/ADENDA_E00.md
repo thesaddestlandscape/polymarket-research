@@ -1,0 +1,3 @@
+# ADENDA E-RE-CG-00 (antes de calcular; manda mtime+sha): ejecución PROXY ligera mientras el censo completo espera load5<4
+Datos: `DL/m5barato_mision/quien_gana_agg_2026-10-{06..25}.csv` (cron diario de `analisis_5m_barato_quien_gana.py`; falta el 19-Oct = missing). Universo = solo 5m de PARES (cierre %900==0, ~1/3 de los 5m), 6 monedas, todas las bandas; pnl a resolución oficial, tomador neto de comisión, SIN rebate (pool de rebate = 0,2·Σfee5, solo contexto). Por wallet-día: net = pnl5_M + pnl5_T.
+Mismas reglas Q1/Q2 del PREREG_E01 con SEL = 06-14, TEST = 15-25. Es un PROXY: no sustituye al censo completo (2/3 de los mercados fuera y sin rebate).

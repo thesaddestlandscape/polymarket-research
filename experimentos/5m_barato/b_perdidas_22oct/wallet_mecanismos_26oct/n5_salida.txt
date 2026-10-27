@@ -1,0 +1,49 @@
+ventas (v=1) filas: 0
+cobertura desenlace 1.0
+
+===== MM
+por día: 10-06:+36 10-07:+3803 10-08:-1844 10-09:+1522 10-10:+2220 10-11:+2437 10-12:+805 10-13:-1870 10-14:+3155 10-15:+5562 10-16:+2270 10-17:+38 10-18:-1073 10-19:-1294 10-20:-978 10-21:-2891
+[SEL] total EV +0.0148 IC90d (+0.0007,+0.0274) PnL +10,264$ coste 692,428$ días+ 7/9 | rebate est +2400$ | fee tomador est 3753$
+   M p[0,0.1) unidades 397 hit 0.060 vs p 0.063 (media 0.051) EV -0.4851 IC90d (-0.7751,-0.1260) PnL -1,882$ coste 3,880$ días+ 1/9
+   M p[0.1,0.3) unidades 565 hit 0.209 vs p 0.222 (media 0.200) EV -0.1498 IC90d (-0.3607,+0.0119) PnL -4,460$ coste 29,763$ días+ 3/9
+   M p[0.3,0.7) unidades 1690 hit 0.521 vs p 0.544 (media 0.513) EV +0.0167 IC90d (-0.0196,+0.0588) PnL +3,334$ coste 200,149$ días+ 6/9
+   M p[0.7,0.9) unidades 1096 hit 0.838 vs p 0.799 (media 0.794) EV +0.0864 IC90d (+0.0448,+0.1202) PnL +20,656$ coste 239,200$ días+ 8/9
+   M p[0.9,1.01) unidades 279 hit 0.968 vs p 0.935 (media 0.933) EV +0.0357 IC90d (-0.0133,+0.0674) PnL +2,847$ coste 79,646$ días+ 8/9
+   T p[0,0.1) unidades 115 hit 0.043 vs p 0.054 (media 0.038) EV -0.7342 IC90d (-1.0182,-0.4214) PnL -584$ coste 796$ días+ 1/9
+   T p[0.1,0.3) unidades 154 hit 0.156 vs p 0.216 (media 0.202) EV -0.3370 IC90d (-0.5879,-0.0285) PnL -1,766$ coste 5,240$ días+ 3/9
+   T p[0.3,0.7) unidades 767 hit 0.520 vs p 0.537 (media 0.523) EV -0.0936 IC90d (-0.1647,-0.0433) PnL -8,329$ coste 89,001$ días+ 1/9
+   T p[0.7,0.9) unidades 292 hit 0.846 vs p 0.799 (media 0.788) EV -0.0016 IC90d (-0.0623,+0.0600) PnL -54$ coste 34,237$ días+ 4/9
+   T p[0.9,1.01) unidades 60 hit 0.950 vs p 0.938 (media 0.937) EV +0.0480 IC90d (+0.0246,+0.0606) PnL +505$ coste 10,514$ días+ 8/9
+   mercados 3083 con ambos lados 0.46 | pares -12,249$ | dirección +26,267$ | fee tomador -3,753$
+   por moneda: n/a en R_D (sin activo); hora: n/a
+[OOS] total EV +0.0062 IC90d (-0.0447,+0.0412) PnL +1,634$ coste 263,052$ días+ 3/7 | rebate est +1040$ | fee tomador est 940$
+   M p[0,0.1) unidades 162 hit 0.043 vs p 0.064 (media 0.054) EV -0.4305 IC90d (-0.8728,+0.1136) PnL -728$ coste 1,691$ días+ 2/7
+   M p[0.1,0.3) unidades 309 hit 0.233 vs p 0.223 (media 0.211) EV -0.1605 IC90d (-0.3690,+0.0909) PnL -1,610$ coste 10,032$ días+ 3/7
+   M p[0.3,0.7) unidades 1061 hit 0.512 vs p 0.545 (media 0.516) EV -0.0129 IC90d (-0.1245,+0.0976) PnL -1,243$ coste 96,570$ días+ 3/7
+   M p[0.7,0.9) unidades 592 hit 0.826 vs p 0.796 (media 0.792) EV +0.0361 IC90d (+0.0043,+0.0583) PnL +3,435$ coste 95,146$ días+ 5/7
+   M p[0.9,1.01) unidades 139 hit 0.964 vs p 0.932 (media 0.933) EV +0.0639 IC90d (+0.0561,+0.0704) PnL +1,497$ coste 23,421$ días+ 7/7
+   T p[0,0.1) unidades 31 hit 0.065 vs p 0.052 (media 0.043) EV +0.8769 IC90d (-1.0665,+1.3335) PnL +180$ coste 205$ días+ 1/7
+   T p[0.1,0.3) unidades 45 hit 0.200 vs p 0.214 (media 0.203) EV -0.3717 IC90d (-0.8130,-0.0570) PnL -395$ coste 1,062$ días+ 1/7
+   T p[0.3,0.7) unidades 244 hit 0.512 vs p 0.540 (media 0.507) EV -0.0628 IC90d (-0.2104,+0.0292) PnL -1,303$ coste 20,753$ días+ 2/7
+   T p[0.7,0.9) unidades 128 hit 0.820 vs p 0.788 (media 0.786) EV +0.1333 IC90d (+0.0734,+0.2022) PnL +1,761$ coste 13,204$ días+ 6/7
+   mercados 1809 con ambos lados 0.35 | pares -3,766$ | dirección +6,340$ | fee tomador -940$
+   por moneda: n/a en R_D (sin activo); hora: n/a
+
+===== W
+por día: 10-06:+2339 10-07:+1435 10-08:+572 10-09:+2351 10-10:-903 10-11:+114 10-12:-69 10-13:+1474 10-14:+185 10-15:-218 10-16:+674 10-17:+552 10-18:+1591 10-19:+1110 10-20:+774 10-21:+955
+[SEL] total EV +0.0465 IC90d (+0.0140,+0.0733) PnL +7,499$ coste 161,226$ días+ 7/9 | rebate est +468$ | fee tomador est 0$
+   M p[0,0.1) unidades 2201 hit 0.043 vs p 0.056 (media 0.042) EV -0.0000 IC90d (-0.2597,+0.2115) PnL -0$ coste 7,887$ días+ 3/9
+   M p[0.1,0.3) unidades 821 hit 0.246 vs p 0.184 (media 0.168) EV +0.5092 IC90d (+0.2929,+0.7310) PnL +4,979$ coste 9,777$ días+ 8/9
+   M p[0.3,0.7) unidades 552 hit 0.529 vs p 0.521 (media 0.487) EV +0.0531 IC90d (-0.0960,+0.2195) PnL +1,108$ coste 20,858$ días+ 4/9
+   M p[0.7,0.9) unidades 373 hit 0.831 vs p 0.831 (media 0.823) EV -0.0101 IC90d (-0.0734,+0.0586) PnL -261$ coste 25,885$ días+ 5/9
+   M p[0.9,1.01) unidades 872 hit 0.974 vs p 0.963 (media 0.959) EV +0.0173 IC90d (+0.0099,+0.0230) PnL +1,674$ coste 96,820$ días+ 8/9
+   mercados 4185 con ambos lados 0.15 | pares +2,667$ | dirección +4,832$ | fee tomador -0$
+   por moneda: n/a en R_D (sin activo); hora: n/a
+[OOS] total EV +0.0271 IC90d (+0.0161,+0.0393) PnL +5,438$ coste 200,790$ días+ 6/7 | rebate est +544$ | fee tomador est 0$
+   M p[0,0.1) unidades 1935 hit 0.035 vs p 0.052 (media 0.036) EV -0.0693 IC90d (-0.3622,+0.2355) PnL -513$ coste 7,397$ días+ 4/7
+   M p[0.1,0.3) unidades 647 hit 0.244 vs p 0.197 (media 0.176) EV +0.1255 IC90d (-0.0304,+0.2971) PnL +1,281$ coste 10,206$ días+ 4/7
+   M p[0.3,0.7) unidades 512 hit 0.547 vs p 0.513 (media 0.482) EV -0.0324 IC90d (-0.1036,+0.0659) PnL -864$ coste 26,698$ días+ 3/7
+   M p[0.7,0.9) unidades 473 hit 0.860 vs p 0.829 (media 0.821) EV +0.0413 IC90d (+0.0001,+0.0709) PnL +1,445$ coste 34,991$ días+ 4/7
+   M p[0.9,1.01) unidades 1028 hit 0.982 vs p 0.961 (media 0.959) EV +0.0337 IC90d (+0.0251,+0.0388) PnL +4,090$ coste 121,499$ días+ 7/7
+   mercados 3821 con ambos lados 0.20 | pares +3,398$ | dirección +2,041$ | fee tomador -0$
+   por moneda: n/a en R_D (sin activo); hora: n/a
