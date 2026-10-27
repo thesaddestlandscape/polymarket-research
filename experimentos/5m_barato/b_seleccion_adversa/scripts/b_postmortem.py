@@ -19,7 +19,7 @@ for l in open(a.ledger):
     if a.hasta and r.get('ts', '') > a.hasta: continue
     t = r.get('tipo')
     if t == 'puja_post': first.setdefault((r['slug'], r['lado']), r)
-    elif t == 'puja_fin': fin[(r['slug'], r['lado'])] = r
+    elif t == 'puja_fin' and not r.get('interrumpida'): fin[(r['slug'], r['lado'])] = r      # un parcial de salida no es un cierre: el mercado queda fuera hasta tener el completo/reconstruido
 slugs = sorted({k[0] for k in fin} - set(des))
 ses = requests.Session()
 for i in range(0, len(slugs), 40):

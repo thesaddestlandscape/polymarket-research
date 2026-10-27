@@ -516,19 +516,22 @@ def conciliar_ledger_B(fills):
     defecto, un gemelo_relleno emparejado por hora (+-5 s), precio y acciones con un fill on-chain aun no explicado."""
     led = defaultdict(float)
     tard = defaultdict(float)
+    parc = defaultdict(float)
     gem = []
     for d in leer_jsonl(DL / "experimento_h47_B_ledger.jsonl"):
         if d.get("real") is not True:
             continue
-        if d["tipo"] == "puja_fin":
+        if d["tipo"] == "puja_fin" and d.get("interrumpida"):
+            parc[d["slug"]] += d.get("llenas_detectadas", 0) or 0      # parcial de salida (cota inferior): solo si no hay puja_fin completo
+        elif d["tipo"] == "puja_fin":
             led[d["slug"]] += d.get("llenas_detectadas", 0) or 0
         elif d["tipo"] == "relleno_tardio":
             tard[d["slug"]] += d["acc"]
         elif d["tipo"] == "gemelo_relleno":
             gem.append((ts_iso_a_epoch(d["ts"]), d["precio"], d["acc_total"]))
-    for slug, v in tard.items():
+    for slug in set(tard) | set(parc):
         if slug not in led:
-            led[slug] = v
+            led[slug] = max(tard.get(slug, 0.0), parc.get(slug, 0.0))     # el parcial ya incluye los tardios que sincronizo al salir
     chain = defaultdict(float)
     for f in fills:
         if f["experimento"] == "H47-B":

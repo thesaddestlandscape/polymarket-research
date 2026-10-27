@@ -144,6 +144,7 @@ def cargar_fuentes():
         elif t == 'puja_fin':
             out = 'Up' if d['lado'] == 'YES' else 'Down'
             for r in d.get('rellenos') or []:
+                if d.get('interrumpida') and r.get('tardio'): continue      # puja_fin parcial de salida: t_deteccion de un tardio = hora de SALIDA, no de relleno; ya cuenta via relleno_tardio
                 rell.setdefault(r['oid'], {})[(r['t_deteccion'], r['acc'])] = r
                 tdet.setdefault((d['slug'], out), []).append(r['t_deteccion'])
         elif t == 'relleno_tardio': tard.setdefault(d['oid'], []).append(d.get('acc') or 0)

@@ -166,7 +166,9 @@ def ordenes_b(ledger_path):
         elif t == 'fuera_libro': fuera.setdefault(oid, d['ts'])
         elif t == 'intencion_cancel': canc.setdefault(oid, d['ts'])
         elif t == 'puja_fin':
-            for r in d.get('rellenos') or []: rel.setdefault(r['oid'], set()).add((float(r['t_deteccion']), float(r['acc'])))
+            for r in d.get('rellenos') or []:
+                if d.get('interrumpida') and r.get('tardio'): continue      # parcial de salida: su t_deteccion es la hora de salida, no de relleno
+                rel.setdefault(r['oid'], set()).add((float(r['t_deteccion']), float(r['acc'])))
     for oid, o in O.items(): o.update(tok=tok.get(oid), tc=tcall.get(oid), t_fuera=fuera.get(oid), t_cancel=canc.get(oid), rel=sorted(rel.get(oid, [])))
     return O
 
