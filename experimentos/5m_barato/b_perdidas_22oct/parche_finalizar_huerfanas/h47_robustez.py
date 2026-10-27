@@ -299,49 +299,39 @@ def _tiene_markouts(r):
 
 
 def escribir_preferente(regs, out=None):
-    """Como rpf.escribir (idempotente por slug, solo-anade, bajo el MISMO flock OUT.lock, fsync) pero NO primero-gana a ciegas: una fila existente con
-    markouts 'missing' se SUSTITUYE por una completa (auditable: la anterior queda en OUT.reemplazos.jsonl y la nueva lleva reemplaza_missing=True).
-    Reescritura atomica (tmp + rename). Devuelve (nuevos+reemplazados, ya_estaban)."""
+    """Como rpf.escribir: SOLO ANADE, bajo el MISMO flock OUT.lock, fsync, idempotente por slug. Unica diferencia: si el slug ya tiene fila pero todas
+    con markouts 'missing' y la nueva los trae, se ANADE tambien (reemplaza_missing=True); el lector (markouts_desde_registro.por_slug) elige la
+    completa. Devuelve (anadidas, ya_estaban)."""
     out = out or RECON_OUT
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out + ".lock", "w") as lk:
         fcntl.flock(lk, fcntl.LOCK_EX)
-        filas = []
+        previas = collections.defaultdict(list)
         if os.path.exists(out):
             for ln in open(out):
                 try:
-                    filas.append(json.loads(ln))
+                    d = json.loads(ln)
+                    previas[d.get("slug")].append(d)
                 except Exception:
                     pass
-        por_slug = {d.get("slug"): i for i, d in enumerate(filas)}
-        nuevos, ya, reempl = 0, 0, []
+        nuevas = []
         for r in regs:
-            i = por_slug.get(r["slug"])
-            if i is None:
-                filas.append(r)
-                por_slug[r["slug"]] = len(filas) - 1
-                nuevos += 1
-            elif not _tiene_markouts(filas[i]) and _tiene_markouts(r):
-                reempl.append(filas[i])
-                filas[i] = dict(r, reemplaza_missing=True)
-                nuevos += 1
-            else:
-                ya += 1
-        if nuevos:
-            if reempl:
-                with open(out.replace(".jsonl", "") + ".reemplazos.jsonl", "a") as f:
-                    for d in reempl:
-                        f.write(json.dumps(d, separators=(",", ":")) + "\n")
-                    f.flush()
-                    os.fsync(f.fileno())
-            tmp = out + ".tmp"
-            with open(tmp, "w") as f:
-                for d in filas:
-                    f.write(json.dumps(d, separators=(",", ":")) + "\n")
+            ex = previas.get(r["slug"])
+            if not ex:
+                nuevas.append(r)
+            elif _tiene_markouts(r) and not any(_tiene_markouts(d) for d in ex):
+                nuevas.append(dict(r, reemplaza_missing=True))
+            if nuevas and nuevas[-1]["slug"] == r["slug"]:
+                previas[r["slug"]].append(nuevas[-1])
+        if nuevas:
+            with open(out, "a") as f:
+                if f.tell() and open(out, "rb").read()[-1:] != b"\n":
+                    f.write("\n")                                  # cola a medias
+                for r in nuevas:
+                    f.write(json.dumps(r, separators=(",", ":")) + "\n")
                 f.flush()
                 os.fsync(f.fileno())
-            os.replace(tmp, out)
-    return nuevos, ya
+    return len(nuevas), len(regs) - len(nuevas)
 
 
 class bloqueo_proceso:
@@ -502,7 +492,7 @@ def _hilo_huerfanas(ex, ledger_path):
 # ---------------------------------------------------------------- (b) salida: puja_fin parcial sin red (DESPUES de cerrar_salida)
 def resumen_parcial(ex, c, ahora=None, post_cierre=False):
     """puja_fin de un mercado vivo sin red (memoria + ledger). Mismos campos que Exp47.finalizar + interrumpida/cota inferior.
-    relleno_real nunca afirma False sin garantia: solo si cerrar_salida corrio, no hay vivas/kill ni ordenes sin verificar."""
+    relleno_real nunca afirma False sin garantia: solo si cerrar_salida corrio, ex.ordenes() no fallo, TODAS las ordenes estan vistas y cerradas y no hay vivas/kill."""
     ahora = time.time() if ahora is None else ahora
     lib, fin = c.lib, c.mk["fin"]
     for tok, e in c.estado.items():
@@ -513,9 +503,10 @@ def resumen_parcial(ex, c, ahora=None, post_cierre=False):
                 r[f"mid_{s}s"] = m
                 r[f"markout_{s}s"] = (m - r["precio"]) / r["precio"] if m is not None else None
     e = c.estado[c.tok]
-    ords = {}
+    ords, ords_ok = {}, False
     try:
         ords = ex.ordenes() if ex.real else {}
+        ords_ok = bool(ex.real)
     except Exception:
         pass
     sin_ver = sorted(h for h in c.hashes if h in ords and ords[h].abierta and not ords[h].alias)
@@ -526,7 +517,8 @@ def resumen_parcial(ex, c, ahora=None, post_cierre=False):
     elif e["llenas"] > 1e-9:
         relleno = True
     else:
-        relleno = False if (post_cierre and not sin_ver and not vivas and not ex.kill) else None
+        todas_cerradas = ords_ok and bool(c.hashes) and all(h in ords and not ords[h].abierta for h in c.hashes)    # fail-closed: toda orden vista y cerrada
+        relleno = False if (post_cierre and todas_cerradas and not vivas and not ex.kill) else None
     return {"tipo": "puja_fin", "slug": c.mk["slug"], "coin": c.coin, "lado": c.lados[c.tok], "k": c.k, "n_ordenes": len(c.hashes),
             "llenas_detectadas": e["llenas"], "llenas_en_vuelo": sum(r["acc"] for r in e["rellenos"] if not r.get("tardio")),
             "rellenos_tardios": sum(1 for r in e["rellenos"] if r.get("tardio")), "coste_detectado": e["coste"],

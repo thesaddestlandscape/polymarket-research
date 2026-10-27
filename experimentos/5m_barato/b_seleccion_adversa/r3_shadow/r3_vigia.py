@@ -281,7 +281,7 @@ def b_real(ledger, smp, decs, des, fin=None, fills=None, fint=None):
             continue
         if r.get("tipo") == "puja_post":
             first.setdefault((r["slug"], r["lado"]), r)
-        elif r.get("tipo") == "puja_fin":
+        elif r.get("tipo") == "puja_fin" and not r.get("interrumpida"):      # un parcial de salida no es un cierre
             finb[(r["slug"], r["lado"])] = r
     g = defaultdict(lambda: {"pujas": 0, "rellenos": 0, "coste": 0.0, "pnl": 0.0, "sin_desenlace": 0})
     for (slug, lado), f in finb.items():

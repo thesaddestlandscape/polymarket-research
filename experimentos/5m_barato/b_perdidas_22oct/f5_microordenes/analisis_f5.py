@@ -33,7 +33,7 @@ def unidades(eventos, real=True):
     """{(slug, lado): puja_fin} con la última puja_fin de cada unidad; solo de ese modo (real/seco)."""
     out = {}
     for e in eventos:
-        if e.get("tipo") == "puja_fin" and bool(e.get("real")) == bool(real) and e.get("slug") and e.get("lado"):
+        if e.get("tipo") == "puja_fin" and not e.get("interrumpida") and bool(e.get("real")) == bool(real) and e.get("slug") and e.get("lado"):   # parcial de salida != cierre
             out[(e["slug"], e["lado"])] = e
     return out
 

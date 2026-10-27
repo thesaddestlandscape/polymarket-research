@@ -301,8 +301,17 @@ def procesar(recs, dry=False, fallback=True):
     return nuevas, resumen
 
 
+def por_slug(filas):
+    """Una fila por slug en puja_fin_reconstruido (que es solo-anade): la que trae markouts (no 'missing') gana a una 'missing'; a igualdad, la ultima."""
+    mejor = {}
+    for i, r in enumerate(filas):
+        k = (r.get('markouts') not in (None, 'missing'), i)
+        if r['slug'] not in mejor or k > mejor[r['slug']][0]: mejor[r['slug']] = (k, r)
+    return [v[1] for v in mejor.values()]
+
+
 def main(dry=False):
-    recs = [json.loads(l) for l in open(IN) if l.strip()]
+    recs = por_slug([json.loads(l) for l in open(IN) if l.strip()])
     nuevas, res = procesar(recs, dry=dry)
     for f in nuevas: print(json.dumps(f))
     print(json.dumps(res), file=sys.stderr)

@@ -21,7 +21,7 @@ for l in open(DL+'experimento_h47_B_ledger.jsonl'):
         p['n_ord']+=1; p['precios'].append(e['precio'])
     elif t in ('lectura','relleno_tardio'):
         lect.setdefault(e['oid'],[]).append(e)
-    elif t=='puja_fin':
+    elif t=='puja_fin' and not e.get('interrumpida'):      # parcial de salida != cierre
         fins[(e['slug'],e['lado'])]=e
 json.dump(dict(pujas={f'{a}|{b}':v for (a,b),v in pujas.items()},mk=mk,orders=orders,lect=lect,fins={f'{a}|{b}':v for (a,b),v in fins.items()}),open(S+'/ledger_extract.json','w'))
 print(len(pujas),len(mk),len(orders),len(lect),len(fins))

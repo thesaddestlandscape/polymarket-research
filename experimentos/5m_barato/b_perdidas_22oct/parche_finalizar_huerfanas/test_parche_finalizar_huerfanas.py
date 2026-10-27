@@ -932,19 +932,24 @@ def test_c4_constantes_coinciden_entre_vendor_ejecutor_y_robustez():
 
 
 # ---- 5: carrera hilo vs cron
-def test_c5_escribir_preferente_sustituye_missing_por_completa_y_audita(tmp_path):
+def test_c5_escribir_preferente_solo_anade_y_el_lector_elige_la_completa(tmp_path):
+    import importlib.util
+    sp = importlib.util.spec_from_file_location("mdr", str(AQUI.parent / "etiquetado_pasivo" / "scripts" / "markouts_desde_registro.py"))
+    M_ = importlib.util.module_from_spec(sp); sp.loader.exec_module(M_)
     out = str(tmp_path / "o.jsonl")
     miss = dict(tipo="puja_fin", slug="a", markouts="missing", rellenos=[])
     comp = dict(tipo="puja_fin", slug="a", markouts="parcial_mids_persistidos", rellenos=[])
     assert R.escribir_preferente([miss, dict(miss, slug="b")], out) == (2, 0)
+    antes = open(out).read()
     assert R.escribir_preferente([dict(miss)], out) == (0, 1)                     # missing sobre missing: ya estaba
-    assert R.escribir_preferente([comp], out) == (1, 0)                           # completa sobre missing: sustituye
-    filas = {d["slug"]: d for d in map(json.loads, open(out))}
-    assert filas["a"]["markouts"] == "parcial_mids_persistidos" and filas["a"]["reemplaza_missing"] is True and len(filas) == 2
-    aud = [json.loads(l) for l in open(str(tmp_path / "o.reemplazos.jsonl"))]
-    assert len(aud) == 1 and aud[0]["markouts"] == "missing"                      # la fila anterior queda auditable
-    assert R.escribir_preferente([dict(miss, markouts="parcial_mids_persistidos", x=2)], out) == (0, 1)   # completa sobre completa: primero gana
-    assert R.escribir_preferente([miss], out) == (0, 1) and not os.path.exists(out + ".tmp")
+    assert R.escribir_preferente([comp], out) == (1, 0)                           # completa sobre missing: se ANADE
+    assert open(out).read().startswith(antes) and len(open(out).read().splitlines()) == 3   # solo anade: lo anterior intacto
+    assert not os.path.exists(out + ".tmp") and not os.path.exists(str(tmp_path / "o.reemplazos.jsonl"))
+    filas = [json.loads(l) for l in open(out)]
+    assert filas[2]["reemplaza_missing"] is True
+    res = {d["slug"]: d for d in M_.por_slug(filas)}
+    assert res["a"]["markouts"] == "parcial_mids_persistidos" and res["b"]["markouts"] == "missing" and len(res) == 2   # el lector resuelve por slug
+    assert R.escribir_preferente([dict(comp, x=2)], out) == (0, 1) and R.escribir_preferente([miss], out) == (0, 1)
 
 
 def test_c5_un_solo_reconstructor_a_la_vez_el_hilo_se_salta_la_pasada_si_el_cron_trabaja(tmp_path):
@@ -982,3 +987,18 @@ def test_c6_cs_ok_no_se_marca_si_la_primera_llamada_fallo_y_luego_es_noop():
     ex2 = ex
     ex2.cerrar_salida()                                                           # 2a llamada (atexit): _cerrado ya puesto -> no-op, NO prueba nada
     assert getattr(ex, "_h47r_cs_ok", False) is False
+
+
+# ---- 2 (5a pasada): relleno_real=False solo con TODAS las ordenes vistas y cerradas y ordenes() sin fallar
+def test_d2_relleno_false_es_fail_closed(monkeypatch):
+    ex, c = _ex_real_con_ctx(monkeypatch)
+    monkeypatch.setattr(ex, "sincronizar_rellenos", lambda cc: 0.0)
+    ex.kill = None
+    assert R.resumen_parcial(ex, c, post_cierre=True)["relleno_real"] is False                 # todo visto y cerrado
+    c.hashes = ["seco-1", "seco-2"]                                                             # un hash que ordenes() no conoce
+    assert R.resumen_parcial(ex, c, post_cierre=True)["relleno_real"] is None
+    c.hashes = ["seco-1"]
+    monkeypatch.setattr(ex, "ordenes", lambda: (_ for _ in ()).throw(RuntimeError("ledger")))   # ordenes() lanza
+    assert R.resumen_parcial(ex, c, post_cierre=True)["relleno_real"] is None
+    monkeypatch.setattr(ex, "ordenes", lambda: {"seco-1": _Ord(abierta=True)})
+    assert R.resumen_parcial(ex, c, post_cierre=True)["relleno_real"] is None

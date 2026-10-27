@@ -88,13 +88,14 @@ def test_parcial_interrumpido_se_reconstruye_marcado_y_un_puja_fin_completo_cier
 def test_pins_hash_ruta_trackeada_y_fallo_ruidoso(tmp_path):
     import shutil
     H = D._robustez()
-    assert sys.path[0] == D.PARCHE and D.PARCHE.startswith('/root/polymarket-research/experimentos/') and 'dev' not in D.PARCHE
+    assert D.PARCHE not in sys.path and D.PARCHE.startswith('/root/polymarket-research/experimentos/') and 'dev' not in D.PARCHE   # solo durante el import
+    assert set(D.PINS) == {'reconstruir_puja_fin.py', 'markouts_desde_registro.py', 'h47_robustez.py', 'pares_contabilidad.py'}   # lo que el cron ejecuta
     d = tmp_path / 'copia'; d.mkdir()
-    for f in D.PINS: shutil.copy(os.path.join(D.PARCHE, f), d / f)
+    for f in D.PARCHE_MODS: shutil.copy(os.path.join(D.PARCHE, f), d / f)
     with open(d / 'h47_robustez.py', 'a') as f: f.write('\n# cambio sin actualizar PINS\n')
     try: D._robustez(str(d)); assert False, 'debia fallar'
     except RuntimeError as e: assert 'h47_robustez.py' in str(e)
-    sys.path[:] = [x for x in sys.path if x != str(d)]; D._robustez()      # restaura la ruta buena en sys.path[0]
+    assert str(d) not in sys.path
 
 
 def test_cron_salta_paso1_si_el_hilo_trabaja_y_no_cuenta_inmaduros_en_esperan(tmp_path):

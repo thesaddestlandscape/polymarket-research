@@ -34,6 +34,14 @@ def test_retirada_liquidez_ignora_tardios_del_parcial(tmp_path):
     p = tmp_path / 'l.jsonl'; p.write_text('\n'.join(json.dumps(e) for e in EV) + '\n')
     O = m.ordenes_b(str(p))
     assert O['a']['rel'] == [(3.0, 1.0)]                                      # el tardio del parcial (hora de salida 9999) no entra
+    ev = [dict(e, ts='2026-10-27T10:00:00.000+00:00') if e['tipo'] == 'relleno_tardio' else e for e in EV]
+    p.write_text('\n'.join(json.dumps(e) for e in ev) + '\n')
+    t = __import__('pandas').Timestamp('2026-10-27T10:00:00.000+00:00').timestamp()
+    assert m.ordenes_b(str(p))['a']['rel'] == [(3.0, 1.0), (t, 5.0)]          # ...pero SI se lee el relleno_tardio del ledger (hora real del evento)
+    ev2 = ev[:-1] + [dict(tipo='puja_fin', slug='eth-updown-5m-1000', lado='YES', rellenos=[dict(oid='a', t_deteccion=t + 0.5, acc=5.0, tardio=True)])]
+    p.write_text('\n'.join(json.dumps(e) for e in ev2) + '\n')
+    rel = m.ordenes_b(str(p))['a']['rel']
+    assert sum(a for _, a in rel) == 5.0                                      # tardio ya en un puja_fin COMPLETO: no se cuenta dos veces
 
 
 def test_conciliar_ledger_B_usa_el_parcial_solo_si_no_hay_completo(tmp_path, monkeypatch):
@@ -54,3 +62,10 @@ def test_conciliar_ledger_B_usa_el_parcial_solo_si_no_hay_completo(tmp_path, mon
 def test_b_postmortem_no_toma_el_parcial_como_cierre():
     src = open(os.path.join(B5, 'b_seleccion_adversa', 'scripts', 'b_postmortem.py')).read()
     assert "elif t == 'puja_fin' and not r.get('interrumpida')" in src
+
+
+def test_resto_de_consumidores_ignoran_el_parcial():
+    for rel_, marca in (('b_seleccion_adversa/r3_shadow/r3_vigia.py', 'elif r.get("tipo") == "puja_fin" and not r.get("interrumpida")'),
+                        ('b_perdidas_22oct/f5_microordenes/analisis_f5.py', 'e.get("tipo") == "puja_fin" and not e.get("interrumpida")'),
+                        ('b_lecciones_wallets/scripts/build.py', "elif t=='puja_fin' and not e.get('interrumpida')")):
+        assert marca in open(os.path.join(B5, rel_)).read(), rel_

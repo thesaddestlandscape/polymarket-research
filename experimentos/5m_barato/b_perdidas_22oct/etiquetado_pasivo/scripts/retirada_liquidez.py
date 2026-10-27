@@ -155,7 +155,7 @@ def procesa_mercado(path, act, mid, fin, win, forward_dia):
 def ordenes_b(ledger_path):
     """oid -> dict(tok, slug, coin, lado, precio, size, t_dec, tc, t_fuera, t_cancel, rel[(t_det, acc)]) a partir del ledger de B (tolera ultima linea a medias; el orden de los eventos
     de un mismo oid NO se asume: post_lat/fuera_libro pueden preceder a puja_post)."""
-    O = {}; tok = {}; tcall = {}; fuera = {}; canc = {}; rel = {}
+    O = {}; tok = {}; tcall = {}; fuera = {}; canc = {}; rel = {}; tard = {}; ya_t = {}
     for l in open(ledger_path):
         try: d = json.loads(l)
         except Exception: continue
@@ -165,10 +165,17 @@ def ordenes_b(ledger_path):
         elif t == 'post_lat': tcall.setdefault(oid, d.get('t_call0'))
         elif t == 'fuera_libro': fuera.setdefault(oid, d['ts'])
         elif t == 'intencion_cancel': canc.setdefault(oid, d['ts'])
+        elif t == 'relleno_tardio' and d.get('ts'): tard.setdefault(oid, []).append((float(pd.Timestamp(d['ts']).timestamp()), float(d.get('acc') or 0)))
         elif t == 'puja_fin':
             for r in d.get('rellenos') or []:
-                if d.get('interrumpida') and r.get('tardio'): continue      # parcial de salida: su t_deteccion es la hora de salida, no de relleno
+                if d.get('interrumpida') and r.get('tardio'): continue      # parcial de salida: su t_deteccion es la hora de salida, no de relleno (cuenta via relleno_tardio)
+                if r.get('tardio'): ya_t.setdefault(r['oid'], []).append(float(r['acc']))
                 rel.setdefault(r['oid'], set()).add((float(r['t_deteccion']), float(r['acc'])))
+    for oid, lst in tard.items():                                               # relleno_tardio del ledger: solo los que NO figuran ya en un puja_fin completo
+        ya = list(ya_t.get(oid, []))
+        for t_, a_ in lst:
+            if a_ in ya: ya.remove(a_)
+            else: rel.setdefault(oid, set()).add((t_, a_))
     for oid, o in O.items(): o.update(tok=tok.get(oid), tc=tcall.get(oid), t_fuera=fuera.get(oid), t_cancel=canc.get(oid), rel=sorted(rel.get(oid, [])))
     return O
 
