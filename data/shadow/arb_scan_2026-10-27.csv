@@ -1,0 +1,10 @@
+timestamp_utc,tipo,accionable,event,end_date,n_brackets,suma_yes,suma_ask,suma_bid,gap_pct,profit_pct,roi_no_pct,liq_min,liq_total,rango_min,rango_max
+2026-10-27T00:07:41+00:00,OVERROUND,False,Solana price on October 31?,2026-10-31,9,1.1035,1.27,0.937,-27.0,-29.0,-2.77,866.0,8005.0,110,140
+2026-10-27T00:07:41+00:00,OVERROUND,False,Solana price on October 30?,2026-10-30,9,1.099,1.268,0.93,-26.8,-28.8,-2.85,859.0,7997.0,110,150
+2026-10-27T00:07:41+00:00,OVERROUND,False,Solana price on November 1?,2026-11-01,9,1.0885,1.257,0.92,-25.7,-27.7,-2.97,849.0,7992.0,110,150
+2026-10-27T00:07:41+00:00,OVERROUND,False,Solana price on October 29?,2026-10-29,9,1.102,1.249,0.955,-24.9,-26.9,-2.55,883.0,8176.0,110,150
+2026-10-27T00:07:41+00:00,OVERROUND,False,Solana price on October 28?,2026-10-28,9,1.1005,1.247,0.954,-24.7,-26.7,-2.56,992.0,10054.0,110,150
+2026-10-27T00:07:41+00:00,OVERROUND,False,Bitcoin price on October 30?,2026-10-30,9,1.023,1.219,0.827,-21.9,-23.9,-4.07,5245.0,49782.0,72000,90000
+2026-10-27T00:07:41+00:00,OVERROUND,False,Ethereum price on November 1?,2026-11-01,9,1.0405,1.218,0.863,-21.8,-23.8,-3.65,3163.0,53674.0,1900,2800
+2026-10-27T00:07:41+00:00,OVERROUND,False,Ethereum price on October 31?,2026-10-31,9,1.0375,1.213,0.862,-21.3,-23.3,-3.66,2994.0,29387.0,1900,2800
+2026-10-27T00:07:41+00:00,OVERROUND,False,Solana price on October 27?,2026-10-27,9,1.049,1.155,0.943,-15.5,-17.5,-2.69,281.0,7575.0,110,150
