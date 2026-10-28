@@ -1,67 +1,67 @@
 {
-  "actualizado_utc": "2026-10-28T06:20:08+00:00",
+  "actualizado_utc": "2026-10-28T12:20:09+00:00",
   "cutoff": "2026-09-24T08:00:00",
-  "n_unidades_fade_forward": 55003,
+  "n_unidades_fade_forward": 55106,
   "hipotesis": {
     "H1_peores_todas": {
-      "n_unidades": 1132,
-      "n_dias": 34,
+      "n_unidades": 1133,
+      "n_dias": 35,
       "n_wallets": 364,
       "top_wallet_pct": 0.034,
-      "hit": 0.5071,
+      "hit": 0.5066,
       "ask_medio": 0.4883,
-      "wilson90lo": 0.4826,
-      "pnl_medio": 0.0489,
-      "exceso_hit_vs_ask_pp": 1.88,
+      "wilson90lo": 0.4822,
+      "pnl_medio": 0.0479,
+      "exceso_hit_vs_ask_pp": 1.83,
       "split_half": [
         0.0771,
-        0.0206
+        0.0188
       ],
       "ci90_bootstrap_dia": [
-        -0.0228,
-        0.1306
+        -0.0248,
+        0.1273
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H2_malas_ask_020_030": {
-      "n_unidades": 1425,
+      "n_unidades": 1428,
       "n_dias": 35,
-      "n_wallets": 258,
+      "n_wallets": 260,
       "top_wallet_pct": 0.167,
-      "hit": 0.2596,
+      "hit": 0.2598,
       "ask_medio": 0.2481,
-      "wilson90lo": 0.241,
-      "pnl_medio": 0.0392,
-      "exceso_hit_vs_ask_pp": 1.15,
+      "wilson90lo": 0.2412,
+      "pnl_medio": 0.0398,
+      "exceso_hit_vs_ask_pp": 1.17,
       "split_half": [
-        0.0042,
-        0.0741
+        0.0014,
+        0.0782
       ],
       "ci90_bootstrap_dia": [
-        -0.0376,
-        0.1166
+        -0.0369,
+        0.1169
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H3_peores_longshot_ask_lt_050": {
-      "n_unidades": 593,
-      "n_dias": 34,
-      "n_wallets": 255,
+      "n_unidades": 594,
+      "n_dias": 35,
+      "n_wallets": 256,
       "top_wallet_pct": 0.052,
-      "hit": 0.3609,
-      "ask_medio": 0.3435,
-      "wilson90lo": 0.3291,
-      "pnl_medio": 0.0715,
-      "exceso_hit_vs_ask_pp": 1.73,
+      "hit": 0.3603,
+      "ask_medio": 0.3437,
+      "wilson90lo": 0.3286,
+      "pnl_medio": 0.0697,
+      "exceso_hit_vs_ask_pp": 1.66,
       "split_half": [
-        0.1307,
-        0.0124
+        0.1352,
+        0.0041
       ],
       "ci90_bootstrap_dia": [
-        -0.0469,
-        0.2126
+        -0.052,
+        0.2009
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
