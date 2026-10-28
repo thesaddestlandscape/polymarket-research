@@ -1,9 +1,8 @@
 {
-  "timestamp_utc": "2026-10-28T13:55:50+00:00",
-  "estado_global": "DEGRADED",
+  "timestamp_utc": "2026-10-28T14:01:10+00:00",
+  "estado_global": "OK",
   "alertas": [
-    "rechazos_1h:4 (rango=0, spike=0)",
-    "SOL:divergencia_0.60%"
+    "rechazos_1h:4 (rango=0, spike=0)"
   ],
   "rechazos_1h": {
     "rango": 0,
@@ -18,63 +17,51 @@
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 3824,
-      "age_seconds": 9.5,
-      "ultimo_precio": 80628.045,
+      "n": 3833,
+      "age_seconds": 8.8,
+      "ultimo_precio": 80588.095,
       "gaps": [],
       "alertas": []
     },
     "ETH": {
       "estado": "OK",
-      "n": 3824,
-      "age_seconds": 9.5,
-      "ultimo_precio": 2335.17,
+      "n": 3833,
+      "age_seconds": 8.8,
+      "ultimo_precio": 2331.555,
       "gaps": [],
       "alertas": []
     },
     "SOL": {
       "estado": "OK",
-      "n": 3824,
-      "age_seconds": 9.5,
+      "n": 3833,
+      "age_seconds": 8.8,
       "ultimo_precio": 101.01,
       "gaps": [],
       "alertas": []
     },
     "XRP": {
       "estado": "OK",
-      "n": 3824,
-      "age_seconds": 9.5,
-      "ultimo_precio": 1.3172,
+      "n": 3833,
+      "age_seconds": 8.8,
+      "ultimo_precio": 1.3174,
       "gaps": [],
       "alertas": []
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-10-28T13:51:42+00:00",
+    "timestamp_utc": "2026-10-28T13:57:06+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 80539.08,
-      "ETH": 2330.1,
-      "SOL": 100.93,
-      "XRP": 1.3159
+      "BTC": 80607.6,
+      "ETH": 2332.63,
+      "SOL": 101.02,
+      "XRP": 1.31782
     },
-    "alertas": [
-      {
-        "sym": "SOL",
-        "max_div_pct": 0.605,
-        "fuentes": {
-          "binance": 100.93,
-          "coinbase": 101.41,
-          "kraken": 100.8
-        },
-        "consenso": 100.93,
-        "accion": "ALERTA"
-      }
-    ],
+    "alertas": [],
     "bloqueados": []
   }
 }
