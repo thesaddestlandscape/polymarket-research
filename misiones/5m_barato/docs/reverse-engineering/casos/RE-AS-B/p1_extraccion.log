@@ -1,0 +1,6 @@
+dia 2026-10-24 lineas 28114358 {'sin_comp': 17800, 'sondas': 59127, 'sin_estado': 300, 'eventos': 2369, 'cruzado': 44988, 'filas': 58827, 'reinicios': 90, 'resuelta_en_flush': 3, 'no_alcanzada': 1380} seg 136 -> /root/polymarket-research-datalogs/palanca1/p1_2026-10-24.csv.gz
+--- run v1 tras ADENDA1 (12:29Z) ---
+dia 2026-10-24 lineas 28114358 {'sondas': 111147, 'sin_estado': 591, 'eventos': 2369, 'cruzado': 44988, 'filas': 110556, 'reinicios': 90, 'resuelta_en_flush': 3, 'no_alcanzada': 2220} seg 172 -> /root/polymarket-research-datalogs/palanca1/p1_2026-10-24.csv.gz
+dia 2026-10-25 lineas 27544175 {'sondas': 111162, 'sin_estado': 360, 'eventos': 2374, 'filas': 110802, 'cruzado': 41003, 'no_alcanzada': 2460} seg 172 -> /root/polymarket-research-datalogs/palanca1/p1_2026-10-25.csv.gz
+dia 2026-10-26 lineas 41601566 {'eventos': 2447, 'sondas': 111381, 'sin_estado': 360, 'cruzado': 52007, 'filas': 111021, 'no_alcanzada': 2820} seg 250 -> /root/polymarket-research-datalogs/palanca1/p1_2026-10-26.csv.gz
+FIN

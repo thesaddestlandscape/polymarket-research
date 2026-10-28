@@ -1,0 +1,226 @@
+== LEDGER H47-B real: unidades (mercado-lado, primer relleno) 202, con cola en ledger 202, Σpnl -14.30
+
+== LEDGER H47-B real, 20-23 Oct (post_ok.cola al colocar)
+  TODOS                          n= 202 cierres= 112 coste=  216.0 EVw=-0.0662 IC90cierre(-0.318,+0.189) EVu=-0.0174 
+ -- por cola (tri)
+  cola 0                         n=  37 cierres=  34 coste=   36.3 EVw=+0.0092 IC90cierre(-0.476,+0.548) EVu=+0.1160 [n<40 NO CONCLUYE]
+  cola (0,25]                    n=  57 cierres=  50 coste=   63.0 EVw=+0.0197 IC90cierre(-0.430,+0.548) EVu=+0.0713 
+  cola >25                       n= 108 cierres=  76 coste=  116.6 EVw=-0.1361 IC90cierre(-0.453,+0.233) EVu=-0.1099 
+ -- por cola (rej)
+  cola 0                         n=  37 cierres=  34 coste=   36.3 EVw=+0.0092 IC90cierre(-0.507,+0.524) EVu=+0.1160 [n<40 NO CONCLUYE]
+  cola (0,10]                    n=  27 cierres=  26 coste=   29.0 EVw=+0.0972 IC90cierre(-0.689,+1.030) EVu=+0.1878 [n<40 NO CONCLUYE]
+  cola (10,25]                   n=  30 cierres=  29 coste=   34.0 EVw=-0.0462 IC90cierre(-0.553,+0.539) EVu=-0.0336 [n<40 NO CONCLUYE]
+  cola (25,100]                  n=  76 cierres=  59 coste=   82.4 EVw=+0.0248 IC90cierre(-0.395,+0.487) EVu=+0.0315 
+  cola >100                      n=  32 cierres=  29 coste=   34.3 EVw=-0.5225 IC90cierre(-0.864,-0.106) EVu=-0.4457 [n<40 NO CONCLUYE]
+ -- por moneda x cola (tri)
+  ETH cola 0                     n=   4 cierres=   4 coste=    4.4 EVw=-1.0000 IC90cierre(-1.000,-1.000) EVu=-1.0000 [n<40 NO CONCLUYE]
+  ETH cola (0,25]                n=  19 cierres=  19 coste=   21.8 EVw=+0.2320 IC90cierre(-0.575,+1.265) EVu=+0.3731 [n<40 NO CONCLUYE]
+  ETH cola >25                   n=  56 cierres=  56 coste=   61.2 EVw=+0.0634 IC90cierre(-0.392,+0.557) EVu=+0.0646 
+  SOL cola 0                     n=  12 cierres=  12 coste=   11.1 EVw=+0.3600 IC90cierre(-0.591,+1.387) EVu=+0.7890 [n<40 NO CONCLUYE]
+  SOL cola (0,25]                n=  21 cierres=  21 coste=   23.7 EVw=-0.1572 IC90cierre(-0.783,+0.505) EVu=-0.1962 [n<40 NO CONCLUYE]
+  SOL cola >25                   n=  31 cierres=  31 coste=   31.7 EVw=-0.1882 IC90cierre(-0.761,+0.468) EVu=-0.1447 [n<40 NO CONCLUYE]
+  XRP cola 0                     n=  21 cierres=  21 coste=   20.7 EVw=+0.0339 IC90cierre(-0.593,+0.774) EVu=-0.0560 [n<40 NO CONCLUYE]
+  XRP cola (0,25]                n=  17 cierres=  17 coste=   17.5 EVw=-0.0043 IC90cierre(-0.918,+1.135) EVu=+0.0644 [n<40 NO CONCLUYE]
+  XRP cola >25                   n=  21 cierres=  21 coste=   23.8 EVw=-0.5798 IC90cierre(-1.000,-0.095) EVu=-0.5238 [n<40 NO CONCLUYE]
+ -- por bucket de precio x cola (tri)
+  10-15 cola 0                   n=   9 cierres=   9 coste=    5.3 EVw=-0.9711 IC90cierre(-1.000,-0.889) EVu=+0.0101 [n<40 NO CONCLUYE]
+  10-15 cola (0,25]              n=  10 cierres=   9 coste=    9.9 EVw=+1.0154 IC90cierre(-1.000,+3.275) EVu=+0.8182 [n<40 NO CONCLUYE]
+  10-15 cola >25                 n=  17 cierres=  16 coste=   15.1 EVw=+0.4564 IC90cierre(-0.680,+1.878) EVu=+0.3629 [n<40 NO CONCLUYE]
+  15-20 cola 0                   n=   6 cierres=   6 coste=    4.2 EVw=-1.0000 IC90cierre(-1.000,-1.000) EVu=-1.0000 [n<40 NO CONCLUYE]
+  15-20 cola (0,25]              n=   9 cierres=   9 coste=    9.0 EVw=-0.1271 IC90cierre(-1.000,+1.100) EVu=+0.2346 [n<40 NO CONCLUYE]
+  15-20 cola >25                 n=  30 cierres=  29 coste=   29.3 EVw=+0.4898 IC90cierre(-0.241,+1.256) EVu=+0.4856 [n<40 NO CONCLUYE]
+  20-25 cola 0                   n=  11 cierres=  11 coste=   13.1 EVw=+0.9157 IC90cierre(-0.237,+2.065) EVu=+0.9645 [n<40 NO CONCLUYE]
+  20-25 cola (0,25]              n=  19 cierres=  18 coste=   20.4 EVw=+0.2229 IC90cierre(-0.503,+1.027) EVu=+0.1077 [n<40 NO CONCLUYE]
+  20-25 cola >25                 n=  34 cierres=  31 coste=   37.9 EVw=-0.4728 IC90cierre(-0.869,-0.029) EVu=-0.4880 [n<40 NO CONCLUYE]
+  25-30 cola 0                   n=  11 cierres=  11 coste=   13.7 EVw=-0.1658 IC90cierre(-0.895,+0.676) EVu=-0.0372 [n<40 NO CONCLUYE]
+  25-30 cola (0,25]              n=  19 cierres=  18 coste=   23.7 EVw=-0.5165 IC90cierre(-0.939,-0.034) EVu=-0.4356 [n<40 NO CONCLUYE]
+  25-30 cola >25                 n=  27 cierres=  26 coste=   34.2 EVw=-0.5617 IC90cierre(-0.870,-0.127) EVu=-0.5930 [n<40 NO CONCLUYE]
+ -- moneda x bucket x cola(tri): 35 celdas con datos, 0 con n>=40
+  ETH|15-20|>25                  n=  20 cierres=  20 coste=   20.8 EVw=+0.2992 IC90cierre(-0.657,+1.291) EVu=+0.2153 [n<40 NO CONCLUYE]
+  ETH|20-25|>25                  n=  14 cierres=  14 coste=   15.8 EVw=-0.0497 IC90cierre(-0.687,+0.875) EVu=-0.0671 [n<40 NO CONCLUYE]
+  ETH|25-30|>25                  n=  14 cierres=  14 coste=   17.5 EVw=-0.4272 IC90cierre(-1.000,+0.200) EVu=-0.4702 [n<40 NO CONCLUYE]
+  SOL|20-25|(0,25]               n=  11 cierres=  11 coste=   12.4 EVw=+0.6177 IC90cierre(-0.240,+1.672) EVu=+0.5344 [n<40 NO CONCLUYE]
+  SOL|20-25|>25                  n=  11 cierres=  11 coste=   11.8 EVw=-0.5745 IC90cierre(-1.000,+0.233) EVu=-0.6047 [n<40 NO CONCLUYE]
+  ETH|25-30|(0,25]               n=   9 cierres=   9 coste=   12.2 EVw=-0.1770 IC90cierre(-1.000,+0.646) EVu=-0.1917 [n<40 NO CONCLUYE]
+  XRP|20-25|>25                  n=   9 cierres=   9 coste=   10.4 EVw=-1.0000 IC90cierre(-1.000,-1.000) EVu=-1.0000 [n<40 NO CONCLUYE]
+  ETH|10-15|>25                  n=   8 cierres=   8 coste=    7.2 EVw=+0.8261 IC90cierre(-1.000,+2.970) EVu=+0.8544 [n<40 NO CONCLUYE]
+
+[vpv] vidas 60876; cobertura gana (re-unida con cache actual) por dia: {'2026-10-24': 0.9997, '2026-10-25': 0.9996, '2026-10-26': 0.9992}
+
+== VIRTUAL relleno pes, unidad primer_relleno (Q0 = cola al colocar) 24-26 Oct
+  TODOS                          n=5254 cierres= 864 coste= 6962.1 EVw=-0.3536 IC90cierre(-0.392,-0.316) EVu=-0.3694 
+ -- por cola (tri)
+  cola (0,25]                    n=4119 cierres= 864 coste= 5327.6 EVw=-0.4106 IC90cierre(-0.454,-0.367) EVu=-0.4210 
+  cola >25                       n=1135 cierres= 684 coste= 1634.5 EVw=-0.1679 IC90cierre(-0.236,-0.098) EVu=-0.1819 
+ -- por cola (rej)
+  cola (0,10]                    n=2815 cierres= 859 coste= 3585.6 EVw=-0.4436 IC90cierre(-0.492,-0.395) EVu=-0.4561 
+  cola (10,25]                   n=1304 cierres= 702 coste= 1742.0 EVw=-0.3427 IC90cierre(-0.414,-0.273) EVu=-0.3453 
+  cola (25,100]                  n= 877 cierres= 583 coste= 1251.8 EVw=-0.2052 IC90cierre(-0.284,-0.127) EVu=-0.2203 
+  cola >100                      n= 258 cierres= 239 coste=  382.6 EVw=-0.0460 IC90cierre(-0.194,+0.107) EVu=-0.0516 
+ -- por moneda x cola (tri)
+  BNB cola (0,25]                n= 590 cierres= 569 coste=  648.9 EVw=-0.6610 IC90cierre(-0.738,-0.585) EVu=-0.6365 
+  BNB cola >25                   n=   9 cierres=   9 coste=    6.1 EVw=-1.0000 IC90cierre(-1.000,-1.000) EVu=-1.0000 [n<40 NO CONCLUYE]
+  BTC cola (0,25]                n= 501 cierres= 440 coste=  740.5 EVw=-0.1762 IC90cierre(-0.269,-0.088) EVu=-0.1738 
+  BTC cola >25                   n= 638 cierres= 556 coste=  944.1 EVw=-0.0415 IC90cierre(-0.128,+0.042) EVu=-0.0399 
+  DOGE cola (0,25]               n= 573 cierres= 552 coste=  684.2 EVw=-0.6273 IC90cierre(-0.707,-0.551) EVu=-0.6431 
+  DOGE cola >25                  n=  20 cierres=  20 coste=   22.2 EVw=-0.5495 IC90cierre(-1.000,-0.017) EVu=-0.5727 [n<40 NO CONCLUYE]
+  ETH cola (0,25]                n= 703 cierres= 630 coste=  992.8 EVw=-0.2798 IC90cierre(-0.355,-0.202) EVu=-0.2800 
+  ETH cola >25                   n= 333 cierres= 315 coste=  479.8 EVw=-0.2914 IC90cierre(-0.403,-0.168) EVu=-0.2955 
+  SOL cola (0,25]                n= 888 cierres= 805 coste= 1168.1 EVw=-0.3751 IC90cierre(-0.446,-0.307) EVu=-0.3736 
+  SOL cola >25                   n=  87 cierres=  86 coste=  116.9 EVw=-0.5295 IC90cierre(-0.739,-0.310) EVu=-0.5543 
+  XRP cola (0,25]                n= 864 cierres= 785 coste= 1093.2 EVw=-0.4420 IC90cierre(-0.513,-0.371) EVu=-0.4333 
+  XRP cola >25                   n=  48 cierres=  47 coste=   65.2 EVw=-0.2337 IC90cierre(-0.555,+0.114) EVu=-0.2901 
+ -- por bucket de precio x cola (tri)
+  10-15 cola (0,25]              n= 387 cierres= 319 coste=  237.8 EVw=-0.4533 IC90cierre(-0.625,-0.261) EVu=-0.4464 
+  10-15 cola >25                 n=  22 cierres=  21 coste=   13.5 EVw=-0.6296 IC90cierre(-1.000,+0.079) EVu=-0.6970 [n<40 NO CONCLUYE]
+  15-20 cola (0,25]              n= 332 cierres= 270 coste=  301.5 EVw=-0.6849 IC90cierre(-0.797,-0.554) EVu=-0.6837 
+  15-20 cola >25                 n=  18 cierres=  17 coste=   16.9 EVw=-1.0000 IC90cierre(-1.000,-1.000) EVu=-1.0000 [n<40 NO CONCLUYE]
+  20-25 cola (0,25]              n= 564 cierres= 415 coste=  656.7 EVw=-0.4594 IC90cierre(-0.565,-0.357) EVu=-0.4543 
+  20-25 cola >25                 n=  50 cierres=  49 coste=   59.2 EVw=-0.3243 IC90cierre(-0.664,+0.054) EVu=-0.3166 
+  25-30 cola (0,25]              n=2836 cierres= 843 coste= 4131.7 EVw=-0.3804 IC90cierre(-0.425,-0.336) EVu=-0.3802 
+  25-30 cola >25                 n=1045 cierres= 656 coste= 1544.9 EVw=-0.1488 IC90cierre(-0.216,-0.076) EVu=-0.1506 
+ -- moneda x bucket x cola(tri): 46 celdas con datos, 22 con n>=40
+  SOL|25-30|(0,25]               n= 623 cierres= 579 coste=  903.0 EVw=-0.3854 IC90cierre(-0.465,-0.305) EVu=-0.3833 
+  BTC|25-30|>25                  n= 619 cierres= 540 coste=  922.9 EVw=-0.0411 IC90cierre(-0.134,+0.046) EVu=-0.0418 
+  ETH|25-30|(0,25]               n= 613 cierres= 551 coste=  893.8 EVw=-0.2783 IC90cierre(-0.365,-0.196) EVu=-0.2762 
+  XRP|25-30|(0,25]               n= 547 cierres= 504 coste=  793.0 EVw=-0.4388 IC90cierre(-0.518,-0.356) EVu=-0.4392 
+  BTC|25-30|(0,25]               n= 493 cierres= 435 coste=  731.3 EVw=-0.1795 IC90cierre(-0.274,-0.087) EVu=-0.1767 
+  ETH|25-30|>25                  n= 308 cierres= 290 coste=  452.1 EVw=-0.2700 IC90cierre(-0.396,-0.147) EVu=-0.2673 
+  DOGE|25-30|(0,25]              n= 297 cierres= 288 coste=  432.2 EVw=-0.5719 IC90cierre(-0.674,-0.466) EVu=-0.5739 
+  BNB|25-30|(0,25]               n= 263 cierres= 254 coste=  378.5 EVw=-0.6565 IC90cierre(-0.758,-0.547) EVu=-0.6548 
+  [por dia] 2026-10-24           n=1764 cierres= 288 coste= 2331.1 EVw=-0.4037 IC90cierre(-0.465,-0.344) EVu=-0.4259 
+  [por dia] 2026-10-25           n=1666 cierres= 288 coste= 2206.2 EVw=-0.4017 IC90cierre(-0.461,-0.341) EVu=-0.4039 
+  [por dia] 2026-10-26           n=1824 cierres= 288 coste= 2424.8 EVw=-0.2618 IC90cierre(-0.329,-0.187) EVu=-0.2831 
+ -- dias x cola(tri)
+  2026-10-24 cola (0,25]         n=1442 cierres= 288 coste= 1870.1 EVw=-0.4225 IC90cierre(-0.485,-0.355) EVu=-0.4440 
+  2026-10-24 cola >25            n= 322 cierres= 225 coste=  461.0 EVw=-0.3275 IC90cierre(-0.445,-0.203) EVu=-0.3449 
+  2026-10-25 cola (0,25]         n=1314 cierres= 288 coste= 1699.8 EVw=-0.4647 IC90cierre(-0.530,-0.398) EVu=-0.4588 
+  2026-10-25 cola >25            n= 352 cierres= 215 coste=  506.4 EVw=-0.1904 IC90cierre(-0.318,-0.075) EVu=-0.1989 
+  2026-10-26 cola (0,25]         n=1363 cierres= 288 coste= 1757.8 EVw=-0.3458 IC90cierre(-0.422,-0.273) EVu=-0.3602 
+  2026-10-26 cola >25            n= 461 cierres= 244 coste=  667.1 EVw=-0.0406 IC90cierre(-0.156,+0.074) EVu=-0.0552 
+
+== VIRTUAL relleno pes, unidad primera_colocada (Q0 = cola al colocar) 24-26 Oct
+  TODOS                          n=2747 cierres= 859 coste= 3979.1 EVw=-0.2599 IC90cierre(-0.308,-0.215) EVu=-0.2627 
+ -- por cola (tri)
+  cola (0,25]                    n=1636 cierres= 738 coste= 2352.8 EVw=-0.3221 IC90cierre(-0.383,-0.264) EVu=-0.3237 
+  cola >25                       n=1111 cierres= 688 coste= 1626.4 EVw=-0.1699 IC90cierre(-0.237,-0.104) EVu=-0.1729 
+ -- por cola (rej)
+  cola (0,10]                    n= 881 cierres= 561 coste= 1263.6 EVw=-0.3273 IC90cierre(-0.405,-0.246) EVu=-0.3278 
+  cola (10,25]                   n= 755 cierres= 498 coste= 1089.2 EVw=-0.3160 IC90cierre(-0.401,-0.232) EVu=-0.3189 
+  cola (25,100]                  n= 827 cierres= 568 coste= 1205.5 EVw=-0.1995 IC90cierre(-0.282,-0.115) EVu=-0.2014 
+  cola >100                      n= 284 cierres= 260 coste=  420.8 EVw=-0.0851 IC90cierre(-0.224,+0.053) EVu=-0.0898 
+ -- por moneda x cola (tri)
+  BNB cola (0,25]                n=  74 cierres=  74 coste=  100.8 EVw=-0.6528 IC90cierre(-0.851,-0.449) EVu=-0.6699 
+  BNB cola >25                   n=   2 cierres=   2 coste=    1.9 EVw=-1.0000 IC90cierre(+nan,+nan) EVu=-1.0000 [n<40 NO CONCLUYE]
+  BTC cola (0,25]                n= 462 cierres= 408 coste=  682.2 EVw=-0.2012 IC90cierre(-0.300,-0.101) EVu=-0.2003 
+  BTC cola >25                   n= 637 cierres= 558 coste=  943.0 EVw=-0.0403 IC90cierre(-0.123,+0.048) EVu=-0.0382 
+  DOGE cola (0,25]               n= 102 cierres=  99 coste=  141.9 EVw=-0.6478 IC90cierre(-0.792,-0.477) EVu=-0.6534 
+  DOGE cola >25                  n=   9 cierres=   9 coste=   11.8 EVw=-0.5745 IC90cierre(-1.000,+0.277) EVu=-0.5556 [n<40 NO CONCLUYE]
+  ETH cola (0,25]                n= 444 cierres= 412 coste=  642.3 EVw=-0.2683 IC90cierre(-0.367,-0.164) EVu=-0.2664 
+  ETH cola >25                   n= 329 cierres= 307 coste=  478.9 EVw=-0.3319 IC90cierre(-0.446,-0.215) EVu=-0.3323 
+  SOL cola (0,25]                n= 338 cierres= 323 coste=  478.5 EVw=-0.4044 IC90cierre(-0.514,-0.294) EVu=-0.3995 
+  SOL cola >25                   n=  94 cierres=  89 coste=  133.1 EVw=-0.4739 IC90cierre(-0.684,-0.265) EVu=-0.4771 
+  XRP cola (0,25]                n= 216 cierres= 203 coste=  307.0 EVw=-0.3160 IC90cierre(-0.465,-0.163) EVu=-0.3125 
+  XRP cola >25                   n=  40 cierres=  39 coste=   57.7 EVw=-0.1327 IC90cierre(-0.481,+0.243) EVu=-0.1638 
+ -- por bucket de precio x cola (tri)
+  10-15 cola (0,25]              n=   6 cierres=   5 coste=    4.2 EVw=+0.1765 IC90cierre(-1.000,+2.333) EVu=+0.1111 [n<40 NO CONCLUYE]
+  10-15 cola >25                 n=   2 cierres=   2 coste=    1.4 EVw=+2.5714 IC90cierre(+nan,+nan) EVu=+2.3333 [n<40 NO CONCLUYE]
+  15-20 cola (0,25]              n=  33 cierres=  32 coste=   29.1 EVw=-1.0000 IC90cierre(-1.000,-1.000) EVu=-1.0000 [n<40 NO CONCLUYE]
+  15-20 cola >25                 n=  11 cierres=  10 coste=   10.4 EVw=-1.0000 IC90cierre(-1.000,-1.000) EVu=-1.0000 [n<40 NO CONCLUYE]
+  20-25 cola (0,25]              n=  86 cierres=  78 coste=  101.2 EVw=-0.0114 IC90cierre(-0.306,+0.288) EVu=-0.0361 
+  20-25 cola >25                 n=  41 cierres=  41 coste=   49.5 EVw=-0.3939 IC90cierre(-0.699,+0.010) EVu=-0.3936 
+  25-30 cola (0,25]              n=1511 cierres= 718 coste= 2218.2 EVw=-0.3283 IC90cierre(-0.385,-0.273) EVu=-0.3270 
+  25-30 cola >25                 n=1057 cierres= 664 coste= 1565.0 EVw=-0.1598 IC90cierre(-0.231,-0.088) EVu=-0.1605 
+ -- moneda x bucket x cola(tri): 37 celdas con datos, 9 con n>=40
+  BTC|25-30|>25                  n= 619 cierres= 543 coste=  923.0 EVw=-0.0412 IC90cierre(-0.132,+0.047) EVu=-0.0415 
+  BTC|25-30|(0,25]               n= 454 cierres= 402 coste=  673.2 EVw=-0.2053 IC90cierre(-0.306,-0.107) EVu=-0.2038 
+  ETH|25-30|(0,25]               n= 420 cierres= 390 coste=  613.8 EVw=-0.2749 IC90cierre(-0.376,-0.171) EVu=-0.2725 
+  ETH|25-30|>25                  n= 311 cierres= 291 coste=  457.5 EVw=-0.3114 IC90cierre(-0.431,-0.194) EVu=-0.3071 
+  SOL|25-30|(0,25]               n= 300 cierres= 288 coste=  438.1 EVw=-0.4408 IC90cierre(-0.558,-0.324) EVu=-0.4414 
+  XRP|25-30|(0,25]               n= 190 cierres= 178 coste=  278.6 EVw=-0.3361 IC90cierre(-0.489,-0.183) EVu=-0.3303 
+  DOGE|25-30|(0,25]              n=  85 cierres=  82 coste=  124.8 EVw=-0.6393 IC90cierre(-0.832,-0.452) EVu=-0.6401 
+  SOL|25-30|>25                  n=  81 cierres=  76 coste=  118.4 EVw=-0.4510 IC90cierre(-0.660,-0.232) EVu=-0.4426 
+
+== VIRTUAL relleno opt, unidad primer_relleno (Q0 = cola al colocar) 24-26 Oct
+  TODOS                          n=6899 cierres= 864 coste= 9561.0 EVw=-0.0179 IC90cierre(-0.055,+0.019) EVu=-0.0111 
+ -- por cola (tri)
+  cola (0,25]                    n=4461 cierres= 863 coste= 6129.1 EVw=-0.0219 IC90cierre(-0.064,+0.022) EVu=-0.0088 
+  cola >25                       n=2438 cierres= 826 coste= 3431.8 EVw=-0.0107 IC90cierre(-0.066,+0.048) EVu=-0.0154 
+ -- por cola (rej)
+  cola (0,10]                    n=2483 cierres= 836 coste= 3394.3 EVw=-0.0440 IC90cierre(-0.101,+0.011) EVu=-0.0342 
+  cola (10,25]                   n=1978 cierres= 788 coste= 2734.8 EVw=+0.0056 IC90cierre(-0.057,+0.069) EVu=+0.0230 
+  cola (25,100]                  n=1943 cierres= 788 coste= 2733.9 EVw=-0.0106 IC90cierre(-0.073,+0.049) EVu=-0.0093 
+  cola >100                      n= 495 cierres= 397 coste=  697.9 EVw=-0.0113 IC90cierre(-0.125,+0.102) EVu=-0.0393 
+ -- por moneda x cola (tri)
+  BNB cola (0,25]                n= 993 cierres= 787 coste= 1253.3 EVw=+0.0811 IC90cierre(+0.011,+0.152) EVu=+0.0897 
+  BNB cola >25                   n= 137 cierres= 133 coste=  146.5 EVw=-0.1126 IC90cierre(-0.356,+0.144) EVu=-0.1647 
+  BTC cola (0,25]                n= 473 cierres= 416 coste=  698.7 EVw=-0.1699 IC90cierre(-0.269,-0.072) EVu=-0.1680 
+  BTC cola >25                   n= 677 cierres= 584 coste= 1001.7 EVw=-0.0117 IC90cierre(-0.095,+0.066) EVu=-0.0103 
+  DOGE cola (0,25]               n= 920 cierres= 755 coste= 1242.3 EVw=+0.0183 IC90cierre(-0.057,+0.091) EVu=+0.0291 
+  DOGE cola >25                  n= 238 cierres= 225 coste=  307.3 EVw=+0.0251 IC90cierre(-0.141,+0.201) EVu=+0.0251 
+  ETH cola (0,25]                n= 559 cierres= 484 coste=  805.9 EVw=-0.0507 IC90cierre(-0.145,+0.041) EVu=-0.0467 
+  ETH cola >25                   n= 588 cierres= 511 coste=  853.4 EVw=-0.0626 IC90cierre(-0.152,+0.029) EVu=-0.0664 
+  SOL cola (0,25]                n= 679 cierres= 585 coste=  954.5 EVw=-0.0518 IC90cierre(-0.138,+0.035) EVu=-0.0326 
+  SOL cola >25                   n= 460 cierres= 415 coste=  652.5 EVw=-0.0421 IC90cierre(-0.153,+0.065) EVu=-0.0364 
+  XRP cola (0,25]                n= 837 cierres= 696 coste= 1174.4 EVw=-0.0421 IC90cierre(-0.114,+0.028) EVu=-0.0329 
+  XRP cola >25                   n= 338 cierres= 302 coste=  470.5 EVw=+0.1371 IC90cierre(+0.008,+0.274) EVu=+0.1238 
+ -- por bucket de precio x cola (tri)
+  10-15 cola (0,25]              n= 149 cierres= 137 coste=   93.2 EVw=+0.0199 IC90cierre(-0.339,+0.425) EVu=+0.0778 
+  10-15 cola >25                 n=  57 cierres=  55 coste=   34.2 EVw=-0.4161 IC90cierre(-0.854,+0.059) EVu=-0.4312 
+  15-20 cola (0,25]              n= 235 cierres= 202 coste=  212.6 EVw=+0.1759 IC90cierre(-0.071,+0.428) EVu=+0.1682 
+  15-20 cola >25                 n=  65 cierres=  62 coste=   59.6 EVw=+0.0067 IC90cierre(-0.431,+0.545) EVu=+0.0412 
+  20-25 cola (0,25]              n= 466 cierres= 366 coste=  542.4 EVw=+0.2904 IC90cierre(+0.133,+0.450) EVu=+0.2841 
+  20-25 cola >25                 n= 181 cierres= 159 coste=  212.0 EVw=-0.0330 IC90cierre(-0.251,+0.185) EVu=-0.0442 
+  25-30 cola (0,25]              n=3611 cierres= 855 coste= 5280.9 EVw=-0.0627 IC90cierre(-0.109,-0.019) EVu=-0.0617 
+  25-30 cola >25                 n=2135 cierres= 806 coste= 3126.0 EVw=-0.0051 IC90cierre(-0.059,+0.054) EVu=-0.0036 
+ -- moneda x bucket x cola(tri): 47 celdas con datos, 21 con n>=40
+  XRP|25-30|(0,25]               n= 712 cierres= 601 coste= 1043.8 EVw=-0.0659 IC90cierre(-0.148,+0.010) EVu=-0.0670 
+  DOGE|25-30|(0,25]              n= 696 cierres= 586 coste= 1021.0 EVw=-0.0352 IC90cierre(-0.116,+0.045) EVu=-0.0342 
+  BTC|25-30|>25                  n= 658 cierres= 569 coste=  980.9 EVw=-0.0112 IC90cierre(-0.095,+0.072) EVu=-0.0114 
+  BNB|25-30|(0,25]               n= 621 cierres= 523 coste=  897.9 EVw=+0.0469 IC90cierre(-0.042,+0.137) EVu=+0.0470 
+  SOL|25-30|(0,25]               n= 588 cierres= 514 coste=  857.8 EVw=-0.1198 IC90cierre(-0.206,-0.032) EVu=-0.1221 
+  ETH|25-30|>25                  n= 558 cierres= 490 coste=  819.2 EVw=-0.0478 IC90cierre(-0.144,+0.047) EVu=-0.0455 
+  ETH|25-30|(0,25]               n= 528 cierres= 462 coste=  769.8 EVw=-0.0583 IC90cierre(-0.158,+0.037) EVu=-0.0537 
+  BTC|25-30|(0,25]               n= 466 cierres= 411 coste=  690.7 EVw=-0.1748 IC90cierre(-0.274,-0.076) EVu=-0.1726 
+
+== VIRTUAL relleno opt, unidad primera_colocada (Q0 = cola al colocar) 24-26 Oct
+  TODOS                          n=5788 cierres= 864 coste= 8218.2 EVw=-0.0369 IC90cierre(-0.076,+0.003) EVu=-0.0369 
+ -- por cola (tri)
+  cola (0,25]                    n=3511 cierres= 855 coste= 4983.6 EVw=-0.0539 IC90cierre(-0.101,-0.007) EVu=-0.0524 
+  cola >25                       n=2277 cierres= 816 coste= 3234.6 EVw=-0.0107 IC90cierre(-0.069,+0.048) EVu=-0.0131 
+ -- por cola (rej)
+  cola (0,10]                    n=1938 cierres= 791 coste= 2724.0 EVw=-0.0584 IC90cierre(-0.120,+0.004) EVu=-0.0580 
+  cola (10,25]                   n=1573 cierres= 726 coste= 2259.5 EVw=-0.0485 IC90cierre(-0.122,+0.018) EVu=-0.0454 
+  cola (25,100]                  n=1815 cierres= 770 coste= 2573.0 EVw=-0.0070 IC90cierre(-0.074,+0.054) EVu=-0.0044 
+  cola >100                      n= 462 cierres= 376 coste=  661.6 EVw=-0.0251 IC90cierre(-0.139,+0.083) EVu=-0.0474 
+ -- por moneda x cola (tri)
+  BNB cola (0,25]                n= 564 cierres= 499 coste=  760.0 EVw=-0.0000 IC90cierre(-0.096,+0.097) EVu=-0.0065 
+  BNB cola >25                   n=  94 cierres=  93 coste=   97.7 EVw=-0.0783 IC90cierre(-0.387,+0.242) EVu=-0.1557 
+  BTC cola (0,25]                n= 467 cierres= 412 coste=  689.4 EVw=-0.1804 IC90cierre(-0.278,-0.085) EVu=-0.1792 
+  BTC cola >25                   n= 673 cierres= 581 coste=  995.0 EVw=-0.0001 IC90cierre(-0.081,+0.080) EVu=+0.0022 
+  DOGE cola (0,25]               n= 663 cierres= 571 coste=  948.6 EVw=+0.0330 IC90cierre(-0.051,+0.120) EVu=+0.0308 
+  DOGE cola >25                  n= 198 cierres= 188 coste=  261.4 EVw=-0.0247 IC90cierre(-0.210,+0.149) EVu=-0.0205 
+  ETH cola (0,25]                n= 550 cierres= 478 coste=  791.7 EVw=-0.0653 IC90cierre(-0.155,+0.031) EVu=-0.0644 
+  ETH cola >25                   n= 558 cierres= 486 coste=  808.6 EVw=-0.0601 IC90cierre(-0.147,+0.033) EVu=-0.0606 
+  SOL cola (0,25]                n= 617 cierres= 545 coste=  873.6 EVw=-0.0729 IC90cierre(-0.164,+0.013) EVu=-0.0648 
+  SOL cola >25                   n= 447 cierres= 404 coste=  639.7 EVw=-0.0073 IC90cierre(-0.117,+0.103) EVu=+0.0026 
+  XRP cola (0,25]                n= 650 cierres= 565 coste=  920.2 EVw=-0.0655 IC90cierre(-0.152,+0.019) EVu=-0.0638 
+  XRP cola >25                   n= 307 cierres= 276 coste=  432.1 EVw=+0.0760 IC90cierre(-0.055,+0.214) EVu=+0.0650 
+ -- por bucket de precio x cola (tri)
+  10-15 cola (0,25]              n=  32 cierres=  29 coste=   21.6 EVw=+0.1601 IC90cierre(-0.559,+1.031) EVu=+0.1607 [n<40 NO CONCLUYE]
+  10-15 cola >25                 n=  37 cierres=  35 coste=   21.2 EVw=-0.2925 IC90cierre(-0.773,+0.415) EVu=-0.3284 [n<40 NO CONCLUYE]
+  15-20 cola (0,25]              n= 106 cierres=  95 coste=   94.0 EVw=-0.3617 IC90cierre(-0.645,-0.066) EVu=-0.3512 
+  15-20 cola >25                 n=  38 cierres=  35 coste=   34.9 EVw=-0.1404 IC90cierre(-0.602,+0.422) EVu=-0.1267 [n<40 NO CONCLUYE]
+  20-25 cola (0,25]              n= 265 cierres= 219 coste=  312.6 EVw=+0.2476 IC90cierre(+0.053,+0.464) EVu=+0.2302 
+  20-25 cola >25                 n= 165 cierres= 145 coste=  193.7 EVw=+0.0842 IC90cierre(-0.156,+0.332) EVu=+0.0693 
+  25-30 cola (0,25]              n=3108 cierres= 840 coste= 4555.5 EVw=-0.0692 IC90cierre(-0.119,-0.020) EVu=-0.0685 
+  25-30 cola >25                 n=2037 cierres= 791 coste= 2984.8 EVw=-0.0133 IC90cierre(-0.076,+0.042) EVu=-0.0120 
+ -- moneda x bucket x cola(tri): 45 celdas con datos, 15 con n>=40
+  BTC|25-30|>25                  n= 652 cierres= 564 coste=  971.9 EVw=-0.0020 IC90cierre(-0.092,+0.079) EVu=-0.0022 
+  DOGE|25-30|(0,25]              n= 600 cierres= 519 coste=  883.5 EVw=+0.0243 IC90cierre(-0.071,+0.115) EVu=+0.0240 
+  XRP|25-30|(0,25]               n= 568 cierres= 494 coste=  833.6 EVw=-0.0823 IC90cierre(-0.175,+0.008) EVu=-0.0823 
+  SOL|25-30|(0,25]               n= 544 cierres= 484 coste=  794.5 EVw=-0.1252 IC90cierre(-0.218,-0.028) EVu=-0.1270 
+  ETH|25-30|>25                  n= 526 cierres= 463 coste=  772.3 EVw=-0.0483 IC90cierre(-0.147,+0.053) EVu=-0.0445 
+  ETH|25-30|(0,25]               n= 517 cierres= 453 coste=  753.4 EVw=-0.0642 IC90cierre(-0.164,+0.036) EVu=-0.0598 
+  BTC|25-30|(0,25]               n= 459 cierres= 406 coste=  680.3 EVw=-0.1842 IC90cierre(-0.282,-0.084) EVu=-0.1823 
+  BNB|25-30|(0,25]               n= 420 cierres= 375 coste=  610.1 EVw=+0.0079 IC90cierre(-0.104,+0.112) EVu=+0.0078 

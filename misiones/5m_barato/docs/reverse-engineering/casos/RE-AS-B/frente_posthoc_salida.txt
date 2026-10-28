@@ -1,0 +1,17 @@
+  TODO frente sin TD           n= 5662 EVw=-0.254 IC90cierre=(-0.293,-0.213) dias=-0.27 -0.31 -0.18
+  tam 1er print [0,5)          n= 1765 EVw=-0.252 IC90cierre=(-0.319,-0.191) dias=-0.22 -0.39 -0.16
+  tam 1er print [5,20)         n= 3281 EVw=-0.277 IC90cierre=(-0.324,-0.232) dias=-0.33 -0.28 -0.23
+  tam 1er print [20,100)       n=  532 EVw=-0.186 IC90cierre=(-0.290,-0.084) dias=-0.14 -0.36 -0.06
+  tam 1er print [100,1e+09)    n=   84 EVw=+0.196 IC90cierre=(-0.107,+0.553) dias=+0.22 -0.21 +0.52
+  dt relleno s [0,1)           n= 1234 EVw=-0.085 IC90cierre=(-0.156,-0.021) dias=-0.04 -0.21 +0.00
+  dt relleno s [1,5)           n=  681 EVw=-0.191 IC90cierre=(-0.284,-0.102) dias=-0.33 -0.19 -0.04
+  dt relleno s [5,20)          n= 1263 EVw=-0.250 IC90cierre=(-0.324,-0.180) dias=-0.35 -0.35 -0.07
+  dt relleno s [20,61)         n= 2484 EVw=-0.377 IC90cierre=(-0.424,-0.324) dias=-0.34 -0.39 -0.40
+  T restante s [0,120)         n= 1158 EVw=-0.353 IC90cierre=(-0.436,-0.272) dias=-0.35 -0.33 -0.38
+  T restante s [120,180)       n= 1259 EVw=-0.357 IC90cierre=(-0.435,-0.275) dias=-0.29 -0.41 -0.37
+  T restante s [180,240)       n= 1536 EVw=-0.281 IC90cierre=(-0.360,-0.204) dias=-0.21 -0.54 -0.12
+  T restante s [240,301)       n= 1709 EVw=-0.106 IC90cierre=(-0.192,-0.018) dias=-0.26 -0.07 +0.01
+  tipo 1er print A             n=  365 EVw=-0.110 IC90cierre=(-0.242,+0.028) dias=+0.14 -0.37 -0.16
+  tipo 1er print B             n= 5297 EVw=-0.264 IC90cierre=(-0.304,-0.221) dias=-0.30 -0.31 -0.19
+  BTC tam [0,5)                n=  294 EVw=-0.054 IC90cierre=(-0.189,+0.086) dias=-0.07 -0.27 +0.15
+  BTC tam [5,1e+09)            n=  515 EVw=-0.095 IC90cierre=(-0.194,+0.001) dias=-0.07 -0.12 -0.10

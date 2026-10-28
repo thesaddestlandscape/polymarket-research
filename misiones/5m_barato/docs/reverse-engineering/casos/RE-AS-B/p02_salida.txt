@@ -1,0 +1,7 @@
+opt barrido0 EVw +0.9029 n=2149 por dia {'2026-10-24': (np.float64(0.801), np.float64(798.0)), '2026-10-25': (np.float64(0.8511), np.float64(732.0)), '2026-10-26': (np.float64(1.095), np.float64(619.0))} cierres 710
+opt barrido1 EVw -0.0527 n=51243 por dia {'2026-10-24': (np.float64(-0.167), np.float64(16473.0)), '2026-10-25': (np.float64(-0.1118), np.float64(16173.0)), '2026-10-26': (np.float64(0.0997), np.float64(18597.0))} cierres 864
+opt no-pes barrido0 EVw +1.5875 n=1137 por dia {'2026-10-24': (np.float64(1.4323), np.float64(436.0)), '2026-10-25': (np.float64(1.4865), np.float64(391.0)), '2026-10-26': (np.float64(1.9469), np.float64(310.0))} cierres 492
+pes barrido0 BTC EVw +0.0568 n=877 por dia {'2026-10-24': (np.float64(0.0523), np.float64(311.0)), '2026-10-25': (np.float64(-0.0599), np.float64(297.0)), '2026-10-26': (np.float64(0.1786), np.float64(269.0))} cierres 526
+pes barrido0 no-BTC EVw +0.2414 n=135 por dia {'2026-10-24': (np.float64(-0.4226), np.float64(51.0)), '2026-10-25': (np.float64(0.5428), np.float64(44.0)), '2026-10-26': (np.float64(0.7173), np.float64(40.0))} cierres 123
+ref mercados dia 26 vs 24-25: frac b1 de todas las vidas opt {'2026-10-24': 0.866, '2026-10-25': 0.861, '2026-10-26': 0.904}
+gana media por dia (lado barato): {'2026-10-24': 0.2293, '2026-10-25': 0.2384, '2026-10-26': 0.2698} b medio {'2026-10-24': 0.2173, '2026-10-25': 0.217, '2026-10-26': 0.2172}

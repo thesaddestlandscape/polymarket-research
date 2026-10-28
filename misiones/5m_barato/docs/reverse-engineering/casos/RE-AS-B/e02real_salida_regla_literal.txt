@@ -1,0 +1,59 @@
+n fills 215 unidades 202 Sum pnl fills -16.0229 coste 221.30 EVw -0.0724
+COBERTURA (de 215): {'F_casado': 215, 'T_L2p': 123, 'T_TOBp': 150, 'T_any_p': 150, 'L2_eval': 123, 'TOB_eval': 150, 'clase_prim': 150, 'T_any_s(ampliada)': 150, 'clase_ampliada': 150} -> clase asignada 69.8%
+estado L2p: {'NOCASADO': 92, 'ok': 123}
+estado TOBp: {'ok': 150, 'NOCASADO': 65}
+por dia, clase asignada: {'2026-10-20': (27, 40), '2026-10-21': (54, 77), '2026-10-22': (55, 81), '2026-10-23': (14, 17)}
+offset bloque-recepcionT ms (n=273): p10 1407 p50 2088 p90 2820 min 1028 max 3583
+ambiguedad ncand>1 (L2p/TOBp): 3 4
+== UNIDAD primera por mercado-lado (ventana barrido 1000 ms, fuente prim, vent p)
+  sweep      n= 36 cierres= 29 coste=  37.65 pnl= +1.724 EVw=+0.0458 IC90cierre=(-0.636,+0.878)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (7, -0.712), '2026-10-22': (3, -1.0), '2026-10-23': (2, 1.778)}
+  nosweep    n=  4 cierres=  4 coste=   4.44 pnl= +9.560 EVw=+2.1532 IC90cierre=(-1.000,+5.250)  porDia={'2026-10-21': (1, -1.0), '2026-10-22': (3, 3.13)}
+  solo       n= 99 cierres= 67 coste= 106.15 pnl=-15.694 EVw=-0.1478 IC90cierre=(-0.494,+0.259)  porDia={'2026-10-21': (43, 0.315), '2026-10-22': (45, -0.386), '2026-10-23': (11, -1.0)}
+  TODOS-clase n=139 cierres= 88 coste= 148.24 pnl= -4.410 EVw=-0.0298 IC90cierre=(-0.348,+0.313)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (51, 0.193), '2026-10-22': (51, -0.192), '2026-10-23': (13, -0.492)}
+== TODOS los fills (ventana barrido 1000 ms, fuente prim, vent p)
+  sweep      n= 39 cierres= 29 coste=  38.83 pnl= +4.165 EVw=+0.1073 IC90cierre=(-0.545,+0.939)  porDia={'2026-10-20': (26, 0.084), '2026-10-21': (8, -0.09), '2026-10-22': (3, -1.0), '2026-10-23': (2, 1.778)}
+  nosweep    n=  5 cierres=  5 coste=   4.68 pnl= +9.320 EVw=+1.9915 IC90cierre=(-1.000,+4.469)  porDia={'2026-10-20': (1, -1.0), '2026-10-21': (1, -1.0), '2026-10-22': (3, 3.13)}
+  solo       n=106 cierres= 68 coste= 108.85 pnl=-18.392 EVw=-0.1690 IC90cierre=(-0.506,+0.206)  porDia={'2026-10-21': (45, 0.294), '2026-10-22': (49, -0.407), '2026-10-23': (12, -1.0)}
+  TODOS-clase n=150 cierres= 89 coste= 152.36 pnl= -4.907 EVw=-0.0322 IC90cierre=(-0.354,+0.330)  porDia={'2026-10-20': (27, 0.075), '2026-10-21': (54, 0.229), '2026-10-22': (55, -0.217), '2026-10-23': (14, -0.501)}
+== sensibilidad unidad (ventana barrido 250 ms, fuente prim, vent p)
+  sweep      n= 30 cierres= 23 coste=  32.32 pnl= +0.058 EVw=+0.0018 IC90cierre=(-0.752,+0.851)  porDia={'2026-10-20': (23, 0.155), '2026-10-21': (5, -0.54), '2026-10-22': (1, -1.0), '2026-10-23': (1, -1.0)}
+  nosweep    n= 10 cierres= 10 coste=   9.77 pnl=+11.226 EVw=+1.1486 IC90cierre=(-0.361,+2.912)  porDia={'2026-10-20': (1, -1.0), '2026-10-21': (3, -1.0), '2026-10-22': (5, 2.095), '2026-10-23': (1, 5.25)}
+  solo       n= 99 cierres= 67 coste= 106.15 pnl=-15.694 EVw=-0.1478 IC90cierre=(-0.500,+0.249)  porDia={'2026-10-21': (43, 0.315), '2026-10-22': (45, -0.386), '2026-10-23': (11, -1.0)}
+  TODOS-clase n=139 cierres= 88 coste= 148.24 pnl= -4.410 EVw=-0.0298 IC90cierre=(-0.350,+0.302)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (51, 0.193), '2026-10-22': (51, -0.192), '2026-10-23': (13, -0.492)}
+== sensibilidad unidad (ventana barrido 500 ms, fuente prim, vent p)
+  sweep      n= 34 cierres= 27 coste=  36.34 pnl= +3.037 EVw=+0.0836 IC90cierre=(-0.629,+0.934)  porDia={'2026-10-20': (23, 0.155), '2026-10-21': (7, -0.712), '2026-10-22': (2, -1.0), '2026-10-23': (2, 1.778)}
+  nosweep    n=  6 cierres=  6 coste=   5.75 pnl= +8.247 EVw=+1.4335 IC90cierre=(-1.000,+3.833)  porDia={'2026-10-20': (1, -1.0), '2026-10-21': (1, -1.0), '2026-10-22': (4, 3.114)}
+  solo       n= 99 cierres= 67 coste= 106.15 pnl=-15.694 EVw=-0.1478 IC90cierre=(-0.492,+0.233)  porDia={'2026-10-21': (43, 0.315), '2026-10-22': (45, -0.386), '2026-10-23': (11, -1.0)}
+  TODOS-clase n=139 cierres= 88 coste= 148.24 pnl= -4.410 EVw=-0.0298 IC90cierre=(-0.353,+0.331)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (51, 0.193), '2026-10-22': (51, -0.192), '2026-10-23': (13, -0.492)}
+== sensibilidad unidad (ventana barrido 2000 ms, fuente prim, vent p)
+  sweep      n= 37 cierres= 30 coste=  38.80 pnl= +0.574 EVw=+0.0148 IC90cierre=(-0.650,+0.806)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (7, -0.712), '2026-10-22': (4, -1.0), '2026-10-23': (2, 1.778)}
+  nosweep    n=  3 cierres=  3 coste=   3.29 pnl=+10.710 EVw=+3.2553 IC90cierre=(+1.174,+5.250)  porDia={'2026-10-21': (1, -1.0), '2026-10-22': (2, 5.25)}
+  solo       n= 99 cierres= 67 coste= 106.15 pnl=-15.694 EVw=-0.1478 IC90cierre=(-0.503,+0.240)  porDia={'2026-10-21': (43, 0.315), '2026-10-22': (45, -0.386), '2026-10-23': (11, -1.0)}
+  TODOS-clase n=139 cierres= 88 coste= 148.24 pnl= -4.410 EVw=-0.0298 IC90cierre=(-0.365,+0.328)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (51, 0.193), '2026-10-22': (51, -0.192), '2026-10-23': (13, -0.492)}
+== unidad, solo L2 (ventana barrido 1000 ms, fuente L2, vent p)
+  sweep      n= 12 cierres= 12 coste=   9.50 pnl= -1.126 EVw=-0.1185 IC90cierre=(-1.000,+1.262)  porDia={'2026-10-21': (7, -0.712), '2026-10-22': (3, -1.0), '2026-10-23': (2, 1.778)}
+  nosweep    n=  4 cierres=  4 coste=   4.44 pnl= +9.560 EVw=+2.1532 IC90cierre=(-1.000,+5.250)  porDia={'2026-10-21': (1, -1.0), '2026-10-22': (3, 3.13)}
+  solo       n= 99 cierres= 67 coste= 106.15 pnl=-15.694 EVw=-0.1478 IC90cierre=(-0.506,+0.248)  porDia={'2026-10-21': (43, 0.315), '2026-10-22': (45, -0.386), '2026-10-23': (11, -1.0)}
+  TODOS-clase n=115 cierres= 71 coste= 120.09 pnl= -7.260 EVw=-0.0605 IC90cierre=(-0.388,+0.323)  porDia={'2026-10-21': (51, 0.193), '2026-10-22': (51, -0.192), '2026-10-23': (13, -0.492)}
+== unidad, solo TOB (ventana barrido 1000 ms, fuente TOB, vent p)
+  sweep      n=124 cierres= 83 coste= 132.48 pnl=-12.982 EVw=-0.0980 IC90cierre=(-0.410,+0.233)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (45, 0.135), '2026-10-22': (44, -0.363), '2026-10-23': (11, -0.409)}
+  nosweep    n=  4 cierres=  4 coste=   4.69 pnl= +9.310 EVw=+1.9851 IC90cierre=(-1.000,+5.250)  porDia={'2026-10-21': (1, -1.0), '2026-10-22': (3, 2.846)}
+  solo       n= 11 cierres= 11 coste=  11.08 pnl= -0.739 EVw=-0.0667 IC90cierre=(-1.000,+0.911)  porDia={'2026-10-21': (5, 0.915), '2026-10-22': (4, -1.0), '2026-10-23': (2, -1.0)}
+  TODOS-clase n=139 cierres= 88 coste= 148.24 pnl= -4.410 EVw=-0.0298 IC90cierre=(-0.354,+0.336)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (51, 0.193), '2026-10-22': (51, -0.192), '2026-10-23': (13, -0.492)}
+== unidad, ventana ampliada (ventana barrido 1000 ms, fuente prim, vent s)
+  sweep      n= 36 cierres= 29 coste=  37.65 pnl= +1.724 EVw=+0.0458 IC90cierre=(-0.630,+0.817)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (7, -0.712), '2026-10-22': (3, -1.0), '2026-10-23': (2, 1.778)}
+  nosweep    n=  4 cierres=  4 coste=   4.44 pnl= +9.560 EVw=+2.1532 IC90cierre=(-1.000,+5.250)  porDia={'2026-10-21': (1, -1.0), '2026-10-22': (3, 3.13)}
+  solo       n= 99 cierres= 67 coste= 106.15 pnl=-15.694 EVw=-0.1478 IC90cierre=(-0.497,+0.234)  porDia={'2026-10-21': (43, 0.315), '2026-10-22': (45, -0.386), '2026-10-23': (11, -1.0)}
+  TODOS-clase n=139 cierres= 88 coste= 148.24 pnl= -4.410 EVw=-0.0298 IC90cierre=(-0.357,+0.328)  porDia={'2026-10-20': (24, 0.101), '2026-10-21': (51, 0.193), '2026-10-22': (51, -0.192), '2026-10-23': (13, -0.492)}
+concordancia L2 (filas) vs TOB (cols), fills con ambos: {('solo', 'sweep'): 95, ('nosweep', 'nosweep'): 3, ('sweep', 'sweep'): 13, ('solo', 'solo'): 10, ('nosweep', 'solo'): 1, ('solo', 'nosweep'): 1}
+fuente de la clase (unidades): Counter({'L2': 115, None: 63, 'TOB': 24})
+moneda eth
+  sweep      n= 20 cierres= 20 coste=  21.65 pnl= +0.350 EVw=+0.0162 IC90cierre=(-0.778,+1.021)  porDia={'2026-10-20': (12, 0.126), '2026-10-21': (3, -1.0), '2026-10-22': (3, -1.0), '2026-10-23': (2, 1.778)}
+  nosweep    n=  3 cierres=  3 coste=   3.29 pnl=+10.710 EVw=+3.2553 IC90cierre=(+1.174,+5.250)  porDia={'2026-10-21': (1, -1.0), '2026-10-22': (2, 5.25)}
+moneda sol
+  sweep      n=  8 cierres=  8 coste=   7.14 pnl= -0.762 EVw=-0.1068 IC90cierre=(-1.000,+1.139)  porDia={'2026-10-20': (5, -0.213), '2026-10-21': (3, 0.747)}
+  nosweep    n=0
+moneda xrp
+  sweep      n=  8 cierres=  8 coste=   8.86 pnl= +2.136 EVw=+0.2410 IC90cierre=(-1.000,+1.663)  porDia={'2026-10-20': (7, 0.297), '2026-10-21': (1, -1.0)}
+  nosweep    n=  1 cierres=  1 coste=   1.15 pnl= -1.150 EVw=-1.0000 IC90cierre=None  porDia={'2026-10-22': (1, -1.0)}
+tiempo hasta barrido (L2, <=2 s) ms: n=109 p10 0 p50 6 p90 151

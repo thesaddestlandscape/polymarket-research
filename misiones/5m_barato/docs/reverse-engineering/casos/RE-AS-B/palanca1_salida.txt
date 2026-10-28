@@ -1,0 +1,64 @@
+filas 332379 {'2026-10-24': {'placebo': 103452, 'real': 7104}, '2026-10-25': {'placebo': 103680, 'real': 7122}, '2026-10-26': {'placebo': 103680, 'real': 7341}}
+
+== COBERTURA (real; unidades = mercado-lado primer evento)
+ L=100: eventos 7189 | sin gana 4 | age>30000 0 | Tp<10 s 1 | ask invalido 0 | ok0 7184 | ejecutables taker (as>=5) 7089 | maker colocables 7184, rellenos pes 2407
+ L=250: eventos 7189 | sin gana 4 | age>30000 0 | Tp<10 s 1 | ask invalido 0 | ok0 7184 | ejecutables taker (as>=5) 7102 | maker colocables 7184, rellenos pes 2530
+ L=500: eventos 7189 | sin gana 4 | age>30000 0 | Tp<10 s 1 | ask invalido 0 | ok0 7184 | ejecutables taker (as>=5) 7109 | maker colocables 7184, rellenos pes 2590
+ L=250: por dia (ok0): {'2026-10-24': 2367, '2026-10-25': 2372, '2026-10-26': 2445} | por moneda: {'BNB': 1230, 'BTC': 1141, 'DOGE': 1247, 'ETH': 1148, 'SOL': 1174, 'XRP': 1244}
+ Tev (s) p10/p50/p90: [131.2 259.8 297.9] | b_sw p50 0.30 | ask_prev->ask_L: sube en 53.1%, igual 17.2%, baja 29.7%, mov medio +0.0075
+ orden de recepcion: edad del estado (ms) p50/p90/max: [ 29. 165. 250.]
+
+== TAKER (comprar el complementario al ask nivel 1, 5 acc, fee 0,07*p*(1-p)); PRIMARIA = L=250
+ -- L=250 (PRIMARIA)
+  todos los dias                     n=7102 cierres= 864 coste= 26410.4 pnl=-1510.38 EVw=-0.0572 IC90cierre(-0.071,-0.044) | EVu=-0.0558 (-0.068,-0.042)
+    por dia L=250: {'2026-10-24': (2330, np.float64(-0.0464)), '2026-10-25': (2344, np.float64(-0.053)), '2026-10-26': (2428, np.float64(-0.0717))}
+    sin 2 mejores dias (['2026-10-24', '2026-10-25']): n=2428 EVw=-0.0717 (queda 1 dia)
+    [extra descriptivo] sin los 2 mejores CIERRES: EVw=-0.0580 (n cierres 862)
+  24+25 (in-sample)                  n=4674 cierres= 576 coste= 17426.1 pnl= -866.09 EVw=-0.0497 IC90cierre(-0.066,-0.033) | EVu=-0.0470 (-0.062,-0.031)
+  26 (fuera de muestra)              n=2428 cierres= 288 coste=  8984.3 pnl= -644.29 EVw=-0.0717 IC90cierre(-0.096,-0.046) | EVu=-0.0727 (-0.097,-0.048)
+    PLACEBO L=250: real EVw=-0.0572 (n=7102) | placebo 10 draws: media +0.0635 p5 +0.0563 p95 +0.0716 (n medio 6444) | percentil real 0% | dif real-placebo -0.1207 IC90cierre(-0.129,-0.111)
+  [desc.] moneda BNB                 n=1227 cierres= 860 coste=  4691.4 pnl= -491.43 EVw=-0.1048 IC90cierre(-0.122,-0.086) | EVu=-0.1064 (-0.125,-0.087)
+  [desc.] moneda BTC                 n=1082 cierres= 838 coste=  4013.5 pnl=  -58.49 EVw=-0.0146 IC90cierre(-0.037,+0.008) | EVu=-0.0143 (-0.036,+0.008)
+  [desc.] moneda DOGE                n=1246 cierres= 864 coste=  4634.1 pnl= -394.09 EVw=-0.0850 IC90cierre(-0.103,-0.066) | EVu=-0.0786 (-0.098,-0.060)
+  [desc.] moneda ETH                 n=1140 cierres= 858 coste=  4220.0 pnl=  -84.98 EVw=-0.0201 IC90cierre(-0.041,+0.002) | EVu=-0.0203 (-0.042,+0.000)
+  [desc.] moneda SOL                 n=1169 cierres= 861 coste=  4327.6 pnl= -167.59 EVw=-0.0387 IC90cierre(-0.060,-0.018) | EVu=-0.0384 (-0.059,-0.018)
+  [desc.] moneda XRP                 n=1238 cierres= 861 coste=  4523.8 pnl= -313.81 EVw=-0.0694 IC90cierre(-0.088,-0.051) | EVu=-0.0682 (-0.086,-0.049)
+  [cota NO ejecutable] al ask previo n=7102 cierres= 864 coste= 26159.9 pnl=-1259.88 EVw=-0.0482 IC90cierre(-0.062,-0.034) | EVu=-0.0452 (-0.058,-0.032)
+ -- L=100 (secundaria)
+  todos los dias                     n=7089 cierres= 864 coste= 26474.2 pnl=-1624.21 EVw=-0.0614 IC90cierre(-0.075,-0.048) | EVu=-0.0600 (-0.072,-0.046)
+    por dia L=100: {'2026-10-24': (2326, np.float64(-0.0521)), '2026-10-25': (2337, np.float64(-0.057)), '2026-10-26': (2426, np.float64(-0.0745))}
+    sin 2 mejores dias (['2026-10-24', '2026-10-25']): n=2426 EVw=-0.0745 (queda 1 dia)
+    [extra descriptivo] sin los 2 mejores CIERRES: EVw=-0.0621 (n cierres 862)
+  24+25 (in-sample)                  n=4663 cierres= 576 coste= 17478.9 pnl= -953.89 EVw=-0.0546 IC90cierre(-0.071,-0.039) | EVu=-0.0524 (-0.068,-0.036)
+  26 (fuera de muestra)              n=2426 cierres= 288 coste=  8995.3 pnl= -670.32 EVw=-0.0745 IC90cierre(-0.099,-0.050) | EVu=-0.0747 (-0.099,-0.050)
+    PLACEBO L=100: real EVw=-0.0614 (n=7089) | placebo 10 draws: media +0.0638 p5 +0.0560 p95 +0.0724 (n medio 6434) | percentil real 0% | dif real-placebo -0.1251 IC90cierre(-0.134,-0.116)
+ -- L=500 (secundaria)
+  todos los dias                     n=7109 cierres= 864 coste= 26326.0 pnl=-1360.95 EVw=-0.0517 IC90cierre(-0.064,-0.038) | EVu=-0.0515 (-0.065,-0.039)
+    por dia L=500: {'2026-10-24': (2344, np.float64(-0.0398)), '2026-10-25': (2340, np.float64(-0.0494)), '2026-10-26': (2425, np.float64(-0.0655))}
+    sin 2 mejores dias (['2026-10-24', '2026-10-25']): n=2425 EVw=-0.0655 (queda 1 dia)
+    [extra descriptivo] sin los 2 mejores CIERRES: EVw=-0.0525 (n cierres 862)
+  24+25 (in-sample)                  n=4684 cierres= 576 coste= 17395.8 pnl= -775.80 EVw=-0.0446 IC90cierre(-0.060,-0.029) | EVu=-0.0439 (-0.059,-0.028)
+  26 (fuera de muestra)              n=2425 cierres= 288 coste=  8930.1 pnl= -585.15 EVw=-0.0655 IC90cierre(-0.090,-0.040) | EVu=-0.0663 (-0.090,-0.042)
+    PLACEBO L=500: real EVw=-0.0517 (n=7109) | placebo 10 draws: media +0.0650 p5 +0.0585 p95 +0.0729 (n medio 6447) | percentil real 0% | dif real-placebo -0.1167 IC90cierre(-0.125,-0.108)
+
+== MAKER (puja virtual 5 acc al mejor bid del complementario en t_sw+L; relleno pes; sin fee ni rebate; solo rellenos)
+ -- L=250 (maker-principal): colocables 7184, rellenos pes 2530 (35.2%), opt 5709
+  rellenos pes                       n=2530 cierres= 801 coste=  8718.7 pnl= -848.70 EVw=-0.0973 IC90cierre(-0.119,-0.075) | EVu=-0.1022 (-0.126,-0.080)
+    por dia L=250: {'2026-10-24': (852, np.float64(-0.0655)), '2026-10-25': (804, np.float64(-0.1107)), '2026-10-26': (874, np.float64(-0.1159))}
+    sin 2 mejores dias (['2026-10-24', '2026-10-25']): n=874 EVw=-0.1159 (queda 1 dia)
+  26 (fuera de muestra)              n= 874 cierres= 271 coste=  3031.4 pnl= -351.40 EVw=-0.1159 IC90cierre(-0.155,-0.078) | EVu=-0.1187 (-0.158,-0.079)
+    PLACEBO L=250: real EVw=-0.0973 (n=2530) | placebo 10 draws: media -0.0426 p5 -0.0686 p95 -0.0188 (n medio 1114) | percentil real 0% | dif real-placebo -0.0547 IC90cierre(-0.071,-0.038)
+ -- L=100 (secundaria): colocables 7184, rellenos pes 2407 (33.5%), opt 5513
+  rellenos pes                       n=2407 cierres= 794 coste=  8190.6 pnl= -835.60 EVw=-0.1020 IC90cierre(-0.126,-0.078) | EVu=-0.1076 (-0.132,-0.082)
+    por dia L=100: {'2026-10-24': (814, np.float64(-0.0658)), '2026-10-25': (765, np.float64(-0.1091)), '2026-10-26': (828, np.float64(-0.1307))}
+    sin 2 mejores dias (['2026-10-24', '2026-10-25']): n=828 EVw=-0.1307 (queda 1 dia)
+  26 (fuera de muestra)              n= 828 cierres= 268 coste=  2841.4 pnl= -371.35 EVw=-0.1307 IC90cierre(-0.173,-0.088) | EVu=-0.1346 (-0.177,-0.095)
+    PLACEBO L=100: real EVw=-0.1020 (n=2407) | placebo 10 draws: media -0.0465 p5 -0.0762 p95 -0.0196 (n medio 1082) | percentil real 0% | dif real-placebo -0.0555 IC90cierre(-0.073,-0.039)
+ -- L=500 (secundaria): colocables 7184, rellenos pes 2590 (36.1%), opt 5883
+  rellenos pes                       n=2590 cierres= 814 coste=  8980.0 pnl= -970.00 EVw=-0.1080 IC90cierre(-0.130,-0.087) | EVu=-0.1151 (-0.137,-0.093)
+    por dia L=500: {'2026-10-24': (889, np.float64(-0.0762)), '2026-10-25': (818, np.float64(-0.1188)), '2026-10-26': (883, np.float64(-0.1299))}
+    sin 2 mejores dias (['2026-10-24', '2026-10-25']): n=883 EVw=-0.1299 (queda 1 dia)
+  26 (fuera de muestra)              n= 883 cierres= 273 coste=  3068.4 pnl= -398.45 EVw=-0.1299 IC90cierre(-0.169,-0.091) | EVu=-0.1350 (-0.175,-0.095)
+    PLACEBO L=500: real EVw=-0.1080 (n=2590) | placebo 10 draws: media -0.0492 p5 -0.0786 p95 -0.0213 (n medio 1151) | percentil real 0% | dif real-placebo -0.0588 IC90cierre(-0.076,-0.042)
+
+FIN

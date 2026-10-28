@@ -1,0 +1,104 @@
+conteos {'ticks_bn_2026-10-24': 1797824, 'vidas': 39911, 'sin_vpv': 2, 'sin_gana': 28, 'ticks_bn_2026-10-25': 1305352, 'ticks_bn_2026-10-26': 2565918}
+== DESC 24+25 vidas 26001 mercado-lados 5030 | rechazo85 0.143 disputada85 0.297 | TD cancela (vidas con salto en vida) real 0.330 placebo 0.400
+  PRIMARIA frente Lp85 A+B TD              n= 3397 cierres= 576 coste=  4183.4 pnl= -1061.6 EVw=-0.2538 IC90cierre=(-0.303,-0.207) EVu=-0.2282
+  frente SIN TD                            n= 3745 cierres= 576 coste=  4805.0 pnl= -1397.5 EVw=-0.2908 IC90cierre=(-0.336,-0.247) EVu=-0.2738
+  frente TD PLACEBO (-60 s)                n= 3597 cierres= 576 coste=  4542.7 pnl= -1252.6 EVw=-0.2758 IC90cierre=(-0.323,-0.230) EVu=-0.2614
+  frente regla max(A,B) TD                 n= 3397 cierres= 576 coste=  4182.2 pnl= -1064.1 EVw=-0.2544 IC90cierre=(-0.304,-0.207) EVu=-0.2282
+  cola-final vpv pes TD (mismas vidas)     n= 2826 cierres= 573 coste=  3649.4 pnl= -1294.4 EVw=-0.3547 IC90cierre=(-0.402,-0.306) EVu=-0.3626
+  cola-final vpv pes sin TD                n= 3310 cierres= 576 coste=  4374.5 pnl= -1794.5 EVw=-0.4102 IC90cierre=(-0.454,-0.368) EVu=-0.4159
+  DIF primaria - cola-final pes TD         n= 3397 cierres= 576 coste=  4183.4 pnl= -1061.6 EVw=+0.1009 IC90cierre=(+0.073,+0.129) EVu=-0.2282
+  cola-final vpv opt TD (mismas vidas)     n= 4364 cierres= 576 coste=  5894.7 pnl=  -244.7 EVw=-0.0415 IC90cierre=(-0.090,+0.004) EVu=-0.0274
+  cola-final vpv opt sin TD                n= 4476 cierres= 576 coste=  6155.9 pnl=  -361.0 EVw=-0.0586 IC90cierre=(-0.105,-0.014) EVu=-0.0490
+  DIF primaria - cola-final opt TD         n= 3397 cierres= 576 coste=  4183.4 pnl= -1061.6 EVw=-0.2122 IC90cierre=(-0.240,-0.184) EVu=-0.2282
+  fill: unidades primaria 3397 / mercado-lados 5030; dt mediana primer print 9699 ms
+== OOS 26 vidas 13882 mercado-lados 2521 | rechazo85 0.169 disputada85 0.318 | TD cancela (vidas con salto en vida) real 0.523 placebo 0.582
+  PRIMARIA frente Lp85 A+B TD              n= 1684 cierres= 288 coste=  2050.8 pnl=  -290.6 EVw=-0.1417 IC90cierre=(-0.217,-0.065) EVu=-0.1301
+  frente SIN TD                            n= 1917 cierres= 288 coste=  2520.9 pnl=  -465.9 EVw=-0.1848 IC90cierre=(-0.255,-0.116) EVu=-0.1776
+  frente TD PLACEBO (-60 s)                n= 1787 cierres= 288 coste=  2276.3 pnl=  -368.8 EVw=-0.1620 IC90cierre=(-0.235,-0.090) EVu=-0.1479
+  frente regla max(A,B) TD                 n= 1684 cierres= 288 coste=  2049.0 pnl=  -288.9 EVw=-0.1410 IC90cierre=(-0.216,-0.064) EVu=-0.1301
+  cola-final vpv pes TD (mismas vidas)     n= 1331 cierres= 288 coste=  1701.0 pnl=  -236.1 EVw=-0.1388 IC90cierre=(-0.218,-0.062) EVu=-0.1475
+  cola-final vpv pes sin TD                n= 1741 cierres= 288 coste=  2313.5 pnl=  -608.5 EVw=-0.2630 IC90cierre=(-0.332,-0.196) EVu=-0.2903
+  DIF primaria - cola-final pes TD         n= 1684 cierres= 288 coste=  2050.8 pnl=  -290.6 EVw=-0.0029 IC90cierre=(-0.046,+0.042) EVu=-0.1301
+  cola-final vpv opt TD (mismas vidas)     n= 2303 cierres= 288 coste=  3150.7 pnl=  +234.3 EVw=+0.0744 IC90cierre=(+0.007,+0.141) EVu=+0.0846
+  cola-final vpv opt sin TD                n= 2345 cierres= 288 coste=  3288.4 pnl=  +171.5 EVw=+0.0522 IC90cierre=(-0.013,+0.116) EVu=+0.0529
+  DIF primaria - cola-final opt TD         n= 1684 cierres= 288 coste=  2050.8 pnl=  -290.6 EVw=-0.2161 IC90cierre=(-0.262,-0.168) EVu=-0.1301
+  fill: unidades primaria 1684 / mercado-lados 2521; dt mediana primer print 8192 ms
+== TODO vidas 39883 mercado-lados 7551 | rechazo85 0.152 disputada85 0.304 | TD cancela (vidas con salto en vida) real 0.397 placebo 0.463
+  PRIMARIA frente Lp85 A+B TD              n= 5081 cierres= 864 coste=  6234.2 pnl= -1352.2 EVw=-0.2169 IC90cierre=(-0.257,-0.174) EVu=-0.1957
+  frente SIN TD                            n= 5662 cierres= 864 coste=  7325.9 pnl= -1863.5 EVw=-0.2544 IC90cierre=(-0.292,-0.216) EVu=-0.2412
+  frente TD PLACEBO (-60 s)                n= 5384 cierres= 864 coste=  6818.9 pnl= -1621.5 EVw=-0.2378 IC90cierre=(-0.277,-0.198) EVu=-0.2238
+  frente regla max(A,B) TD                 n= 5081 cierres= 864 coste=  6231.2 pnl= -1353.0 EVw=-0.2171 IC90cierre=(-0.258,-0.174) EVu=-0.1957
+  cola-final vpv pes TD (mismas vidas)     n= 4157 cierres= 861 coste=  5350.4 pnl= -1530.5 EVw=-0.2860 IC90cierre=(-0.328,-0.243) EVu=-0.2938
+  cola-final vpv pes sin TD                n= 5051 cierres= 864 coste=  6688.0 pnl= -2403.0 EVw=-0.3593 IC90cierre=(-0.398,-0.321) EVu=-0.3726
+  DIF primaria - cola-final pes TD         n= 5081 cierres= 864 coste=  6234.2 pnl= -1352.2 EVw=+0.0691 IC90cierre=(+0.045,+0.093) EVu=-0.1957
+  cola-final vpv opt TD (mismas vidas)     n= 6667 cierres= 864 coste=  9045.4 pnl=   -10.4 EVw=-0.0011 IC90cierre=(-0.040,+0.037) EVu=+0.0113
+  cola-final vpv opt sin TD                n= 6821 cierres= 864 coste=  9444.4 pnl=  -189.4 EVw=-0.0201 IC90cierre=(-0.057,+0.017) EVu=-0.0140
+  DIF primaria - cola-final opt TD         n= 5081 cierres= 864 coste=  6234.2 pnl= -1352.2 EVw=-0.2158 IC90cierre=(-0.239,-0.192) EVu=-0.1957
+  fill: unidades primaria 5081 / mercado-lados 7551; dt mediana primer print 9252 ms
+== robustez y controles (TODO; descriptivas, Bonferroni x12)
+  primaria +rebate (supuesto)              n= 5081 cierres= 864 coste=  6234.2 pnl= -1352.2 EVw=-0.2068 IC90cierre=(-0.247,-0.164) EVu=-0.1854
+  solo rellenos completos 5 acc            n= 4717 cierres= 864 coste=  6229.6 pnl= -1509.6 EVw=-0.2423 IC90cierre=(-0.284,-0.199) EVu=-0.2416
+  excluyendo disputadas                    n= 4227 cierres= 862 coste=  5050.7 pnl= -1214.9 EVw=-0.2405 IC90cierre=(-0.288,-0.194) EVu=-0.2093
+  Lp=0                                     n= 5664 cierres= 864 coste=  7242.1 pnl= -1464.6 EVw=-0.2022 IC90cierre=(-0.241,-0.164) EVu=-0.1919
+  Lp=250                                   n= 4695 cierres= 864 coste=  5595.2 pnl= -1292.7 EVw=-0.2310 IC90cierre=(-0.274,-0.188) EVu=-0.2047
+  INVERSION apartados por TD (sin TD)      n= 2155 cierres= 782 coste=  2601.8 pnl= -1025.8 EVw=-0.3943 IC90cierre=(-0.454,-0.332) EVu=-0.3779
+  no apartados (sin TD)                    n= 5081 cierres= 864 coste=  6330.3 pnl= -1394.2 EVw=-0.2202 IC90cierre=(-0.260,-0.177) EVu=-0.1957
+  DIF apartados - no apartados             n= 2155 cierres= 782 coste=  2601.8 pnl= -1025.8 EVw=-0.1740 IC90cierre=(-0.226,-0.121) EVu=-0.3779
+  primaria dia 2026-10-24                  n= 1742 cierres= 288 coste=  2157.4 pnl=  -504.1 EVw=-0.2337 IC90cierre=(-0.301,-0.170) EVu=-0.2212
+  primaria dia 2026-10-25                  n= 1655 cierres= 288 coste=  2026.1 pnl=  -557.5 EVw=-0.2752 IC90cierre=(-0.343,-0.207) EVu=-0.2355
+  primaria dia 2026-10-26                  n= 1684 cierres= 288 coste=  2050.8 pnl=  -290.6 EVw=-0.1417 IC90cierre=(-0.217,-0.065) EVu=-0.1301
+  sin el mejor dia (2026-10-26)            n= 3397 cierres= 576 coste=  4183.4 pnl= -1061.6 EVw=-0.2538 IC90cierre=(-0.303,-0.207) EVu=-0.2282
+  sin los 2 mejores dias (= 2026-10-25)    n= 1655 cierres= 288 coste=  2026.1 pnl=  -557.5 EVw=-0.2752 IC90cierre=(-0.343,-0.207) EVu=-0.2355
+  sin los 2 mejores cierres                n= 5070 cierres= 862 coste=  6222.8 pnl= -1389.9 EVw=-0.2234 IC90cierre=(-0.264,-0.181) EVu=-0.2060
+== por moneda (TODO, primaria) y moneda x bucket b' (n>=40, descriptivo)
+  BNB                                      n=  758 cierres= 694 coste=   755.5 pnl=  -306.8 EVw=-0.4061 IC90cierre=(-0.489,-0.322) EVu=-0.3397
+      BNB 2026-10-24 n=277 EVw=-0.479
+      BNB 2026-10-25 n=223 EVw=-0.367
+      BNB 2026-10-26 n=258 EVw=-0.362
+  BTC                                      n=  806 cierres= 675 coste=  1140.2 pnl=   -88.1 EVw=-0.0773 IC90cierre=(-0.152,-0.005) EVu=-0.0561
+      BTC 2026-10-24 n=284 EVw=-0.066
+      BTC 2026-10-25 n=273 EVw=-0.166
+      BTC 2026-10-26 n=249 EVw=+0.006
+  DOGE                                     n=  722 cierres= 653 coste=   728.8 pnl=  -237.5 EVw=-0.3259 IC90cierre=(-0.411,-0.241) EVu=-0.3023
+      DOGE 2026-10-24 n=226 EVw=-0.306
+      DOGE 2026-10-25 n=240 EVw=-0.369
+      DOGE 2026-10-26 n=256 EVw=-0.306
+  ETH                                      n=  912 cierres= 759 coste=  1247.4 pnl=  -187.6 EVw=-0.1504 IC90cierre=(-0.218,-0.084) EVu=-0.1197
+      ETH 2026-10-24 n=323 EVw=-0.173
+      ETH 2026-10-25 n=293 EVw=-0.215
+      ETH 2026-10-26 n=296 EVw=-0.061
+  SOL                                      n=  982 cierres= 825 coste=  1280.2 pnl=  -289.4 EVw=-0.2261 IC90cierre=(-0.294,-0.161) EVu=-0.2007
+      SOL 2026-10-24 n=320 EVw=-0.252
+      SOL 2026-10-25 n=326 EVw=-0.316
+      SOL 2026-10-26 n=336 EVw=-0.109
+  XRP                                      n=  901 cierres= 761 coste=  1082.2 pnl=  -242.7 EVw=-0.2243 IC90cierre=(-0.298,-0.153) EVu=-0.1851
+      XRP 2026-10-24 n=312 EVw=-0.241
+      XRP 2026-10-25 n=300 EVw=-0.295
+      XRP 2026-10-26 n=289 EVw=-0.126
+  BNB b10                                  n=  161 cierres= 159 coste=    87.2 pnl=   -24.9 EVw=-0.2851 IC90cierre=(-0.590,+0.023) EVu=-0.2181
+  BNB b15                                  n=   74 cierres=  74 coste=    57.1 pnl=   -19.7 EVw=-0.3450 IC90cierre=(-0.699,+0.032) EVu=-0.3408
+  BNB b20                                  n=  112 cierres= 112 coste=   107.4 pnl=   -63.3 EVw=-0.5890 IC90cierre=(-0.783,-0.361) EVu=-0.5981
+  BNB b25                                  n=  194 cierres= 185 coste=   223.9 pnl=   -88.4 EVw=-0.3949 IC90cierre=(-0.553,-0.234) EVu=-0.2903
+  BNB b30                                  n=  217 cierres= 206 coste=   279.8 pnl=  -110.6 EVw=-0.3952 IC90cierre=(-0.533,-0.256) EVu=-0.3405
+  BTC b10                                  n=   62 cierres=  62 coste=    36.3 pnl=    +8.7 EVw=+0.2397 IC90cierre=(-0.321,+0.915) EVu=+0.2623
+  BTC b25                                  n=   92 cierres=  89 coste=   127.5 pnl=    -0.4 EVw=-0.0031 IC90cierre=(-0.267,+0.256) EVu=+0.0198
+  BTC b30                                  n=  597 cierres= 507 coste=   922.1 pnl=   -92.1 EVw=-0.0999 IC90cierre=(-0.179,-0.022) EVu=-0.1011
+  DOGE b10                                 n=  108 cierres= 108 coste=    54.0 pnl=   -30.0 EVw=-0.5549 IC90cierre=(-0.822,-0.213) EVu=-0.5510
+  DOGE b15                                 n=   91 cierres=  90 coste=    62.8 pnl=   -10.2 EVw=-0.1632 IC90cierre=(-0.486,+0.223) EVu=-0.0144
+  DOGE b20                                 n=   99 cierres=  98 coste=    85.9 pnl=   -59.7 EVw=-0.6950 IC90cierre=(-0.870,-0.493) EVu=-0.6244
+  DOGE b25                                 n=  167 cierres= 165 coste=   185.6 pnl=   -48.9 EVw=-0.2633 IC90cierre=(-0.449,-0.080) EVu=-0.1812
+  DOGE b30                                 n=  257 cierres= 240 coste=   340.5 pnl=   -88.7 EVw=-0.2606 IC90cierre=(-0.391,-0.128) EVu=-0.2544
+  ETH b10                                  n=   51 cierres=  51 coste=    27.0 pnl=    -2.0 EVw=-0.0731 IC90cierre=(-0.637,+0.621) EVu=-0.1510
+  ETH b20                                  n=   47 cierres=  47 coste=    49.7 pnl=   -24.6 EVw=-0.4950 IC90cierre=(-0.799,-0.144) EVu=-0.4397
+  ETH b25                                  n=  221 cierres= 209 coste=   299.5 pnl=    -6.3 EVw=-0.0210 IC90cierre=(-0.191,+0.162) EVu=-0.0117
+  ETH b30                                  n=  562 cierres= 495 coste=   846.8 pnl=  -171.0 EVw=-0.2020 IC90cierre=(-0.289,-0.116) EVu=-0.1819
+  SOL b10                                  n=   56 cierres=  56 coste=    29.6 pnl=    +3.7 EVw=+0.1256 IC90cierre=(-0.450,+0.850) EVu=+0.2389
+  SOL b15                                  n=   45 cierres=  45 coste=    37.3 pnl=   -26.1 EVw=-0.6991 IC90cierre=(-0.967,-0.350) EVu=-0.6216
+  SOL b20                                  n=   83 cierres=  82 coste=    89.1 pnl=   -19.1 EVw=-0.2140 IC90cierre=(-0.537,+0.097) EVu=-0.2426
+  SOL b25                                  n=  234 cierres= 226 coste=   307.6 pnl=   -10.4 EVw=-0.0338 IC90cierre=(-0.203,+0.140) EVu=+0.0051
+  SOL b30                                  n=  564 cierres= 501 coste=   816.7 pnl=  -237.6 EVw=-0.2909 IC90cierre=(-0.372,-0.206) EVu=-0.2900
+  XRP b10                                  n=   63 cierres=  63 coste=    35.0 pnl=   -15.0 EVw=-0.4289 IC90cierre=(-0.856,+0.047) EVu=-0.4981
+  XRP b15                                  n=   64 cierres=  62 coste=    47.4 pnl=    +3.5 EVw=+0.0732 IC90cierre=(-0.375,+0.566) EVu=+0.2256
+  XRP b20                                  n=  103 cierres= 102 coste=   100.7 pnl=   -24.7 EVw=-0.2457 IC90cierre=(-0.521,+0.041) EVu=-0.2074
+  XRP b25                                  n=  195 cierres= 187 coste=   245.7 pnl=   -82.6 EVw=-0.3363 IC90cierre=(-0.494,-0.176) EVu=-0.2701
+  XRP b30                                  n=  476 cierres= 431 coste=   653.4 pnl=  -123.8 EVw=-0.1895 IC90cierre=(-0.283,-0.088) EVu=-0.1592

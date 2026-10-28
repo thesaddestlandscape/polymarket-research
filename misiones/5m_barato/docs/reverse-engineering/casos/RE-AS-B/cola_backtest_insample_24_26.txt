@@ -1,0 +1,37 @@
+
+dias forward con datos: 3 ['2026-10-24', '2026-10-25', '2026-10-26'] | incompletos: []
+
+== P  Q0>100 (cualquier moneda)
+  acumulado                      n= 258 cierres= 239 coste=  382.6 EVw=-0.0460 IC90cierre(-0.196,+0.104) EVu=-0.0516 
+    IC90 por DIAS (bootstrap de 3 dias): (-0.231,+0.086)
+    por dia: {'2026-10-24': (72, np.float64(-0.2964)), '2026-10-25': (71, np.float64(-0.0982)), '2026-10-26': (115, np.float64(0.1427))}
+    sin 2 mejores dias ['2026-10-26', '2026-10-25']: n=72 EVw=-0.2964
+
+== S1 Q0>25 & ETH/SOL/XRP
+  acumulado                      n= 468 cierres= 388 coste=  662.0 EVw=-0.3278 IC90cierre(-0.432,-0.229) EVu=-0.3431 
+    IC90 por DIAS (bootstrap de 3 dias): (-0.459,-0.236)
+    por dia: {'2026-10-24': (121, np.float64(-0.5218)), '2026-10-25': (150, np.float64(-0.3581)), '2026-10-26': (197, np.float64(-0.1913))}
+    sin 2 mejores dias ['2026-10-26', '2026-10-25']: n=121 EVw=-0.5218
+
+== S2 BTC & Q0>100
+  acumulado                      n= 248 cierres= 235 coste=  368.2 EVw=-0.0360 IC90cierre(-0.178,+0.113) EVu=-0.0403 
+    IC90 por DIAS (bootstrap de 3 dias): (-0.223,+0.099)
+    por dia: {'2026-10-24': (70, np.float64(-0.2764)), '2026-10-25': (68, np.float64(-0.1124)), '2026-10-26': (110, np.float64(0.1642))}
+    sin 2 mejores dias ['2026-10-26', '2026-10-25']: n=70 EVw=-0.2764
+
+== C  Q0<=25 (donde vive B)
+  acumulado                      n=4119 cierres= 864 coste= 5327.6 EVw=-0.4106 IC90cierre(-0.449,-0.371) EVu=-0.4210 
+    IC90 por DIAS (bootstrap de 3 dias): (-0.450,-0.372)
+    por dia: {'2026-10-24': (1442, np.float64(-0.4225)), '2026-10-25': (1314, np.float64(-0.4647)), '2026-10-26': (1363, np.float64(-0.3458))}
+    sin 2 mejores dias ['2026-10-26', '2026-10-24']: n=1314 EVw=-0.4647
+
+== ALL
+  acumulado                      n=5254 cierres= 864 coste= 6962.1 EVw=-0.3536 IC90cierre(-0.393,-0.315) EVu=-0.3694 
+    IC90 por DIAS (bootstrap de 3 dias): (-0.403,-0.306)
+    por dia: {'2026-10-24': (1764, np.float64(-0.4037)), '2026-10-25': (1666, np.float64(-0.4017)), '2026-10-26': (1824, np.float64(-0.2618))}
+    sin 2 mejores dias ['2026-10-26', '2026-10-25']: n=1764 EVw=-0.4037
+
+PLACEBO permutacion cola (dia x moneda x bucket): obs -0.0460 | placebo media -0.0966 p95 +0.0350 | p(placebo>=obs)=0.269
+CONTRASTE ajustado (Q0>25 menos Q0<=25, celdas moneda x bucket con n>=3 en ambos, pesos coste bajo): +0.0295 sobre 14 celdas
+
+GATE celda P: PENDIENTE (n=258/40, dias=3/10, EVw=-0.046)

@@ -1,0 +1,85 @@
+vidas 60847 {'sym_2026-10-24': 6, 'sin_gana': 29, 'sym_2026-10-25': 6, 'sym_2026-10-26': 6}
+== DESC 24+25 vidas 39581 frac vidas con salto adverso k=2 en vida (approx) 0.245
+  pes todas                          n= 3430 cierres= 576 EVw=-0.4027 IC90=(-0.446,-0.361)
+  pes RETENIDOS politica primaria    n= 3015 cierres= 576 EVw=-0.3532 IC90=(-0.401,-0.307)
+  pes apartados justa                n=  646 cierres= 361 EVw=-0.5874 IC90=(-0.695,-0.477)
+  pes no apartados justa             n= 3307 cierres= 576 EVw=-0.3994 IC90=(-0.444,-0.356)
+  pes DIF apartados-no_apartados     n=  646 cierres= 361 EVw=-0.1880 IC90=(-0.286,-0.083)
+  pes fill-rate unidades retenidas/todas = 3015/3430
+  opt todas                          n= 4522 cierres= 576 EVw=-0.0518 IC90=(-0.097,-0.009)
+  opt RETENIDOS politica primaria    n= 4441 cierres= 576 EVw=-0.0392 IC90=(-0.085,+0.006)
+  opt apartados justa                n=  940 cierres= 427 EVw=-0.2510 IC90=(-0.347,-0.151)
+  opt no apartados justa             n= 4464 cierres= 576 EVw=-0.0448 IC90=(-0.092,+0.000)
+  opt DIF apartados-no_apartados     n=  940 cierres= 427 EVw=-0.2062 IC90=(-0.299,-0.116)
+  opt fill-rate unidades retenidas/todas = 4441/4522
+== OOS 26 vidas 21266 frac vidas con salto adverso k=2 en vida (approx) 0.408
+  pes todas                          n= 1824 cierres= 288 EVw=-0.2618 IC90=(-0.335,-0.187)
+  pes RETENIDOS politica primaria    n= 1512 cierres= 288 EVw=-0.1575 IC90=(-0.239,-0.073)
+  pes apartados justa                n=  560 cierres= 232 EVw=-0.3689 IC90=(-0.494,-0.244)
+  pes no apartados justa             n= 1753 cierres= 288 EVw=-0.2469 IC90=(-0.320,-0.170)
+  pes DIF apartados-no_apartados     n=  560 cierres= 232 EVw=-0.1220 IC90=(-0.232,-0.012)
+  pes fill-rate unidades retenidas/todas = 1512/1824
+  opt todas                          n= 2377 cierres= 288 EVw=+0.0481 IC90=(-0.019,+0.119)
+  opt RETENIDOS politica primaria    n= 2352 cierres= 288 EVw=+0.0644 IC90=(-0.007,+0.138)
+  opt apartados justa                n=  791 cierres= 254 EVw=+0.0023 IC90=(-0.127,+0.128)
+  opt no apartados justa             n= 2349 cierres= 288 EVw=+0.0614 IC90=(-0.009,+0.136)
+  opt DIF apartados-no_apartados     n=  791 cierres= 254 EVw=-0.0590 IC90=(-0.163,+0.040)
+  opt fill-rate unidades retenidas/todas = 2352/2377
+== TODO vidas 60847 frac vidas con salto adverso k=2 en vida (approx) 0.302
+  pes todas                          n= 5254 cierres= 864 EVw=-0.3536 IC90=(-0.392,-0.318)
+  pes RETENIDOS politica primaria    n= 4527 cierres= 864 EVw=-0.2886 IC90=(-0.330,-0.249)
+  pes apartados justa                n= 1206 cierres= 593 EVw=-0.4848 IC90=(-0.564,-0.401)
+  pes no apartados justa             n= 5060 cierres= 864 EVw=-0.3469 IC90=(-0.386,-0.310)
+  pes DIF apartados-no_apartados     n= 1206 cierres= 593 EVw=-0.1379 IC90=(-0.213,-0.065)
+  pes fill-rate unidades retenidas/todas = 4527/5254
+  opt todas                          n= 6899 cierres= 864 EVw=-0.0170 IC90=(-0.056,+0.020)
+  opt RETENIDOS politica primaria    n= 6793 cierres= 864 EVw=-0.0030 IC90=(-0.042,+0.035)
+  opt apartados justa                n= 1731 cierres= 681 EVw=-0.1342 IC90=(-0.211,-0.056)
+  opt no apartados justa             n= 6813 cierres= 864 EVw=-0.0080 IC90=(-0.047,+0.030)
+  opt DIF apartados-no_apartados     n= 1731 cierres= 681 EVw=-0.1263 IC90=(-0.194,-0.056)
+  opt fill-rate unidades retenidas/todas = 6793/6899
+== secundarias (TODO, Bonferroni x6)
+  pes k=2 Lc=60 retenidos            n= 4524 cierres= 864 EVw=-0.2880 IC90=(-0.330,-0.248)
+  pes k=2 Lc=60 DIF apa-noapa        n= 1222 cierres= 598 EVw=-0.1384 IC90=(-0.210,-0.068)
+  opt k=2 Lc=60 retenidos            n= 6790 cierres= 864 EVw=-0.0034 IC90=(-0.043,+0.035)
+  opt k=2 Lc=60 DIF apa-noapa        n= 1768 cierres= 690 EVw=-0.1298 IC90=(-0.199,-0.062)
+  pes k=2 Lc=250 retenidos           n= 4582 cierres= 864 EVw=-0.2911 IC90=(-0.333,-0.252)
+  pes k=2 Lc=250 DIF apa-noapa       n= 1043 cierres= 528 EVw=-0.1160 IC90=(-0.195,-0.030)
+  opt k=2 Lc=250 retenidos           n= 6802 cierres= 864 EVw=-0.0053 IC90=(-0.044,+0.033)
+  opt k=2 Lc=250 DIF apa-noapa       n= 1482 cierres= 619 EVw=-0.0984 IC90=(-0.178,-0.021)
+  pes k=1 Lc=100 retenidos           n= 3519 cierres= 863 EVw=-0.1924 IC90=(-0.240,-0.146)
+  pes k=1 Lc=100 DIF apa-noapa       n= 2622 cierres= 827 EVw=-0.1006 IC90=(-0.143,-0.058)
+  opt k=1 Lc=100 retenidos           n= 6519 cierres= 864 EVw=+0.0140 IC90=(-0.027,+0.056)
+  opt k=1 Lc=100 DIF apa-noapa       n= 3909 cierres= 858 EVw=-0.1175 IC90=(-0.152,-0.081)
+  pes k=4 Lc=100 retenidos           n= 5147 cierres= 864 EVw=-0.3450 IC90=(-0.384,-0.308)
+  pes k=4 Lc=100 DIF apa-noapa       n=  265 cierres= 176 EVw=+0.0159 IC90=(-0.206,+0.248)
+  opt k=4 Lc=100 retenidos           n= 6879 cierres= 864 EVw=-0.0146 IC90=(-0.053,+0.022)
+  opt k=4 Lc=100 DIF apa-noapa       n=  298 cierres= 199 EVw=-0.0678 IC90=(-0.272,+0.152)
+== moneda x bucket (TODO, pes, retenidos primaria, n>=40, descriptivo)
+  BNB b10  n=154 EVw=-0.366
+  BNB b15  n=60 EVw=-0.698
+  BNB b20  n=72 EVw=-0.811
+  BNB b25  n=123 EVw=-0.613
+  BNB b30  n=90 EVw=-0.667
+  BTC b25  n=142 EVw=+0.016
+  BTC b30  n=970 EVw=-0.110
+  DOGE b10  n=79 EVw=-0.452
+  DOGE b15  n=55 EVw=-0.678
+  DOGE b20  n=52 EVw=-0.569
+  DOGE b25  n=81 EVw=-0.589
+  DOGE b30  n=87 EVw=-0.502
+  ETH b10  n=60 EVw=-0.277
+  ETH b15  n=56 EVw=-0.791
+  ETH b20  n=92 EVw=-0.158
+  ETH b25  n=366 EVw=-0.164
+  ETH b30  n=418 EVw=-0.274
+  SOL b10  n=88 EVw=-0.309
+  SOL b15  n=97 EVw=-0.329
+  SOL b20  n=126 EVw=-0.282
+  SOL b25  n=322 EVw=-0.292
+  SOL b30  n=250 EVw=-0.440
+  XRP b10  n=117 EVw=-0.324
+  XRP b15  n=88 EVw=-0.075
+  XRP b20  n=108 EVw=-0.409
+  XRP b25  n=199 EVw=-0.399
+  XRP b30  n=151 EVw=-0.338

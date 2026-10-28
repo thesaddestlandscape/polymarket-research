@@ -1,0 +1,14 @@
+archivo libro5_ms_2026-10-26_1965189.csv.gz rango 1793053278 1793059199 mercados con tokens 1202 muestras 360
+estado muestras {('XRP', 'ok'): 67, ('ETH', 'ok'): 68, ('SOL', 'ok'): 71, ('BTC', 'ok'): 68, ('XRP', 'sin_libro'): 23, ('ETH', 'sin_libro'): 22, ('SOL', 'sin_libro'): 19, ('BTC', 'sin_libro'): 22}
+coin n_muestras n_mercados mid_med spread_med frac_bid_en_banda Qtot_a_med Qtot_b_med | V1(join bb) cuota[bajo,alto] a / b | V2(s=1c) cuota[bajo,alto] a / b | ingreso$/mercado escenario ag: V1b[bajo,alto] V2b[bajo,alto] | p*(equilibrio)
+BTC 68 18 0.505 1.00 0.99 2133 2124 | V1 a[0.012,0.034] b[0.012,0.035] | V2 a[0.024,0.042] b[0.024,0.042] | pool$/mk 33.60 -> V1b[0.400,1.159] V2b[0.808,1.411] | p*V2b<=0.627
+ETH 68 18 0.575 1.00 1.00 228 202 | V1 a[0.095,0.230] b[0.115,0.263] | V2 a[0.077,0.192] b[0.094,0.223] | pool$/mk 5.60 -> V1b[0.646,1.474] V2b[0.526,1.250] | p*V2b<=0.556
+SOL 71 18 0.580 1.00 0.99 72 30 | V1 a[0.212,0.397] b[0.437,0.564] | V2 a[0.217,0.391] b[0.434,0.562] | pool$/mk 5.60 -> V1b[2.449,3.160] V2b[2.431,3.146] | p*V2b<=1.398
+XRP 67 18 0.545 2.00 0.99 59 15 | V1 a[0.228,0.413] b[0.509,0.602] | V2 a[0.276,0.444] b[0.519,0.605] | pool$/mk 5.60 -> V1b[2.851,3.371] V2b[2.908,3.388] | p*V2b<=1.506
+archivo libro5_ms_2026-10-24_1109162.csv.gz rango 1792880478 1792886399 mercados con tokens 1196 muestras 360
+estado muestras {('ETH', 'ok'): 68, ('SOL', 'ok'): 72, ('BTC', 'ok'): 69, ('XRP', 'ok'): 72, ('BTC', 'sin_libro'): 21, ('ETH', 'sin_libro'): 22, ('SOL', 'sin_libro'): 18, ('XRP', 'sin_libro'): 18}
+coin n_muestras n_mercados mid_med spread_med frac_bid_en_banda Qtot_a_med Qtot_b_med | V1(join bb) cuota[bajo,alto] a / b | V2(s=1c) cuota[bajo,alto] a / b | ingreso$/mercado escenario ag: V1b[bajo,alto] V2b[bajo,alto] | p*(equilibrio)
+BTC 69 18 0.515 1.00 1.00 1213 1201 | V1 a[0.023,0.059] b[0.029,0.063] | V2 a[0.019,0.048] b[0.025,0.053] | pool$/mk 33.60 -> V1b[0.979,2.127] V2b[0.842,1.765] | p*V2b<=0.784
+ETH 68 18 0.515 1.00 1.00 175 155 | V1 a[0.117,0.268] b[0.146,0.312] | V2 a[0.095,0.227] b[0.120,0.268] | pool$/mk 5.60 -> V1b[0.818,1.745] V2b[0.671,1.503] | p*V2b<=0.668
+SOL 72 18 0.492 1.00 1.00 66 40 | V1 a[0.228,0.407] b[0.378,0.517] | V2 a[0.225,0.398] b[0.369,0.511] | pool$/mk 5.60 -> V1b[2.114,2.898] V2b[2.068,2.859] | p*V2b<=1.271
+XRP 72 18 0.460 2.00 0.96 20 0 | V1 a[0.384,0.585] b[0.748,0.779] | V2 a[0.484,0.657] b[0.802,0.827] | pool$/mk 5.60 -> V1b[4.191,4.361] V2b[4.491,4.632] | p*V2b<=2.059

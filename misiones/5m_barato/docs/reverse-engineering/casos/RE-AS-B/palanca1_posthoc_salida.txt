@@ -1,0 +1,16 @@
+REAL taker L=250 (como PRIMARIA)                     n=  7102 acierto=0.7012 ask_medio=0.7302 EVw=-0.0572
+PLACEBO mismas unidades que el real (prereg)         n= 64445 acierto=0.6895 ask_medio=0.6377 EVw=+0.0635
+PLACEBO TODAS las unidades (no condicionado)         n= 93503 acierto=0.4957 ask_medio=0.5101 EVw=-0.0474
+PLACEBO unidades SIN evento real                     n= 29058 acierto=0.0660 ask_medio=0.2270 EVw=-0.7213
+real ask_L in [0.0,0.6)                              n=    92 acierto=0.4457 ask_medio=0.5084 EVw=-0.1515
+placebo-mismas unidades ask in [0.0,0.6)             n= 26038 acierto=0.4858 ask_medio=0.3496 EVw=+0.3374
+real ask_L in [0.6,0.8)                              n=  6263 acierto=0.6981 ask_medio=0.7206 EVw=-0.0497
+placebo-mismas unidades ask in [0.6,0.8)             n= 15696 acierto=0.7012 ask_medio=0.6943 EVw=-0.0109
+real ask_L in [0.8,0.9)                              n=   677 acierto=0.7548 ask_medio=0.8299 EVw=-0.1011
+placebo-mismas unidades ask in [0.8,0.9)             n=  6975 acierto=0.8163 ask_medio=0.8441 EVw=-0.0432
+real ask_L in [0.9,1.0)                              n=    70 acierto=0.8000 ask_medio=0.9150 EVw=-0.1308
+placebo-mismas unidades ask in [0.9,1.0)             n= 15736 acierto=0.9585 ask_medio=0.9665 EVw=-0.0105
+real, ask sube tras barrido                          n=  3763 acierto=0.7239 ask_medio=0.7531 EVw=-0.0549
+real, ask igual                                      n=  1219 acierto=0.7235 ask_medio=0.7273 EVw=-0.0236
+real, ask baja                                       n=  2120 acierto=0.6481 ask_medio=0.6912 EVw=-0.0819
+T_ev (s) real p50 260 ; placebo-mismas p50 168
