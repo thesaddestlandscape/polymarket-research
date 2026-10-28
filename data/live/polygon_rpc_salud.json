@@ -47,10 +47,10 @@
    "ultimo_aviso": 1793154184.282987
   },
   "archivo": {
-   "ok": false,
-   "detalle": "LimiteTemporal: HTTP 429",
-   "desde": 1793157788.3724248,
-   "ultimo_aviso": 1793157788.3724248
+   "ok": true,
+   "detalle": "",
+   "desde": 1793161383.9403558,
+   "ultimo_aviso": 1793161383.9403558
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-28T03:23:08+00:00"
+ "_actualizado_utc": "2026-10-28T04:23:03+00:00"
 }
