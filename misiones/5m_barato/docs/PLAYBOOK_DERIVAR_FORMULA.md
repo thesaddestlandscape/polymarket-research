@@ -62,3 +62,44 @@ Calcular primero la **cota de ganancia máxima** de la familia de reglas (aquí 
 - Estado S = «barrido ≥800 acc misma moneda en (t−60 s, t−5 s], por recepción»: dEV/E +0,109 IC90 días [+0,035,+0,183], 11/17 días +, cobertura 11,9 %, placebo máx p=0,040. INSUFFICIENT_EVIDENCE (falla 80 % de días; maldición del ganador; bootstrap por mercado cruza 0; control S_chain no replica).
 - Lección: cuando una pista pasa 4 de 5 gates, NO se relaja el gate fallido: se amplía muestra, se usa selección anidada/walk-forward del estado y se prueba la versión operable (simulación con cola propia) antes de hablar de capacidad. Variantes ilimitadas solo dentro de una familia prerregistrada con partición temporal.
 - R5 en curso: sim3-BTC + cobertura + ETH/otras + control + capacidad.
+
+## 9. R5-R7 (28-Oct): lecciones de proceso y de medición (Javi 28-Oct tarde: «replicar el procedimiento en otras subestrategias de 5m barato, 5m y 15m»)
+### 9.1 Registro de rondas (continuación de §3)
+| Ronda | Pregunta | Veredicto | Lección transferible |
+|---|---|---|---|
+| R3 | ¿Hay información que cierre la brecha? | REJECTED (σ_ε 1,33 vs 2,6 pp) | Inventariar fuentes por ganancia en cuadratura antes de más variantes |
+| R4 | ¿Un estado post-barrido (S) mejora el EV? | EXPLORATORY (+0,109 IC90 [+0,035,+0,183], 11/17 días+) | Pasar 4 de 5 gates no autoriza relajar el 5.º: se amplía muestra y se valida anidado |
+| R5 (456 variantes sim3-BTC) | ¿Se explota S operando? | REJECTED (v057 OOS −0,065); v258 post-hoc congelada +0,034 | Una familia grande elegida en IS cae en OOS (maldición del ganador); lo no tocado es solo el forward |
+| R6 (48 conductas) | ¿Qué hacen las makers ganadoras? | Ganadoras persisten (+0,076, selección y medida en días distintos); regla ex-ante REJECTED | Hallar el rasgo (estar en el libro ANTES del barrido) ≠ tener una regla ejecutable |
+| R7 | Puja armada por los primeros prints; predictor; brecha; dosis-respuesta | A REJECTED (−0,134..−0,155 OOS), B AUC 0,66 sin ahorro, C brecha = muestreo, D sin señal; M1 vivo | La latencia no era el problema (68/150/300 ms igual); la prima la cobra quien ya estaba posicionado |
+
+### 9.2 Lecciones de MEDICIÓN (añadir a §4)
+- **Una pista post-hoc no es una regla**: «bb−3..−4 dentro de barrido ≥200 acc» daba OOS +0,274 (9/10 días) como lectura del relleno y −0,134..−0,155 como regla ejecutable. Siempre convertir la pista en regla que SOLO use información disponible en el instante de decidir y medirla con relleno estricto.
+- **Reloj del precio de referencia**: medir el mejor bid en rhat−300 ms (o en cualquier instante anterior al relleno) en un barrido da un precio retrasado y fabrica «profundidad». Medir la referencia en la recepción exacta; si el efecto desaparece, era artefacto, y se estudia qué señal real contenía.
+- **Cota teórica primero**: la cancelación tardía tenía techo oráculo 39,7 k€ y ahorro medido 0 €; el predictor tiene AUC 0,66. Calcular el oráculo antes de construir la regla ahorra rondas (ampliación de §6).
+- **Clases post-hoc (velocidad, retardo) se etiquetan como tales**; no cuentan para el veredicto.
+- **Dosis-respuesta**: ajustar una pendiente continua (R²) antes que buckets; si la pendiente cambia de signo entre IS y OOS no hay dosis-respuesta, aunque un bucket brille.
+- **Brecha sim-vs-real**: antes de acusar al modelo de relleno, medir coincidencia fill a fill (75,5 %), rebate (~1,1 pp) y MUESTRA (60 ejecuciones/día simuladas frente al nicho completo). Una brecha de muestreo se cierra con más muestra, no con otro modelo.
+- **Selección y medida en días distintos** (wallets/estado elegidos en IS, evaluados en OOS) con placebo e inversión; el placebo debe estratificarse por el precio de RELLENO.
+- **Reproducir antes de construir**: la ronda arranca reproduciendo la cifra del informe anterior (R6 reprodujo S800 +0,098 vs +0,110; ETH no reprodujo → control inconclusivo, no «confirmado»).
+- **Latencia en el eje**: probar siempre la política con latencias 68/150/300 ms; si el resultado no se mueve, la hipótesis no es de velocidad.
+
+### 9.3 Lecciones de PROCESO
+1. **Un agente a la vez y reanudable**: reanudar el MISMO agente con SendMessage conserva contexto y ahorra tokens (R6 ≈199 k tokens/23 llamadas, R7 ≈89 k adicionales/22 llamadas). Agente nuevo solo para validación/red-team independientes.
+2. **Prompt de ronda**: alcance, presupuesto (≤20-35 llamadas), qué leer (solo resúmenes), callejones cerrados, tarea con prerregistro+hash ANTES de medir, métricas obligatorias, ruta de informe, respuesta ≤15 líneas.
+3. **Comentarios del humano entre rondas se transcriben TAL CUAL en el brief** (memoria + prompt) y se convierten en un paso numerado; el agente no los reinterpreta. El mandato «no se cierra» obliga a que cada REJECTED traiga un mecanismo vivo y el siguiente turno.
+4. **Cada ronda termina con**: informe, fila en este playbook, FAILED_ATTEMPTS/DECISION_LOG, checkpoint de memoria y commit selectivo (solo md/py/txt ligeros; datos pesados fuera de git).
+5. **Veredictos con tres estados**: REJECTED / EXPLORATORY / CANDIDATE; «mecanismo vivo» con estado EVIDENCE_INSUFFICIENT y la pieza que falta (en B: predictor de llegada de barrido).
+6. **Forward congelado** para cualquier candidata post-hoc (v258: cron diario 05:25Z, sin dinero): es la única lectura limpia; con sd diaria 0,22 el IC90>0 exige ≈52 días a +0,05 → decir de antemano cuántos días hacen falta.
+7. **Guardias operativas**: nice 19 + ionice + ulimit, fuera del racimo 06-09Z, flock, Telegram si falla, sin producción ni data/live.
+
+### 9.4 Plantilla para otra subestrategia (5m barato A/otras, 5m, 15m)
+1. Síntoma medible (EVw ponderado por €, IC90 por días, OOS) y qué gate falla.
+2. Cota teórica/oráculo de la familia de reglas ANTES de medir (§6, §9.2).
+3. Reproducir la cifra de partida con el registro ms + on-chain del tramo, relleno estricto, libros cruzados fuera.
+4. Descomponer la población de rellenos (informados/no informados) por rasgos ex-ante; qué hacen las wallets ganadoras (selección y medida en días distintos).
+5. Convertir cada pista en regla ejecutable con latencia real; probar 68/150/300 ms; placebo e inversión; desagregar moneda×bucket.
+6. Predictor de llegada del evento (hazard) si el valor depende de estar posicionado ANTES.
+7. Cerrar la brecha sim-real con muestra completa antes de tocar el modelo.
+8. Congelar candidata para forward; no dinero real sin checklist de 6 categorías + /code-review + OK de Javi + rampa de stake.
+9. Ajustes por marco: 5m (ref. TWAP60 ventana [e−62,e−3], cierre cada 5 min), 15m (fee/rebate maker 0,07/0,2, sin relleno optimista), 5m barato (bids <0,10 → pares con dependencia negativa, profundidad real del bid).
