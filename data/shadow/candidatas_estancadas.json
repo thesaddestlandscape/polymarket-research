@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-27T07:39:16.683357+00:00",
+  "generado": "2026-10-28T07:39:17.348065+00:00",
   "cementerio": [
     {
       "clave": "FAVORITO_CONFIRMADO#BNB#240min",
@@ -38,9 +38,9 @@
     },
     {
       "clave": "FAVORITO_CONFIRMADO#BNB#15min",
-      "n": 65,
-      "ic_bayes": -0.1716,
-      "motivo": "IC_bayes=-0.172 n=65 conf=1.00 → edge_minimo=0.04",
+      "n": 66,
+      "ic_bayes": -0.1765,
+      "motivo": "IC_bayes=-0.176 n=66 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
@@ -66,16 +66,16 @@
     },
     {
       "clave": "GBM_LATE_60M_FADE#SOL#60min",
-      "n": 166,
-      "ic_bayes": -0.2619,
-      "motivo": "IC_bayes=-0.262 n=166 conf=1.00 → DESACTIVADA",
+      "n": 170,
+      "ic_bayes": -0.2558,
+      "motivo": "IC_bayes=-0.256 n=170 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "GBM_LATE_60M_FADE#ETH#60min",
-      "n": 220,
-      "ic_bayes": -0.2342,
-      "motivo": "IC_bayes=-0.234 n=220 conf=1.00 → DESACTIVADA",
+      "n": 223,
+      "ic_bayes": -0.2378,
+      "motivo": "IC_bayes=-0.238 n=223 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
@@ -87,9 +87,9 @@
     },
     {
       "clave": "PRICE_TARGET_GBM_FADE#SOL#atexpiry",
-      "n": 308,
-      "ic_bayes": -0.1968,
-      "motivo": "IC_bayes=-0.197 n=308 conf=1.00 → edge_minimo=0.04",
+      "n": 311,
+      "ic_bayes": -0.1965,
+      "motivo": "IC_bayes=-0.196 n=311 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
@@ -101,30 +101,30 @@
     },
     {
       "clave": "PRICE_TARGET_GBM#BTC#atexpiry",
-      "n": 352,
-      "ic_bayes": -0.1328,
-      "motivo": "IC_bayes=-0.133 n=352 conf=1.00 → edge_minimo=0.04",
+      "n": 357,
+      "ic_bayes": -0.1323,
+      "motivo": "IC_bayes=-0.132 n=357 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
       "clave": "PRICE_TARGET_GBM_FADE#ETH#atexpiry",
-      "n": 364,
-      "ic_bayes": -0.2186,
-      "motivo": "IC_bayes=-0.219 n=364 conf=1.00 → DESACTIVADA",
+      "n": 367,
+      "ic_bayes": -0.2209,
+      "motivo": "IC_bayes=-0.221 n=367 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "PRICE_TARGET_GBM_FADE#BTC#atexpiry",
-      "n": 418,
-      "ic_bayes": -0.2095,
-      "motivo": "IC_bayes=-0.210 n=418 conf=1.00 → DESACTIVADA",
+      "n": 423,
+      "ic_bayes": -0.2106,
+      "motivo": "IC_bayes=-0.211 n=423 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "GBM_LATE_60M_FADE#60min",
-      "n": 619,
-      "ic_bayes": -0.2504,
-      "motivo": "IC_bayes=-0.250 n=619 conf=1.00 → DESACTIVADA",
+      "n": 626,
+      "ic_bayes": -0.25,
+      "motivo": "IC_bayes=-0.250 n=626 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
@@ -136,65 +136,65 @@
     },
     {
       "clave": "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min",
-      "n": 899,
-      "ic_bayes": 0.1915,
-      "motivo": "IC_bayes=+0.191 n=899 conf=1.00",
+      "n": 900,
+      "ic_bayes": 0.1907,
+      "motivo": "IC_bayes=+0.191 n=900 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#15min",
-      "n": 899,
-      "ic_bayes": 0.1915,
-      "motivo": "IC_bayes=+0.191 n=899 conf=1.00",
+      "n": 900,
+      "ic_bayes": 0.1907,
+      "motivo": "IC_bayes=+0.191 n=900 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "PRICE_TARGET_GBM_FADE#atexpiry",
-      "n": 1090,
-      "ic_bayes": -0.2097,
-      "motivo": "IC_bayes=-0.210 n=1090 conf=1.00 → DESACTIVADA",
+      "n": 1101,
+      "ic_bayes": -0.2108,
+      "motivo": "IC_bayes=-0.211 n=1101 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "LIQUIDACIONES_5M#ETH#5min",
-      "n": 1477,
-      "ic_bayes": 0.0213,
-      "motivo": "IC_bayes=+0.021 n=1477 conf=1.00",
+      "n": 1495,
+      "ic_bayes": 0.0217,
+      "motivo": "IC_bayes=+0.022 n=1495 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min",
-      "n": 3415,
-      "ic_bayes": 0.2021,
-      "motivo": "IC_bayes=+0.202 n=3415 conf=1.00",
+      "n": 3484,
+      "ic_bayes": 0.2022,
+      "motivo": "IC_bayes=+0.202 n=3484 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "UPDOWN_GBM_15M_TARDIO#XRP#15min",
-      "n": 5786,
-      "ic_bayes": -0.0643,
-      "motivo": "IC_bayes=-0.064 n=5786 conf=1.00",
+      "n": 5835,
+      "ic_bayes": -0.064,
+      "motivo": "IC_bayes=-0.064 n=5835 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min",
-      "n": 14622,
-      "ic_bayes": 0.2183,
-      "motivo": "IC_bayes=+0.218 n=14622 conf=1.00",
+      "n": 14822,
+      "ic_bayes": 0.2181,
+      "motivo": "IC_bayes=+0.218 n=14822 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#15min",
-      "n": 25633,
-      "ic_bayes": 0.1955,
-      "motivo": "IC_bayes=+0.195 n=25633 conf=1.00",
+      "n": 25981,
+      "ic_bayes": 0.195,
+      "motivo": "IC_bayes=+0.195 n=25981 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#5min",
-      "n": 89930,
-      "ic_bayes": 0.201,
-      "motivo": "IC_bayes=+0.201 n=89930 conf=1.00",
+      "n": 91148,
+      "ic_bayes": 0.2009,
+      "motivo": "IC_bayes=+0.201 n=91148 conf=1.00",
       "viola_n_minimo": false
     }
   ],
@@ -455,12 +455,6 @@
       "clave": "WEEKLY_PRICE#SOL#BUY_YES",
       "n_hace_dias": 32,
       "n_hoy": 32,
-      "dias": 7
-    },
-    {
-      "clave": "LIQUIDACIONES_5M#ETH#5min#BUY_NO",
-      "n_hace_dias": 34,
-      "n_hoy": 34,
       "dias": 7
     },
     {
