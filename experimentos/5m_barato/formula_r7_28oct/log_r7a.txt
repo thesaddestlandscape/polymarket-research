@@ -1,0 +1,77 @@
+2026-10-06 {(100, 3): 4416, (200, 3): 1779, (400, 3): 555} 8 s
+2026-10-07 {(100, 3): 4109, (200, 3): 1716, (400, 3): 573} 16 s
+2026-10-08 {(100, 3): 4636, (200, 3): 1988, (400, 3): 675} 26 s
+2026-10-09 {(100, 3): 4313, (200, 3): 1864, (400, 3): 529} 35 s
+2026-10-10 {(100, 3): 4088, (200, 3): 1536, (400, 3): 535} 41 s
+2026-10-11 {(100, 3): 3771, (200, 3): 1445, (400, 3): 479} 48 s
+2026-10-12 {(100, 3): 4099, (200, 3): 1611, (400, 3): 407} 56 s
+2026-10-13 {(100, 3): 4134, (200, 3): 1749, (400, 3): 485} 64 s
+2026-10-14 {(100, 3): 3823, (200, 3): 1635, (400, 3): 468} 72 s
+2026-10-15 {(100, 3): 4405, (200, 3): 1947, (400, 3): 654} 81 s
+2026-10-16 {(100, 3): 4131, (200, 3): 1768, (400, 3): 569} 90 s
+2026-10-17 {(100, 3): 3921, (200, 3): 1433, (400, 3): 442} 97 s
+2026-10-18 {(100, 3): 3698, (200, 3): 1356, (400, 3): 397} 104 s
+2026-10-19 {(100, 3): 3962, (200, 3): 1653, (400, 3): 577} 112 s
+2026-10-20 {(100, 3): 4590, (200, 3): 2019, (400, 3): 700} 121 s
+2026-10-21 {(100, 3): 4602, (200, 3): 1993, (400, 3): 701} 130 s
+2026-10-22 {(100, 3): 4101, (200, 3): 1741, (400, 3): 601} 138 s
+2026-10-23 {(100, 3): 4153, (200, 3): 1891, (400, 3): 713} 147 s
+2026-10-24 {(100, 3): 3881, (200, 3): 1712, (400, 3): 543} 153 s
+2026-10-25 {(100, 3): 3780, (200, 3): 1823, (400, 3): 661} 160 s
+2026-10-26 {(100, 3): 4309, (200, 3): 1978, (400, 3): 721} 169 s
+2026-10-27 {(100, 3): 4503, (200, 3): 2116, (400, 3): 757} 177 s
+== R7 A: puja profunda armada (N=10 acc, vida 10 s, relleno estricto por travesia, latencia GTC 68 ms; EUR flujo S800-BTC 48.847/d)
+  variantes (X,m): IS cota inf IC90: (100, 3):-0.033 (100, 4):-0.038 (200, 3):-0.070 (200, 4):-0.088 (400, 3):-0.049 (400, 4):-0.060 | elegida (100, 3), p max-stat 0.372
+  X=100 m=3 IS  eventos/d 4179 relleno 53.9 % | EVw +0.033 dia +0.029 [-0.033,+0.091] +7/10 sin2 -0.005 | 4338 EUR/d n=22516 | cuota 8.88 %
+  X=100 m=3 OOS eventos/d 4082 relleno 52.8 % | EVw -0.151 dia -0.156 [-0.221,-0.091] +1/10 sin2 -0.197 | 4097 EUR/d n=21533 | cuota 8.39 %
+  X=100 m=3 DEV eventos/d 4406 relleno 52.7 % | EVw -0.131 dia -0.134 [-1.510,+1.243] +1/2 sin2 +nan | 4414 EUR/d n=4644 | cuota 9.04 %
+  X=100 m=4 IS  eventos/d 3984 relleno 46.7 % | EVw +0.037 dia +0.033 [-0.038,+0.103] +8/10 sin2 -0.004 | 3509 EUR/d n=18590 | cuota 7.18 %
+  X=100 m=4 OOS eventos/d 3884 relleno 45.3 % | EVw -0.155 dia -0.160 [-0.226,-0.094] +1/10 sin2 -0.200 | 3277 EUR/d n=17581 | cuota 6.71 %
+  X=100 m=4 DEV eventos/d 4192 relleno 44.7 % | EVw -0.142 dia -0.148 [-1.513,+1.216] +1/2 sin2 +nan | 3502 EUR/d n=3747 | cuota 7.17 %
+  X=200 m=3 IS  eventos/d 1727 relleno 55.5 % | EVw -0.004 dia -0.010 [-0.070,+0.050] +5/10 sin2 -0.045 | 1820 EUR/d n=9577 | cuota 3.73 %
+  X=200 m=3 OOS eventos/d 1739 relleno 54.3 % | EVw -0.148 dia -0.154 [-0.216,-0.092] +1/10 sin2 -0.187 | 1764 EUR/d n=9438 | cuota 3.61 %
+  X=200 m=3 DEV eventos/d 2047 relleno 54.5 % | EVw -0.069 dia -0.068 [-1.357,+1.222] +1/2 sin2 +nan | 2051 EUR/d n=2232 | cuota 4.20 %
+  X=200 m=4 IS  eventos/d 1641 relleno 48.7 % | EVw -0.009 dia -0.016 [-0.088,+0.057] +5/10 sin2 -0.058 | 1486 EUR/d n=7994 | cuota 3.04 %
+  X=200 m=4 OOS eventos/d 1650 relleno 46.9 % | EVw -0.142 dia -0.149 [-0.224,-0.075] +1/10 sin2 -0.186 | 1416 EUR/d n=7739 | cuota 2.90 %
+  X=200 m=4 DEV eventos/d 1944 relleno 46.3 % | EVw -0.056 dia -0.061 [-1.446,+1.324] +1/2 sin2 +nan | 1620 EUR/d n=1801 | cuota 3.32 %
+  X=400 m=3 IS  eventos/d 536 relleno 57.8 % | EVw +0.040 dia +0.029 [-0.049,+0.106] +7/10 sin2 -0.013 | 575 EUR/d n=3099 | cuota 1.18 %
+  X=400 m=3 OOS eventos/d 590 relleno 54.8 % | EVw -0.134 dia -0.162 [-0.269,-0.056] +1/10 sin2 -0.206 | 595 EUR/d n=3234 | cuota 1.22 %
+  X=400 m=3 DEV eventos/d 739 relleno 55.6 % | EVw +0.015 dia +0.017 [-0.825,+0.858] +1/2 sin2 +nan | 734 EUR/d n=822 | cuota 1.50 %
+  X=400 m=4 IS  eventos/d 509 relleno 51.5 % | EVw +0.033 dia +0.022 [-0.060,+0.105] +5/10 sin2 -0.025 | 474 EUR/d n=2618 | cuota 0.97 %
+  X=400 m=4 OOS eventos/d 555 relleno 47.8 % | EVw -0.139 dia -0.170 [-0.287,-0.053] +1/10 sin2 -0.219 | 480 EUR/d n=2653 | cuota 0.98 %
+  X=400 m=4 DEV eventos/d 697 relleno 48.2 % | EVw +0.039 dia +0.036 [-0.961,+1.034] +1/2 sin2 +nan | 592 EUR/d n=672 | cuota 1.21 %
+  -- elegida (100, 3): latencia (OOS 16-25)
+     GTC 68 ms: relleno 52.8 % | EVw -0.151 dia -0.156 [-0.221,-0.091] +1/10 sin2 -0.197 | 4097 EUR/d n=21533
+     GTC 150 ms: relleno 52.9 % | EVw -0.152 dia -0.157 [-0.222,-0.092] +1/10 sin2 -0.198 | 4106 EUR/d n=21589
+     GTC 300 ms: relleno 53.2 % | EVw -0.155 dia -0.160 [-0.226,-0.095] +1/10 sin2 -0.202 | 4128 EUR/d n=21713
+  PLACEBO cotizar siempre m=3 IS: relleno 49.4 % | EVw -0.048 dia -0.049 [-0.136,+0.039] +5/10 sin2 -0.098 | 4808 EUR/d n=19325
+  PLACEBO cotizar siempre m=3 OOS: relleno 46.3 % | EVw -0.103 dia -0.108 [-0.169,-0.047] +1/10 sin2 -0.143 | 4475 EUR/d n=17782
+  PLACEBO cotizar siempre m=4 IS: relleno 41.4 % | EVw -0.040 dia -0.033 [-0.103,+0.037] +3/10 sin2 -0.078 | 5111 EUR/d n=20472
+  PLACEBO cotizar siempre m=4 OOS: relleno 39.8 % | EVw -0.127 dia -0.132 [-0.176,-0.089] +0/10 sin2 -0.158 | 4875 EUR/d n=19285
+  covariable 15m margen15<=0        IS : eventos 20574 rellenos 22516 | EVw -0.004 dia +0.003 [-0.071,+0.078] +4/10 sin2 -0.043 | 2150 EUR/d n=11202
+  covariable 15m margen15<=0        OOS: eventos 24681 rellenos 26177 | EVw -0.146 dia -0.155 [-0.265,-0.044] +3/12 sin2 -0.231 | 2058 EUR/d n=12968
+  covariable 15m 0<margen15<=0,10   IS : eventos 0 rellenos 22516 | sin datos
+  covariable 15m 0<margen15<=0,10   OOS: eventos 0 rellenos 26177 | sin datos
+  covariable 15m margen15>0,10      IS : eventos 20742 rellenos 22516 | EVw +0.061 dia +0.053 [-0.072,+0.178] +6/10 sin2 -0.032 | 2134 EUR/d n=11050
+  covariable 15m margen15>0,10      OOS: eventos 24528 rellenos 26177 | EVw -0.145 dia -0.140 [-0.246,-0.034] +3/12 sin2 -0.193 | 2057 EUR/d n=12986
+  covariable 15m sin 15m            IS : eventos 478 rellenos 22516 | EVw +0.437 dia +0.074 [-0.563,+0.711] +5/10 sin2 -0.341 | 53 EUR/d n=264
+  covariable 15m sin 15m            OOS: eventos 422 rellenos 26177 | EVw -0.338 dia -0.410 [-0.692,-0.128] +3/12 sin2 -0.576 | 35 EUR/d n=223
+
+== R7 B: predictor (X=100, m=3, todos los eventos armados; entrenado IS 06-15, AUC en OOS 16-27)
+  Y1 continua (relleno): n_IS=41794 n_OOS=49631 base 0.527 | AUC logit 0.654 HGB 0.662 IC90 dias HGB [0.656,0.668] | nulo permutado 0.500
+  Y2 gana|relleno: n_IS=22516 n_OOS=26177 base 0.162 | AUC logit 0.623 HGB 0.596 IC90 dias HGB [0.586,0.609] | nulo permutado 0.501
+  filtro P(gana|relleno)>=0.010 (cuantil IS 0.00, conserva 100 % en OOS): EV/E -0.147 frente a sin filtro -0.147; pnl total -7342.1 vs -7342.1 EUR (n=26177 rellenos OOS)
+     por dias: EVw -0.147 dia -0.152 [-0.224,-0.081] +2/12 sin2 -0.200 | 4150 EUR/d n=26177
+  CANCELACION TARDIA (rasgos hasta fill-130 ms; cancelables 25496 de 26177 rellenos OOS): AUC y|relleno 0.598 | ahorro OOS +0.0 EUR (pnl -7118.0 -> -7118.0) frente a cota oraculo 39696.2 EUR (0 % de la cota); base sin cancelar EV/E -0.147
+
+== R7 D: dosis-respuesta continua (rellenos de todos los makers, BTC, estado S800)
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/formula_r7_28oct/r7a.py", line 238, in <module>
+    main()
+    ~~~~^^
+  File "/root/polymarket-research/experimentos/5m_barato/formula_r7_28oct/r7a.py", line 215, in main
+    R = load6(days, 0); S = np.isfinite(R['dA']); r_i = (R['y'] - R['p']) / R['p']; w = R['den']
+  File "/root/polymarket-research/experimentos/5m_barato/formula_r6_28oct/r6a.py", line 21, in load
+    R = {c: np.concatenate(v) for c, v in out.items()}; R['di'] = np.concatenate(di)
+            ~~~~~~~~~~~~~~^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 24.5 MiB for an array with shape (3209649,) and data type float64

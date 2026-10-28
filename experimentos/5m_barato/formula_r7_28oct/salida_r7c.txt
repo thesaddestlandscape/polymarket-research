@@ -1,0 +1,31 @@
+== R7 C: brecha de ejecucion v258 (theta800, W5-60, Trem120-240, TD1, bb+0,01, banda>=0,10; N=20 acc)
+  SIM  IS 06-15  EVw +0.047 dia +0.046 [-0.062,+0.154] +3/10 sin2 -0.030 | 219 EUR/d n=1355 | ejec/d 58
+  REAL IS 06-15  EVw +0.144 dia +0.182 [-0.072,+0.435] +7/10 sin2 +0.028 | 10632 EUR/d n=127721
+  SIM  OOS 16-25 EVw +0.036 dia +0.018 [-0.125,+0.160] +7/10 sin2 -0.051 | 243 EUR/d n=1355 | ejec/d 63
+  REAL OOS 16-25 EVw +0.112 dia +0.097 [-0.046,+0.240] +6/10 sin2 -0.001 | 13366 EUR/d n=127721
+  SIM  DEV 26-27 EVw +0.339 dia +0.367 [-0.692,+1.426] +2/2 sin2 +nan | 266 EUR/d n=1355 | ejec/d 74
+  REAL DEV 26-27 EVw +0.767 dia +0.776 [+0.521,+1.031] +2/2 sin2 +nan | 18737 EUR/d n=127721
+  SIM  06-25     EVw +0.041 dia +0.032 [-0.051,+0.114] +10/20 sin2 -0.009 | 231 EUR/d n=1355 | ejec/d 60
+  REAL 06-25     EVw +0.126 dia +0.139 [+0.004,+0.274] +13/20 sin2 +0.053 | 11999 EUR/d n=127721
+  rebate maker 0,014*(1-p) por EUR sobre fills sim: +0.0108
+  fills sim con relleno real emparejado (mismo mercado y precio, |dt|<=2 s): 75.5 % de 1355
+  [IS] nicho real ∩ sim: EVw -0.120 dia -0.098 [-0.349,+0.154] +4/10 sin2 -0.249 | 420 EUR/d n=4767
+  [IS] nicho real SIN sim, p=bb+0,01: EVw +0.053 dia +0.086 [-0.217,+0.390] +6/10 sin2 -0.120 | 1829 EUR/d n=18005
+  [IS] nicho real SIN sim, otros niveles: EVw +0.177 dia +0.212 [-0.044,+0.468] +7/10 sin2 +0.054 | 8382 EUR/d n=104949
+  [IS] sim SIN relleno real emparejado: EVw +0.075 dia +0.059 [-0.279,+0.396] +4/10 sin2 -0.156 | 57 EUR/d n=332
+  [OOS 16-25] nicho real ∩ sim: EVw +0.220 dia +0.128 [-0.236,+0.491] +5/10 sin2 -0.107 | 530 EUR/d n=4767
+  [OOS 16-25] nicho real SIN sim, p=bb+0,01: EVw +0.104 dia +0.092 [-0.045,+0.228] +6/10 sin2 +0.003 | 2208 EUR/d n=18005
+  [OOS 16-25] nicho real SIN sim, otros niveles: EVw +0.109 dia +0.091 [-0.060,+0.242] +5/10 sin2 -0.017 | 10628 EUR/d n=104949
+  [OOS 16-25] sim SIN relleno real emparejado: EVw +0.032 dia -0.030 [-0.303,+0.243] +5/10 sin2 -0.134 | 64 EUR/d n=332
+  [DEV] nicho real ∩ sim: EVw +0.609 dia +0.933 [-2.958,+4.825] +2/2 sin2 +nan | 721 EUR/d n=4767
+  [DEV] nicho real SIN sim, p=bb+0,01: EVw +0.977 dia +1.005 [+0.094,+1.916] +2/2 sin2 +nan | 3334 EUR/d n=18005
+  [DEV] nicho real SIN sim, otros niveles: EVw +0.727 dia +0.726 [+0.681,+0.771] +2/2 sin2 +nan | 14682 EUR/d n=104949
+  [DEV] sim SIN relleno real emparejado: EVw +0.314 dia +0.344 [-1.655,+2.344] +2/2 sin2 +nan | 53 EUR/d n=332
+  nicho real niv bb+1 por nivel: EVw +0.096 dia +0.077 [-0.072,+0.225] +6/10 sin2 -0.027 | 2302 EUR/d n=18967
+  nicho real niv bb por nivel: EVw +0.120 dia +0.099 [-0.060,+0.257] +5/10 sin2 -0.001 | 9572 EUR/d n=95992
+  nicho real niv >bb+1 por nivel: EVw +0.090 dia +0.100 [-0.083,+0.283] +5/10 sin2 +0.003 | 1491 EUR/d n=12762
+  nicho real tamano fill <5 acc: EVw +0.111 dia +0.103 [-0.043,+0.249] +7/10 sin2 +0.023 | 640 EUR/d n=36953
+  nicho real tamano 5-20: EVw +0.076 dia +0.074 [-0.051,+0.199] +6/10 sin2 -0.015 | 4898 EUR/d n=68784
+  nicho real tamano >=20: EVw +0.135 dia +0.109 [-0.053,+0.271] +6/10 sin2 +0.003 | 7828 EUR/d n=21984
+  nicho real retardo 5-20 s: EVw +0.030 dia +0.058 [-0.128,+0.244] +5/10 sin2 -0.061 | 6242 EUR/d n=55160
+  nicho real 20-60 s: EVw +0.185 dia +0.164 [-0.035,+0.363] +7/10 sin2 +0.041 | 7123 EUR/d n=72561

@@ -1,0 +1,45 @@
+== R7 A2: mecanismo VELOCIDAD de la continuacion (X=100, m=3; "pre-posicionada" = orden ya en el libro al armar, sin latencia; "reactiva" = GTC 68 ms)
+  pre-posicionada TODAS las pre-posicionadas IS        EVw +0.035 dia +0.030 [-0.033,+0.094] +7/10 sin2 -0.004 | 4324 EUR/d n=22437 | fills/d 2244
+  pre-posicionada TODAS las pre-posicionadas OOS 16-25 EVw -0.149 dia -0.154 [-0.220,-0.088] +1/10 sin2 -0.195 | 4082 EUR/d n=21445 | fills/d 2144
+  pre-posicionada TODAS las pre-posicionadas DEV       EVw -0.131 dia -0.134 [-1.491,+1.224] +1/2 sin2 +nan | 4401 EUR/d n=4630 | fills/d 2315
+  pre-posicionada dt [0,94) ms               IS        EVw +0.213 dia +0.211 [-0.059,+0.480] +7/10 sin2 +0.052 | 48 EUR/d n=234 | fills/d 23
+  pre-posicionada dt [0,94) ms               OOS 16-25 EVw -0.060 dia -0.072 [-0.254,+0.110] +3/10 sin2 -0.187 | 63 EUR/d n=302 | fills/d 30
+  pre-posicionada dt [0,94) ms               DEV       EVw -0.141 dia -0.148 [-1.302,+1.006] +1/2 sin2 +nan | 47 EUR/d n=48 | fills/d 24
+  pre-posicionada dt [94,500) ms             IS        EVw -0.016 dia -0.021 [-0.089,+0.047] +3/10 sin2 -0.063 | 349 EUR/d n=1709 | fills/d 171
+  pre-posicionada dt [94,500) ms             OOS 16-25 EVw -0.191 dia -0.191 [-0.269,-0.113] +1/10 sin2 -0.235 | 308 EUR/d n=1522 | fills/d 152
+  pre-posicionada dt [94,500) ms             DEV       EVw -0.296 dia -0.295 [-0.446,-0.144] +0/2 sin2 +nan | 355 EUR/d n=355 | fills/d 178
+  pre-posicionada dt [500,2000) ms           IS        EVw +0.076 dia +0.074 [+0.001,+0.148] +8/10 sin2 +0.030 | 1162 EUR/d n=5817 | fills/d 582
+  pre-posicionada dt [500,2000) ms           OOS 16-25 EVw -0.123 dia -0.129 [-0.223,-0.036] +3/10 sin2 -0.178 | 1047 EUR/d n=5353 | fills/d 535
+  pre-posicionada dt [500,2000) ms           DEV       EVw -0.044 dia -0.054 [-1.476,+1.368] +1/2 sin2 +nan | 1062 EUR/d n=1090 | fills/d 545
+  pre-posicionada dt [2000,12000) ms         IS        EVw +0.021 dia +0.016 [-0.060,+0.092] +6/10 sin2 -0.032 | 2766 EUR/d n=14677 | fills/d 1468
+  pre-posicionada dt [2000,12000) ms         OOS 16-25 EVw -0.156 dia -0.161 [-0.233,-0.088] +1/10 sin2 -0.211 | 2664 EUR/d n=14268 | fills/d 1427
+  pre-posicionada dt [2000,12000) ms         DEV       EVw -0.142 dia -0.142 [-1.657,+1.374] +1/2 sin2 +nan | 2938 EUR/d n=3137 | fills/d 1568
+  reactiva (68 ms) IS        EVw +0.033 dia +0.029 [-0.033,+0.091] +7/10 sin2 -0.005 | 4338 EUR/d n=22516
+  pre-posicionada que la reactiva PIERDE (dt<94 ms) y salto adverso previo <2 s: EVw +0.185 dia -0.201 [-0.879,+0.477] +3/9 sin2 -0.700 | 8 EUR/d n=34 | sin salto: EVw +0.218 dia +0.221 [-0.109,+0.551] +8/10 sin2 +0.042 | 41 EUR/d n=200
+  reactiva (68 ms) OOS 16-25 EVw -0.151 dia -0.156 [-0.221,-0.091] +1/10 sin2 -0.197 | 4097 EUR/d n=21533
+  pre-posicionada que la reactiva PIERDE (dt<94 ms) y salto adverso previo <2 s: EVw -0.087 dia +0.924 [-0.645,+2.493] +4/9 sin2 -0.319 | 11 EUR/d n=49 | sin salto: EVw -0.055 dia -0.075 [-0.229,+0.079] +3/10 sin2 -0.171 | 53 EUR/d n=253
+  pre-posicionada dt<94 ms cum<200  OOS: EVw -0.179 dia -0.198 [-0.400,+0.003] +3/10 sin2 -0.322 | 50 EUR/d n=241
+  pre-posicionada dt<94 ms 200-400  OOS: EVw -0.322 dia -0.090 [-1.467,+1.287] +2/7 sin2 -1.000 | 4 EUR/d n=15
+  pre-posicionada dt<94 ms >=400    OOS: EVw +0.624 dia +0.861 [-0.297,+2.018] +5/10 sin2 +0.108 | 10 EUR/d n=46
+
+== R7 D: dosis-respuesta continua (rellenos de todos los makers, BTC, estado S800)
+  WLS EV/E ~ a + b*log(tam barrido/800) + c*dentro_barrido, IS 06-15: a +0.042 b +0.164 IC90 dias [-0.126,+0.390] c +0.242 (n=197379)
+  WLS EV/E ~ a + b*log(tam barrido/800) + c*dentro_barrido, OOS 16-25: a +0.150 b -0.240 IC90 dias [-0.434,-0.038] c +0.108 (n=207382)
+  WLS EV/E ~ a + b*log(tam barrido/800) + c*dentro_barrido, DEV 26-27: a -0.051 b +0.688 IC90 dias [+0.652,+0.702] c +0.567 (n=47095)
+  R2 OOS ponderado frente a media IS: 0.0008
+  dentro de barrido  tam [800,1000): IS EVw +0.310 [-0.124,+0.523] +8/10 2770EUR/d | OOS EVw +0.441 [+0.187,+0.729] +10/12 4437EUR/d
+  dentro de barrido  tam [1000,1400): IS EVw +0.281 [+0.099,+0.727] +7/10 4775EUR/d | OOS EVw +0.086 [-0.003,+0.294] +9/12 6050EUR/d
+  dentro de barrido  tam [1400,2000): IS EVw +0.338 [-0.266,+0.603] +6/10 1385EUR/d | OOS EVw +0.363 [-0.027,+0.931] +7/12 2359EUR/d
+  dentro de barrido  tam [2000,3000): IS EVw +0.861 [-0.559,+1.377] +5/10 1159EUR/d | OOS EVw +0.587 [-0.443,+0.821] +6/12 1654EUR/d
+  dentro de barrido  tam [3000,5000): IS EVw -0.448 [-1.037,-0.595] +0/9 554EUR/d | OOS EVw +0.748 [-0.608,+1.415] +4/10 917EUR/d
+  dentro de barrido  tam [5000,inf): IS EVw +2.016 [-0.921,+3.282] +3/5 626EUR/d | OOS EVw +0.312 [-0.855,+1.637] +4/8 432EUR/d
+  post-barrido       tam [800,1000): IS EVw +0.072 [-0.161,+0.172] +5/10 11770EUR/d | OOS EVw +0.087 [-0.065,+0.267] +7/12 11880EUR/d
+  post-barrido       tam [1000,1400): IS EVw +0.205 [+0.033,+0.392] +8/10 12588EUR/d | OOS EVw +0.144 [-0.021,+0.308] +9/12 13061EUR/d
+  post-barrido       tam [1400,2000): IS EVw +0.088 [-0.219,+0.272] +5/10 5263EUR/d | OOS EVw +0.117 [-0.180,+0.409] +7/12 5068EUR/d
+  post-barrido       tam [2000,3000): IS EVw +0.224 [-0.373,+0.641] +5/10 2684EUR/d | OOS EVw -0.115 [-0.382,+0.243] +5/12 3144EUR/d
+  post-barrido       tam [3000,5000): IS EVw -0.653 [-0.983,-0.569] +0/9 1840EUR/d | OOS EVw -0.198 [-0.622,+0.209] +5/11 1874EUR/d
+  post-barrido       tam [5000,inf): IS EVw +1.215 [-0.717,+2.331] +3/7 896EUR/d | OOS EVw -0.070 [-0.856,+0.798] +3/10 572EUR/d
+  post-barrido retardo 5-10 s  IS EVw +0.182 dia +0.168 [+0.036,+0.301] +8/10 sin2 +0.102 | 6900 EUR/d n=81604 | OOS+DEV EVw +0.070 dia +0.057 [-0.040,+0.155] +8/12 sin2 +0.012 | 7350 EUR/d n=81604
+  post-barrido retardo 10-20   IS EVw +0.127 dia +0.128 [-0.004,+0.260] +6/10 sin2 +0.041 | 8915 EUR/d n=105002 | OOS+DEV EVw +0.008 dia -0.004 [-0.116,+0.108] +6/12 sin2 -0.073 | 9083 EUR/d n=105002
+  post-barrido retardo 20-40   IS EVw +0.144 dia +0.159 [+0.017,+0.302] +8/10 sin2 +0.081 | 10979 EUR/d n=127930 | OOS+DEV EVw +0.044 dia +0.033 [-0.101,+0.167] +7/12 sin2 -0.044 | 11253 EUR/d n=127930
+  post-barrido retardo 40-60   IS EVw +0.027 dia +0.022 [-0.150,+0.193] +4/10 sin2 -0.100 | 7795 EUR/d n=85063 | OOS+DEV EVw +0.221 dia +0.219 [+0.022,+0.417] +9/12 sin2 +0.088 | 7663 EUR/d n=85063

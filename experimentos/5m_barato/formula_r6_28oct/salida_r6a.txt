@@ -1,0 +1,230 @@
+== R6 dias incluidos (22): 06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
+
+==== BTC: filas 3209649, en S800 14.1 % (EUR 14.7 %)
+-- A reproduccion dEV/E (S800 menos no-S), IC90 por dias (R5: 06-25 +0,110 [+0,028,+0,192]; 22 dias +0,149 [+0,062,+0,236])
+  06-25: dEV +0.098 [+0.017,+0.179] +12/20 | EV_S +0.121 EV_noS +0.031 | S 47168 EUR/d
+  22 dias(06-27): dEV +0.140 [+0.052,+0.229] +14/22 | EV_S +0.165 EV_noS +0.025 | S 48440 EUR/d
+  IS 05-15: dEV +0.097 [-0.048,+0.242] +5/10 | EV_S +0.181 EV_noS +0.091 | S 45488 EUR/d
+  OOS 16-25: dEV +0.099 [-0.001,+0.198] +7/10 | EV_S +0.065 EV_noS -0.030 | S 48847 EUR/d
+  DEV 26-27: dEV +0.567 [+0.323,+0.810] +2/2 | EV_S +0.500 EV_noS -0.035 | S 61165 EUR/d
+-- B BTC SEL 06-15 -> MEAS 16-27: wallets 2691, elegibles 437 (EV SEL: top20 >= +0.195, bottom20 <= -0.048); n W/L/REST 88/88/261
+   GANADORAS  MEAS: EVw +0.076 dia +0.072 [-0.007,+0.151] +6/12 sin2 +0.018 | 22018 EUR/d n=87265 | EUR S 19.5 %
+   RESTO      MEAS: EVw -0.000 dia -0.005 [-0.079,+0.070] +5/12 sin2 -0.052 | 238557 EUR/d n=1180980 | EUR S 14.8 %
+   PERDEDORAS MEAS: EVw -0.082 dia -0.082 [-0.168,+0.005] +4/12 sin2 -0.131 | 5096 EUR/d n=40226 | EUR S 14.2 %
+   placebo (2000 sorteos): EV MEAS ganadoras +0.076 vs placebo media +0.005, p(placebo>=) = 0.000 | inversion (perdedoras) -0.082
+-- B BTC SEL 16-27 -> MEAS 06-15: wallets 2933, elegibles 511 (EV SEL: top20 >= +0.116, bottom20 <= -0.134); n W/L/REST 103/103/305
+   GANADORAS  MEAS: EVw +0.211 dia +0.204 [+0.115,+0.293] +9/10 sin2 +0.151 | 21259 EUR/d n=72544 | EUR S 15.6 %
+   RESTO      MEAS: EVw +0.107 dia +0.104 [+0.059,+0.150] +10/10 sin2 +0.078 | 249921 EUR/d n=1050417 | EUR S 13.7 %
+   PERDEDORAS MEAS: EVw +0.108 dia +0.101 [+0.050,+0.152] +9/10 sin2 +0.078 | 11146 EUR/d n=60652 | EUR S 13.7 %
+   placebo (2000 sorteos): EV MEAS ganadoras +0.211 vs placebo media +0.116, p(placebo>=) = 0.000 | inversion (perdedoras) +0.108
+
+-- B conductas (BTC, MEAS 16-27, grupos elegidos en SEL 06-15): cada celda = %EUR del grupo | EV/E | n
+ [contexto]
+   dentro de barrido on-chain (swsz>=200) TODA 23.1% +0.10 n171862 | GANA 34.2% +0.17 n11755 | REST 23.8% +0.09 n121506 | PERD 14.1% +0.17 n3174
+   estado S post-barrido                  TODA 10.7% +0.08 n220230 | GANA 11.4% +0.21 n12328 | REST 10.2% +0.08 n143782 | PERD 11.3% +0.13 n5004
+   sin S                                  TODA 66.2% -0.05 n1362016 | GANA 54.4% -0.01 n63182 | REST 66.0% -0.04 n915692 | PERD 74.6% -0.16 n32048
+ [delay s (S)]
+   5-10                                   TODA  3.2% +0.27 n52604 | GANA  4.1% +0.41 n3268 | REST  3.1% +0.32 n34407 | PERD  2.7% +0.29 n1101
+   10-20                                  TODA  4.1% +0.09 n68086 | GANA  5.3% +0.17 n4073 | REST  3.9% +0.10 n44315 | PERD  3.4% +0.16 n1455
+   20-40                                  TODA  4.9% +0.05 n81382 | GANA  6.4% +0.15 n4861 | REST  4.7% +0.02 n53297 | PERD  5.4% +0.40 n1838
+   40-60                                  TODA  3.2% +0.27 n52405 | GANA  3.7% +0.62 n2801 | REST  3.1% +0.23 n35419 | PERD  2.7% +0.18 n1207
+   noS                                    TODA 84.6% -0.03 n1499631 | GANA 80.5% +0.02 n72262 | REST 85.2% -0.03 n1013542 | PERD 85.8% -0.14 n34625
+ [nivel p-bb ticks]
+   p<bb (profundo)                        TODA 25.2% +0.02 n436179 | GANA 27.4% +0.09 n25987 | REST 25.0% +0.03 n279939 | PERD 24.8% -0.13 n9978
+   p=bb                                   TODA 43.9% -0.03 n841712 | GANA 35.8% +0.03 n33068 | REST 44.3% -0.03 n586493 | PERD 44.2% -0.14 n20360
+   p>bb (mejora)                          TODA 19.4% -0.01 n294064 | GANA 17.9% +0.05 n14545 | REST 20.1% -0.01 n203433 | PERD 17.1% -0.09 n6250
+   sin libro                              TODA 11.5% +0.09 n182153 | GANA 18.9% +0.17 n13665 | REST 10.7% +0.07 n111115 | PERD 13.9% +0.20 n3638
+ [tam relleno acc]
+   <5                                     TODA  5.2% -0.04 n545782 | GANA  3.5% +0.03 n24357 | REST  4.8% -0.04 n361229 | PERD  9.2% -0.09 n13672
+   5-20                                   TODA 37.5% -0.03 n924845 | GANA 30.0% +0.04 n44369 | REST 34.6% -0.03 n595078 | PERD 48.6% -0.09 n23275
+   20-100                                 TODA 48.1% +0.01 n271394 | GANA 44.3% +0.10 n16852 | REST 53.3% +0.02 n217607 | PERD 34.6% -0.10 n3133
+   >=100                                  TODA  9.2% +0.05 n12087 | GANA 22.3% +0.09 n1687 | REST  7.4% +0.06 n7066 | PERD  7.6% +0.08 n146
+ [tam barrido (S)]
+   800-1600                               TODA 11.9% +0.17 n198786 | GANA 14.9% +0.23 n11500 | REST 11.5% +0.16 n132178 | PERD 11.2% +0.30 n4392
+   1600-3200                              TODA  2.7% +0.09 n42770 | GANA  3.7% +0.54 n2753 | REST  2.6% +0.11 n27575 | PERD  2.2% +0.36 n908
+   >=3200                                 TODA  0.8% +0.10 n12921 | GANA  0.9% +0.43 n750 | REST  0.7% +0.10 n7685 | PERD  0.8% -0.16 n301
+   noS                                    TODA 84.6% -0.03 n1499631 | GANA 80.5% +0.02 n72262 | REST 85.2% -0.03 n1013542 | PERD 85.8% -0.14 n34625
+ [orden en S]
+   persistente (ya rellena en barrido)    TODA  0.2% -0.31 n1576 | GANA  0.1% +1.05 n59 | REST  0.0% +0.46 n295 | PERD  0.3% -0.88 n69
+   nueva tras barrido                     TODA 15.2% +0.16 n252901 | GANA 19.4% +0.29 n14944 | REST 14.8% +0.15 n167143 | PERD 13.9% +0.30 n5532
+   noS                                    TODA 84.6% -0.03 n1499631 | GANA 80.5% +0.02 n72262 | REST 85.2% -0.03 n1013542 | PERD 85.8% -0.14 n34625
+ [ordenes/(wallet,token)]
+   1                                      TODA 20.2% +0.07 n336471 | GANA 39.3% +0.07 n28717 | REST 15.1% +0.12 n169818 | PERD 33.8% -0.04 n9878
+   2                                      TODA 14.2% +0.05 n233685 | GANA 21.9% +0.13 n16320 | REST 13.7% +0.05 n154667 | PERD 15.9% -0.10 n5511
+   3                                      TODA 10.6% +0.01 n177309 | GANA 10.2% -0.02 n8832 | REST 11.2% +0.02 n125650 | PERD  9.5% +0.16 n3306
+   4+                                     TODA 55.0% -0.05 n1006643 | GANA 28.6% +0.07 n33396 | REST 60.1% -0.04 n730845 | PERD 40.7% -0.17 n21531
+ [cambio precio vs orden previa]
+   baja                                   TODA 32.3% +0.00 n666026 | GANA 23.3% +0.12 n26986 | REST 34.5% +0.00 n477894 | PERD 27.7% -0.05 n14716
+   igual                                  TODA  6.3% -0.03 n115376 | GANA  4.3% +0.13 n3374 | REST  6.5% -0.02 n77342 | PERD  5.6% -0.10 n3236
+   sube                                   TODA 21.2% +0.02 n320010 | GANA 14.2% +0.12 n11924 | REST 23.1% +0.01 n234148 | PERD 14.8% -0.12 n6291
+   primera orden                          TODA 40.2% -0.01 n652696 | GANA 58.3% +0.04 n44981 | REST 35.9% -0.01 n391596 | PERD 51.9% -0.08 n15983
+ [reposicion tras relleno (sig. orden)]
+   <=30s precio menor                     TODA 31.3% -0.17 n528003 | GANA 20.6% -0.09 n21960 | REST 33.5% -0.17 n374802 | PERD 27.2% -0.21 n12310
+   <=30s igual                            TODA  5.9% -0.02 n117406 | GANA  4.1% +0.16 n3536 | REST  6.1% -0.02 n79294 | PERD  5.2% -0.09 n3175
+   <=30s mayor                            TODA 14.8% +0.21 n291987 | GANA  9.9% +0.29 n11309 | REST 16.0% +0.22 n213182 | PERD 10.4% +0.04 n5739
+   ninguna                                TODA 36.4% +0.10 n636359 | GANA 57.3% +0.11 n43904 | REST 31.7% +0.12 n378905 | PERD 48.7% -0.02 n16090
+   >30s                                   TODA 11.6% -0.11 n180353 | GANA  8.1% -0.07 n6556 | REST 12.7% -0.12 n134797 | PERD  8.4% -0.15 n2912
+ [ambos lados (wallet,mercado)]
+   un lado                                TODA 66.6% -0.36 n1193167 | GANA 77.8% -0.10 n66572 | REST 63.4% -0.41 n772402 | PERD 79.1% -0.27 n32029
+   ambos tokens                           TODA 33.4% +0.70 n560941 | GANA 22.2% +0.69 n20693 | REST 36.6% +0.71 n408578 | PERD 20.9% +0.63 n8197
+ [lado token]
+   sin libro                              TODA 11.5% +0.09 n182153 | GANA 18.9% +0.17 n13665 | REST 10.7% +0.07 n111115 | PERD 13.9% +0.20 n3638
+   side0                                  TODA 45.3% +0.00 n811240 | GANA 42.1% +0.09 n38478 | REST 45.3% +0.00 n549293 | PERD 45.6% -0.15 n19472
+   side1                                  TODA 43.2% -0.03 n760715 | GANA 39.0% +0.02 n35122 | REST 44.0% -0.02 n520572 | PERD 40.4% -0.10 n17116
+ [hora UTC]
+   00-06                                  TODA 23.6% +0.01 n410625 | GANA 23.9% +0.16 n20628 | REST 23.6% +0.01 n275556 | PERD 25.1% -0.09 n10097
+   06-12                                  TODA 24.4% +0.02 n428573 | GANA 20.7% +0.11 n18673 | REST 25.0% +0.02 n292115 | PERD 22.4% -0.11 n9620
+   12-18                                  TODA 25.9% +0.00 n469403 | GANA 27.4% +0.10 n23634 | REST 26.1% +0.01 n320471 | PERD 25.4% -0.08 n9126
+   18-24                                  TODA 26.1% -0.04 n445507 | GANA 28.1% -0.04 n24330 | REST 25.3% -0.04 n292838 | PERD 27.1% -0.05 n11383
+ [T_rem s]
+   <60                                    TODA  8.5% +0.04 n149697 | GANA 11.8% +0.14 n10007 | REST  8.5% +0.05 n100843 | PERD  6.3% -0.11 n2373
+   60-120                                 TODA 21.7% -0.01 n398463 | GANA 21.4% +0.07 n19912 | REST 21.9% -0.01 n268868 | PERD 15.4% -0.08 n5476
+   120-180                                TODA 23.7% -0.00 n439549 | GANA 18.9% +0.14 n17184 | REST 24.1% -0.01 n303383 | PERD 27.1% -0.20 n12955
+   180-240                                TODA 24.5% -0.03 n429245 | GANA 23.3% +0.05 n21450 | REST 24.5% -0.02 n288113 | PERD 28.1% -0.09 n12952
+   >=240                                  TODA 21.6% +0.02 n337154 | GANA 24.6% +0.02 n18712 | REST 20.9% +0.02 n219773 | PERD 23.2% +0.08 n6470
+ [edad orden desde 1er relleno s]
+   0 (primer)                             TODA 75.2% +0.01 n1213619 | GANA 75.0% +0.10 n58952 | REST 76.6% +0.01 n802099 | PERD 70.9% -0.04 n30307
+   <5                                     TODA 23.5% -0.05 n523317 | GANA 23.7% +0.03 n27496 | REST 23.0% -0.04 n371208 | PERD 26.4% -0.15 n9392
+   5-30                                   TODA  1.0% -0.15 n13933 | GANA  1.1% -0.43 n727 | REST  0.4% -0.03 n6728 | PERD  2.6% -0.58 n483
+   >30                                    TODA  0.3% +0.07 n3239 | GANA  0.1% +0.83 n90 | REST  0.1% -0.18 n945 | PERD  0.1% -0.07 n44
+ [Binance desde salto bajista s]
+   <2                                     TODA  1.7% -0.00 n34187 | GANA  2.3% +0.00 n2549 | REST  1.5% +0.05 n21160 | PERD  2.4% -0.20 n798
+   2-10                                   TODA  3.1% +0.08 n52623 | GANA  3.9% +0.19 n2974 | REST  3.1% +0.07 n35387 | PERD  3.0% -0.13 n1029
+   >10                                    TODA 94.5% -0.01 n1655325 | GANA 92.8% +0.07 n81093 | REST 94.7% -0.00 n1116734 | PERD 94.0% -0.07 n38101
+   n/d                                    TODA  0.7% +0.08 n11973 | GANA  0.9% +0.24 n649 | REST  0.7% +0.07 n7699 | PERD  0.6% -0.41 n298
+ [salto bajista <=5 s tras relleno]
+   no                                     TODA 97.8% -0.01 n1717294 | GANA 97.0% +0.07 n84658 | REST 97.9% -0.01 n1157430 | PERD 97.7% -0.08 n39365
+   si                                     TODA  2.2% +0.41 n36814 | GANA  3.0% +0.27 n2607 | REST  2.1% +0.49 n23550 | PERD  2.3% -0.19 n861
+   tamano medio de relleno acc S, por tamano de barrido (GANADORAS/RESTO): 800-1600 19.0/13.7; 1600-3200 19.8/14.8; >=3200 17.1/13.1
+   pares: coste medio de par (p_lado0+p_lado1, ponderado) GANADORAS 0.405 RESTO 0.424 (n con ambos tokens 20693/87265)
+
+-- C tramo S util (todos los makers, BTC): dEV por clase y particion
+  T_rem       <60        IS dEV -0.114 [-0.306,+0.077] +3/10 | EV_S +0.024 EV_noS +0.091 | S 9447 EUR/d
+                         OOS dEV +0.072 [-0.228,+0.373] +5/10 | EV_S +0.146 EV_noS -0.030 | S 8167 EUR/d
+                         DEV dEV -0.296 [-1.226,+0.634] +0/2 | EV_S -0.322 EV_noS -0.035 | S 10880 EUR/d
+  T_rem       60-120     IS dEV +0.235 [-0.017,+0.487] +6/10 | EV_S +0.335 EV_noS +0.091 | S 11654 EUR/d
+                         OOS dEV -0.062 [-0.188,+0.065] +5/10 | EV_S -0.047 EV_noS -0.030 | S 12639 EUR/d
+                         DEV dEV -0.119 [-2.557,+2.319] +1/2 | EV_S -0.088 EV_noS -0.035 | S 13399 EUR/d
+  T_rem       120-180    IS dEV +0.200 [-0.088,+0.488] +6/10 | EV_S +0.292 EV_noS +0.091 | S 8375 EUR/d
+                         OOS dEV +0.030 [-0.213,+0.274] +4/10 | EV_S +0.023 EV_noS -0.030 | S 11292 EUR/d
+                         DEV dEV +0.670 [-2.229,+3.569] +2/2 | EV_S +0.694 EV_noS -0.035 | S 12795 EUR/d
+  T_rem       180-240    IS dEV +0.029 [-0.232,+0.290] +5/10 | EV_S +0.074 EV_noS +0.091 | S 9127 EUR/d
+                         OOS dEV +0.310 [+0.144,+0.476] +8/10 | EV_S +0.265 EV_noS -0.030 | S 9924 EUR/d
+                         DEV dEV +1.042 [+0.155,+1.928] +2/2 | EV_S +0.962 EV_noS -0.035 | S 15213 EUR/d
+  T_rem       >=240      IS dEV -0.016 [-0.268,+0.235] +6/10 | EV_S +0.145 EV_noS +0.091 | S 6885 EUR/d
+                         OOS dEV +0.106 [-0.206,+0.418] +6/10 | EV_S -0.047 EV_noS -0.030 | S 6826 EUR/d
+                         DEV dEV +1.289 [-3.097,+5.675] +2/2 | EV_S +1.319 EV_noS -0.035 | S 8879 EUR/d
+  hora        00-06      IS dEV -0.052 [-0.388,+0.285] +4/10 | EV_S +0.107 EV_noS +0.091 | S 8768 EUR/d
+                         OOS dEV +0.126 [-0.261,+0.514] +5/10 | EV_S -0.029 EV_noS -0.030 | S 12607 EUR/d
+                         DEV dEV +1.478 [-4.177,+7.132] +2/2 | EV_S +1.387 EV_noS -0.035 | S 12096 EUR/d
+  hora        06-12      IS dEV +0.399 [-0.089,+0.886] +6/10 | EV_S +0.424 EV_noS +0.091 | S 10407 EUR/d
+                         OOS dEV +0.548 [+0.159,+0.937] +8/10 | EV_S +0.542 EV_noS -0.030 | S 10943 EUR/d
+                         DEV dEV +0.107 [-1.382,+1.596] +1/2 | EV_S +0.068 EV_noS -0.035 | S 9196 EUR/d
+  hora        12-18      IS dEV -0.038 [-0.366,+0.291] +3/10 | EV_S +0.059 EV_noS +0.091 | S 15199 EUR/d
+                         OOS dEV +0.037 [-0.124,+0.199] +6/10 | EV_S +0.028 EV_noS -0.030 | S 11568 EUR/d
+                         DEV dEV +0.127 [-1.057,+1.311] +1/2 | EV_S +0.128 EV_noS -0.035 | S 17070 EUR/d
+  hora        18-24      IS dEV +0.056 [-0.201,+0.313] +6/10 | EV_S +0.180 EV_noS +0.091 | S 11114 EUR/d
+                         OOS dEV -0.178 [-0.470,+0.114] +5/10 | EV_S -0.198 EV_noS -0.030 | S 13728 EUR/d
+                         DEV dEV +0.351 [-3.932,+4.633] +1/2 | EV_S +0.481 EV_noS -0.035 | S 22803 EUR/d
+  precio      .09-.15    IS dEV +0.204 [+0.033,+0.375] +6/10 | EV_S +0.303 EV_noS +0.091 | S 9022 EUR/d
+                         OOS dEV +0.030 [-0.173,+0.234] +5/10 | EV_S +0.021 EV_noS -0.030 | S 10379 EUR/d
+                         DEV dEV +0.452 [-1.812,+2.715] +2/2 | EV_S +0.338 EV_noS -0.035 | S 13341 EUR/d
+  precio      .15-.22    IS dEV +0.057 [-0.144,+0.258] +4/10 | EV_S +0.153 EV_noS +0.091 | S 14074 EUR/d
+                         OOS dEV +0.048 [-0.081,+0.177] +5/10 | EV_S +0.016 EV_noS -0.030 | S 15218 EUR/d
+                         DEV dEV +0.873 [+0.205,+1.540] +2/2 | EV_S +0.823 EV_noS -0.035 | S 21774 EUR/d
+  precio      .22-.31    IS dEV +0.073 [-0.072,+0.218] +5/10 | EV_S +0.150 EV_noS +0.091 | S 22392 EUR/d
+                         OOS dEV +0.161 [+0.050,+0.271] +7/10 | EV_S +0.117 EV_noS -0.030 | S 23250 EUR/d
+                         DEV dEV +0.303 [-2.396,+3.001] +1/2 | EV_S +0.312 EV_noS -0.035 | S 26050 EUR/d
+  tam barrido 800-1600   IS dEV +0.059 [-0.069,+0.186] +6/10 | EV_S +0.151 EV_noS +0.091 | S 35268 EUR/d
+                         OOS dEV +0.150 [+0.073,+0.228] +9/10 | EV_S +0.121 EV_noS -0.030 | S 38026 EUR/d
+                         DEV dEV +0.420 [-0.394,+1.234] +2/2 | EV_S +0.369 EV_noS -0.035 | S 45767 EUR/d
+  tam barrido 1600-3200  IS dEV +0.248 [-0.067,+0.563] +6/10 | EV_S +0.360 EV_noS +0.091 | S 7483 EUR/d
+                         OOS dEV +0.037 [-0.302,+0.376] +6/10 | EV_S -0.059 EV_noS -0.030 | S 8409 EUR/d
+                         DEV dEV +0.759 [+0.083,+1.435] +2/2 | EV_S +0.602 EV_noS -0.035 | S 12287 EUR/d
+  tam barrido >=3200     IS dEV -0.085 [-0.930,+0.761] +3/9 | EV_S +0.084 EV_noS +0.096 | S 3042 EUR/d
+                         OOS dEV -0.312 [-0.662,+0.038] +4/10 | EV_S -0.391 EV_noS -0.030 | S 2412 EUR/d
+                         DEV dEV +1.891 [+0.046,+3.735] +2/2 | EV_S +2.019 EV_noS -0.035 | S 3112 EUR/d
+  delay s     5-10       IS dEV +0.108 [-0.041,+0.258] +7/10 | EV_S +0.233 EV_noS +0.091 | S 8771 EUR/d
+                         OOS dEV +0.130 [-0.047,+0.306] +6/10 | EV_S +0.067 EV_noS -0.030 | S 9931 EUR/d
+                         DEV dEV +1.005 [-0.251,+2.262] +2/2 | EV_S +0.968 EV_noS -0.035 | S 14589 EUR/d
+  delay s     10-20      IS dEV +0.054 [-0.144,+0.251] +4/10 | EV_S +0.146 EV_noS +0.091 | S 11353 EUR/d
+                         OOS dEV +0.039 [-0.112,+0.190] +6/10 | EV_S +0.018 EV_noS -0.030 | S 12737 EUR/d
+                         DEV dEV +0.401 [-2.091,+2.892] +2/2 | EV_S +0.377 EV_noS -0.035 | S 16986 EUR/d
+  delay s     20-40      IS dEV +0.130 [-0.103,+0.363] +8/10 | EV_S +0.200 EV_noS +0.091 | S 14846 EUR/d
+                         OOS dEV +0.034 [-0.110,+0.177] +8/10 | EV_S +0.002 EV_noS -0.030 | S 16144 EUR/d
+                         DEV dEV +0.353 [+0.240,+0.465] +2/2 | EV_S +0.265 EV_noS -0.035 | S 16854 EUR/d
+  delay s     40-60      IS dEV +0.103 [-0.149,+0.355] +6/10 | EV_S +0.151 EV_noS +0.091 | S 10519 EUR/d
+                         OOS dEV +0.289 [+0.081,+0.497] +8/10 | EV_S +0.224 EV_noS -0.030 | S 10034 EUR/d
+                         DEV dEV +0.553 [+0.260,+0.846] +2/2 | EV_S +0.438 EV_noS -0.035 | S 12737 EUR/d
+  clases IS dEV>=+0,05 y >=30 EUR/d (regla ex-ante): {"T_rem": ["60-120", "120-180"], "hora": ["06-12", "18-24"], "precio": [".09-.15", ".15-.22", ".22-.31"], "tam barrido": ["800-1600", "1600-3200"], "delay s": ["5-10", "10-20", "20-40", "40-60"]}
+  TRAMO conjuncion IS: EVw +0.411 dia +0.439 [+0.072,+0.807] +7/10 sin2 +0.230 | 9690 EUR/d n=101014 | dEV +0.352 [-0.028,+0.731] +7/10 | EV_S +0.411 EV_noS +0.091 | S 9690 EUR/d | cobertura EUR S 21.3 %
+  TRAMO conjuncion OOS: EVw +0.054 dia +0.013 [-0.263,+0.288] +5/10 sin2 -0.116 | 10347 EUR/d n=101014 | dEV +0.049 [-0.196,+0.293] +6/10 | EV_S +0.054 EV_noS -0.030 | S 10347 EUR/d | cobertura EUR S 21.2 %
+  TRAMO conjuncion DEV: EVw +0.431 dia +0.323 [-1.336,+1.982] +2/2 sin2 +nan | 13744 EUR/d n=101014 | dEV +0.362 [-2.750,+3.474] +1/2 | EV_S +0.431 EV_noS -0.035 | S 13744 EUR/d | cobertura EUR S 22.5 %
+  covariables diarias: dia | EUR S | %fills S | tam medio S | adverso<=5s | EV_S | EV_noS | dEV
+   06   38624  11.8%   13.4 0.022 +0.179 +0.212 -0.033
+   07   50503  15.0%   12.6 0.035 +0.556 -0.041 +0.597
+   08   54608  15.3%   12.5 0.061 -0.001 +0.241 -0.242
+   09   51710  15.3%   12.5 0.014 -0.063 +0.001 -0.064
+   10   49013  16.0%   11.7 0.008 +0.276 -0.009 +0.285
+   11   51135  16.5%   12.7 0.008 +0.059 +0.091 -0.032
+   12   25709   8.6%   10.5 0.029 +0.107 +0.048 +0.059
+   13   33433  11.2%   10.3 0.024 +0.086 +0.055 +0.031
+   14   35674  11.0%   12.1 0.030 +0.463 +0.075 +0.388
+   15   64475  15.3%   13.9 0.057 +0.187 +0.206 -0.018
+   16   46040  13.2%   12.5 0.027 +0.151 +0.054 +0.097
+   17   29783   9.5%   11.9 0.007 +0.086 -0.051 +0.137
+   18   28255   9.6%   10.4 0.014 -0.059 -0.147 +0.088
+   19   58871  17.5%   13.5 0.015 +0.065 -0.224 +0.290
+   20   66697  17.9%   13.5 0.024 +0.207 +0.062 +0.144
+   21   66556  17.7%   14.4 0.025 -0.041 +0.185 -0.226
+   22   33816  10.3%   13.0 0.030 -0.172 -0.099 -0.073
+   23   72153  16.8%   13.9 0.016 -0.080 -0.054 -0.026
+   24   44224  13.9%   11.5 0.033 +0.397 +0.043 +0.355
+   25   42076  13.8%   11.6 0.013 +0.072 -0.127 +0.199
+   26   52313  15.0%   13.8 0.035 +0.719 +0.191 +0.528
+   27   70018  18.3%   15.2 0.013 +0.336 -0.269 +0.605
+   Spearman dEV con EUR S/%S/tam/adverso: +0.01 +0.05 -0.06 -0.08
+
+-- D familia de 48 conductas (poblacion de rellenos de todos los makers en S800 BTC)
+ IS 06-15 -> OOS 16-25 y DEV 26-27: elegida delay[5,20)s nivel>=bb:1 Trem[60,290) barrido>=800 p>=0.00 | IS EVw +0.219 dia +0.230 [+0.072,+0.389] +8/10 sin2 +0.138 | 9262 EUR/d n=107961 | p max-stat (volteo signos, 48) 0.105; candidatas con cota inf IC90>0 en IS: 10/48
+    medida: EVw -0.047 dia -0.045 [-0.183,+0.092] +5/10 sin2 -0.116 | 11794 EUR/d n=107961
+    placebo (barridos +30 min): EVw -0.129 dia -0.192 [-0.375,-0.009] +2/10 sin2 -0.302 | 6248 EUR/d n=55619 | inversion (en S, fuera de la conducta): EVw +0.101 dia +0.097 [-0.007,+0.201] +6/10 sin2 +0.032 | 37053 EUR/d n=343895
+    VARIANTES en la medida: EV>0 en 19/48 (media familia -0.042); EV medio todos los rellenos noS: EVw -0.030 dia -0.036 [-0.107,+0.035] +4/10 sin2 -0.076 | 277181 EUR/d n=2757793
+    medida: EVw +0.742 dia +0.764 [+0.070,+1.457] +2/2 sin2 +nan | 15925 EUR/d n=107961
+    placebo (barridos +30 min): EVw +0.066 dia +0.083 [-0.929,+1.095] +1/2 sin2 +nan | 7975 EUR/d n=55619 | inversion (en S, fuera de la conducta): EVw +0.414 dia +0.443 [-0.987,+1.872] +2/2 sin2 +nan | 45241 EUR/d n=343895
+    VARIANTES en la medida: EV>0 en 48/48 (media familia +0.860); EV medio todos los rellenos noS: EVw -0.035 dia -0.039 [-1.492,+1.413] +1/2 sin2 +nan | 294441 EUR/d n=2757793
+    CUOTA OOS: conducta 11794 EUR/d = 24.1 % del flujo S800-BTC (48847 EUR/d); wallets 1044, top1 4.4 % top5 16.2 %; makers por mercado mediana 24 -> cuota justa 1/n = 4.2 % del flujo de la conducta = 1.01 % del flujo S
+    EUR/ano a EVw -0.047: cuota 9% del flujo S -> -75333 ; cuota 1/n de la conducta -> -8421 ; cuota del flujo S necesaria para 200k: imposible
+ inversa IS 16-27 -> 06-15: elegida delay[20,60)s nivel>=bb:0 Trem[120,240) barrido>=800 p>=0.00 | IS EVw +0.295 dia +0.281 [+0.137,+0.426] +10/12 sin2 +0.201 | 12190 EUR/d n=108119 | p max-stat (volteo signos, 48) 0.023; candidatas con cota inf IC90>0 en IS: 13/48
+    medida: EVw +0.124 dia +0.189 [-0.046,+0.424] +6/10 sin2 +0.062 | 10713 EUR/d n=108119
+    placebo (barridos +30 min): EVw +0.247 dia +0.134 [-0.181,+0.448] +6/10 sin2 -0.047 | 9071 EUR/d n=97758 | inversion (en S, fuera de la conducta): EVw +0.199 dia +0.184 [+0.072,+0.296] +8/10 sin2 +0.116 | 34775 EUR/d n=343737
+    VARIANTES en la medida: EV>0 en 46/48 (media familia +0.171); EV medio todos los rellenos noS: EVw +0.091 dia +0.088 [+0.030,+0.146] +8/10 sin2 +0.053 | 284007 EUR/d n=2757793
+
+-- E nichos de v057 y v258 (rellenos de todos los makers) y criterios
+  v057 IS: EVw +0.096 dia +0.102 [+0.024,+0.180] +8/10 sin2 +0.071 | 30669 EUR/d n=276475 | cuota del flujo S800 67.42 %
+  v057 OOS: EVw +0.004 dia -0.015 [-0.088,+0.059] +5/10 sin2 -0.060 | 33543 EUR/d n=276475 | cuota del flujo S800 68.67 %
+  v057 DEV: EVw +0.096 dia +0.103 [-0.277,+0.482] +2/2 sin2 +nan | 41715 EUR/d n=276475 | cuota del flujo S800 68.20 %
+  v258 IS: EVw +0.144 dia +0.182 [-0.072,+0.435] +7/10 sin2 +0.028 | 10632 EUR/d n=127721 | cuota del flujo S800 23.37 %
+  v258 OOS: EVw +0.112 dia +0.097 [-0.046,+0.240] +6/10 sin2 -0.001 | 13366 EUR/d n=127721 | cuota del flujo S800 27.36 %
+  v258 DEV: EVw +0.767 dia +0.776 [+0.521,+1.031] +2/2 sin2 +nan | 18737 EUR/d n=127721 | cuota del flujo S800 30.63 %
+ C5 (>=8/10 dias+) por RUIDO, ejecutando 543 ejec x 20 acc (~2715 EUR/d) sobre el nicho, EV verdadero m (bootstrap por mercado, 3000 dias):
+  v057: P(dia+) y P(>=8/10 dias+): m=+0.00: 0.42 / 0.018 | m=+0.03: 0.50 / 0.054 | m=+0.05: 0.47 / 0.038 | m=+0.10: 0.53 / 0.083
+  v258: P(dia+) y P(>=8/10 dias+): m=+0.00: 0.45 / 0.026 | m=+0.03: 0.45 / 0.026 | m=+0.05: 0.44 / 0.024 | m=+0.10: 0.46 / 0.033
+
+==== ETH: filas 341438, en S800 1.6 % (EUR 2.7 %)
+-- A reproduccion dEV/E (S800 menos no-S), IC90 por dias (R5: 06-25 +0,110 [+0,028,+0,192]; 22 dias +0,149 [+0,062,+0,236])
+  06-25: dEV -0.285 [-0.862,+0.292] +3/14 | EV_S +0.402 EV_noS +0.039 | S 1142 EUR/d
+  22 dias(06-27): dEV -0.336 [-0.840,+0.168] +3/16 | EV_S +0.384 EV_noS +0.055 | S 1024 EUR/d
+  IS 05-15: dEV +0.209 [-1.224,+1.642] +2/6 | EV_S +1.805 EV_noS +0.102 | S 1260 EUR/d
+  OOS 16-25: dEV -0.655 [-0.974,-0.336] +1/8 | EV_S -0.858 EV_noS -0.021 | S 1053 EUR/d
+  DEV 26-27: dEV -0.698 [-2.794,+1.398] +0/2 | EV_S -0.327 EV_noS +0.189 | S 201 EUR/d
+-- B ETH SEL 06-15 -> MEAS 16-27: wallets 498, elegibles 77 (EV SEL: top20 >= +0.283, bottom20 <= +0.013); n W/L/REST 16/16/45
+   GANADORAS  MEAS: EVw +0.016 dia +0.039 [-0.105,+0.182] +7/12 sin2 -0.034 | 5165 EUR/d n=24764 | EUR S 3.1 %
+   RESTO      MEAS: EVw +0.003 dia +0.026 [-0.081,+0.132] +7/12 sin2 -0.030 | 12846 EUR/d n=88072 | EUR S 2.6 %
+   PERDEDORAS MEAS: EVw -0.040 dia +0.011 [-0.158,+0.179] +6/12 sin2 -0.097 | 1911 EUR/d n=11169 | EUR S 3.2 %
+   placebo (2000 sorteos): EV MEAS ganadoras +0.016 vs placebo media -0.004, p(placebo>=) = 0.349 | inversion (perdedoras) -0.040
+-- B ETH SEL 16-27 -> MEAS 06-15: wallets 535, elegibles 83 (EV SEL: top20 >= +0.178, bottom20 <= -0.135); n W/L/REST 17/17/49
+   GANADORAS  MEAS: EVw +0.171 dia +0.116 [-0.045,+0.278] +6/10 sin2 +0.012 | 2079 EUR/d n=14433 | EUR S 2.5 %
+   RESTO      MEAS: EVw +0.139 dia +0.132 [+0.050,+0.214] +9/10 sin2 +0.080 | 14558 EUR/d n=81514 | EUR S 2.3 %
+   PERDEDORAS MEAS: EVw +0.081 dia +0.079 [-0.013,+0.171] +8/10 sin2 +0.008 | 6706 EUR/d n=39023 | EUR S 1.4 %
+   placebo (2000 sorteos): EV MEAS ganadoras +0.171 vs placebo media +0.137, p(placebo>=) = 0.263 | inversion (perdedoras) +0.081
