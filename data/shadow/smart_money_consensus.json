@@ -1,45 +1,38 @@
 {
   "BTC": {
-    "smart_money_consensus": -0.0632,
-    "n_trades_smart": 760,
-    "n_wallets_smart": 10,
-    "smart_money_consensus_ponderado": -0.0798,
-    "n_wallets_smart_ponderado": 10
-  },
-  "SOL": {
-    "smart_money_consensus": 0.0423,
-    "n_trades_smart": 71,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.105,
-    "n_wallets_smart_ponderado": 3
+    "smart_money_consensus": 0.0779,
+    "n_trades_smart": 475,
+    "n_wallets_smart": 8,
+    "smart_money_consensus_ponderado": 0.0688,
+    "n_wallets_smart_ponderado": 8
   },
   "ETH": {
-    "smart_money_consensus": -0.0084,
-    "n_trades_smart": 357,
-    "n_wallets_smart": 6,
-    "smart_money_consensus_ponderado": 0.0371,
-    "n_wallets_smart_ponderado": 6
+    "smart_money_consensus": 0.1667,
+    "n_trades_smart": 360,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.2963,
+    "n_wallets_smart_ponderado": 3
   },
   "XRP": {
-    "smart_money_consensus": -0.0233,
-    "n_trades_smart": 43,
+    "smart_money_consensus": 0.3846,
+    "n_trades_smart": 13,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.221,
+    "smart_money_consensus_ponderado": 0.4519,
     "n_wallets_smart_ponderado": 1
+  },
+  "SOL": {
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 16,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": 0.3973,
+    "n_wallets_smart_ponderado": 2
   },
   "DOGE": {
-    "smart_money_consensus": -0.25,
-    "n_trades_smart": 8,
+    "smart_money_consensus": -1.0,
+    "n_trades_smart": 1,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.4473,
+    "smart_money_consensus_ponderado": -1.0,
     "n_wallets_smart_ponderado": 1
   },
-  "BNB": {
-    "smart_money_consensus": -0.2593,
-    "n_trades_smart": 27,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.5625,
-    "n_wallets_smart_ponderado": 1
-  },
-  "_actualizado": "2026-10-28T19:07:22+00:00"
+  "_actualizado": "2026-10-28T19:30:30+00:00"
 }
