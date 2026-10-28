@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-28T02:27:12+00:00",
+ "generado_utc": "2026-10-28T02:38:24+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -15,10 +15,10 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 7.51,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 7.51,
@@ -41,15 +41,15 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 90427.53,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 13,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 117716.93,
+   "usd_long": 112685.51,
    "usd_short": 0.0,
-   "n": 19,
+   "n": 18,
    "imbalance": -1.0
   }
  },
@@ -67,15 +67,15 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 4103.77,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 6,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 7118.5,
+   "usd_long": 4396.51,
    "usd_short": 0.0,
-   "n": 10,
+   "n": 8,
    "imbalance": -1.0
   }
  },
@@ -93,15 +93,15 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 119310.7,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 17,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 123893.17,
+   "usd_long": 121579.83,
    "usd_short": 0.0,
-   "n": 23,
+   "n": 21,
    "imbalance": -1.0
   }
  },
@@ -119,10 +119,10 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 2436.92,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 5,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 2508.46,
@@ -145,16 +145,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 68334.44,
-   "usd_short": 0.0,
-   "n": 11,
-   "imbalance": -1.0
+   "usd_long": 0.0,
+   "usd_short": 612.33,
+   "n": 1,
+   "imbalance": 1.0
   },
   "60min": {
-   "usd_long": 148865.54,
-   "usd_short": 0.0,
-   "n": 28,
-   "imbalance": -1.0
+   "usd_long": 141097.45,
+   "usd_short": 612.33,
+   "n": 26,
+   "imbalance": -0.9914
   }
  },
  "lag_bybit_ws": {
