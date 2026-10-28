@@ -1,10 +1,10 @@
 {
  "https://polygon-bor-rpc.publicnode.com": {
   "cabeza": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1791813561.3136537,
-   "ultimo_aviso": 0
+   "ok": false,
+   "detalle": "retrasado 52 bloques",
+   "desde": 1793190259.6768212,
+   "ultimo_aviso": 1793190259.6768212
   },
   "archivo": {
    "ok": true,
@@ -21,10 +21,10 @@
  },
  "https://polygon.drpc.org": {
   "cabeza": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1791813561.3136537,
-   "ultimo_aviso": 0
+   "ok": false,
+   "detalle": "retrasado 52 bloques",
+   "desde": 1793190259.6768212,
+   "ultimo_aviso": 1793190259.6768212
   },
   "archivo": {
    "ok": true,
@@ -41,10 +41,10 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1793154184.282987,
-   "ultimo_aviso": 1793154184.282987
+   "ok": false,
+   "detalle": "retrasado 52 bloques",
+   "desde": 1793190259.6768212,
+   "ultimo_aviso": 1793190259.6768212
   },
   "archivo": {
    "ok": true,
@@ -53,10 +53,10 @@
    "ultimo_aviso": 1793161383.9403558
   },
   "latest": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1792970590.2006354,
-   "ultimo_aviso": 1792970590.2006354
+   "ok": false,
+   "detalle": "RechazoPolitica: HTTP 403",
+   "desde": 1793190259.6768212,
+   "ultimo_aviso": 1793190259.6768212
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-28T11:23:09+00:00"
+ "_actualizado_utc": "2026-10-28T12:24:19+00:00"
 }
