@@ -1,0 +1,69 @@
+== R8-TREM [BTC] logit Y10 AUC OOS 0.692; filas 337226
+-- familia 48 (T_rem x hazard x m), vida 10 s, relleno estricto
+  T 15- 60 bajo  m=1 IS - | OOS - | DEV -
+  T 15- 60 bajo  m=2 IS - | OOS - | DEV -
+  T 15- 60 bajo  m=3 IS - | OOS - | DEV -
+  T 15- 60 medio m=1 IS +0.065 [-0.157,+0.372] +4/10 sin2 -0.056 69E/d fill 227% | OOS -0.140 [-0.302,-0.008] +1/10 sin2 -0.241 101E/d fill 158% | DEV -0.077 [-3.431,+3.131] +1/2 sin2 +nan 70E/d fill 1291%
+  T 15- 60 medio m=2 IS +0.128 [-0.152,+0.449] +6/10 sin2 -0.021 66E/d fill 217% | OOS -0.112 [-0.287,+0.031] +2/10 sin2 -0.222 97E/d fill 151% | DEV -0.236 [-2.093,+1.612] +1/2 sin2 +nan 65E/d fill 1252%
+  T 15- 60 medio m=3 IS +0.106 [-0.106,+0.313] +5/10 sin2 -0.033 66E/d fill 211% | OOS -0.114 [-0.304,+0.040] +3/10 sin2 -0.226 95E/d fill 144% | DEV -0.245 [-2.346,+1.884] +1/2 sin2 +nan 66E/d fill 1129%
+  T 15- 60 alto  m=1 IS -0.035 [-0.149,+0.112] +4/10 sin2 -0.093 164E/d fill 203% | OOS -0.173 [-0.288,-0.046] +2/10 sin2 -0.233 172E/d fill 192% | DEV -0.126 [-1.843,+1.426] +1/2 sin2 +nan 166E/d fill 937%
+  T 15- 60 alto  m=2 IS -0.058 [-0.176,+0.112] +3/10 sin2 -0.115 150E/d fill 198% | OOS -0.218 [-0.326,-0.106] +1/10 sin2 -0.275 157E/d fill 182% | DEV -0.080 [-1.777,+1.462] +1/2 sin2 +nan 147E/d fill 909%
+  T 15- 60 alto  m=3 IS -0.080 [-0.200,+0.094] +4/10 sin2 -0.137 140E/d fill 189% | OOS -0.257 [-0.387,-0.106] +2/10 sin2 -0.332 144E/d fill 177% | DEV -0.152 [-2.128,+1.633] +1/2 sin2 +nan 130E/d fill 884%
+  T 15- 60 todos m=1 IS -0.033 [-0.174,+0.150] +4/10 sin2 -0.119 200E/d fill 210% | OOS -0.173 [-0.278,-0.065] +1/10 sin2 -0.216 232E/d fill 182% | DEV -0.125 [-2.527,+2.071] +1/2 sin2 +nan 206E/d fill 1007%
+  T 15- 60 todos m=2 IS -0.021 [-0.163,+0.178] +5/10 sin2 -0.109 184E/d fill 205% | OOS -0.174 [-0.281,-0.070] +1/10 sin2 -0.223 217E/d fill 173% | DEV -0.123 [-2.101,+1.701] +1/2 sin2 +nan 188E/d fill 975%
+  T 15- 60 todos m=3 IS -0.039 [-0.183,+0.141] +5/10 sin2 -0.131 175E/d fill 196% | OOS -0.207 [-0.339,-0.067] +3/10 sin2 -0.260 198E/d fill 167% | DEV -0.158 [-2.244,+1.783] +1/2 sin2 +nan 172E/d fill 933%
+  T 60-120 bajo  m=1 IS - | OOS -1.000 [+nan,+nan] +0/1 sin2 +nan 2E/d fill 50% | DEV -
+  T 60-120 bajo  m=2 IS - | OOS -1.000 [+nan,+nan] +0/1 sin2 +nan 5E/d fill 67% | DEV -
+  T 60-120 bajo  m=3 IS - | OOS -1.000 [+nan,+nan] +0/1 sin2 +nan 5E/d fill 67% | DEV -
+  T 60-120 medio m=1 IS -0.003 [-0.094,+0.081] +4/10 sin2 -0.054 709E/d fill 168% | OOS -0.120 [-0.203,-0.046] +1/10 sin2 -0.169 682E/d fill 170% | DEV -0.077 [-1.519,+1.307] +1/2 sin2 +nan 634E/d fill 914%
+  T 60-120 medio m=2 IS +0.006 [-0.078,+0.087] +7/10 sin2 -0.040 639E/d fill 152% | OOS -0.126 [-0.228,-0.036] +1/10 sin2 -0.191 605E/d fill 154% | DEV -0.111 [-1.605,+1.316] +1/2 sin2 +nan 562E/d fill 834%
+  T 60-120 medio m=3 IS +0.029 [-0.057,+0.111] +7/10 sin2 -0.016 565E/d fill 139% | OOS -0.134 [-0.236,-0.044] +1/10 sin2 -0.199 540E/d fill 138% | DEV -0.108 [-1.393,+1.117] +1/2 sin2 +nan 516E/d fill 743%
+  T 60-120 alto  m=1 IS -0.060 [-0.199,+0.061] +5/10 sin2 -0.135 182E/d fill 182% | OOS -0.219 [-0.361,-0.116] +3/10 sin2 -0.313 188E/d fill 175% | DEV -0.390 [-1.057,+0.279] +0/2 sin2 +nan 197E/d fill 805%
+  T 60-120 alto  m=2 IS -0.048 [-0.180,+0.086] +5/10 sin2 -0.118 160E/d fill 167% | OOS -0.198 [-0.373,-0.081] +3/10 sin2 -0.311 162E/d fill 163% | DEV -0.360 [-0.776,+0.050] +0/2 sin2 +nan 164E/d fill 756%
+  T 60-120 alto  m=3 IS -0.091 [-0.231,+0.041] +4/10 sin2 -0.173 140E/d fill 154% | OOS -0.190 [-0.347,-0.090] +2/10 sin2 -0.291 138E/d fill 150% | DEV -0.513 [-1.395,+0.370] +0/2 sin2 +nan 144E/d fill 694%
+  T 60-120 todos m=1 IS -0.014 [-0.101,+0.066] +4/10 sin2 -0.067 796E/d fill 170% | OOS -0.132 [-0.220,-0.055] +1/10 sin2 -0.189 768E/d fill 172% | DEV -0.113 [-1.570,+1.288] +1/2 sin2 +nan 721E/d fill 906%
+  T 60-120 todos m=2 IS -0.001 [-0.084,+0.078] +6/10 sin2 -0.046 711E/d fill 154% | OOS -0.135 [-0.231,-0.049] +1/10 sin2 -0.195 677E/d fill 155% | DEV -0.142 [-1.686,+1.336] +1/2 sin2 +nan 635E/d fill 826%
+  T 60-120 todos m=3 IS +0.008 [-0.083,+0.097] +6/10 sin2 -0.041 629E/d fill 140% | OOS -0.143 [-0.233,-0.065] +1/10 sin2 -0.205 601E/d fill 140% | DEV -0.160 [-1.640,+1.258] +1/2 sin2 +nan 577E/d fill 741%
+  T120-200 bajo  m=1 IS - | OOS +2.571 [+nan,+nan] +1/1 sin2 +nan 3E/d fill 100% | DEV -
+  T120-200 bajo  m=2 IS - | OOS - | DEV -
+  T120-200 bajo  m=3 IS - | OOS - | DEV +2.448 [+nan,+nan] +1/1 sin2 +nan 3E/d fill 50%
+  T120-200 medio m=1 IS -0.049 [-0.127,+0.026] +2/10 sin2 -0.097 1291E/d fill 141% | OOS -0.152 [-0.216,-0.089] +2/10 sin2 -0.195 1248E/d fill 144% | DEV -0.171 [-1.639,+1.292] +1/2 sin2 +nan 1278E/d fill 723%
+  T120-200 medio m=2 IS -0.053 [-0.136,+0.026] +3/10 sin2 -0.100 1090E/d fill 120% | OOS -0.130 [-0.206,-0.054] +2/10 sin2 -0.184 1064E/d fill 121% | DEV -0.165 [-1.569,+1.237] +1/2 sin2 +nan 1101E/d fill 612%
+  T120-200 medio m=3 IS -0.038 [-0.125,+0.049] +3/10 sin2 -0.091 897E/d fill 101% | OOS -0.129 [-0.209,-0.054] +2/10 sin2 -0.187 904E/d fill 101% | DEV -0.131 [-1.747,+1.482] +1/2 sin2 +nan 938E/d fill 509%
+  T120-200 alto  m=1 IS +0.069 [-0.195,+0.555] +5/10 sin2 -0.084 35E/d fill 154% | OOS -0.056 [-0.471,+0.143] +4/10 sin2 -0.307 34E/d fill 150% | DEV +0.540 [-4.534,+5.200] +1/2 sin2 +nan 49E/d fill 549%
+  T120-200 alto  m=2 IS +0.033 [-0.301,+0.870] +5/10 sin2 -0.124 27E/d fill 130% | OOS -0.124 [-0.610,+0.083] +3/10 sin2 -0.463 26E/d fill 128% | DEV +0.684 [-3.583,+4.487] +1/2 sin2 +nan 39E/d fill 482%
+  T120-200 alto  m=3 IS -0.090 [-0.321,+0.416] +5/10 sin2 -0.178 22E/d fill 109% | OOS -0.301 [-0.819,-0.087] +4/10 sin2 -0.653 20E/d fill 111% | DEV +0.682 [-4.824,+5.507] +1/2 sin2 +nan 33E/d fill 436%
+  T120-200 todos m=1 IS -0.047 [-0.125,+0.029] +2/10 sin2 -0.095 1302E/d fill 141% | OOS -0.151 [-0.214,-0.089] +2/10 sin2 -0.195 1259E/d fill 144% | DEV -0.143 [-1.389,+1.101] +1/2 sin2 +nan 1301E/d fill 716%
+  T120-200 todos m=2 IS -0.054 [-0.139,+0.025] +2/10 sin2 -0.103 1097E/d fill 120% | OOS -0.124 [-0.202,-0.047] +2/10 sin2 -0.179 1072E/d fill 122% | DEV -0.138 [-1.349,+1.073] +1/2 sin2 +nan 1119E/d fill 607%
+  T120-200 todos m=3 IS -0.037 [-0.127,+0.052] +4/10 sin2 -0.092 905E/d fill 101% | OOS -0.127 [-0.208,-0.051] +2/10 sin2 -0.187 909E/d fill 102% | DEV -0.099 [-1.472,+1.273] +1/2 sin2 +nan 955E/d fill 506%
+  T200-286 bajo  m=1 IS +0.039 [-0.101,+0.180] +6/10 sin2 -0.037 173E/d fill 134% | OOS -0.032 [-0.248,+0.112] +5/10 sin2 -0.162 161E/d fill 132% | DEV -0.004 [-1.024,+1.027] +1/2 sin2 +nan 151E/d fill 742%
+  T200-286 bajo  m=2 IS +0.032 [-0.121,+0.161] +6/10 sin2 -0.067 184E/d fill 113% | OOS -0.069 [-0.267,+0.084] +3/10 sin2 -0.188 170E/d fill 109% | DEV -0.123 [-1.154,+0.904] +1/2 sin2 +nan 171E/d fill 600%
+  T200-286 bajo  m=3 IS -0.040 [-0.180,+0.099] +3/10 sin2 -0.133 186E/d fill 94% | OOS -0.080 [-0.248,+0.056] +4/10 sin2 -0.189 172E/d fill 91% | DEV -0.062 [-0.643,+0.526] +1/2 sin2 +nan 192E/d fill 474%
+  T200-286 medio m=1 IS -0.023 [-0.073,+0.024] +5/10 sin2 -0.045 1284E/d fill 129% | OOS -0.123 [-0.197,-0.042] +1/10 sin2 -0.167 1210E/d fill 133% | DEV -0.136 [-0.961,+0.685] +0/2 sin2 +nan 1290E/d fill 653%
+  T200-286 medio m=2 IS -0.025 [-0.091,+0.030] +4/10 sin2 -0.055 1079E/d fill 105% | OOS -0.118 [-0.198,-0.031] +1/10 sin2 -0.166 1024E/d fill 109% | DEV -0.130 [-0.835,+0.568] +0/2 sin2 +nan 1104E/d fill 534%
+  T200-286 medio m=3 IS -0.020 [-0.105,+0.043] +4/10 sin2 -0.068 895E/d fill 85% | OOS -0.148 [-0.235,-0.056] +1/10 sin2 -0.197 849E/d fill 88% | DEV -0.081 [-0.610,+0.444] +1/2 sin2 +nan 909E/d fill 433%
+  T200-286 alto  m=1 IS +0.926 [-0.727,+1.407] +4/10 sin2 -0.366 7E/d fill 155% | OOS -0.478 [-1.086,-0.237] +2/9 sin2 -1.000 9E/d fill 157% | DEV +2.692 [+0.872,+4.658] +2/2 sin2 +nan 16E/d fill 364%
+  T200-286 alto  m=2 IS +1.098 [-0.674,+1.960] +4/10 sin2 -0.234 6E/d fill 124% | OOS -0.495 [-1.190,-0.369] +1/9 sin2 -1.000 7E/d fill 130% | DEV +2.802 [+0.638,+4.756] +2/2 sin2 +nan 13E/d fill 304%
+  T200-286 alto  m=3 IS +0.646 [-0.632,+1.829] +4/10 sin2 -0.258 5E/d fill 100% | OOS -0.762 [-1.114,-0.622] +1/9 sin2 -1.000 5E/d fill 114% | DEV +2.687 [+0.771,+4.354] +2/2 sin2 +nan 11E/d fill 250%
+  T200-286 todos m=1 IS -0.033 [-0.085,+0.016] +5/10 sin2 -0.056 1357E/d fill 130% | OOS -0.128 [-0.205,-0.044] +2/10 sin2 -0.171 1283E/d fill 134% | DEV -0.128 [-1.158,+0.897] +1/2 sin2 +nan 1365E/d fill 654%
+  T200-286 todos m=2 IS -0.025 [-0.086,+0.030] +6/10 sin2 -0.048 1163E/d fill 106% | OOS -0.127 [-0.214,-0.031] +1/10 sin2 -0.177 1099E/d fill 109% | DEV -0.128 [-0.995,+0.730] +1/2 sin2 +nan 1170E/d fill 536%
+  T200-286 todos m=3 IS -0.034 [-0.103,+0.024] +4/10 sin2 -0.068 991E/d fill 87% | OOS -0.149 [-0.241,-0.050] +1/10 sin2 -0.203 931E/d fill 89% | DEV -0.093 [-0.792,+0.601] +1/2 sin2 +nan 1003E/d fill 438%
+-> elegida IS: T60-120 medio m=3 (cota inf -0.057) p max 0.962
+   ALEATORIO misma banda: IS -0.001 [-0.099,+0.102] +5/10 sin2 -0.059 320E/d fill 139% | OOS -0.181 [-0.270,-0.095] +1/10 sin2 -0.236 314E/d fill 139% | DEV -0.017 [-1.918,+1.820] +1/2 sin2 +nan 275E/d fill 759%
+   objetivo [0.09,0.15): IS +0.058 [-0.062,+0.185] +5/10 sin2 -0.016 111E/d fill 124% | OOS -0.161 [-0.367,+0.023] +3/10 sin2 -0.285 94E/d fill 136% | DEV -0.073 [-3.643,+3.261] +1/2 sin2 +nan 97E/d fill 742%
+   objetivo [0.15,0.22): IS +0.057 [-0.099,+0.208] +6/10 sin2 -0.008 150E/d fill 141% | OOS -0.240 [-0.379,-0.113] +1/10 sin2 -0.329 137E/d fill 140% | DEV -0.202 [-1.100,+0.723] +0/2 sin2 +nan 138E/d fill 701%
+   objetivo [0.22,0.29): IS +0.004 [-0.089,+0.099] +7/10 sin2 -0.045 304E/d fill 151% | OOS -0.079 [-0.202,+0.022] +3/10 sin2 -0.153 309E/d fill 139% | DEV -0.074 [-0.708,+0.513] +0/2 sin2 +nan 281E/d fill 776%
+   cuota OOS 1.11 %
+-- auditoria INVERSION (hazard bajo <= q05, m=3, todas las T_rem)
+  reproduccion logit: IS -0.040 [-0.180,+0.099] +3/10 sin2 -0.133 186E/d fill 94% | OOS -0.083 [-0.249,+0.053] +4/10 sin2 -0.193 172E/d fill 90% | DEV -0.043 [-0.507,+0.428] +1/2 sin2 +nan 193E/d fill 472%
+  trem   mediana bajo-relleno 271.000 | bajo-todo 271.000 | SIEMPRE-relleno 167.000
+  spr    mediana bajo-relleno 0.010 | bajo-todo 0.010 | SIEMPRE-relleno 0.010
+  acc60  mediana bajo-relleno 319.848 | bajo-todo 374.161 | SIEMPRE-relleno 1728.517
+  bb     mediana bajo-relleno 0.300 | bajo-todo 0.300 | SIEMPRE-relleno 0.230
+  tsl200 mediana bajo-relleno 300000.000 | bajo-todo 300000.000 | SIEMPRE-relleno 13563.500
+  ms hasta relleno (bajo) p10/p50/p90: 910 3883 8308
+  rellenos 1519 en 1336 (dia,token) distintos; top dia aporta 5350000000000 % del pnl OOS+DEV
+  bajo m=3 T 15- 60: IS - | OOS - | DEV -
+  bajo m=3 T 60-120: IS - | OOS -1.000 [+nan,+nan] +0/1 sin2 +nan 5E/d fill 67% | DEV -
+  bajo m=3 T120-200: IS - | OOS - | DEV +2.448 [+nan,+nan] +1/1 sin2 +nan 3E/d fill 50%
+  bajo m=3 T200-286: IS -0.040 [-0.180,+0.099] +3/10 sin2 -0.133 186E/d fill 94% | OOS -0.080 [-0.248,+0.056] +4/10 sin2 -0.189 172E/d fill 91% | DEV -0.062 [-0.643,+0.526] +1/2 sin2 +nan 192E/d fill 474%

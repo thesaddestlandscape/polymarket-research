@@ -1,0 +1,63 @@
+== R8 Bloque 2/5 [ETH]: filas 336356 (IS 150093, OOS+DEV 186263); tasa base Y10(>=800 acc en 10 s) IS 0.0011 OOS 0.0012
+  Y10: AUC OOS HGB 0.607 [0.533,0.710] logit 0.801 | nulo permutado 0.498 | OOF IS 0.625 | Brier OOS 0.00130 vs constante 0.00117 (skill -0.111) | n pos OOS 219
+   calibracion OOS por deciles (pred media / observada): 0.003/0.002 0.003/0.000 0.003/0.001 0.003/0.001 0.003/0.000 0.003/0.000 0.003/0.000 0.003/0.001 0.003/0.001 0.007/0.005
+   top 1 % OOS: tasa observada 0.016 frente a base 0.001 (lift 13.7x)
+/usr/local/lib/python3.14/dist-packages/numpy/lib/_function_base_impl.py:3036: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/usr/local/lib/python3.14/dist-packages/numpy/lib/_function_base_impl.py:3037: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+   rasgos con mayor |corr| con el hazard OOS: tsl800 -0.17, n800_60 +0.15, coin_n60 +0.15, acc60 +0.13, acc5 +0.12, tsl200 -0.10
+  Y5: AUC OOS HGB 0.554 [0.488,0.699] logit 0.810 | nulo permutado 0.479 | OOF IS 0.623 | Brier OOS 0.00068 vs constante 0.00067 (skill -0.013) | n pos OOS 125
+  Y4: AUC OOS HGB 0.574 [0.522,0.611] logit 0.685 | nulo permutado 0.499 | OOF IS 0.632 | Brier OOS 0.00440 vs constante 0.00442 (skill +0.006) | n pos OOS 827
+
+-- Politicas hazard (cotizar a bb − m ticks si hazard >= umbral IS; N=10 acc; vida 10 s; llegada 73 ms; relleno estricto; 1 orden viva por token)
+  q=0.99 m=1 IS  ord/d 36 fill 47.5 % | EVw +0.100 dia +0.008 [-0.371,+0.387] +5/10 sin2 -0.218 | 37 EUR/d n=760 | cuota 3728.00 %
+  q=0.99 m=1 OOS ord/d 98 fill 47.8 % | EVw -0.166 dia -0.173 [-0.380,+0.033] +2/10 sin2 -0.304 | 103 EUR/d n=760 | cuota 10312.00 %
+  q=0.99 m=1 DEV ord/d 118 fill 50.4 % | EVw +0.124 dia +0.061 [-1.887,+2.010] +1/2 sin2 +nan | 133 EUR/d n=760 | cuota 13345.00 %
+  q=0.99 m=2 IS  ord/d 41 fill 43.1 % | EVw +0.174 dia +0.208 [-0.138,+0.555] +6/10 sin2 -0.002 | 40 EUR/d n=718 | cuota 4005.00 %
+  q=0.99 m=2 OOS ord/d 106 fill 40.8 % | EVw -0.195 dia -0.183 [-0.378,+0.011] +3/10 sin2 -0.302 | 97 EUR/d n=718 | cuota 9685.00 %
+  q=0.99 m=2 DEV ord/d 123 fill 43.9 % | EVw +0.031 dia -0.022 [-1.393,+1.349] +1/2 sin2 +nan | 121 EUR/d n=718 | cuota 12130.00 %
+  q=0.99 m=3 IS  ord/d 45 fill 37.3 % | EVw +0.106 dia +0.058 [-0.212,+0.327] +6/10 sin2 -0.102 | 39 EUR/d n=665 | cuota 3889.00 %
+  q=0.99 m=3 OOS ord/d 113 fill 35.7 % | EVw -0.115 dia -0.116 [-0.318,+0.085] +3/10 sin2 -0.246 | 90 EUR/d n=665 | cuota 9040.00 %
+  q=0.99 m=3 DEV ord/d 130 fill 36.2 % | EVw +0.091 dia +0.024 [-1.629,+1.677] +1/2 sin2 +nan | 105 EUR/d n=665 | cuota 10545.00 %
+  q=0.98 m=1 IS  ord/d 65 fill 48.0 % | EVw +0.078 dia -0.045 [-0.336,+0.247] +5/10 sin2 -0.193 | 70 EUR/d n=1574 | cuota 6955.00 %
+  q=0.98 m=1 OOS ord/d 220 fill 47.1 % | EVw -0.291 dia -0.290 [-0.407,-0.172] +1/10 sin2 -0.359 | 220 EUR/d n=1574 | cuota 22012.00 %
+  q=0.98 m=1 DEV ord/d 242 fill 46.6 % | EVw -0.055 dia -0.102 [-1.730,+1.526] +1/2 sin2 +nan | 249 EUR/d n=1574 | cuota 24855.00 %
+  q=0.98 m=2 IS  ord/d 74 fill 41.9 % | EVw +0.097 dia +0.058 [-0.205,+0.321] +6/10 sin2 -0.088 | 71 EUR/d n=1469 | cuota 7111.00 %
+  q=0.98 m=2 OOS ord/d 230 fill 41.1 % | EVw -0.303 dia -0.304 [-0.427,-0.182] +1/10 sin2 -0.368 | 202 EUR/d n=1469 | cuota 20224.00 %
+  q=0.98 m=2 DEV ord/d 255 fill 41.6 % | EVw -0.055 dia -0.093 [-1.666,+1.481] +1/2 sin2 +nan | 233 EUR/d n=1469 | cuota 23275.00 %
+  q=0.98 m=3 IS  ord/d 83 fill 35.3 % | EVw +0.014 dia -0.027 [-0.219,+0.165] +7/10 sin2 -0.110 | 68 EUR/d n=1297 | cuota 6808.00 %
+  q=0.98 m=3 OOS ord/d 238 fill 34.6 % | EVw -0.228 dia -0.234 [-0.390,-0.078] +1/10 sin2 -0.334 | 177 EUR/d n=1297 | cuota 17738.00 %
+  q=0.98 m=3 DEV ord/d 263 fill 34.4 % | EVw +0.068 dia +0.044 [-0.840,+0.927] +1/2 sin2 +nan | 201 EUR/d n=1297 | cuota 20130.00 %
+  q=0.95 m=1 IS  ord/d 159 fill 47.2 % | EVw -0.113 dia -0.150 [-0.339,+0.038] +4/10 sin2 -0.256 | 167 EUR/d n=15251 | cuota 16691.00 %
+  q=0.95 m=1 OOS ord/d 2602 fill 46.1 % | EVw -0.213 dia -0.212 [-0.274,-0.150] +0/10 sin2 -0.246 | 2360 EUR/d n=15251 | cuota 236005.00 %
+  q=0.95 m=1 DEV ord/d 2706 fill 46.1 % | EVw -0.149 dia -0.153 [-0.728,+0.421] +0/2 sin2 +nan | 2414 EUR/d n=15251 | cuota 241370.00 %
+  q=0.95 m=2 IS  ord/d 180 fill 40.7 % | EVw -0.105 dia -0.101 [-0.298,+0.096] +4/10 sin2 -0.224 | 166 EUR/d n=13307 | cuota 16649.00 %
+  q=0.95 m=2 OOS ord/d 2623 fill 39.6 % | EVw -0.199 dia -0.198 [-0.263,-0.132] +0/10 sin2 -0.230 | 2058 EUR/d n=13307 | cuota 205773.00 %
+  q=0.95 m=2 DEV ord/d 2698 fill 40.5 % | EVw -0.164 dia -0.168 [-0.624,+0.287] +0/2 sin2 +nan | 2152 EUR/d n=13307 | cuota 215205.00 %
+  q=0.95 m=3 IS  ord/d 201 fill 34.5 % | EVw -0.123 dia -0.134 [-0.286,+0.019] +3/10 sin2 -0.227 | 160 EUR/d n=11622 | cuota 15969.00 %
+  q=0.95 m=3 OOS ord/d 2635 fill 34.2 % | EVw -0.182 dia -0.181 [-0.249,-0.113] +0/10 sin2 -0.219 | 1804 EUR/d n=11622 | cuota 180393.00 %
+  q=0.95 m=3 DEV ord/d 2694 fill 35.4 % | EVw -0.117 dia -0.121 [-0.436,+0.195] +0/2 sin2 +nan | 1892 EUR/d n=11622 | cuota 189220.00 %
+  -> elegida (IS cota inf IC90 -0.138): q=0.99 m=2; p max-stat (9 politicas) 0.346
+-- comparadores de la elegida (misma m; IS / OOS / DEV)
+  SIEMPRE                        IS  ord/d 2543 fill 44.2 % | EVw -0.106 dia -0.107 [-0.139,-0.076] +0/10 sin2 -0.122 | 2250 EUR/d n=23909 | cuota 225036.00 %
+  SIEMPRE                        OOS ord/d 2643 fill 39.6 % | EVw -0.202 dia -0.201 [-0.270,-0.131] +0/10 sin2 -0.235 | 2069 EUR/d n=23909 | cuota 206948.00 %
+  SIEMPRE                        DEV ord/d 2712 fill 40.4 % | EVw -0.169 dia -0.174 [-0.622,+0.274] +0/2 sin2 +nan | 2155 EUR/d n=23909 | cuota 215530.00 %
+  ALEATORIO                      IS  ord/d 88 fill 43.3 % | EVw -0.085 dia -0.087 [-0.246,+0.072] +4/10 sin2 -0.171 | 71 EUR/d n=1420 | cuota 7102.00 %
+  ALEATORIO                      OOS ord/d 221 fill 37.4 % | EVw -0.304 dia -0.277 [-0.465,-0.090] +3/10 sin2 -0.399 | 155 EUR/d n=1420 | cuota 15519.00 %
+  ALEATORIO                      DEV ord/d 270 fill 39.0 % | EVw -0.129 dia -0.150 [-2.039,+1.739] +1/2 sin2 +nan | 195 EUR/d n=1420 | cuota 19515.00 %
+  INVERSION (hazard bajo)        IS  ord/d 99 fill 53.1 % | EVw +0.628 dia +0.924 [+0.154,+1.695] +8/10 sin2 +0.399 | 84 EUR/d n=577 | cuota 8414.00 %
+  INVERSION (hazard bajo)        OOS ord/d 9 fill 51.1 % | EVw -0.754 dia -0.885 [-1.098,-0.672] +1/9 sin2 -1.000 | 9 EUR/d n=577 | cuota 903.33 %
+  INVERSION (hazard bajo)        DEV ord/d 6 fill 30.8 % | EVw +0.220 dia +0.220 [+nan,+nan] +1/1 sin2 +nan | 8 EUR/d n=577 | cuota 820.00 %
+  ORACULO (barrido real <=10 s)  IS  ord/d 3 fill 90.9 % | EVw +0.161 dia +0.114 [-1.127,+1.355] +3/6 sin2 -0.653 | 11 EUR/d n=70 | cuota 1148.33 %
+  ORACULO (barrido real <=10 s)  OOS ord/d 4 fill 85.7 % | EVw -0.615 dia -0.495 [-1.023,+0.033] +2/8 sin2 -0.862 | 10 EUR/d n=70 | cuota 975.00 %
+  ORACULO (barrido real <=10 s)  DEV ord/d 2 fill 80.0 % | EVw +0.010 dia +0.190 [-7.326,+7.707] +1/2 sin2 +nan | 5 EUR/d n=70 | cuota 495.00 %
+-- desagregado de la elegida en OOS+DEV por bucket de precio del objetivo
+  objetivo [.09,.15): ord/d 15 fill 38.1 % | EVw -0.487 dia -0.458 [-0.949,+0.034] +3/12 sin2 -0.795 | 6 EUR/d n=98 | cuota 649.17 %
+  objetivo [.15,.22): ord/d 24 fill 44.9 % | EVw -0.314 dia -0.289 [-0.664,+0.087] +2/12 sin2 -0.571 | 19 EUR/d n=161 | cuota 1945.00 %
+  objetivo [.22,.29]: ord/d 70 fill 40.9 % | EVw -0.078 dia -0.086 [-0.250,+0.078] +3/12 sin2 -0.179 | 75 EUR/d n=459 | cuota 7498.33 %
+-- salidas tras el relleno (OOS+DEV): mantener frente a vender al bid L1 a tf+215 ms+Δ (comision tomadora 0,07 p(1-p)); cota oraculo = max(mantener, vender)
+  mantener: EV/E -0.150 pnl -181.1 EUR (n=540)
+  vender Δ=0s: con bid disponible 100 %; EV/E vender-siempre -0.209 (pnl -253.4) | cota oraculo pnl +570.1 (ahorro maximo +751.2 EUR)
+  vender Δ=1s: con bid disponible 100 %; EV/E vender-siempre -0.209 (pnl -253.1) | cota oraculo pnl +565.2 (ahorro maximo +746.3 EUR)
+  vender Δ=3s: con bid disponible 100 %; EV/E vender-siempre -0.230 (pnl -278.2) | cota oraculo pnl +544.3 (ahorro maximo +725.4 EUR)

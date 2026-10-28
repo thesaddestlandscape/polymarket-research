@@ -1,0 +1,69 @@
+== R8 Bloque 2/5 [ETH]: filas 336356 (IS 150093, OOS+DEV 186263); tasa base Y10(>=800 acc en 10 s) IS 0.0011 OOS 0.0012
+joblib.externals.loky.process_executor._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.14/dist-packages/joblib/_utils.py", line 109, in __call__
+    return self.func(**kwargs)
+           ~~~~~~~~~^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/joblib/parallel.py", line 607, in __call__
+    return [func(*args, **kwargs) for func, args, kwargs in self.items]
+            ~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/utils/parallel.py", line 184, in __call__
+    return self.function(*args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/ensemble/_hist_gradient_boosting/binning.py", line 82, in _find_binning_thresholds
+    bin_thresholds = sliding_window_view(distinct_values, 2).mean(axis=1)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/numpy/lib/_stride_tricks_impl.py", line 439, in sliding_window_view
+    raise ValueError(
+        'window shape cannot be larger than input array shape')
+ValueError: window shape cannot be larger than input array shape
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/formula_r8_28oct/r8h_an.py", line 28, in <module>
+    for a, b in GroupKFold(5).split(idx, groups=di[idx]): oof[b] = hgb().fit(F_[idx[a]], yy[idx[a]]).predict_proba(F_[idx[b]])[:, 1]
+                                                                   ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/base.py", line 1403, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/ensemble/_hist_gradient_boosting/gradient_boosting.py", line 603, in fit
+    X_binned_train = self._bin_data(
+        X_train, sample_weight_train, is_training_data=True
+    )
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/ensemble/_hist_gradient_boosting/gradient_boosting.py", line 1122, in _bin_data
+    X_binned = self._bin_mapper.fit_transform(
+        X, sample_weight=sample_weight
+    )  # F-aligned array
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/utils/_set_output.py", line 319, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/base.py", line 969, in fit_transform
+    return self.fit(X, **fit_params).transform(X)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/ensemble/_hist_gradient_boosting/binning.py", line 287, in fit
+    non_cat_thresholds = Parallel(n_jobs=self.n_threads, backend="threading")(
+        delayed(_find_binning_thresholds)(
+    ...<3 lines>...
+        if not self.is_categorical_[f_idx]
+    )
+  File "/usr/local/lib/python3.14/dist-packages/sklearn/utils/parallel.py", line 91, in __call__
+    return super().__call__(iterable_with_config_and_warning_filters)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/joblib/parallel.py", line 2072, in __call__
+    return output if self.return_generator else list(output)
+                                                ~~~~^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/joblib/parallel.py", line 1682, in _get_outputs
+    yield from self._retrieve()
+  File "/usr/local/lib/python3.14/dist-packages/joblib/parallel.py", line 1784, in _retrieve
+    self._raise_error_fast()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.14/dist-packages/joblib/parallel.py", line 1859, in _raise_error_fast
+    error_job.get_result(self.timeout)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/joblib/parallel.py", line 758, in get_result
+    return self._return_or_raise()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.14/dist-packages/joblib/parallel.py", line 773, in _return_or_raise
+    raise self._result
+ValueError: window shape cannot be larger than input array shape

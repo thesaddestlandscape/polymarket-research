@@ -1,0 +1,28 @@
+== R8 Bloque 3: brecha real-sim con TODO el nicho y TODA la familia (22 dias), diferencia emparejada por dia
+  v258 (N=20): diferencia emparejada por dia real − sim: media +0.135 IC90 [+0.012,+0.258] (22 dias; real mejor en 13); EV pooled real +0.213 sim +0.072; fills sim 1355
+  mercados con relleno real en el nicho: 1356 ; mercados con relleno sim: 1225
+  bootstrap por MERCADO de la diferencia (real − sim, pooled 22 dias): media +0.143 IC90 [-0.043,+0.341]
+  familia (6 variantes x2 bandas, δ+0,01) N=5: ejec/d 902, EV pooled +0.066 ; real − familia emparejado por dia +0.141 [+0.028,+0.254] (22 dias)
+  familia (6 variantes x2 bandas, δ+0,01) N=10: ejec/d 1249, EV pooled +0.064 ; real − familia emparejado por dia +0.143 [+0.030,+0.256] (22 dias)
+  familia (6 variantes x2 bandas, δ+0,01) N=20: ejec/d 1778, EV pooled +0.062 ; real − familia emparejado por dia +0.144 [+0.032,+0.257] (22 dias)
+  familia (6 variantes x2 bandas, δ+0,01) N=50: ejec/d 2968, EV pooled +0.051 ; real − familia emparejado por dia +0.155 [+0.043,+0.268] (22 dias)
+
+== R8 Bloque 4: colocacion tardia (sim R5, N=20, theta800, Trem 120-240, TD1, δ+0,01, banda>=0,10)
+  S W5-60 s                    IS  EVw +0.047 dia +0.046 [-0.062,+0.154] +3/10 sin2 -0.030 | ejec/d 156 | cuota 0.45 % | 3.7 kEUR/ano
+  S W5-60 s                    OOS EVw +0.036 dia +0.018 [-0.125,+0.160] +7/10 sin2 -0.051 | ejec/d 167 | cuota 0.50 % | 3.2 kEUR/ano
+  S W5-60 s                    DEV EVw +0.339 dia +0.367 [-0.692,+1.426] +2/2 sin2 +nan | ejec/d 193 | cuota 0.54 % | 32.9 kEUR/ano
+  S W20-60 s                   IS  EVw +0.034 dia +0.061 [-0.088,+0.211] +5/10 sin2 -0.025 | ejec/d 129 | cuota 0.34 % | 2.1 kEUR/ano
+  S W20-60 s                   OOS EVw +0.020 dia -0.004 [-0.139,+0.132] +6/10 sin2 -0.062 | ejec/d 128 | cuota 0.37 % | 1.3 kEUR/ano
+  S W20-60 s                   DEV EVw +0.394 dia +0.434 [-1.420,+2.287] +2/2 sin2 +nan | ejec/d 161 | cuota 0.46 % | 32.2 kEUR/ano
+  S W20-120 s                  IS  EVw +0.054 dia +0.069 [-0.079,+0.218] +5/10 sin2 -0.037 | ejec/d 185 | cuota 0.52 % | 5.0 kEUR/ano
+  S W20-120 s                  OOS EVw -0.027 dia -0.040 [-0.161,+0.080] +5/10 sin2 -0.107 | ejec/d 180 | cuota 0.55 % | -2.7 kEUR/ano
+  S W20-120 s                  DEV EVw +0.278 dia +0.293 [-0.950,+1.535] +2/2 sin2 +nan | ejec/d 235 | cuota 0.68 % | 33.4 kEUR/ano
+  S W40-60 s                   IS  EVw +0.006 dia +0.054 [-0.096,+0.204] +6/10 sin2 -0.028 | ejec/d 78 | cuota 0.24 % | 0.3 kEUR/ano
+  S W40-60 s                   OOS EVw +0.081 dia +0.083 [-0.095,+0.261] +5/10 sin2 -0.019 | ejec/d 91 | cuota 0.26 % | 3.8 kEUR/ano
+  S W40-60 s                   DEV EVw +0.457 dia +0.456 [-1.132,+2.044] +2/2 sin2 +nan | ejec/d 108 | cuota 0.31 % | 24.9 kEUR/ano
+  S W30-120 s                  IS  EVw +0.050 dia +0.067 [-0.087,+0.222] +4/10 sin2 -0.030 | ejec/d 158 | cuota 0.48 % | 4.3 kEUR/ano
+  S W30-120 s                  OOS EVw -0.037 dia -0.044 [-0.141,+0.053] +3/10 sin2 -0.101 | ejec/d 164 | cuota 0.50 % | -3.4 kEUR/ano
+  S W30-120 s                  DEV EVw +0.332 dia +0.336 [-0.829,+1.501] +2/2 sin2 +nan | ejec/d 208 | cuota 0.60 % | 35.4 kEUR/ano
+  SIEMPRE (sin S)              IS  EVw -0.046 dia -0.047 [-0.101,+0.006] +3/10 sin2 -0.077 | ejec/d 980 | cuota 3.22 % | -26.5 kEUR/ano
+  SIEMPRE (sin S)              OOS EVw -0.112 dia -0.112 [-0.173,-0.052] +1/10 sin2 -0.147 | ejec/d 926 | cuota 3.18 % | -63.4 kEUR/ano
+  SIEMPRE (sin S)              DEV EVw -0.062 dia -0.063 [-1.166,+1.039] +1/2 sin2 +nan | ejec/d 1014 | cuota 3.28 % | -36.3 kEUR/ano

@@ -1,0 +1,19 @@
+== R8 Bloque 5 [ETH] colocacion (Bloque 4 con ext ETH; cuota relativa al flujo S800-BTC, solo orientativa)
+  S W5-60 s                    IS  EVw +0.356 dia +0.189 [-0.974,+1.353] +3/6 sin2 -0.593 | ejec/d 4 | cuota 0.02 % | 1.2 kEUR/ano
+  S W5-60 s                    OOS EVw -0.630 dia -0.093 [-1.253,+1.067] +2/7 sin2 -1.000 | ejec/d 6 | cuota 0.02 % | -2.0 kEUR/ano
+  S W5-60 s                    DEV EVw +0.515 dia -0.091 [-5.831,+5.649] +1/2 sin2 +nan | ejec/d 2 | cuota 0.01 % | 1.2 kEUR/ano
+  S W20-60 s                   IS  EVw +0.157 dia +0.060 [-1.055,+1.174] +3/6 sin2 -0.707 | ejec/d 3 | cuota 0.01 % | 0.4 kEUR/ano
+  S W20-60 s                   OOS EVw -0.766 dia -0.659 [-1.322,+0.003] +1/7 sin2 -1.000 | ejec/d 5 | cuota 0.02 % | -2.4 kEUR/ano
+  S W20-60 s                   DEV EVw +0.515 dia -0.091 [-5.831,+5.649] +1/2 sin2 +nan | ejec/d 2 | cuota 0.01 % | 1.2 kEUR/ano
+  S W20-120 s                  IS  EVw +0.038 dia -0.279 [-0.941,+0.383] +3/6 sin2 -0.702 | ejec/d 4 | cuota 0.02 % | 0.1 kEUR/ano
+  S W20-120 s                  OOS EVw -0.390 dia -0.483 [-1.061,+0.095] +2/8 sin2 -0.942 | ejec/d 7 | cuota 0.03 % | -1.9 kEUR/ano
+  S W20-120 s                  DEV EVw +0.515 dia -0.091 [-5.831,+5.649] +1/2 sin2 +nan | ejec/d 2 | cuota 0.01 % | 1.2 kEUR/ano
+  S W40-60 s                   IS  EVw +0.660 dia +0.485 [-0.939,+1.910] +3/6 sin2 -0.524 | ejec/d 3 | cuota 0.01 % | 1.2 kEUR/ano
+  S W40-60 s                   OOS EVw -1.000 dia -1.000 [-1.000,-1.000] +0/4 sin2 -1.000 | ejec/d 4 | cuota 0.01 % | -1.7 kEUR/ano
+  S W40-60 s                   DEV EVw +0.667 dia +0.667 [+nan,+nan] +1/1 sin2 +nan | ejec/d 2 | cuota 0.01 % | 1.5 kEUR/ano
+  S W30-120 s                  IS  EVw +0.099 dia -0.246 [-0.933,+0.441] +3/6 sin2 -0.675 | ejec/d 4 | cuota 0.02 % | 0.3 kEUR/ano
+  S W30-120 s                  OOS EVw -0.285 dia -0.471 [-1.059,+0.118] +2/8 sin2 -0.936 | ejec/d 8 | cuota 0.02 % | -1.2 kEUR/ano
+  S W30-120 s                  DEV EVw +0.630 dia -0.167 [-5.428,+5.095] +1/2 sin2 +nan | ejec/d 4 | cuota 0.01 % | 1.4 kEUR/ano
+  SIEMPRE (sin S)              IS  EVw -0.108 dia -0.107 [-0.150,-0.065] +0/10 sin2 -0.127 | ejec/d 888 | cuota 2.88 % | -55.3 kEUR/ano
+  SIEMPRE (sin S)              OOS EVw -0.189 dia -0.188 [-0.248,-0.128] +0/10 sin2 -0.224 | ejec/d 832 | cuota 2.70 % | -90.8 kEUR/ano
+  SIEMPRE (sin S)              DEV EVw -0.184 dia -0.185 [-1.228,+0.859] +0/2 sin2 +nan | ejec/d 796 | cuota 2.71 % | -88.8 kEUR/ano
