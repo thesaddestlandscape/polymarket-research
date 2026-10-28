@@ -41,16 +41,16 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1792470183.4677908,
-   "ultimo_aviso": 1792470183.4677908
+   "ok": false,
+   "detalle": "RechazoPolitica: HTTP 403",
+   "desde": 1793150583.7569723,
+   "ultimo_aviso": 1793150583.7569723
   },
   "archivo": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1793060584.2071736,
-   "ultimo_aviso": 1793060584.2071736
+   "ok": false,
+   "detalle": "RuntimeError: sin cabeza",
+   "desde": 1793150583.7569723,
+   "ultimo_aviso": 1793150583.7569723
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-28T00:23:05+00:00"
+ "_actualizado_utc": "2026-10-28T01:23:03+00:00"
 }
