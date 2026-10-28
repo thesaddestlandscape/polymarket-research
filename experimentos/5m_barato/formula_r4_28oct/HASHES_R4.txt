@@ -1,0 +1,13 @@
+# HASHES_R4 2026-10-28T12:07:54Z - sha256 ANTES de ejecutar r4.py confirm sobre 19-25 Oct (build de esos dias aun no lanzado)
+939a2bccb6325a2603cea19076ff1ad775e2dc4d0ea4125861416fa3b16a54bd  PREREG_FORMULA_R4.md
+c660da472927976126177d408cfa5019f1bf34eab609e4cc9d86ebeb23f1eed9  r4.py
+3362de1aa7174102b31f80ff29d67f517d89591b6081c3d32bc6410571d87ffb  calib2.py
+3dfb49a8b3871a21b7354de5a9c9bbc8ce23b583508712f23837a8e5ed1c57c3  frozen_r4.json
+a4d84add1c9476efc866717547f6664573636501857364e2b9459a7c6bcaf348  ../formula_r3_28oct/identity3.py
+# REHASH + ENMIENDA 2026-10-28T12:16:34Z - ANTES de construir/contrastar los dias 09-18 Oct (cambio unico: onc_fmt busca tambien en m5_onchain)
+b04aeb35ee548f0af91c603d36cb3dd0bf3b72a484eedcbbe90d48d948603008  PREREG_ENMIENDA_R4.md
+e9fba2c8ec03289df8541cd8585ae6fb8287a61efa02d0b4f62c8b4d6bcde295  r4.py
+4af0270eaad92145da937c3f1ff5523f68405672b35229905cf03195cdcfaab7  ext_dias.py
+939a2bccb6325a2603cea19076ff1ad775e2dc4d0ea4125861416fa3b16a54bd  PREREG_FORMULA_R4.md
+3362de1aa7174102b31f80ff29d67f517d89591b6081c3d32bc6410571d87ffb  calib2.py
+3dfb49a8b3871a21b7354de5a9c9bbc8ce23b583508712f23837a8e5ed1c57c3  frozen_r4.json

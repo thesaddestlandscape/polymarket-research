@@ -1,0 +1,26 @@
+== CAPACIDAD B-sim (R3 features: primer relleno por mercado-token, puja bb+0,01, cola 0, LR 130 ms) x estado S congelado en el TICK de decision (sin desenlaces)
+   [diag 2026-10-20] ts-d0 min 24.0 max 86300.0 ; d0=1792454400 ; mkt unicos=1554 ; col coin unicos=[0. 1. 2. 3. 4. 5.]
+[2026-10-20] filas=30472 con_relleno=2586 primeros_rellenos=1238 precio_medio=0.200 acc_llenas(5/10/20)=4.23/6.68/9.68 EUR(5/10/20 acc)=1045/1648/2378
+   [diag 2026-10-21] ts-d0 min 12.0 max 86340.0 ; d0=1792540800 ; mkt unicos=1599 ; col coin unicos=[0. 1. 2. 3. 4. 5.]
+[2026-10-21] filas=32299 con_relleno=2633 primeros_rellenos=1302 precio_medio=0.202 acc_llenas(5/10/20)=4.12/6.66/9.66 EUR(5/10/20 acc)=1085/1754/2549
+   [diag 2026-10-22] ts-d0 min 10.0 max 86314.0 ; d0=1792627200 ; mkt unicos=1642 ; col coin unicos=[0. 1. 2. 3. 4. 5.]
+[2026-10-22] filas=30470 con_relleno=2541 primeros_rellenos=1210 precio_medio=0.203 acc_llenas(5/10/20)=4.39/7.23/10.97 EUR(5/10/20 acc)=1078/1775/2714
+   [diag 2026-10-23] ts-d0 min 10.0 max 86330.0 ; d0=1792713600 ; mkt unicos=1623 ; col coin unicos=[0. 1. 2. 3. 4. 5.]
+[2026-10-23] filas=31407 con_relleno=2339 primeros_rellenos=1173 precio_medio=0.203 acc_llenas(5/10/20)=4.36/6.94/10.30 EUR(5/10/20 acc)=1045/1661/2478
+   [diag 2026-10-24] ts-d0 min 12.0 max 86336.0 ; d0=1792800000 ; mkt unicos=1656 ; col coin unicos=[0. 1. 2. 3. 4. 5.]
+[2026-10-24] filas=31396 con_relleno=2562 primeros_rellenos=1194 precio_medio=0.203 acc_llenas(5/10/20)=4.23/6.75/10.31 EUR(5/10/20 acc)=1033/1655/2546
+   [diag 2026-10-25] ts-d0 min 10.0 max 86316.0 ; d0=1792886400 ; mkt unicos=1612 ; col coin unicos=[0. 1. 2. 3. 4. 5.]
+[2026-10-25] filas=33762 con_relleno=2403 primeros_rellenos=1144 precio_medio=0.202 acc_llenas(5/10/20)=4.30/6.85/10.28 EUR(5/10/20 acc)=1001/1599/2409
+   [diag 2026-10-26] ts-d0 min 20.0 max 86202.0 ; d0=1792972800 ; mkt unicos=1638 ; col coin unicos=[0. 1. 2. 3. 4. 5.]
+[2026-10-26] filas=33685 con_relleno=2499 primeros_rellenos=1243 precio_medio=0.199 acc_llenas(5/10/20)=4.29/6.82/10.14 EUR(5/10/20 acc)=1073/1717/2580 | mapeo mercado->moneda 100.0 % | cobertura S en el tick: n 0.014 EUR 0.013
+TOTAL 7 dias: primeros rellenos/dia 1215; EUR desplegados/dia a 5/10/20 acc: 1051/1687/2522 ; factor de profundidad medido vs lineal (10 acc, 20 acc): 1.60 (de 2) / 2.40 (de 4)
+cobertura de S sobre los primeros rellenos B-sim (1 dia(s) con estado): n 0.014, EUR 0.013
+ESCENARIOS: EV(S) = EV_todo + (1-cov)*dEV ; EUR/anio = 365 x (EUR desplegados/dia en S) x EV(S) ; EV_todo = +0,5 % (R2 U_p1 EVw) | -4,2 % (proxy R3: -0,0085/acc a ~0,2) | -7,2 % (B real on-chain, n=202); cov=0.013
+    5 acc: EUR/dia desplegados en S 14 | dEV=+0.10 | EV_todo +0.5% -> EV(S) +10.4% ->    +521 EUR/anio | EV_todo -4.2% -> EV(S) +5.7% ->    +285 EUR/anio | EV_todo -7.2% -> EV(S) +2.7% ->    +134 EUR/anio
+    5 acc: EUR/dia desplegados en S 14 | dEV=+0.15 | EV_todo +0.5% -> EV(S) +15.3% ->    +769 EUR/anio | EV_todo -4.2% -> EV(S) +10.6% ->    +533 EUR/anio | EV_todo -7.2% -> EV(S) +7.6% ->    +382 EUR/anio
+   10 acc: EUR/dia desplegados en S 22 | dEV=+0.10 | EV_todo +0.5% -> EV(S) +10.4% ->    +836 EUR/anio | EV_todo -4.2% -> EV(S) +5.7% ->    +457 EUR/anio | EV_todo -7.2% -> EV(S) +2.7% ->    +215 EUR/anio
+   10 acc: EUR/dia desplegados en S 22 | dEV=+0.15 | EV_todo +0.5% -> EV(S) +15.3% ->   +1234 EUR/anio | EV_todo -4.2% -> EV(S) +10.6% ->    +855 EUR/anio | EV_todo -7.2% -> EV(S) +7.6% ->    +613 EUR/anio
+   20 acc: EUR/dia desplegados en S 33 | dEV=+0.10 | EV_todo +0.5% -> EV(S) +10.4% ->   +1250 EUR/anio | EV_todo -4.2% -> EV(S) +5.7% ->    +683 EUR/anio | EV_todo -7.2% -> EV(S) +2.7% ->    +322 EUR/anio
+   20 acc: EUR/dia desplegados en S 33 | dEV=+0.15 | EV_todo +0.5% -> EV(S) +15.3% ->   +1845 EUR/anio | EV_todo -4.2% -> EV(S) +10.6% ->   +1278 EUR/anio | EV_todo -7.2% -> EV(S) +7.6% ->    +917 EUR/anio
+   (UNA unidad por mercado-token, cola 0, sin reposiciones; EUR del simulador B-sim, no validados; referencia 200.000 EUR/anio)
+fin capacity 0 s

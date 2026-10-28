@@ -57,3 +57,8 @@ Calcular primero la **cota de ganancia máxima** de la familia de reglas (aquí 
 - R3 REJECTED (frontera de información: σ_ε 1,33 pp vs 2,6; L2 techo 1,64 pp; barrendero informado 6-7 % → INSUFFICIENT_EVIDENCE). R4 en curso (estado post-barrido, confirmación on-chain 20-25 Oct).
 - Lección: cuando la cota analítica dice «hace falta información ×2-3», el siguiente paso es un INVENTARIO de fuentes con ganancia en cuadratura (ΔLL/σ_ε por fuente), no más variantes del mismo modelo; y descomponer la población (aquí el 93-94 % de rellenos no informados) por rasgos ex-ante antes de buscar un único filtro.
 - Mandato de proceso: no parar hasta fórmula validada; cada rechazo → siguiente hipótesis con mecanismo distinto; los gates no se relajan.
+
+## 8. R4 (28-Oct 13:00Z): primera pista positiva
+- Estado S = «barrido ≥800 acc misma moneda en (t−60 s, t−5 s], por recepción»: dEV/E +0,109 IC90 días [+0,035,+0,183], 11/17 días +, cobertura 11,9 %, placebo máx p=0,040. INSUFFICIENT_EVIDENCE (falla 80 % de días; maldición del ganador; bootstrap por mercado cruza 0; control S_chain no replica).
+- Lección: cuando una pista pasa 4 de 5 gates, NO se relaja el gate fallido: se amplía muestra, se usa selección anidada/walk-forward del estado y se prueba la versión operable (simulación con cola propia) antes de hablar de capacidad. Variantes ilimitadas solo dentro de una familia prerregistrada con partición temporal.
+- R5 en curso: sim3-BTC + cobertura + ETH/otras + control + capacidad.

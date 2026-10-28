@@ -1,0 +1,85 @@
+[2026-10-09] fills con desenlace=178944 (de 178944) cobertura S=0.123
+[2026-10-10] fills con desenlace=166659 (de 166659) cobertura S=0.134
+[2026-10-11] fills con desenlace=162283 (de 162283) cobertura S=0.135
+[2026-10-12] fills con desenlace=180642 (de 180642) cobertura S=0.074
+[2026-10-13] fills con desenlace=189057 (de 189057) cobertura S=0.100
+[2026-10-14] fills con desenlace=171375 (de 171375) cobertura S=0.092
+[2026-10-15] fills con desenlace=188040 (de 188040) cobertura S=0.131
+[2026-10-16] fills con desenlace=172621 (de 172621) cobertura S=0.115
+[2026-10-17] fills con desenlace=158461 (de 158461) cobertura S=0.084
+[2026-10-18] fills con desenlace=170210 (de 170210) cobertura S=0.085
+[2026-10-19] fills con desenlace=164117 (de 164117) cobertura S=0.152
+[2026-10-20] fills con desenlace=183113 (de 183113) cobertura S=0.161
+[2026-10-21] fills con desenlace=169767 (de 169767) cobertura S=0.154
+[2026-10-22] fills con desenlace=158476 (de 158607) cobertura S=0.090
+[2026-10-23] fills con desenlace=180166 (de 180166) cobertura S=0.151
+[2026-10-24] fills con desenlace=164447 (de 164447) cobertura S=0.124
+[2026-10-25] fills con desenlace=164034 (de 164034) cobertura S=0.123
+
+== CONFIRMACION final17: dias=2026-10-09,2026-10-10,2026-10-11,2026-10-12,2026-10-13,2026-10-14,2026-10-15,2026-10-16,2026-10-17,2026-10-18,2026-10-19,2026-10-20,2026-10-21,2026-10-22,2026-10-23,2026-10-24,2026-10-25 | estado congelado ('cl', 'ALL', 800) (hueco 300 ms, ventana (t-60 s, t-5 s], misma moneda, reloj de RECEPCION; fill en r_hat = bloque - lag casado o 2,2 s) | n fills=2922412
+día        fills   n_S     cov_n  cov_EUR  EV/E(S)  EV/E(noS)  dEV/E   dEV/E(acc-igual) mercados_S  EUR_S/dia
+2026-10-09  178944   21950  0.123  0.132   -0.063   +0.015    -0.078   -0.023             109          51710
+2026-10-10  166659   22414  0.134  0.135   +0.259   +0.002    +0.258   +0.179             119          50253
+2026-10-11  162283   21955  0.135  0.151   +0.059   +0.083    -0.024   -0.120             104          51135
+2026-10-12  180642   13318  0.074  0.077   +0.238   +0.051    +0.186   +0.158              91          27014
+2026-10-13  189057   18987  0.100  0.103   +0.363   +0.066    +0.297   +0.135             105          38039
+2026-10-14  171375   15807  0.092  0.103   +0.463   +0.082    +0.381   +0.249              85          35674
+2026-10-15  188040   24608  0.131  0.158   +0.186   +0.186    -0.000   -0.079             107          64571
+2026-10-16  172621   19817  0.115  0.124   +0.137   +0.047    +0.090   +0.030              99          46605
+2026-10-17  158461   13271  0.084  0.093   +0.091   -0.038    +0.129   +0.134              76          30200
+2026-10-18  170210   14533  0.085  0.091   -0.060   -0.138    +0.078   +0.056              83          28296
+2026-10-19  164117   25026  0.152  0.166   +0.056   -0.199    +0.255   +0.257             121          59685
+2026-10-20  183113   29487  0.161  0.169   +0.110   +0.021    +0.089   +0.050             155          72561
+2026-10-21  169767   26120  0.154  0.163   -0.049   +0.183    -0.231   -0.191             146          67262
+2026-10-22  158476   14315  0.090  0.095   -0.172   -0.062    -0.110   -0.151              90          33855
+2026-10-23  180166   27198  0.151  0.185   -0.080   -0.050    -0.030   -0.087             113          72160
+2026-10-24  164447   20362  0.124  0.132   +0.397   +0.023    +0.374   +0.356             107          44224
+2026-10-25  164034   20214  0.123  0.128   +0.072   -0.115    +0.187   +0.169             108          42076
+PRIMARIO dEV/E medio por dia = +0.1089 IC90 t(dias)[+0.0352,+0.1826] | bootstrap dias [+0.0408,+0.1773] | dias positivos 11/17 | cobertura media (n) 0.119 (€) 0.130 | acc-igual +0.0662
+   sin los 2 mejores dias (2026-10-14,2026-10-24): dEV/E +0.0731 IC90[+0.0042,+0.1419] (n=15 dias) | dejando fuera cada dia: min +0.0919 max +0.1302
+   EUR en S por dia (volumen de la zona en estado S, todos los makers): 47960 ; acc: 259380
+PLACEBO A (etiquetas permutadas en estratos dia x moneda x centimo de relleno, K=150): media placebo +0.0012 sd 0.0081 -> p=0.0066 | efecto ajustado por composicion (obs - media placebo) = +0.1077
+PLACEBO B (estado desplazado en el tiempo por moneda-dia 10 min..23 h, resultados residualizados por moneda x centimo; observado +0.1096, K=150): media placebo -0.0136 sd 0.0617 -> p=0.0397
+PLACEBO A2 (como A + tramo de T_rem hasta el cierre del mercado {<30,30-60,60-120,120-180,180-240,>=240 s}, K=150): media placebo +0.0100 sd 0.0081 -> p=0.0066 | efecto ajustado (obs - media) = +0.0989
+== T_rem (segundos hasta el cierre del mercado en el relleno): cobertura de S y contraste DENTRO de cada tramo (estado primario)
+   T_rem <30 s     fills=55794 cov_n=0.312 dEV/E -0.188 IC90[-0.557,+0.180] dias+ 8/17
+   T_rem 30-60 s   fills=230552 cov_n=0.198 dEV/E -0.044 IC90[-0.223,+0.135] dias+ 9/17
+   T_rem 60-120 s  fills=675145 cov_n=0.139 dEV/E -0.017 IC90[-0.156,+0.122] dias+ 6/17
+   T_rem 120-180 s fills=701811 cov_n=0.110 dEV/E +0.118 IC90[-0.072,+0.307] dias+ 10/17
+   T_rem 180-240 s fills=692693 cov_n=0.099 dEV/E +0.258 IC90[+0.085,+0.431] dias+ 12/17
+   T_rem >=240 s   fills=566417 cov_n=0.083 dEV/E +0.113 IC90[-0.108,+0.335] dias+ 11/17
+   efecto post-estratificado por T_rem (media ponderada por EUR de los contrastes por tramo): +0.1033
+BOOTSTRAP por MERCADO (agrupa dias; 27596 mercados distintos, 1818 con fills en S): dEV/E agrupado +0.0923 IC90[-0.0112,+0.1964]
+== SECUNDARIOS (no deciden)
+   S_chain (tamano on-chain, reloj bloque, oraculo)     dEV/E -0.0032 IC90[-0.0510,+0.0447] dias+ 8/17 cobertura 0.371
+   lag 1,4 s uniforme                                   dEV/E +0.1018 IC90[+0.0300,+0.1736] dias+ 11/17 cobertura 0.122
+   lag 2,9 s uniforme                                   dEV/E +0.1112 IC90[+0.0369,+0.1856] dias+ 11/17 cobertura 0.118
+   umbral/2                                             dEV/E +0.0603 IC90[+0.0188,+0.1017] dias+ 12/17 cobertura 0.331
+   umbral*2                                             dEV/E +0.0326 IC90[-0.1858,+0.2509] dias+ 9/17 cobertura 0.032
+   solo fills de barridos propios <50 acc               dEV/E +0.0440 IC90[-0.0302,+0.1183] dias+ 10/17 cobertura 0.120
+   fills con barrido propio >=200 acc excluidos         dEV/E +0.0555 IC90[-0.0142,+0.1251] dias+ 11/17 cobertura 0.120
+   pesos iguales por fill (acc-igual)                   dEV/E +0.0662 IC90[-0.0005,+0.1328] dias+ 11/17 cobertura 0.120
+== DESAGREGADO por moneda (todos los precios; estado primario)
+   BTC   dEV/E +0.096 IC90[+0.025,+0.167] dias+ 11/17 fills=2496583 n_S=344270 cov_n=0.138 EUR_zona/dia=324269
+   ETH   dEV/E -0.154 IC90[-0.814,+0.507] dias+ 3/12 fills=251742 n_S=5067 cov_n=0.020 EUR_zona/dia=26055
+   SOL   dEV/E +0.243 IC90[-5.909,+6.396] dias+ 1/2 fills=87488 n_S=37 cov_n=0.000 EUR_zona/dia=8450
+   XRP   fills=45457 n_S=8: insuficiente para contraste
+   DOGE  fills=24155 n_S=0: insuficiente para contraste
+   BNB   fills=16987 n_S=0: insuficiente para contraste
+== DESAGREGADO moneda x bucket de precio de relleno (estado primario; dEV/E medio por dia, IC90 t; n_S fills; mercados distintos en S)
+   BTC   [0,09-0,15) dEV/E +0.057 IC90[-0.068,+0.182] dias+ 9/17 n_S=115390 n_noS=528474 mercados_S=1448
+   BTC   [0,15-0,20) dEV/E +0.022 IC90[-0.082,+0.127] dias+ 9/17 n_S= 82496 n_noS=475096 mercados_S=1353
+   BTC   [0,20-0,25) dEV/E +0.125 IC90[+0.008,+0.243] dias+ 11/17 n_S= 66993 n_noS=454452 mercados_S=1232
+   BTC   [0,25-0,31] dEV/E +0.138 IC90[+0.046,+0.231] dias+ 12/17 n_S= 79391 n_noS=694291 mercados_S=1152
+   ETH   [0,09-0,15) dEV/E +0.281 IC90[-1.061,+1.623] dias+ 3/11 n_S=  1525 n_noS= 74836 mercados_S=  54
+   ETH   [0,15-0,20) dEV/E -0.071 IC90[-0.911,+0.770] dias+ 3/12 n_S=  1205 n_noS= 53691 mercados_S=  58
+   ETH   [0,20-0,25) dEV/E +0.086 IC90[-0.687,+0.858] dias+ 5/12 n_S=  1088 n_noS= 49128 mercados_S=  44
+   ETH   [0,25-0,31] dEV/E +0.299 IC90[-0.445,+1.042] dias+ 5/11 n_S=  1249 n_noS= 69020 mercados_S=  38
+== CONCENTRACION (fills en S): mercados distintos / top-1 / top-5 del volumen por mercado | barrenderos distintos / top-1 / top-5
+   S: mercados 1818 top1 1.0 % top5 3.6 % | barrenderos 10912 top1 3.3 % top5 12.5 %
+   noS: mercados 27595 top1 0.1 % top5 0.3 % | barrenderos 20228 top1 3.9 % top5 12.1 %
+   aporte de los 2 mejores dias a la suma de dEV/E positivos: 32.5 %
+== VEREDICTO MECANICO (criterios del prereg; nd=17 dias de confirmacion)
+   dEV/E>=+0,10: True (+0.1089) | IC90 dias>0: True (lo +0.0352) | dias positivos >=80 % (14 de 17): False (11) | cobertura 10-60 %: True (0.119) | placebo p<0,05 (max(A,A2,B)=0.0397): True
+   VEREDICTO: INSUFFICIENT_EVIDENCE
+fin confirm 134 s

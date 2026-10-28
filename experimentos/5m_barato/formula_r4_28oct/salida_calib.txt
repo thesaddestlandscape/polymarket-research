@@ -1,0 +1,22 @@
+CALIBRACION sobre dias de DESCUBRIMIENTO 2026-10-26,2026-10-27 (sin usar desenlaces): fidelidad de un estado OBSERVABLE (impresiones del registro, reloj de recepcion) frente al estado on-chain S_chain (barrido>=200 acc, misma moneda, (t-60 s, t-5 s], reloj de bloque)
+S_chain: cobertura de rellenos 0.443 (n=324876)
+   ('cl', 'SELL', 50)     cobertura=0.463 kappa=+0.468 P(S_reg|S_chain)=0.724 P(S_chain|S_reg)=0.693
+   ('cl', 'SELL', 100)    cobertura=0.341 kappa=+0.467 P(S_reg|S_chain)=0.595 P(S_chain|S_reg)=0.773
+   ('cl', 'SELL', 150)    cobertura=0.259 kappa=+0.446 P(S_reg|S_chain)=0.496 P(S_chain|S_reg)=0.850
+   ('cl', 'SELL', 200)    cobertura=0.210 kappa=+0.429 P(S_reg|S_chain)=0.437 P(S_chain|S_reg)=0.919
+   ('cl', 'SELL', 300)    cobertura=0.130 kappa=+0.294 P(S_reg|S_chain)=0.282 P(S_chain|S_reg)=0.961
+   ('cl', 'ALL', 50)      cobertura=0.817 kappa=+0.297 P(S_reg|S_chain)=0.997 P(S_chain|S_reg)=0.541
+   ('cl', 'ALL', 100)     cobertura=0.772 kappa=+0.372 P(S_reg|S_chain)=0.995 P(S_chain|S_reg)=0.571
+   ('cl', 'ALL', 150)     cobertura=0.711 kappa=+0.476 P(S_reg|S_chain)=0.993 P(S_chain|S_reg)=0.618
+   ('cl', 'ALL', 200)     cobertura=0.650 kappa=+0.582 P(S_reg|S_chain)=0.990 P(S_chain|S_reg)=0.674
+   ('cl', 'ALL', 300)     cobertura=0.522 kappa=+0.648 P(S_reg|S_chain)=0.890 P(S_chain|S_reg)=0.755
+   ('flow', 'SELL', 300)  cobertura=0.249 kappa=+0.446 P(S_reg|S_chain)=0.486 P(S_chain|S_reg)=0.865
+   ('flow', 'SELL', 600)  cobertura=0.119 kappa=+0.270 P(S_reg|S_chain)=0.258 P(S_chain|S_reg)=0.961
+   ('flow', 'SELL', 1200) cobertura=0.034 kappa=+0.084 P(S_reg|S_chain)=0.076 P(S_chain|S_reg)=0.999
+   ('flow', 'SELL', 2400) cobertura=0.007 kappa=+0.019 P(S_reg|S_chain)=0.017 P(S_chain|S_reg)=1.000
+   ('flow', 'ALL', 300)   cobertura=0.755 kappa=+0.401 P(S_reg|S_chain)=0.994 P(S_chain|S_reg)=0.583
+   ('flow', 'ALL', 600)   cobertura=0.683 kappa=+0.503 P(S_reg|S_chain)=0.978 P(S_chain|S_reg)=0.635
+   ('flow', 'ALL', 1200)  cobertura=0.543 kappa=+0.629 P(S_reg|S_chain)=0.901 P(S_chain|S_reg)=0.736
+   ('flow', 'ALL', 2400)  cobertura=0.279 kappa=+0.499 P(S_reg|S_chain)=0.547 P(S_chain|S_reg)=0.868
+ELEGIDO (max kappa con cobertura en [0,10; 0,60]): ('cl', 'ALL', 300) cobertura=0.522 kappa=+0.648 -> frozen_r4.json
+fin calib 1 s
