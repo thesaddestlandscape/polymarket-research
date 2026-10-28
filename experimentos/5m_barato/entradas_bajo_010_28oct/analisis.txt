@@ -1,0 +1,150 @@
+DIAS 22 2026-10-05 2026-10-26 unidades 1711156 rellenos estrictos 710169 placebo 23844 inversion 477087
+
+== A. Relleno estricto y seleccion adversa (hold) por L, todas monedas
+L=0.01 n=201330 fill=0.048 touch+cola=0.048 | acierto relleno 0.002 (breakeven 0.01) no-relleno 0.523 | EVw relleno -0.746 | EV no-relleno(hip) +51.316 | EV touch+cola -0.739 | s hasta cierre p10/p50/p90 30/59/98
+L=0.02 n=197503 fill=0.451 touch+cola=0.451 | acierto relleno 0.013 (breakeven 0.02) no-relleno 0.914 | EVw relleno -0.336 | EV no-relleno(hip) +44.700 | EV touch+cola -0.336 | s hasta cierre p10/p50/p90 26/62/129
+L=0.03 n=194542 fill=0.462 touch+cola=0.462 | acierto relleno 0.019 (breakeven 0.03) no-relleno 0.942 | EVw relleno -0.357 | EV no-relleno(hip) +30.423 | EV touch+cola -0.357 | s hasta cierre p10/p50/p90 28/66/142
+L=0.04 n=191853 fill=0.464 touch+cola=0.464 | acierto relleno 0.026 (breakeven 0.04) no-relleno 0.952 | EVw relleno -0.339 | EV no-relleno(hip) +22.825 | EV touch+cola -0.339 | s hasta cierre p10/p50/p90 30/71/149
+L=0.05 n=189384 fill=0.466 touch+cola=0.466 | acierto relleno 0.032 (breakeven 0.05) no-relleno 0.962 | EVw relleno -0.338 | EV no-relleno(hip) +18.260 | EV touch+cola -0.338 | s hasta cierre p10/p50/p90 31/75/157
+L=0.06 n=187116 fill=0.468 touch+cola=0.468 | acierto relleno 0.040 (breakeven 0.06) no-relleno 0.969 | EVw relleno -0.324 | EV no-relleno(hip) +15.171 | EV touch+cola -0.324 | s hasta cierre p10/p50/p90 32/78/164
+L=0.07 n=185032 fill=0.467 touch+cola=0.467 | acierto relleno 0.046 (breakeven 0.07) no-relleno 0.973 | EVw relleno -0.331 | EV no-relleno(hip) +12.920 | EV touch+cola -0.331 | s hasta cierre p10/p50/p90 33/80/169
+L=0.08 n=183109 fill=0.467 touch+cola=0.467 | acierto relleno 0.053 (breakeven 0.08) no-relleno 0.976 | EVw relleno -0.319 | EV no-relleno(hip) +11.218 | EV touch+cola -0.319 | s hasta cierre p10/p50/p90 34/83/173
+L=0.09 n=181287 fill=0.467 touch+cola=0.467 | acierto relleno 0.060 (breakeven 0.09) no-relleno 0.978 | EVw relleno -0.322 | EV no-relleno(hip) +9.885 | EV touch+cola -0.322 | s hasta cierre p10/p50/p90 36/85/176
+
+== A2. moneda x bucket L: hold relleno estricto (IS|OOS) + fill + EV no-relleno
+BNB L[0.01-0.03] fill=0.265 noFillEV=+40.221 | IS n=21139 EVw=-0.201 IC90[-0.373,-0.015] sin2=-0.291 | OOS n=4819 EVw=-0.230 IC90[-0.510,-0.045] sin2=+nan
+BNB L[0.04-0.06] fill=0.414 noFillEV=+16.797 | IS n=31367 EVw=-0.380 IC90[-0.483,-0.278] sin2=-0.438 | OOS n=7557 EVw=-0.244 IC90[-0.457,-0.033] sin2=+nan
+BNB L[0.07-0.09] fill=0.433 noFillEV=+10.550 | IS n=31803 EVw=-0.439 IC90[-0.502,-0.375] sin2=-0.454 | OOS n=7412 EVw=-0.347 IC90[-0.495,-0.201] sin2=+nan
+BTC L[0.01-0.03] fill=0.338 noFillEV=+45.891 | IS n=27221 EVw=-0.366 IC90[-0.455,-0.288] sin2=-0.403 | OOS n=6392 EVw=-0.130 IC90[-0.390,+0.120] sin2=+nan
+BTC L[0.04-0.06] fill=0.486 noFillEV=+19.514 | IS n=37641 EVw=-0.197 IC90[-0.278,-0.118] sin2=-0.233 | OOS n=8745 EVw=-0.060 IC90[-0.328,+0.110] sin2=+nan
+BTC L[0.07-0.09] fill=0.483 noFillEV=+11.621 | IS n=36289 EVw=-0.159 IC90[-0.226,-0.095] sin2=-0.186 | OOS n=8480 EVw=-0.150 IC90[-0.290,-0.014] sin2=+nan
+DOGE L[0.01-0.03] fill=0.296 noFillEV=+42.333 | IS n=25190 EVw=-0.510 IC90[-0.623,-0.390] sin2=-0.573 | OOS n=4359 EVw=-0.455 IC90[-0.541,-0.353] sin2=+nan
+DOGE L[0.04-0.06] fill=0.449 noFillEV=+18.186 | IS n=35837 EVw=-0.493 IC90[-0.564,-0.424] sin2=-0.525 | OOS n=6962 EVw=-0.397 IC90[-0.440,-0.355] sin2=+nan
+DOGE L[0.07-0.09] fill=0.454 noFillEV=+11.122 | IS n=34507 EVw=-0.452 IC90[-0.504,-0.399] sin2=-0.472 | OOS n=7095 EVw=-0.377 IC90[-0.447,-0.313] sin2=+nan
+ETH L[0.01-0.03] fill=0.340 noFillEV=+45.929 | IS n=27000 EVw=-0.391 IC90[-0.516,-0.266] sin2=-0.462 | OOS n=6267 EVw=-0.358 IC90[-0.515,-0.209] sin2=+nan
+ETH L[0.04-0.06] fill=0.485 noFillEV=+19.510 | IS n=37008 EVw=-0.301 IC90[-0.375,-0.226] sin2=-0.342 | OOS n=8646 EVw=-0.334 IC90[-0.399,-0.269] sin2=+nan
+ETH L[0.07-0.09] fill=0.482 noFillEV=+11.614 | IS n=35568 EVw=-0.256 IC90[-0.319,-0.192] sin2=-0.289 | OOS n=8383 EVw=-0.174 IC90[-0.256,-0.094] sin2=+nan
+SOL L[0.01-0.03] fill=0.337 noFillEV=+45.585 | IS n=26859 EVw=-0.367 IC90[-0.466,-0.270] sin2=-0.388 | OOS n=6167 EVw=-0.399 IC90[-0.705,-0.089] sin2=+nan
+SOL L[0.04-0.06] fill=0.484 noFillEV=+19.502 | IS n=36992 EVw=-0.331 IC90[-0.417,-0.247] sin2=-0.377 | OOS n=8441 EVw=-0.357 IC90[-0.568,-0.154] sin2=+nan
+SOL L[0.07-0.09] fill=0.478 noFillEV=+11.613 | IS n=35399 EVw=-0.327 IC90[-0.404,-0.255] sin2=-0.368 | OOS n=8095 EVw=-0.334 IC90[-0.529,-0.035] sin2=+nan
+XRP L[0.01-0.03] fill=0.331 noFillEV=+45.015 | IS n=27156 EVw=-0.405 IC90[-0.501,-0.308] sin2=-0.464 | OOS n=5948 EVw=-0.353 IC90[-0.507,-0.193] sin2=+nan
+XRP L[0.04-0.06] fill=0.479 noFillEV=+19.398 | IS n=37325 EVw=-0.360 IC90[-0.436,-0.287] sin2=-0.398 | OOS n=8438 EVw=-0.425 IC90[-0.529,-0.344] sin2=+nan
+XRP L[0.07-0.09] fill=0.473 noFillEV=+11.575 | IS n=35597 EVw=-0.365 IC90[-0.416,-0.313] sin2=-0.397 | OOS n=8065 EVw=-0.426 IC90[-0.495,-0.359] sin2=+nan
+
+== A3. bucket L x s
+L[0.01-0.03] s=30 fill=0.332 | IS n=58698 EVw=-0.375 IC90[-0.435,-0.316] sin2=-0.392 | OOS n=13086 EVw=-0.327 IC90[-0.437,-0.203] sin2=+nan
+L[0.01-0.03] s=120 fill=0.327 | IS n=57126 EVw=-0.376 IC90[-0.437,-0.316] sin2=-0.395 | OOS n=12594 EVw=-0.335 IC90[-0.470,-0.199] sin2=+nan
+L[0.01-0.03] s=210 fill=0.287 | IS n=38741 EVw=-0.386 IC90[-0.449,-0.318] sin2=-0.415 | OOS n=8272 EVw=-0.269 IC90[-0.421,-0.118] sin2=+nan
+L[0.04-0.06] s=30 fill=0.496 | IS n=87340 EVw=-0.336 IC90[-0.379,-0.294] sin2=-0.347 | OOS n=19969 EVw=-0.293 IC90[-0.335,-0.253] sin2=+nan
+L[0.04-0.06] s=120 fill=0.477 | IS n=80424 EVw=-0.342 IC90[-0.384,-0.301] sin2=-0.355 | OOS n=18064 EVw=-0.299 IC90[-0.340,-0.264] sin2=+nan
+L[0.04-0.06] s=210 fill=0.406 | IS n=48406 EVw=-0.352 IC90[-0.386,-0.319] sin2=-0.368 | OOS n=10756 EVw=-0.312 IC90[-0.356,-0.257] sin2=+nan
+L[0.07-0.09] s=30 fill=0.515 | IS n=90381 EVw=-0.315 IC90[-0.352,-0.278] sin2=-0.326 | OOS n=20727 EVw=-0.282 IC90[-0.338,-0.205] sin2=+nan
+L[0.07-0.09] s=120 fill=0.474 | IS n=76734 EVw=-0.334 IC90[-0.371,-0.300] sin2=-0.345 | OOS n=17392 EVw=-0.307 IC90[-0.370,-0.231] sin2=+nan
+L[0.07-0.09] s=210 fill=0.381 | IS n=42048 EVw=-0.354 IC90[-0.399,-0.308] sin2=-0.370 | OOS n=9411 EVw=-0.311 IC90[-0.376,-0.248] sin2=+nan
+
+== B. escalones fijos (sin seleccion) por bucket L, rellenos estrictos
+L[0.01-0.03] baseH | IS n=154565 EVw=-0.378 IC90[-0.438,-0.321] sin2=-0.399 | OOS n=33952 EVw=-0.316 IC90[-0.445,-0.185] sin2=+nan
+L[0.01-0.03] baseD | IS n=154565 EVw=+0.573 IC90[+0.499,+0.640] sin2=+0.547 | OOS n=33952 EVw=+0.621 IC90[+0.447,+0.793] sin2=+nan
+L[0.01-0.03] S0H | IS n=154565 EVw=-0.699 IC90[-0.711,-0.687] sin2=-0.704 | OOS n=33952 EVw=-0.674 IC90[-0.686,-0.663] sin2=+nan
+L[0.01-0.03] S1H | IS n=154565 EVw=-0.651 IC90[-0.665,-0.636] sin2=-0.656 | OOS n=33952 EVw=-0.624 IC90[-0.648,-0.599] sin2=+nan
+L[0.01-0.03] S2H | IS n=154565 EVw=-0.609 IC90[-0.627,-0.589] sin2=-0.615 | OOS n=33952 EVw=-0.584 IC90[-0.614,-0.549] sin2=+nan
+L[0.01-0.03] S3H | IS n=154565 EVw=-0.562 IC90[-0.587,-0.533] sin2=-0.576 | OOS n=33952 EVw=-0.575 IC90[-0.624,-0.527] sin2=+nan
+L[0.01-0.03] S5H | IS n=154565 EVw=-0.470 IC90[-0.508,-0.433] sin2=-0.482 | OOS n=33952 EVw=-0.494 IC90[-0.542,-0.449] sin2=+nan
+L[0.01-0.03] L05H | IS n=154565 EVw=-0.585 IC90[-0.604,-0.565] sin2=-0.591 | OOS n=33952 EVw=-0.584 IC90[-0.610,-0.559] sin2=+nan
+L[0.01-0.03] S1D | IS n=154565 EVw=+0.412 IC90[+0.350,+0.467] sin2=+0.387 | OOS n=33952 EVw=+0.441 IC90[+0.270,+0.612] sin2=+nan
+L[0.04-0.06] baseH | IS n=216170 EVw=-0.342 IC90[-0.381,-0.304] sin2=-0.354 | OOS n=48789 EVw=-0.300 IC90[-0.334,-0.262] sin2=+nan
+L[0.04-0.06] baseD | IS n=216170 EVw=+0.063 IC90[+0.020,+0.102] sin2=+0.046 | OOS n=48789 EVw=+0.098 IC90[+0.031,+0.160] sin2=+nan
+L[0.04-0.06] S0H | IS n=216170 EVw=-0.633 IC90[-0.643,-0.624] sin2=-0.637 | OOS n=48789 EVw=-0.617 IC90[-0.625,-0.607] sin2=+nan
+L[0.04-0.06] S1H | IS n=216170 EVw=-0.606 IC90[-0.618,-0.592] sin2=-0.610 | OOS n=48789 EVw=-0.586 IC90[-0.604,-0.567] sin2=+nan
+L[0.04-0.06] S2H | IS n=216170 EVw=-0.575 IC90[-0.590,-0.559] sin2=-0.579 | OOS n=48789 EVw=-0.565 IC90[-0.582,-0.549] sin2=+nan
+L[0.04-0.06] S3H | IS n=216170 EVw=-0.538 IC90[-0.557,-0.518] sin2=-0.543 | OOS n=48789 EVw=-0.539 IC90[-0.564,-0.517] sin2=+nan
+L[0.04-0.06] S5H | IS n=216170 EVw=-0.439 IC90[-0.467,-0.412] sin2=-0.447 | OOS n=48789 EVw=-0.449 IC90[-0.463,-0.439] sin2=+nan
+L[0.04-0.06] L05H | IS n=216170 EVw=-0.536 IC90[-0.553,-0.520] sin2=-0.540 | OOS n=48789 EVw=-0.533 IC90[-0.542,-0.524] sin2=+nan
+L[0.04-0.06] S1D | IS n=216170 EVw=-0.116 IC90[-0.146,-0.087] sin2=-0.132 | OOS n=48789 EVw=-0.088 IC90[-0.178,-0.001] sin2=+nan
+L[0.07-0.09] baseH | IS n=209163 EVw=-0.330 IC90[-0.368,-0.296] sin2=-0.340 | OOS n=47530 EVw=-0.297 IC90[-0.351,-0.239] sin2=+nan
+L[0.07-0.09] baseD | IS n=209163 EVw=-0.122 IC90[-0.158,-0.088] sin2=-0.138 | OOS n=47530 EVw=-0.095 IC90[-0.144,-0.041] sin2=+nan
+L[0.07-0.09] S0H | IS n=209163 EVw=-0.593 IC90[-0.603,-0.581] sin2=-0.596 | OOS n=47530 EVw=-0.583 IC90[-0.598,-0.569] sin2=+nan
+L[0.07-0.09] S1H | IS n=209163 EVw=-0.573 IC90[-0.587,-0.559] sin2=-0.577 | OOS n=47530 EVw=-0.568 IC90[-0.585,-0.553] sin2=+nan
+L[0.07-0.09] S2H | IS n=209163 EVw=-0.550 IC90[-0.567,-0.533] sin2=-0.555 | OOS n=47530 EVw=-0.554 IC90[-0.573,-0.535] sin2=+nan
+L[0.07-0.09] S3H | IS n=209163 EVw=-0.512 IC90[-0.533,-0.491] sin2=-0.518 | OOS n=47530 EVw=-0.529 IC90[-0.558,-0.494] sin2=+nan
+L[0.07-0.09] S5H | IS n=209163 EVw=-0.425 IC90[-0.456,-0.394] sin2=-0.433 | OOS n=47530 EVw=-0.430 IC90[-0.465,-0.394] sin2=+nan
+L[0.07-0.09] L05H | IS n=209163 EVw=-0.509 IC90[-0.529,-0.489] sin2=-0.515 | OOS n=47530 EVw=-0.506 IC90[-0.529,-0.478] sin2=+nan
+L[0.07-0.09] S1D | IS n=209163 EVw=-0.289 IC90[-0.310,-0.269] sin2=-0.293 | OOS n=47530 EVw=-0.285 IC90[-0.325,-0.240] sin2=+nan
+
+-- P(toque estricto) vs cota L/g
+L[0.01-0.03] +0.02 n=188517 P(toque)=0.157 cota L/g=0.539
+L[0.01-0.03] +0.05 n=188517 P(toque)=0.110 cota L/g=0.322
+L[0.01-0.03] +0.10 n=188517 P(toque)=0.074 cota L/g=0.193
+L[0.01-0.03] +0.20 n=188517 P(toque)=0.045 cota L/g=0.108
+L[0.01-0.03] +0.30 n=188517 P(toque)=0.035 cota L/g=0.075
+L[0.01-0.03] +0.45 n=188517 P(toque)=0.026 cota L/g=0.051
+L[0.04-0.06] +0.02 n=264959 P(toque)=0.249 cota L/g=0.710
+L[0.04-0.06] +0.05 n=264959 P(toque)=0.188 cota L/g=0.496
+L[0.04-0.06] +0.10 n=264959 P(toque)=0.135 cota L/g=0.331
+L[0.04-0.06] +0.20 n=264959 P(toque)=0.088 cota L/g=0.199
+L[0.04-0.06] +0.30 n=264959 P(toque)=0.069 cota L/g=0.142
+L[0.04-0.06] +0.45 n=264959 P(toque)=0.054 cota L/g=0.100
+L[0.07-0.09] +0.02 n=256693 P(toque)=0.311 cota L/g=0.799
+L[0.07-0.09] +0.05 n=256693 P(toque)=0.250 cota L/g=0.614
+L[0.07-0.09] +0.10 n=256693 P(toque)=0.190 cota L/g=0.443
+L[0.07-0.09] +0.20 n=256693 P(toque)=0.133 cota L/g=0.285
+L[0.07-0.09] +0.30 n=256693 P(toque)=0.106 cota L/g=0.210
+L[0.07-0.09] +0.45 n=256693 P(toque)=0.083 cota L/g=0.151
+
+== B2. seleccion IS por moneda x bucket L (celdas s x escalon/escalera x terminal), max-statistic; OOS
+BNB L[0.01-0.03] elegida s=210 baseD nIS=5177 EVw_IS=+1.143 p_maxstat=0.000 | OOS EVw=+0.682 coste OOS=1193
+BNB L[0.04-0.06] elegida s=210 baseD nIS=6937 EVw_IS=+0.273 p_maxstat=0.000 | OOS EVw=+0.011 coste OOS=1693
+BNB L[0.07-0.09] elegida s=210 baseD nIS=6263 EVw_IS=-0.082 p_maxstat=1.000 | OOS EVw=-0.184 coste OOS=1543
+BTC L[0.01-0.03] elegida s=210 S5D nIS=6725 EVw_IS=+0.800 p_maxstat=0.000 | OOS EVw=+1.185 coste OOS=1547
+BTC L[0.04-0.06] elegida s=210 baseD nIS=8336 EVw_IS=+0.335 p_maxstat=0.000 | OOS EVw=+0.692 coste OOS=1947
+BTC L[0.07-0.09] elegida s=210 baseD nIS=7238 EVw_IS=+0.168 p_maxstat=0.002 | OOS EVw=+0.265 coste OOS=1822
+DOGE L[0.01-0.03] elegida s=210 baseD nIS=6501 EVw_IS=+0.742 p_maxstat=0.000 | OOS EVw=+1.049 coste OOS=1092
+DOGE L[0.04-0.06] elegida s=210 baseD nIS=8154 EVw_IS=+0.146 p_maxstat=0.043 | OOS EVw=+0.281 coste OOS=1575
+DOGE L[0.07-0.09] elegida s=210 baseD nIS=7001 EVw_IS=-0.094 p_maxstat=1.000 | OOS EVw=-0.001 coste OOS=1494
+ETH L[0.01-0.03] elegida s=210 S5D nIS=6650 EVw_IS=+1.066 p_maxstat=0.000 | OOS EVw=+1.268 coste OOS=1544
+ETH L[0.04-0.06] elegida s=210 S5D nIS=8284 EVw_IS=+0.394 p_maxstat=0.000 | OOS EVw=+0.307 coste OOS=1989
+ETH L[0.07-0.09] elegida s=210 baseD nIS=7177 EVw_IS=+0.141 p_maxstat=0.003 | OOS EVw=+0.181 coste OOS=1826
+SOL L[0.01-0.03] elegida s=210 baseD nIS=6781 EVw_IS=+0.857 p_maxstat=0.000 | OOS EVw=+1.010 coste OOS=1536
+SOL L[0.04-0.06] elegida s=210 baseD nIS=8344 EVw_IS=+0.256 p_maxstat=0.001 | OOS EVw=+0.359 coste OOS=1836
+SOL L[0.07-0.09] elegida s=210 baseD nIS=7213 EVw_IS=+0.002 p_maxstat=0.877 | OOS EVw=+0.099 coste OOS=1647
+XRP L[0.01-0.03] elegida s=210 baseD nIS=6907 EVw_IS=+0.860 p_maxstat=0.000 | OOS EVw=+0.590 coste OOS=1438
+XRP L[0.04-0.06] elegida s=210 baseD nIS=8351 EVw_IS=+0.284 p_maxstat=0.000 | OOS EVw=+0.076 coste OOS=1784
+XRP L[0.07-0.09] elegida s=210 baseD nIS=7156 EVw_IS=+0.009 p_maxstat=0.837 | OOS EVw=-0.087 coste OOS=1608
+CARTERA IS EVw=+0.3799 | OOS EVw=+0.4093 IC90 dias[+0.2753,+0.5442] por dia [0.653 0.442 0.215 0.326] sin2=+nan coste OOS(3 niveles L apilados)=29115 EUR
+capacidad cons(IC90 inf): EVw +0.275 x coste/dia 2426 EUR (1 nivel L por mercado-lado) = +668 EUR/dia = +243834 EUR/anio (objetivo 548 EUR/dia)
+capacidad base(punto): EVw +0.409 x coste/dia 2426 EUR (1 nivel L por mercado-lado) = +993 EUR/dia = +362448 EUR/anio (objetivo 548 EUR/dia)
+capacidad opt(IC90 sup): EVw +0.544 x coste/dia 2426 EUR (1 nivel L por mercado-lado) = +1320 EUR/dia = +481911 EUR/anio (objetivo 548 EUR/dia)
+
+== C. pares A+B (mismo L,s): probabilidad conjunta
+L=0.01 pares=99391 P(YES)=0.048 P(NO)=0.044 P(conjunta)=0.0002 producto=0.0021 n_both=17 EVw_par_hold=+49.014
+L=0.02 pares=96543 P(YES)=0.467 P(NO)=0.452 P(conjunta)=0.0101 producto=0.2113 n_both=974 EVw_par_hold=+24.014
+L=0.03 pares=93921 P(YES)=0.485 P(NO)=0.471 P(conjunta)=0.0163 producto=0.2285 n_both=1531 EVw_par_hold=+15.680
+L=0.04 pares=91373 P(YES)=0.493 P(NO)=0.480 P(conjunta)=0.0235 producto=0.2367 n_both=2143 EVw_par_hold=+11.513
+L=0.05 pares=88970 P(YES)=0.503 P(NO)=0.488 P(conjunta)=0.0305 producto=0.2450 n_both=2715 EVw_par_hold=+9.013
+L=0.06 pares=86756 P(YES)=0.510 P(NO)=0.495 P(conjunta)=0.0383 producto=0.2526 n_both=3321 EVw_par_hold=+7.346
+L=0.07 pares=84692 P(YES)=0.515 P(NO)=0.501 P(conjunta)=0.0449 producto=0.2581 n_both=3805 EVw_par_hold=+6.156
+L=0.08 pares=82784 P(YES)=0.521 P(NO)=0.506 P(conjunta)=0.0531 producto=0.2638 n_both=4397 EVw_par_hold=+5.263
+L=0.09 pares=80974 P(YES)=0.525 P(NO)=0.511 P(conjunta)=0.0602 producto=0.2685 n_both=4874 EVw_par_hold=+4.568
+
+== D. controles por bucket de precio de compra (hold, +0,05, +0,10 H)
+real L[0.01-0.03] baseH | IS n=154565 EVw=-0.378 IC90[-0.439,-0.319] sin2=-0.399 | OOS n=33952 EVw=-0.316 IC90[-0.445,-0.185] sin2=+nan
+real L[0.01-0.03] S1H | IS n=154565 EVw=-0.651 IC90[-0.665,-0.637] sin2=-0.656 | OOS n=33952 EVw=-0.624 IC90[-0.648,-0.599] sin2=+nan
+real L[0.01-0.03] S2H | IS n=154565 EVw=-0.609 IC90[-0.627,-0.590] sin2=-0.615 | OOS n=33952 EVw=-0.584 IC90[-0.614,-0.549] sin2=+nan
+placebo L[0.01-0.03] baseH | IS n=12500 EVw=-0.711 IC90[-0.776,-0.645] sin2=-0.723 | OOS n=2836 EVw=-0.763 IC90[-0.954,-0.572] sin2=+nan
+placebo L[0.01-0.03] S1H | IS n=12500 EVw=-0.882 IC90[-0.893,-0.871] sin2=-0.884 | OOS n=2836 EVw=-0.886 IC90[-0.911,-0.856] sin2=+nan
+placebo L[0.01-0.03] S2H | IS n=12500 EVw=-0.863 IC90[-0.875,-0.850] sin2=-0.864 | OOS n=2836 EVw=-0.877 IC90[-0.901,-0.853] sin2=+nan
+inversion L[0.01-0.03] baseH | IS n=391665 EVw=-0.005 IC90[-0.007,-0.003] sin2=-0.006 | OOS n=85422 EVw=-0.010 IC90[-0.016,-0.006] sin2=+nan
+inversion L[0.01-0.03] S1H | IS n=92906 EVw=-0.015 IC90[-0.019,-0.010] sin2=-0.017 | OOS n=19478 EVw=-0.021 IC90[-0.035,-0.006] sin2=+nan
+inversion L[0.01-0.03] S2H | IS n=2707 EVw=-0.033 IC90[-0.065,-0.002] sin2=-0.052 | OOS n=561 EVw=-0.092 IC90[-0.211,-0.003] sin2=+nan
+real L[0.04-0.06] baseH | IS n=216170 EVw=-0.342 IC90[-0.381,-0.305] sin2=-0.354 | OOS n=48789 EVw=-0.300 IC90[-0.334,-0.262] sin2=+nan
+real L[0.04-0.06] S1H | IS n=216170 EVw=-0.606 IC90[-0.618,-0.593] sin2=-0.610 | OOS n=48789 EVw=-0.586 IC90[-0.604,-0.569] sin2=+nan
+real L[0.04-0.06] S2H | IS n=216170 EVw=-0.575 IC90[-0.589,-0.559] sin2=-0.579 | OOS n=48789 EVw=-0.565 IC90[-0.582,-0.549] sin2=+nan
+placebo L[0.04-0.06] baseH | IS n=3863 EVw=-0.398 IC90[-0.491,-0.299] sin2=-0.459 | OOS n=943 EVw=-0.386 IC90[-0.495,-0.275] sin2=+nan
+placebo L[0.04-0.06] S1H | IS n=3863 EVw=-0.640 IC90[-0.657,-0.623] sin2=-0.645 | OOS n=943 EVw=-0.586 IC90[-0.614,-0.554] sin2=+nan
+placebo L[0.04-0.06] S2H | IS n=3863 EVw=-0.600 IC90[-0.624,-0.575] sin2=-0.603 | OOS n=943 EVw=-0.566 IC90[-0.632,-0.488] sin2=+nan
+real L[0.07-0.09] baseH | IS n=209163 EVw=-0.330 IC90[-0.367,-0.295] sin2=-0.340 | OOS n=47530 EVw=-0.297 IC90[-0.358,-0.239] sin2=+nan
+real L[0.07-0.09] S1H | IS n=209163 EVw=-0.573 IC90[-0.587,-0.560] sin2=-0.577 | OOS n=47530 EVw=-0.568 IC90[-0.583,-0.553] sin2=+nan
+real L[0.07-0.09] S2H | IS n=209163 EVw=-0.550 IC90[-0.566,-0.532] sin2=-0.555 | OOS n=47530 EVw=-0.554 IC90[-0.573,-0.535] sin2=+nan
+placebo L[0.07-0.09] baseH | IS n=3002 EVw=-0.149 IC90[-0.251,-0.047] sin2=-0.213 | OOS n=700 EVw=-0.145 IC90[-0.266,-0.049] sin2=+nan
+placebo L[0.07-0.09] S1H | IS n=3002 EVw=-0.518 IC90[-0.541,-0.494] sin2=-0.522 | OOS n=700 EVw=-0.544 IC90[-0.576,-0.511] sin2=+nan
+placebo L[0.07-0.09] S2H | IS n=3002 EVw=-0.486 IC90[-0.520,-0.451] sin2=-0.495 | OOS n=700 EVw=-0.508 IC90[-0.557,-0.457] sin2=+nan

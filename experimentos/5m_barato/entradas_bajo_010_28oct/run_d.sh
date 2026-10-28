@@ -1,0 +1,10 @@
+#!/bin/bash
+cd /root/polymarket-research
+ulimit -v 3000000
+for d in $(seq -w 5 26); do
+  D=2026-10-$d
+  [ -s experimentos/5m_barato/entradas_bajo_010_28oct/outD/d_$D.csv ] && continue
+  L=$(cut -d' ' -f2 /proc/loadavg | cut -d. -f1); while [ "$L" -ge 7 ]; do sleep 60; L=$(cut -d' ' -f2 /proc/loadavg | cut -d. -f1); done
+  nice -n 19 ionice -c3 python3 experimentos/5m_barato/entradas_bajo_010_28oct/entradas_d.py $D >> experimentos/5m_barato/entradas_bajo_010_28oct/runD.log 2>&1
+done
+echo FIN >> experimentos/5m_barato/entradas_bajo_010_28oct/runD.log

@@ -1,0 +1,8 @@
+299b7b7689de3271f252bb90971bcf8752e986f166673babbc3df47a47e3bedf  PREREG_ENTRADAS.md
+59eaca8a9add36a4f94d0f2157871a85d254db84d2bdddb3cfa89e733c21a383  entradas.py
+ffcd634fb6544158b5fce6477da29c2341ed7dcf86fba3bad9933bc8b649f786  run_all.sh
+27a65650900b4fa9aef3e35229af18ca6726b76e357a81ffd516c588bdddb0aa  entradas.py
+(entradas.py rehasheado tras compactar memoria, antes de medir resultados)
+bea8308d1985aa3740e64b2ab0824b8c582ba27fce0da56fb0d1f37fa93968be  entradas_d.py
+fee552ff873d34a31cf613837a17ded427c3ce5d65cb47d6804182cff7b38b25  run_d.sh
+(entradas_d.py/run_d.sh: iteracion D con profundidad, hasheados antes de medir; rejilla y celdas elegidas = las del prereg original, sin reseleccion)

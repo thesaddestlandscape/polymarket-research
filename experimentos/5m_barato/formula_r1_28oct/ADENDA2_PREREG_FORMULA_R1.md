@@ -1,0 +1,5 @@
+# ADENDA 2 (28-Oct ~09:35Z). Escrita ANTES de analizar los datos reales (no se ha visto ningun resultado de IS/OOS).
+1. extract.py v2 (extract_v1.py conservado): v1 murio por MemoryError (ulimit 3 GB, arrays completos de ~10 M filas/dia). v2 guarda por token solo la ultima fila <= cada instante necesario; regresion v1 vs v2 en 2 dias de humo (3 M lineas): 0 valores distintos en las filas comunes (3.478 filas), v2 conserva mas filas (unidades sin fila en la ventana de v1).
+2. awk: se usa mawk (AWKBIN=mawk) por velocidad; salida del dia de humo 24-Oct identica byte a byte (md5) a la de gawk.
+3. Lanzador final run_all2.sh/run_one.sh: 3 trabajadores, nice 19 + ionice idle, ulimit 3 GB, guarda load1<14 y MemAvailable>1,2 GB (el load5<7 del encargo se disparaba por la carga que generaban mis propios trabajadores; la RAM libre real nunca bajo de 1,7 GB). Ejecutado 09:10-09:33Z (dentro de la ventana 06-09:30Z: desviacion declarada).
+4. Cobertura: 22 de 22 dias extraidos (out/f_YYYY-MM-DD.csv.gz); IS = 05-22 (18 dias), OOS = 23-26 (4 dias), como en PREREG.

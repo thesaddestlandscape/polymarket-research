@@ -1,0 +1,145 @@
+FILAS 319316 DIAS IS 18 OOS 4
+UNIDADES 26802 IS 21875 OOS 4927 coste/dia IS 1386.2 OOS 1424.5 EUR
+HOLD EVw IS 0.0003 OOS -0.0329
+
+== COBERTURA de terminos (fraccion finita) por clase ==
+N filas 53604 mA 1.000 dC 0.945 dQ 1.000 zB 0.996 ejecutable(VAL) 0.000 | paridad dP: filas con |dP|>0.02 = 0.0001 (libros espejo => ~0)
+E filas 107208 mA 0.991 dC 0.926 dQ 0.991 zB 0.996 ejecutable(VAL) 0.553 | paridad dP: filas con |dP|>0.02 = 0.0000 (libros espejo => ~0)
+L filas 158504 mA 0.345 dC 0.277 dQ 0.345 zB 0.996 ejecutable(VAL) 0.247 | paridad dP: filas con |dP|>0.02 = 0.0000 (libros espejo => ~0)
+
+== COEFICIENTES (ajuste en todo IS; SE del modelo, anticonservador) ==
+N n 21875 a0 -0.037(0.024) a2_dC 0.020(0.026) a3_dQ 0.099(0.030) a4_zB 0.006(0.021)
+E n 86671 a0 -0.001(0.012) a2_dC 0.026(0.013) a3_dQ 0.085(0.014) a4_zB -0.004(0.011)
+L n 44976 a0 0.015(0.015) a2_dC 0.043(0.011) a3_dQ 0.154(0.026) a4_zB 0.038(0.011)
+
+== CONTENIDO INFORMATIVO: logloss medio mid-solo / a0 / completo; delta(completo-a0) e IC90 por dias ==
+N IS cross-fit n 21875 LL mid 0.5259 a0 0.5257 full 0.5257 dLL(full-a0) -0.00004 IC90 [-0.00026, 0.00017]
+N OOS n 4927 LL mid 0.5255 a0 0.5248 full 0.5250 dLL(full-a0) 0.00026 IC90 [-0.00005, 0.00053]
+E IS cross-fit n 86671 LL mid 0.5026 a0 0.5027 full 0.5026 dLL(full-a0) -0.00010 IC90 [-0.00022, 0.00003]
+E OOS n 19543 LL mid 0.5043 a0 0.5043 full 0.5038 dLL(full-a0) -0.00053 IC90 [-0.00084, -0.00024]
+L IS cross-fit n 44976 LL mid 0.3375 a0 0.3375 full 0.3370 dLL(full-a0) -0.00051 IC90 [-0.00095, -0.00005]
+L OOS n 9677 LL mid 0.3462 a0 0.3461 full 0.3454 dLL(full-a0) -0.00074 IC90 [-0.00179, 0.00033]
+
+== SELECCION ADVERSA MEDIDA: win - mid por instante (filas con mid) ==
+n1 | IS n=21875 win=0.226 mid=0.246 win-mid=-0.0200 | OOS n=4927 win=0.221 mid=0.251 win-mid=-0.0298
+n0 | IS n=21875 win=0.226 mid=0.234 win-mid=-0.0083 | OOS n=4927 win=0.221 mid=0.241 win-mid=-0.0193
+e1 | IS n=21874 win=0.226 mid=0.225 win-mid=+0.0009 | OOS n=4927 win=0.221 mid=0.230 win-mid=-0.0091
+e2 | IS n=21871 win=0.226 mid=0.224 win-mid=+0.0014 | OOS n=4927 win=0.221 mid=0.230 win-mid=-0.0085
+e3 | IS n=21823 win=0.226 mid=0.226 win-mid=+0.0006 | OOS n=4920 win=0.222 mid=0.231 win-mid=-0.0096
+e4 | IS n=21103 win=0.232 mid=0.232 win-mid=-0.0002 | OOS n=4769 win=0.226 mid=0.236 win-mid=-0.0091
+l1 | IS n=16589 win=0.262 mid=0.262 win-mid=+0.0000 | OOS n=3698 win=0.257 mid=0.257 win-mid=-0.0003
+l2 | IS n=13281 win=0.307 mid=0.306 win-mid=+0.0011 | OOS n=2799 win=0.309 mid=0.306 win-mid=+0.0032
+l3 | IS n=7943 win=0.377 mid=0.372 win-mid=+0.0043 | OOS n=1659 win=0.383 mid=0.380 win-mid=+0.0038
+l4 | IS n=4239 win=0.428 mid=0.427 win-mid=+0.0010 | OOS n=895 win=0.434 mid=0.432 win-mid=+0.0013
+l5 | IS n=2182 win=0.455 mid=0.457 win-mid=-0.0022 | OOS n=465 win=0.467 mid=0.457 win-mid=+0.0095
+l6 | IS n=742 win=0.473 mid=0.470 win-mid=+0.0027 | OOS n=161 win=0.509 mid=0.506 win-mid=+0.0031
+
+== TERMINOS UNO A UNO: dLogLoss(a0+termino menos a0) en IS cross-fit y OOS con IC90 por dias; coeficiente IS | OOS ==
+N dC coef IS +0.020 | OOS +0.158 | IS n=21875 dLL=+0.00010 IC90 [-0.00000, +0.00022] | OOS n=4927 dLL=-0.00018 IC90 [-0.00029, -0.00006]
+N dQ coef IS +0.100 | OOS -0.035 | IS n=21875 dLL=-0.00020 IC90 [-0.00044, +0.00005] | OOS n=4927 dLL=+0.00044 IC90 [+0.00016, +0.00072]
+N zB coef IS +0.005 | OOS +0.009 | IS n=21875 dLL=+0.00005 IC90 [+0.00002, +0.00009] | OOS n=4927 dLL=-0.00000 IC90 [-0.00006, +0.00005]
+E dC coef IS +0.027 | OOS +0.206 | IS n=86671 dLL=+0.00006 IC90 [-0.00005, +0.00019] | OOS n=19543 dLL=-0.00031 IC90 [-0.00044, -0.00020]
+E dQ coef IS +0.085 | OOS +0.099 | IS n=86671 dLL=-0.00019 IC90 [-0.00029, -0.00011] | OOS n=19543 dLL=-0.00023 IC90 [-0.00045, -0.00000]
+E zB coef IS -0.005 | OOS -0.010 | IS n=86671 dLL=+0.00003 IC90 [+0.00001, +0.00006] | OOS n=19543 dLL=-0.00000 IC90 [-0.00005, +0.00005]
+L dC coef IS +0.032 | OOS +0.066 | IS n=44976 dLL=-0.00006 IC90 [-0.00020, +0.00010] | OOS n=9677 dLL=-0.00029 IC90 [-0.00045, -0.00014]
+L dQ coef IS +0.157 | OOS +0.127 | IS n=44976 dLL=-0.00035 IC90 [-0.00064, -0.00002] | OOS n=9677 dLL=-0.00026 IC90 [-0.00100, +0.00040]
+L zB coef IS +0.035 | OOS +0.033 | IS n=44976 dLL=-0.00006 IC90 [-0.00024, +0.00012] | OOS n=9677 dLL=-0.00011 IC90 [-0.00043, +0.00027]
+
+== COSTE DE SALIR POR INSTANTE (vender todo al bid de t_d+250 ms; solo filas ejecutables) ==
+e1 | IS n=13615 win=0.263 mid=0.261 S=0.239 EVw_vender=-0.066 EVw_mantener=0.025 | OOS n=3094 win=0.251 mid=0.265 S=0.240 EVw_vender=-0.071 EVw_mantener=-0.029
+e2 | IS n=13222 win=0.268 mid=0.268 S=0.248 EVw_vender=-0.027 EVw_mantener=0.051 | OOS n=3040 win=0.258 mid=0.272 S=0.249 EVw_vender=-0.032 EVw_mantener=0.003
+e3 | IS n=11587 win=0.299 mid=nan S=0.278 EVw_vender=0.109 EVw_mantener=0.190 | OOS n=2746 win=0.280 mid=0.299 S=0.275 EVw_vender=0.087 EVw_mantener=0.109
+e4 | IS n=9779 win=0.368 mid=nan S=0.345 EVw_vender=0.406 EVw_mantener=0.496 | OOS n=2255 win=0.344 mid=nan S=0.341 EVw_vender=0.370 EVw_mantener=0.384
+l1 | IS n=6735 win=0.559 mid=nan S=0.528 EVw_vender=1.176 EVw_mantener=1.306 | OOS n=1517 win=0.552 mid=nan S=0.523 EVw_vender=1.145 EVw_mantener=1.263
+l2 | IS n=6167 win=0.685 mid=nan S=0.658 EVw_vender=1.731 EVw_mantener=1.845 | OOS n=1353 win=0.681 mid=nan S=0.657 EVw_vender=1.712 EVw_mantener=1.809
+l3 | IS n=5452 win=0.802 mid=nan S=0.771 EVw_vender=2.202 EVw_mantener=2.330 | OOS n=1199 win=0.799 mid=nan S=0.765 EVw_vender=2.153 EVw_mantener=2.294
+l4 | IS n=5125 win=0.898 mid=nan S=0.875 EVw_vender=2.636 EVw_mantener=2.730 | OOS n=1149 win=0.894 mid=nan S=0.873 EVw_vender=2.610 EVw_mantener=2.695
+l5 | IS n=4377 win=0.942 mid=nan S=0.922 EVw_vender=2.813 EVw_mantener=2.893 | OOS n=956 win=0.942 mid=nan S=0.921 EVw_vender=2.771 EVw_mantener=2.861
+l6 | IS n=4178 win=0.983 mid=nan S=0.967 EVw_vender=2.977 EVw_mantener=3.046 | OOS n=875 win=0.986 mid=nan S=0.969 EVw_vender=2.968 EVw_mantener=3.037
+
+== VENDER: 18 variantes (clase x kappa); IS con q^ cross-fit; OOS con ajuste en todo IS ==
+E   kappa=0.000  IS Delta -0.01258 (vendidas 2065)  OOS Delta -0.00166 (vendidas 390)
+E   kappa=0.005  IS Delta -0.00804 (vendidas 1411)  OOS Delta -0.00610 (vendidas 257)
+E   kappa=0.010  IS Delta -0.00469 (vendidas 1034)  OOS Delta -0.00712 (vendidas 195)
+E   kappa=0.020  IS Delta -0.00254 (vendidas 632)  OOS Delta -0.00425 (vendidas 120)
+E   kappa=0.030  IS Delta -0.00257 (vendidas 413)  OOS Delta +0.00107 (vendidas 72)
+E   kappa=0.050  IS Delta -0.00193 (vendidas 182)  OOS Delta -0.00064 (vendidas 35)
+L   kappa=0.000  IS Delta -0.01248 (vendidas 2259)  OOS Delta -0.01784 (vendidas 480)
+L   kappa=0.005  IS Delta -0.01347 (vendidas 1594)  OOS Delta -0.01515 (vendidas 354)
+L   kappa=0.010  IS Delta -0.01419 (vendidas 1141)  OOS Delta -0.01140 (vendidas 253)
+L   kappa=0.020  IS Delta -0.00791 (vendidas 690)  OOS Delta -0.00716 (vendidas 140)
+L   kappa=0.030  IS Delta -0.00273 (vendidas 469)  OOS Delta -0.00455 (vendidas 90)
+L   kappa=0.050  IS Delta -0.00170 (vendidas 233)  OOS Delta -0.00455 (vendidas 40)
+EL  kappa=0.000  IS Delta -0.02458 (vendidas 3946)  OOS Delta -0.01672 (vendidas 801)
+EL  kappa=0.005  IS Delta -0.02067 (vendidas 2817)  OOS Delta -0.01718 (vendidas 576)
+EL  kappa=0.010  IS Delta -0.01784 (vendidas 2072)  OOS Delta -0.01513 (vendidas 429)
+EL  kappa=0.020  IS Delta -0.00986 (vendidas 1284)  OOS Delta -0.01256 (vendidas 258)
+EL  kappa=0.030  IS Delta -0.00557 (vendidas 863)  OOS Delta -0.00401 (vendidas 161)
+EL  kappa=0.050  IS Delta -0.00363 (vendidas 413)  OOS Delta -0.00519 (vendidas 75)
+VARIANTE IS-ELEGIDA ('L', 0.05) p max-stat IS = 0.9990 (18 variantes)
+IS  Delta -0.00170 IC90 dias [-0.00396, +0.00060] sin 2 mejores dias -0.00267  EVw regla -0.0014 (HOLD 0.0003)
+OOS Delta -0.00455 IC90 dias [-0.00826, +0.00123] sin 2 mejores dias -0.00819  EVw regla -0.0375 (HOLD -0.0329)  vendidas 40 de 4927  Delta por dia [-0.0099  0.005  -0.0065 -0.0066]
+OOS Delta EUR/dia -6.484 (IC90 dias [-11.987, -0.980]) => EUR/ano a volumen simulado -2367
+SENSIBILIDAD sin minimo 1 USD: IS Delta -0.00272 (vendidas 257) OOS Delta -0.00419 (vendidas 43)
+PLACEBO OOS (cov. permutadas): media -0.00353 p95 -0.00052  p(>=obs) = 0.706
+INVERSION: OOS Delta -0.00351 (vendidas 92)  IS Delta -0.00595 (vendidas 468)
+
+-- por moneda x bucket de p0 (regla elegida): n unidades / vendidas / Delta EUR  [IS | OOS] --
+BNB bucket 1 IS n=379 v=2 D=+1.96 | OOS n=92 v=0 D=+0.00
+BNB bucket 2 IS n=564 v=4 D=+8.00 | OOS n=64 v=0 D=+0.00
+BNB bucket 3 IS n=628 v=9 D=+0.04 | OOS n=79 v=1 D=-1.42
+BNB bucket 4 IS n=661 v=5 D=-4.93 | OOS n=76 v=0 D=+0.00
+BNB bucket 5 IS n=139 v=0 D=+0.00 | OOS n=21 v=0 D=+0.00
+BTC bucket 1 IS n=182 v=0 D=+0.00 | OOS n=18 v=0 D=+0.00
+BTC bucket 2 IS n=523 v=1 D=-2.69 | OOS n=76 v=0 D=+0.00
+BTC bucket 3 IS n=1283 v=8 D=-4.21 | OOS n=255 v=1 D=+0.99
+BTC bucket 4 IS n=3217 v=38 D=-1.42 | OOS n=861 v=5 D=-0.50
+BTC bucket 5 IS n=820 v=9 D=-0.31 | OOS n=229 v=2 D=-3.99
+DOGE bucket 1 IS n=385 v=2 D=+0.08 | OOS n=68 v=0 D=+0.00
+DOGE bucket 2 IS n=586 v=1 D=+1.33 | OOS n=88 v=1 D=+0.99
+DOGE bucket 3 IS n=632 v=2 D=+1.04 | OOS n=125 v=0 D=+0.00
+DOGE bucket 4 IS n=681 v=3 D=-2.21 | OOS n=128 v=0 D=+0.00
+DOGE bucket 5 IS n=133 v=2 D=+3.15 | OOS n=21 v=1 D=-0.43
+ETH bucket 1 IS n=503 v=5 D=-3.52 | OOS n=135 v=0 D=+0.00
+ETH bucket 2 IS n=781 v=16 D=-9.65 | OOS n=176 v=4 D=+11.14
+ETH bucket 3 IS n=1047 v=13 D=+0.27 | OOS n=255 v=4 D=+0.26
+ETH bucket 4 IS n=1393 v=22 D=-16.25 | OOS n=324 v=7 D=-13.97
+ETH bucket 5 IS n=303 v=3 D=-1.55 | OOS n=81 v=1 D=-3.91
+SOL bucket 1 IS n=550 v=3 D=+6.47 | OOS n=120 v=2 D=-2.31
+SOL bucket 2 IS n=805 v=10 D=-2.69 | OOS n=216 v=0 D=+0.00
+SOL bucket 3 IS n=1138 v=21 D=-22.15 | OOS n=242 v=1 D=-1.93
+SOL bucket 4 IS n=1464 v=22 D=+3.21 | OOS n=335 v=6 D=-10.39
+SOL bucket 5 IS n=278 v=5 D=-4.12 | OOS n=70 v=0 D=+0.00
+XRP bucket 1 IS n=426 v=1 D=+1.48 | OOS n=100 v=0 D=+0.00
+XRP bucket 2 IS n=566 v=5 D=+4.50 | OOS n=187 v=1 D=-1.32
+XRP bucket 3 IS n=797 v=10 D=+2.33 | OOS n=208 v=2 D=-0.48
+XRP bucket 4 IS n=866 v=8 D=+6.24 | OOS n=222 v=1 D=+1.33
+XRP bucket 5 IS n=145 v=3 D=-6.72 | OOS n=55 v=0 D=+0.00
+monedas con Delta OOS>0: 1 de 6
+CRITERIOS VENDER: {'i': np.False_, 'ii': np.False_, 'iii': np.False_, 'iv': False, 'v': False}
+
+== CANCELAR (reserva de compra): cancelar si q^_N + rebate - p0 < kappa_in ==
+n0 kappa_in=0.00  IS Delta_EUR/EUR +0.00266 (canceladas 12541)  OOS +0.01551 (canceladas 2460)
+n0 kappa_in=0.01  IS Delta_EUR/EUR -0.00252 (canceladas 17247)  OOS +0.03074 (canceladas 3600)
+n0 kappa_in=0.02  IS Delta_EUR/EUR -0.00323 (canceladas 19388)  OOS +0.03477 (canceladas 4155)
+n0 kappa_in=0.03  IS Delta_EUR/EUR -0.00400 (canceladas 20285)  OOS +0.03754 (canceladas 4443)
+n0 kappa_in=0.05  IS Delta_EUR/EUR +0.00011 (canceladas 21103)  OOS +0.03456 (canceladas 4684)
+n0 kappa_in=0.08  IS Delta_EUR/EUR -0.00002 (canceladas 21589)  OOS +0.03211 (canceladas 4840)
+n1 kappa_in=0.00  IS Delta_EUR/EUR -0.00355 (canceladas 9652)  OOS +0.00262 (canceladas 1928)
+n1 kappa_in=0.01  IS Delta_EUR/EUR -0.00690 (canceladas 14141)  OOS +0.00664 (canceladas 2967)
+n1 kappa_in=0.02  IS Delta_EUR/EUR -0.00441 (canceladas 16769)  OOS +0.02014 (canceladas 3648)
+n1 kappa_in=0.03  IS Delta_EUR/EUR -0.00465 (canceladas 18398)  OOS +0.01647 (canceladas 4035)
+n1 kappa_in=0.05  IS Delta_EUR/EUR -0.00129 (canceladas 20081)  OOS +0.02697 (canceladas 4458)
+n1 kappa_in=0.08  IS Delta_EUR/EUR -0.00022 (canceladas 21133)  OOS +0.02641 (canceladas 4719)
+VARIANTE IS-ELEGIDA ('n0', 0.0) p max-stat IS = 0.5017 (6 variantes) IS Delta +0.00266 IC90 [-0.01406, +0.02006] sin 2 mejores -0.00559
+OOS Delta +0.01551 IC90 dias [-0.03301, +0.06321] sin 2 mejores -0.03301; canceladas 2460 de 4927 (49.9%); EVw retenidas -0.0359 vs HOLD -0.0329; EUR totales OOS +88.37 en 4 dias
+EVw retenidas OOS -0.0359 IC90 dias [-0.1683, 0.1004]
+PLACEBO OOS: media +0.02071 p95 +0.03939 p(>=obs) = 0.706 ; INVERSION OOS Delta +0.00007 (canceladas 715)
+CRITERIOS CANCELAR: {'i': False, 'ii': False, 'iii': False, 'v': True}
+
+== ESCALERA FIJA (escalera_patas_28oct, terminal H, mismas unidades) ==
+HOLD | n=21875 EVw=0.0003 | n=4927 EVw=-0.0329
++10c | n=21875 EVw=-0.1852 | n=4927 EVw=-0.1982
++20c | n=21875 EVw=-0.1465 | n=4927 EVw=-0.1775
++45c | n=21875 EVw=-0.0778 | n=4927 EVw=-0.1158
+FIN_ANALISIS

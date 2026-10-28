@@ -1,0 +1,39 @@
+dias 22 filas rellenos 710169
+dstat (todas las unidades rellenas, s=210): {'nobid': 0.65, 'ok': 0.166, 'partial': 0.13, 'stale': 0.054}
+  bucket 0 n 47013 {'nobid': 0.677, 'partial': 0.157, 'ok': 0.087, 'stale': 0.08} bs mediana (ok/partial) 23.0
+  bucket 1 n 59162 {'nobid': 0.657, 'ok': 0.164, 'partial': 0.132, 'stale': 0.047} bs mediana (ok/partial) 23.5
+  bucket 2 n 51459 {'nobid': 0.617, 'ok': 0.24, 'partial': 0.104, 'stale': 0.04} bs mediana (ok/partial) 23.59000015258789
+
+== baseD s=210 por bucket (todas monedas): viejo vs nuevo (IS | OOS)
+bucket 0 pnl_oldD IS EVw=+0.897 IC90[+0.809,+0.975] | OOS EVw=+1.033 IC90[+0.808,+1.256]
+bucket 0 pnl_newD IS EVw=+0.255 IC90[+0.186,+0.324] | OOS EVw=+0.355 IC90[+0.093,+0.609]
+bucket 1 pnl_oldD IS EVw=+0.281 IC90[+0.231,+0.326] | OOS EVw=+0.320 IC90[+0.178,+0.464]
+bucket 1 pnl_newD IS EVw=+0.104 IC90[+0.060,+0.148] | OOS EVw=+0.122 IC90[-0.037,+0.292]
+bucket 2 pnl_oldD IS EVw=+0.027 IC90[-0.026,+0.077] | OOS EVw=+0.055 IC90[-0.012,+0.112]
+bucket 2 pnl_newD IS EVw=-0.040 IC90[-0.088,+0.009] | OOS EVw=-0.023 IC90[-0.092,+0.043]
+
+== CARTERA con las celdas elegidas ANTES (sin reseleccion)
+CARTERA old: IS EVw=+0.3799 | OOS EVw=+0.4093 IC90 dias[+0.2753,+0.5442] por dia [0.653 0.442 0.215 0.326] sin2mejores=+0.2728 coste OOS=29115 n_unidades=157634
+  BNB b0 pnl_newD OOS EVw=+0.043 IS EVw=+0.224 coste OOS=1193
+  BNB b1 pnl_newD OOS EVw=-0.123 IS EVw=+0.021 coste OOS=1693
+  BNB b2 pnl_newD OOS EVw=-0.225 IS EVw=-0.162 coste OOS=1543
+  BTC b0 pnl_newS5D OOS EVw=+0.934 IS EVw=+0.529 coste OOS=1547
+  BTC b1 pnl_newD OOS EVw=+0.584 IS EVw=+0.267 coste OOS=1947
+  BTC b2 pnl_newD OOS EVw=+0.210 IS EVw=+0.140 coste OOS=1822
+  DOGE b0 pnl_newD OOS EVw=-0.060 IS EVw=+0.032 coste OOS=1092
+  DOGE b1 pnl_newD OOS EVw=-0.031 IS EVw=-0.029 coste OOS=1575
+  DOGE b2 pnl_newD OOS EVw=-0.105 IS EVw=-0.144 coste OOS=1494
+  ETH b0 pnl_newS5D OOS EVw=+0.486 IS EVw=+0.492 coste OOS=1544
+  ETH b1 pnl_newS5D OOS EVw=+0.097 IS EVw=+0.216 coste OOS=1989
+  ETH b2 pnl_newD OOS EVw=+0.101 IS EVw=+0.067 coste OOS=1826
+  SOL b0 pnl_newD OOS EVw=+0.268 IS EVw=+0.115 coste OOS=1536
+  SOL b1 pnl_newD OOS EVw=+0.137 IS EVw=+0.044 coste OOS=1836
+  SOL b2 pnl_newD OOS EVw=-0.027 IS EVw=-0.088 coste OOS=1647
+  XRP b0 pnl_newD OOS EVw=-0.028 IS EVw=+0.132 coste OOS=1438
+  XRP b1 pnl_newD OOS EVw=-0.132 IS EVw=+0.079 coste OOS=1784
+  XRP b2 pnl_newD OOS EVw=-0.157 IS EVw=-0.070 coste OOS=1608
+CARTERA new: IS EVw=+0.0999 | OOS EVw=+0.1171 IC90 dias[-0.0474,+0.2828] por dia [ 0.404  0.188 -0.088 -0.035] sin2mejores=-0.0603 coste OOS=29115 n_unidades=157634
+  dstat en unidades de la cartera: {'nobid': 0.65, 'ok': 0.166, 'partial': 0.13, 'stale': 0.054}
+  capacidad cons: EVw -0.047 x coste/dia 2426 (1 nivel L por mercado-lado) = -115 EUR/dia (obj 548)
+  capacidad base: EVw +0.117 x coste/dia 2426 (1 nivel L por mercado-lado) = +284 EUR/dia (obj 548)
+  capacidad opt: EVw +0.283 x coste/dia 2426 (1 nivel L por mercado-lado) = +686 EUR/dia (obj 548)

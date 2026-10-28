@@ -1,0 +1,118 @@
+dias 11 2026-10-05 2026-10-26 | OOS = ['2026-10-23', '2026-10-24', '2026-10-25', '2026-10-26'] | IS = ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-13'] 
+fills 15126 validos (coste>0 y desenlace) 15126 sin desenlace 0 snaps 158388
+
+===== HOLD y techo oraculo (t=2s)
+HOLD IS  n=9415 EVw=-0.0241 IC90c(-0.059,+0.013) dias+ 2/7 sin2mejores -0.0532 coste 9964
+HOLD OOS n=5711 EVw=-0.0318 IC90c(-0.083,+0.019) dias+ 1/4 sin2mejores -0.1458 coste 6032
+referencia R1 alpha miner (SALIDA_DINAMICA): IS +0.0004 n=25427, OOS -0.0318 n=5711
+barrido (print estrictamente a traves del nivel): IS 0.799 OOS 0.826 de los rellenos
+TECHO ORACULO (quitar barridos) IS  n=1892 EVw=+0.0506 IC90c(-0.018,+0.127) dias+ 5/7 sin2mejores -0.0079 coste 2053 
+                         OOS n=992 EVw=-0.0517 IC90c(-0.140,+0.041) dias+ 1/4 sin2mejores -0.2136 coste 1061
+solo barridos                  IS  n=7523 EVw=-0.0435 IC90c(-0.082,-0.004) dias+ 2/7 sin2mejores -0.0728 coste 7912 
+                         OOS n=4719 EVw=-0.0275 IC90c(-0.077,+0.027) dias+ 1/4 sin2mejores -0.1325 coste 4971
+
+===== Univariante (rasgos y lead) (t=2s)
+AUC univariante de GANAR (>0,5: mayor valor -> mas gana). Orden por |AUC_IS@100ms-0,5|; cobertura no-NaN IS
+rasgo          cobert | IS@100  OOS@100 OOS@300 OOS@1000 OOS@2000
+mid              1.00 | 0.596   0.568   0.556   0.550    0.542
+bb               1.00 | 0.595   0.567   0.553   0.547    0.542
+cba              1.00 | 0.405   0.434   0.447   0.453    0.458
+cbb              1.00 | 0.407   0.435   0.445   0.450    0.459
+ba               1.00 | 0.593   0.565   0.555   0.550    0.541
+lvl              1.00 | 0.581   0.556   0.549   0.547    0.541
+das1000          0.19 | 0.467   0.507   0.489   0.500    0.518
+npr1000          1.00 | 0.527   0.513   0.514   0.516    0.515
+bull1000         1.00 | 0.524   0.506   0.510   0.518    0.505
+lastpr_age       0.97 | 0.476   0.480   0.479   0.481    0.476
+T                1.00 | 0.522   0.519   0.519   0.519    0.519
+nupd1000         1.00 | 0.522   0.526   0.523   0.528    0.524
+gap_bb           1.00 | 0.521   0.509   0.495   0.505    0.512
+imb1000          0.47 | 0.480   0.507   0.504   0.473    0.515
+gap_ba           1.00 | 0.519   0.498   0.493   0.501    0.492
+coin             1.00 | 0.481   0.480   0.480   0.480    0.480
+rasgos sin variacion (excluidos del modelo): ['te_age', 'b15', 'a15', 'db15_300', 'db15_1000', 'b15_minus_a5', 'st15_age']
+
+===== Q1 AUC y lead (t=3s)
+Q1: AUC OOS (gana) M1 (todos los rasgos) vs M0 (T, moneda, lado, hora, nivel); n_OOS=5711, ganadores=1286
+  L= 100 ms  AUC M1 0.551 IC90(0.537,0.568)  M0 0.544  dAUC +0.007 IC90(-0.005,+0.018)
+  L= 200 ms  AUC M1 0.549 IC90(0.535,0.566)  M0 0.543  dAUC +0.006 IC90(-0.005,+0.016)
+  L= 300 ms  AUC M1 0.546 IC90(0.532,0.564)  M0 0.539  dAUC +0.007 IC90(-0.003,+0.018)
+  L= 600 ms  AUC M1 0.546 IC90(0.532,0.564)  M0 0.544  dAUC +0.002 IC90(-0.009,+0.012)
+  L=1000 ms  AUC M1 0.541 IC90(0.527,0.558)  M0 0.535  dAUC +0.005 IC90(-0.006,+0.014)
+  L=2000 ms  AUC M1 0.531 IC90(0.516,0.550)  M0 0.527  dAUC +0.004 IC90(-0.006,+0.013)
+Q1 por familia de rasgos (AUC OOS; M0 estatico como referencia)
+  PM_propio    L=100: 0.549 L=300: 0.540 L=1000: 0.535 | M0: L=100: 0.544 L=300: 0.539 L=1000: 0.535
+  espejo_comp  L=100: 0.551 L=300: 0.540 L=1000: 0.536 | M0: L=100: 0.544 L=300: 0.539 L=1000: 0.535
+  prints       L=100: 0.538 L=300: 0.536 L=1000: 0.537 | M0: L=100: 0.544 L=300: 0.539 L=1000: 0.535
+  Binance      L=100: 0.544 L=300: 0.540 L=1000: 0.538 | M0: L=100: 0.544 L=300: 0.539 L=1000: 0.535
+
+===== Q2 politica no pujar/cancelar (t=22s)
+
+-- Lc=100 ms (offsets [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100]) --
+ q=0.1 theta=-0.425 marcados IS 0.10 OOS 0.08
+   IS(OOF) retenidos n=8473 EVw=-0.0270 IC90c(-0.064,+0.013) dias+ 2/7 sin2mejores -0.0704 coste 8886
+   IS(OOF) marcados   n=942 EVw=-0.0006 IC90c(-0.099,+0.098) dias+ 4/7 sin2mejores -0.0815 coste 1079
+   OOS retenidos      n=5229 EVw=-0.0213 IC90c(-0.076,+0.034) dias+ 2/4 sin2mejores -0.1516 coste 5464 | pes(-0.046): -0.0673 IC90c(-0.122,-0.012)
+   OOS marcados (inversion) n=482 EVw=-0.1325 IC90c(-0.251,-0.011) dias+ 0/4 sin2mejores -0.1962 coste 568
+   placebo OOS: mediana -0.0318 p95 -0.0209; P(placebo>=obs)=0.056
+ q=0.2 theta=-0.349 marcados IS 0.20 OOS 0.17
+   IS(OOF) retenidos n=7532 EVw=-0.0221 IC90c(-0.065,+0.020) dias+ 2/7 sin2mejores -0.0638 coste 7844
+   IS(OOF) marcados   n=1883 EVw=-0.0315 IC90c(-0.102,+0.033) dias+ 3/7 sin2mejores -0.0800 coste 2121
+   OOS retenidos      n=4747 EVw=-0.0226 IC90c(-0.080,+0.035) dias+ 2/4 sin2mejores -0.1554 coste 4908 | pes(-0.046): -0.0686 IC90c(-0.126,-0.011)
+   OOS marcados (inversion) n=964 EVw=-0.0719 IC90c(-0.163,+0.016) dias+ 1/4 sin2mejores -0.1676 coste 1124
+   placebo OOS: mediana -0.0304 p95 -0.0128; P(placebo>=obs)=0.202
+ q=0.3 theta=-0.292 marcados IS 0.30 OOS 0.27
+   IS(OOF) retenidos n=6590 EVw=-0.0029 IC90c(-0.049,+0.041) dias+ 3/7 sin2mejores -0.0496 coste 6814
+   IS(OOF) marcados   n=2825 EVw=-0.0699 IC90c(-0.122,-0.017) dias+ 1/7 sin2mejores -0.1002 coste 3151
+   OOS retenidos      n=4173 EVw=-0.0113 IC90c(-0.075,+0.048) dias+ 2/4 sin2mejores -0.1564 coste 4281 | pes(-0.046): -0.0573 IC90c(-0.121,+0.002)
+   OOS marcados (inversion) n=1538 EVw=-0.0819 IC90c(-0.159,-0.013) dias+ 1/4 sin2mejores -0.1438 coste 1751
+   placebo OOS: mediana -0.0328 p95 -0.0095; P(placebo>=obs)=0.074
+ q=0.5 theta=-0.208 marcados IS 0.50 OOS 0.46
+   IS(OOF) retenidos n=4707 EVw=+0.0143 IC90c(-0.038,+0.068) dias+ 4/7 sin2mejores -0.0345 coste 4785
+   IS(OOF) marcados   n=4708 EVw=-0.0596 IC90c(-0.102,-0.016) dias+ 2/7 sin2mejores -0.0811 coste 5180
+   OOS retenidos      n=3072 EVw=-0.0288 IC90c(-0.102,+0.044) dias+ 1/4 sin2mejores -0.1608 coste 3106 | pes(-0.046): -0.0748 IC90c(-0.148,-0.002)
+   OOS marcados (inversion) n=2639 EVw=-0.0350 IC90c(-0.098,+0.023) dias+ 2/4 sin2mejores -0.1297 coste 2927
+   placebo OOS: mediana -0.0328 p95 +0.0086; P(placebo>=obs)=0.432
+ q primario (IS, retenidos>=40% del coste): (0.5, np.float64(0.014283516474049957))
+
+-- Lc=250 ms (offsets [300, 400, 500, 600, 700, 800, 900, 1000, 1100]) --
+ q=0.1 theta=-0.415 marcados IS 0.10 OOS 0.08
+   IS(OOF) retenidos n=8473 EVw=-0.0238 IC90c(-0.062,+0.016) dias+ 2/7 sin2mejores -0.0643 coste 8871
+   IS(OOF) marcados   n=942 EVw=-0.0264 IC90c(-0.123,+0.060) dias+ 1/7 sin2mejores -0.0936 coste 1093
+   OOS retenidos      n=5226 EVw=-0.0229 IC90c(-0.076,+0.032) dias+ 2/4 sin2mejores -0.1540 coste 5454 | pes(-0.046): -0.0689 IC90c(-0.122,-0.014)
+   OOS marcados (inversion) n=485 EVw=-0.1157 IC90c(-0.240,-0.001) dias+ 0/4 sin2mejores -0.2019 coste 579
+   placebo OOS: mediana -0.0320 p95 -0.0199; P(placebo>=obs)=0.096
+ q=0.2 theta=-0.334 marcados IS 0.20 OOS 0.17
+   IS(OOF) retenidos n=7532 EVw=-0.0228 IC90c(-0.065,+0.021) dias+ 2/7 sin2mejores -0.0669 coste 7815
+   IS(OOF) marcados   n=1883 EVw=-0.0287 IC90c(-0.095,+0.042) dias+ 2/7 sin2mejores -0.0629 coste 2150
+   OOS retenidos      n=4715 EVw=-0.0144 IC90c(-0.067,+0.039) dias+ 2/4 sin2mejores -0.1491 coste 4853 | pes(-0.046): -0.0604 IC90c(-0.113,-0.007)
+   OOS marcados (inversion) n=996 EVw=-0.1033 IC90c(-0.193,-0.019) dias+ 1/4 sin2mejores -0.1935 coste 1179
+   placebo OOS: mediana -0.0324 p95 -0.0122; P(placebo>=obs)=0.074
+ q=0.3 theta=-0.278 marcados IS 0.30 OOS 0.27
+   IS(OOF) retenidos n=6590 EVw=-0.0053 IC90c(-0.052,+0.039) dias+ 3/7 sin2mejores -0.0508 coste 6772
+   IS(OOF) marcados   n=2825 EVw=-0.0641 IC90c(-0.118,-0.009) dias+ 2/7 sin2mejores -0.1089 coste 3193
+   OOS retenidos      n=4174 EVw=-0.0231 IC90c(-0.086,+0.034) dias+ 2/4 sin2mejores -0.1639 coste 4260 | pes(-0.046): -0.0691 IC90c(-0.132,-0.012)
+   OOS marcados (inversion) n=1537 EVw=-0.0528 IC90c(-0.127,+0.021) dias+ 1/4 sin2mejores -0.1040 coste 1772
+   placebo OOS: mediana -0.0311 p95 -0.0021; P(placebo>=obs)=0.316
+ q=0.5 theta=-0.187 marcados IS 0.50 OOS 0.48
+   IS(OOF) retenidos n=4707 EVw=-0.0061 IC90c(-0.060,+0.046) dias+ 3/7 sin2mejores -0.0592 coste 4747
+   IS(OOF) marcados   n=4708 EVw=-0.0405 IC90c(-0.085,+0.006) dias+ 3/7 sin2mejores -0.0599 coste 5218
+   OOS retenidos      n=2979 EVw=-0.0391 IC90c(-0.107,+0.029) dias+ 1/4 sin2mejores -0.1781 coste 2985 | pes(-0.046): -0.0851 IC90c(-0.153,-0.017)
+   OOS marcados (inversion) n=2732 EVw=-0.0246 IC90c(-0.087,+0.038) dias+ 1/4 sin2mejores -0.1130 coste 3048
+   placebo OOS: mediana -0.0308 p95 +0.0100; P(placebo>=obs)=0.628
+ q primario (IS, retenidos>=40% del coste): (0.3, np.float64(-0.005272561389279061))
+
+===== Q1b/Q2b snapshots: barrido, ask y complementario (t=35s)
+snaps total 158388, usables (T>=63, desenlace) 158102; IS 90167 OOS 67935; P(barrido 100-2100ms) 0.0416; P(barrido adverso) 0.0323; P(ask comp +2c en 250ms) 0.0782
+M2 barrido ADVERSO en (100,2100] ms: AUC OOS M1 0.713 IC90(0.705,0.723) M0 0.676 dAUC +0.037 IC90(+0.032,+0.044) positivos OOS=1975
+M3 ask complementario +2c a +250 ms: AUC OOS M1 0.753 IC90(0.748,0.757) M0 0.595 dAUC +0.158 IC90(+0.150,+0.163) positivos OOS=5766
+   lead: AUC de M2 contra barrido adverso en (100,1100] ms: 0.739 (positivos 1239)
+   lead: AUC de M2 contra barrido adverso en (250,1250] ms: 0.710 (positivos 1000)
+   lead: AUC de M2 contra barrido adverso en (500,1500] ms: 0.689 (positivos 841)
+   lead: AUC de M2 contra barrido adverso en (1000,2000] ms: 0.666 (positivos 744)
+   lead: AUC de M2 contra barrido adverso en (2000,3000] ms: 0.669 (positivos 640)
+ q=0.01 theta=0.1499 marcados OOS 0.008 | comprar complementario (taker, ask+250ms, fee) marcados: n=517 EVw=-0.0480 IC90c(-0.085,-0.009) | incondicional: n=9174 EVw=-0.0502 IC90c(-0.062,-0.039)
+ q=0.03 theta=0.1068 marcados OOS 0.025 | comprar complementario (taker, ask+250ms, fee) marcados: n=1426 EVw=-0.0214 IC90c(-0.043,+0.001) | incondicional: n=9174 EVw=-0.0502 IC90c(-0.062,-0.039)
+ q=0.10 theta=0.0648 marcados OOS 0.087 | comprar complementario (taker, ask+250ms, fee) marcados: n=3691 EVw=-0.0379 IC90c(-0.053,-0.023) | incondicional: n=9174 EVw=-0.0502 IC90c(-0.062,-0.039)
+
+FIN t=50s
