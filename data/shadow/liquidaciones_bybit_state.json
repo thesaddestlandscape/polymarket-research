@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-28T09:32:10+00:00",
+ "generado_utc": "2026-10-28T09:38:31+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -21,10 +21,10 @@
    "imbalance": null
   },
   "60min": {
-   "usd_long": 4991.78,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   }
  },
  "BTC": {
@@ -47,10 +47,10 @@
    "imbalance": null
   },
   "60min": {
-   "usd_long": 798288.12,
+   "usd_long": 327.07,
    "usd_short": 1056.23,
-   "n": 107,
-   "imbalance": -0.9974
+   "n": 2,
+   "imbalance": 0.5271
   }
  },
  "DOGE": {
@@ -73,10 +73,10 @@
    "imbalance": null
   },
   "60min": {
-   "usd_long": 117.42,
+   "usd_long": 0.0,
    "usd_short": 501.54,
-   "n": 2,
-   "imbalance": 0.6206
+   "n": 1,
+   "imbalance": 1.0
   }
  },
  "ETH": {
@@ -88,21 +88,21 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 1108.07,
+   "n": 1,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 1108.07,
+   "n": 1,
+   "imbalance": 1.0
   },
   "60min": {
-   "usd_long": 848943.08,
-   "usd_short": 33018.91,
-   "n": 50,
-   "imbalance": -0.9251
+   "usd_long": 0.0,
+   "usd_short": 34126.98,
+   "n": 4,
+   "imbalance": 1.0
   }
  },
  "SOL": {
@@ -125,10 +125,10 @@
    "imbalance": null
   },
   "60min": {
-   "usd_long": 103720.93,
+   "usd_long": 0.0,
    "usd_short": 1797.29,
-   "n": 28,
-   "imbalance": -0.9659
+   "n": 2,
+   "imbalance": 1.0
   }
  },
  "XRP": {
@@ -151,18 +151,18 @@
    "imbalance": null
   },
   "60min": {
-   "usd_long": 17317.97,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 4,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 0,
-  "ultimo_lag_s": null,
-  "max_lag_s": null,
-  "media_lag_s": null,
+  "n_muestras": 1,
+  "ultimo_lag_s": 0.38,
+  "max_lag_s": 0.38,
+  "media_lag_s": 0.38,
   "umbral_alerta_s": 5.0
  }
 }
