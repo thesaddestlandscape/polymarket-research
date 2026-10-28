@@ -7,11 +7,11 @@
   "hi": 0.08,
   "n": 113,
   "pnl_medio": -0.5749,
-  "diff_vs_resto": -0.5595,
-  "p_valor": 0.0205,
+  "diff_vs_resto": -0.5566,
+  "p_valor": 0.02,
   "split_half_diff": [
-   -0.1269,
-   -0.9846
+   -0.1239,
+   -0.9817
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7493,
@@ -43,11 +43,11 @@
   "hi": 0.14,
   "n": 53,
   "pnl_medio": -0.6205,
-  "diff_vs_resto": -0.5997,
-  "p_valor": 0.006,
+  "diff_vs_resto": -0.5996,
+  "p_valor": 0.0045,
   "split_half_diff": [
-   -0.2057,
-   -0.9792
+   -0.2056,
+   -0.9791
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.826,
@@ -96,29 +96,29 @@
   "veredicto": "malo_confirmado"
  },
  "Dota#SEGUIR": {
-  "n_dias": 20,
-  "pnl_sin_mejores_dias": -0.8819,
+  "n_dias": 21,
+  "pnl_sin_mejores_dias": -0.8848,
   "robusto_dias": false,
   "lo": 0.16,
   "hi": 0.21,
-  "n": 44,
-  "pnl_medio": -0.5593,
-  "diff_vs_resto": -0.5447,
-  "p_valor": 0.0055,
+  "n": 45,
+  "pnl_medio": -0.5691,
+  "diff_vs_resto": -0.5546,
+  "p_valor": 0.0035,
   "split_half_diff": [
-   -0.7707,
-   -0.3186
+   -0.7708,
+   -0.3477
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.6705,
+  "pnl_medio_loo": -0.678,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.8927,
-   -0.2032
+   -0.8951,
+   -0.2209
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 77,
-  "g_kelly_f10": -0.08958,
+  "g_kelly_f10": -0.09011,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -235,11 +235,11 @@
   "hi": 0.19,
   "n": 42,
   "pnl_medio": -0.7219,
-  "diff_vs_resto": -0.6982,
+  "diff_vs_resto": -0.6986,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6982,
-   -0.6982
+   -0.6986,
+   -0.6986
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8575,
@@ -283,6 +283,7 @@
   "g_kelly_f10": 0.05358,
   "veredicto_crudo_hoy": "bueno_confirmado",
   "historial_crudo": [
+   "bueno_confirmado",
    "bueno_confirmado",
    "bueno_confirmado"
   ],
