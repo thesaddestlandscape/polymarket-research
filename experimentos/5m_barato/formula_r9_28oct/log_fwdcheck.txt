@@ -1,0 +1,11 @@
+[2026-10-27] EXT ok: tokens=576 q=7361905 prints=160063 x=929126 jd=8917 ju=16394 | awk 53 s total 65 s
+2026-10-27 ok tokens 200 q 9059636
+2026-10-27 14745 163 s
+fin
+{'day': '2026-10-27', 'coin': 'BTC', 'cobertura_desenlace': 1.0, 'tokens': 576, 'filas': 14745, 'ordenes': 58, 'rellenos': 27, 'num': 98.60000000000001, 'den': 71.39999999999999, 'frac_sel': 0.007731434384537131, 'hash_modelo': '971a86f40e07c97567a02390f84f52082988456c32cd914b4a18a47103afa661'}
+[2026-10-27] EXT ok: tokens=576 q=3046452 prints=20344 x=457174 jd=12550 ju=19668 | awk 30 s total 35 s
+2026-10-27 15498 1 s
+fin
+{'day': '2026-10-27', 'coin': 'ETH', 'cobertura_desenlace': 1.0, 'tokens': 576, 'filas': 15498, 'ordenes': 60, 'rellenos': 14, 'num': -3.8, 'den': 13.8, 'frac_sel': 0.00832365466511808, 'hash_modelo': '31f64a2a179107116f4e244a9265c5375f1b259abe145b7f4e498cdcd65fee6c'}
+BTC forward 1 dias: EVw +1.381 dia +1.381 IC90 [+nan,+nan] +1/1 sin2 +nan 71 E/dia -> EN CURSO (<10 dias)
+ETH forward 1 dias: EVw -0.275 dia -0.275 IC90 [+nan,+nan] +0/1 sin2 +nan 14 E/dia -> EN CURSO (<10 dias)

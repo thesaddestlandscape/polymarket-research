@@ -1,0 +1,12 @@
+2026-10-28T20:03:14Z DESVIACION declarada: umbral load5 4->6 (8 nucleos; base del VPS 5-8; nice19/ionice3)
+2026-10-28T20:14:54Z DESVIACION: umbral load5 6->8 (=nproc; la base nocturna del VPS es 6,6)
+2026-10-28T20:15:02Z start r9a.py
+2026-10-28T20:15:38Z end r9a.py rc=0
+2026-10-28T20:15:58Z start r9c.py
+2026-10-28T20:29:03Z end r9c.py rc=0
+2026-10-28T20:35:34Z start r9d.py
+2026-10-28T20:35:38Z end r9d.py rc=0
+2026-10-28T20:35:53Z r9d fallo de forma (R[v,2] tiene 6 campos), corregido sin ver resultados
+2026-10-28T20:35:53Z start r9d.py
+2026-10-28T20:36:45Z end r9d.py rc=0
+2026-10-28T20:42:06Z end fwdcheck rc=0

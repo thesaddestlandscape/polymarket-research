@@ -1,0 +1,26 @@
+== R9 E2 BTC: modelo congelado frozen_E2_hgb_BTC.pkl sha256 971a86f40e07c97567a02390f84f52082988456c32cd914b4a18a47103afa661 thr 0.015498
+  (i) reproduccion INVERSION: IS +0.504 [+0.281,+0.735] +9/10 sin2 +0.357 112E/d n721 | OOS +0.695 [+0.359,+0.997] +9/10 sin2 +0.484 61E/d n721 | DEV +1.268 [+0.514,+2.011] +2/2 sin2 +nan 68E/d n721
+  (ii) dias con relleno 22; 2 mejores dias (06,10) aportan 21 % del pnl; EV pooled sin ellos +0.558; EV por dia: 06:+0.94 07:+0.48 08:+0.33 09:+0.52 10:+1.29 11:+0.13 12:+0.35 13:+0.53 14:-0.10 15:+0.61 16:+0.53 17:+0.95 18:+0.11 19:+0.06 20:+1.36 21:+0.98 22:+0.80 23:+1.55 24:-0.08 25:+0.52 26:+1.14 27:+1.38
+  (iii) rellenos 721 en 590 (dia,token) distintos; ordenes 1765
+  (iv) perfil mediana [bajo-relleno | SIEMPRE-relleno]: acc1 7|26.7; acc5 60.1|161; acc30 485|971; acc60 810|1.57e+03; np1 1|3; np5 6|11; np30 35|58; np60 55|92; tsl200 3.75e+04|1.92e+04; tsl800 3e+05|3e+05; n800_60 0|0; coin_n60 0|0; comp_acc5 0|0; bb 0.31|0.24; spr 0.01|0.01; bs 238|154; dbb1 0|0; dbb5 -0.01|-0.02; cbb 0.68|0.73; dcbb1 0|0.01; dcbb5 0.01|0.03; bid15 0.98|0.97; m15 0.67|0.66; dbid15 0|0; trem 235|165; hour 8|12; jadv 6e+04|6e+04; jopp 6e+04|6e+04; jn30 0|0; jn300 79|12
+      y medio bajo-relleno 0.422 (precio 0.260) | SIEMPRE-relleno 0.184 (precio 0.202)
+  (v) origen propio         n 106: IS +0.469 [-0.234,+0.851] +7/10 sin2 -0.026 10E/d n106 | OOS +0.414 [-0.248,+1.115] +6/10 sin2 -0.042 15E/d n106 | DEV +1.658 [-2.407,+6.663] +2/2 sin2 +nan 15E/d n106
+  (v) origen complementario n 615: IS +0.507 [+0.272,+0.755] +9/10 sin2 +0.346 103E/d n615 | OOS +0.784 [+0.410,+1.140] +9/10 sin2 +0.584 47E/d n615 | DEV +1.158 [+0.016,+2.346] +2/2 sin2 +nan 53E/d n615
+      libros con bb+bb_comp>1 (cruzados) 0 de 721; bb−(1−ask_comp)>0,02: 0; EV de los cruzados -
+  (vi) T_rem  15- 60: IS - | OOS - | DEV -
+  (vi) T_rem  60-120: IS -1.000 [-1.000,-1.000] +0/2 sin2 +nan 2E/d n5 | OOS -1.000 [+nan,+nan] +0/1 sin2 +nan 3E/d n5 | DEV -1.000 [+nan,+nan] +0/1 sin2 +nan 5E/d n5
+  (vi) T_rem 120-200: IS -0.031 [-0.394,+0.306] +4/10 sin2 -0.271 21E/d n154 | OOS +0.001 [-0.609,+0.679] +5/10 sin2 -0.396 17E/d n154 | DEV +0.914 [-7.992,+8.623] +1/2 sin2 +nan 10E/d n154
+  (vi) T_rem 200-286: IS +0.632 [+0.389,+0.941] +9/10 sin2 +0.501 91E/d n562 | OOS +0.972 [+0.650,+1.265] +10/10 sin2 +0.793 44E/d n562 | DEV +1.428 [-1.093,+3.871] +2/2 sin2 +nan 56E/d n562
+  (vi) precio [0.09,0.15): IS -0.522 [-1.227,-0.244] +1/9 sin2 -1.000 2E/d n25 | OOS +0.613 [-2.741,+3.818] +1/5 sin2 -1.000 1E/d n25 | DEV -1.000 [+nan,+nan] +0/1 sin2 +nan 1E/d n25
+  (vi) precio [0.15,0.22): IS +0.333 [-0.763,+0.830] +4/9 sin2 -0.427 8E/d n71 | OOS +1.569 [+0.771,+3.100] +8/9 sin2 +1.243 6E/d n71 | DEV +1.174 [-8.085,+8.752] +1/2 sin2 +nan 5E/d n71
+  (vi) precio [0.22,0.29): IS +0.538 [+0.324,+0.772] +9/10 sin2 +0.418 103E/d n625 | OOS +0.616 [+0.268,+0.929] +8/10 sin2 +0.403 56E/d n625 | DEV +1.292 [+0.018,+2.533] +2/2 sin2 +nan 63E/d n625
+
+== R9 E5 ETH: modelo congelado frozen_E5_logit_ETH.pkl sha256 31f64a2a179107116f4e244a9265c5375f1b259abe145b7f4e498cdcd65fee6c thr -9.421710
+  REGLA T120-200 q05 m=3   IS +0.697 [+0.079,+1.158] +7/10 sin2 +0.341 24E/d n456 | OOS +1.018 [+0.525,+1.584] +8/10 sin2 +0.775 22E/d n456 | DEV +0.629 [-4.639,+5.730] +1/2 sin2 +nan 15E/d n456
+     rellenos 456, (dia,token) 419, 2 mejores dias 23 % pnl, EV sin ellos +0.724, precio medio 0.106, y medio 0.195
+  vecino m=2               IS +0.457 [-0.015,+0.848] +8/10 sin2 +0.182 40E/d n818 | OOS +0.545 [+0.205,+0.825] +8/10 sin2 +0.323 41E/d n818 | DEV +0.072 [-1.836,+1.885] +1/2 sin2 +nan 33E/d n818
+  vecino q03               IS +0.841 [+0.093,+1.683] +8/10 sin2 +0.400 12E/d n229 | OOS +1.548 [+0.964,+2.265] +9/10 sin2 +1.324 11E/d n229 | DEV +1.353 [-4.821,+7.346] +2/2 sin2 +nan 8E/d n229
+  vecino q10               IS +0.612 [+0.362,+0.952] +9/10 sin2 +0.481 50E/d n1055 | OOS +0.350 [+0.005,+0.677] +7/10 sin2 +0.120 56E/d n1055 | DEV +0.542 [-4.220,+5.113] +1/2 sin2 +nan 49E/d n1055
+  vecino T100-220          IS +0.514 [+0.054,+0.870] +7/10 sin2 +0.260 37E/d n703 | OOS +0.738 [+0.355,+1.194] +9/10 sin2 +0.537 33E/d n703 | DEV +1.060 [-3.397,+5.345] +2/2 sin2 +nan 27E/d n703
+  vecino T60-120           IS -0.098 [-0.371,+0.206] +4/10 sin2 -0.275 47E/d n993 | OOS -0.059 [-0.286,+0.180] +3/10 sin2 -0.203 53E/d n993 | DEV +1.022 [+0.873,+1.183] +2/2 sin2 +nan 44E/d n993
+  vecino T200-286          IS +0.865 [-1.139,+2.112] +2/6 sin2 -0.764 7E/d n39 | OOS +1.210 [-0.902,+6.595] +4/7 sin2 -0.059 3E/d n39 | DEV +3.000 [-19.978,+25.121] +1/2 sin2 +nan 1E/d n39
