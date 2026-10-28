@@ -1,0 +1,10 @@
+== R8 Bloque 2/5 [BTC]: filas 337226 (IS 153571, OOS+DEV 183655); tasa base Y10(>=800 acc en 10 s) IS 0.0478 OOS 0.0590
+  Y10: AUC OOS HGB 0.684 [0.672,0.694] logit 0.695 | nulo permutado 0.503 | OOF IS 0.683 | Brier OOS 0.05358 vs constante 0.05563 (skill +0.037) | n pos OOS 10832
+   calibracion OOS por deciles (pred media / observada): 0.016/0.025 0.023/0.029 0.027/0.033 0.030/0.034 0.034/0.041 0.039/0.046 0.045/0.052 0.054/0.064 0.071/0.091 0.143/0.175
+   top 1 % OOS: tasa observada 0.285 frente a base 0.059 (lift 4.8x)
+/usr/local/lib/python3.14/dist-packages/numpy/lib/_function_base_impl.py:3036: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/usr/local/lib/python3.14/dist-packages/numpy/lib/_function_base_impl.py:3037: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+   rasgos con mayor |corr| con el hazard OOS: trem -0.55, np5 +0.39, acc30 +0.37, acc5 +0.37, acc60 +0.34, coin_n60 +0.32
+  Y5: AUC OOS HGB 0.702 [0.692,0.711] logit 0.709 | nulo permutado 0.502 | OOF IS 0.700 | Brier OOS 0.03056 vs constante 0.03140 (skill +0.027) | n pos OOS 5954

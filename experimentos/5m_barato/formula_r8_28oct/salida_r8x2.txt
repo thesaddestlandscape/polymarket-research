@@ -1,0 +1,4 @@
+== R8 Bloque 1b: ¿el deficit de L1 es retraso de la actualizacion? (prints dentro de barrido >=200)
+  D_now>=−2 (L1 coherente)   n=702532 | bb(t+50ms)−p en ticks: mediana 0.0 | bb(t+300ms)−p: mediana 0.0, % con bb(t+300)<=p: 84.7 % | retardo de la 1a fila q tras el print: p50 10 ms p90 52 ms
+  D_now −3..−4               n=3348 | bb(t+50ms)−p en ticks: mediana 3.0 | bb(t+300ms)−p: mediana 1.0, % con bb(t+300)<=p: 42.5 % | retardo de la 1a fila q tras el print: p50 8 ms p90 46 ms
+  D_now<=−5                  n=2588 | bb(t+50ms)−p en ticks: mediana 4.0 | bb(t+300ms)−p: mediana 2.0, % con bb(t+300)<=p: 40.3 % | retardo de la 1a fila q tras el print: p50 7 ms p90 40 ms
