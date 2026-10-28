@@ -1,53 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-10T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 202,
-      "resolve_postmortem_p50_s": 6.0,
-      "resolve_postmortem_p95_s": 11.0,
-      "resolve_postmortem_max_s": 17.0,
-      "n_ciclos_live_trade": 2432,
-      "hueco_live_trade_max_s": 296.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 11,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 60.0,
-      "gb_libres": 28.94,
-      "git_gb": 0.0,
-      "data_gb": 21.88,
-      "datalogs_gb": 5.51
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.49,
-      "ram_pct_libre": 40.1
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 416,
-      "n_results_total": 103334
-    },
-    "carga_sistema": {
-      "load1": 7.29,
-      "load5": 6.21,
-      "load15": 5.45,
-      "nproc": 2,
-      "ratio5": 3.1,
-      "n_procesos_total": 195
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [
-      "🔥 CPU sobresuscrita: load5=6.21 en 2 cores (ratio=3.1x, umbral 3.0x) -- 195 procesos vivos"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-11T07:08:01+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 46,
@@ -13820,6 +13772,219 @@
       "⚠️ screens STALE (código en disco != código cargado): r3shadow",
       "💀 4 OOM-kill(s) del kernel en 24h: systemd(pid 1359, 0.7MB), (sd-pam)(pid 1361, 0.2MB), python(pid 1188630, 2123.8MB), python(pid 1963880, 3795.9MB)",
       "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-27T07:44:06+00:00) -- Traceback (most recent call last):"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-28T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 117,
+      "resolve_postmortem_p50_s": 112.6,
+      "resolve_postmortem_p95_s": 188.1,
+      "resolve_postmortem_max_s": 592.1,
+      "resolve_postmortem_duraciones_s": [
+        90.0,
+        83.8,
+        90.2,
+        158.1,
+        135.8,
+        109.9,
+        98.4,
+        98.4,
+        95.6,
+        171.0,
+        126.3,
+        84.7,
+        90.6,
+        101.1,
+        108.3,
+        171.2,
+        142.5,
+        90.5,
+        101.7,
+        111.8,
+        104.0,
+        184.7,
+        147.1,
+        103.8,
+        108.5,
+        109.6,
+        113.2,
+        111.9,
+        592.1,
+        127.7,
+        143.9,
+        114.2,
+        118.6,
+        118.3,
+        194.7,
+        154.0,
+        131.1,
+        118.3,
+        120.8,
+        106.9,
+        188.1,
+        151.3,
+        107.5,
+        96.7,
+        112.8,
+        166.1,
+        188.3,
+        151.5,
+        120.2,
+        138.1,
+        126.4,
+        137.3,
+        193.8,
+        165.8,
+        122.6,
+        120.2,
+        117.6,
+        114.7,
+        155.0,
+        137.6,
+        93.6,
+        101.1,
+        115.1,
+        88.3,
+        162.0,
+        131.9,
+        90.9,
+        96.0,
+        95.9,
+        95.4,
+        171.1,
+        157.7,
+        94.6,
+        91.2,
+        91.0,
+        88.3,
+        175.5,
+        115.4,
+        84.3,
+        84.6,
+        92.3,
+        93.6,
+        156.6,
+        132.9,
+        86.2,
+        101.7,
+        90.7,
+        94.7,
+        163.5,
+        139.3,
+        97.6,
+        82.8,
+        89.6,
+        83.1,
+        160.8,
+        125.5,
+        86.6,
+        87.6,
+        78.9,
+        91.0,
+        134.0,
+        127.9,
+        88.7,
+        90.2,
+        90.5,
+        102.1,
+        164.3,
+        150.3,
+        104.8,
+        112.8,
+        111.6,
+        106.3,
+        162.6,
+        197.0,
+        102.2,
+        112.6,
+        110.0
+      ],
+      "n_ciclos_live_trade": 4057,
+      "hueco_live_trade_max_s": 62.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 22,
+      "stale": [
+        "r3shadow"
+      ]
+    },
+    "disco": {
+      "pct_usado": 82.0,
+      "gb_libres": 13.57,
+      "git_gb": 0.0,
+      "data_gb": 18.84,
+      "datalogs_gb": 5.55
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 4.23,
+      "ram_pct_libre": 27.8
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 769,
+      "n_results_total": 1196583
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 6.64,
+      "load5": 5.36,
+      "load15": 5.69,
+      "nproc": 8,
+      "ratio5": 0.67,
+      "n_procesos_total": 300
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 3,
+      "eventos": [
+        {
+          "ts": "Oct 27 21:30:19",
+          "pid": "2188139",
+          "nombre": "python",
+          "rss_mb": 3013.8
+        },
+        {
+          "ts": "Oct 27 22:16:13",
+          "pid": "2414283",
+          "nombre": "python",
+          "rss_mb": 3329.3
+        },
+        {
+          "ts": "Oct 27 22:18:20",
+          "pid": "2414488",
+          "nombre": "python",
+          "rss_mb": 2564.2
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 1,
+      "vigias": [
+        {
+          "log": "vigia_wallet_mirror_seleccion_ab.log",
+          "mtime_utc": "2026-10-28T07:44:08+00:00",
+          "ultima_linea_fallo": "Traceback (most recent call last):"
+        }
+      ]
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 592s (umbral 400s)",
+      "⚠️ screens STALE (código en disco != código cargado): r3shadow",
+      "💀 3 OOM-kill(s) del kernel en 24h: python(pid 2188139, 3013.8MB), python(pid 2414283, 3329.3MB), python(pid 2414488, 2564.2MB)",
+      "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-28T07:44:08+00:00) -- Traceback (most recent call last):"
     ],
     "estado": "ANOMALIA"
   }
