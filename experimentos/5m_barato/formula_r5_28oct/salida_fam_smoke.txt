@@ -1,0 +1,67 @@
+== FAMILIA sim3-BTC: 456 variantes x 4 tamanos | IS=27,27 | OOS=27 | N de seleccion=20
+compuerta IS (opera >=80 % de los dias y >=100 ejec/dia a N=20): pasan 315 de 456
+-- IS: 12 mejores por cota inferior IC90 (por dias) del EV/E diario
+  v185 S th800 w1-60 T120-240 TD0 d-0.01 b0.20                  media +0.510 lo90 +0.510 t +0.00 ejec/dia 101
+  v287 S th800 w5-120 T120-240 TD1 d-0.01 b0.20                 media +0.505 lo90 +0.505 t +0.00 ejec/dia 122
+  v235 S th800 w5-30 T120-240 TD1 d+0.01 b0.20                  media +0.487 lo90 +0.487 t +0.00 ejec/dia 112
+  v229 S th800 w5-30 T120-240 TD0 d+0.01 b0.20                  media +0.475 lo90 +0.475 t +0.00 ejec/dia 115
+  v215 S th800 w1-120 T120-240 TD1 d-0.01 b0.20                 media +0.460 lo90 +0.460 t +0.00 ejec/dia 126
+  v261 S th800 w5-60 T120-240 TD1 d+0.00 b0.20                  media +0.444 lo90 +0.444 t +0.00 ejec/dia 112
+  v255 S th800 w5-60 T120-240 TD0 d+0.00 b0.20                  media +0.434 lo90 +0.434 t +0.00 ejec/dia 116
+  v281 S th800 w5-120 T120-240 TD0 d-0.01 b0.20                 media +0.420 lo90 +0.420 t +0.00 ejec/dia 127
+  v238 S th800 w5-30 T120-240 TD1 d-0.01 b0.10                  media +0.410 lo90 +0.410 t +0.00 ejec/dia 116
+  v209 S th800 w1-120 T120-240 TD0 d-0.01 b0.20                 media +0.384 lo90 +0.384 t +0.00 ejec/dia 131
+  v259 S th800 w5-60 T120-240 TD1 d+0.01 b0.20                  media +0.377 lo90 +0.377 t +0.00 ejec/dia 138
+  v232 S th800 w5-30 T120-240 TD0 d-0.01 b0.10                  media +0.376 lo90 +0.376 t +0.00 ejec/dia 120
+ELEGIDA en IS: v185 S th800 w1-60 T120-240 TD0 d-0.01 b0.20 | t_IS=+0.00 | p ajustado max-estadistico (volteo de signos por dias, K=5000, 315 candidatas) = 1.0000
+   FORMULA: S=S theta=800 acc, ventana tras el barrido [1 s, 60 s], T_rem [120,240] s, cancelacion TD=0, cotizar bb-0.01 (cola solo travesia), banda bb>=0.20, tamanos 5/10/20/50 acc
+flujo S800 de TODOS los makers en BTC (OOS): 385988 acc/dia, 70018 EUR/dia de coste
+-- OOS de la elegida | v185
+   N= 5 | EV/E agreg +0.464 | dia medio +0.464 IC90[+nan,+nan] dias+ 1/1 | ejec/dia 44 acc/dia 158 (0.04 % del flujo S800 BTC) coste/dia 41 pnl/dia +19.0 => +6943 EUR/anio
+   N=10 | EV/E agreg +0.492 | dia medio +0.492 IC90[+nan,+nan] dias+ 1/1 | ejec/dia 64 acc/dia 310 (0.08 % del flujo S800 BTC) coste/dia 80 pnl/dia +39.6 => +14453 EUR/anio
+   N=20 | EV/E agreg +0.510 | dia medio +0.510 IC90[+nan,+nan] dias+ 1/1 | ejec/dia 101 acc/dia 610 (0.16 % del flujo S800 BTC) coste/dia 159 pnl/dia +81.1 => +29596 EUR/anio
+   N=50 | EV/E agreg +0.495 | dia medio +0.495 IC90[+nan,+nan] dias+ 1/1 | ejec/dia 169 acc/dia 1458 (0.38 % del flujo S800 BTC) coste/dia 382 pnl/dia +189.1 => +69004 EUR/anio
+-- IS de la elegida (referencia, seleccionada aqui) | v185
+   N= 5 | EV/E agreg +0.464 | dia medio +0.464 IC90[+0.464,+0.464] dias+ 2/2 | ejec/dia 44 acc/dia 158 (0.04 % del flujo S800 BTC) coste/dia 41 pnl/dia +19.0 => +6943 EUR/anio
+   N=10 | EV/E agreg +0.492 | dia medio +0.492 IC90[+0.492,+0.492] dias+ 2/2 | ejec/dia 64 acc/dia 310 (0.08 % del flujo S800 BTC) coste/dia 80 pnl/dia +39.6 => +14453 EUR/anio
+   N=20 | EV/E agreg +0.510 | dia medio +0.510 IC90[+0.510,+0.510] dias+ 2/2 | ejec/dia 101 acc/dia 610 (0.16 % del flujo S800 BTC) coste/dia 159 pnl/dia +81.1 => +29596 EUR/anio
+   N=50 | EV/E agreg +0.495 | dia medio +0.495 IC90[+0.495,+0.495] dias+ 2/2 | ejec/dia 169 acc/dia 1458 (0.38 % del flujo S800 BTC) coste/dia 382 pnl/dia +189.1 => +69004 EUR/anio
+   dias OOS (N=20): 27:+0.51
+-- WALK-FORWARD (re-elige con los dias previos y mide el siguiente; N=20): EV/E agreg +0.510 | dia medio +0.510 IC90[+nan,+nan] dias+ 1/1 | elecciones: {185: 1}
+-- estabilidad de la seleccion: Spearman(media diaria IS, media diaria OOS) entre las 315 candidatas = +1.000
+-- EFECTOS MARGINALES (candidatas IS; EV/E agregado OOS medio, ejec/dia OOS medias, N=20)
+   tipo=A: EV -0.231 ej 947 (n=24) | tipo=S: EV -0.050 ej 375 (n=291)
+   theta=0.0: EV -0.231 ej 947 (n=24) | theta=1600.0: EV -0.043 ej 119 (n=16) | theta=400.0: EV -0.176 ej 538 (n=144) | theta=800.0: EV +0.088 ej 226 (n=131)
+   w1=0.0: EV -0.231 ej 947 (n=24) | w1=1.0: EV -0.069 ej 381 (n=143) | w1=5.0: EV -0.032 ej 368 (n=148)
+   w2=0.0: EV -0.231 ej 947 (n=24) | w2=120.0: EV -0.045 ej 400 (n=110) | w2=30.0: EV -0.074 ej 338 (n=86) | w2=60.0: EV -0.035 ej 378 (n=95)
+   T=0: EV -0.133 ej 451 (n=172) | T=1: EV +0.019 ej 379 (n=143)
+   TD=0: EV -0.069 ej 420 (n=158) | TD=1: EV -0.059 ej 417 (n=157)
+   delta=0: EV -0.049 ej 477 (n=110) | delta=1: EV -0.072 ej 406 (n=104) | delta=2: EV -0.072 ej 367 (n=101)
+   banda=0: EV -0.085 ej 469 (n=170) | banda=1: EV -0.039 ej 359 (n=145)
+-- S menos SIEMPRE (mismos T/TD/delta/banda), EV/E OOS: media +0.179, mediana +0.126, rango [-0.114,+0.805] (n=291); por theta: {400: 0.054, 800: 0.316, 1600: 0.17}
+-- BASE "COTIZAR SIEMPRE" (sin S): EV/E agreg IS | OOS | ejec/dia OOS (N=20)
+   SIEMPRE T60-290 TD0 d+0.01 b0.10             -0.209 | -0.209 | 1181
+   SIEMPRE T60-290 TD0 d+0.00 b0.10             -0.201 | -0.201 | 1054
+   SIEMPRE T60-290 TD0 d-0.01 b0.10             -0.250 | -0.250 | 998
+   SIEMPRE T60-290 TD1 d+0.01 b0.10             -0.203 | -0.203 | 1180
+   SIEMPRE T60-290 TD1 d+0.00 b0.10             -0.193 | -0.193 | 1051
+   SIEMPRE T60-290 TD1 d-0.01 b0.10             -0.242 | -0.242 | 1000
+   SIEMPRE T120-240 TD0 d+0.01 b0.10            -0.244 | -0.244 | 992
+   SIEMPRE T120-240 TD0 d+0.00 b0.10            -0.250 | -0.250 | 873
+   SIEMPRE T120-240 TD0 d-0.01 b0.10            -0.295 | -0.295 | 817
+   SIEMPRE T120-240 TD1 d+0.01 b0.10            -0.238 | -0.238 | 985
+   SIEMPRE T120-240 TD1 d+0.00 b0.10            -0.240 | -0.240 | 850
+   SIEMPRE T120-240 TD1 d-0.01 b0.10            -0.278 | -0.278 | 814
+-- DETALLE OOS de la elegida: 42 registros (suborden con relleno)
+   EV/E (detalle, N=20) +0.510 sobre 159 EUR de coste, 29 mercados
+   bootstrap por MERCADO: IC90 [+0.012, +0.998]
+   por T_rem del primer relleno: [120,180): EV +0.583 coste 88 n=24 | [180,240): EV +0.419 coste 70 n=18
+   por precio de puja: [0.2,0.25): EV +0.056 coste 38 n=13 | [0.25,0.31): EV +0.652 coste 121 n=29
+   cola>0                                   EV +0.510 coste 159 n=42
+   sin salto adverso                        EV +0.510 coste 159 n=42
+-- CAPACIDAD de la elegida (OOS, EUR ~ pUSD sin FX): rampa de tamano; para 200.000 EUR/anio hace falta multiplicar
+   N= 5: 158 acc/dia (cuota 0.04 % del flujo S800 BTC), coste 41 EUR/dia, pnl +19.0 EUR/dia = +6943 EUR/anio; factor para 200 k: 29x
+   N=10: 310 acc/dia (cuota 0.08 % del flujo S800 BTC), coste 80 EUR/dia, pnl +39.6 EUR/dia = +14453 EUR/anio; factor para 200 k: 14x
+   N=20: 610 acc/dia (cuota 0.16 % del flujo S800 BTC), coste 159 EUR/dia, pnl +81.1 EUR/dia = +29596 EUR/anio; factor para 200 k: 7x
+   N=50: 1458 acc/dia (cuota 0.38 % del flujo S800 BTC), coste 382 EUR/dia, pnl +189.1 EUR/dia = +69004 EUR/anio; factor para 200 k: 3x
+fin fam 2 s

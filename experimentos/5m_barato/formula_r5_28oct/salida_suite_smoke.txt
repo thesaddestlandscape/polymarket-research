@@ -1,0 +1,80 @@
+== SUITE R5 (rellenos de TODOS los makers; EV/E ponderado por EUR, bruto de comision; reloj de recepcion) | inclusion mecanica = regla de ext_dias.py de R4
+  2026-10-26 n=166328 (mediana ref 164447) y_cov=1.0000 casadas=0.516 -> INCLUIDO
+  2026-10-27 n=158548 (mediana ref 164447) y_cov=1.0000 casadas=0.521 -> INCLUIDO
+dias incluidos (2): 26,27
+umbral relativo por moneda (percentil de 800 acc en clusters BTC de los dias IS = 0.9000): BTC=NA(n=0) ETH=NA(n=0) SOL=NA(n=0) XRP=NA(n=0) DOGE=NA(n=0) BNB=NA(n=0) HYPE=NA(n=0) AVAX=NA(n=0) LINK=NA(n=0) OTHER=NA(n=0)
+
+-- 1. dEV/E diario de S800 (hueco 300 ms, ventana (5,60] s, recepcion): todas las monedas | BTC
+   2026-10-26 (FRESCO) todas +0.504 | BTC +0.528 | cobertura n 0.130
+   2026-10-27 (FRESCO) todas +0.571 | BTC +0.605 | cobertura n 0.161
+S800 todas | todos incl. 26-27             nS=  47240 cov 0.145/0.157 dEV/E dia +0.538 IC90[+0.327,+0.748] +2/2 agreg +0.505 EV(S) +0.497 p=0.020
+S800 BTC   | todos incl. 26-27             nS=  47095 cov 0.166/0.172 dEV/E dia +0.567 IC90[+0.323,+0.810] +2/2 agreg +0.535 EV(S) +0.500 p=0.022
+
+-- 2. SELECCION ANIDADA (walk-forward) de S entre 12 especificaciones (modo ALL/SELL x umbral); >=8 dias de entrenamiento; cobertura pasada 5-60 %
+   naive_media    dEV/E dia medio +nan IC90[+nan,+nan] dias+ 0/0 | cobertura media elegida nan | elecciones {}
+   prudente_lo90  dEV/E dia medio +nan IC90[+nan,+nan] dias+ 0/0 | cobertura media elegida nan | elecciones {}
+   fijo_ALL800    dEV/E dia medio +nan IC90[+nan,+nan] dias+ 0/0 | cobertura media elegida nan | elecciones {}
+   (referencia sesgada: mejor celda A POSTERIORI S3200 con media +3.342 sobre los 2 dias; las medias de todas las celdas: A100:-0.124 A200:+0.003 A400:+0.186 A800:+0.538 A1600:+1.170 A3200:+1.975 S100:-0.145 S200:-0.174 S400:-0.009 S800:+0.307 S1600:+0.714 S3200:+3.342)
+
+-- 3. FAMILIA DE ESTADOS COMPLEMENTARIOS (16, prerregistrada, sin eleccion): dEV/E de cada estado vs el resto; Holm sobre los 16
+   flujo propio V=0                             nS=   28613 cov 0.088/0.100 dEV/E +0.147 IC90[-0.431,+0.725] +2/2 p=0.177 pHolm=1.000
+   flujo propio V(0,200)                        nS=   41785 cov 0.129/0.109 dEV/E +0.059 IC90[-0.350,+0.467] +1/2 p=0.266 pHolm=1.000
+   flujo propio V[200,800)                      nS=   47764 cov 0.147/0.159 dEV/E -0.059 IC90[-0.091,-0.027] +0/2 p=0.973 pHolm=1.000
+   flujo propio V[800,3200)                     nS=  154260 cov 0.475/0.460 dEV/E -0.220 IC90[-0.645,+0.206] +0/2 p=0.905 pHolm=1.000
+   flujo propio V[3200,12800)                   nS=   50163 cov 0.154/0.163 dEV/E +0.138 IC90[-0.929,+1.204] +1/2 p=0.282 pHolm=1.000
+   flujo propio V>=12800                        nS=    2291 cov 0.007/0.009 dEV/E +2.501 IC90[-1.037,+6.039] +2/2 p=0.070 pHolm=1.000
+   barridos>=200 n=0                            nS=  113550 cov 0.350/0.343 dEV/E -0.003 IC90[-0.434,+0.428] +1/2 p=0.514 pHolm=1.000
+   barridos>=200 n=1                            nS=   56796 cov 0.175/0.179 dEV/E -0.067 IC90[-0.256,+0.121] +0/2 p=0.867 pHolm=1.000
+   barridos>=200 n=2-3                          nS=   84003 cov 0.259/0.252 dEV/E -0.049 IC90[-0.637,+0.540] +1/2 p=0.653 pHolm=1.000
+   barridos>=200 n>=4                           nS=   70527 cov 0.217/0.226 dEV/E +0.108 IC90[-0.050,+0.266] +2/2 p=0.073 pHolm=1.000
+   BTC-lider V=0 (monedas no BTC)               nS=    6463 cov 0.157/0.190 dEV/E -0.013 IC90[-1.004,+0.977] +1/2 p=0.527 pHolm=1.000
+   BTC-lider V(0,200) (monedas no BTC)          nS=    2650 cov 0.065/0.073 dEV/E -0.043 IC90[-0.861,+0.776] +1/2 p=0.601 pHolm=1.000
+   BTC-lider V[200,800) (monedas no BTC)        nS=    6085 cov 0.148/0.157 dEV/E +0.008 IC90[-1.958,+1.973] +1/2 p=0.492 pHolm=1.000
+   BTC-lider V[800,3200) (monedas no BTC)       nS=   20109 cov 0.490/0.450 dEV/E +0.048 IC90[+0.019,+0.076] +2/2 p=0.030 pHolm=0.479
+   BTC-lider V[3200,12800) (monedas no BTC)     nS=    5613 cov 0.137/0.128 dEV/E -0.047 IC90[-1.658,+1.564] +1/2 p=0.558 pHolm=1.000
+   BTC-lider V>=12800 (monedas no BTC)          nS=     122 cov 0.003/0.002 dEV/E -0.112 IC90[-3.888,+3.663] +1/2 p=0.559 pHolm=1.000
+   cobertura acumulada (umbral de flujo propio, anidado):
+   flujo propio >= 200 acc                 nS= 254478 cov 0.783/0.792 dEV/E dia -0.111 IC90[-0.175,-0.046] +0/2 agreg -0.117 EV(S) +0.047 p=0.971
+   flujo propio >= 800 acc                 nS= 206714 cov 0.636/0.633 dEV/E dia -0.045 IC90[-0.081,-0.009] +0/2 agreg -0.049 EV(S) +0.053 p=0.960
+   flujo propio >= 3200 acc                nS=  52454 cov 0.161/0.172 dEV/E dia +0.302 IC90[-0.348,+0.951] +2/2 agreg +0.285 EV(S) +0.307 p=0.105
+   flujo propio >= 12800 acc               nS=   2291 cov 0.007/0.009 dEV/E dia +2.501 IC90[-1.037,+6.039] +2/2 agreg +2.550 EV(S) +2.598 p=0.070
+
+-- 4. RESTRICCION prerregistrada BTC y T_rem en [120,240) s: IC por dia y por MERCADO
+S800 BTC T120-240 | FRESCOS (05-08 y 26-27) nS=  21772 cov 0.155/0.162 dEV/E dia +0.939 IC90[+0.174,+1.704] +2/2 agreg +0.928 EV(S) +0.840 p=0.041
+       bootstrap por mercado (563 mercados): dEV +0.928 IC90 [+0.302,+1.515]
+S800 BTC T120-240 | todos                  nS=  21772 cov 0.155/0.162 dEV/E dia +0.939 IC90[+0.174,+1.704] +2/2 agreg +0.928 EV(S) +0.840 p=0.041
+       bootstrap por mercado (563 mercados): dEV +0.928 IC90 [+0.302,+1.515]
+S800 BTC T[0,60) | todos                   nS=   8742 cov 0.339/0.354 dEV/E dia -0.382 IC90[-1.504,+0.740] +0/2 agreg -0.446 EV(S) -0.329 p=0.861
+S800 BTC T[60,120) | todos                 nS=  10743 cov 0.174/0.181 dEV/E dia +0.034 IC90[-3.094,+3.161] +1/2 agreg +0.070 EV(S) -0.088 p=0.478
+S800 BTC T[120,180) | todos                nS=  10837 cov 0.153/0.153 dEV/E dia +0.623 IC90[-1.870,+3.117] +2/2 agreg +0.694 EV(S) +0.694 p=0.180
+S800 BTC T[180,240) | todos                nS=  10935 cov 0.157/0.171 dEV/E dia +1.161 IC90[+0.766,+1.556] +2/2 agreg +1.136 EV(S) +0.962 p=0.017
+S800 BTC T[240,301) | todos                nS=   5746 cov 0.105/0.113 dEV/E dia +1.174 IC90[-4.317,+6.664] +2/2 agreg +1.235 EV(S) +1.389 p=0.203
+
+-- 5. TAMANO del relleno (BTC; S800 vs no-S dentro de cada tramo de tamano)
+BTC sz[0,5)                                nS=  13955 cov 0.154/0.142 dEV/E dia +0.410 IC90[+0.271,+0.550] +2/2 agreg +0.384 EV(S) +0.342 p=0.017
+BTC sz[5,20)                               nS=  22929 cov 0.166/0.152 dEV/E dia +0.509 IC90[+0.384,+0.634] +2/2 agreg +0.480 EV(S) +0.429 p=0.012
+BTC sz[20,100)                             nS=   9573 cov 0.183/0.171 dEV/E dia +0.515 IC90[+0.191,+0.839] +2/2 agreg +0.485 EV(S) +0.467 p=0.032
+BTC sz[100,500)                            nS=    617 cov 0.233/0.236 dEV/E dia +0.802 IC90[+0.619,+0.985] +2/2 agreg +0.726 EV(S) +0.685 p=0.012
+BTC sz[500,1e+12)                          nS=     21 cov 0.396/0.447 dEV/E dia +2.640 IC90[-2.652,+7.932] +2/2 agreg +2.383 EV(S) +1.585 p=0.098
+BTC precio[0.09,0.15)                      nS=  16370 cov 0.223/0.239 dEV/E dia +0.717 IC90[-1.579,+3.013] +2/2 agreg +0.652 EV(S) +0.338 p=0.149
+BTC precio[0.15,0.20)                      nS=  12407 cov 0.187/0.207 dEV/E dia +0.934 IC90[-0.574,+2.443] +2/2 agreg +0.941 EV(S) +0.828 p=0.080
+BTC precio[0.20,0.25)                      nS=   9417 cov 0.162/0.194 dEV/E dia +0.617 IC90[-2.973,+4.206] +2/2 agreg +0.656 EV(S) +0.699 p=0.237
+BTC precio[0.25,0.31)                      nS=   8056 cov 0.105/0.117 dEV/E dia +0.105 IC90[-1.417,+1.626] +1/2 agreg +0.101 EV(S) +0.145 p=0.370
+
+-- 6. POR QUE S_reg REPLICA Y S_chain NO
+   celda reg y chain  fills 0.132 del total, EUR 0.142, EV/E +0.535
+   celda solo reg     fills 0.014 del total, EUR 0.015, EV/E +0.127
+   celda solo chain   fills 0.311 del total, EUR 0.308, EV/E -0.041
+   celda ninguno      fills 0.543 del total, EUR 0.535, EV/E +0.011
+S_reg800 ALL (registro, recepcion)         nS=  47240 cov 0.145/0.157 dEV/E dia +0.538 IC90[+0.327,+0.748] +2/2 agreg +0.505 EV(S) +0.497 p=0.020
+S_reg800 SOLO venta barata                 nS=  11486 cov 0.035/0.034 dEV/E dia +0.307 IC90[-3.782,+4.396] +1/2 agreg +0.474 EV(S) +0.529 p=0.359
+S_chain>=200 (tx,tomador,token; bloque)    nS= 143898 cov 0.443/0.450 dEV/E dia +0.134 IC90[+0.039,+0.229] +2/2 agreg +0.127 EV(S) +0.141 p=0.035
+S_chain>=800                               nS=  22732 cov 0.070/0.075 dEV/E dia +0.996 IC90[-0.977,+2.969] +2/2 agreg +0.930 EV(S) +0.931 p=0.097
+   EV/E de fills fuera de S800 (referencia): -0.008 ; clusters>=800: 455 (BTC 449)
+   EV de los fills en (5,60] s tras cada barrido BTC, por n de impresiones: [1,3): n=134 EV +0.956 (EUR 45509) | [3,11): n=108 EV +1.392 (EUR 50292) | [11,51): n=119 EV +0.341 (EUR 55082) | [51,1e+09): n=88 EV +0.640 (EUR 35682)
+   EV de los fills en (5,60] s tras cada barrido BTC, por fraccion de venta barata: [0,0.2): n=370 EV +0.832 (EUR 157216) | [0.8,1.01): n=79 EV +0.829 (EUR 29349)
+   EV de los fills en (5,60] s tras cada barrido BTC, por duracion ms: [0,1000): n=256 EV +1.108 (EUR 102638) | [1000,5000): n=179 EV +0.520 (EUR 75032) | [5000,1e+12): n=14 EV +0.266 (EUR 8895)
+   EV de los fills en (5,60] s tras cada barrido BTC, por tamano acc: [800,1600): n=341 EV +0.561 (EUR 126016) | [1600,3200): n=82 EV +1.059 (EUR 44098) | [3200,1e+09): n=26 EV +2.290 (EUR 16452)
+
+-- 7. POR MONEDA con umbral relativo fijado en IS (sin desenlaces); S_rel vs no-S dentro de la moneda
+fin suite 1 s
