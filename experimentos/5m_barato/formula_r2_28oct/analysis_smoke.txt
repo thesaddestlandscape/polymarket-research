@@ -1,0 +1,93 @@
+SMOKE (desenlaces sinteticos si falta; NO interpretable) unidades elegibles 280 duplicadas 0 sin desenlace 0
+dias 1 2026-10-24 2026-10-24 monedas ['BNB', 'BTC', 'DOGE', 'ETH', 'SOL', 'XRP'] fv15 disponible en el 57.9 % de las elegibles
+REGRESION U_p1 vs P(R1): comunes 280 de 280 ; sh igual 100.00 % cost igual 100.00 % t1 igual 100.00 %
+
+== sigma_eps realizada en las elegibles: std 0.0099 ; P(eps<-0.010) 0.164 P(eps<-0.005) 0.279 P(eps<+0.005) 0.657 ; media 0.00119
+   cota empirica G10: bloquea 16.4 % ; E[eps|eps>=c]-E[eps] = +0.0029 por acc
+   cota empirica G5: bloquea 27.9 % ; E[eps|eps>=c]-E[eps] = +0.0048 por acc
+   cota empirica GP5: bloquea 65.7 % ; E[eps|eps>=c]-E[eps] = +0.0112 por acc
+
+== TABLA por celda (EV/acc = sum pnl / sum acc ; IC90 por dias; AS = E[tasa_estrato - gana | relleno])
+celda  rellenos  lam  dias  EV/acc [IC90]  EVw  EVw-sin2  EV/acc IS | OOS  AS/acc [IC90]  EUR  EUR/elegible
+U_p1       171 0.611   1 -0.0474 [-0.0474,-0.0474] -0.2110 +nan  +nan | -0.0474  +0.0709 [+0.0709,+0.0709]    -37.6 -0.1342
+U_z0       102 0.364   1 -0.0688 [-0.0688,-0.0688] -0.3174 +nan  +nan | -0.0688  +0.0731 [+0.0731,+0.0731]    -31.3 -0.1116
+U_m1        55 0.196   1 -0.1288 [-0.1288,-0.1288] -0.6280 +nan  +nan | -0.1288  +0.1409 [+0.1409,+0.1409]    -34.8 -0.1242
+U_m2        36 0.129   1 -0.1600 [-0.1600,-0.1600] -0.8426 +nan  +nan | -0.1600  +0.1853 [+0.1853,+0.1853]    -28.8 -0.1028
+G10_p1     163 0.582   1 -0.0482 [-0.0482,-0.0482] -0.2206 +nan  +nan | -0.0482  +0.0812 [+0.0812,+0.0812]    -36.1 -0.1289
+G10_z0      91 0.325   1 -0.0879 [-0.0879,-0.0879] -0.4322 +nan  +nan | -0.0879  +0.1051 [+0.1051,+0.1051]    -35.8 -0.1279
+G10_m1      45 0.161   1 -0.1251 [-0.1251,-0.1251] -0.6402 +nan  +nan | -0.1251  +0.1411 [+0.1411,+0.1411]    -27.5 -0.0983
+G10_m2      29 0.104   1 -0.1386 [-0.1386,-0.1386] -0.7918 +nan  +nan | -0.1386  +0.1727 [+0.1727,+0.1727]    -20.1 -0.0718
+G5_p1      148 0.529   1 -0.0459 [-0.0459,-0.0459] -0.2162 +nan  +nan | -0.0459  +0.0826 [+0.0826,+0.0826]    -30.9 -0.1104
+G5_z0       68 0.243   1 -0.0847 [-0.0847,-0.0847] -0.4168 +nan  +nan | -0.0847  +0.1019 [+0.1019,+0.1019]    -26.3 -0.0941
+G5_m1       32 0.114   1 -0.1154 [-0.1154,-0.1154] -0.6414 +nan  +nan | -0.1154  +0.1486 [+0.1486,+0.1486]    -18.5 -0.0659
+G5_m2       19 0.068   1 -0.1090 [-0.1090,-0.1090] -0.6668 +nan  +nan | -0.1090  +0.1476 [+0.1476,+0.1476]    -10.4 -0.0370
+GP5_p1      93 0.332   1 -0.0433 [-0.0433,-0.0433] -0.2017 +nan  +nan | -0.0433  +0.0607 [+0.0607,+0.0607]    -18.3 -0.0653
+GP5_z0      27 0.096   1 -0.0342 [-0.0342,-0.0342] -0.1688 +nan  +nan | -0.0342  +0.0364 [+0.0364,+0.0364]     -4.1 -0.0147
+GP5_m1      12 0.043   1 -0.1681 [-0.1681,-0.1681] -0.9888 +nan  +nan | -0.1681  +0.1886 [+0.1886,+0.1886]    -10.1 -0.0360
+GP5_m2       7 0.025   1 -0.1554 [-0.1554,-0.1554] -0.9887 +nan  +nan | -0.1554  +0.2090 [+0.2090,+0.2090]     -5.4 -0.0194
+I5_p1      153 0.546   1 -0.0723 [-0.0723,-0.0723] -0.3196 +nan  +nan | -0.0723  +0.0924 [+0.0924,+0.0924]    -51.2 -0.1829
+I5_z0       99 0.354   1 -0.0727 [-0.0727,-0.0727] -0.3365 +nan  +nan | -0.0727  +0.0800 [+0.0800,+0.0800]    -31.5 -0.1126
+I5_m1       53 0.189   1 -0.1259 [-0.1259,-0.1259] -0.6114 +nan  +nan | -0.1259  +0.1373 [+0.1373,+0.1373]    -32.4 -0.1156
+I5_m2       34 0.121   1 -0.1600 [-0.1600,-0.1600] -0.8331 +nan  +nan | -0.1600  +0.1831 [+0.1831,+0.1831]    -26.7 -0.0955
+O_z0       161 0.575   1 -0.0508 [-0.0508,-0.0508] -0.2368 +nan  +nan | -0.0508  +0.0838 [+0.0838,+0.0838]    -37.7 -0.1346
+O_m1        86 0.307   1 -0.0577 [-0.0577,-0.0577] -0.2746 +nan  +nan | -0.0577  +0.0718 [+0.0718,+0.0718]    -23.5 -0.0840
+O_m2        55 0.196   1 -0.1189 [-0.1189,-0.1189] -0.6094 +nan  +nan | -0.1189  +0.1409 [+0.1409,+0.1409]    -32.1 -0.1147
+
+MAX-STATISTIC (bootstrap de dias centrado, 16 celdas): T_max -inf en U_p1 ; p_max = 1.0000
+PLACEBO de relleno (desenlace permutado dentro de estrato): max-statistic p_plac = 1.0000 ; p por celda: U_p1:0.970 U_z0:0.990 U_m1:1.000 U_m2:1.000 G10_p1:0.990 G10_z0:1.000 G10_m1:0.980 G10_m2:1.000 G5_p1:0.990 G5_z0:1.000 G5_m1:0.980 G5_m2:0.910 GP5_p1:0.910 GP5_z0:0.670 GP5_m1:1.000 GP5_m2:1.000
+
+== COMPUERTAS: EV/acc(g) - EV/acc(U) en el mismo delta [IC90 dias]
+G10_p1  dEV -0.0008 [-0.0008,-0.0008] rellenos 163 vs 171
+G10_z0  dEV -0.0191 [-0.0191,-0.0191] rellenos 91 vs 102
+G10_m1  dEV +0.0037 [+0.0037,+0.0037] rellenos 45 vs 55
+G10_m2  dEV +0.0214 [+0.0214,+0.0214] rellenos 29 vs 36
+G5_p1   dEV +0.0014 [+0.0014,+0.0014] rellenos 148 vs 171
+G5_z0   dEV -0.0159 [-0.0159,-0.0159] rellenos 68 vs 102
+G5_m1   dEV +0.0134 [+0.0134,+0.0134] rellenos 32 vs 55
+G5_m2   dEV +0.0510 [+0.0510,+0.0510] rellenos 19 vs 36
+GP5_p1  dEV +0.0041 [+0.0041,+0.0041] rellenos 93 vs 171
+GP5_z0  dEV +0.0345 [+0.0345,+0.0345] rellenos 27 vs 102
+GP5_m1  dEV -0.0393 [-0.0393,-0.0393] rellenos 12 vs 55
+GP5_m2  dEV +0.0046 [+0.0046,+0.0046] rellenos 7 vs 36
+I5_p1   dEV -0.0249 [-0.0249,-0.0249] rellenos 153 vs 171
+I5_z0   dEV -0.0040 [-0.0040,-0.0040] rellenos 99 vs 102
+I5_m1   dEV +0.0029 [+0.0029,+0.0029] rellenos 53 vs 55
+I5_m2   dEV -0.0001 [-0.0001,-0.0001] rellenos 34 vs 36
+
+== CRITERIOS (CANDIDATE = todos) ==
+U_p1    REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+U_z0    REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+U_m1    REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+U_m2    REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+G10_p1  REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8,c9
+G10_z0  REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8,c9
+G10_m1  REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8,c9
+G10_m2  REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+G5_p1   REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+G5_z0   REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8,c9
+G5_m1   REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8,c9
+G5_m2   REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+GP5_p1  REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+GP5_z0  REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+GP5_m1  REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8,c9
+GP5_m2  REJECTED    fallan: c1,c2,c3,c4,c5,c6,c7,c8
+VEREDICTO GLOBAL: REJECTED (ninguna celda cumple todos los criterios)
+
+== COTAS OPTIMISTAS (cola 0) vs ESTRICTAS; regla del logger L2 ==
+O_z0 EV -0.0508 [-0.0508,-0.0508] n=161 | estricta U_z0 EV -0.0688 n=102 | cota supera umbral: False
+O_m1 EV -0.0577 [-0.0577,-0.0577] n=86 | estricta U_m1 EV -0.1288 n=55 | cota supera umbral: False
+O_m2 EV -0.1189 [-0.1189,-0.1189] n=55 | estricta U_m2 EV -0.1600 n=36 | cota supera umbral: False
+LOGGER L2 NECESARIO (cota optimista supera +0.02 con IC90>0 y la estricta no): False
+
+CURVA U: lambda por profundidad (0..3 c bajo +0.01): [0.6107 0.3643 0.1964 0.1286] k_eff por centimo 0.529 (1/k = 1.89 c) ; EV|relleno(d)=-0.0416-0.0398*d (c) 
+   EV|relleno no crece con la profundidad (pendiente -0.0398/c): solucion de esquina, no cotizar con ventaja
+   argmax EV/elegible: m2 [-0.1342, -0.1116, -0.1242, -0.1028]
+
+== U_p1 por moneda x bucket de bb (n rellenos / EV/acc / EUR) ==
+BNB  b1    4 -0.113   -1.7 | b2    0 +nan   +0.0 | b3    1 -0.267   -0.0 | b4    7 +0.223   +6.1 | total   12 +0.103
+BTC  b1    1 -0.148   -0.7 | b2    1 -0.198   -1.0 | b3    5 -0.009   -0.2 | b4   35 -0.079  -13.7 | total   42 -0.075
+DOGE b1    0 +nan   +0.0 | b2    1 -0.208   -1.0 | b3    3 -0.204   -3.1 | b4   13 +0.022   +1.3 | total   17 -0.035
+ETH  b1    0 +nan   +0.0 | b2    2 -0.163   -1.6 | b3    5 -0.206   -5.1 | b4   30 -0.089  -12.4 | total   37 -0.110
+SOL  b1    2 -0.198   -2.0 | b2    0 +nan   +0.0 | b3    5 -0.148   -2.6 | b4   27 -0.062   -8.1 | total   34 -0.081
+XRP  b1    0 +nan   +0.0 | b2    0 +nan   +0.0 | b3    8 -0.062   -2.2 | b4   21 +0.112  +10.6 | total   29 +0.064
+FIN_ANALISIS2

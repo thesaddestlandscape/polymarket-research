@@ -1,0 +1,49 @@
+analysis3 SMOKE  dias=2026-10-10..2026-10-10
+== DATOS: dias cargados 1 de 1 (faltan []) | filas 27740 -> con desenlace 27740 (cobertura 100.00 %) | IS 23621 OOS 4119 | SMOKE (no decide)
+   por moneda {'BTC': 324, 'ETH': 370, 'SOL': 5150, 'XRP': 4290, 'DOGE': 7690, 'BNB': 9916} | hasfv_130 0.898 | filas con relleno a 2 s 2146 (7.74 %) | y media 0.228 | 1/(2m(1-m)) medio 3.188
+M0 R2-fijo OOS       n=    4119 dias=22 | dLL=+8.197e-04 IC90t[-1.25e-04,+1.76e-03] boot[-9.13e-05,+1.73e-03] | sigma_eps=0.62 pp  dLL_pred=1.17e-04 | pend.calib=-1.09 IC90[-5.33,1.71]
+M0 R2-fijo IS        n=   23621 dias=22 | dLL=+2.240e-04 IC90t[-2.66e-04,+7.14e-04] boot[-2.21e-04,+6.70e-04] | sigma_eps=0.59 pp  dLL_pred=1.06e-04 | pend.calib=-0.62 IC90[-2.76,1.76]
+M1 OOS               n=    4119 dias=22 | dLL=+1.631e-03 IC90t[-4.82e-03,+8.08e-03] boot[-4.55e-03,+7.25e-03] | sigma_eps=2.96 pp  dLL_pred=2.74e-03 | pend.calib=0.11 IC90[-0.92,1.79]
+M1 IS-CV             n=   23621 dias=22 | dLL=+9.329e-03 IC90t[+5.73e-03,+1.29e-02] boot[+6.08e-03,+1.26e-02] | sigma_eps=3.68 pp  dLL_pred=3.90e-03 | pend.calib=-0.69 IC90[-1.08,-0.24]
+   [M1] p=18  0s
+M2 OOS               n=    4119 dias=22 | dLL=+1.124e-03 IC90t[-5.34e-03,+7.59e-03] boot[-5.15e-03,+6.92e-03] | sigma_eps=3.04 pp  dLL_pred=2.86e-03 | pend.calib=0.18 IC90[-0.73,2.22]
+   [M2] p=24  0s
+M3 OOS               n=    4119 dias=22 | dLL=-5.230e-04 IC90t[-8.33e-03,+7.28e-03] boot[-7.41e-03,+6.41e-03] | sigma_eps=3.83 pp  dLL_pred=4.46e-03 | pend.calib=0.33 IC90[-0.35,1.58]
+   [M3] p=33  0s
+M4 OOS               n=    4119 dias=22 | dLL=-3.138e-03 IC90t[-1.06e-02,+4.33e-03] boot[-1.00e-02,+4.12e-03] | sigma_eps=4.16 pp  dLL_pred=5.22e-03 | pend.calib=0.69 IC90[0.26,1.88]
+   [M4] p=38  0s
+M5 OOS               n=    4119 dias=22 | dLL=-4.381e-03 IC90t[-1.27e-02,+3.94e-03] boot[-1.21e-02,+3.03e-03] | sigma_eps=4.68 pp  dLL_pred=6.61e-03 | pend.calib=0.73 IC90[0.38,1.82]
+M5 IS-CV             n=   23621 dias=22 | dLL=+9.256e-03 IC90t[+3.35e-03,+1.52e-02] boot[+3.72e-03,+1.49e-02] | sigma_eps=5.27 pp  dLL_pred=8.02e-03 | pend.calib=-0.09 IC90[-0.46,0.21]
+   M5 coef estandarizados (top12 por |b|): c4=+0.3616, c5=+0.3372, c3=+0.2298, bn1=-0.2172, c2=+0.2144, bn1k=+0.2141, dq=+0.2003, las=+0.1802, tsl=+0.1721, dm30=-0.1553, fc30=-0.1445, dc0=-0.1281
+   [M5] p=44  1s
+M1nb (sin libro) OOS n=    4119 dias=22 | dLL=-5.090e-04 IC90t[-7.42e-03,+6.41e-03] boot[-7.12e-03,+5.09e-03] | sigma_eps=2.81 pp  dLL_pred=2.47e-03 | pend.calib=0.35 IC90[-0.70,3.75]
+M5nb (sin libro) OOS n=    4119 dias=22 | dLL=-6.284e-03 IC90t[-1.47e-02,+2.16e-03] boot[-1.43e-02,+1.03e-03] | sigma_eps=4.60 pp  dLL_pred=6.36e-03 | pend.calib=0.85 IC90[0.51,2.04]
+M1 LR=60 OOS         n=    4119 dias=22 | dLL=+1.427e-03 IC90t[-5.72e-03,+8.57e-03] boot[-5.32e-03,+7.93e-03] | sigma_eps=3.25 pp  dLL_pred=3.26e-03 | pend.calib=0.05 IC90[-0.89,2.45]
+M5 LR=60 OOS         n=    4119 dias=22 | dLL=-4.772e-03 IC90t[-1.38e-02,+4.24e-03] boot[-1.32e-02,+3.27e-03] | sigma_eps=4.87 pp  dLL_pred=7.17e-03 | pend.calib=0.66 IC90[0.33,1.83]
+M1 LR=30 OOS         n=    4119 dias=22 | dLL=+1.855e-03 IC90t[-5.28e-03,+8.99e-03] boot[-5.40e-03,+8.14e-03] | sigma_eps=3.32 pp  dLL_pred=3.37e-03 | pend.calib=0.05 IC90[-0.91,2.24]
+M5 LR=30 OOS         n=    4119 dias=22 | dLL=-4.405e-03 IC90t[-1.33e-02,+4.45e-03] boot[-1.29e-02,+3.62e-03] | sigma_eps=4.94 pp  dLL_pred=7.38e-03 | pend.calib=0.65 IC90[0.31,1.79]
+   M5 OOS moneda SOL  n=    922 dLL=-2.05e-03 IC90t[-2.63e-02,+2.22e-02] sigma_eps=4.71 pp
+   M5 OOS moneda XRP  n=    558 dLL=+1.01e-03 IC90t[-1.91e-02,+2.11e-02] sigma_eps=3.94 pp
+   M5 OOS moneda DOGE n=   1523 dLL=-7.95e-03 IC90t[-2.91e-02,+1.32e-02] sigma_eps=4.68 pp
+   M5 OOS moneda BNB  n=   1022 dLL=-5.95e-03 IC90t[-2.38e-02,+1.19e-02] sigma_eps=4.01 pp
+   M5 IS-CV sin los 2 mejores dias: dLL=+1.15e-02 (con todos +9.26e-03; mejores dias -1.83e-02 -7.60e-03)
+   M5 OOS sin los 2 mejores dias: dLL=+3.31e-04 (con todos -4.38e-03; mejores dias -6.28e-02 -4.02e-02)
+   placebo permutacion (estratos dia x moneda x T30 x m0,02; 200 perm.): dLL observado(filas) -1.740e-03 | placebo media -2.562e-03 sd 5.37e-04 | p=0.935
+== PROXY ESTATICO DE GP (primer relleno por mercado-token con puja a bb+0,01, cola 0; informativo, no decide): filas relleno 2146, primeros rellenos 1153 (OOS 182), EV/acc sin compuerta +0.0074 (peso por tamano/5)
+   M1: E[eps|primer relleno]=+0.96 pp frente a E[eps|todas las filas]=+0.57 pp (fuera de muestra: OOF en IS, final en OOS)
+   M1 c=+0.0 pp: pasan 653 (56.1 % del peso) | EV/acc paso +0.0028 dEV(agregado) -0.0047 | 22d dias=22 dEV=-0.0018 IC90[-0.0188,+0.0153] ; OOS dias=22 dEV=+0.0526 IC90[-0.0276,+0.1328] | placebo por precio de relleno: media +0.0053 p=0.848
+   M1 c=+0.5 pp: pasan 586 (50.4 % del peso) | EV/acc paso +0.0087 dEV(agregado) +0.0012 | 22d dias=22 dEV=+0.0025 IC90[-0.0164,+0.0214] ; OOS dias=22 dEV=+0.0485 IC90[-0.0404,+0.1373] | placebo por precio de relleno: media +0.0069 p=0.679
+   M1 c=+1.0 pp: pasan 524 (44.9 % del peso) | EV/acc paso -0.0070 dEV(agregado) -0.0144 | 22d dias=22 dEV=-0.0120 IC90[-0.0335,+0.0094] ; OOS dias=21 dEV=+0.0148 IC90[-0.0763,+0.1058] | placebo por precio de relleno: media +0.0072 p=0.960
+   M1 c=+2.0 pp: pasan 427 (37.1 % del peso) | EV/acc paso -0.0192 dEV(agregado) -0.0266 | 22d dias=22 dEV=-0.0261 IC90[-0.0486,-0.0035] ; OOS dias=20 dEV=-0.0255 IC90[-0.1313,+0.0804] | placebo por precio de relleno: media +0.0122 p=0.990
+   M5: E[eps|primer relleno]=+1.95 pp frente a E[eps|todas las filas]=+0.58 pp (fuera de muestra: OOF en IS, final en OOS)
+   M5 c=+0.0 pp: pasan 660 (57.1 % del peso) | EV/acc paso +0.0280 dEV(agregado) +0.0206 | 22d dias=22 dEV=+0.0217 IC90[+0.0015,+0.0419] ; OOS dias=22 dEV=+0.0805 IC90[+0.0346,+0.1264] | placebo por precio de relleno: media +0.0112 p=0.166
+   M5 c=+0.5 pp: pasan 615 (53.2 % del peso) | EV/acc paso +0.0343 dEV(agregado) +0.0269 | 22d dias=22 dEV=+0.0285 IC90[+0.0072,+0.0498] ; OOS dias=22 dEV=+0.0883 IC90[+0.0197,+0.1569] | placebo por precio de relleno: media +0.0150 p=0.152
+   M5 c=+1.0 pp: pasan 564 (49.1 % del peso) | EV/acc paso +0.0385 dEV(agregado) +0.0311 | 22d dias=22 dEV=+0.0306 IC90[+0.0084,+0.0528] ; OOS dias=22 dEV=+0.0634 IC90[-0.0111,+0.1380] | placebo por precio de relleno: media +0.0164 p=0.106
+   M5 c=+2.0 pp: pasan 491 (43.1 % del peso) | EV/acc paso +0.0442 dEV(agregado) +0.0367 | 22d dias=22 dEV=+0.0346 IC90[+0.0122,+0.0570] ; OOS dias=22 dEV=+0.0553 IC90[-0.0263,+0.1370] | placebo por precio de relleno: media +0.0179 p=0.084
+VEREDICTO_R3: FALLO | M5 OOS sigma_eps=4.68 pp (umbral 2,6), dLL=-4.38e-03 (umbral -2,0e-3) IC90t sup=+3.94e-03, pend.calib=0.73 (umbral 0,7) [SMOKE]
+== COTA ANALITICA con la sigma_eps alcanzada (E[eps|eps>=c], gaussiana; pass = fraccion de tiempo que se cotiza)
+   M0 R2 fijo sigma=0.62 pp: c=+0.0 pp -> +0.49 pp (pasa 50 %) | c=+0.5 pp -> +0.85 pp (pasa 21 %) | c=+1.0 pp -> +1.26 pp (pasa 5 %)
+   M1 OOS     sigma=2.96 pp: c=+0.0 pp -> +2.37 pp (pasa 50 %) | c=+0.5 pp -> +2.69 pp (pasa 43 %) | c=+1.0 pp -> +3.04 pp (pasa 37 %)
+   M5 OOS     sigma=4.68 pp: c=+0.0 pp -> +3.74 pp (pasa 50 %) | c=+0.5 pp -> +4.06 pp (pasa 46 %) | c=+1.0 pp -> +4.39 pp (pasa 42 %)
+REGLA_L2: sigma(M5)=4.68, sigma(M5 sin libro)=4.60 -> contribucion del libro L1 0.88 pp en cuadratura; cota generosa de L2 (x2 en la parte de libro) sigma_max=4.92 pp (minimo matematico 2,1) -> L2_JUSTIFICADO (solo si ademas PARCIAL/EXITO)
+fin 3 s

@@ -1,0 +1,10 @@
+92cb4123af80384dbe323281de2ac40cffbcdce5c26025c5d640a3436d417466  PREREG_FORMULA_R2.md
+dedd2edf43dac09e2f64e30533e65f4642447500ca561a089354454b1f6b90c9  sim2.py
+163b0323129cb4b904af7298063e03574213d8e3ede35bff1c91d4b1578d193d  analysis2.py
+e91cc58e4024e505fbba9c67144e6eb0c4f4cf508b6581ee7e065c3b34fd8881  run_one_r2.sh
+d25fee6e74b94e2efea168f2563cf04bc33a781d5aa545f698ccb577a5d733dd  run_all_r2.sh
+a5736208bc26ed4a8a04a401d0b79d7ef02535d4c1623641071f9601db92a171  mkprereg.py
+11f656208054870b3954450ae98a08e361498f32ae08c5faf57eb71fc801e3e8  PREREG_TEMPLATE.md
+# 2026-10-28T10:00:58Z hashes definitivos ANTES de los 22 dias reales; sim2.py: recursion (super) y AWK15 solo tf 15min (las k de 5m/60m pisaban el mapa 15m); analysis2.py: orden de claves, dtype, se>1e-9; prereg sin cambios; sin resultados reales vistos
+81bb196fa0800ccc30db597c28b3424360486ddef1ef3f8974ffd502e7168f13  analysis_salida.txt
+c3185d0e188c0b7009cae617957c7558d07ca0295099f2f972eaf1c26e5ac75e  diag2.py

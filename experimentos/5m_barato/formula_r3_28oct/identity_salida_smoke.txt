@@ -1,0 +1,29 @@
+[2026-10-26] lineas_onchain=600001 filas_F_tokens5m=224861 pujas_zona=26575 con_desenlace=26575 | casadas con impresion t: 4.4 % | bloque-recepcion ms p10/p50/p90=[1436.0, 2131.0, 2868.0] | tokens5m=3318 claves_impresion=333 (1 s)
+[2026-10-27] lineas_onchain=600001 filas_F_tokens5m=174894 pujas_zona=17312 con_desenlace=17312 | casadas con impresion t: 9.6 % | bloque-recepcion ms p10/p50/p90=[1457.0, 2272.0, 2983.0] | tokens5m=1592 claves_impresion=433 (1 s)
+== I0/I1 poblacion y concentracion (pujas de maker BUY de tokens 5m en [0.09,0.31] rellenadas; EV/E = sum tam*(y-p)/sum tam*p)
+   2026-10-26 rellenos=26575 mercados=232 barrenderos=1646 (>=30 rellenos: 182) barridos=16929 | EV/E=+0.732 IC90[+0.142,+1.373] | top1/top5/top10 del volumen: 6.7/21.3/33.6 % HHI=0.0154
+   2026-10-27 rellenos=17312 mercados=181 barrenderos=1423 (>=30 rellenos: 126) barridos=11228 | EV/E=-0.148 IC90[-0.529,+0.219] | top1/top5/top10 del volumen: 6.4/18.1/27.9 % HHI=0.0125
+== I2 persistencia (informados = 20 %% peor EV/E entre barrenderos con >=30 rellenos el dia A; se miden el dia B)
+   A=2026-10-26 -> B=2026-10-27: calificados 182, informados 37 (umbral EV/E -0.165) | rellenos de informados el dia B: 731 (4.2 % de los rellenos, 3.8 % del volumen) | EV/E informados -0.302 vs resto -0.142, dif -0.160 IC90[-0.578,+0.203]
+      Spearman EV/E por barrendero entre dias (>=15 rellenos ambos dias, n=127 barrenderos): rho=+0.129 p=0.149
+   I3 puerta de cadencia (misma moneda, relleno de un informado del dia A en (t-60 s, t-5 s]): senala 65.5 % de los rellenos del dia B | EV/E senalados -0.134 vs resto -0.175, dif +0.040 IC90[-0.486,+0.520]
+      solo rellenos de NO informados: senalados 65.5 % | EV/E -0.123 vs -0.180, dif +0.057 IC90[-0.482,+0.507]
+   A=2026-10-27 -> B=2026-10-26: calificados 126, informados 26 (umbral EV/E -0.801) | rellenos de informados el dia B: 973 (3.7 % de los rellenos, 4.7 % del volumen) | EV/E informados +0.557 vs resto +0.740, dif -0.183 IC90[-0.688,+0.513]
+      Spearman EV/E por barrendero entre dias (>=15 rellenos ambos dias, n=127 barrenderos): rho=+0.129 p=0.149
+   I3 puerta de cadencia (misma moneda, relleno de un informado del dia A en (t-60 s, t-5 s]): senala 48.3 % de los rellenos del dia B | EV/E senalados +0.381 vs resto +1.035, dif -0.654 IC90[-1.155,+0.040]
+      solo rellenos de NO informados: senalados 48.1 % | EV/E +0.408 vs +1.030, dif -0.622 IC90[-1.155,+0.037]
+== I4 cadencia propia (rellenos del mismo barrendero en (t-60 s, t-5 s], mismo dia)
+   previos=0    rellenos=  31201 (71.1 %) EV/E=+0.188 IC90[-0.103,+0.496]
+   previos=1-2  rellenos=   5452 (12.4 %) EV/E=+0.066 IC90[-0.226,+0.350]
+   previos=3-9  rellenos=   4889 (11.1 %) EV/E=+0.302 IC90[-0.165,+0.770]
+   previos=>=10 rellenos=   2345 (5.3 %) EV/E=+2.315 IC90[-0.094,+3.371]
+== I5 tamano del barrido y makers alcanzados frente a EV/E (barrido = tx, barrendero, token)
+   tam<10  rellenos=  20306 (46.3 %) EV/E=+0.177 IC90[-0.071,+0.410]
+   10-50   rellenos=  13003 (29.6 %) EV/E=+0.115 IC90[-0.147,+0.390]
+   50-200  rellenos=   5742 (13.1 %) EV/E=+0.154 IC90[-0.187,+0.475]
+   >=200   rellenos=   4836 (11.0 %) EV/E=+0.978 IC90[-0.082,+1.841]
+   1 maker rellenos=  21267 (48.5 %) EV/E=+0.120 IC90[-0.125,+0.371]
+   2-3     rellenos=  12344 (28.1 %) EV/E=+0.068 IC90[-0.173,+0.381]
+   >=4     rellenos=  10276 (23.4 %) EV/E=+0.745 IC90[+0.028,+1.398]
+LIMITES: 2 dias on-chain (26-27 Oct) = 1 replicacion A<->B; barrendero = direccion, no persona; reloj de bloque ~2,4 s tras el casado: NINGUN rasgo de identidad entra en M1-M5 [SMOKE: no decide]
+fin 3 s

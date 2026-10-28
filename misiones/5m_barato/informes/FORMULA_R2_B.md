@@ -1,0 +1,52 @@
+# FORMULA_R2_B (28-Oct-2026) — curva AS(delta) de la puja pasiva por profundidad + compuerta dC/dQ. VEREDICTO: REJECTED (0 celdas CANDIDATE; 2 EXPLORATORY, sin soporte estadistico)
+Agente polymarket-quantum-alpha-miner, ronda 2 (mandato del chief, <=20 llamadas). Sin ordenes, sin tocar produccion ni data/live. Prereg PREREG_FORMULA_R2.md sha256 92cb4123af80384dbe323281de2ac40cffbcdce5c26025c5d640a3436d417466 (hasheado 09:58Z, antes de los 22 dias reales; HASHES_R2.txt incluye sim2.py, analysis2.py, scripts y la salida). Codigo y salida: `/root/polymarket-research/experimentos/5m_barato/formula_r2_28oct/` (sim2.py hereda de alpha_miner_b_27oct/sim.py sin modificarlo; analysis_salida.txt 101 lineas; diag2.py). Ejecucion 10:01-10:20Z (fuera de 06:00-09:30Z), nice 19, ionice idle, guard load1<14 y MemAvailable>1,2 GB, 22 de 22 dias, 0 fallos.
+
+## 1. Resumen
+- Ninguna profundidad de puja pasiva da EV/acc >= +0,02 (umbral pre-registrado, +2,0 pp). Sin compuerta, EV|relleno por acc: delta=+0,01 (un tick por encima del bid) +0,11 pp [IC90 por dias -0,52/+0,74] n=31.138; delta=0 -0,10 pp [-0,83/+0,66] n=15.540; delta=-0,01 +0,00 pp [-0,86/+0,92] n=7.796; delta=-0,02 -1,43 pp [-2,35/-0,44] n=4.816. La probabilidad de relleno se parte por dos en cada tick (lambda 0,622/0,310/0,156/0,096; k_eff=0,629 por centimo, 1/k=1,59 c) y el EV|relleno no sube con la profundidad (pendiente -0,0045/c): solucion de esquina, el optimo de los cuatro puntos es el tick +0,01 (x* = R - 1/k no tiene raiz interior). Es el B actual.
+- Compuerta de informacion (UNA variante nueva, eps = q^ - mid con dC del 15m y dQ de la cola L1, coeficientes fijados de R1): hace exactamente lo que predice la cota analitica y no mas. Con sigma_eps realizada 0,98 pp, la cota E[eps|eps>=c] es +0,29/+0,52/+1,08 pp por acc para c=-1,0/-0,5/+0,5 pp y la ganancia medida en delta=+0,01 es +0,24/+0,53/+0,84 pp (IC90 por dias +0,15/+0,33; +0,38/+0,66; +0,51/+1,16); la inversion (usar eps al reves) empeora -0,20/-0,39 pp con IC90<0 en las cuatro profundidades. La informacion 15m + cola L1 es real y esta bien calibrada, pero pequena.
+- Mejor celda: GP5_p1 (cotizar en bb+0,01 solo si eps>=+0,5 pp): n=15.964 rellenos, EV +0,95 pp/acc [IC90 +0,13/+1,76], EVw +4,3 %, +2,2 % sin los 2 mejores dias, IS +1,13 pp | OOS +0,27 pp, 22 de 22 dias con datos, +675 EUR en 22 dias a 5 acc por pata. Falla c1 (0,95 < 2,0 pp), c6 (p max-statistic sobre 16 celdas = 0,1225) y c7 (por defecto de diseno, ver 5). Cota optimista de cola (O_*): +0,85/+0,56/+0,98 pp, todas < +2 pp: el logger L2 NO hace falta para la pregunta de profundidad.
+
+## 2. Cota analitica previa y comprobacion
+Antes de medir (sec. 3 del prereg): con eps ~ N(0, sigma^2), la compuerta solo puede mejorar el EV de los rellenos retenidos en E[eps|eps>=c]. Medido en las 50.078 elegibles: sigma_eps = 0,98 pp (P(eps<-1,0 pp)=16,7 %, P(<-0,5 pp)=30,9 %, P(<+0,5 pp)=64,7 %; fv15 disponible en el 89,3 %); cotas empiricas +0,29 / +0,52 / +1,08 pp/acc; observado en p1 +0,24 / +0,53 / +0,84 (en delta=-0,02 las compuertas dan +0,40/+1,31/+2,14 pp sobre U_m2, que es negativa, con n=3.340/2.233/874 y celdas netas -1,03/-0,13/+0,70 pp). Para cruzar +2 pp absolutos con una compuerta hace falta sigma_eps >= ~2,1 pp como minimo matematico y ~2,6 pp con margen (2,2-2,7 veces la actual), con la celda base cerca de 0: dLogLoss ~1,3e-3 a 2e-3 nats por fila frente a los ~3e-4 a 5e-4 de R1.
+
+## 3. Resultados (22 dias 05-26 Oct, 6 monedas; 50.078 elegibles con desenlace oficial, 76 sin desenlace = 0,15 %; EV/acc = sum pnl/sum acc; rebate maker 20 % incluido; IC90 por dias, B=2000)
+Control de implementacion: U_p1 reproduce las unidades P de R1 en 50.078 de 50.078 (acc, coste y t1 identicos al 100 %); con rellenos completos (5 acc) EVw IS +0,0003 (n=21.875, coste 1386,2 EUR/dia) y OOS -0,0329 (n=4.927, 1424,5 EUR/dia) = R1 exacto; la diferencia 31.138 vs 26.802 son 4.336 rellenos parciales.
+| celda | rellenos | lambda | EV/acc [IC90 dias] | EVw | EVw sin 2 mejores dias | EV/acc IS / OOS | EUR (22 d, 5 acc/pata) |
+|---|---|---|---|---|---|---|---|
+| U_p1 (+0,01) | 31.138 | 0,622 | +0,0011 [-0,0052,+0,0074] | +0,0050 | -0,0113 | +0,0025 / -0,0049 | +164 |
+| U_z0 (0) | 15.540 | 0,310 | -0,0010 [-0,0083,+0,0066] | -0,0048 | -0,0265 | +0,0003 / -0,0064 | -73 |
+| U_m1 (-0,01) | 7.796 | 0,156 | +0,0000 [-0,0086,+0,0092] | +0,0001 | -0,0194 | +0,0032 / -0,0110 | +1 |
+| U_m2 (-0,02) | 4.816 | 0,096 | -0,0143 [-0,0235,-0,0044] | -0,0701 | -0,0921 | -0,0117 / -0,0229 | -316 |
+| G10_p1 | 30.014 | 0,599 | +0,0035 [-0,0030,+0,0099] | +0,0160 | -0,0027 | +0,0044 / -0,0002 | +483 |
+| G5_p1 | 27.439 | 0,548 | +0,0064 [-0,0004,+0,0130] | +0,0295 | +0,0114 | +0,0079 / -0,0001 | +793 |
+| GP5_p1 | 15.964 | 0,319 | +0,0095 [+0,0013,+0,0176] | +0,0431 | +0,0219 | +0,0113 / +0,0027 | +675 |
+| GP5_z0 | 3.908 | 0,078 | +0,0101 [-0,0017,+0,0218] | +0,0469 | +0,0175 | +0,0095 / +0,0118 | +176 |
+| GP5_m1 | 1.642 | 0,033 | +0,0159 [+0,0031,+0,0288] | +0,0766 | +0,0440 | +0,0161 / +0,0152 | +118 |
+| GP5_m2 | 874 | 0,017 | +0,0070 [-0,0140,+0,0285] | +0,0348 | -0,0276 | +0,0044 / +0,0137 | +28 |
+| I5_p1 (control inverso) | 27.894 | 0,557 | -0,0026 [-0,0091,+0,0039] | -0,0116 | -0,0288 | -0,0011 / -0,0094 | -333 |
+(Las 23 celdas, incluidas G10/G5 en z0-m2, I5 y O_*, estan en analysis_salida.txt.)
+- Max-statistic (16 celdas, bootstrap centrado de dias): T max 2,03 en GP5_m1; p max = 0,1225. Ninguna celda cumple c6.
+- Estabilidad diaria: dEV(G5_p1 - U_p1) > 0 en 18 de 22 dias (mediana +0,61 pp); GP5_p1 18 de 22 (mediana +0,77 pp); GP5_m1 14 de 22. Desviacion tipica diaria de EV/acc de GP5_p1: 2,48 pp (~18 dias hacen falta para repetir un IC90 por dias de semiancho 0,9 pp; ~40 para potencia 80 %).
+- Por moneda (rellenos, EV/acc, EUR): U_p1 BNB 3726 +1,6 pp +243 | BTC 7617 -1,2 -437 | DOGE 3926 +1,0 +172 | ETH 5521 +0,5 +120 | SOL 5893 +0,6 +153 | XRP 4455 -0,4 -87. GP5_p1 BNB 1158 +1,5 +68 | BTC 5977 +0,2 +48 | DOGE 1261 +2,4 +118 | ETH 2792 +1,0 +126 | SOL 3110 +2,1 +287 | XRP 1666 +0,4 +28 (6 de 6 monedas positivas; SOL = 43 % de los EUR). GP5_m1 esta concentrada: SOL +64 de +118 EUR, BTC 1.045 de 1.642 rellenos. Desagregado moneda x bucket de bb en analysis_salida.txt (U_p1 y GP5_m1).
+- Sensibilidad al rebate (EV/acc con / sin el 20 % del fee): U_p1 +0,11/-0,13 pp; G5_p1 +0,64/+0,41; GP5_p1 +0,95/+0,72; GP5_m1 +1,59/+1,36. Todo el EV de U_p1 es el rebate.
+- Cotas optimistas (cola 0, no realizables): O_z0 +0,85 pp [+0,17,+1,50] n=29.038; O_m1 +0,56 [-0,19,+1,34]; O_m2 +0,98 [+0,12,+1,91]. Ninguna supera +2 pp, de modo que la regla pre-registrada da «logger L2 NO necesario».
+
+## 4. Criterios pre-registrados
+CANDIDATE: ninguna. EXPLORATORY: GP5_p1 y GP5_m1 (c4, c5, c8 si; fallan c1, c6, c7). El resto REJECTED. En las 16 celdas c1 (EV >= +2 pp) falla siempre: el veredicto no depende de c7.
+
+## 5. Defectos y red team
+1. PLACEBO pre-registrado mal disenado: estratifica por bucket de bb en la elegibilidad (te), pero los rellenos ocurren despues de que el precio haya bajado; el placebo vale +6 pp/acc (p_plac=1,000 en todas las celdas, incluidas las de EV>0) y c7 no puede pasar por construccion. Por lo mismo, el «AS(delta)» pre-registrado (6,0/6,7/6,8/8,8 pp para +0,01/0/-0,01/-0,02, IC90 de +-0,4-0,7 pp) incluye la deriva te->relleno y no es la seleccion adversa informativa: esa, medida en R1, es win - mid(t1+250 ms) ~ +0,1 pp (IS) / -0,9 pp (OOS), es decir, el mid tras el relleno esta calibrado. La variable de decision es EV|relleno(delta), que si esta bien definida. Para ronda 3: estratos por precio de relleno y no por te.
+2. Coeficientes A2=0,026 y A3=0,085 ajustados con desenlaces IS (05-22 Oct): el tramo IS de la compuerta no es estrictamente fuera de muestra; en OOS (23-26) la mejora frente a U se mantiene (GP5_p1 +0,76 pp, G5_p1 +0,48 pp), con 4 dias.
+3. Dependencia del rebate maker (0,24 pp/acc) y de un relleno sin cola/identidad: la simulacion U_p1 da EVw +0,5 %, el EV real de B on-chain es -7,2 % (n=202) con SE ~13 pp (estimacion mia con p~0,23, no medida), asi que ni confirma ni contradice; aunque la ganancia de GP5 (+3,8 pp EVw) se trasladase 1:1, B quedaria en ~-3,4 %.
+4. El EV de U_p1 sin los 2 mejores dias es negativo (-1,1 %) y el de BTC (24 % de los rellenos) es negativo: el «cero» del punto +0,01 es mezcla de monedas.
+5. Entradas: rellenos de 5 acc por elegible; el volumen escala con el numero de elegibles (2.276/dia), no con la cola: +675 EUR/22 d = 11,2 kEUR/ano (GP5_p1), 13,2 kEUR/ano (G5_p1), 2,7 kEUR/ano (U_p1) en el simulador, optimistas.
+6. Pre-registro: dos bugs corregidos antes de ver resultados reales (recursion al parchear S.U; AWK15 incluia las k de 5m/60m que pisaban el mapa del 15m) y ajustes menores en analysis2.py; registrados en HASHES_R2.txt. Un `rm` de ficheros de humo fue bloqueado por el sistema y no se reintento (quedan tmp/ y out_smoke/, sin efecto).
+
+## 6. Impacto en el portafolio de 200 kEUR
+Esta familia (entrada pasiva con L1 + 15m) aporta como maximo +8,5-10,4 kEUR/ano sobre B (GP5_p1/G5_p1 frente a U_p1, simulados y sin validar) y 0 EUR validados; el hueco de >=164 kEUR no se mueve. No se propone tocar el ejecutor de B (cualquier compuerta es cambio de regla que toca dinero: /code-review + OK de Javi).
+
+## 7. Ronda 3 propuesta (una prueba decisiva)
+Frontera de informacion de la entrada pasiva: ampliar eps con (a) flujo firmado del propio token (t rows BUY/SELL 1/5/30 s), (b) retornos de Binance 0,2/1/5 s, (c) mid de BTC 5m para las alts, (d) ΔC multi-horizonte, ajustado con validacion cruzada por dias en IS y sensibilidad al retardo LR (130, 60 y 30 ms). Pre-registrar: exito de informacion = sigma_eps >= 2,6 pp (dLogLoss OOS <= -2e-3 nats por fila, IC90 por dias < 0); solo entonces repetir GP-tipo con el criterio de esta ronda (EV >= +2 pp, n>=750, >=10 dias, IC90>0, p max<0,05, placebo por precio de relleno). Si sigma_eps < 2 pp en el mejor caso, cerrar toda la familia de entrada pasiva con L1. Datos: los registros ms ya existentes; no hace falta logger nuevo; L2 solo si el residuo apuntase a profundidad multi-nivel.
+
+## 8. Reproducibilidad
+`cd /root/polymarket-research/experimentos/5m_barato/formula_r2_28oct; python3 sim2.py --selftest` (19 comprobaciones, OK); `bash run_all_r2.sh` (22 dias idempotente, mawk, nice 19); `python3 analysis2.py > analysis_salida.txt` (~60 s); `python3 diag2.py`. Desviaciones: placebo (5.1), arreglos previos de codigo (5.6), nada en la ventana 06-09:30Z.

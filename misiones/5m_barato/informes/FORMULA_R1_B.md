@@ -62,3 +62,7 @@ HOLD +0,0003 | −0,0329; +10c −0,185 | −0,198; +20c −0,147 | −0,178; +4
 
 ## 8. Reproducibilidad
 `cd experimentos/5m_barato/formula_r1_28oct; bash run_all2.sh` (22 días, idempotente, nice 19, mawk) y `bash run_analysis.sh` (30 s) → analysis_salida.txt. HASHES.txt con sha256 de PREREG, ADENDA1/2, extract.py/extract_v1.py, analysis.py y lanzadores. Datos: units/ (alpha_miner_b_27oct), m5_registro y m15_registro (22 días), maker_ms_desenlaces_cache.json. Estado: COMPLETO (22/22 días).
+
+
+## Actualizacion 28-Oct (ronda 2)
+Ver FORMULA_R2_B.md: la curva de profundidad de la puja pasiva es plana (EV/acc ~0, esquina en +1 tick) y la compuerta dC/dQ solo recupera la cota analitica (+0,2-0,8 pp/acc); el precio de cotizacion x* de la sec. 7 queda cerrado con informacion L1+15m.

@@ -34,7 +34,7 @@ Alcance + presupuesto (llamadas, nice/ulimit) → qué leer (solo resúmenes) �
 | Entradas <0,10 (710k rellenos) | ¿Pujas pasivas 1-9c? | REJECTED (hold −0,30; AS: relleno acierta 0,2-6 %) | El relleno es el barrido final del token que muere; pares con dependencia negativa (P conjunta ≪ producto de marginales) |
 | Iteración D | ¿Vender al bid T−30 s? | +0,409 → +0,117 con profundidad real; IC90 cruza 0 | Sin profundidad de bid un positivo es artefacto; 65 % sin bid |
 | Fórmula R1 (22 d, 6 monedas, 5 params, prereg 116f5c42) | ¿Vender/cancelar con q̂ = σ(logit m + ΔC 15m + ΔQ cola + zBinance)? | REJECTED salida/cancelar (17/18 variantes Δ OOS<0; placebo p=0,71) | La AS ya está hecha ANTES del relleno (win−mid −2,0 pp a t1−250 ms): tras el relleno el mid está calibrado. Cota teórica G≈0,1 % del coste de salir: la información extra mueve q̂ ≈1,3 pp vs coste ≈2,2 pp. Una cota analítica de ganancia máxima ahorra rondas: calcularla ANTES de medir |
-| Fórmula R2 | Curva AS(δ) de la puja pasiva de entrada (x*=R−1/k) | (en curso) | — |
+| Fórmula R2 (prereg 92cb4123, 50.078 patas, 16 celdas) | Curva AS(δ) + compuerta ε (15m+cola L1) | REJECTED (0/16 CANDIDATE; mejor GP5_p1 +0,95 pp vs umbral +2,0; p max-stat 0,12) | P(relleno) se parte por 2 por tick → solución de esquina en +0,01. Cota E[ε|ε≥c] calculada antes: la información actual (σ_ε 0,98 pp) no llega; hace falta σ_ε ×2-3. Defecto: placebo estratificado por bucket de bb absorbe la deriva (+6 pp): estratificar por precio de RELLENO |
 
 ## 4. Trampas del método (ya cazadas en este caso)
 - Relleno optimista (10 acc supuestas, mismo relleno de entrada para 2 patas) → medir P conjunta real.
@@ -52,3 +52,8 @@ Alcance + presupuesto (llamadas, nice/ulimit) → qué leer (solo resúmenes) �
 
 ## 6. Lección de método (R1)
 Calcular primero la **cota de ganancia máxima** de la familia de reglas (aquí G=σφ(h/σ)−h·Φ̄(h/σ)) y compararla con el objetivo (548 €/día exigiría σ 10× mayor): descarta familias enteras sin medirlas. Pasar entonces a la palanca que SÍ tiene margen (la entrada/cotización), no a más variantes de salida.
+
+## 7. Estado tras R3 (28-Oct 12:10Z)
+- R3 REJECTED (frontera de información: σ_ε 1,33 pp vs 2,6; L2 techo 1,64 pp; barrendero informado 6-7 % → INSUFFICIENT_EVIDENCE). R4 en curso (estado post-barrido, confirmación on-chain 20-25 Oct).
+- Lección: cuando la cota analítica dice «hace falta información ×2-3», el siguiente paso es un INVENTARIO de fuentes con ganancia en cuadratura (ΔLL/σ_ε por fuente), no más variantes del mismo modelo; y descomponer la población (aquí el 93-94 % de rellenos no informados) por rasgos ex-ante antes de buscar un único filtro.
+- Mandato de proceso: no parar hasta fórmula validada; cada rechazo → siguiente hipótesis con mecanismo distinto; los gates no se relajan.
