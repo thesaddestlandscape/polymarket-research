@@ -1,0 +1,12 @@
+== G) hoja rentable: T200-286 & bid15<=0.51 & cbb>0.66 & bb>0.28 (bb<=0.35 por construccion de la banda)
+  LEAF                                           IS EVw+1.199 [+1.10,+1.28] n580 d10 +10 sin2+1.14 +190.8E/d fill29% || OOS EVw+1.043 [+0.93,+1.14] n639 d12 +12 sin2+0.97 +152.3E/d fill28%
+    LEAF & bb+cbb in (0.000,0.950]               IS - fill0% || OOS - fill0%
+    LEAF & bb+cbb in (0.950,0.970]               IS EVw+0.709 [-0.48,+2.38] n9 d7 +4 sin2+0.16 +1.7E/d fill50% || OOS EVw+0.786 [-0.08,+1.50] n24 d9 +6 sin2+0.25 +4.0E/d fill44%
+    LEAF & bb+cbb in (0.970,0.990]               IS EVw+1.399 [+1.29,+1.51] n372 d10 +10 sin2+1.35 +134.1E/d fill33% || OOS EVw+1.105 [+0.95,+1.26] n391 d12 +12 sin2+1.02 +93.2E/d fill31%
+    LEAF & bb+cbb in (0.990,1.001]               IS EVw+1.109 [+0.96,+1.22] n483 d10 +10 sin2+1.02 +150.4E/d fill32% || OOS EVw+1.025 [+0.89,+1.13] n529 d12 +12 sin2+0.93 +127.0E/d fill31%
+    LEAF & bb+cbb in (1.001,2.000]               IS - fill0% || OOS - fill0%
+  en OOS: ordenes 2303 rellenos 836; precio medio objetivo 0.273; y medio de rellenos 0.555; y medio de ordenes (hubiera ganado, rellenada o no) 0.616
+  en IS: rellenos 817 precio 0.273 y 0.613; ordenes y 0.635
+  bb+cbb mediana rellenos 0.990 ; bid15 mediana 0.370 ; bb 0.300 ; cbb 0.680 ; spr 0.010
+  y medio (ganar) de TODAS las filas T200-286 con bid15<=0.51 & bb en [0.28,0.35] por cbb: cbb(0.00,0.50]: 1.000 n3 cbb(0.50,0.60]: 0.560 n25 cbb(0.60,0.66]: 0.620 n6436 cbb(0.66,0.72]: 0.628 n15205 cbb(0.72,0.80]: nan n0 cbb(0.80,1.00]: nan n0
+  origen del print que rellena (OOS, 0 propio / 1 complementario / -1 no hallado): {1: 685, 0: 151}

@@ -1,0 +1,88 @@
+q05 OOF IS (raw HGB p) 0.01035
+== A) referencias (T200-286)
+  HGB congelado bajo (q05 IS)                  IS EVw+0.437 [+0.24,+0.67] n321 d10 +9 sin2+0.34 +36.5E/d || OOS16-27 EVw+0.446 [+0.23,+0.66] n174 d12 +12 sin2+0.31 +17.2E/d
+  SIEMPRE (bb-3c, todas)                       IS EVw-0.041 [-0.11,+0.02] n2137 d10 +4 sin2-0.08 -21.9E/d || OOS16-27 EVw-0.134 [-0.20,-0.07] n2483 d12 +2 sin2-0.18 -69.6E/d
+  ALEATORIO(HGB) misma fraccion: IS EVw -0.021 sd 0.122 | OOS -0.142 sd 0.110
+-- surrogate profundidad 3 (IS, T200-286): precision 0.13 recall 0.79 vs seleccion HGB
+|--- bid15 <= 0.51
+|   |--- cbb <= 0.66
+|   |   |--- hour <= 1.50
+|   |   |   |--- class: False
+|   |   |--- hour >  1.50
+|   |   |   |--- class: False
+|   |--- cbb >  0.66
+|   |   |--- bb <= 0.28
+|   |   |   |--- class: False
+|   |   |--- bb >  0.28
+|   |   |   |--- class: True
+|--- bid15 >  0.51
+|   |--- bb <= 0.23
+|   |   |--- trem <= 240.00
+|   |   |   |--- class: False
+|   |   |--- trem >  240.00
+|   |   |   |--- class: True
+|   |--- bb >  0.23
+|   |   |--- trem <= 240.00
+|   |   |   |--- class: True
+|   |   |--- trem >  240.00
+|   |   |   |--- class: True
+
+  surrogate d3                                 IS EVw+0.605 [+0.51,+0.68] n1043 d10 +10 sin2+0.54 +168.1E/d || OOS16-27 EVw+0.449 [+0.35,+0.55] n1222 d12 +12 sin2+0.40 +121.7E/d
+  ALEATORIO(surrogate d3) misma fraccion: IS EVw -0.044 sd 0.025 | OOS -0.130 sd 0.027
+-- surrogate profundidad 4 (IS, T200-286): precision 0.16 recall 0.73 vs seleccion HGB
+  surrogate d4                                 IS EVw+0.685 [+0.59,+0.76] n868 d10 +10 sin2+0.63 +158.9E/d || OOS16-27 EVw+0.539 [+0.42,+0.66] n1009 d12 +12 sin2+0.48 +121.2E/d
+== B) cortes IS (Q25/Q50/Q75 en filas IS T200-286): acc30 507/891/1.4e+03; acc60 687/1.3e+03/2.13e+03; np60 46/80/122; spr 0.01/0.01/0.01; bid15 0.19/0.35/0.44; cbb 0.7/0.74/0.78; np5 6/11/17; bs 90/287/859; tsl200 5.95e+03/1.74e+04/7.63e+04
+  acc60<=Q25                                   IS EVw-0.053 [-0.15,+0.02] n1474 d10 +3 sin2-0.11 -20.3E/d || OOS16-27 EVw-0.107 [-0.17,-0.04] n1683 d12 +3 sin2-0.14 -39.3E/d
+      solape con seleccion HGB: 1605 de 28792 reglas ordenes, HGB 3470
+  +np60>=Q50                                   IS EVw+0.719 [+0.08,+2.17] n30 d5 +4 sin2+0.59 +5.0E/d || OOS16-27 EVw-0.231 [-1.17,+0.50] n14 d8 +2 sin2-1.00 -0.5E/d
+      solape con seleccion HGB: 13 de 295 reglas ordenes, HGB 3470
+  +spr<=Q50                                    IS EVw+0.719 [+0.08,+2.17] n30 d5 +4 sin2+0.59 +5.0E/d || OOS16-27 EVw-0.184 [-1.17,+0.50] n13 d8 +2 sin2-1.00 -0.4E/d
+  ALEATORIO(+spr<=Q50) misma fraccion: IS EVw +0.055 sd 0.365 | OOS -0.173 sd 0.433
+      solape con seleccion HGB: 13 de 289 reglas ordenes, HGB 3470
+  +bid15>=Q50                                  IS EVw+0.562 [-0.15,+2.14] n19 d5 +3 sin2+0.28 +2.5E/d || OOS16-27 EVw+0.504 [-1.53,+2.64] n7 d6 +2 sin2-1.00 +0.6E/d
+  ALEATORIO(+bid15>=Q50) misma fraccion: IS EVw -0.103 sd 0.417 | OOS -0.577 sd 0.377
+      solape con seleccion HGB: 9 de 153 reglas ordenes, HGB 3470
+  acc30<=Q25 & np60>=Q50                       IS EVw-0.038 [-0.33,+0.39] n195 d10 +4 sin2-0.21 -1.6E/d || OOS16-27 EVw+0.155 [-0.07,+0.43] n209 d12 +7 sin2+0.04 +5.9E/d
+      solape con seleccion HGB: 134 de 3514 reglas ordenes, HGB 3470
+    + cbb<=Q50                                 IS EVw+1.681 [+1.01,+2.09] n53 d10 +9 sin2+1.26 +23.2E/d || OOS16-27 EVw+2.006 [+1.24,+2.47] n47 d12 +11 sin2+1.62 +20.6E/d
+      solape con seleccion HGB: 95 de 661 reglas ordenes, HGB 3470
+== C) regimenes de libro (cortes IS), SIEMPRE vs HGB-bajo dentro del regimen, T200-286
+ [acc60 Q1 (muy tranquilo)]  fraccion de filas T200-286: 0.25
+     SIEMPRE                                   IS EVw-0.053 [-0.15,+0.02] n1474 d10 +3 sin2-0.11 -20.3E/d || OOS16-27 EVw-0.107 [-0.17,-0.04] n1683 d12 +3 sin2-0.14 -39.3E/d
+     HGB bajo                                  IS EVw+0.359 [+0.00,+0.74] n188 d10 +9 sin2+0.15 +18.5E/d || OOS16-27 EVw+0.502 [+0.09,+0.93] n99 d12 +10 sin2+0.22 +11.1E/d
+ [acc60 Q2-Q3]  fraccion de filas T200-286: 0.50
+     SIEMPRE                                   IS EVw-0.030 [-0.11,+0.04] n1533 d10 +5 sin2-0.06 -10.1E/d || OOS16-27 EVw-0.164 [-0.27,-0.06] n1737 d12 +2 sin2-0.24 -52.5E/d
+     HGB bajo                                  IS EVw+0.706 [+0.49,+1.03] n157 d10 +10 sin2+0.56 +27.3E/d || OOS16-27 EVw+0.376 [+0.07,+0.64] n92 d12 +8 sin2+0.22 +7.3E/d
+ [acc60 Q4 (agitado)]  fraccion de filas T200-286: 0.24
+     SIEMPRE                                   IS EVw-0.010 [-0.12,+0.10] n715 d10 +4 sin2-0.08 -1.4E/d || OOS16-27 EVw-0.136 [-0.30,-0.03] n821 d12 +2 sin2-0.26 -17.5E/d
+     HGB bajo                                  IS EVw+0.449 [-0.23,+1.63] n27 d9 +6 sin2+0.12 +2.5E/d || OOS16-27 EVw+0.724 [-0.78,+3.21] n9 d4 +3 sin2-0.11 +1.4E/d
+ [spr<=Q50 (apretado)]  fraccion de filas T200-286: 0.96
+     SIEMPRE                                   IS EVw-0.042 [-0.12,+0.03] n2110 d10 +4 sin2-0.08 -22.0E/d || OOS16-27 EVw-0.127 [-0.19,-0.06] n2460 d12 +2 sin2-0.17 -65.2E/d
+     HGB bajo                                  IS EVw+0.413 [+0.22,+0.64] n313 d10 +9 sin2+0.31 +33.6E/d || OOS16-27 EVw+0.457 [+0.25,+0.66] n168 d12 +12 sin2+0.34 +17.0E/d
+ [spr>Q50 (ancho)]  fraccion de filas T200-286: 0.04
+     SIEMPRE                                   IS EVw+0.013 [-0.16,+0.16] n555 d10 +5 sin2-0.10 +1.6E/d || OOS16-27 EVw-0.098 [-0.21,-0.01] n835 d12 +3 sin2-0.16 -15.2E/d
+     HGB bajo                                  IS EVw+1.243 [+0.19,+1.80] n21 d6 +5 sin2+0.76 +6.7E/d || OOS16-27 EVw+0.208 [-0.82,+0.89] n17 d8 +4 sin2-0.51 +0.7E/d
+ [bid15>=Q75 (alto)]  fraccion de filas T200-286: 0.26
+     SIEMPRE                                   IS EVw-0.109 [-0.33,+0.05] n660 d10 +3 sin2-0.26 -18.4E/d || OOS16-27 EVw-0.240 [-0.32,-0.15] n767 d12 +1 sin2-0.29 -39.0E/d
+     HGB bajo                                  IS EVw+0.206 [-0.06,+0.50] n198 d10 +6 sin2+0.06 +10.8E/d || OOS16-27 EVw+0.323 [+0.05,+0.62] n131 d12 +9 sin2+0.14 +9.3E/d
+ [bid15<Q75]  fraccion de filas T200-286: 0.73
+     SIEMPRE                                   IS EVw-0.035 [-0.11,+0.03] n1631 d10 +4 sin2-0.08 -14.0E/d || OOS16-27 EVw-0.095 [-0.18,-0.03] n1858 d12 +2 sin2-0.16 -36.2E/d
+     HGB bajo                                  IS EVw+0.834 [+0.51,+1.16] n127 d10 +9 sin2+0.69 +26.8E/d || OOS16-27 EVw+0.817 [+0.13,+1.62] n43 d10 +7 sin2+0.45 +7.9E/d
+ [bid15 NaN]  fraccion de filas T200-286: 0.00
+     SIEMPRE                                   IS - || OOS16-27 -
+     HGB bajo                                  IS - || OOS16-27 -
+ [np60>=Q50 (activo)]  fraccion de filas T200-286: 0.50
+     SIEMPRE                                   IS EVw-0.018 [-0.13,+0.08] n1243 d10 +4 sin2-0.09 -4.4E/d || OOS16-27 EVw-0.202 [-0.32,-0.08] n1431 d12 +1 sin2-0.27 -47.1E/d
+     HGB bajo                                  IS EVw+0.587 [+0.18,+1.07] n82 d10 +9 sin2+0.40 +11.1E/d || OOS16-27 EVw+0.987 [+0.43,+1.57] n43 d12 +11 sin2+0.71 +8.7E/d
+ [np60<Q50 (poco activo)]  fraccion de filas T200-286: 0.50
+     SIEMPRE                                   IS EVw-0.043 [-0.11,+0.02] n1876 d10 +3 sin2-0.08 -20.6E/d || OOS16-27 EVw-0.121 [-0.19,-0.06] n2224 d12 +2 sin2-0.17 -57.6E/d
+     HGB bajo                                  IS EVw+0.405 [+0.12,+0.71] n267 d10 +9 sin2+0.25 +28.8E/d || OOS16-27 EVw+0.433 [+0.22,+0.74] n149 d12 +12 sin2+0.27 +14.3E/d
+ [tranquilo: acc60<=Q50 & spr<=Q50]  fraccion de filas T200-286: 0.48
+     SIEMPRE                                   IS EVw-0.029 [-0.11,+0.04] n1802 d10 +4 sin2-0.07 -13.5E/d || OOS16-27 EVw-0.115 [-0.18,-0.05] n2133 d12 +2 sin2-0.16 -52.2E/d
+     HGB bajo                                  IS EVw+0.388 [+0.10,+0.69] n263 d10 +9 sin2+0.26 +27.1E/d || OOS16-27 EVw+0.473 [+0.29,+0.71] n143 d12 +12 sin2+0.34 +15.0E/d
+ [tranquilo & bid15>=Q50]  fraccion de filas T200-286: 0.29
+     SIEMPRE                                   IS EVw-0.103 [-0.26,+0.05] n1204 d10 +4 sin2-0.19 -32.3E/d || OOS16-27 EVw-0.140 [-0.20,-0.08] n1431 d12 +2 sin2-0.18 -43.1E/d
+     HGB bajo                                  IS EVw+0.305 [+0.01,+0.65] n210 d10 +8 sin2+0.17 +17.0E/d || OOS16-27 EVw+0.432 [+0.24,+0.70] n126 d12 +11 sin2+0.30 +12.1E/d
+ [agitado y ancho: acc60>Q50 & spr>Q50]  fraccion de filas T200-286: 0.02
+     SIEMPRE                                   IS EVw+0.050 [-0.35,+0.39] n205 d10 +6 sin2-0.20 +2.0E/d || OOS16-27 EVw-0.091 [-0.36,+0.08] n375 d12 +6 sin2-0.23 -5.5E/d
+     HGB bajo                                  IS EVw+3.310 [+2.69,+3.86] n5 d4 +4 sin2+2.85 +3.8E/d || OOS16-27 EVw+1.326 [-2.06,+4.66] n4 d3 +2 sin2+nan +0.9E/d

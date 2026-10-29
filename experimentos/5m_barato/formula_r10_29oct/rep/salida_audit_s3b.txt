@@ -1,0 +1,40 @@
+== FUGA por ausencia: en hz, cbb/dcbb1/dcbb5/comp_acc5 = NaN cuando el complementario NO tiene prints en TODA la ventana (r10_build.py:23-24,50-55; D.stream sin corte temporal).
+  T200-286 bb>0,28: cbb NaN 50.3% y|NaN 0.0000 n28845 | y|finito 0.623 n28451
+  T200-286 bb>0,28: comp_acc5 NaN 50.3% y|NaN 0.0000 n28845 | y|finito 0.623 n28451
+  todo T200-286 por banda bb: bb[0.10,0.16) NaN 79% y|NaN 0.000 y|fin 0.593 | bb[0.16,0.22) NaN 67% y|NaN 0.000 y|fin 0.620 | bb[0.22,0.28) NaN 59% y|NaN 0.000 y|fin 0.633 | bb[0.28,0.36) NaN 50% y|NaN 0.000 y|fin 0.623
+reproduccion L=0 bb: iguales 1.0000 n103538
+reproduccion L=0 bid15: iguales 1.0000 n103538
+reproduccion L=0 cbb donde hz finito: iguales 1.0000 n46288 | hz NaN y L1 causal existe: 57250
+  hz cbb NaN <=> stream(comp) vacio en toda la ventana: 1.0000 (n57250); filas hz-finitas con 0 prints del comp ANTES de t: 38246 de 46288, y=0.700
+
+== (1) HOJA con rasgos CAUSALES en T+L (cbb = L1 del complementario, no NaN por futuro), regla ejecutable = hoja(L) & fila existente; TOMADOR ask T+215 ms, fee 0,07p(1-p), 1 por (dia,token)
+  L=-3000 ms: filas 18849 tokens 3677 | y 0.303 ask215 0.308 | IS EVw-0.043 [-0.12,+0.03] d10 +4 sin2-0.09 || OOS EVw-0.078 [-0.16,-0.01] d12 +2 sin2-0.14
+  L=-2000 ms: filas 19560 tokens 3701 | y 0.307 ask215 0.312 | IS EVw-0.030 [-0.11,+0.04] d10 +3 sin2-0.08 || OOS EVw-0.086 [-0.17,-0.01] d12 +2 sin2-0.16
+  L=-1000 ms: filas 20361 tokens 3852 | y 0.311 ask215 0.314 | IS EVw-0.030 [-0.11,+0.04] d10 +4 sin2-0.07 || OOS EVw-0.075 [-0.16,-0.01] d12 +2 sin2-0.14
+  L=   +0 ms: filas 20941 tokens 3848 | y 0.317 ask215 0.317 | IS EVw-0.005 [-0.08,+0.06] d10 +4 sin2-0.05 || OOS EVw-0.082 [-0.17,-0.01] d12 +2 sin2-0.15
+  L=+1000 ms: filas 20135 tokens 3778 | y 0.316 ask215 0.320 | IS EVw-0.042 [-0.12,+0.03] d10 +4 sin2-0.08 || OOS EVw-0.074 [-0.16,+0.00] d12 +2 sin2-0.14
+  hoja causal L=0: 20941 filas vs hoja hz 15205; y causal 0.303 vs hz 0.628
+  hoja causal & comp con >=1 print ANTES de t (indicador causal): filas 1731 y 0.303
+
+== (2) MAKER bb-m sobre hoja CAUSAL (relleno estricto print<objetivo, 10 s; sin rebate; 1 relleno/(dia,token))
+   bb-1c IS: ordenes 2310 | rellenos 1082 y 0.276 precio 0.286 | no rellenadas 829 y 0.362 | EVw-0.034 [-0.13,+0.06] d10 +4 sin2-0.08
+   bb-1c OOS: ordenes 2741 | rellenos 1273 y 0.255 precio 0.285 | no rellenadas 1033 y 0.359 | EVw-0.106 [-0.21,-0.01] d12 +3 sin2-0.17
+   bb-3c IS: ordenes 3520 | rellenos 1207 y 0.272 precio 0.277 | no rellenadas 1901 y 0.357 | EVw-0.020 [-0.13,+0.07] d10 +5 sin2-0.07
+   bb-3c OOS: ordenes 4173 | rellenos 1368 y 0.243 precio 0.276 | no rellenadas 2355 y 0.357 | EVw-0.120 [-0.22,-0.04] d12 +2 sin2-0.20
+   TOMADOR hoja causal L=0: IS EVw-0.005 [-0.08,+0.06] d10 +4 sin2-0.05 || OOS EVw-0.082 [-0.17,-0.01] d12 +2 sin2-0.15
+
+== (3) contaminacion del HGB congelado (sha 5e495915) por la ausencia de cbb/comp_acc5
+sha 5e495915
+  HGB-bajo todas T   rellenos 603: cbb NaN 42.6% (y 0.000) | cbb finito (y 0.616) | precio 0.263
+     IS todas EVw+0.358 [+0.17,+0.60] d10 +9 sin2+0.26 | solo cbb NaN EVw-1.000 [-1.00,-1.00] d10 +0 sin2-1.00 | solo cbb finito EVw+1.279 [+1.03,+1.54] d10 +10 sin2+1.17
+     OOS todas EVw+0.319 [+0.14,+0.48] d12 +10 sin2+0.23 | solo cbb NaN EVw-1.000 [-1.00,-1.00] d12 +0 sin2-1.00 | solo cbb finito EVw+1.397 [+1.10,+1.64] d12 +12 sin2+1.22
+  HGB-bajo T200-286  rellenos 495: cbb NaN 42.4% (y 0.000) | cbb finito (y 0.656) | precio 0.262
+     IS todas EVw+0.437 [+0.24,+0.67] d10 +9 sin2+0.34 | solo cbb NaN EVw-1.000 [-1.00,-1.00] d10 +0 sin2-1.00 | solo cbb finito EVw+1.380 [+1.12,+1.64] d10 +10 sin2+1.26
+     OOS todas EVw+0.446 [+0.23,+0.66] d12 +12 sin2+0.31 | solo cbb NaN EVw-1.000 [-1.00,-1.00] d12 +0 sin2-1.00 | solo cbb finito EVw+1.630 [+1.36,+1.87] d12 +12 sin2+1.47
+  SIEMPRE T200-286   rellenos 4620: cbb NaN 60.2% (y 0.000) | cbb finito (y 0.574) | precio 0.251
+     IS todas EVw-0.041 [-0.11,+0.02] d10 +4 sin2-0.08 | solo cbb NaN EVw-1.000 [-1.00,-1.00] d10 +0 sin2-1.00 | solo cbb finito EVw+1.273 [+1.17,+1.38] d10 +10 sin2+1.21
+     OOS todas EVw-0.134 [-0.20,-0.07] d12 +2 sin2-0.18 | solo cbb NaN EVw-1.000 [-1.00,-1.00] d12 +0 sin2-1.00 | solo cbb finito EVw+1.163 [+1.05,+1.28] d12 +12 sin2+1.10
+  HGB congelado con cbb/dcbb/comp_acc5 = NaN para todos (sin fuga), umbral original: rellenos 331 | IS EVw-0.310 [-0.52,-0.05] d10 +2 sin2-0.44 || OOS EVw-0.118 [-0.39,+0.20] d12 +4 sin2-0.26
+  idem T200-286: rellenos 259 | IS EVw-0.300 [-0.51,-0.10] d10 +2 sin2-0.46 || OOS EVw-0.079 [-0.45,+0.26] d12 +5 sin2-0.29
+  HGB REENTRENADO en IS SIN las 4 columnas con fuga, q05 OOF: rellenos 670 | IS(OOF) EVw-0.099 [-0.20,-0.02] d10 +3 sin2-0.15 || OOS EVw-0.119 [-0.27,+0.05] d12 +4 sin2-0.20
+  idem T200-286: rellenos 506 | IS(OOF) EVw-0.144 [-0.30,-0.03] d10 +2 sin2-0.25 || OOS EVw-0.066 [-0.29,+0.15] d12 +4 sin2-0.21
