@@ -129,6 +129,8 @@ Caja altcoin (10 días, cifras comunicadas: XRP +$703, DOGE +$203, BNB +$53, BTC
 - `cheap5m-reverse-engineer` (26-Oct): último recurso para problemas bloqueados; docs en `docs/reverse-engineering/`; no puede autocertificar SOLVED.
 - `polymarket-quantum-alpha-miner` (26-Oct, Opus, effort max): ARQUITECTO de alpha; interviene ANTES de aceptar una estrategia o modificar una regla importante y REVISA tras el experimento; los especialistas implementan, validan y refutan sus propuestas; no autocertifica (alcance: solo 5m barato por ahora).
 
+- `polymarket-quantum-researcher` y `polymarket-predictive-alpha-engine` (29-Oct, Sonnet, effort medium, maxTurns 40): el primero hace pruebas ACOTADAS de métodos cuánticos/quantum-inspired y de fuentes de datos nuevas (protocolo en `docs/QUANTUM_COMPUTE_AND_INFORMATION_RESEARCH.md`); el segundo pronostica con probabilidad calibrada y convierte en EV neto. Los invoca el alpha-miner o el chief, UNO a la vez; no autocertifican (validador + red-team). Sin gasto ni QPU de pago sin OK de Javi.
+
 ## 6. Etiquetas permitidas
 
 `REJECTED`, `DATA_BLOCKED`, `EXPLORATORY`, `PROMISING`, `DRY_RUN_VALIDATED`. La etiqueta `DRY_RUN_VALIDATED` no autoriza trading live. Ningún agente puede declarar 200k alcanzables sin modelo de contribución, capacidad, capital, solapamiento, incertidumbre y pruebas empíricas.
