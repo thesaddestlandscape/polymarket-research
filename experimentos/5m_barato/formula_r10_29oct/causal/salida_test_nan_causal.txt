@@ -1,0 +1,71 @@
+/root/polymarket-research/experimentos/5m_barato/formula_r10_29oct/causal/hz_BTC.npz: filas 337226 (seleccion 337226), rasgos 40, y medio 0.2301
+rasgo           nan%    y|NaN    y|fin      dif    corr | nivel token (nan/fin)    | dias(+/n) | estrato
+acc1            0.00  (sin NaN o todo NaN)
+acc5            0.00  (sin NaN o todo NaN)
+acc30           0.00  (sin NaN o todo NaN)
+acc60           0.00  (sin NaN o todo NaN)
+np1             0.00  (sin NaN o todo NaN)
+np5             0.00  (sin NaN o todo NaN)
+np30            0.00  (sin NaN o todo NaN)
+np60            0.00  (sin NaN o todo NaN)
+tsl200          0.00  (sin NaN o todo NaN)
+tsl800          0.00  (sin NaN o todo NaN)
+n800_60         0.00  (sin NaN o todo NaN)
+coin_n60        0.00  (sin NaN o todo NaN)
+comp_acc5       0.00  (sin NaN o todo NaN)
+bb              0.00  (sin NaN o todo NaN)
+spr             0.00  (sin NaN o todo NaN)
+bs              0.00  (sin NaN o todo NaN)
+dbb1            0.01   0.4118   0.2301  +0.1817  +0.003 | 0.412 / 0.307 (n17/9053) | 0/0 | dif/estrato 
+dbb5            0.03   0.2745   0.2301  +0.0444  +0.002 | 0.222 / 0.308 (n54/9016) | 0/0 | dif/estrato +0.16 +0.04
+cbb             0.00  (sin NaN o todo NaN)
+dcbb1           0.01   0.4118   0.2301  +0.1817  +0.003 | 0.412 / 0.307 (n17/9053) | 0/0 | dif/estrato 
+dcbb5           0.03   0.2745   0.2301  +0.0444  +0.002 | 0.222 / 0.308 (n54/9016) | 0/0 | dif/estrato +0.16 +0.04
+bid15           0.03   0.1163   0.2301  -0.1138  -0.004 | 0.333 / 0.307 (n3/9067) | 1/1 | dif/estrato -0.18
+m15             0.03   0.1163   0.2301  -0.1138  -0.004 | 0.333 / 0.307 (n3/9067) | 1/1 | dif/estrato -0.18
+dbid15          0.03   0.1163   0.2301  -0.1138  -0.004 | 0.333 / 0.307 (n3/9067) | 1/1 | dif/estrato -0.18
+trem            0.00  (sin NaN o todo NaN)
+hour            0.00  (sin NaN o todo NaN)
+jadv            0.00  (sin NaN o todo NaN)
+jopp            0.00  (sin NaN o todo NaN)
+jn30            0.00  (sin NaN o todo NaN)
+jn300           0.00  (sin NaN o todo NaN)
+cba             0.00  (sin NaN o todo NaN)
+cspr            0.00  (sin NaN o todo NaN)
+cbs             0.00  (sin NaN o todo NaN)
+dcba1           0.01   0.4118   0.2301  +0.1817  +0.003 | 0.412 / 0.307 (n17/9053) | 0/0 | dif/estrato 
+dcba5           0.03   0.2745   0.2301  +0.0444  +0.002 | 0.222 / 0.308 (n54/9016) | 0/0 | dif/estrato +0.16 +0.04
+comp_tsl        0.00  (sin NaN o todo NaN)
+comp_np5        0.00  (sin NaN o todo NaN)
+sumb            0.00  (sin NaN o todo NaN)
+suma            0.00  (sin NaN o todo NaN)
+c_exist         0.00  (sin NaN o todo NaN)
+
+== MODA (valor centinela: p.ej. 0 o 300000 = "sin datos" codificado explicito; mismo criterio, excluye NaN)
+acc1         moda 0           27.41% y|moda 0.2647 y|otros 0.2170 dif +0.0476 dias 22/22
+acc5         moda 0            7.81% y|moda 0.3294 y|otros 0.2217 dif +0.1078 dias 22/22 FUGA_PROBABLE
+np1          moda 0           27.41% y|moda 0.2647 y|otros 0.2170 dif +0.0476 dias 22/22
+np5          moda 0            7.81% y|moda 0.3294 y|otros 0.2217 dif +0.1078 dias 22/22 FUGA_PROBABLE
+tsl200       moda 300000      19.70% y|moda 0.2732 y|otros 0.2195 dif +0.0537 dias 22/22
+tsl800       moda 300000      81.54% y|moda 0.2317 y|otros 0.2232 dif +0.0085 dias 10/22
+n800_60      moda 0           86.33% y|moda 0.2314 y|otros 0.2217 dif +0.0098 dias 12/22
+coin_n60     moda 0           84.88% y|moda 0.2313 y|otros 0.2234 dif +0.0078 dias 12/22
+comp_acc5    moda 0           99.60% y|moda 0.2301 y|otros 0.2348 dif -0.0047 dias 11/22
+spr          moda 0.01        94.88% y|moda 0.2286 y|otros 0.2571 dif -0.0285 dias 20/22
+dbb1         moda 0           46.97% y|moda 0.2197 y|otros 0.2393 dif -0.0196 dias 20/22
+dbb5         moda 0           13.08% y|moda 0.2179 y|otros 0.2319 dif -0.0140 dias 17/22
+dcbb1        moda 0           46.82% y|moda 0.2195 y|otros 0.2394 dif -0.0200 dias 20/22
+dcbb5        moda 0           13.02% y|moda 0.2180 y|otros 0.2319 dif -0.0139 dias 18/22
+dbid15       moda 0           36.52% y|moda 0.2273 y|otros 0.2317 dif -0.0044 dias 9/22
+jadv         moda 60000       82.15% y|moda 0.2306 y|otros 0.2278 dif +0.0028 dias 12/22
+jopp         moda 60000       91.02% y|moda 0.2268 y|otros 0.2631 dif -0.0363 dias 14/22
+jn30         moda 0           86.56% y|moda 0.2287 y|otros 0.2391 dif -0.0104 dias 13/22
+jn300        moda 0           44.05% y|moda 0.2296 y|otros 0.2305 dif -0.0010 dias 10/22
+cspr         moda 0.01        94.87% y|moda 0.2286 y|otros 0.2571 dif -0.0284 dias 20/22
+dcba1        moda 0           46.97% y|moda 0.2197 y|otros 0.2393 dif -0.0196 dias 20/22
+dcba5        moda 0           13.08% y|moda 0.2179 y|otros 0.2319 dif -0.0140 dias 17/22
+comp_tsl     moda 300000      76.22% y|moda 0.2290 y|otros 0.2338 dif -0.0048 dias 12/22
+comp_np5     moda 0           99.60% y|moda 0.2301 y|otros 0.2348 dif -0.0047 dias 11/22
+sumb         moda 0.99        94.87% y|moda 0.2286 y|otros 0.2571 dif -0.0284 dias 20/22
+suma         moda 1.01        94.87% y|moda 0.2286 y|otros 0.2571 dif -0.0284 dias 20/22
+RESULTADO: 2 rasgo(s) FUGA_PROBABLE
