@@ -28,11 +28,11 @@
     "hi": 0.06,
     "n": 62,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9364,
+    "diff_vs_resto": -0.9368,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9364,
-      -0.9364
+      -0.9368,
+      -0.9368
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -58,11 +58,11 @@
     "hi": 0.1,
     "n": 40,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9365,
-    "p_valor": 0.0005,
+    "diff_vs_resto": -0.9378,
+    "p_valor": 0.0,
     "split_half_diff": [
-      -0.9365,
-      -0.9365
+      -0.9378,
+      -0.9378
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -89,7 +89,7 @@
     "n": 65,
     "pnl_medio": -0.3476,
     "diff_vs_resto": -0.3394,
-    "p_valor": 0.015,
+    "p_valor": 0.016,
     "split_half_diff": [
       -0.3313,
       -0.3473
@@ -229,24 +229,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 57,
-    "pnl_sin_mejores_dias": -0.5211,
+    "pnl_sin_mejores_dias": -0.522,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 2233,
-    "pnl_medio": -0.4339,
-    "diff_vs_resto": -0.3969,
+    "n": 2237,
+    "pnl_medio": -0.435,
+    "diff_vs_resto": -0.398,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.3618,
-      -0.4319
+      -0.363,
+      -0.433
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.4756,
+    "pnl_medio_loo": -0.4765,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6016,
-      -0.2627
+      -0.5988,
+      -0.2606
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -306,11 +306,11 @@
     "hi": 0.1,
     "n": 382,
     "pnl_medio": -0.5179,
-    "diff_vs_resto": -0.4753,
+    "diff_vs_resto": -0.4752,
     "p_valor": 0.0005,
     "split_half_diff": [
-      -0.5504,
-      -0.4002
+      -0.5503,
+      -0.4001
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5576,
@@ -345,11 +345,11 @@
     "hi": 0.35,
     "n": 42,
     "pnl_medio": -0.4998,
-    "diff_vs_resto": -0.4539,
-    "p_valor": 0.001,
+    "diff_vs_resto": -0.4534,
+    "p_valor": 0.0005,
     "split_half_diff": [
-      -0.3807,
-      -0.5272
+      -0.3801,
+      -0.5267
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5651,
