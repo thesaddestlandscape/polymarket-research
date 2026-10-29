@@ -1,0 +1,52 @@
+dia 2026-10-20: 405 ordenes procesadas
+dia 2026-10-21: 1121 ordenes procesadas
+dia 2026-10-22: 1746 ordenes procesadas
+dia 2026-10-23: 524 ordenes procesadas
+casado auto-print: {'exacto': 121, 'resta': 54, 'sin_casar': 40} (rellenos on-chain de ordenes 215)
+
+== (1) Rellenos REALES por categoria (orden; prints ajenos en [t_ini, t_fin+250 ms])
+  A  rellenos  45 (22.3 %) | ordenes en cat   62 P(relleno) 0.726 | coste  53.41 EUR pnl   +2.59 EV +0.048 IC90puja [-0.413,+0.534] | por dia 10-20:+0.413 10-21:+0.332 10-22:-1.000 10-23:-1.000
+  B  rellenos  42 (20.8 %) | ordenes en cat   71 P(relleno) 0.592 | coste  48.11 EUR pnl  +16.22 EV +0.337 IC90puja [-0.281,+1.005] | por dia 10-20:+2.000 10-21:+0.119 10-22:+0.110 10-23:+0.367
+  C  rellenos  94 (46.5 %) | ordenes en cat   94 P(relleno) 1.000 | coste 101.68 EUR pnl  -23.56 EV -0.232 IC90puja [-0.529,+0.080] | por dia 10-20:-0.265 10-21:-0.029 10-22:-0.174 10-23:-1.000
+  D  rellenos  21 (10.4 %) | ordenes en cat 3569 P(relleno) 0.006 | coste  18.10 EUR pnl  -11.27 EV -0.623 IC90puja [-1.000,-0.104] | por dia 10-20:-1.000 10-21:+0.500 10-22:-0.764 10-23:-1.000
+  TOTAL rellenos 202 coste 221.30 pnl -16.02 EV -0.072 [-0.300,+0.179]
+  ESTRICTO marca NO-relleno a 157 de 202 rellenos reales (77.7 %); de ellos B solo-toque 42, C solo-propio 94, D sin print 21
+  EV de los descartados por el estricto: -0.111 [-0.370,+0.153] coste 167.89
+  sensibilidad e=0 ms: A 23 B 28 C 121 D 30
+  sensibilidad e=1000 ms: A 70 B 39 C 74 D 19
+  por PUJA (mercado,lado; categoria = mejor de sus ordenes): rellenas 202 de 364
+    A pujas  48 (23.8 %) coste 56.06 EV -0.001 [-0.451,+0.480]
+    B pujas  51 (25.2 %) coste 55.88 EV +0.154 [-0.378,+0.719]
+    C pujas  83 (41.1 %) coste 92.05 EV -0.153 [-0.474,+0.194]
+    D pujas  20 (9.9 %) coste 17.31 EV -0.605 [-1.000,-0.018]
+
+== (2) Modelo de relleno (logit, TUNE 20-21 -> TEST 22-23; n TUNE 1526/109 rellenos, TEST 2270/93)
+  M_excl (sin propios)   TEST AUC 0.775 Brier 0.0332 (base 0.0402, skill +0.174) P media virtual 0.0496 real 0.0410 (ratio 1.21) | coef lVt+0.79 lVa+0.52 lQ-0.10 fifo+0.02 lvida+0.67 off-0.11
+  PLACEBO +90 s          TEST AUC 0.662 Brier 0.0395 (base 0.0402, skill +0.019) P media virtual 0.0610 real 0.0410 (ratio 1.49) | coef lVt+0.05 lVa+0.08 lQ-0.12 fifo-0.02 lvida+0.66 off+0.00
+  M_incl (circular)      TEST AUC 0.935 Brier 0.0154 (base 0.0402, skill +0.618) P media virtual 0.0487 real 0.0410 (ratio 1.19) | coef lVt+0.81 lVa+1.58 lQ-0.25 fifo-0.14 lvida+0.60 off-0.18
+  calibracion M_excl TEST por deciles (n, P virtual, real):
+   227 0.013/0.004 | 227 0.015/0.013 | 227 0.018/0.018 | 227 0.022/0.018 | 227 0.026/0.013 | 227 0.031/0.035 | 227 0.038/0.040 | 227 0.047/0.022 | 227 0.063/0.062 | 227 0.224/0.185
+  regla ESTRICTO               TEST P virtual 0.0084 real 0.0410 recall 0.11 precision 0.53
+  regla TOQUE                  TEST P virtual 0.0269 real 0.0410 recall 0.34 precision 0.52
+  regla FIFO                   TEST P virtual 0.0057 real 0.0410 recall 0.09 precision 0.62
+  regla CAPA1-v2 (con propios) TEST P virtual 0.0454 real 0.0410 recall 0.84 precision 0.76
+
+== (3) Politica vigente de B re-simulada sobre sus ordenes reales (TEST 22-23 y TOTAL); EV por EUR, coste virtual = P*size*p
+  TEST  real -0.321 (pnl -32.04, coste 99.92) | ESTRICTO -0.777 (coste 22.44, pnl -17.44) | TOQUE -0.179 | M_excl -0.044 (coste 131.90 pnl -5.80) | M_incl -0.164 | brecha cerrada por M_excl 161 %, por TOQUE 131 %
+  TUNE  real +0.132 (pnl +16.01, coste 121.38) | ESTRICTO +0.402 (coste 50.66, pnl +20.34) | TOQUE +0.436 | M_excl +0.312 (coste 128.73 pnl +40.20) | M_incl +0.288 | brecha cerrada por M_excl 33 %, por TOQUE -13 %
+  TOTAL real -0.072 (pnl -16.02, coste 221.30) | ESTRICTO +0.040 (coste 73.10, pnl +2.90) | TOQUE +0.153 | M_excl +0.132 (coste 260.64 pnl +34.40) | M_incl +0.062 | brecha cerrada por M_excl -82 %, por TOQUE -101 %
+
+== EV REAL por posicion de cola (cola = acciones delante en nuestro nivel al postear, REST ~100 ms antes)
+  cola 0-10   ordenes  859 rellenos  64 P 0.075 | coste  65.75 pnl   +2.67 EV +0.041 [-0.407,+0.488] | cat A/B/C/D 11/12/33/8 | por dia 10-20:+0.796 10-21:+0.134 10-22:-0.050 10-23:-1.000
+  cola 10-40  ordenes 1006 rellenos  52 P 0.052 | coste  59.27 pnl  -16.80 EV -0.284 [-0.637,+0.111] | cat A/B/C/D 15/13/18/6 | por dia 10-20:+1.183 10-21:+0.152 10-22:-1.000 10-23:-1.000
+  cola 40-100 ordenes 1105 rellenos  54 P 0.049 | coste  61.07 pnl  +13.33 EV +0.218 [-0.272,+0.755] | cat A/B/C/D 11/13/26/4 | por dia 10-20:-0.530 10-21:+0.418 10-22:+0.414 10-23:+0.101
+  cola >=100  ordenes  826 rellenos  32 P 0.039 | coste  35.22 pnl  -15.22 EV -0.432 [-0.857,+0.013] | cat A/B/C/D 8/4/17/3 | por dia 10-20:-0.400 10-21:-0.409 10-22:-0.505
+    cat A cola 0-10  n  11 coste  14.20 EV -0.296 [-1.000,+0.449]
+    cat A cola 10-40 n  15 coste  17.41 EV +0.493 [-0.401,+1.424]
+    cat A cola >=40  n  19 coste  21.80 EV -0.082 [-0.780,+0.799]
+    cat B cola 0-10  n  12 coste  15.10 EV +0.986 [-0.356,+2.550]
+    cat B cola 10-40 n  13 coste  14.32 EV -1.000 [-1.000,-1.000]
+    cat B cola >=40  n  17 coste  18.69 EV +0.837 [-0.140,+1.860]
+    cat C cola 0-10  n  33 coste  33.28 EV -0.201 [-0.687,+0.326]
+    cat C cola 10-40 n  18 coste  19.96 EV -0.175 [-0.763,+0.506]
+    cat C cola >=40  n  43 coste  48.45 EV -0.276 [-0.704,+0.213]

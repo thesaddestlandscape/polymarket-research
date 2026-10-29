@@ -1,0 +1,20 @@
+tipos b_fills: {'F': 215}
+ordenes 3796 fill 202 resuelto {1: 3796} pnl NaN 0 coste>0 sin fill 0
+fills onchain 215 con oid en ordenes 215 | ordenes fill=1 sin fill onchain 0 | ordenes fill=0 con onchain 0
+fills onchain sin orden en log (huérfanos): 0 ts 
+coste=acc*p max err 0.0000 ; pnl=acc*(gana-p) max err 0.0000
+casado {'exacto': 121, 'resta': 54, 'sin_casar': 40}
+A n 45 coste 53.41 pnl +2.59 EV +0.048 puja[-0.425,+0.577] dia[-1.000,+0.354] dias+ 2/4 sin2 -1.000 | 10-20:10/+0.41 10-21:25/+0.33 10-22:9/-1.00 10-23:1/-1.00
+B n 42 coste 48.11 pnl +16.22 EV +0.337 puja[-0.268,+1.015] dia[+0.117,+0.970] dias+ 4/4 sin2 +0.174 | 10-20:4/+2.00 10-21:16/+0.12 10-22:18/+0.11 10-23:4/+0.37
+C n 94 coste 101.68 pnl -23.56 EV -0.232 puja[-0.521,+0.088] dia[-0.500,-0.120] dias+ 0/4 sin2 -0.319 | 10-20:17/-0.26 10-21:27/-0.03 10-22:41/-0.17 10-23:9/-1.00
+D n 21 coste 18.10 pnl -11.27 EV -0.623 puja[-1.000,-0.073] dia[-1.000,-0.052] dias+ 1/4 sin2 -0.870 | 10-20:6/-1.00 10-21:4/+0.50 10-22:9/-0.76 10-23:2/-1.00
+TOTAL n 202 EV -0.072 puja[-0.301,+0.179] dia[-0.287,+0.116] dias+ 2/4 sin2 -0.321 | 10-20:37/+0.07 10-21:72/+0.17 10-22:77/-0.27 10-23:16/-0.58
+fills con on-chain no casado por cat: {'A': 18, 'C': 1, 'D': 21}
+C por cola: {Interval(-1.0, 0.5, closed='right'): '22 -0.027', Interval(0.5, 10.0, closed='right'): '11 -0.549', Interval(10.0, 40.0, closed='right'): '18 -0.175', Interval(40.0, 1000000000.0, closed='right'): '43 -0.276'}
+matriz mia x r11 (rellenas):
+cat_r11   A   B   C   D
+cat                    
+A        45   0   0   0
+B         0  42   0   0
+C         0   0  94   0
+D         0   0   0  21

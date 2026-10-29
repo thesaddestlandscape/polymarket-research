@@ -1,0 +1,25 @@
+ordenes 23-Oct 524 | excl caida 0 | Q0 None 0 | Q0<1 59 | evaluables 465 rellenas eval 12 (de 16 )
+Q0 L2 vs cola REST (rellenas):     cat     Q0   cola  a_pre  fillprint    bad
+57    B   60.0    6.0   0.00      False  False
+101   C   73.0   73.0   0.00       True  False
+116   C  100.0  100.0   0.00       True  False
+142   C   25.0   25.0   0.00       True  False
+173   C   15.0   15.0   0.00       True  False
+187   B   49.3   49.3  43.58      False  False
+193   B  114.0    6.0   0.00      False  False
+273   D    0.0    0.0   0.00      False  False
+298   A   38.2   33.2   5.00       True  False
+359   C    0.0    0.0   0.00       True  False
+404   C    0.0    0.0   0.00       True  False
+466   D   44.0   44.0  39.00      False  False
+503   B    7.0   12.0  11.00      False  False
+507   C    0.0    0.0  58.55      False  False
+521   C   63.0   63.0   0.00       True  False
+522   C   85.0   85.0   0.00       True  False
+P1 primaria             C 6/9 | A+B 3/5 | D 1/2 | Fisher p=0.622
+P1 posthoc gap>=100ms   C 6/9 | A+B 2/5 | D 1/2 | Fisher p=0.343
+P1 posthoc gap>=250ms   C 3/9 | A+B 2/5 | D 0/2 | Fisher p=0.797
+P2 tasa EVAP 0.490 (n 465) | rellenos evitados 10 (pnl -4.44, coste 11.44; cats {'C': 6, 'B': 3, 'D': 1}) | rellenos conservados 2 pnl -2.55 | dPnl +4.44 | placebo media +1.29 p5 -3.78 p95 +6.30 percentil real 79
+P3 markout +10 s (c)      EVAP n 228 media -1.090 | no-EVAP n 237 media -1.198 | dif +0.108 IC90 puja [-1.108  1.381] | por moneda {('eth', False): -0.412, ('eth', True): 0.508, ('sol', False): -1.948, ('sol', True): -1.565, ('xrp', False): -1.103, ('xrp', True): -1.97}
+P3 desenlace (gana-p)/p   EVAP n 228 media -0.799 | no-EVAP n 237 media -0.820 | dif +0.021 IC90 puja [-0.063  0.098] | por moneda {('eth', False): -0.825, ('eth', True): -0.627, ('sol', False): -0.857, ('sol', True): -0.927, ('xrp', False): -0.686, ('xrp', True): -0.715}
+pujas 35
