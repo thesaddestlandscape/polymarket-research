@@ -1,55 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-11T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 46,
-      "resolve_postmortem_p50_s": 7.0,
-      "resolve_postmortem_p95_s": 10.0,
-      "resolve_postmortem_max_s": 14.0,
-      "n_ciclos_live_trade": 564,
-      "hueco_live_trade_max_s": 295.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 8,
-      "stale": [
-        "ejeclive"
-      ]
-    },
-    "disco": {
-      "pct_usado": 61.0,
-      "gb_libres": 28.27,
-      "git_gb": 0.0,
-      "data_gb": 22.21,
-      "datalogs_gb": 5.58
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 0.93,
-      "ram_pct_libre": 25.1
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 420,
-      "n_results_total": 109505
-    },
-    "carga_sistema": {
-      "load1": 5.56,
-      "load5": 5.81,
-      "load15": 7.08,
-      "nproc": 2,
-      "ratio5": 2.9,
-      "n_procesos_total": 196
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [
-      "⚠️ screens STALE (código en disco != código cargado): ejeclive"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-12T07:08:02+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 129,
@@ -13985,6 +13935,248 @@
       "⚠️ screens STALE (código en disco != código cargado): r3shadow",
       "💀 3 OOM-kill(s) del kernel en 24h: python(pid 2188139, 3013.8MB), python(pid 2414283, 3329.3MB), python(pid 2414488, 2564.2MB)",
       "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-28T07:44:08+00:00) -- Traceback (most recent call last):"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-29T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 135,
+      "resolve_postmortem_p50_s": 112.1,
+      "resolve_postmortem_p95_s": 195.4,
+      "resolve_postmortem_max_s": 380.8,
+      "resolve_postmortem_duraciones_s": [
+        102.9,
+        148.9,
+        137.8,
+        82.2,
+        86.2,
+        91.6,
+        97.1,
+        171.2,
+        158.7,
+        101.8,
+        102.6,
+        107.8,
+        122.7,
+        158.1,
+        160.5,
+        103.0,
+        100.0,
+        112.9,
+        108.8,
+        182.6,
+        133.0,
+        118.3,
+        115.0,
+        112.5,
+        116.6,
+        200.8,
+        153.3,
+        104.5,
+        105.8,
+        101.8,
+        104.5,
+        173.9,
+        129.8,
+        110.3,
+        101.5,
+        93.2,
+        94.7,
+        170.9,
+        154.3,
+        105.9,
+        105.9,
+        104.7,
+        112.1,
+        178.7,
+        164.3,
+        148.1,
+        108.6,
+        107.4,
+        122.5,
+        182.1,
+        164.5,
+        137.8,
+        112.9,
+        106.7,
+        136.6,
+        236.0,
+        226.3,
+        187.6,
+        114.7,
+        155.5,
+        152.6,
+        285.2,
+        143.3,
+        101.8,
+        99.0,
+        119.2,
+        123.1,
+        195.3,
+        160.4,
+        162.0,
+        106.0,
+        116.1,
+        106.9,
+        174.5,
+        146.1,
+        116.5,
+        118.2,
+        106.7,
+        114.7,
+        195.4,
+        133.6,
+        92.5,
+        98.9,
+        100.2,
+        88.8,
+        93.0,
+        380.8,
+        93.1,
+        99.1,
+        98.9,
+        82.7,
+        81.7,
+        165.1,
+        118.7,
+        90.0,
+        94.1,
+        76.4,
+        79.8,
+        141.1,
+        125.2,
+        80.8,
+        90.6,
+        96.2,
+        93.5,
+        200.7,
+        128.4,
+        93.7,
+        98.8,
+        105.1,
+        80.4,
+        156.4,
+        132.6,
+        87.1,
+        89.1,
+        90.2,
+        81.5,
+        156.6,
+        162.3,
+        82.3,
+        139.8,
+        83.4,
+        84.7,
+        152.7,
+        131.7,
+        98.8,
+        90.4,
+        103.6,
+        107.4,
+        168.2,
+        153.9,
+        97.0,
+        87.8,
+        104.5,
+        92.7,
+        157.7
+      ],
+      "n_ciclos_live_trade": 4660,
+      "hueco_live_trade_max_s": 86.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 22,
+      "stale": [
+        "r3shadow"
+      ]
+    },
+    "disco": {
+      "pct_usado": 85.0,
+      "gb_libres": 11.17,
+      "git_gb": 0.0,
+      "data_gb": 18.85,
+      "datalogs_gb": 5.91
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 5.37,
+      "ram_pct_libre": 35.3
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 769,
+      "n_results_total": 1210788
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 5.85,
+      "load5": 5.41,
+      "load15": 5.51,
+      "nproc": 8,
+      "ratio5": 0.68,
+      "n_procesos_total": 300
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 5,
+      "eventos": [
+        {
+          "ts": "Oct 28 08:10:49",
+          "pid": "2594139",
+          "nombre": "python",
+          "rss_mb": 2655.0
+        },
+        {
+          "ts": "Oct 28 12:29:03",
+          "pid": "2115606",
+          "nombre": "systemd",
+          "rss_mb": 1.4
+        },
+        {
+          "ts": "Oct 28 12:29:03",
+          "pid": "2115608",
+          "nombre": "(sd-pam)",
+          "rss_mb": 0.8
+        },
+        {
+          "ts": "Oct 28 12:29:03",
+          "pid": "2508687",
+          "nombre": "python",
+          "rss_mb": 1274.0
+        },
+        {
+          "ts": "Oct 28 22:19:52",
+          "pid": "2853784",
+          "nombre": "python",
+          "rss_mb": 3919.5
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 1,
+      "vigias": [
+        {
+          "log": "vigia_wallet_mirror_seleccion_ab.log",
+          "mtime_utc": "2026-10-29T07:44:07+00:00",
+          "ultima_linea_fallo": "Traceback (most recent call last):"
+        }
+      ]
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⚠️ screens STALE (código en disco != código cargado): r3shadow",
+      "💀 5 OOM-kill(s) del kernel en 24h: python(pid 2594139, 2655.0MB), systemd(pid 2115606, 1.4MB), (sd-pam)(pid 2115608, 0.8MB), python(pid 2508687, 1274.0MB), python(pid 2853784, 3919.5MB)",
+      "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-29T07:44:07+00:00) -- Traceback (most recent call last):"
     ],
     "estado": "ANOMALIA"
   }
