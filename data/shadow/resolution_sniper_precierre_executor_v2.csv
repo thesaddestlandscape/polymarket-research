@@ -139975,3 +139975,9 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-10-29T22:59:15.229+00:00,1793314800,5min,False,XRP,Up,,0,,,,,6369763,False,sin_ask,,,,47.3,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,3.241876776983814
 2026-10-29T22:59:48.084+00:00,1793314800,60min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
 2026-10-29T22:59:48.319+00:00,1793314800,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
+2026-10-29T23:09:15.149+00:00,1793315400,5min,False,ETH,Down,0.68,1,True,False,False,sin_datos_para_offset_-45s,6369886,False,fuera_banda_ask=0.68,37.0,0.68,,98.8,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,0.503568161819454
+2026-10-29T23:09:15.150+00:00,1793315400,5min,False,BTC,Down,,1,,,,,6369879,False,sin_ask,,,,107.3,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,5.880557586546498
+2026-10-29T23:09:15.150+00:00,1793315400,5min,False,DOGE,Down,0.91,1,True,False,False,sin_datos_para_offset_-45s,6369885,False,fuera_banda_ask=0.91,0.0,0.91,,121.6,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,1.2416320755481691
+2026-10-29T23:09:15.150+00:00,1793315400,5min,False,XRP,Down,0.99,1,True,False,False,sin_datos_para_offset_-45s,6369880,False,fuera_banda_ask=0.99,0.0,0.99,,104.4,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,2.9854759019212067
+2026-10-29T23:09:15.150+00:00,1793315400,5min,False,SOL,Down,0.86,1,True,False,False,sin_datos_para_offset_-45s,6369881,False,fuera_banda_ask=0.86,0.0,0.86,,99.9,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,1.3478702761069234
+2026-10-29T23:09:15.150+00:00,1793315400,5min,False,BNB,Down,0.98,1,True,False,False,sin_datos_para_offset_-45s,6369884,False,fuera_banda_ask=0.98,0.0,0.98,,103.9,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,1.5272738477007102
