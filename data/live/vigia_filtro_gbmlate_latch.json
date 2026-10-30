@@ -145,6 +145,7 @@
  "GBM_LATE_15M#SOL#15min": [
   "drift_60min|abs_gt|0.461|BUY_YES",
   "hora_utc|lt|17.0|BUY_YES",
+  "ibs_20min|gt|0.2063|BUY_NO",
   "ibs_20min|gt|0.2069|BUY_NO",
   "ibs_20min|gt|0.2075|BUY_NO",
   "ibs_20min|gt|0.2083|BUY_NO",
@@ -397,6 +398,7 @@
   "sigma_ewma_delta_pct|gt|8.509|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.511|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.515|BUY_NO",
+  "sigma_ewma_delta_pct|gt|8.51|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.527|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.532|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.533|BUY_NO",
@@ -943,6 +945,7 @@
   "ibs_20min|lt|0.7634|BUY_YES",
   "ibs_20min|lt|0.7647|BUY_YES",
   "ibs_20min|lt|0.764|BUY_YES",
+  "ibs_20min|lt|0.7664|BUY_YES",
   "ibs_20min|lt|0.76|BUY_YES",
   "ibs_20min|lt|0.7753|BUY_YES",
   "ibs_20min|lt|0.7778|BUY_YES",
