@@ -28,11 +28,11 @@
     "hi": 0.06,
     "n": 62,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9357,
+    "diff_vs_resto": -0.9346,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9357,
-      -0.9357
+      -0.9346,
+      -0.9346
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -58,11 +58,11 @@
     "hi": 0.1,
     "n": 42,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9352,
-    "p_valor": 0.0,
+    "diff_vs_resto": -0.9349,
+    "p_valor": 0.0005,
     "split_half_diff": [
-      -0.9352,
-      -0.9352
+      -0.9349,
+      -0.9349
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -168,11 +168,11 @@
     "hi": 0.31,
     "n": 57,
     "pnl_medio": -0.6449,
-    "diff_vs_resto": -0.5982,
-    "p_valor": 0.0,
+    "diff_vs_resto": -0.599,
+    "p_valor": 0.001,
     "split_half_diff": [
-      -0.7053,
-      -0.4947
+      -0.7061,
+      -0.4955
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7039,
@@ -192,24 +192,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 58,
-    "pnl_sin_mejores_dias": -0.4838,
+    "pnl_sin_mejores_dias": -0.4847,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 2380,
-    "pnl_medio": -0.4033,
-    "diff_vs_resto": -0.3658,
+    "n": 2384,
+    "pnl_medio": -0.4043,
+    "diff_vs_resto": -0.3666,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.3987,
-      -0.3329
+      -0.3994,
+      -0.3338
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.4424,
+    "pnl_medio_loo": -0.4433,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.5737,
-      -0.2297
+      -0.568,
+      -0.2243
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -237,11 +237,11 @@
     "hi": 0.1,
     "n": 399,
     "pnl_medio": -0.4578,
-    "diff_vs_resto": -0.4148,
-    "p_valor": 0.001,
+    "diff_vs_resto": -0.4149,
+    "p_valor": 0.002,
     "split_half_diff": [
-      -0.5138,
-      -0.3162
+      -0.514,
+      -0.3163
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5036,
