@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-10-29T09:40:09+00:00",
+ "actualizado_utc": "2026-10-30T09:40:09+00:00",
  "fok_reales": {
   "enviadas": 32,
   "muertas": 12,
@@ -8,47 +8,47 @@
  },
  "offsets": {
   "5m#-47": {
-   "n": 16,
+   "n": 17,
    "pendientes": 0,
    "dias": 11,
-   "acierto": 0.625,
-   "ask_medio": 0.526,
-   "ev_eur": 0.345,
+   "acierto": 0.647,
+   "ask_medio": 0.525,
+   "ev_eur": 0.38,
    "ic90_cierre": [
-    -0.132,
-    0.894
+    -0.094,
+    0.834
    ]
   },
   "5m#-46": {
-   "n": 14,
+   "n": 15,
    "pendientes": 0,
    "dias": 10,
-   "acierto": 0.5,
-   "ask_medio": 0.52,
-   "ev_eur": -0.114,
+   "acierto": 0.533,
+   "ask_medio": 0.519,
+   "ev_eur": -0.044,
    "ic90_cierre": [
-    -0.553,
-    0.31
+    -0.456,
+    0.363
    ]
   },
   "5m#-45": {
-   "n": 14,
+   "n": 15,
    "pendientes": 0,
    "dias": 10,
-   "acierto": 0.429,
-   "ask_medio": 0.524,
-   "ev_eur": -0.247,
+   "acierto": 0.467,
+   "ask_medio": 0.522,
+   "ev_eur": -0.168,
    "ic90_cierre": [
-    -0.728,
-    0.165
+    -0.612,
+    0.238
    ]
   },
   "5m#emparejado": {
-   "senales_T45": 14,
-   "tambien_a_T47": 6,
+   "senales_T45": 15,
+   "tambien_a_T47": 7,
    "solo_a_T47": 10,
-   "comunes_resueltos": 6,
-   "dif_ev_T47_menos_T45": 0.038
+   "comunes_resueltos": 7,
+   "dif_ev_T47_menos_T45": 0.033
   },
   "15m#-47": {
    "n": 21,
