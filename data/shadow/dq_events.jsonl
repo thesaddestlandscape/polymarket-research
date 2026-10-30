@@ -219496,3 +219496,17 @@
 {"ts": "2026-10-30T01:28:13+00:00", "sym": "BNB", "value": 0.1749, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-10-30T01:29:07+00:00", "sym": "DOGE", "value": 0.2585, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-10-30T01:29:07+00:00", "sym": "BNB", "value": 0.2296, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:31:00+00:00", "sym": "XRP", "value": 1.2038, "reason": "cross_source_warn coinbase=1.2038 vs mediana=1.2069 (0.52%)"}
+{"ts": "2026-10-30T01:31:53+00:00", "sym": "DOGE", "value": 0.5024, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:31:53+00:00", "sym": "BNB", "value": 0.3669, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:32:04+00:00", "sym": "ETH", "value": 2177.58, "reason": "cross_source_warn coinbase=2177.5800 vs mediana=2189.0050 (1.05%)"}
+{"ts": "2026-10-30T01:32:04+00:00", "sym": "XRP", "value": 1.21, "reason": "cross_source_warn coingecko=1.2100 vs mediana=1.2051 (0.81%)"}
+{"ts": "2026-10-30T01:32:46+00:00", "sym": "DOGE", "value": 0.103, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:32:46+00:00", "sym": "BNB", "value": 0.0086, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:33:05+00:00", "sym": "XRP", "value": 1.2, "reason": "cross_source_warn coingecko=1.2000 vs mediana=1.2032 (0.54%)"}
+{"ts": "2026-10-30T01:33:46+00:00", "sym": "DOGE", "value": 0.8795, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:33:46+00:00", "sym": "BNB", "value": 0.5372, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:34:45+00:00", "sym": "DOGE", "value": 0.7544, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:34:45+00:00", "sym": "BNB", "value": 0.7556, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:35:43+00:00", "sym": "DOGE", "value": 0.3946, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-30T01:35:43+00:00", "sym": "BNB", "value": 0.6119, "reason": "cambio_fuente coingecko->binance"}
