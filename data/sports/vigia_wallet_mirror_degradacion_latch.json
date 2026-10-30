@@ -183,7 +183,11 @@
   "avisado": false
  },
  "0xbfda64473959b988172066319172b83b58b35504#CS": {
-  "avisado": false
+  "avisado": true,
+  "hit_hist": 68.7,
+  "hit_reciente": 35.0,
+  "n_reciente": 20,
+  "telegram_ok": true
  },
  "0x48b0900dc31ac1aadf4777ba76eb72d35048a348#Dota": {
   "avisado": false
@@ -569,11 +573,7 @@
   "telegram_ok": true
  },
  "0x6918ea182d963b1fb7888860b8a8b8bcfba5782b#LoL": {
-  "avisado": true,
-  "hit_hist": 76.1,
-  "hit_reciente": 40.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x80bac5c17aec3f5b3d0f01166b639cd453a02e78#LoL": {
   "avisado": true,
@@ -1135,11 +1135,7 @@
   "avisado": false
  },
  "0x4dd24f21b6c8adc8a059dca1a0346a3aa99214c2#NHL": {
-  "avisado": true,
-  "hit_hist": 66.2,
-  "hit_reciente": 30.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x689f7d0a49d2646dc199848ffbdb4757242e259c#Tennis": {
   "avisado": false
@@ -1679,11 +1675,7 @@
   "telegram_ok": true
  },
  "0x559b850620cd9ee1136d48484c1f374fc5d44959#LoL": {
-  "avisado": true,
-  "hit_hist": 78.2,
-  "hit_reciente": 40.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x494e6eec37f3d1350854987360a5ae3bd8326f79#LoL": {
   "avisado": true,
@@ -1789,11 +1781,7 @@
   "telegram_ok": true
  },
  "0xf49614e63fb15383d4a9b717a1be03ad2410fe79#LoL": {
-  "avisado": true,
-  "hit_hist": 85.9,
-  "hit_reciente": 50.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0xaf21b89714840bfbb74f401bc0007710d065d34a#LoL": {
   "avisado": true,
@@ -1838,9 +1826,103 @@
   "telegram_ok": true
  },
  "0xf1f2b3c6c5bea42a6664fe3a8395addc1ab28c8d#mls-otros": {
+  "avisado": false
+ },
+ "0x4ebc2722adc772bde8680792d0a6fdf15499a33d#CS": {
   "avisado": true,
-  "hit_hist": 95.8,
+  "hit_hist": 60.3,
+  "hit_reciente": 25.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x74b75e8436613e36fac0e007a01dfd33753d8b0b#CS": {
+  "avisado": true,
+  "hit_hist": 83.3,
+  "hit_reciente": 45.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xd7b290888348307c079e3a2c2594abc37e469709#CS": {
+  "avisado": true,
+  "hit_hist": 64.1,
+  "hit_reciente": 30.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xee7c748761cd39ff8bc8ce5fc6d298fd91a870f2#LoL": {
+  "avisado": true,
+  "hit_hist": 78.0,
+  "hit_reciente": 40.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x5d71c3bc940449f251a686584779c927787e8da4#LoL": {
+  "avisado": true,
+  "hit_hist": 72.8,
+  "hit_reciente": 30.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xfed75ac71a6a4313e92d16a9fbef81cf225fe405#MLB": {
+  "avisado": true,
+  "hit_hist": 61.7,
+  "hit_reciente": 25.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x5f0e3501b7c629f3fe5721f56cac7052323c7397#NBA": {
+  "avisado": true,
+  "hit_hist": 84.2,
+  "hit_reciente": 50.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xdc41c39b95453c943174f369926018f6963bdd7e#NBA": {
+  "avisado": true,
+  "hit_hist": 57.9,
+  "hit_reciente": 20.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x2a0d91fe7c9b1f92fda6e38fdfd5cfdb182010c1#NBA": {
+  "avisado": true,
+  "hit_hist": 67.1,
+  "hit_reciente": 25.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x684baa57c338c2549aec0aa3f034f695d72a8409#NFL": {
+  "avisado": true,
+  "hit_hist": 93.2,
   "hit_reciente": 60.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xcc40e3d54a3206d85d86f305596ff6fb4dc96ae3#NFL": {
+  "avisado": true,
+  "hit_hist": 58.4,
+  "hit_reciente": 25.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0xdb42c28c9cbc06c2c4dd446b7094a256adce0ad9#Tennis": {
+  "avisado": true,
+  "hit_hist": 64.4,
+  "hit_reciente": 30.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x75177693e4ecdd01a33cb43ba3fe606dcf750353#cfb-otros": {
+  "avisado": true,
+  "hit_hist": 63.4,
+  "hit_reciente": 25.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x6d3c5bd13984b2de47c3a88ddc455309aab3d294#fin1-otros": {
+  "avisado": true,
+  "hit_hist": 60.8,
+  "hit_reciente": 25.0,
   "n_reciente": 20,
   "telegram_ok": true
  }
