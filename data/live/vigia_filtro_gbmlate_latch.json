@@ -147,6 +147,7 @@
   "hora_utc|lt|17.0|BUY_YES",
   "ibs_20min|gt|0.2059|BUY_NO",
   "ibs_20min|gt|0.2063|BUY_NO",
+  "ibs_20min|gt|0.2065|BUY_NO",
   "ibs_20min|gt|0.2069|BUY_NO",
   "ibs_20min|gt|0.2075|BUY_NO",
   "ibs_20min|gt|0.2083|BUY_NO",
