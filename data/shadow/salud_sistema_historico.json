@@ -1,51 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-13T05:56:54+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 141,
-      "resolve_postmortem_p50_s": 8.0,
-      "resolve_postmortem_p95_s": 16.0,
-      "resolve_postmortem_max_s": 32.0,
-      "n_ciclos_live_trade": 1708,
-      "hueco_live_trade_max_s": 358.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 9,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 62.0,
-      "gb_libres": 27.34,
-      "git_gb": 0.0,
-      "data_gb": 22.79,
-      "datalogs_gb": 5.71
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.76,
-      "ram_pct_libre": 47.4
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 431,
-      "n_results_total": 124223
-    },
-    "carga_sistema": {
-      "load1": 3.27,
-      "load5": 3.59,
-      "load15": 3.72,
-      "nproc": 2,
-      "ratio5": 1.79,
-      "n_procesos_total": 185
-    },
-    "git_push": {
-      "commits_sin_pushear": 1
-    },
-    "anomalias": [],
-    "estado": "OK"
-  },
-  {
     "timestamp_utc": "2026-08-13T07:08:01+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 142,
@@ -14269,6 +14223,249 @@
       "⚠️ screens STALE (código en disco != código cargado): h23shadowv3, r3shadow",
       "💀 7 OOM-kill(s) del kernel en 24h: python(pid 3295297, 4370.1MB), python3(pid 3439621, 2438.7MB), systemd(pid 2727885, 1.3MB), (sd-pam)(pid 2727887, 0.6MB), sort(pid 3463286, 1611.7MB), python(pid 3463753, 1818.5MB), python3(pid 3466994, 3601.5MB)",
       "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-30T07:44:08+00:00) -- Traceback (most recent call last):"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-31T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 134,
+      "resolve_postmortem_p50_s": 124.1,
+      "resolve_postmortem_p95_s": 198.8,
+      "resolve_postmortem_max_s": 417.1,
+      "resolve_postmortem_duraciones_s": [
+        112.0,
+        104.1,
+        117.8,
+        108.5,
+        417.1,
+        92.7,
+        111.3,
+        90.8,
+        108.1,
+        114.5,
+        178.7,
+        149.5,
+        113.5,
+        115.3,
+        125.4,
+        115.0,
+        182.3,
+        157.1,
+        108.7,
+        126.8,
+        125.7,
+        96.7,
+        195.6,
+        157.3,
+        115.1,
+        134.2,
+        122.2,
+        104.4,
+        181.9,
+        161.5,
+        115.7,
+        129.7,
+        120.7,
+        109.5,
+        198.9,
+        156.9,
+        125.4,
+        123.8,
+        128.7,
+        120.3,
+        193.6,
+        179.5,
+        122.8,
+        122.2,
+        124.8,
+        130.8,
+        190.3,
+        174.7,
+        126.5,
+        128.0,
+        115.7,
+        129.7,
+        195.0,
+        220.8,
+        172.3,
+        126.2,
+        104.4,
+        102.5,
+        196.1,
+        158.2,
+        117.4,
+        112.2,
+        125.6,
+        123.5,
+        198.8,
+        160.0,
+        126.5,
+        129.7,
+        138.3,
+        124.1,
+        204.0,
+        158.3,
+        123.1,
+        128.6,
+        134.2,
+        134.4,
+        195.8,
+        167.3,
+        143.3,
+        142.4,
+        115.6,
+        129.1,
+        188.5,
+        162.4,
+        118.8,
+        124.6,
+        125.0,
+        129.4,
+        194.7,
+        155.9,
+        114.7,
+        101.7,
+        103.3,
+        99.9,
+        136.4,
+        112.8,
+        79.4,
+        79.1,
+        93.2,
+        91.1,
+        156.8,
+        118.9,
+        88.7,
+        108.0,
+        96.9,
+        97.0,
+        156.8,
+        145.7,
+        113.9,
+        99.9,
+        109.9,
+        104.9,
+        103.3,
+        409.7,
+        97.1,
+        107.8,
+        122.9,
+        111.0,
+        111.4,
+        177.5,
+        151.7,
+        112.1,
+        105.3,
+        109.0,
+        92.5,
+        116.0,
+        398.5,
+        109.4,
+        98.7,
+        100.6,
+        109.1,
+        97.7,
+        172.2,
+        134.6
+      ],
+      "n_ciclos_live_trade": 4685,
+      "hueco_live_trade_max_s": 55.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 22,
+      "stale": [
+        "h23shadowv3",
+        "r3shadow"
+      ]
+    },
+    "disco": {
+      "pct_usado": 88.0,
+      "gb_libres": 8.84,
+      "git_gb": 0.0,
+      "data_gb": 19.45,
+      "datalogs_gb": 7.05
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 5.78,
+      "ram_pct_libre": 37.9
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 770,
+      "n_results_total": 1239235
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 5.62,
+      "load5": 5.72,
+      "load15": 5.47,
+      "nproc": 8,
+      "ratio5": 0.71,
+      "n_procesos_total": 292
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 5,
+      "eventos": [
+        {
+          "ts": "Oct 30 18:01:05",
+          "pid": "3387390",
+          "nombre": "python",
+          "rss_mb": 2449.6
+        },
+        {
+          "ts": "Oct 30 22:16:08",
+          "pid": "3802606",
+          "nombre": "python",
+          "rss_mb": 3215.2
+        },
+        {
+          "ts": "Oct 30 22:17:35",
+          "pid": "3802825",
+          "nombre": "python",
+          "rss_mb": 2659.9
+        },
+        {
+          "ts": "Oct 31 06:26:23",
+          "pid": "3952227",
+          "nombre": "python3",
+          "rss_mb": 2469.6
+        },
+        {
+          "ts": "Oct 31 07:52:15",
+          "pid": "3689673",
+          "nombre": "python",
+          "rss_mb": 2540.7
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 1,
+      "vigias": [
+        {
+          "log": "vigia_wallet_mirror_seleccion_ab.log",
+          "mtime_utc": "2026-10-31T07:44:07+00:00",
+          "ultima_linea_fallo": "Traceback (most recent call last):"
+        }
+      ]
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 417s (umbral 400s)",
+      "⚠️ screens STALE (código en disco != código cargado): h23shadowv3, r3shadow",
+      "💀 5 OOM-kill(s) del kernel en 24h: python(pid 3387390, 2449.6MB), python(pid 3802606, 3215.2MB), python(pid 3802825, 2659.9MB), python3(pid 3952227, 2469.6MB), python(pid 3689673, 2540.7MB)",
+      "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-10-31T07:44:07+00:00) -- Traceback (most recent call last):"
     ],
     "estado": "ANOMALIA"
   }
