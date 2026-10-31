@@ -1,23 +1,23 @@
 {
- "actualizado_utc": "2026-10-30T09:30:58+00:00",
+ "actualizado_utc": "2026-10-31T09:30:57+00:00",
  "regla": "H43 R5K congelada 17-Oct",
- "n_unidades": 1246,
- "dias": 13,
- "coste_usd": 11376.41,
- "pnl_usd": -173.64,
- "ev_eur_ponderado": -0.0153,
- "ev_por_unidad": 0.0053,
+ "n_unidades": 1347,
+ "dias": 14,
+ "coste_usd": 12337.22,
+ "pnl_usd": -234.44,
+ "ev_eur_ponderado": -0.019,
+ "ev_por_unidad": 0.0015,
  "ic90_cierre": [
-  -0.107,
-  0.076
+  -0.111,
+  0.07
  ],
  "ic90_dias": [
-  -0.116,
-  0.088
+  -0.112,
+  0.079
  ],
- "ev_sin_2_mejores_dias": -0.0905,
- "ev_sin_top20_unidades": -0.0943,
- "precio_medio": 0.184,
+ "ev_sin_2_mejores_dias": -0.088,
+ "ev_sin_top20_unidades": -0.0919,
+ "precio_medio": 0.185,
  "por_dia": {
   "2026-10-17": {
    "coste": 551.98,
@@ -70,6 +70,10 @@
   "2026-10-29": {
    "coste": 1051.52,
    "ev": -0.0965
+  },
+  "2026-10-30": {
+   "coste": 960.81,
+   "ev": -0.0633
   }
  },
  "cobertura": {
@@ -149,6 +153,12 @@
    "mercados": 275,
    "con_desenlace": 275,
    "unidades": 113,
+   "unidades_sin_desenlace": 0
+  },
+  "2026-10-30": {
+   "mercados": 288,
+   "con_desenlace": 288,
+   "unidades": 101,
    "unidades_sin_desenlace": 0
   }
  },
