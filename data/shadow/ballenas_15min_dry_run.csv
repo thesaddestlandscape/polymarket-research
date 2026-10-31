@@ -17601,3 +17601,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-10-31T20:17:07+00:00,ETH,6435106,0xf6b0ad0e1bfbd0edeabc0e62404b67b1db1a2ea8623355ed9cb5caf2944276f6,2026-10-31T20:30:00Z,0.45,0.0392,1.0,3,772.2,,,,20,False,banda_ok py=0.450 rest_lo=6.93 rest_hi=14.82
 2026-10-31T20:25:10+00:00,BNB,6435101,0xed6bff8a07d8658ef11df5c2d4ff06a7773844fb0a961ca7cac3ccd2aad6a726,2026-10-31T20:30:00Z,0.11,0.0767,1.0,3,289.2,,,,23,False,fuera_de_bandas_significativas
 2026-10-31T20:30:11+00:00,ETH,6435290,0x25fd0b9e88bc0e38b419a3e886818e446c5afaad1dfd8a31592a58e7b0c99841,2026-10-31T20:45:00Z,0.48,0.0092,1.0,3,888.5,,,,6,False,banda_ok py=0.480 rest_lo=6.93 rest_hi=14.82
+2026-10-31T20:33:24+00:00,SOL,6435282,0xbf8fe388d172d6c7876dbe82cd8eab4584c6dfc0383f17d28a494b1cdb5b25b2,2026-10-31T20:45:00Z,0.18,0.0247,1.0,4,695.9,,,,7,True,banda_prematura py=0.180 restante=11.60>10.85
