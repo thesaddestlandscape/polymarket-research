@@ -47,16 +47,16 @@
    "ultimo_aviso": 1793193800.3324585
   },
   "archivo": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1793442184.3562055,
-   "ultimo_aviso": 1793442184.3562055
+   "ok": false,
+   "detalle": "RechazoPolitica: HTTP 403",
+   "desde": 1793456586.8170855,
+   "ultimo_aviso": 1793456586.8170855
   },
   "latest": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1793377386.2981331,
-   "ultimo_aviso": 1793377386.2981331
+   "ok": false,
+   "detalle": "RechazoPolitica: HTTP 403",
+   "desde": 1793456586.8170855,
+   "ultimo_aviso": 1793456586.8170855
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-31T13:23:08+00:00"
+ "_actualizado_utc": "2026-10-31T14:23:06+00:00"
 }
