@@ -27,6 +27,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 from csv_lectura_tolerante import leer_csv_tolerante
 import predicciones_archivos as _pa  # 05-Oct: predictions_*.csv o .csv.gz (disco)
@@ -1682,7 +1683,7 @@ def _fees_reales_recientes(limit_paginas: int = 3, pagina: int = 500) -> dict:
     eventos = []
     for i in range(limit_paginas):
         try:
-            r = requests.get(DATA_API_ACTIVITY,
+            r = data_api.resp("activity",
                              params={"user": wallet, "limit": pagina, "offset": i * pagina},
                              timeout=15)
             r.raise_for_status()

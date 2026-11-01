@@ -26,6 +26,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import requests
+import data_api
 
 DIR_LIVE = Path(__file__).parent / "data" / "live"
 CACHE_PATH = DIR_LIVE / "balance_real.json"
@@ -183,14 +184,14 @@ def _fetch_posiciones_wallet(wallet: str) -> list | None:
     (best-effort, cada caller decide su propio fallback)."""
     try:
         out = []
-        r = requests.get(f"{DATA_API}/positions",
+        r = data_api.resp("positions",
                           params={"user": wallet, "redeemable": "false", "limit": 500},
                           timeout=20)
         r.raise_for_status()
         d = r.json()
         if isinstance(d, list):
             out.extend(d)
-        r2 = requests.get(f"{DATA_API}/positions",
+        r2 = data_api.resp("positions",
                            params={"user": wallet, "redeemable": "true", "limit": 500},
                            timeout=20)
         r2.raise_for_status()
@@ -273,7 +274,7 @@ def _positions_value(wallet: str) -> tuple[float, list | None]:
     03-Sep: devuelve también la lista cruda de `/positions` (o None si
     falló) para que `fetch_balance_real()` se la pase a
     `_sports_positions_value_actual()` sin repetir las 2 llamadas HTTP."""
-    r = requests.get(f"{DATA_API}/value", params={"user": wallet}, timeout=20)
+    r = data_api.resp("value", params={"user": wallet}, timeout=20)
     r.raise_for_status()
     d = r.json()
     if isinstance(d, list) and d:
@@ -849,7 +850,7 @@ def _daily_real_pnl(wallet: str) -> tuple[list, float, float]:
     # la API, sin tocar este código) -- el 400 se tragaba en el except de
     # abajo y dejaba pnl_hoy_real/pnl_7d_real/daily_real en None/[] en
     # silencio durante horas.
-    r = requests.get(f"{DATA_API}/activity",
+    r = data_api.resp("activity",
                      params={"user": wallet, "limit": 500}, timeout=25)
     r.raise_for_status()
     evs = r.json()

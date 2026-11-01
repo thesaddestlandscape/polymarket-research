@@ -22,6 +22,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -109,7 +110,7 @@ def _condition_id(market_id, cache):
 
 def _trades_de(cond_id):
     try:
-        r = requests.get(f"{DATA_API}/trades", params={"market": cond_id, "limit": 500},
+        r = data_api.resp("trades", params={"market": cond_id, "limit": 500},
                           headers=H, timeout=TIMEOUT)
         return (r.json() or []) if r.status_code == 200 else []
     except Exception:

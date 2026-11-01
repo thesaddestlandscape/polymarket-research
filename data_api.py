@@ -36,8 +36,18 @@ def get(ruta: str, params: dict | None = None, timeout: float = 15, paginas: int
     p = dict(params or {})
     if "market" in p:
         p["condition"] = p.pop("market")
+    # v1 `redeemable=true|false` -> v2 `status`; el OPEN de v2 incluye redimibles: filtrar en cliente
+    if ruta == "trades":
+        p.setdefault("taker_only", "true")   # v1 devolvía solo tomadoras; v2 por defecto mezcla maker (verificado 01-Nov: 15 vs 77)
+    red = p.pop("redeemable", None) if ruta == "positions" else None
+    if red is not None:
+        red = str(red).lower() == "true"
+        p["status"] = "REDEEMABLE" if red else "OPEN"
     off = int(p.pop("offset", 0) or 0)
-    lim = int(p.get("limit", 100))
+    lim = min(int(p.get("limit", 100)), 1000)   # v2: limit 0..1000
+    p["limit"] = lim
+    if ruta == "positions":
+        paginas = max(paginas, 10)   # el filtro de cliente puede vaciar páginas: seguir hasta agotar
     out, cursor, saltar = [], None, off
     for _ in range(max(paginas, 1) + (off // max(lim, 1) + 1 if off else 0)):
         q = dict(p, **({"cursor": cursor} if cursor else {}))
@@ -47,6 +57,8 @@ def get(ruta: str, params: dict | None = None, timeout: float = 15, paginas: int
         if not isinstance(j, dict) or "data" not in j:
             raise ValueError(f"forma v2 inesperada en {ruta}")
         d = j["data"]
+        if d is None and ruta == "value":
+            raise ValueError("value: data null (fail-closed)")
         rows = d if isinstance(d, list) else ([] if d is None else [d])
         if saltar >= len(rows) and saltar:
             saltar -= len(rows)
@@ -55,6 +67,17 @@ def get(ruta: str, params: dict | None = None, timeout: float = 15, paginas: int
         cursor = (j.get("pagination") or {}).get("next_cursor")
         if not cursor or (not saltar and len(out) >= lim * max(paginas, 1)):
             break
+    else:
+        if saltar:
+            raise ValueError(f"{ruta}: offset {off} no alcanzado (paginas insuficientes)")
+    if saltar:
+        raise ValueError(f"{ruta}: offset {off} más allá del final de la paginación")
+    if ruta == "positions":
+        # v1 aplicaba sizeThreshold=1 por defecto; v2 no
+        umbral = float(p.get("sizeThreshold", 1))
+        out = [x for x in out if (x.get("current_size") or 0) >= umbral]
+        if red is not None:
+            out = [x for x in out if bool(x.get("redeemable")) == red]
     return _conv(out)
 
 
@@ -68,6 +91,6 @@ class _Resp:
     def text(self): return __import__("json").dumps(self._d)
 
 
-def resp(ruta: str, params: dict | None = None, timeout: float = 15, **_ignorado):
+def resp(ruta: str, params: dict | None = None, timeout: float = 15, headers=None):
     """Sustituto directo de requests.get(f"{DATA_API}/{ruta}", params=..., timeout=...)."""
     return _Resp(get(ruta, params, timeout))

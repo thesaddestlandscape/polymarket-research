@@ -25,6 +25,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
@@ -54,7 +55,7 @@ def _condition_id(market_id):
 
 def _trades_tape(cond_id):
     try:
-        r = requests.get(f"{DATA_API}/trades", params={"market": cond_id, "limit": 200},
+        r = data_api.resp("trades", params={"market": cond_id, "limit": 200},
                           headers=H, timeout=TIMEOUT)
         return r.json() if r.status_code == 200 else []
     except Exception:

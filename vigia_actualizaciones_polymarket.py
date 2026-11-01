@@ -105,6 +105,10 @@ def _extraer_cuerpo_changelog(texto: str) -> str:
     # de hashear/diffear, para no disparar alertas de ruido de UI.
     lineas = texto.splitlines()
     lineas = [l for l in lineas if not re.fullmatch(r"[⌘⌃⌥⇧]\s*[A-Za-z0-9]{0,2}", l.strip())]
+    # 01-Nov: falso positivo -- Mintlify incrusta su config de sitio (JSON
+    # {"docsConfig":...}, banners, navbar) como una línea gigante que cambia
+    # sin tocar el changelog. Descartar líneas JSON/enormes.
+    lineas = [l for l in lineas if not (l.lstrip().startswith(("{\"", "[{")) or len(l) > 1500 or "docsConfig" in l)]
     return "\n".join(lineas)
 
 

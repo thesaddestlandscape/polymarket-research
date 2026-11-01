@@ -35,6 +35,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
@@ -71,7 +72,7 @@ def _posiciones_abiertas(wallet: str) -> list[dict]:
     no expone un flag "abierto" fiable (redeemable=true aparece también en
     mercados ya resueltos) -- endDate es el filtro robusto."""
     try:
-        r = requests.get("https://data-api.polymarket.com/positions",
+        r = data_api.resp("positions",
                           params={"user": wallet, "limit": 500}, timeout=TIMEOUT)
         r.raise_for_status()
         pos = r.json()

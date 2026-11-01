@@ -23,6 +23,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
@@ -87,7 +88,7 @@ def main() -> int:
             if not cid:
                 continue
             try:
-                r = requests.get(f"{DATA_API}/trades", params={"market": cid, "limit": 200},
+                r = data_api.resp("trades", params={"market": cid, "limit": 200},
                                   headers=H, timeout=TIMEOUT)
                 tr = r.json() if r.status_code == 200 else []
             except Exception:

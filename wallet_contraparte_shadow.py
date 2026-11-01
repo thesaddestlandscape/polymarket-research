@@ -36,6 +36,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
 
 import requests
+import data_api
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
@@ -107,7 +108,7 @@ def main() -> int:
             if not cid:
                 continue
             try:
-                resp = requests.get(f"{DATA_API}/trades", params={"market": cid, "limit": 200},
+                resp = data_api.resp("trades", params={"market": cid, "limit": 200},
                                      headers=H, timeout=TIMEOUT)
                 tr = resp.json() if resp.status_code == 200 else []
             except Exception:
