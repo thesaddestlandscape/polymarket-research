@@ -1,11 +1,24 @@
 {
- "actualizado_utc": "2026-10-31T08:10:08+00:00",
+ "actualizado_utc": "2026-11-01T08:10:08+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
   "TOP_MAX": 0.3
  },
  "radar": {
+  "CS#SEGUIR#0.90": {
+   "n": 191,
+   "dias": 57,
+   "frac_dias_pos": 0.789,
+   "top_wallet": 0.168,
+   "n_wallets": 61,
+   "pnl_medio": 0.017,
+   "medias_tramos": [
+    0.0496,
+    0.0014,
+    0.0005
+   ]
+  },
   "LoL#SEGUIR#0.85": {
    "n": 107,
    "dias": 41,
@@ -20,16 +33,29 @@
    ]
   },
   "CS#SEGUIR#0.65": {
-   "n": 774,
-   "dias": 66,
-   "frac_dias_pos": 0.606,
-   "top_wallet": 0.094,
-   "n_wallets": 212,
-   "pnl_medio": 0.0531,
+   "n": 788,
+   "dias": 68,
+   "frac_dias_pos": 0.603,
+   "top_wallet": 0.093,
+   "n_wallets": 217,
+   "pnl_medio": 0.0494,
    "medias_tramos": [
-    0.0819,
-    0.0653,
-    0.0122
+    0.0767,
+    0.0716,
+    0.0003
+   ]
+  },
+  "LoL#SEGUIR#0.45": {
+   "n": 276,
+   "dias": 60,
+   "frac_dias_pos": 0.65,
+   "top_wallet": 0.051,
+   "n_wallets": 135,
+   "pnl_medio": 0.1308,
+   "medias_tramos": [
+    0.1184,
+    0.0591,
+    0.2149
    ]
   },
   "LoL#FADE#0.85": {
@@ -46,16 +72,16 @@
    ]
   },
   "Dota#SEGUIR#0.75": {
-   "n": 116,
-   "dias": 43,
-   "frac_dias_pos": 0.698,
-   "top_wallet": 0.103,
-   "n_wallets": 58,
-   "pnl_medio": 0.0666,
+   "n": 118,
+   "dias": 44,
+   "frac_dias_pos": 0.705,
+   "top_wallet": 0.102,
+   "n_wallets": 59,
+   "pnl_medio": 0.0704,
    "medias_tramos": [
-    0.1143,
-    0.0535,
-    0.0338
+    0.1196,
+    0.0264,
+    0.0652
    ]
   },
   "NFL#SEGUIR#0.75": {
@@ -71,30 +97,30 @@
     0.1377
    ]
   },
-  "lal-otros#FADE#0.50": {
-   "n": 76,
+  "epl-otros#FADE#0.45": {
+   "n": 91,
    "dias": 20,
    "frac_dias_pos": 0.7,
-   "top_wallet": 0.145,
-   "n_wallets": 26,
-   "pnl_medio": 0.2403,
+   "top_wallet": 0.198,
+   "n_wallets": 25,
+   "pnl_medio": 0.1862,
    "medias_tramos": [
-    0.355,
-    0.2095,
-    0.1597
+    0.2759,
+    0.1274,
+    0.1564
    ]
   },
-  "epl-otros#SEGUIR#0.45": {
-   "n": 69,
+  "cfb-otros#FADE#0.70": {
+   "n": 64,
    "dias": 17,
-   "frac_dias_pos": 0.765,
-   "top_wallet": 0.13,
+   "frac_dias_pos": 0.706,
+   "top_wallet": 0.172,
    "n_wallets": 28,
-   "pnl_medio": 0.3208,
+   "pnl_medio": 0.0578,
    "medias_tramos": [
-    0.3816,
-    0.3934,
-    0.1873
+    0.0551,
+    0.1188,
+    0.002
    ]
   }
  }
