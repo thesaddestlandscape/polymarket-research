@@ -5,26 +5,29 @@ import re
 import requests
 
 BASE = "https://data-api.polymarket.com"
-_ALIAS = {"token_id": "asset", "opposite_token_id": "oppositeAsset",
+_ALIAS_COMUN = {"token_id": "asset", "opposite_token_id": "oppositeAsset"}
+_ALIAS_RUTA = {"positions": 
           # /v2/positions: nombres distintos a v1 (verificado 01-Nov)
-          "current_size": "size", "total_pnl": "cashPnl", "total_cost_usdc": "initialValue",
-          "total_size": "totalBought", "current_price": "curPrice", "avg_price": "avgPrice",
-          # /v2/leaderboard
-          "user_id": "proxyWallet", "user_name": "userName", "volume": "vol", "x_username": "xUsername"}
+          {"current_size": "size", "total_pnl": "cashPnl", "total_cost_usdc": "initialValue",
+          "total_size": "totalBought", "current_price": "curPrice", "avg_price": "avgPrice"},
+               # /v2/leaderboard
+               "leaderboard": {"user_id": "proxyWallet", "user_name": "userName", "volume": "vol", "x_username": "xUsername"}}
 _RUTAS = {"trades", "activity", "positions", "value", "oi", "holders", "live-volume", "leaderboard"}
 
 
-def _camel(k: str) -> str:
-    if k in _ALIAS:
-        return _ALIAS[k]
+def _camel(k: str, ruta: str = "") -> str:
+    if k in _ALIAS_RUTA.get(ruta, {}):
+        return _ALIAS_RUTA[ruta][k]
+    if k in _ALIAS_COMUN:
+        return _ALIAS_COMUN[k]
     return re.sub(r"_([a-z0-9])", lambda m: m.group(1).upper(), k)
 
 
-def _conv(x):
+def _conv(x, ruta: str = ""):
     if isinstance(x, dict):
-        return {_camel(k): _conv(v) for k, v in x.items()}
+        return {_camel(k, ruta): _conv(v, ruta) for k, v in x.items()}
     if isinstance(x, list):
-        return [_conv(v) for v in x]
+        return [_conv(v, ruta) for v in x]
     return x
 
 
@@ -71,14 +74,16 @@ def get(ruta: str, params: dict | None = None, timeout: float = 15, paginas: int
         if saltar:
             raise ValueError(f"{ruta}: offset {off} no alcanzado (paginas insuficientes)")
     if saltar:
-        raise ValueError(f"{ruta}: offset {off} más allá del final de la paginación")
+        return []   # como v1: offset más allá del final = lista vacía
+    if ruta == "positions" and cursor:
+        raise ValueError("positions: truncado por tope de páginas (fail-closed)")
     if ruta == "positions":
         # v1 aplicaba sizeThreshold=1 por defecto; v2 no
         umbral = float(p.get("sizeThreshold", 1))
         out = [x for x in out if (x.get("current_size") or 0) >= umbral]
         if red is not None:
             out = [x for x in out if bool(x.get("redeemable")) == red]
-    return _conv(out)
+    return _conv(out, ruta)
 
 
 class _Resp:
