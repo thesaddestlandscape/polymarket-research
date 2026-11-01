@@ -41,6 +41,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 from wallet_pnl_diario import fetch_activity
 
@@ -188,7 +189,10 @@ def _cargar_json(path, default):
 
 def _get(url, params=None, timeout=None):
     try:
-        r = requests.get(url, params=params, headers=HEADERS, timeout=timeout or TIMEOUT)
+        if url.startswith(DATA_API + "/"):
+            r = data_api.resp(url[len(DATA_API) + 1:], params, timeout=timeout or TIMEOUT)
+        else:
+            r = requests.get(url, params=params, headers=HEADERS, timeout=timeout or TIMEOUT)
         if r.status_code != 200:
             return None
         return r.json()

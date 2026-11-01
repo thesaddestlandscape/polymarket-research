@@ -9,6 +9,7 @@ import csv, glob, json, time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
+import data_api
 
 TIMEOUT = 30
 VENTANA_HORAS = 4          # trades de las últimas 4 horas
@@ -63,12 +64,7 @@ def fetch_actividad(wallet_addr):
     intento = 0
     while True:
         try:
-            r = requests.get(
-                DATA_API,
-                params={"user": wallet_addr, "limit": 500},
-                headers=HEADERS_HTTP,
-                timeout=TIMEOUT,
-            )
+            r = data_api.resp("activity", {"user": wallet_addr, "limit": 500}, timeout=TIMEOUT)
             if r.status_code == 404:
                 return []
             if r.status_code == 429 and intento < MAX_REINTENTOS_429:

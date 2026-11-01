@@ -35,6 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 TIMEOUT = 30
 TOP_N = 75
@@ -57,7 +58,7 @@ def fetch_leaderboard(order_by: str, time_period: str = "MONTH") -> list:
         "limit": 50,
         "offset": 0,
     }
-    r = requests.get(LEADERBOARD_URL, params=params, timeout=TIMEOUT)
+    r = data_api.resp("leaderboard", params, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
 
@@ -96,11 +97,12 @@ def combinar_rankings(por_pnl: list, por_vol: list) -> list:
 def fetch_positions(address: str) -> list:
     """Obtiene posiciones actuales (size>1) de un usuario."""
     params = {"user": address, "sizeThreshold": 1, "limit": 500}
-    r = requests.get(POSITIONS_URL, params=params, timeout=TIMEOUT)
+    r = data_api.resp("positions", params, timeout=TIMEOUT)
     if r.status_code != 200:
         return []
     try:
-        return r.json()
+        # v2 ignora sizeThreshold: filtrar en cliente (size>1, como v1)
+        return [p for p in r.json() if (p.get("size") or 0) > 1]
     except ValueError:
         return []
 

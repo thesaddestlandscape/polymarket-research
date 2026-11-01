@@ -45,6 +45,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 DIR_SHADOW = Path(__file__).parent / "data" / "shadow"
 CSV_PATH = DIR_SHADOW / "maker_sim.csv"
@@ -114,7 +115,7 @@ def simular(pred: dict, mercado: dict, res: dict, resolution_ts: str) -> None:
             return
         if random.random() >= SAMPLE_RATE:
             return  # muestreo -- ver docstring de SAMPLE_RATE
-        r = requests.get(f"{DATA_API}/trades",
+        r = data_api.resp("trades",
                          params={"market": cond_id, "limit": 500},
                          headers=H, timeout=5)
         trades = r.json() or []

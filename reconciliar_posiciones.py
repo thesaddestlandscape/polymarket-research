@@ -52,6 +52,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 BASE = Path(__file__).parent
 DIR_LIVE = BASE / "data" / "live"
@@ -84,7 +85,7 @@ def cargar_wallet() -> str | None:
 
 
 def fetch_posiciones(wallet: str) -> list:
-    r = requests.get(f"{DATA_API}/positions", params={"user": wallet}, timeout=20)
+    r = data_api.resp("positions", params={"user": wallet}, timeout=20)
     r.raise_for_status()
     return r.json() or []
 

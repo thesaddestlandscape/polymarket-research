@@ -28,6 +28,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import requests
+import data_api
 
 DIR = Path(__file__).parent
 ENV_PATH = DIR / "data/live/.env"
@@ -67,7 +68,7 @@ def fetch_polymarket_activity(wallet: str) -> list:
     evs = []
     offset = 0
     while True:
-        r = requests.get(f"{DATA_API}/activity",
+        r = data_api.resp("activity",
                          params={"user": wallet, "limit": 500, "offset": offset},
                          timeout=20)
         r.raise_for_status()

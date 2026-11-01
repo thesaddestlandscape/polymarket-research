@@ -41,6 +41,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import data_api
 
 DIR = Path(__file__).resolve().parent
 DIR_WALLETS = DIR / "data" / "wallets"
@@ -113,7 +114,7 @@ def fetch_activity(wallet: str, max_events: int = MAX_EVENTOS_POR_WALLET) -> lis
         intento = 0
         while True:
             try:
-                r = requests.get(f"{DATA_API}/activity",
+                r = data_api.resp("activity",
                                  params={"user": wallet, "limit": 500, "offset": offset},
                                  timeout=TIMEOUT)
                 if r.status_code == 429 and intento < MAX_REINTENTOS_429:
