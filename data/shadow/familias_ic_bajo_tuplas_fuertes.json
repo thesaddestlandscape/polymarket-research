@@ -32,19 +32,19 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0582,
+  "ic_bayes_familia": 0.0583,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 27.86,
+  "pnl_fiel_combinado_eur": 26.4,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#ETH#240min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 27.86,
-    "n_ejecutado": 320
+    "pnl_fiel_eur_sin_suelo": 26.4021,
+    "n_ejecutado": 321
    }
   ]
  },
  "LIQUIDACIONES_60M": {
-  "ic_bayes_familia": -0.0391,
+  "ic_bayes_familia": -0.0389,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 16.5,
   "tuplas": [
