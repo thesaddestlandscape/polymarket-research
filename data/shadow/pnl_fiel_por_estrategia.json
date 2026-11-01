@@ -1,7 +1,7 @@
 {
-  "generado_utc": "2026-11-01T05:24:35+00:00",
+  "generado_utc": "2026-11-01T05:56:52+00:00",
   "bankroll_inicial_por_tupla": 25.44,
-  "n_snapshots_libro_indexados": 1041896,
+  "n_snapshots_libro_indexados": 1041898,
   "limitaciones": [
     "IC usado para Kelly es el ACTUAL de strategy_params.json, no histórico punto-en-el-tiempo",
     "Overrides puntuales con fecha de circuit_breaker se ignoran (se usa siempre el valor base)",
