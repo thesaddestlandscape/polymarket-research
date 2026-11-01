@@ -75220,3 +75220,7 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-11-01T09:32:19+00:00,0xe98f96da6a1a1ad0e91bcfdb5fde8ab5eb2601dc928175277ff677ccd7161c5a,xrp-updown-5m-1793525400,XRP,5min,Down,2,0.4652963311382879,0.0,0.98,0.0,0.97,-1.02,0,0,0,0,fuera_de_zona_confirmada
 2026-11-01T09:35:19+00:00,0x78fb758c455b6df0a534e2f40c65ddda890b42a75665aacf54a4cd208a050a03,btc-updown-5m-1793525700,BTC,5min,Up,2,0.5199999672955995,0.0,0.6,0.0,0.61,1.67,0,0,0,0,fuera_de_zona_confirmada
 2026-11-01T09:35:37+00:00,0x99fa257cdb17c93677984fd19b07de8c4776515bd7d7c1bd2797ec40fa32ab1f,eth-updown-5m-1793525700,ETH,5min,Up,2,0.73,538.6,0.68,595.9,0.69,1.47,1,0,0,0,fuera_de_zona_confirmada
+2026-11-01T09:39:11+00:00,0x10d1fdf567282ee54e220483b56a9cfb18f45a61ef7b60722cdb7ef041d908cd,bitcoin-up-or-down-november-1-2026-4am-et,BTC,60min,Down,2,0.968,2509.6,0.979,2504.1,0.979,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-01T09:39:14+00:00,0x5dfdd945fcc302d6dfa351da0d8caf3165b7ffa59b3ce16469acc1516b9261d6,btc-updown-15m-1793525400,BTC,15min,Up,2,0.5,0.0,0.85,0.0,0.86,1.18,0,0,0,0,fuera_de_zona_confirmada
+2026-11-01T09:40:18+00:00,0xefa0b6de1a79e146b44766e48167eb8b8d49ff4ba5e0609d24d9680d330cadfd,eth-updown-5m-1793526000,ETH,5min,Up,2,0.38,465.1,0.22,612.3,0.22,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-01T09:40:21+00:00,0x2991789b3cb6f0fdd1296914c37f2dbb84cb3ac727a4d55395c5621d3e72dee7,btc-updown-5m-1793526000,BTC,5min,Down,2,0.5929411764705882,0.0,0.69,0.0,0.63,-8.7,0,0,0,0,fuera_de_zona_confirmada

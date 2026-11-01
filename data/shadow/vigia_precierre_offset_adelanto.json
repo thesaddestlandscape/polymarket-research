@@ -1,7 +1,7 @@
 {
- "actualizado_utc": "2026-10-31T09:40:08+00:00",
+ "actualizado_utc": "2026-11-01T09:40:06+00:00",
  "fok_reales": {
-  "enviadas": 33,
+  "enviadas": 34,
   "muertas": 12,
   "muertas_resueltas": 12,
   "muertas_que_ganarian": 10
@@ -20,45 +20,45 @@
    ]
   },
   "5m#-46": {
-   "n": 15,
+   "n": 16,
    "pendientes": 0,
-   "dias": 10,
-   "acierto": 0.533,
-   "ask_medio": 0.519,
-   "ev_eur": -0.044,
+   "dias": 11,
+   "acierto": 0.562,
+   "ask_medio": 0.521,
+   "ev_eur": 0.005,
    "ic90_cierre": [
-    -0.456,
-    0.363
+    -0.386,
+    0.388
    ]
   },
   "5m#-45": {
-   "n": 17,
+   "n": 18,
    "pendientes": 0,
    "dias": 12,
-   "acierto": 0.412,
-   "ask_medio": 0.522,
-   "ev_eur": -0.266,
+   "acierto": 0.444,
+   "ask_medio": 0.523,
+   "ev_eur": -0.205,
    "ic90_cierre": [
-    -0.66,
-    0.116
+    -0.576,
+    0.161
    ]
   },
   "5m#emparejado": {
-   "senales_T45": 17,
+   "senales_T45": 18,
    "tambien_a_T47": 7,
    "solo_a_T47": 10,
    "comunes_resueltos": 7,
    "dif_ev_T47_menos_T45": 0.033
   },
   "15m#-47": {
-   "n": 22,
+   "n": 23,
    "pendientes": 0,
    "dias": 15,
-   "acierto": 0.727,
-   "ask_medio": 0.768,
-   "ev_eur": -0.04,
+   "acierto": 0.739,
+   "ask_medio": 0.77,
+   "ev_eur": -0.029,
    "ic90_cierre": [
-    -0.274,
+    -0.257,
     0.178
    ]
   },
@@ -89,26 +89,26 @@
   "15m#emparejado": {
    "senales_T45": 17,
    "tambien_a_T47": 6,
-   "solo_a_T47": 16,
+   "solo_a_T47": 17,
    "comunes_resueltos": 6,
    "dif_ev_T47_menos_T45": 0.019
   }
  },
  "rampa": {
   "5m": {
-   "n": 3,
-   "dias": 3,
-   "pnl_eur": 5.17,
-   "ev_eur": 0.861,
+   "n": 4,
+   "dias": 4,
+   "pnl_eur": 6.87,
+   "ev_eur": 0.859,
    "ic90_dias": [
-    -0.368,
-    2.09
+    -0.09,
+    1.809
    ],
-   "ev_sin_2_mejores": -1.035,
-   "ev_ultimas_20": 0.861,
-   "enviadas": 7,
+   "ev_sin_2_mejores": -0.09,
+   "ev_ultimas_20": 0.859,
+   "enviadas": 8,
    "fok_muertas": 1,
-   "fok_muertas_pct": 0.143,
+   "fok_muertas_pct": 0.125,
    "gates": {
     "n>=40": false,
     "dias>=10": false,
@@ -126,8 +126,8 @@
    "pnl_eur": 0.89,
    "ev_eur": 0.056,
    "ic90_dias": [
-    -0.29,
-    0.44
+    -0.288,
+    0.437
    ],
    "ev_sin_2_mejores": -0.117,
    "ev_ultimas_20": 0.056,
