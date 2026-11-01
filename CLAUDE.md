@@ -262,6 +262,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - Guardia de `ballenas_executor_15min.py`: descartar activos cuya banda operativa favorezca NO en vez de YES.
 
 **Operación e infraestructura**
+- Editar un módulo muy importado (`smart_money_tracker.py`, `data_api.py`: 102 módulos vigilados en observadores) marca STALE a casi todas las screens y el watchdog las reinicia en cascada; `ejeclive` (dinero real) NO se reinicia sola: `verify_deploy.py --restart ejeclive` a mano sin trades OPEN (01-Nov, migración Data API v2). Data API v2 ≠ v1: `/trades` mezcla maker (forzar `taker_only=true`), `/positions` ignora `sizeThreshold`/`redeemable`; usar siempre `data_api.py`.
 - Vigías con latch cuya firma incluye un valor recalculado cada ciclo → spam (737 avisos en 5 días), dos veces.
 - Racha que mezcla MÉTODOS: el 08-Oct el vigía quirúrgico B anunció WALLET_MIRROR#BTC#5min#g0 [0,10-0,11) con "3 días CONSECUTIVOS" sumando el 06-Oct evaluado con el método viejo (cada copia una observación, n_forward 106-123) y 07/08 con el nuevo (mercado-lado-bucket, fee real, n 25-30). Toda racha/persistencia cuenta solo lecturas del método vigente (campo `metodo` en `edge_quirurgico_historial.jsonl`).
 - Racha de "N días consecutivos" que salta los días en que la zona no aparece: el vigía quirúrgico B anunció SNIPER#BTC#5min [0,16-0,17) con 3 días seguidos (28, 30 y 01) cuando el 29-Sep no era operable (01-Oct). Ausente un día en que el generador corrió = día malo.
