@@ -1,109 +1,109 @@
 {
-  "actualizado_utc": "2026-10-31T18:20:08+00:00",
+  "actualizado_utc": "2026-11-01T00:20:07+00:00",
   "cutoff": "2026-09-24T08:00:00",
-  "n_unidades_fade_forward": 59754,
+  "n_unidades_fade_forward": 60989,
   "hipotesis": {
     "H1_peores_todas": {
-      "n_unidades": 1239,
+      "n_unidades": 1290,
       "n_dias": 38,
-      "n_wallets": 390,
-      "top_wallet_pct": 0.042,
-      "hit": 0.5165,
-      "ask_medio": 0.4898,
-      "wilson90lo": 0.4932,
-      "pnl_medio": 0.064,
-      "exceso_hit_vs_ask_pp": 2.68,
+      "n_wallets": 395,
+      "top_wallet_pct": 0.04,
+      "hit": 0.5116,
+      "ask_medio": 0.4906,
+      "wilson90lo": 0.4887,
+      "pnl_medio": 0.0491,
+      "exceso_hit_vs_ask_pp": 2.1,
       "split_half": [
-        0.0932,
-        0.0349
+        0.0952,
+        0.003
       ],
       "ci90_bootstrap_dia": [
-        -0.0039,
-        0.1413
+        -0.0147,
+        0.1235
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H2_malas_ask_020_030": {
-      "n_unidades": 1550,
+      "n_unidades": 1588,
       "n_dias": 38,
-      "n_wallets": 286,
+      "n_wallets": 290,
       "top_wallet_pct": 0.163,
-      "hit": 0.26,
-      "ask_medio": 0.2482,
-      "wilson90lo": 0.2421,
-      "pnl_medio": 0.0412,
-      "exceso_hit_vs_ask_pp": 1.18,
+      "hit": 0.2601,
+      "ask_medio": 0.2481,
+      "wilson90lo": 0.2424,
+      "pnl_medio": 0.0423,
+      "exceso_hit_vs_ask_pp": 1.19,
       "split_half": [
-        -0.0008,
-        0.0833
+        0.0049,
+        0.0798
       ],
       "ci90_bootstrap_dia": [
-        -0.03,
-        0.1126
+        -0.0269,
+        0.1129
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H3_peores_longshot_ask_lt_050": {
-      "n_unidades": 652,
+      "n_unidades": 675,
       "n_dias": 38,
-      "n_wallets": 279,
-      "top_wallet_pct": 0.063,
-      "hit": 0.3681,
-      "ask_medio": 0.3486,
-      "wilson90lo": 0.3376,
-      "pnl_medio": 0.0791,
-      "exceso_hit_vs_ask_pp": 1.95,
+      "n_wallets": 286,
+      "top_wallet_pct": 0.061,
+      "hit": 0.3615,
+      "ask_medio": 0.3489,
+      "wilson90lo": 0.3317,
+      "pnl_medio": 0.0573,
+      "exceso_hit_vs_ask_pp": 1.26,
       "split_half": [
-        0.1238,
-        0.0344
+        0.1231,
+        -0.0083
       ],
       "ci90_bootstrap_dia": [
-        -0.0282,
-        0.2021
+        -0.0477,
+        0.1742
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H4_ufc_fade": {
-      "n_unidades": 294,
-      "n_dias": 31,
-      "n_wallets": 64,
-      "top_wallet_pct": 0.19,
-      "hit": 0.5204,
+      "n_unidades": 310,
+      "n_dias": 36,
+      "n_wallets": 68,
+      "top_wallet_pct": 0.187,
+      "hit": 0.5194,
       "ask_medio": 0.4977,
-      "wilson90lo": 0.4725,
-      "pnl_medio": 0.0662,
-      "exceso_hit_vs_ask_pp": 2.27,
+      "wilson90lo": 0.4727,
+      "pnl_medio": 0.0539,
+      "exceso_hit_vs_ask_pp": 2.17,
       "split_half": [
-        0.014,
-        0.1183
+        -0.01,
+        0.1177
       ],
       "ci90_bootstrap_dia": [
-        -0.0893,
-        0.1816
+        -0.0895,
+        0.1681
       ],
       "cutoff": "2026-09-24T08:40:00",
       "veredicto": "sin_concluir"
     },
     "H5_epl_otros_fade": {
-      "n_unidades": 746,
+      "n_unidades": 850,
       "n_dias": 25,
-      "n_wallets": 45,
-      "top_wallet_pct": 0.249,
-      "hit": 0.5402,
-      "ask_medio": 0.538,
-      "wilson90lo": 0.5101,
-      "pnl_medio": -0.0517,
-      "exceso_hit_vs_ask_pp": 0.22,
+      "n_wallets": 46,
+      "top_wallet_pct": 0.275,
+      "hit": 0.5376,
+      "ask_medio": 0.5376,
+      "wilson90lo": 0.5094,
+      "pnl_medio": -0.0543,
+      "exceso_hit_vs_ask_pp": 0.0,
       "split_half": [
-        -0.0545,
-        -0.049
+        -0.0591,
+        -0.0494
       ],
       "ci90_bootstrap_dia": [
-        -0.0778,
-        -0.0237
+        -0.0788,
+        -0.0218
       ],
       "cutoff": "2026-09-24T08:40:00",
       "veredicto": "refutado_forward"
