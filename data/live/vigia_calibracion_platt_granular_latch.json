@@ -1606,5 +1606,21 @@
   "LIQUIDACIONES_15M#BTC#15min": {
     "n": 200,
     "confirmado": true
+  },
+  "LIQUIDACIONES_15M#ETH": {
+    "n": 205,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_15M#ETH#15min": {
+    "n": 205,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#BNB#15min": {
+    "n": 220,
+    "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#BNB#5min": {
+    "n": 217,
+    "confirmado": false
   }
 }
