@@ -11,9 +11,14 @@ PY=/root/polymarket-research/.venv/bin/python
 case "$1" in
   desenlaces)
     nice -n 19 ionice -c3 $PY -I r3_desenlaces.py >> "$LOG" 2>&1; rc=$?
-    if [ $rc -ne 0 ]; then
+    # 02-Nov: un 429 aislado de gamma es transitorio (los pendientes se reintentan cada 20 min y solo se abandonan a las 6 h): avisar
+    # solo con 3 fallos CONSECUTIVOS (>=1 h), y como mucho 1 aviso cada 3 h.
+    if [ $rc -eq 0 ]; then
+      rm -f "$DL/.fallos_desenlaces"
+    else
+      n=$(( $(cat "$DL/.fallos_desenlaces" 2>/dev/null || echo 0) + 1 )); echo $n > "$DL/.fallos_desenlaces"
       last=$(stat -c %Y "$DL/.aviso_desenlaces" 2>/dev/null || echo 0)
-      if [ $(( $(date +%s) - last )) -gt 10800 ]; then touch "$DL/.aviso_desenlaces"; aviso "🚨 R3 shadow: el resolvedor de desenlaces FALLÓ rc=$rc (gamma). Ver $LOG"; fi
+      if [ $n -ge 3 ] && [ $(( $(date +%s) - last )) -gt 10800 ]; then touch "$DL/.aviso_desenlaces"; aviso "🚨 R3 shadow: el resolvedor de desenlaces FALLÓ $n veces seguidas rc=$rc (gamma). Ver $LOG"; fi
     fi ;;
   vigia)
     echo "=== $(date -u +%FT%TZ) vigia" >> "$LOG"
