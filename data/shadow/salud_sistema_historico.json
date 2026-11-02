@@ -1,51 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-14T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 150,
-      "resolve_postmortem_p50_s": 8.0,
-      "resolve_postmortem_p95_s": 13.0,
-      "resolve_postmortem_max_s": 20.0,
-      "n_ciclos_live_trade": 1809,
-      "hueco_live_trade_max_s": 238.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 9,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 64.0,
-      "gb_libres": 26.13,
-      "git_gb": 0.0,
-      "data_gb": 23.27,
-      "datalogs_gb": 5.94
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.72,
-      "ram_pct_libre": 46.3
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 433,
-      "n_results_total": 132425
-    },
-    "carga_sistema": {
-      "load1": 3.72,
-      "load5": 5.29,
-      "load15": 6.18,
-      "nproc": 2,
-      "ratio5": 2.65,
-      "n_procesos_total": 185
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [],
-    "estado": "OK"
-  },
-  {
     "timestamp_utc": "2026-08-15T07:08:01+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 148,
@@ -14675,6 +14629,147 @@
       "⚠️ screens STALE (código en disco != código cargado): h23shadowv3, r3shadow",
       "💀 7 OOM-kill(s) del kernel en 24h: systemd(pid 3637026, 1.6MB), (sd-pam)(pid 3637028, 0.7MB), python3(pid 4056759, 1972.2MB), python(pid 3979105, 2074.3MB), python(pid 29649, 3662.7MB), python(pid 29897, 2678.4MB), python3(pid 166582, 2459.7MB)",
       "🚨 vigía roto: vigia_wallet_mirror_seleccion_ab.log (última ejecución falló, mtime 2026-11-01T07:44:07+00:00) -- Traceback (most recent call last):"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-02T07:57:02+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 52,
+      "resolve_postmortem_p50_s": 97.0,
+      "resolve_postmortem_p95_s": 169.5,
+      "resolve_postmortem_max_s": 222.3,
+      "resolve_postmortem_duraciones_s": [
+        98.0,
+        95.6,
+        161.9,
+        132.1,
+        97.0,
+        99.6,
+        92.4,
+        90.2,
+        146.9,
+        134.2,
+        83.4,
+        75.5,
+        81.8,
+        76.0,
+        135.0,
+        122.0,
+        73.7,
+        99.1,
+        87.8,
+        81.1,
+        138.2,
+        123.7,
+        85.8,
+        84.7,
+        112.1,
+        98.2,
+        169.5,
+        127.9,
+        88.6,
+        95.1,
+        88.0,
+        101.8,
+        141.3,
+        129.9,
+        81.5,
+        84.9,
+        82.9,
+        83.8,
+        134.8,
+        130.8,
+        77.8,
+        82.9,
+        81.9,
+        79.1,
+        156.2,
+        121.9,
+        106.3,
+        81.0,
+        81.6,
+        84.5,
+        170.3,
+        222.3
+      ],
+      "n_ciclos_live_trade": 2125,
+      "hueco_live_trade_max_s": 62.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 22,
+      "stale": [
+        "h23shadowv3",
+        "r3shadow"
+      ]
+    },
+    "disco": {
+      "pct_usado": 90.0,
+      "gb_libres": 7.42,
+      "git_gb": 0.0,
+      "data_gb": 20.67,
+      "datalogs_gb": 6.86
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 7.64,
+      "ram_pct_libre": 50.2
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 771,
+      "n_results_total": 1266177
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 2.51,
+      "load5": 3.57,
+      "load15": 4.56,
+      "nproc": 8,
+      "ratio5": 0.45,
+      "n_procesos_total": 290
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 3,
+      "eventos": [
+        {
+          "ts": "Nov 01 08:09:32",
+          "pid": "30865",
+          "nombre": "python",
+          "rss_mb": 2198.4
+        },
+        {
+          "ts": "Nov 01 08:09:58",
+          "pid": "190736",
+          "nombre": "python",
+          "rss_mb": 2143.1
+        },
+        {
+          "ts": "Nov 01 22:19:35",
+          "pid": "441902",
+          "nombre": "python",
+          "rss_mb": 4207.6
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 1
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⚠️ screens STALE (código en disco != código cargado): h23shadowv3, r3shadow",
+      "💀 3 OOM-kill(s) del kernel en 24h: python(pid 30865, 2198.4MB), python(pid 190736, 2143.1MB), python(pid 441902, 4207.6MB)"
     ],
     "estado": "ANOMALIA"
   }
