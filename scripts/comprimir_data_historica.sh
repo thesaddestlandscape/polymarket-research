@@ -205,6 +205,18 @@ if mountpoint -q /mnt/HC_Volume_106538179 && mkdir -p "$MS_VOL" 2>/dev/null; the
     find "$L5" -maxdepth 1 -name 'libro5_ms_*.csv.gz' -mtime +14 -print -delete || true   # el escritor también borra: una carrera no aborta el script (set -e)
     # (el tamaño lo acota el propio escritor: presupuesto de 20 GB; aquí solo la retención por días)
   fi
+  # 02-Nov: libro5_tx (log de tx de casados, ~100 MB/dia, sin retencion): gzip SIN PERDIDA de los dias < hoy UTC, verificado con cmp antes de borrar.
+  # Nadie lee estos ficheros hoy (a1_vida_ordenes.py solo los cita en un docstring); lectores futuros: gzip.open.
+  TX=/mnt/HC_Volume_106538179/libro5_tx
+  if [ -d "$TX" ]; then
+    HOY_TX=$(date -u +%Y-%m-%d)
+    for f in "$TX"/libro5_tx_*.csv; do
+      [ -f "$f" ] || continue
+      d=${f##*/libro5_tx_}; d=${d:0:10}
+      [ "$d" \< "$HOY_TX" ] || continue
+      nice -n 19 ionice -c3 gzip -6 -c "$f" > "$f.gz.tmp" && cmp -s <(zcat "$f.gz.tmp") "$f" && mv "$f.gz.tmp" "$f.gz" && rm -f "$f" || { rm -f "$f.gz.tmp"; echo "ERROR comprimiendo $f"; }
+    done
+  fi
   find /root/polymarket-research-datalogs -maxdepth 1 -name 'maker_ms_*_*.csv.gz' -mtime +4 -print0 |
   while IFS= read -r -d '' f; do
     b=$(basename "$f")
