@@ -155523,3 +155523,14 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-11-02T22:45:00.089+00:00,1793659500,5min,False,ETH,Up,,0,,,,,6553245,False,no_fillable_ask=None_ratio=0.0,0.0,,,57.6,,,,,,,,RESOLUTION_SNIPER_NAIVE,,5.12153111718586
 2026-11-02T22:45:00.090+00:00,1793659500,5min,False,BTC,Up,,0,,,,,6553250,False,no_fillable_ask=None_ratio=0.0,0.0,,,57.4,,,,,,,,RESOLUTION_SNIPER_NAIVE,,3.093135689155034
 2026-11-02T22:45:00.090+00:00,1793659500,5min,False,BNB,Up,,0,,,,,6553244,False,no_fillable_ask=None_ratio=0.0,0.0,,,53.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,5.458516405912392
+2026-11-02T22:49:16.415+00:00,1793659800,5min,False,BNB,Up,,0,,,,,6553316,False,sin_ask,,,,45.6,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,7.401951058334594
+2026-11-02T22:49:16.417+00:00,1793659800,5min,False,XRP,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-02T22:49:16.417+00:00,1793659800,5min,False,ETH,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-02T22:49:16.417+00:00,1793659800,5min,False,BTC,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-02T22:49:16.417+00:00,1793659800,5min,False,DOGE,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-02T22:49:16.417+00:00,1793659800,5min,False,SOL,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-02T22:50:00.074+00:00,1793659800,5min,False,DOGE,Up,,0,,,,,6553319,False,no_fillable_ask=None_ratio=0.0,0.0,,,50.4,,,,,,,,RESOLUTION_SNIPER_NAIVE,,5.875128940797512
+2026-11-02T22:50:00.074+00:00,1793659800,5min,False,BNB,Up,,0,,,,,6553316,False,no_fillable_ask=None_ratio=0.0,0.0,,,47.5,,,,,,,,RESOLUTION_SNIPER_NAIVE,,6.803284270118825
+2026-11-02T22:50:00.074+00:00,1793659800,5min,False,XRP,Up,,0,,,,,6553321,False,no_fillable_ask=None_ratio=0.0,0.0,,,51.6,,,,,,,,RESOLUTION_SNIPER_NAIVE,,2.511551526689627
+2026-11-02T22:50:00.074+00:00,1793659800,5min,False,BTC,Up,,0,,,,,6553322,False,no_fillable_ask=None_ratio=0.0,0.0,,,55.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,13.721568407398973
+2026-11-02T22:50:00.074+00:00,1793659800,5min,False,ETH,Up,,0,,,,,6553330,False,no_fillable_ask=None_ratio=0.0,0.0,,,48.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,11.75764439606678
