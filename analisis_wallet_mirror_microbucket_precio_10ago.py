@@ -30,6 +30,7 @@ Solo lectura -- no toca ningún gate real, no genera ninguna tupla
 WALLET_MIRROR en pares_permitidos_live.
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import wm_ejecutor_csv  # 25-Sep: lector unificado principal+reconstruido (solo análisis)
 import math
 from collections import defaultdict
@@ -63,7 +64,7 @@ def pnl_neto(ask, acierto):
 
 def cargar_outcomes():
     out = {}
-    with open(SNIPER, encoding="utf-8") as f:
+    with csv_rotado.abrir(SNIPER) as f:
         for r in csv.DictReader(f):
             if r.get("acierto") not in ("0", "1"):
                 continue

@@ -29,6 +29,7 @@ Metodología:
   nada que ver con la wallet).
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import json
 import random
 import statistics
@@ -121,7 +122,7 @@ def main() -> int:
     n_con_libro_cercano = 0
     vistos_hash = set()
 
-    with open(WALLET_MIRROR, encoding="utf-8") as f:
+    with csv_rotado.abrir(WALLET_MIRROR) as f:
         for r in csv.DictReader(f):
             t = parse_ts(r.get("trade_timestamp", ""))
             if t is None or not (rango_min <= t <= rango_max):

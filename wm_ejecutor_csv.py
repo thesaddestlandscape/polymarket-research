@@ -15,6 +15,7 @@ reconstruido anteriores a RECON_HASTA_TS (el principal empieza 23-Sep 06:03:48).
 ilegible se ignora (= comportamiento anterior). Cada fila reconstruida lleva reconstruido='1'.
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
@@ -26,7 +27,7 @@ csv.field_size_limit(10_000_000)
 
 def iter_filas(principal=PRINCIPAL):
     principal = Path(principal)
-    with open(principal, encoding="utf-8", newline="") as f:
+    with csv_rotado.abrir(principal) as f:
         for r in csv.DictReader(f):
             yield r
     recon = principal.with_name(RECON_NOMBRE)

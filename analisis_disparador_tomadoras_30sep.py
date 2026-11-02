@@ -48,7 +48,7 @@ def main():
             else:
                 k += 1
                 if k % 40 == 0: ev["resto de wallets (control)"].append((r["activo"], t, r["outcome"], pr))
-    with open(REPO / "data/shadow/wallet_mirror_executor_dryrun.csv", encoding="utf-8") as f:
+    with csv_rotado.abrir(REPO / "data/shadow/wallet_mirror_executor_dryrun.csv") as f:
         for r in csv.DictReader(f):
             if r["timestamp_utc"].startswith(dia) and r["marco"] in ("5min", "15min") and r["sigue_fillable_en_decision"] == "1":
                 try: ev["NUESTRO Wallet Mirror (decisión)"].append((r["activo"], ts(r["timestamp_utc"]), r["mirror_lado"], float(r["ask_decision"])))

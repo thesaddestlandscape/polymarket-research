@@ -219,6 +219,9 @@ def cargar_forward(E1B, dias):
     ax = [pd.read_csv(E1B + f'aux_{d}.csv.gz') for d in dias if os.path.exists(E1B + f'aux_{d}.csv.gz')]
     aux = pd.concat(ax, ignore_index=True) if len(ax) == len(dias) else None
     Xe = pd.concat([pd.read_csv(E1B + f'e1x_{d}.csv.gz') for d in dias if os.path.exists(E1B + f'e1x_{d}.csv.gz')], ignore_index=True)
+    # 02-Nov: un mercado que abre a las 00:00 aparece como candidato (sin fill) en el dia anterior; pertenece al dia de fin-1 s
+    ok = lambda T: pd.to_datetime(T.fin - 1, unit='s').dt.strftime('%Y-%m-%d') == T.dia
+    X = X[ok(X)].reset_index(drop=True); Xe = Xe[ok(Xe)].reset_index(drop=True)
     return X, aux, Xe
 
 

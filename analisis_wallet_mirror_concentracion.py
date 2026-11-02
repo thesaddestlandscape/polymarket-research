@@ -15,6 +15,7 @@ mano cada sesión (o cron diario junto al resto de auditorías de madurez,
 CLAUDE.md pt.16).
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import json
 import sys
 from collections import Counter
@@ -54,7 +55,7 @@ def _tuplas_wallet_mirror_live() -> set[tuple[str, str]]:
 def analizar(activo: str, marco: str) -> dict | None:
     if not DRY_RUN.exists():
         return None
-    filas = [r for r in csv.DictReader(open(DRY_RUN, encoding="utf-8"))
+    filas = [r for r in csv.DictReader(csv_rotado.abrir(DRY_RUN))
              if r.get("tipo") == "SEGUIR" and r.get("activo") == activo and r.get("marco") == marco]
     n = len(filas)
     if n == 0:

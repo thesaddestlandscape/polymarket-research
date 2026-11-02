@@ -10,6 +10,7 @@ ambas implican la MISMA direccion real.
 Solo lectura, no toca produccion.
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import json
 from collections import defaultdict
 
@@ -55,7 +56,7 @@ def main():
     n_overlap_market = 0
     confluencia = []  # (acierto_seguir,) cuando coinciden
     discrepancia = []
-    with open(SEGUIR, encoding="utf-8") as f:
+    with csv_rotado.abrir(SEGUIR) as f:
         for r in csv.DictReader(f):
             if r.get("tipo") != "SEGUIR":
                 continue

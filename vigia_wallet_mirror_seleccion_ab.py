@@ -22,6 +22,7 @@ Cron diario 07:44 con --telegram.  Veredicto a favor de B = >=10 días medidos, 
 y EV(B) >= +0,10 con IC90 >0.
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import json
 import os
 import random
@@ -56,7 +57,7 @@ def _cargar() -> dict:
 
 def _leer(ruta: Path) -> dict:
     por_dia = defaultdict(list)
-    with open(ruta, encoding="utf-8", errors="replace", newline="") as f:
+    with csv_rotado.abrir(ruta, errors="replace") as f:
         for r in csv.DictReader(f):
             if r.get("acierto") not in ("0", "1") or r.get("sigue_fillable_en_decision") != "1":
                 continue
@@ -67,6 +68,10 @@ def _leer(ruta: Path) -> dict:
             if ratio < 5 or not 0.05 <= a < 0.95:
                 continue
             pnl = int(r["acierto"]) / a - 1 - FEE * (1 - a)
+            try:
+                date.fromisoformat(r["timestamp_utc"][:10])          # fila corrupta (NULs por escritura truncada)
+            except ValueError:
+                continue
             por_dia[r["timestamp_utc"][:10]].append(((r["wallet"], r["activo"], r["marco"]), r["marco"], pnl))
     return por_dia
 

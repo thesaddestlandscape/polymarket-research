@@ -17,6 +17,7 @@ case "$1" in
     fi ;;
   vigia)
     echo "=== $(date -u +%FT%TZ) vigia" >> "$LOG"
+    ulimit -v 4500000   # 02-Nov: RSS medido 3,0 GB con 5 dias (MemoryError a 2,5 GB); el resolvedor sigue a 2,5 GB
     nice -n 19 ionice -c3 $PY -I r3_vigia.py --telegram >> "$LOG" 2>&1 || aviso "🚨 R3 shadow: el vigía diario FALLÓ. Ver $LOG" ;;
   *) echo "uso: $0 desenlaces|vigia"; exit 2 ;;
 esac

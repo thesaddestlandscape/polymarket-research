@@ -13,6 +13,7 @@ Candidata = n>=40, >=10 días, PnL>=+0,10 EUR/tr, IC90 bootstrap por DÍAS > 0 y
 Telegram SIEMPRE (resumen) + JSON data/shadow/vigia_wallet_mirror_entrada_baja.json.
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import json
 import random
 import sys
@@ -36,7 +37,7 @@ def cargar(p):
     g = defaultdict(list)
     if not p.exists():
         return g
-    with open(p, encoding="utf-8", newline="") as f:
+    with csv_rotado.abrir(p) as f:
         for r in csv.DictReader(f):
             if (r.get("sigue_fillable_en_decision") != "1" or r.get("acierto") not in ("0", "1")
                     or (r.get("timestamp_utc") or "") < DESDE):

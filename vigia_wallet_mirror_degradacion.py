@@ -34,6 +34,7 @@ vigia_log_growth.py/vigia_slippage_kill_switch.py.
 Cron sugerido: diario, mismo bloque que el resto de vigías de análisis.
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import json
 import sys
 from collections import defaultdict
@@ -86,7 +87,7 @@ def _historial_por_wallet() -> dict:
     hist = defaultdict(list)
     if not DRY_RUN.exists():
         return hist
-    with open(DRY_RUN, encoding="utf-8") as f:
+    with csv_rotado.abrir(DRY_RUN) as f:
         for row in csv.DictReader(f):
             if row.get("tipo") != "SEGUIR" or row.get("acierto") not in ("0", "1"):
                 continue

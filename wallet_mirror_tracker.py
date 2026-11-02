@@ -40,6 +40,7 @@ esto es un catch-up sobre un CSV que ya se está escribiendo solo, no una
 decisión en tiempo real todavía).
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 from escritura_atomica import escribir_csv_atomico, reescribir_csv_streaming  # 23-Sep, ver ese módulo
 import fcntl
 import io
@@ -89,7 +90,8 @@ def _leer_dry_run_vivo_filas():
     viejo que el propio fichero en disco, solo evita reparsearlo si no
     ha cambiado desde la última lectura."""
     try:
-        mtime = DRY_RUN_VIVO.stat().st_mtime
+        # 02-Nov (/code-review): la caché depende también de las partes rotadas, no solo del fichero vivo
+        mtime = (DRY_RUN_VIVO.stat().st_mtime,) + tuple((p.name, p.stat().st_mtime) for p in csv_rotado._fuentes(DRY_RUN_VIVO) if p != DRY_RUN_VIVO)
     except OSError:
         return []
     if _cache_dry_run_vivo["mtime"] != mtime:
@@ -103,7 +105,7 @@ def _leer_dry_run_vivo_filas():
         # internadas y se devuelve un generador de dicts con las MISMAS claves/valores -- los
         # dos consumidores solo iteran y hacen row.get(), su resultado no cambia.
         filas = []
-        with open(DRY_RUN_VIVO, encoding="utf-8") as f:
+        with csv_rotado.abrir(DRY_RUN_VIVO) as f:
             for r in csv.DictReader(f):
                 if r.get("acierto") not in ("0", "1"):
                     continue

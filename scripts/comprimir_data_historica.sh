@@ -163,6 +163,14 @@ comprimir_dir data/sports "activity_ws_*.csv"
 # .csv.gz en datalogs/csv_rotados/ -- sin pérdida: los lectores lo abren con
 # csv_rotado.abrir() (partes + fichero vivo, mismas líneas en el mismo orden).
 nice -n 15 /usr/bin/python3 /root/polymarket-research/csv_rotado.py rotar data/shadow/dispersed_bot_executor_dryrun.csv || echo "ERROR rotando dispersed_bot_executor_dryrun.csv"
+# 02-Nov (disco al 92 %): freeze_estado y curva_cierre (891 MB, sin lectores de datos; escritores en modo append con cabecera)
+nice -n 15 /usr/bin/python3 /root/polymarket-research/csv_rotado.py rotar data/shadow/resolution_sniper_freeze_estado_fase0.csv || echo "ERROR rotando resolution_sniper_freeze_estado_fase0.csv"
+nice -n 15 /usr/bin/python3 /root/polymarket-research/csv_rotado.py rotar data/shadow/resolution_sniper_precierre_curva_cierre_fase0.csv || echo "ERROR rotando resolution_sniper_precierre_curva_cierre_fase0.csv"
+# 02-Nov: wallet mirror (cripto) por ANTIGUEDAD: el resolvedor reescribe filas (acierto), asi que solo se mueve el prefijo ya resuelto >3 d
+# bajo el flock de los escritores. Lectores migrados a csv_rotado.abrir(). NO aplicar a data/sports/ (mismo stem -> colision de partes).
+for f in wallet_mirror_sniper_dry_run wallet_mirror_executor_dryrun; do
+  (ulimit -v 3000000; nice -n 15 ionice -c3 /usr/bin/python3 /root/polymarket-research/csv_rotado.py rotar_antiguas data/shadow/$f.csv data/shadow/$f.csv.lock) || echo "ERROR rotar_antiguas $f"
+done
 
 cd /root/polymarket-research-datalogs
 comprimir_dir . "polymarket_activity_*.csv" "$CUTOFF_COMPRIMIR_DATALOGS"

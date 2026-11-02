@@ -56,6 +56,7 @@ bucket.json -- no toca ningún gate real, WALLET_MIRROR no puede estar en
 pares_permitidos_live (tupla sintética, ver wallet_mirror_executor_dryrun.py).
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import json
 import os
 import math
@@ -159,7 +160,7 @@ def cargar_filas():
     # Up y Down del mismo mercado siguen siendo 2 observaciones (el ejecutor live compra ambos si los copia).
     unidades = defaultdict(list)
     n_sin_clave = 0
-    with open(EXECUTOR, encoding="utf-8") as f:
+    with csv_rotado.abrir(EXECUTOR) as f:
         for r in csv.DictReader(f):
             if r.get("sigue_fillable_en_decision") != "1":
                 continue

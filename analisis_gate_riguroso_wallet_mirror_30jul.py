@@ -7,6 +7,7 @@ P24). Segmentado por tipo (SEGUIR/FADE) x es_jugada_grande x activo
 Correr desde la raíz del repo: python3 analisis_gate_riguroso_wallet_mirror_30jul.py
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import math
 import random
 from collections import defaultdict
@@ -36,7 +37,7 @@ def cargar():
     # fichero correcto a leer hoy. Cron roto eliminado la misma sesión (ver
     # memoria project_wallet_mirror_cron_roto_reconectado_10ago).
     filas = []
-    with open("data/shadow/wallet_mirror_sniper_dry_run.csv", encoding="utf-8") as f:
+    with csv_rotado.abrir("data/shadow/wallet_mirror_sniper_dry_run.csv") as f:
         for r in csv.DictReader(f):
             if r.get("acierto") not in ("0", "1"):
                 continue

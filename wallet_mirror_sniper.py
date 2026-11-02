@@ -117,13 +117,36 @@ def _vistos_guardar(vistos: dict) -> None:
     VISTOS_PATH.write_text(json.dumps(lista), encoding="utf-8")
 
 
+_PEND_FILAS: list = []   # filas pendientes de volcar (lock ocupado por el resolvedor/rotación)
+_PEND_MAX = 20000
+
+
 def _guardar_fila(fila: dict) -> None:
-    nuevo = not OUT.exists()
-    with open(OUT, "a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=COLUMNS)
-        if nuevo:
-            w.writeheader()
-        w.writerow(fila)
+    """02-Nov (/code-review): añade bajo el MISMO flock que usan el resolvedor (reescritura) y csv_rotado.rotar_antiguas.
+    Sin espera ni sleep (corre en el event loop del WS): si el lock está ocupado la fila queda en memoria y se vuelca,
+    en orden, en la siguiente llamada que lo consiga. Nunca escribe sin lock (un append al inode viejo se perdía)."""
+    import fcntl
+    _PEND_FILAS.append(fila)
+    if len(_PEND_FILAS) > _PEND_MAX:
+        del _PEND_FILAS[0]
+    lk = open(OUT.with_name(OUT.name + ".lock"), "a")
+    try:
+        try:
+            fcntl.flock(lk, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            return
+        try:
+            nuevo = not OUT.exists()
+            with open(OUT, "a", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=COLUMNS)
+                if nuevo:
+                    w.writeheader()
+                w.writerows(_PEND_FILAS)
+            _PEND_FILAS.clear()
+        finally:
+            fcntl.flock(lk, fcntl.LOCK_UN)
+    finally:
+        lk.close()
 
 
 async def _mantener_ping(ws):

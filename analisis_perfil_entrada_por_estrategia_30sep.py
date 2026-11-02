@@ -46,7 +46,7 @@ def main():
                 ev[f"REFERENCIA tomadoras persistentes#{r['marco']}"].append((r["market_slug"], t, r["outcome"], p))
     for s in P: P[s].sort()
     T = {s: [x[0] for x in v] for s, v in P.items()}
-    with open(REPO / "data/shadow/wallet_mirror_executor_dryrun.csv", encoding="utf-8") as f:
+    with csv_rotado.abrir(REPO / "data/shadow/wallet_mirror_executor_dryrun.csv") as f:
         for r in csv.DictReader(f):
             if not r["timestamp_utc"].startswith(dia) or r["market_slug"] not in out or r["sigue_fillable_en_decision"] != "1": continue
             try: ev[f"WALLET_MIRROR {r['tipo']}#{r['marco']}"].append((r["market_slug"], ts(r["timestamp_utc"]), r["mirror_lado"], float(r["ask_decision"])))

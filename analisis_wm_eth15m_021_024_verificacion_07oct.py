@@ -14,6 +14,7 @@ Solo lectura. Uso: python3 analisis_wm_eth15m_021_024_verificacion_07oct.py
 """
 import collections
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import sys
 from pathlib import Path
 
@@ -38,7 +39,7 @@ def cargar():
     for k, f in enumerate(FUENTES):
         if not f.exists():
             continue
-        for r in csv.DictReader(open(f, encoding="utf-8")):
+        for r in csv.DictReader(csv_rotado.abrir(f)):
             if k == 1 and r["timestamp_utc"][:19] > CORTE_RECON:
                 continue
             if r.get("activo") != "ETH" or r.get("marco") != "15min" or r.get("es_jugada_grande") == "1":

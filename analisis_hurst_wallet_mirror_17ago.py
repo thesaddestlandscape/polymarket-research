@@ -20,6 +20,7 @@ sigue_fillable_en_decision=1) + outcome real (wallet_mirror_sniper_dry_run.csv)
 + filtro TWAP (shadow_postmortem.es_pre_twap). Solo lectura.
 """
 import csv
+import csv_rotado  # 02-Nov: lee partes .csv.gz rotadas + fichero vivo
 import wm_ejecutor_csv  # 25-Sep: lector unificado principal+reconstruido (solo análisis)
 import glob
 import math
@@ -146,7 +147,7 @@ def _pnl_neto(ask, acierto):
 
 def _cargar_outcomes():
     out = {}
-    with open(SNIPER, encoding="utf-8") as f:
+    with csv_rotado.abrir(SNIPER) as f:
         for r in csv.DictReader(f):
             if r.get("acierto") not in ("0", "1"):
                 continue
