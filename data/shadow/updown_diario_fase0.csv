@@ -24788,3 +24788,39 @@ ts_utc,activo,slug,market_id,min_restantes,spot,ref,sigma_1m,z,prob_justa_up,ask
 2026-11-02T15:44:01+00:00,XRP,xrp-up-or-down-on-november-2-2026,6476076,75.97,1.253,1.2513,0.000907,0.171,0.5678,0.63,0.59,255.95,0.41,0.37,172.0,609,
 2026-11-02T15:44:01+00:00,DOGE,dogecoin-up-or-down-on-november-2-2026,6476077,75.97,0.07537,0.07566,0.000866,-0.505,0.3066,0.32,0.13,40.0,0.87,0.68,8.7,610,
 2026-11-02T15:44:01+00:00,BNB,bnb-up-or-down-on-november-2-2026,6476079,75.97,704.7,711.74,0.000577,-1.962,0.0249,0.13,0.07,33.96,0.93,0.87,19.16,609,
+2026-11-02T15:45:02+00:00,BTC,bitcoin-up-or-down-on-november-2-2026,6476063,74.95,77998.01,78150.01,0.000739,-0.302,0.3812,0.35,0.33,222.81,0.67,0.65,169.41,1224,
+2026-11-02T15:45:02+00:00,ETH,ethereum-up-or-down-on-november-2-2026,6476073,74.95,2291.35,2270.0,0.000907,1.184,0.8819,0.92,0.91,1835.16,0.09,0.08,9.09,621,
+2026-11-02T15:45:02+00:00,SOL,solana-up-or-down-on-november-2-2026,6476075,74.95,94.29,94.83,0.001092,-0.6,0.2742,0.25,0.21,138.51,0.79,0.75,184.97,600,
+2026-11-02T15:45:02+00:00,XRP,xrp-up-or-down-on-november-2-2026,6476076,74.95,1.2556,1.2513,0.000918,0.429,0.6659,0.68,0.67,7.06,0.33,0.32,231.33,604,
+2026-11-02T15:45:02+00:00,DOGE,dogecoin-up-or-down-on-november-2-2026,6476077,74.95,0.07549,0.07566,0.000876,-0.295,0.3842,0.45,0.24,57.6,0.76,0.55,99.3,629,
+2026-11-02T15:45:02+00:00,BNB,bnb-up-or-down-on-november-2-2026,6476079,74.95,705.2,711.74,0.000584,-1.815,0.0347,0.16,0.07,6.99,0.93,0.84,9.77,627,
+2026-11-02T15:46:00+00:00,BTC,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:46:00+00:00,ETH,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:46:00+00:00,SOL,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:46:00+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:46:00+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:46:00+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:47:01+00:00,BTC,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:47:01+00:00,ETH,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:47:01+00:00,SOL,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:47:01+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:47:01+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:47:01+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:48:01+00:00,BTC,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:48:01+00:00,ETH,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:48:01+00:00,SOL,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:48:01+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:48:01+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:48:01+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:49:01+00:00,BTC,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:49:01+00:00,ETH,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:49:01+00:00,SOL,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:49:01+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:49:01+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:49:01+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:50:02+00:00,BTC,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:50:02+00:00,ETH,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:50:02+00:00,SOL,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:50:02+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:50:02+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-02T15:50:02+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
