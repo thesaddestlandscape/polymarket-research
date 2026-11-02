@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-11-01T08:10:08+00:00",
+ "actualizado_utc": "2026-11-02T08:10:08+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
@@ -30,19 +30,6 @@
     0.0503,
     0.112,
     0.0821
-   ]
-  },
-  "CS#SEGUIR#0.65": {
-   "n": 788,
-   "dias": 68,
-   "frac_dias_pos": 0.603,
-   "top_wallet": 0.093,
-   "n_wallets": 217,
-   "pnl_medio": 0.0494,
-   "medias_tramos": [
-    0.0767,
-    0.0716,
-    0.0003
    ]
   },
   "LoL#SEGUIR#0.45": {
@@ -85,29 +72,55 @@
    ]
   },
   "NFL#SEGUIR#0.75": {
-   "n": 122,
-   "dias": 31,
-   "frac_dias_pos": 0.645,
-   "top_wallet": 0.115,
-   "n_wallets": 43,
-   "pnl_medio": 0.0921,
+   "n": 149,
+   "dias": 36,
+   "frac_dias_pos": 0.611,
+   "top_wallet": 0.121,
+   "n_wallets": 45,
+   "pnl_medio": 0.0935,
    "medias_tramos": [
-    0.0688,
-    0.0675,
-    0.1377
+    0.0558,
+    0.0821,
+    0.1408
+   ]
+  },
+  "epl-otros#SEGUIR#0.75": {
+   "n": 81,
+   "dias": 22,
+   "frac_dias_pos": 0.636,
+   "top_wallet": 0.136,
+   "n_wallets": 28,
+   "pnl_medio": 0.0335,
+   "medias_tramos": [
+    0.0529,
+    0.0032,
+    0.0443
+   ]
+  },
+  "epl-otros#FADE#0.40": {
+   "n": 85,
+   "dias": 21,
+   "frac_dias_pos": 0.714,
+   "top_wallet": 0.165,
+   "n_wallets": 28,
+   "pnl_medio": 0.1343,
+   "medias_tramos": [
+    0.1615,
+    0.0157,
+    0.2225
    ]
   },
   "epl-otros#FADE#0.45": {
-   "n": 91,
-   "dias": 20,
-   "frac_dias_pos": 0.7,
-   "top_wallet": 0.198,
-   "n_wallets": 25,
-   "pnl_medio": 0.1862,
+   "n": 95,
+   "dias": 21,
+   "frac_dias_pos": 0.714,
+   "top_wallet": 0.189,
+   "n_wallets": 26,
+   "pnl_medio": 0.1792,
    "medias_tramos": [
-    0.2759,
-    0.1274,
-    0.1564
+    0.304,
+    0.0218,
+    0.2098
    ]
   },
   "cfb-otros#FADE#0.70": {
@@ -121,6 +134,19 @@
     0.0551,
     0.1188,
     0.002
+   ]
+  },
+  "NBA#SEGUIR#0.15": {
+   "n": 63,
+   "dias": 16,
+   "frac_dias_pos": 0.625,
+   "top_wallet": 0.222,
+   "n_wallets": 26,
+   "pnl_medio": 0.5767,
+   "medias_tramos": [
+    0.9622,
+    0.0676,
+    0.7004
    ]
   }
  }
