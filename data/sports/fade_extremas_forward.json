@@ -1,25 +1,25 @@
 {
-  "actualizado_utc": "2026-11-02T12:20:07+00:00",
+  "actualizado_utc": "2026-11-02T18:20:08+00:00",
   "cutoff": "2026-09-24T08:00:00",
-  "n_unidades_fade_forward": 64197,
+  "n_unidades_fade_forward": 64310,
   "hipotesis": {
     "H1_peores_todas": {
-      "n_unidades": 1359,
+      "n_unidades": 1360,
       "n_dias": 40,
       "n_wallets": 406,
       "top_wallet_pct": 0.038,
-      "hit": 0.5092,
-      "ask_medio": 0.4912,
-      "wilson90lo": 0.4869,
-      "pnl_medio": 0.0373,
-      "exceso_hit_vs_ask_pp": 1.8,
+      "hit": 0.5088,
+      "ask_medio": 0.4913,
+      "wilson90lo": 0.4865,
+      "pnl_medio": 0.0365,
+      "exceso_hit_vs_ask_pp": 1.75,
       "split_half": [
-        0.0879,
-        -0.0133
+        0.0911,
+        -0.018
       ],
       "ci90_bootstrap_dia": [
-        -0.0266,
-        0.1112
+        -0.028,
+        0.1106
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
