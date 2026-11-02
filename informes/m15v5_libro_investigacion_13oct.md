@@ -104,3 +104,9 @@ nosotros es P(relleno) y selección de NUESTRA orden → experimento real/en sec
 - Capacidad honesta hoy: los 3 cosechadores persistentes suman ≈1,3 k$/día comercial en BTC 15m (+≈0,7 k reembolso est.);
   548 €/día exigiría capturar ~la mitad de lo que hoy gana el mejor grupo del mercado. Ninguna vía tiene aún PnL propio
   demostrado.
+
+## 26-Oct — NUEVA SUBESTRATEGIA FAV-15M-ETH (maker en favoritos 15m ETH, banda 0,70-0,99), decisión Javi: cuelga de la misión 15m v5
+- Origen: separada de B por la validación independiente del 26-Oct (misiones/5m_barato/docs/reverse-engineering/casos/VALIDACION_INDEPENDIENTE_26OCT.md §4). Es otra mecánica que B (maker en favoritos 15m, no 5m barato); no suma con B.
+- Evidencia (EXPLORATORY, 0 € validado): mapa_escala (experimentos/5m_barato/b_perdidas_22oct/mapa_escala/INFORME.md): población +2,5-2,7 %, 13-14/16 días +, IC90 días (+0,015,+0,033), de los dos únicos nichos que sobreviven BH-FDR (q=0,024 de 96); flujo ~79 k€/día, pool de beneficio 750-850 €/día por banda; 1 % de cuota ≈6 k€/año, 5 % ≈29 k€ (sin estrés, brecha de ejecución 0, cuota SIN medir); top-1 maker 13-15 % (279-348 makers); capital en riesgo ~0,7-1,0 k€. F2/F3: 15m ETH [0,90-0,95) +0,031-0,032 población pero con puja virtual 5 acc al final de cola −0,003 (IC90 cierres −0,023..+0,022); fallos agrupados 19,6 % de cierres con fallo ≥0,90.
+- Contradicción a resolver primero: población +0,03 vs puja propia ≈0. Lección de este libro: la cola no explicaba a los cosechadores; medir con on-chain (verdad) y EV ponderado por € por unidad correcta (mercado-lado/cierre), nunca por fills.
+- Siguiente (cuando Javi lo ordene): TP2 cuota maker alcanzable + EV de puja propia por banda de 0,05 con on-chain, ≥10 días, IC por cierre/día, sin 5 mejores cierres; reutilizar herramientas de la misión 15m v5 (pares_cola_onchain, politica_planos); luego otras monedas. Cruzar con H15-BARATO-REPOSICION-V1 (BTC, solape de mecánica).

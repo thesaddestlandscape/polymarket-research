@@ -190,7 +190,7 @@ TAREAS = [
     ("fetch_binance_perp_cvd_oi", fetch_binance_perp_cvd_oi.main, "fetch_binance_perp_cvd_oi.log", 900),
     ("vigia_ballenas_5min_fillability", vigia_ballenas_5min_fillability.main, "vigia_ballenas_5min_fillability.log", 900),
     ("vigia_ballenas_bypass", vigia_ballenas_bypass.main, "vigia_ballenas_bypass.log", 900),
-    ("vigia_causal_vs_fillable", vigia_causal_vs_fillable.main, "vigia_causal_fillable.log", 1800),
+    ("vigia_causal_vs_fillable", vigia_causal_vs_fillable.main, "vigia_causal_fillable.log", 10800),  # 19-Oct OK Javi: 1800->10800, tardaba ~1480 s por ciclo
     ("vigia_ballenas_cobertura", vigia_ballenas_cobertura.main, "vigia_ballenas_cobertura.log", 1800),
     ("shadow_pnl_fiel", shadow_pnl_fiel.main, "shadow_pnl_fiel.log", 1800),
     # 02-Sep (propuesta B2, barrido de sesión "edge sin capturar"): PnL real

@@ -14,3 +14,6 @@
 
 ## 2026-10-28 — R7 caso B
 Decisión del investigador: no cerrar la línea 5m barato/B; descartadas la reacción tras primeros prints, el filtro/cancelación y el modelo continuo del tamaño; siguiente ronda propuesta = hazard de llegada de barrido grande + auditoría del reloj de la clase «profundo» de R6. Estado: HYPOTHESIS_REFUTED (A, B-ahorro, D) / EVIDENCE_INSUFFICIENT (M1). Sin validador independiente todavía.
+
+## 2026-10-29 — R11 cola B (RE-B-COLA-R11)
+Decisión del investigador: no construir simulador de toque para B (sobreestima +0,11..+0,24 €/€ por la clase oculta C); siguiente = prerregistro EVAP sobre libro5_ms. EVIDENCE_INSUFFICIENT. Pendiente validador independiente.
