@@ -158270,3 +158270,4 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-11-03T15:29:15.143+00:00,1793719800,5min,False,SOL,Up,0.92,0,True,False,False,sin_datos_para_offset_-45s,6582666,False,fuera_banda_ask=0.92,0.0,0.92,,51.7,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,1.1694958501365094
 2026-11-03T15:29:15.143+00:00,1793719800,5min,False,BTC,Up,0.99,0,True,False,False,sin_datos_para_offset_-45s,6582670,False,fuera_banda_ask=0.99,0.0,0.99,,50.9,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,2.9788532598316846
 2026-11-03T15:29:15.143+00:00,1793719800,5min,False,XRP,Up,0.98,0,True,False,False,sin_datos_para_offset_-45s,6582667,False,fuera_banda_ask=0.98,0.0,0.98,,47.5,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,1.6844953690678715
+2026-11-03T15:29:48.344+00:00,1793719800,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
