@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-02T09:20:10+00:00",
+ "generado_utc": "2026-11-03T09:20:11+00:00",
  "dias": [
   "2026-09-24",
   "2026-09-25",
@@ -39,86 +39,87 @@
   "2026-10-29",
   "2026-10-30",
   "2026-10-31",
-  "2026-11-01"
+  "2026-11-01",
+  "2026-11-02"
  ],
  "resumen": {
   "precierre_T-45|5min": {
    "hoy_>=0bps": {
-    "n": 64012,
-    "acierto_pct": 95.68
+    "n": 65632,
+    "acierto_pct": 95.69
    },
    "hoy_>=1bps": {
-    "n": 57851,
+    "n": 59348,
     "acierto_pct": 98.22
    },
    "hoy_>=2bps": {
-    "n": 51861,
+    "n": 53246,
     "acierto_pct": 99.15
    },
    "hoy_>=4bps": {
-    "n": 41607,
+    "n": 42727,
     "acierto_pct": 99.73
    },
    "polybolt_>=0bps": {
-    "n": 63378,
+    "n": 65058,
     "acierto_pct": 95.63
    },
    "polybolt_>=1bps": {
-    "n": 57247,
-    "acierto_pct": 98.19
+    "n": 58801,
+    "acierto_pct": 98.18
    },
    "polybolt_>=2bps": {
-    "n": 51214,
+    "n": 52663,
     "acierto_pct": 99.19
    },
    "polybolt_>=4bps": {
-    "n": 40915,
-    "acierto_pct": 99.74
+    "n": 42073,
+    "acierto_pct": 99.75
    },
    "polybolt_t60a_>=0bps": {
-    "n": 63372,
-    "acierto_pct": 95.61
+    "n": 65052,
+    "acierto_pct": 95.62
    },
    "polybolt_t60a_>=1bps": {
-    "n": 57279,
-    "acierto_pct": 98.18
+    "n": 58837,
+    "acierto_pct": 98.17
    },
    "polybolt_t60a_>=2bps": {
-    "n": 51289,
+    "n": 52731,
     "acierto_pct": 99.19
    },
    "polybolt_t60a_>=4bps": {
-    "n": 41089,
+    "n": 42259,
     "acierto_pct": 99.75
    },
    "polybolt_s30_>=0bps": {
-    "n": 50933,
+    "n": 52613,
     "acierto_pct": 95.12
    },
    "polybolt_s30_>=1bps": {
-    "n": 46114,
-    "acierto_pct": 97.85
+    "n": 47681,
+    "acierto_pct": 97.84
    },
    "polybolt_s30_>=2bps": {
-    "n": 41431,
+    "n": 42882,
     "acierto_pct": 98.93
    },
    "polybolt_s30_>=4bps": {
-    "n": 33301,
+    "n": 34493,
     "acierto_pct": 99.64
    },
    "pareado_>=2bps": {
-    "n": 49551,
+    "n": 50925,
     "solo_hoy_acierta": 0,
     "solo_polybolt_acierta": 0
    },
    "pareado_>=2bps|polybolt_t60a": {
-    "n": 49662,
+    "n": 51034,
     "solo_hoy_acierta": 0,
     "solo_polybolt_t60a_acierta": 0
    },
    "pareado_>=2bps|polybolt_s30": {
-    "n": 39199,
+    "n": 40548,
     "solo_hoy_acierta": 3,
     "solo_polybolt_s30_acierta": 4
    },
@@ -137,81 +138,81 @@
   },
   "precierre_T-45|15min": {
    "hoy_>=0bps": {
-    "n": 20758,
-    "acierto_pct": 97.81
+    "n": 21316,
+    "acierto_pct": 97.78
    },
    "hoy_>=1bps": {
-    "n": 19614,
-    "acierto_pct": 99.15
+    "n": 20145,
+    "acierto_pct": 99.13
    },
    "hoy_>=2bps": {
-    "n": 18500,
-    "acierto_pct": 99.64
+    "n": 19007,
+    "acierto_pct": 99.63
    },
    "hoy_>=4bps": {
-    "n": 16346,
+    "n": 16816,
     "acierto_pct": 99.88
    },
    "polybolt_>=0bps": {
-    "n": 20868,
-    "acierto_pct": 97.8
+    "n": 21438,
+    "acierto_pct": 97.76
    },
    "polybolt_>=1bps": {
-    "n": 19734,
-    "acierto_pct": 99.14
+    "n": 20275,
+    "acierto_pct": 99.13
    },
    "polybolt_>=2bps": {
-    "n": 18576,
-    "acierto_pct": 99.63
+    "n": 19099,
+    "acierto_pct": 99.62
    },
    "polybolt_>=4bps": {
-    "n": 16398,
+    "n": 16882,
     "acierto_pct": 99.88
    },
    "polybolt_t60a_>=0bps": {
-    "n": 20868,
-    "acierto_pct": 97.77
+    "n": 21438,
+    "acierto_pct": 97.74
    },
    "polybolt_t60a_>=1bps": {
-    "n": 19750,
-    "acierto_pct": 99.13
+    "n": 20292,
+    "acierto_pct": 99.11
    },
    "polybolt_t60a_>=2bps": {
-    "n": 18579,
-    "acierto_pct": 99.66
+    "n": 19099,
+    "acierto_pct": 99.64
    },
    "polybolt_t60a_>=4bps": {
-    "n": 16407,
+    "n": 16889,
     "acierto_pct": 99.88
    },
    "polybolt_s30_>=0bps": {
-    "n": 16661,
-    "acierto_pct": 97.27
+    "n": 17231,
+    "acierto_pct": 97.26
    },
    "polybolt_s30_>=1bps": {
-    "n": 15728,
-    "acierto_pct": 98.85
+    "n": 16275,
+    "acierto_pct": 98.83
    },
    "polybolt_s30_>=2bps": {
-    "n": 14802,
-    "acierto_pct": 99.54
+    "n": 15324,
+    "acierto_pct": 99.52
    },
    "polybolt_s30_>=4bps": {
-    "n": 13077,
+    "n": 13559,
     "acierto_pct": 99.85
    },
    "pareado_>=2bps": {
-    "n": 17893,
+    "n": 18399,
     "solo_hoy_acierta": 0,
     "solo_polybolt_acierta": 0
    },
    "pareado_>=2bps|polybolt_t60a": {
-    "n": 17908,
+    "n": 18412,
     "solo_hoy_acierta": 0,
     "solo_polybolt_t60a_acierta": 0
    },
    "pareado_>=2bps|polybolt_s30": {
-    "n": 14097,
+    "n": 14598,
     "solo_hoy_acierta": 1,
     "solo_polybolt_s30_acierta": 0
    },
@@ -220,91 +221,91 @@
     0.04
    ],
    "ic90_dif_pp_polybolt_t60a_menos_hoy_>=2bps": [
-    -0.02,
-    0.06
+    -0.03,
+    0.05
    ],
    "ic90_dif_pp_polybolt_s30_menos_hoy_>=2bps": [
     -0.18,
-    -0.05
+    -0.06
    ]
   },
   "naive_T+0|5min": {
    "hoy_>=0bps": {
-    "n": 64392,
+    "n": 66030,
     "acierto_pct": 99.77
    },
    "hoy_>=1bps": {
-    "n": 58256,
+    "n": 59774,
     "acierto_pct": 99.99
    },
    "hoy_>=2bps": {
-    "n": 52323,
+    "n": 53717,
     "acierto_pct": 100.0
    },
    "hoy_>=4bps": {
-    "n": 41951,
+    "n": 43110,
     "acierto_pct": 100.0
    },
    "polybolt_>=0bps": {
-    "n": 63297,
+    "n": 64977,
     "acierto_pct": 99.45
    },
    "polybolt_>=1bps": {
-    "n": 57211,
+    "n": 58769,
     "acierto_pct": 99.99
    },
    "polybolt_>=2bps": {
-    "n": 51358,
+    "n": 52795,
     "acierto_pct": 100.0
    },
    "polybolt_>=4bps": {
-    "n": 41039,
+    "n": 42229,
     "acierto_pct": 100.0
    },
    "polybolt_t60a_>=0bps": {
-    "n": 63291,
+    "n": 64971,
     "acierto_pct": 99.89
    },
    "polybolt_t60a_>=1bps": {
-    "n": 57231,
+    "n": 58787,
     "acierto_pct": 100.0
    },
    "polybolt_t60a_>=2bps": {
-    "n": 51376,
+    "n": 52809,
     "acierto_pct": 100.0
    },
    "polybolt_t60a_>=4bps": {
-    "n": 41133,
+    "n": 42326,
     "acierto_pct": 100.0
    },
    "polybolt_s30_>=0bps": {
-    "n": 50939,
+    "n": 52619,
     "acierto_pct": 97.87
    },
    "polybolt_s30_>=1bps": {
-    "n": 46073,
+    "n": 47628,
     "acierto_pct": 99.56
    },
    "polybolt_s30_>=2bps": {
-    "n": 41422,
+    "n": 42864,
     "acierto_pct": 99.87
    },
    "polybolt_s30_>=4bps": {
-    "n": 33155,
+    "n": 34365,
     "acierto_pct": 99.97
    },
    "pareado_>=2bps": {
-    "n": 50260,
+    "n": 51644,
     "solo_hoy_acierta": 0,
     "solo_polybolt_acierta": 0
    },
    "pareado_>=2bps|polybolt_t60a": {
-    "n": 50436,
+    "n": 51826,
     "solo_hoy_acierta": 0,
     "solo_polybolt_t60a_acierta": 1
    },
    "pareado_>=2bps|polybolt_s30": {
-    "n": 39532,
+    "n": 40893,
     "solo_hoy_acierta": 10,
     "solo_polybolt_s30_acierta": 1
    },
@@ -317,87 +318,87 @@
     0.01
    ],
    "ic90_dif_pp_polybolt_s30_menos_hoy_>=2bps": [
-    -0.17,
+    -0.16,
     -0.09
    ]
   },
   "naive_T+0|15min": {
    "hoy_>=0bps": {
-    "n": 20917,
-    "acierto_pct": 99.89
+    "n": 21475,
+    "acierto_pct": 99.88
    },
    "hoy_>=1bps": {
-    "n": 19773,
-    "acierto_pct": 99.99
+    "n": 20304,
+    "acierto_pct": 100.0
    },
    "hoy_>=2bps": {
-    "n": 18651,
+    "n": 19152,
     "acierto_pct": 100.0
    },
    "hoy_>=4bps": {
-    "n": 16463,
+    "n": 16923,
     "acierto_pct": 100.0
    },
    "polybolt_>=0bps": {
-    "n": 20732,
+    "n": 21302,
     "acierto_pct": 99.73
    },
    "polybolt_>=1bps": {
-    "n": 19588,
+    "n": 20131,
     "acierto_pct": 100.0
    },
    "polybolt_>=2bps": {
-    "n": 18463,
+    "n": 18978,
     "acierto_pct": 100.0
    },
    "polybolt_>=4bps": {
-    "n": 16294,
+    "n": 16770,
     "acierto_pct": 100.0
    },
    "polybolt_t60a_>=0bps": {
-    "n": 20732,
+    "n": 21302,
     "acierto_pct": 99.93
    },
    "polybolt_t60a_>=1bps": {
-    "n": 19591,
+    "n": 20135,
     "acierto_pct": 100.0
    },
    "polybolt_t60a_>=2bps": {
-    "n": 18475,
+    "n": 18987,
     "acierto_pct": 100.0
    },
    "polybolt_t60a_>=4bps": {
-    "n": 16306,
+    "n": 16778,
     "acierto_pct": 100.0
    },
    "polybolt_s30_>=0bps": {
-    "n": 16655,
-    "acierto_pct": 98.65
+    "n": 17225,
+    "acierto_pct": 98.64
    },
    "polybolt_s30_>=1bps": {
-    "n": 15747,
+    "n": 16288,
     "acierto_pct": 99.78
    },
    "polybolt_s30_>=2bps": {
-    "n": 14785,
+    "n": 15297,
     "acierto_pct": 99.97
    },
    "polybolt_s30_>=4bps": {
-    "n": 13039,
+    "n": 13502,
     "acierto_pct": 99.99
    },
    "pareado_>=2bps": {
-    "n": 17987,
+    "n": 18486,
     "solo_hoy_acierta": 0,
     "solo_polybolt_acierta": 0
    },
    "pareado_>=2bps|polybolt_t60a": {
-    "n": 18014,
+    "n": 18514,
     "solo_hoy_acierta": 0,
     "solo_polybolt_t60a_acierta": 0
    },
    "pareado_>=2bps|polybolt_s30": {
-    "n": 14196,
+    "n": 14687,
     "solo_hoy_acierta": 1,
     "solo_polybolt_s30_acierta": 0
    },
@@ -410,395 +411,395 @@
     0.0
    ],
    "ic90_dif_pp_polybolt_s30_menos_hoy_>=2bps": [
-    -0.05,
+    -0.06,
     -0.01
    ]
   }
  },
  "por_activo_margen>=2bps": {
   "precierre_T-45|5min|DOGE|hoy": {
-   "n": 9241,
-   "acierto_pct": 98.85
+   "n": 9484,
+   "acierto_pct": 98.86
   },
   "naive_T+0|5min|DOGE|hoy": {
-   "n": 9312,
+   "n": 9557,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|BNB|hoy": {
-   "n": 8235,
-   "acierto_pct": 99.51
+   "n": 8457,
+   "acierto_pct": 99.52
   },
   "naive_T+0|5min|BNB|hoy": {
-   "n": 8297,
+   "n": 8516,
    "acierto_pct": 99.99
   },
   "precierre_T-45|5min|BTC|hoy": {
-   "n": 7715,
-   "acierto_pct": 99.59
+   "n": 7935,
+   "acierto_pct": 99.6
   },
   "naive_T+0|5min|BTC|hoy": {
-   "n": 7800,
+   "n": 8018,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|XRP|hoy": {
-   "n": 9035,
-   "acierto_pct": 98.76
+   "n": 9273,
+   "acierto_pct": 98.77
   },
   "naive_T+0|5min|XRP|hoy": {
-   "n": 9160,
+   "n": 9399,
    "acierto_pct": 100.0
   },
   "naive_T+0|5min|SOL|hoy": {
-   "n": 9182,
+   "n": 9427,
    "acierto_pct": 99.99
   },
   "precierre_T-45|5min|ETH|hoy": {
-   "n": 8516,
+   "n": 8735,
    "acierto_pct": 99.3
   },
   "naive_T+0|5min|ETH|hoy": {
-   "n": 8572,
+   "n": 8800,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|SOL|hoy": {
-   "n": 9119,
-   "acierto_pct": 99.01
+   "n": 9362,
+   "acierto_pct": 99.0
   },
   "precierre_T-45|15min|BNB|hoy": {
-   "n": 2989,
+   "n": 3074,
    "acierto_pct": 99.87
   },
   "naive_T+0|15min|BNB|hoy": {
-   "n": 3026,
+   "n": 3108,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|XRP|hoy": {
-   "n": 3185,
-   "acierto_pct": 99.47
+   "n": 3265,
+   "acierto_pct": 99.45
   },
   "naive_T+0|15min|XRP|hoy": {
-   "n": 3193,
+   "n": 3271,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|SOL|hoy": {
-   "n": 3189,
-   "acierto_pct": 99.56
+   "n": 3280,
+   "acierto_pct": 99.57
   },
   "naive_T+0|15min|SOL|hoy": {
-   "n": 3216,
+   "n": 3307,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|DOGE|hoy": {
-   "n": 3220,
-   "acierto_pct": 99.38
+   "n": 3306,
+   "acierto_pct": 99.36
   },
   "naive_T+0|15min|DOGE|hoy": {
-   "n": 3226,
+   "n": 3311,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|ETH|hoy": {
-   "n": 3029,
-   "acierto_pct": 99.7
+   "n": 3115,
+   "acierto_pct": 99.71
   },
   "naive_T+0|15min|ETH|hoy": {
-   "n": 3078,
+   "n": 3164,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|BTC|hoy": {
-   "n": 2888,
-   "acierto_pct": 99.9
+   "n": 2967,
+   "acierto_pct": 99.87
   },
   "naive_T+0|15min|BTC|hoy": {
-   "n": 2912,
+   "n": 2991,
    "acierto_pct": 100.0
   },
   "naive_T+0|5min|DOGE|polybolt": {
-   "n": 9139,
+   "n": 9390,
    "acierto_pct": 100.0
   },
   "naive_T+0|5min|DOGE|polybolt_t60a": {
-   "n": 9146,
+   "n": 9397,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|XRP|polybolt": {
-   "n": 8924,
-   "acierto_pct": 98.79
+   "n": 9172,
+   "acierto_pct": 98.8
   },
   "precierre_T-45|5min|XRP|polybolt_t60a": {
-   "n": 8925,
-   "acierto_pct": 98.85
+   "n": 9173,
+   "acierto_pct": 98.86
   },
   "naive_T+0|5min|XRP|polybolt": {
-   "n": 8981,
+   "n": 9231,
    "acierto_pct": 99.99
   },
   "naive_T+0|5min|XRP|polybolt_t60a": {
-   "n": 8997,
+   "n": 9245,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|BTC|polybolt": {
-   "n": 7628,
-   "acierto_pct": 99.65
+   "n": 7859,
+   "acierto_pct": 99.66
   },
   "precierre_T-45|5min|BTC|polybolt_t60a": {
-   "n": 7641,
-   "acierto_pct": 99.65
+   "n": 7871,
+   "acierto_pct": 99.66
   },
   "naive_T+0|5min|BTC|polybolt": {
-   "n": 7662,
+   "n": 7887,
    "acierto_pct": 100.0
   },
   "naive_T+0|5min|BTC|polybolt_t60a": {
-   "n": 7655,
+   "n": 7877,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|ETH|polybolt": {
-   "n": 8408,
-   "acierto_pct": 99.3
+   "n": 8636,
+   "acierto_pct": 99.31
   },
   "precierre_T-45|5min|ETH|polybolt_t60a": {
-   "n": 8420,
+   "n": 8648,
    "acierto_pct": 99.35
   },
   "naive_T+0|5min|ETH|polybolt": {
-   "n": 8422,
+   "n": 8654,
    "acierto_pct": 100.0
   },
   "naive_T+0|5min|ETH|polybolt_t60a": {
-   "n": 8421,
+   "n": 8655,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|BNB|polybolt": {
-   "n": 8110,
-   "acierto_pct": 99.58
+   "n": 8342,
+   "acierto_pct": 99.57
   },
   "precierre_T-45|5min|BNB|polybolt_t60a": {
-   "n": 8126,
+   "n": 8355,
    "acierto_pct": 99.59
   },
   "naive_T+0|5min|BNB|polybolt": {
-   "n": 8143,
+   "n": 8370,
    "acierto_pct": 100.0
   },
   "naive_T+0|5min|BNB|polybolt_t60a": {
-   "n": 8138,
+   "n": 8364,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|DOGE|polybolt": {
-   "n": 9123,
-   "acierto_pct": 98.89
+   "n": 9379,
+   "acierto_pct": 98.9
   },
   "precierre_T-45|5min|DOGE|polybolt_t60a": {
-   "n": 9139,
-   "acierto_pct": 98.84
+   "n": 9393,
+   "acierto_pct": 98.85
   },
   "precierre_T-45|5min|SOL|polybolt": {
-   "n": 9021,
-   "acierto_pct": 99.05
+   "n": 9275,
+   "acierto_pct": 99.02
   },
   "precierre_T-45|5min|SOL|polybolt_t60a": {
-   "n": 9038,
-   "acierto_pct": 98.98
+   "n": 9291,
+   "acierto_pct": 98.96
   },
   "naive_T+0|5min|SOL|polybolt": {
-   "n": 9011,
+   "n": 9263,
    "acierto_pct": 100.0
   },
   "naive_T+0|5min|SOL|polybolt_t60a": {
-   "n": 9019,
+   "n": 9271,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|BNB|polybolt": {
-   "n": 3003,
-   "acierto_pct": 99.83
+   "n": 3091,
+   "acierto_pct": 99.84
   },
   "precierre_T-45|15min|BNB|polybolt_t60a": {
-   "n": 3011,
-   "acierto_pct": 99.83
+   "n": 3098,
+   "acierto_pct": 99.84
   },
   "naive_T+0|15min|BNB|polybolt": {
-   "n": 2987,
+   "n": 3071,
    "acierto_pct": 100.0
   },
   "naive_T+0|15min|BNB|polybolt_t60a": {
-   "n": 2992,
+   "n": 3076,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|DOGE|polybolt": {
-   "n": 3233,
-   "acierto_pct": 99.44
+   "n": 3322,
+   "acierto_pct": 99.43
   },
   "precierre_T-45|15min|DOGE|polybolt_t60a": {
-   "n": 3226,
-   "acierto_pct": 99.5
+   "n": 3314,
+   "acierto_pct": 99.49
   },
   "naive_T+0|15min|DOGE|polybolt": {
-   "n": 3205,
+   "n": 3291,
    "acierto_pct": 100.0
   },
   "naive_T+0|15min|DOGE|polybolt_t60a": {
-   "n": 3199,
+   "n": 3285,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|XRP|polybolt": {
-   "n": 3201,
-   "acierto_pct": 99.5
+   "n": 3284,
+   "acierto_pct": 99.45
   },
   "precierre_T-45|15min|XRP|polybolt_t60a": {
-   "n": 3196,
-   "acierto_pct": 99.5
+   "n": 3279,
+   "acierto_pct": 99.45
   },
   "naive_T+0|15min|XRP|polybolt": {
-   "n": 3161,
+   "n": 3242,
    "acierto_pct": 100.0
   },
   "naive_T+0|15min|XRP|polybolt_t60a": {
-   "n": 3167,
+   "n": 3247,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|BTC|polybolt": {
-   "n": 2899,
-   "acierto_pct": 99.86
+   "n": 2982,
+   "acierto_pct": 99.83
   },
   "precierre_T-45|15min|BTC|polybolt_t60a": {
-   "n": 2901,
-   "acierto_pct": 99.86
+   "n": 2984,
+   "acierto_pct": 99.83
   },
   "naive_T+0|15min|BTC|polybolt": {
-   "n": 2877,
+   "n": 2959,
    "acierto_pct": 100.0
   },
   "naive_T+0|15min|BTC|polybolt_t60a": {
-   "n": 2875,
+   "n": 2956,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|SOL|polybolt": {
-   "n": 3206,
-   "acierto_pct": 99.53
+   "n": 3298,
+   "acierto_pct": 99.55
   },
   "precierre_T-45|15min|SOL|polybolt_t60a": {
-   "n": 3208,
-   "acierto_pct": 99.56
+   "n": 3300,
+   "acierto_pct": 99.58
   },
   "naive_T+0|15min|SOL|polybolt": {
-   "n": 3184,
+   "n": 3277,
    "acierto_pct": 100.0
   },
   "naive_T+0|15min|SOL|polybolt_t60a": {
-   "n": 3192,
+   "n": 3285,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|ETH|polybolt": {
-   "n": 3034,
-   "acierto_pct": 99.67
+   "n": 3122,
+   "acierto_pct": 99.68
   },
   "precierre_T-45|15min|ETH|polybolt_t60a": {
-   "n": 3037,
-   "acierto_pct": 99.7
+   "n": 3124,
+   "acierto_pct": 99.71
   },
   "naive_T+0|15min|ETH|polybolt": {
-   "n": 3049,
+   "n": 3138,
    "acierto_pct": 100.0
   },
   "naive_T+0|15min|ETH|polybolt_t60a": {
-   "n": 3050,
+   "n": 3138,
    "acierto_pct": 100.0
   },
   "naive_T+0|5min|BNB|polybolt_s30": {
-   "n": 6578,
+   "n": 6804,
    "acierto_pct": 99.94
   },
   "precierre_T-45|5min|ETH|polybolt_s30": {
-   "n": 6827,
-   "acierto_pct": 98.89
+   "n": 7058,
+   "acierto_pct": 98.91
   },
   "precierre_T-45|5min|SOL|polybolt_s30": {
-   "n": 7272,
-   "acierto_pct": 98.71
+   "n": 7527,
+   "acierto_pct": 98.68
   },
   "naive_T+0|5min|SOL|polybolt_s30": {
-   "n": 7247,
-   "acierto_pct": 99.82
+   "n": 7501,
+   "acierto_pct": 99.83
   },
   "naive_T+0|5min|ETH|polybolt_s30": {
-   "n": 6842,
-   "acierto_pct": 99.87
+   "n": 7077,
+   "acierto_pct": 99.86
   },
   "precierre_T-45|5min|DOGE|polybolt_s30": {
-   "n": 7321,
-   "acierto_pct": 98.66
+   "n": 7575,
+   "acierto_pct": 98.68
   },
   "naive_T+0|5min|DOGE|polybolt_s30": {
-   "n": 7326,
-   "acierto_pct": 99.81
+   "n": 7576,
+   "acierto_pct": 99.82
   },
   "precierre_T-45|15min|DOGE|polybolt_s30": {
-   "n": 2546,
-   "acierto_pct": 99.41
+   "n": 2636,
+   "acierto_pct": 99.36
   },
   "naive_T+0|15min|DOGE|polybolt_s30": {
-   "n": 2543,
+   "n": 2630,
    "acierto_pct": 99.96
   },
   "precierre_T-45|15min|ETH|polybolt_s30": {
-   "n": 2419,
-   "acierto_pct": 99.55
+   "n": 2507,
+   "acierto_pct": 99.56
   },
   "naive_T+0|15min|ETH|polybolt_s30": {
-   "n": 2456,
-   "acierto_pct": 99.96
+   "n": 2544,
+   "acierto_pct": 99.92
   },
   "precierre_T-45|15min|SOL|polybolt_s30": {
-   "n": 2575,
-   "acierto_pct": 99.34
+   "n": 2668,
+   "acierto_pct": 99.36
   },
   "naive_T+0|15min|SOL|polybolt_s30": {
-   "n": 2562,
+   "n": 2655,
    "acierto_pct": 100.0
   },
   "precierre_T-45|15min|XRP|polybolt_s30": {
-   "n": 2532,
-   "acierto_pct": 99.41
+   "n": 2614,
+   "acierto_pct": 99.35
   },
   "naive_T+0|15min|XRP|polybolt_s30": {
-   "n": 2517,
+   "n": 2598,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|XRP|polybolt_s30": {
-   "n": 7195,
-   "acierto_pct": 98.6
+   "n": 7446,
+   "acierto_pct": 98.59
   },
   "naive_T+0|5min|XRP|polybolt_s30": {
-   "n": 7206,
-   "acierto_pct": 99.83
+   "n": 7454,
+   "acierto_pct": 99.84
   },
   "naive_T+0|15min|BNB|polybolt_s30": {
-   "n": 2404,
+   "n": 2487,
    "acierto_pct": 100.0
   },
   "precierre_T-45|5min|BTC|polybolt_s30": {
-   "n": 6200,
+   "n": 6429,
    "acierto_pct": 99.53
   },
   "naive_T+0|5min|BTC|polybolt_s30": {
-   "n": 6223,
+   "n": 6452,
    "acierto_pct": 99.97
   },
   "precierre_T-45|15min|BTC|polybolt_s30": {
-   "n": 2317,
-   "acierto_pct": 99.83
+   "n": 2399,
+   "acierto_pct": 99.79
   },
   "naive_T+0|15min|BTC|polybolt_s30": {
-   "n": 2303,
-   "acierto_pct": 99.91
+   "n": 2383,
+   "acierto_pct": 99.92
   },
   "precierre_T-45|15min|BNB|polybolt_s30": {
-   "n": 2413,
-   "acierto_pct": 99.75
+   "n": 2500,
+   "acierto_pct": 99.76
   },
   "precierre_T-45|5min|BNB|polybolt_s30": {
-   "n": 6616,
-   "acierto_pct": 99.3
+   "n": 6847,
+   "acierto_pct": 99.28
   }
  },
  "por_dia": {
@@ -69478,6 +69479,1863 @@
     "naive_T+0|15min|BNB|hoy|4": [
      64,
      64
+    ]
+   }
+  },
+  "2026-11-02": {
+   "n_mercados": 2262,
+   "celdas": {
+    "precierre_T-45|5min|TODOS|polybolt|0": [
+     1680,
+     1609
+    ],
+    "precierre_T-45|5min|ETH|polybolt|0": [
+     280,
+     270
+    ],
+    "precierre_T-45|5min|TODOS|polybolt|1": [
+     1554,
+     1524
+    ],
+    "precierre_T-45|5min|ETH|polybolt|1": [
+     254,
+     248
+    ],
+    "precierre_T-45|5min|TODOS|polybolt|2": [
+     1449,
+     1437
+    ],
+    "precierre_T-45|5min|ETH|polybolt|2": [
+     228,
+     227
+    ],
+    "precierre_T-45|5min|TODOS|polybolt|4": [
+     1158,
+     1157
+    ],
+    "precierre_T-45|5min|ETH|polybolt|4": [
+     189,
+     189
+    ],
+    "precierre_T-45|5min|TODOS|polybolt_t60a|0": [
+     1680,
+     1611
+    ],
+    "precierre_T-45|5min|ETH|polybolt_t60a|0": [
+     280,
+     270
+    ],
+    "precierre_T-45|5min|TODOS|polybolt_t60a|1": [
+     1558,
+     1524
+    ],
+    "precierre_T-45|5min|ETH|polybolt_t60a|1": [
+     255,
+     249
+    ],
+    "precierre_T-45|5min|TODOS|polybolt_t60a|2": [
+     1442,
+     1431
+    ],
+    "precierre_T-45|5min|ETH|polybolt_t60a|2": [
+     228,
+     227
+    ],
+    "precierre_T-45|5min|TODOS|polybolt_t60a|4": [
+     1170,
+     1168
+    ],
+    "precierre_T-45|5min|ETH|polybolt_t60a|4": [
+     191,
+     191
+    ],
+    "precierre_T-45|5min|TODOS|polybolt_s30|0": [
+     1680,
+     1600
+    ],
+    "precierre_T-45|5min|ETH|polybolt_s30|0": [
+     280,
+     267
+    ],
+    "precierre_T-45|5min|TODOS|polybolt_s30|1": [
+     1567,
+     1532
+    ],
+    "precierre_T-45|5min|ETH|polybolt_s30|1": [
+     260,
+     255
+    ],
+    "precierre_T-45|5min|TODOS|polybolt_s30|2": [
+     1451,
+     1435
+    ],
+    "precierre_T-45|5min|ETH|polybolt_s30|2": [
+     231,
+     230
+    ],
+    "precierre_T-45|5min|TODOS|polybolt_s30|4": [
+     1192,
+     1186
+    ],
+    "precierre_T-45|5min|ETH|polybolt_s30|4": [
+     192,
+     191
+    ],
+    "naive_T+0|5min|TODOS|polybolt|0": [
+     1680,
+     1674
+    ],
+    "naive_T+0|5min|ETH|polybolt|0": [
+     280,
+     279
+    ],
+    "naive_T+0|5min|TODOS|polybolt|1": [
+     1558,
+     1558
+    ],
+    "naive_T+0|5min|ETH|polybolt|1": [
+     254,
+     254
+    ],
+    "naive_T+0|5min|TODOS|polybolt|2": [
+     1437,
+     1437
+    ],
+    "naive_T+0|5min|ETH|polybolt|2": [
+     232,
+     232
+    ],
+    "naive_T+0|5min|TODOS|polybolt|4": [
+     1190,
+     1190
+    ],
+    "naive_T+0|5min|ETH|polybolt|4": [
+     192,
+     192
+    ],
+    "naive_T+0|5min|TODOS|polybolt_t60a|0": [
+     1680,
+     1677
+    ],
+    "naive_T+0|5min|ETH|polybolt_t60a|0": [
+     280,
+     279
+    ],
+    "naive_T+0|5min|TODOS|polybolt_t60a|1": [
+     1556,
+     1556
+    ],
+    "naive_T+0|5min|ETH|polybolt_t60a|1": [
+     254,
+     254
+    ],
+    "naive_T+0|5min|TODOS|polybolt_t60a|2": [
+     1433,
+     1433
+    ],
+    "naive_T+0|5min|ETH|polybolt_t60a|2": [
+     234,
+     234
+    ],
+    "naive_T+0|5min|TODOS|polybolt_t60a|4": [
+     1193,
+     1193
+    ],
+    "naive_T+0|5min|ETH|polybolt_t60a|4": [
+     192,
+     192
+    ],
+    "naive_T+0|5min|TODOS|polybolt_s30|0": [
+     1680,
+     1643
+    ],
+    "naive_T+0|5min|ETH|polybolt_s30|0": [
+     280,
+     269
+    ],
+    "naive_T+0|5min|TODOS|polybolt_s30|1": [
+     1555,
+     1548
+    ],
+    "naive_T+0|5min|ETH|polybolt_s30|1": [
+     259,
+     257
+    ],
+    "naive_T+0|5min|TODOS|polybolt_s30|2": [
+     1442,
+     1441
+    ],
+    "naive_T+0|5min|ETH|polybolt_s30|2": [
+     235,
+     234
+    ],
+    "naive_T+0|5min|TODOS|polybolt_s30|4": [
+     1210,
+     1209
+    ],
+    "naive_T+0|5min|ETH|polybolt_s30|4": [
+     194,
+     193
+    ],
+    "precierre_T-45|5min|XRP|polybolt|0": [
+     280,
+     272
+    ],
+    "precierre_T-45|5min|XRP|polybolt|1": [
+     264,
+     259
+    ],
+    "precierre_T-45|5min|XRP|polybolt|2": [
+     248,
+     246
+    ],
+    "precierre_T-45|5min|XRP|polybolt|4": [
+     202,
+     202
+    ],
+    "precierre_T-45|5min|XRP|polybolt_t60a|0": [
+     280,
+     272
+    ],
+    "precierre_T-45|5min|XRP|polybolt_t60a|1": [
+     266,
+     260
+    ],
+    "precierre_T-45|5min|XRP|polybolt_t60a|2": [
+     248,
+     246
+    ],
+    "precierre_T-45|5min|XRP|polybolt_t60a|4": [
+     203,
+     203
+    ],
+    "precierre_T-45|5min|XRP|polybolt_s30|0": [
+     280,
+     270
+    ],
+    "precierre_T-45|5min|XRP|polybolt_s30|1": [
+     265,
+     261
+    ],
+    "precierre_T-45|5min|XRP|polybolt_s30|2": [
+     251,
+     247
+    ],
+    "precierre_T-45|5min|XRP|polybolt_s30|4": [
+     209,
+     208
+    ],
+    "naive_T+0|5min|XRP|polybolt|0": [
+     280,
+     279
+    ],
+    "naive_T+0|5min|XRP|polybolt|1": [
+     267,
+     267
+    ],
+    "naive_T+0|5min|XRP|polybolt|2": [
+     250,
+     250
+    ],
+    "naive_T+0|5min|XRP|polybolt|4": [
+     210,
+     210
+    ],
+    "naive_T+0|5min|XRP|polybolt_t60a|0": [
+     280,
+     280
+    ],
+    "naive_T+0|5min|XRP|polybolt_t60a|1": [
+     265,
+     265
+    ],
+    "naive_T+0|5min|XRP|polybolt_t60a|2": [
+     248,
+     248
+    ],
+    "naive_T+0|5min|XRP|polybolt_t60a|4": [
+     210,
+     210
+    ],
+    "naive_T+0|5min|XRP|polybolt_s30|0": [
+     280,
+     280
+    ],
+    "naive_T+0|5min|XRP|polybolt_s30|1": [
+     268,
+     268
+    ],
+    "naive_T+0|5min|XRP|polybolt_s30|2": [
+     248,
+     248
+    ],
+    "naive_T+0|5min|XRP|polybolt_s30|4": [
+     212,
+     212
+    ],
+    "precierre_T-45|5min|BNB|polybolt|0": [
+     280,
+     268
+    ],
+    "precierre_T-45|5min|BNB|polybolt|1": [
+     252,
+     250
+    ],
+    "precierre_T-45|5min|BNB|polybolt|2": [
+     232,
+     230
+    ],
+    "precierre_T-45|5min|BNB|polybolt|4": [
+     174,
+     174
+    ],
+    "precierre_T-45|5min|BNB|polybolt_t60a|0": [
+     280,
+     268
+    ],
+    "precierre_T-45|5min|BNB|polybolt_t60a|1": [
+     251,
+     247
+    ],
+    "precierre_T-45|5min|BNB|polybolt_t60a|2": [
+     229,
+     228
+    ],
+    "precierre_T-45|5min|BNB|polybolt_t60a|4": [
+     177,
+     177
+    ],
+    "precierre_T-45|5min|BNB|polybolt_s30|0": [
+     280,
+     265
+    ],
+    "precierre_T-45|5min|BNB|polybolt_s30|1": [
+     254,
+     249
+    ],
+    "precierre_T-45|5min|BNB|polybolt_s30|2": [
+     231,
+     228
+    ],
+    "precierre_T-45|5min|BNB|polybolt_s30|4": [
+     179,
+     179
+    ],
+    "naive_T+0|5min|BNB|polybolt|0": [
+     280,
+     278
+    ],
+    "naive_T+0|5min|BNB|polybolt|1": [
+     255,
+     255
+    ],
+    "naive_T+0|5min|BNB|polybolt|2": [
+     227,
+     227
+    ],
+    "naive_T+0|5min|BNB|polybolt|4": [
+     175,
+     175
+    ],
+    "naive_T+0|5min|BNB|polybolt_t60a|0": [
+     280,
+     280
+    ],
+    "naive_T+0|5min|BNB|polybolt_t60a|1": [
+     256,
+     256
+    ],
+    "naive_T+0|5min|BNB|polybolt_t60a|2": [
+     226,
+     226
+    ],
+    "naive_T+0|5min|BNB|polybolt_t60a|4": [
+     178,
+     178
+    ],
+    "naive_T+0|5min|BNB|polybolt_s30|0": [
+     280,
+     274
+    ],
+    "naive_T+0|5min|BNB|polybolt_s30|1": [
+     255,
+     254
+    ],
+    "naive_T+0|5min|BNB|polybolt_s30|2": [
+     226,
+     226
+    ],
+    "naive_T+0|5min|BNB|polybolt_s30|4": [
+     185,
+     185
+    ],
+    "precierre_T-45|5min|SOL|polybolt|0": [
+     280,
+     265
+    ],
+    "precierre_T-45|5min|SOL|polybolt|1": [
+     266,
+     257
+    ],
+    "precierre_T-45|5min|SOL|polybolt|2": [
+     254,
+     249
+    ],
+    "precierre_T-45|5min|SOL|polybolt|4": [
+     219,
+     218
+    ],
+    "precierre_T-45|5min|SOL|polybolt_t60a|0": [
+     280,
+     266
+    ],
+    "precierre_T-45|5min|SOL|polybolt_t60a|1": [
+     265,
+     257
+    ],
+    "precierre_T-45|5min|SOL|polybolt_t60a|2": [
+     253,
+     248
+    ],
+    "precierre_T-45|5min|SOL|polybolt_t60a|4": [
+     222,
+     220
+    ],
+    "precierre_T-45|5min|SOL|polybolt_s30|0": [
+     280,
+     267
+    ],
+    "precierre_T-45|5min|SOL|polybolt_s30|1": [
+     272,
+     263
+    ],
+    "precierre_T-45|5min|SOL|polybolt_s30|2": [
+     255,
+     250
+    ],
+    "precierre_T-45|5min|SOL|polybolt_s30|4": [
+     223,
+     220
+    ],
+    "naive_T+0|5min|SOL|polybolt|0": [
+     280,
+     278
+    ],
+    "naive_T+0|5min|SOL|polybolt|1": [
+     265,
+     265
+    ],
+    "naive_T+0|5min|SOL|polybolt|2": [
+     252,
+     252
+    ],
+    "naive_T+0|5min|SOL|polybolt|4": [
+     225,
+     225
+    ],
+    "naive_T+0|5min|SOL|polybolt_t60a|0": [
+     280,
+     279
+    ],
+    "naive_T+0|5min|SOL|polybolt_t60a|1": [
+     264,
+     264
+    ],
+    "naive_T+0|5min|SOL|polybolt_t60a|2": [
+     252,
+     252
+    ],
+    "naive_T+0|5min|SOL|polybolt_t60a|4": [
+     227,
+     227
+    ],
+    "naive_T+0|5min|SOL|polybolt_s30|0": [
+     280,
+     273
+    ],
+    "naive_T+0|5min|SOL|polybolt_s30|1": [
+     262,
+     261
+    ],
+    "naive_T+0|5min|SOL|polybolt_s30|2": [
+     254,
+     254
+    ],
+    "naive_T+0|5min|SOL|polybolt_s30|4": [
+     226,
+     226
+    ],
+    "precierre_T-45|5min|DOGE|polybolt|0": [
+     280,
+     268
+    ],
+    "precierre_T-45|5min|DOGE|polybolt|1": [
+     267,
+     263
+    ],
+    "precierre_T-45|5min|DOGE|polybolt|2": [
+     256,
+     254
+    ],
+    "precierre_T-45|5min|DOGE|polybolt|4": [
+     218,
+     218
+    ],
+    "precierre_T-45|5min|DOGE|polybolt_t60a|0": [
+     280,
+     268
+    ],
+    "precierre_T-45|5min|DOGE|polybolt_t60a|1": [
+     268,
+     262
+    ],
+    "precierre_T-45|5min|DOGE|polybolt_t60a|2": [
+     254,
+     252
+    ],
+    "precierre_T-45|5min|DOGE|polybolt_t60a|4": [
+     220,
+     220
+    ],
+    "precierre_T-45|5min|DOGE|polybolt_s30|0": [
+     280,
+     269
+    ],
+    "precierre_T-45|5min|DOGE|polybolt_s30|1": [
+     268,
+     261
+    ],
+    "precierre_T-45|5min|DOGE|polybolt_s30|2": [
+     254,
+     252
+    ],
+    "precierre_T-45|5min|DOGE|polybolt_s30|4": [
+     222,
+     222
+    ],
+    "naive_T+0|5min|DOGE|polybolt|0": [
+     280,
+     280
+    ],
+    "naive_T+0|5min|DOGE|polybolt|1": [
+     268,
+     268
+    ],
+    "naive_T+0|5min|DOGE|polybolt|2": [
+     251,
+     251
+    ],
+    "naive_T+0|5min|DOGE|polybolt|4": [
+     221,
+     221
+    ],
+    "naive_T+0|5min|DOGE|polybolt_t60a|0": [
+     280,
+     280
+    ],
+    "naive_T+0|5min|DOGE|polybolt_t60a|1": [
+     267,
+     267
+    ],
+    "naive_T+0|5min|DOGE|polybolt_t60a|2": [
+     251,
+     251
+    ],
+    "naive_T+0|5min|DOGE|polybolt_t60a|4": [
+     221,
+     221
+    ],
+    "naive_T+0|5min|DOGE|polybolt_s30|0": [
+     280,
+     276
+    ],
+    "naive_T+0|5min|DOGE|polybolt_s30|1": [
+     261,
+     260
+    ],
+    "naive_T+0|5min|DOGE|polybolt_s30|2": [
+     250,
+     250
+    ],
+    "naive_T+0|5min|DOGE|polybolt_s30|4": [
+     218,
+     218
+    ],
+    "precierre_T-45|5min|BTC|polybolt|0": [
+     280,
+     266
+    ],
+    "precierre_T-45|5min|BTC|polybolt|1": [
+     251,
+     247
+    ],
+    "precierre_T-45|5min|BTC|polybolt|2": [
+     231,
+     231
+    ],
+    "precierre_T-45|5min|BTC|polybolt|4": [
+     156,
+     156
+    ],
+    "precierre_T-45|5min|BTC|polybolt_t60a|0": [
+     280,
+     267
+    ],
+    "precierre_T-45|5min|BTC|polybolt_t60a|1": [
+     253,
+     249
+    ],
+    "precierre_T-45|5min|BTC|polybolt_t60a|2": [
+     230,
+     230
+    ],
+    "precierre_T-45|5min|BTC|polybolt_t60a|4": [
+     157,
+     157
+    ],
+    "precierre_T-45|5min|BTC|polybolt_s30|0": [
+     280,
+     262
+    ],
+    "precierre_T-45|5min|BTC|polybolt_s30|1": [
+     248,
+     243
+    ],
+    "precierre_T-45|5min|BTC|polybolt_s30|2": [
+     229,
+     228
+    ],
+    "precierre_T-45|5min|BTC|polybolt_s30|4": [
+     167,
+     166
+    ],
+    "naive_T+0|5min|BTC|polybolt|0": [
+     280,
+     280
+    ],
+    "naive_T+0|5min|BTC|polybolt|1": [
+     249,
+     249
+    ],
+    "naive_T+0|5min|BTC|polybolt|2": [
+     225,
+     225
+    ],
+    "naive_T+0|5min|BTC|polybolt|4": [
+     167,
+     167
+    ],
+    "naive_T+0|5min|BTC|polybolt_t60a|0": [
+     280,
+     279
+    ],
+    "naive_T+0|5min|BTC|polybolt_t60a|1": [
+     250,
+     250
+    ],
+    "naive_T+0|5min|BTC|polybolt_t60a|2": [
+     222,
+     222
+    ],
+    "naive_T+0|5min|BTC|polybolt_t60a|4": [
+     165,
+     165
+    ],
+    "naive_T+0|5min|BTC|polybolt_s30|0": [
+     280,
+     271
+    ],
+    "naive_T+0|5min|BTC|polybolt_s30|1": [
+     250,
+     248
+    ],
+    "naive_T+0|5min|BTC|polybolt_s30|2": [
+     229,
+     229
+    ],
+    "naive_T+0|5min|BTC|polybolt_s30|4": [
+     175,
+     175
+    ],
+    "precierre_T-45|5min|TODOS|hoy|0": [
+     1620,
+     1553
+    ],
+    "precierre_T-45|5min|SOL|hoy|0": [
+     270,
+     254
+    ],
+    "precierre_T-45|5min|TODOS|hoy|1": [
+     1497,
+     1466
+    ],
+    "precierre_T-45|5min|SOL|hoy|1": [
+     259,
+     251
+    ],
+    "precierre_T-45|5min|TODOS|hoy|2": [
+     1385,
+     1375
+    ],
+    "precierre_T-45|5min|SOL|hoy|2": [
+     243,
+     239
+    ],
+    "precierre_T-45|5min|TODOS|hoy|4": [
+     1120,
+     1119
+    ],
+    "precierre_T-45|5min|SOL|hoy|4": [
+     213,
+     212
+    ],
+    "precierre_T-45|5min|TODOS|pareado>=2bps": [
+     1374,
+     0,
+     0
+    ],
+    "precierre_T-45|5min|TODOS|pareado>=2bps|polybolt_t60a": [
+     1372,
+     0,
+     0
+    ],
+    "precierre_T-45|5min|TODOS|pareado>=2bps|polybolt_s30": [
+     1349,
+     0,
+     0
+    ],
+    "naive_T+0|5min|TODOS|hoy|0": [
+     1638,
+     1633
+    ],
+    "naive_T+0|5min|SOL|hoy|0": [
+     273,
+     273
+    ],
+    "naive_T+0|5min|TODOS|hoy|1": [
+     1518,
+     1518
+    ],
+    "naive_T+0|5min|SOL|hoy|1": [
+     257,
+     257
+    ],
+    "naive_T+0|5min|TODOS|hoy|2": [
+     1394,
+     1394
+    ],
+    "naive_T+0|5min|SOL|hoy|2": [
+     245,
+     245
+    ],
+    "naive_T+0|5min|TODOS|hoy|4": [
+     1159,
+     1159
+    ],
+    "naive_T+0|5min|SOL|hoy|4": [
+     220,
+     220
+    ],
+    "naive_T+0|5min|TODOS|pareado>=2bps": [
+     1384,
+     0,
+     0
+    ],
+    "naive_T+0|5min|TODOS|pareado>=2bps|polybolt_t60a": [
+     1390,
+     0,
+     0
+    ],
+    "naive_T+0|5min|TODOS|pareado>=2bps|polybolt_s30": [
+     1361,
+     0,
+     0
+    ],
+    "precierre_T-45|5min|XRP|hoy|0": [
+     270,
+     263
+    ],
+    "precierre_T-45|5min|XRP|hoy|1": [
+     254,
+     250
+    ],
+    "precierre_T-45|5min|XRP|hoy|2": [
+     238,
+     236
+    ],
+    "precierre_T-45|5min|XRP|hoy|4": [
+     195,
+     195
+    ],
+    "naive_T+0|5min|XRP|hoy|0": [
+     273,
+     273
+    ],
+    "naive_T+0|5min|XRP|hoy|1": [
+     260,
+     260
+    ],
+    "naive_T+0|5min|XRP|hoy|2": [
+     239,
+     239
+    ],
+    "naive_T+0|5min|XRP|hoy|4": [
+     203,
+     203
+    ],
+    "precierre_T-45|5min|BTC|hoy|0": [
+     270,
+     257
+    ],
+    "precierre_T-45|5min|BTC|hoy|1": [
+     241,
+     237
+    ],
+    "precierre_T-45|5min|BTC|hoy|2": [
+     220,
+     220
+    ],
+    "precierre_T-45|5min|BTC|hoy|4": [
+     150,
+     150
+    ],
+    "naive_T+0|5min|BTC|hoy|0": [
+     273,
+     272
+    ],
+    "naive_T+0|5min|BTC|hoy|1": [
+     243,
+     243
+    ],
+    "naive_T+0|5min|BTC|hoy|2": [
+     218,
+     218
+    ],
+    "naive_T+0|5min|BTC|hoy|4": [
+     162,
+     162
+    ],
+    "precierre_T-45|5min|DOGE|hoy|0": [
+     270,
+     259
+    ],
+    "precierre_T-45|5min|DOGE|hoy|1": [
+     257,
+     253
+    ],
+    "precierre_T-45|5min|DOGE|hoy|2": [
+     243,
+     241
+    ],
+    "precierre_T-45|5min|DOGE|hoy|4": [
+     212,
+     212
+    ],
+    "naive_T+0|5min|DOGE|hoy|0": [
+     273,
+     272
+    ],
+    "naive_T+0|5min|DOGE|hoy|1": [
+     261,
+     261
+    ],
+    "naive_T+0|5min|DOGE|hoy|2": [
+     245,
+     245
+    ],
+    "naive_T+0|5min|DOGE|hoy|4": [
+     215,
+     215
+    ],
+    "precierre_T-45|5min|ETH|hoy|0": [
+     270,
+     261
+    ],
+    "precierre_T-45|5min|ETH|hoy|1": [
+     245,
+     239
+    ],
+    "precierre_T-45|5min|ETH|hoy|2": [
+     219,
+     218
+    ],
+    "precierre_T-45|5min|ETH|hoy|4": [
+     181,
+     181
+    ],
+    "naive_T+0|5min|ETH|hoy|0": [
+     273,
+     273
+    ],
+    "naive_T+0|5min|ETH|hoy|1": [
+     249,
+     249
+    ],
+    "naive_T+0|5min|ETH|hoy|2": [
+     228,
+     228
+    ],
+    "naive_T+0|5min|ETH|hoy|4": [
+     187,
+     187
+    ],
+    "precierre_T-45|5min|BNB|hoy|0": [
+     270,
+     259
+    ],
+    "precierre_T-45|5min|BNB|hoy|1": [
+     241,
+     236
+    ],
+    "precierre_T-45|5min|BNB|hoy|2": [
+     222,
+     221
+    ],
+    "precierre_T-45|5min|BNB|hoy|4": [
+     169,
+     169
+    ],
+    "naive_T+0|5min|BNB|hoy|0": [
+     273,
+     270
+    ],
+    "naive_T+0|5min|BNB|hoy|1": [
+     248,
+     248
+    ],
+    "naive_T+0|5min|BNB|hoy|2": [
+     219,
+     219
+    ],
+    "naive_T+0|5min|BNB|hoy|4": [
+     172,
+     172
+    ],
+    "precierre_T-45|15min|TODOS|polybolt|0": [
+     570,
+     550
+    ],
+    "precierre_T-45|15min|XRP|polybolt|0": [
+     95,
+     88
+    ],
+    "precierre_T-45|15min|TODOS|polybolt|1": [
+     541,
+     534
+    ],
+    "precierre_T-45|15min|XRP|polybolt|1": [
+     85,
+     83
+    ],
+    "precierre_T-45|15min|TODOS|polybolt|2": [
+     523,
+     519
+    ],
+    "precierre_T-45|15min|XRP|polybolt|2": [
+     83,
+     81
+    ],
+    "precierre_T-45|15min|TODOS|polybolt|4": [
+     484,
+     482
+    ],
+    "precierre_T-45|15min|XRP|polybolt|4": [
+     76,
+     75
+    ],
+    "precierre_T-45|15min|TODOS|polybolt_t60a|0": [
+     570,
+     550
+    ],
+    "precierre_T-45|15min|XRP|polybolt_t60a|0": [
+     95,
+     88
+    ],
+    "precierre_T-45|15min|TODOS|polybolt_t60a|1": [
+     542,
+     534
+    ],
+    "precierre_T-45|15min|XRP|polybolt_t60a|1": [
+     86,
+     83
+    ],
+    "precierre_T-45|15min|TODOS|polybolt_t60a|2": [
+     520,
+     516
+    ],
+    "precierre_T-45|15min|XRP|polybolt_t60a|2": [
+     83,
+     81
+    ],
+    "precierre_T-45|15min|TODOS|polybolt_t60a|4": [
+     482,
+     480
+    ],
+    "precierre_T-45|15min|XRP|polybolt_t60a|4": [
+     75,
+     74
+    ],
+    "precierre_T-45|15min|TODOS|polybolt_s30|0": [
+     570,
+     553
+    ],
+    "precierre_T-45|15min|XRP|polybolt_s30|0": [
+     95,
+     87
+    ],
+    "precierre_T-45|15min|TODOS|polybolt_s30|1": [
+     547,
+     537
+    ],
+    "precierre_T-45|15min|XRP|polybolt_s30|1": [
+     89,
+     85
+    ],
+    "precierre_T-45|15min|TODOS|polybolt_s30|2": [
+     522,
+     517
+    ],
+    "precierre_T-45|15min|XRP|polybolt_s30|2": [
+     82,
+     80
+    ],
+    "precierre_T-45|15min|TODOS|polybolt_s30|4": [
+     482,
+     481
+    ],
+    "precierre_T-45|15min|XRP|polybolt_s30|4": [
+     73,
+     73
+    ],
+    "naive_T+0|15min|TODOS|polybolt|0": [
+     570,
+     569
+    ],
+    "naive_T+0|15min|XRP|polybolt|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|TODOS|polybolt|1": [
+     543,
+     543
+    ],
+    "naive_T+0|15min|XRP|polybolt|1": [
+     86,
+     86
+    ],
+    "naive_T+0|15min|TODOS|polybolt|2": [
+     515,
+     515
+    ],
+    "naive_T+0|15min|XRP|polybolt|2": [
+     81,
+     81
+    ],
+    "naive_T+0|15min|TODOS|polybolt|4": [
+     476,
+     476
+    ],
+    "naive_T+0|15min|XRP|polybolt|4": [
+     74,
+     74
+    ],
+    "naive_T+0|15min|TODOS|polybolt_t60a|0": [
+     570,
+     570
+    ],
+    "naive_T+0|15min|XRP|polybolt_t60a|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|TODOS|polybolt_t60a|1": [
+     544,
+     544
+    ],
+    "naive_T+0|15min|XRP|polybolt_t60a|1": [
+     86,
+     86
+    ],
+    "naive_T+0|15min|TODOS|polybolt_t60a|2": [
+     512,
+     512
+    ],
+    "naive_T+0|15min|XRP|polybolt_t60a|2": [
+     80,
+     80
+    ],
+    "naive_T+0|15min|TODOS|polybolt_t60a|4": [
+     472,
+     472
+    ],
+    "naive_T+0|15min|XRP|polybolt_t60a|4": [
+     75,
+     75
+    ],
+    "naive_T+0|15min|TODOS|polybolt_s30|0": [
+     570,
+     560
+    ],
+    "naive_T+0|15min|XRP|polybolt_s30|0": [
+     95,
+     92
+    ],
+    "naive_T+0|15min|TODOS|polybolt_s30|1": [
+     541,
+     540
+    ],
+    "naive_T+0|15min|XRP|polybolt_s30|1": [
+     89,
+     89
+    ],
+    "naive_T+0|15min|TODOS|polybolt_s30|2": [
+     512,
+     511
+    ],
+    "naive_T+0|15min|XRP|polybolt_s30|2": [
+     81,
+     81
+    ],
+    "naive_T+0|15min|TODOS|polybolt_s30|4": [
+     463,
+     463
+    ],
+    "naive_T+0|15min|XRP|polybolt_s30|4": [
+     70,
+     70
+    ],
+    "precierre_T-45|15min|BTC|polybolt|0": [
+     95,
+     89
+    ],
+    "precierre_T-45|15min|BTC|polybolt|1": [
+     87,
+     85
+    ],
+    "precierre_T-45|15min|BTC|polybolt|2": [
+     83,
+     82
+    ],
+    "precierre_T-45|15min|BTC|polybolt|4": [
+     74,
+     74
+    ],
+    "precierre_T-45|15min|BTC|polybolt_t60a|0": [
+     95,
+     89
+    ],
+    "precierre_T-45|15min|BTC|polybolt_t60a|1": [
+     87,
+     85
+    ],
+    "precierre_T-45|15min|BTC|polybolt_t60a|2": [
+     83,
+     82
+    ],
+    "precierre_T-45|15min|BTC|polybolt_t60a|4": [
+     72,
+     72
+    ],
+    "precierre_T-45|15min|BTC|polybolt_s30|0": [
+     95,
+     92
+    ],
+    "precierre_T-45|15min|BTC|polybolt_s30|1": [
+     90,
+     87
+    ],
+    "precierre_T-45|15min|BTC|polybolt_s30|2": [
+     82,
+     81
+    ],
+    "precierre_T-45|15min|BTC|polybolt_s30|4": [
+     71,
+     71
+    ],
+    "naive_T+0|15min|BTC|polybolt|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|BTC|polybolt|1": [
+     89,
+     89
+    ],
+    "naive_T+0|15min|BTC|polybolt|2": [
+     82,
+     82
+    ],
+    "naive_T+0|15min|BTC|polybolt|4": [
+     70,
+     70
+    ],
+    "naive_T+0|15min|BTC|polybolt_t60a|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|BTC|polybolt_t60a|1": [
+     90,
+     90
+    ],
+    "naive_T+0|15min|BTC|polybolt_t60a|2": [
+     81,
+     81
+    ],
+    "naive_T+0|15min|BTC|polybolt_t60a|4": [
+     70,
+     70
+    ],
+    "naive_T+0|15min|BTC|polybolt_s30|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|BTC|polybolt_s30|1": [
+     91,
+     91
+    ],
+    "naive_T+0|15min|BTC|polybolt_s30|2": [
+     80,
+     80
+    ],
+    "naive_T+0|15min|BTC|polybolt_s30|4": [
+     69,
+     69
+    ],
+    "precierre_T-45|15min|ETH|polybolt|0": [
+     95,
+     93
+    ],
+    "precierre_T-45|15min|ETH|polybolt|1": [
+     93,
+     92
+    ],
+    "precierre_T-45|15min|ETH|polybolt|2": [
+     88,
+     88
+    ],
+    "precierre_T-45|15min|ETH|polybolt|4": [
+     82,
+     82
+    ],
+    "precierre_T-45|15min|ETH|polybolt_t60a|0": [
+     95,
+     93
+    ],
+    "precierre_T-45|15min|ETH|polybolt_t60a|1": [
+     93,
+     92
+    ],
+    "precierre_T-45|15min|ETH|polybolt_t60a|2": [
+     87,
+     87
+    ],
+    "precierre_T-45|15min|ETH|polybolt_t60a|4": [
+     83,
+     83
+    ],
+    "precierre_T-45|15min|ETH|polybolt_s30|0": [
+     95,
+     94
+    ],
+    "precierre_T-45|15min|ETH|polybolt_s30|1": [
+     91,
+     91
+    ],
+    "precierre_T-45|15min|ETH|polybolt_s30|2": [
+     88,
+     88
+    ],
+    "precierre_T-45|15min|ETH|polybolt_s30|4": [
+     84,
+     84
+    ],
+    "naive_T+0|15min|ETH|polybolt|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|ETH|polybolt|1": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|ETH|polybolt|2": [
+     89,
+     89
+    ],
+    "naive_T+0|15min|ETH|polybolt|4": [
+     83,
+     83
+    ],
+    "naive_T+0|15min|ETH|polybolt_t60a|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|ETH|polybolt_t60a|1": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|ETH|polybolt_t60a|2": [
+     88,
+     88
+    ],
+    "naive_T+0|15min|ETH|polybolt_t60a|4": [
+     82,
+     82
+    ],
+    "naive_T+0|15min|ETH|polybolt_s30|0": [
+     95,
+     93
+    ],
+    "naive_T+0|15min|ETH|polybolt_s30|1": [
+     91,
+     90
+    ],
+    "naive_T+0|15min|ETH|polybolt_s30|2": [
+     88,
+     87
+    ],
+    "naive_T+0|15min|ETH|polybolt_s30|4": [
+     83,
+     83
+    ],
+    "precierre_T-45|15min|BNB|polybolt|0": [
+     95,
+     95
+    ],
+    "precierre_T-45|15min|BNB|polybolt|1": [
+     91,
+     91
+    ],
+    "precierre_T-45|15min|BNB|polybolt|2": [
+     88,
+     88
+    ],
+    "precierre_T-45|15min|BNB|polybolt|4": [
+     78,
+     78
+    ],
+    "precierre_T-45|15min|BNB|polybolt_t60a|0": [
+     95,
+     95
+    ],
+    "precierre_T-45|15min|BNB|polybolt_t60a|1": [
+     91,
+     91
+    ],
+    "precierre_T-45|15min|BNB|polybolt_t60a|2": [
+     87,
+     87
+    ],
+    "precierre_T-45|15min|BNB|polybolt_t60a|4": [
+     78,
+     78
+    ],
+    "precierre_T-45|15min|BNB|polybolt_s30|0": [
+     95,
+     94
+    ],
+    "precierre_T-45|15min|BNB|polybolt_s30|1": [
+     89,
+     89
+    ],
+    "precierre_T-45|15min|BNB|polybolt_s30|2": [
+     87,
+     87
+    ],
+    "precierre_T-45|15min|BNB|polybolt_s30|4": [
+     80,
+     80
+    ],
+    "naive_T+0|15min|BNB|polybolt|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|BNB|polybolt|1": [
+     89,
+     89
+    ],
+    "naive_T+0|15min|BNB|polybolt|2": [
+     84,
+     84
+    ],
+    "naive_T+0|15min|BNB|polybolt|4": [
+     78,
+     78
+    ],
+    "naive_T+0|15min|BNB|polybolt_t60a|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|BNB|polybolt_t60a|1": [
+     89,
+     89
+    ],
+    "naive_T+0|15min|BNB|polybolt_t60a|2": [
+     84,
+     84
+    ],
+    "naive_T+0|15min|BNB|polybolt_t60a|4": [
+     77,
+     77
+    ],
+    "naive_T+0|15min|BNB|polybolt_s30|0": [
+     95,
+     93
+    ],
+    "naive_T+0|15min|BNB|polybolt_s30|1": [
+     87,
+     87
+    ],
+    "naive_T+0|15min|BNB|polybolt_s30|2": [
+     83,
+     83
+    ],
+    "naive_T+0|15min|BNB|polybolt_s30|4": [
+     75,
+     75
+    ],
+    "precierre_T-45|15min|SOL|polybolt|0": [
+     95,
+     95
+    ],
+    "precierre_T-45|15min|SOL|polybolt|1": [
+     94,
+     94
+    ],
+    "precierre_T-45|15min|SOL|polybolt|2": [
+     92,
+     92
+    ],
+    "precierre_T-45|15min|SOL|polybolt|4": [
+     90,
+     90
+    ],
+    "precierre_T-45|15min|SOL|polybolt_t60a|0": [
+     95,
+     95
+    ],
+    "precierre_T-45|15min|SOL|polybolt_t60a|1": [
+     94,
+     94
+    ],
+    "precierre_T-45|15min|SOL|polybolt_t60a|2": [
+     92,
+     92
+    ],
+    "precierre_T-45|15min|SOL|polybolt_t60a|4": [
+     90,
+     90
+    ],
+    "precierre_T-45|15min|SOL|polybolt_s30|0": [
+     95,
+     95
+    ],
+    "precierre_T-45|15min|SOL|polybolt_s30|1": [
+     95,
+     95
+    ],
+    "precierre_T-45|15min|SOL|polybolt_s30|2": [
+     93,
+     93
+    ],
+    "precierre_T-45|15min|SOL|polybolt_s30|4": [
+     89,
+     89
+    ],
+    "naive_T+0|15min|SOL|polybolt|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|SOL|polybolt|1": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|SOL|polybolt|2": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|SOL|polybolt|4": [
+     89,
+     89
+    ],
+    "naive_T+0|15min|SOL|polybolt_t60a|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|SOL|polybolt_t60a|1": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|SOL|polybolt_t60a|2": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|SOL|polybolt_t60a|4": [
+     87,
+     87
+    ],
+    "naive_T+0|15min|SOL|polybolt_s30|0": [
+     95,
+     94
+    ],
+    "naive_T+0|15min|SOL|polybolt_s30|1": [
+     94,
+     94
+    ],
+    "naive_T+0|15min|SOL|polybolt_s30|2": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|SOL|polybolt_s30|4": [
+     85,
+     85
+    ],
+    "precierre_T-45|15min|DOGE|polybolt|0": [
+     95,
+     90
+    ],
+    "precierre_T-45|15min|DOGE|polybolt|1": [
+     91,
+     89
+    ],
+    "precierre_T-45|15min|DOGE|polybolt|2": [
+     89,
+     88
+    ],
+    "precierre_T-45|15min|DOGE|polybolt|4": [
+     84,
+     83
+    ],
+    "precierre_T-45|15min|DOGE|polybolt_t60a|0": [
+     95,
+     90
+    ],
+    "precierre_T-45|15min|DOGE|polybolt_t60a|1": [
+     91,
+     89
+    ],
+    "precierre_T-45|15min|DOGE|polybolt_t60a|2": [
+     88,
+     87
+    ],
+    "precierre_T-45|15min|DOGE|polybolt_t60a|4": [
+     84,
+     83
+    ],
+    "precierre_T-45|15min|DOGE|polybolt_s30|0": [
+     95,
+     91
+    ],
+    "precierre_T-45|15min|DOGE|polybolt_s30|1": [
+     93,
+     90
+    ],
+    "precierre_T-45|15min|DOGE|polybolt_s30|2": [
+     90,
+     88
+    ],
+    "precierre_T-45|15min|DOGE|polybolt_s30|4": [
+     85,
+     84
+    ],
+    "naive_T+0|15min|DOGE|polybolt|0": [
+     95,
+     94
+    ],
+    "naive_T+0|15min|DOGE|polybolt|1": [
+     91,
+     91
+    ],
+    "naive_T+0|15min|DOGE|polybolt|2": [
+     86,
+     86
+    ],
+    "naive_T+0|15min|DOGE|polybolt|4": [
+     82,
+     82
+    ],
+    "naive_T+0|15min|DOGE|polybolt_t60a|0": [
+     95,
+     95
+    ],
+    "naive_T+0|15min|DOGE|polybolt_t60a|1": [
+     91,
+     91
+    ],
+    "naive_T+0|15min|DOGE|polybolt_t60a|2": [
+     86,
+     86
+    ],
+    "naive_T+0|15min|DOGE|polybolt_t60a|4": [
+     81,
+     81
+    ],
+    "naive_T+0|15min|DOGE|polybolt_s30|0": [
+     95,
+     93
+    ],
+    "naive_T+0|15min|DOGE|polybolt_s30|1": [
+     89,
+     89
+    ],
+    "naive_T+0|15min|DOGE|polybolt_s30|2": [
+     87,
+     87
+    ],
+    "naive_T+0|15min|DOGE|polybolt_s30|4": [
+     81,
+     81
+    ],
+    "precierre_T-45|15min|TODOS|hoy|0": [
+     558,
+     540
+    ],
+    "precierre_T-45|15min|BNB|hoy|0": [
+     93,
+     93
+    ],
+    "precierre_T-45|15min|TODOS|hoy|1": [
+     531,
+     523
+    ],
+    "precierre_T-45|15min|BNB|hoy|1": [
+     89,
+     89
+    ],
+    "precierre_T-45|15min|TODOS|hoy|2": [
+     507,
+     504
+    ],
+    "precierre_T-45|15min|BNB|hoy|2": [
+     85,
+     85
+    ],
+    "precierre_T-45|15min|TODOS|hoy|4": [
+     470,
+     468
+    ],
+    "precierre_T-45|15min|BNB|hoy|4": [
+     76,
+     76
+    ],
+    "precierre_T-45|15min|TODOS|pareado>=2bps": [
+     506,
+     0,
+     0
+    ],
+    "precierre_T-45|15min|TODOS|pareado>=2bps|polybolt_t60a": [
+     504,
+     0,
+     0
+    ],
+    "precierre_T-45|15min|TODOS|pareado>=2bps|polybolt_s30": [
+     501,
+     0,
+     0
+    ],
+    "naive_T+0|15min|TODOS|hoy|0": [
+     558,
+     557
+    ],
+    "naive_T+0|15min|BNB|hoy|0": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|TODOS|hoy|1": [
+     531,
+     531
+    ],
+    "naive_T+0|15min|BNB|hoy|1": [
+     87,
+     87
+    ],
+    "naive_T+0|15min|TODOS|hoy|2": [
+     501,
+     501
+    ],
+    "naive_T+0|15min|BNB|hoy|2": [
+     82,
+     82
+    ],
+    "naive_T+0|15min|TODOS|hoy|4": [
+     460,
+     460
+    ],
+    "naive_T+0|15min|BNB|hoy|4": [
+     75,
+     75
+    ],
+    "naive_T+0|15min|TODOS|pareado>=2bps": [
+     499,
+     0,
+     0
+    ],
+    "naive_T+0|15min|TODOS|pareado>=2bps|polybolt_t60a": [
+     500,
+     0,
+     0
+    ],
+    "naive_T+0|15min|TODOS|pareado>=2bps|polybolt_s30": [
+     491,
+     0,
+     0
+    ],
+    "precierre_T-45|15min|XRP|hoy|0": [
+     93,
+     86
+    ],
+    "precierre_T-45|15min|XRP|hoy|1": [
+     84,
+     81
+    ],
+    "precierre_T-45|15min|XRP|hoy|2": [
+     80,
+     79
+    ],
+    "precierre_T-45|15min|XRP|hoy|4": [
+     73,
+     72
+    ],
+    "naive_T+0|15min|XRP|hoy|0": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|XRP|hoy|1": [
+     84,
+     84
+    ],
+    "naive_T+0|15min|XRP|hoy|2": [
+     78,
+     78
+    ],
+    "naive_T+0|15min|XRP|hoy|4": [
+     73,
+     73
+    ],
+    "precierre_T-45|15min|BTC|hoy|0": [
+     93,
+     88
+    ],
+    "naive_T+0|15min|BTC|hoy|0": [
+     93,
+     92
+    ],
+    "precierre_T-45|15min|SOL|hoy|0": [
+     93,
+     93
+    ],
+    "precierre_T-45|15min|SOL|hoy|1": [
+     92,
+     92
+    ],
+    "precierre_T-45|15min|SOL|hoy|2": [
+     91,
+     91
+    ],
+    "precierre_T-45|15min|SOL|hoy|4": [
+     88,
+     88
+    ],
+    "naive_T+0|15min|SOL|hoy|0": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|SOL|hoy|1": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|SOL|hoy|2": [
+     91,
+     91
+    ],
+    "naive_T+0|15min|SOL|hoy|4": [
+     85,
+     85
+    ],
+    "precierre_T-45|15min|DOGE|hoy|0": [
+     93,
+     88
+    ],
+    "precierre_T-45|15min|DOGE|hoy|1": [
+     89,
+     87
+    ],
+    "precierre_T-45|15min|DOGE|hoy|2": [
+     86,
+     85
+    ],
+    "naive_T+0|15min|DOGE|hoy|0": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|DOGE|hoy|1": [
+     88,
+     88
+    ],
+    "precierre_T-45|15min|ETH|hoy|0": [
+     93,
+     92
+    ],
+    "precierre_T-45|15min|ETH|hoy|1": [
+     91,
+     90
+    ],
+    "precierre_T-45|15min|ETH|hoy|2": [
+     86,
+     86
+    ],
+    "precierre_T-45|15min|ETH|hoy|4": [
+     80,
+     80
+    ],
+    "naive_T+0|15min|ETH|hoy|0": [
+     93,
+     93
+    ],
+    "naive_T+0|15min|ETH|hoy|1": [
+     91,
+     91
+    ],
+    "naive_T+0|15min|ETH|hoy|2": [
+     86,
+     86
+    ],
+    "naive_T+0|15min|ETH|hoy|4": [
+     80,
+     80
+    ],
+    "precierre_T-45|15min|DOGE|hoy|4": [
+     83,
+     82
+    ],
+    "naive_T+0|15min|DOGE|hoy|2": [
+     85,
+     85
+    ],
+    "naive_T+0|15min|DOGE|hoy|4": [
+     79,
+     79
+    ],
+    "precierre_T-45|15min|BTC|hoy|1": [
+     86,
+     84
+    ],
+    "precierre_T-45|15min|BTC|hoy|2": [
+     79,
+     78
+    ],
+    "precierre_T-45|15min|BTC|hoy|4": [
+     70,
+     70
+    ],
+    "naive_T+0|15min|BTC|hoy|1": [
+     88,
+     88
+    ],
+    "naive_T+0|15min|BTC|hoy|2": [
+     79,
+     79
+    ],
+    "naive_T+0|15min|BTC|hoy|4": [
+     68,
+     68
     ]
    }
   }
