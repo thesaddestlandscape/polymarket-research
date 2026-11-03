@@ -1622,5 +1622,9 @@
   "LIQUIDACIONES_DEPTH_FASE0#BNB#5min": {
     "n": 217,
     "confirmado": false
+  },
+  "PRICE_TARGET_GBM#SOL": {
+    "n": 200,
+    "confirmado": false
   }
 }
