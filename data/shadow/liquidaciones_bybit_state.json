@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-03T06:51:09+00:00",
+ "generado_utc": "2026-11-03T06:56:19+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -16,34 +16,34 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 412.44,
+   "n": 2,
+   "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 8208.03,
-   "n": 4,
+   "usd_short": 8620.47,
+   "n": 6,
    "imbalance": 1.0
   }
  },
  "BTC": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 1448.73,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 1601.28,
-   "n": 2,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 2136.46,
-   "n": 4,
+   "usd_short": 1754.03,
+   "n": 3,
    "imbalance": 1.0
   },
   "60min": {
@@ -82,15 +82,15 @@
  "ETH": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 357.83,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 872.41,
-   "n": 2,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -114,20 +114,20 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 19993.01,
-   "n": 2,
+   "usd_short": 1561.75,
+   "n": 3,
    "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 19993.01,
-   "n": 2,
+   "usd_short": 21645.59,
+   "n": 6,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 46592.62,
-   "n": 12,
+   "usd_short": 48245.2,
+   "n": 16,
    "imbalance": 1.0
   }
  },
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 6,
-  "ultimo_lag_s": 0.54,
-  "max_lag_s": 0.54,
-  "media_lag_s": 0.37,
+  "n_muestras": 3,
+  "ultimo_lag_s": 0.34,
+  "max_lag_s": 0.56,
+  "media_lag_s": 0.34,
   "umbral_alerta_s": 5.0
  }
 }
