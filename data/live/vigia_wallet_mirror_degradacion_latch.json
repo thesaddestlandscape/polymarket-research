@@ -157,7 +157,11 @@
   "telegram_ok": true
  },
  "0x3636026376b7536bd407bd9adcc5b1f7c9471a40#BTC#5min": {
-  "avisado": false
+  "avisado": true,
+  "hit_hist": 98.9,
+  "hit_reciente": 40.0,
+  "n_reciente": 15,
+  "telegram_ok": true
  },
  "0xce50c96b976203b53342a0a801067d2cdcfcf46e#BTC#5min": {
   "avisado": false
@@ -1441,7 +1445,11 @@
   "avisado": false
  },
  "0xbd81e57170049b2310cded2d285e2052dc022f35#BTC#15min": {
-  "avisado": false
+  "avisado": true,
+  "hit_hist": 100.0,
+  "hit_reciente": 66.7,
+  "n_reciente": 15,
+  "telegram_ok": true
  },
  "0x6be20921d8606f7e720b27c964ca34923c8ee856#BTC#15min": {
   "avisado": true,
@@ -1585,7 +1593,11 @@
   "avisado": false
  },
  "0x1b414826a2c991d5ae1669a754291626d0df0b56#BNB#15min": {
-  "avisado": false
+  "avisado": true,
+  "hit_hist": 62.2,
+  "hit_reciente": 20.0,
+  "n_reciente": 15,
+  "telegram_ok": true
  },
  "0x18efd357232f6bde0d0f855308ddc5cec5d19665#SOL#15min": {
   "avisado": false
@@ -1867,7 +1879,11 @@
   "telegram_ok": true
  },
  "0x1b414826a2c991d5ae1669a754291626d0df0b56#ETH#5min": {
-  "avisado": false
+  "avisado": true,
+  "hit_hist": 57.2,
+  "hit_reciente": 0.0,
+  "n_reciente": 15,
+  "telegram_ok": true
  },
  "0xc2ad03f79ca3f3c17d8c7de2612ce0c89b7d40ed#BTC#5min": {
   "avisado": true,
@@ -4273,11 +4289,7 @@
   "telegram_ok": true
  },
  "0xb2c474baaabb2533b75e763fe6c3c85c6410cffc#BTC#5min": {
-  "avisado": true,
-  "hit_hist": 74.3,
-  "hit_reciente": 13.3,
-  "n_reciente": 15,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x6795096964f31bbe77755ce5f4f12c8d09f54a4c#BTC#5min": {
   "avisado": false
@@ -4434,7 +4446,11 @@
   "telegram_ok": true
  },
  "0x33c50d85f43828fe2305dcc6fa0000f7391cc5d2#BTC#240min": {
-  "avisado": false
+  "avisado": true,
+  "hit_hist": 47.7,
+  "hit_reciente": 0.0,
+  "n_reciente": 15,
+  "telegram_ok": true
  },
  "0x13e930fd298e3d859c6c2d2adb0a3fb9a1f4b22f#BTC#60min": {
   "avisado": true,
@@ -4460,7 +4476,11 @@
   "avisado": false
  },
  "0x335ac48637a3bc37c2eac9e0c9799c32b3cda494#ETH#60min": {
-  "avisado": false
+  "avisado": true,
+  "hit_hist": 59.3,
+  "hit_reciente": 20.0,
+  "n_reciente": 15,
+  "telegram_ok": true
  },
  "0x093db68ffb0a4c97aca7fab45817c16a4461220e#BTC#15min": {
   "avisado": false
@@ -4658,11 +4678,7 @@
   "telegram_ok": true
  },
  "0x43e7e4b6a5dc71663d12cbf16b28468095a5472a#ETH#5min": {
-  "avisado": true,
-  "hit_hist": 42.5,
-  "hit_reciente": 0.0,
-  "n_reciente": 15,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x72ca0e1437e5cc5972aefab8429a359b02e5b78e#ETH#5min": {
   "avisado": true,
@@ -4714,9 +4730,75 @@
   "telegram_ok": true
  },
  "0x87d4219830b4e04575b12b5109178b5b29118e2c#BTC#5min": {
+  "avisado": false
+ },
+ "0xd98d11c3cd12461bd275ef79f4f9ae235afd6418#ETH#15min": {
   "avisado": true,
-  "hit_hist": 86.5,
-  "hit_reciente": 46.7,
+  "hit_hist": 49.3,
+  "hit_reciente": 0.0,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0xf18305d6d314d5b11ea5c3cc321d4880c6e7979c#BTC#15min": {
+  "avisado": true,
+  "hit_hist": 85.9,
+  "hit_reciente": 6.7,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0xb559f21a6c1fc896f89c8338a08f75de42ebb01f#BTC#15min": {
+  "avisado": true,
+  "hit_hist": 73.1,
+  "hit_reciente": 6.7,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0x7894991b387feef283138229220418ede71b455f#BTC#15min": {
+  "avisado": true,
+  "hit_hist": 31.9,
+  "hit_reciente": 0.0,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0x76120b53be44cbbb19b748ecc8f6e4f57bbd0073#BTC#15min": {
+  "avisado": true,
+  "hit_hist": 63.3,
+  "hit_reciente": 26.7,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0xe3eeb127d5763a6e4ad597f773f9d259c94d5176#DOGE#5min": {
+  "avisado": true,
+  "hit_hist": 67.2,
+  "hit_reciente": 13.3,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0x86aca168075106750ed14460f3a4599e43ff29ae#BTC#5min": {
+  "avisado": true,
+  "hit_hist": 82.3,
+  "hit_reciente": 0.0,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0xffb1ad13584ebff9cfacf25c122b44451639d739#BTC#5min": {
+  "avisado": true,
+  "hit_hist": 100.0,
+  "hit_reciente": 20.0,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0xdd8d23de7971178f14b2bdd342fb5a7c69e92436#BTC#5min": {
+  "avisado": true,
+  "hit_hist": 90.5,
+  "hit_reciente": 26.7,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0xd03a91e14cb8c4e4556058c3a7de439842e9f00e#BTC#5min": {
+  "avisado": true,
+  "hit_hist": 63.9,
+  "hit_reciente": 0.0,
   "n_reciente": 15,
   "telegram_ok": true
  }
