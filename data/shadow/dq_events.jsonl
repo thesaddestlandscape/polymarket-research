@@ -229770,3 +229770,13 @@
 {"ts": "2026-11-04T02:54:18+00:00", "sym": "BNB", "value": 0.0871, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-11-04T02:55:18+00:00", "sym": "DOGE", "value": 0.0122, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-11-04T02:55:18+00:00", "sym": "BNB", "value": 0.0697, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-04T02:58:17+00:00", "sym": "DOGE", "value": 0.0041, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-04T02:58:17+00:00", "sym": "BNB", "value": 0.1512, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-04T02:59:18+00:00", "sym": "DOGE", "value": 0.1456, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-04T02:59:18+00:00", "sym": "BNB", "value": 0.1337, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-04T03:01:19+00:00", "sym": "DOGE", "value": 1.0319, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-04T03:01:19+00:00", "sym": "BNB", "value": 0.4543, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-04T03:01:40+00:00", "sym": "ETH", "value": 2243.72, "reason": "cross_source_warn coingecko=2243.7200 vs mediana=2237.9350 (0.52%)"}
+{"ts": "2026-11-04T03:01:40+00:00", "sym": "SOL", "value": 90.87, "reason": "cross_source_warn coingecko=90.8700 vs mediana=90.5675 (0.67%)"}
+{"ts": "2026-11-04T03:02:19+00:00", "sym": "DOGE", "value": 0.9915, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-04T03:02:19+00:00", "sym": "BNB", "value": 0.6765, "reason": "cambio_fuente coingecko->binance"}
