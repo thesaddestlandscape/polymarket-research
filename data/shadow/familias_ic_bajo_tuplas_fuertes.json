@@ -22,9 +22,9 @@
   ]
  },
  "LIQUIDACIONES_60M": {
-  "ic_bayes_familia": -0.0347,
+  "ic_bayes_familia": -0.0344,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 34.97,
+  "pnl_fiel_combinado_eur": 35.12,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_60M#BTC#60min#BUY_NO",
@@ -33,7 +33,7 @@
    },
    {
     "k": "LIQUIDACIONES_60M#BTC#60min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 15.8317,
+    "pnl_fiel_eur_sin_suelo": 15.9766,
     "n_ejecutado": 159
    }
   ]
