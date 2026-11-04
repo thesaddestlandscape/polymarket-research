@@ -1,55 +1,55 @@
 {
- "generado_utc": "2026-11-04T05:38:28+00:00",
+ "generado_utc": "2026-11-04T05:43:39+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
-   "usd_long": 1592.95,
+   "usd_long": 0.0,
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
+  },
+  "5min": {
+   "usd_long": 590.88,
    "usd_short": 0.0,
    "n": 1,
    "imbalance": -1.0
   },
-  "5min": {
-   "usd_long": 2293.92,
-   "usd_short": 0.0,
-   "n": 2,
-   "imbalance": -1.0
-  },
   "15min": {
-   "usd_long": 2293.92,
+   "usd_long": 2884.8,
    "usd_short": 0.0,
-   "n": 2,
+   "n": 3,
    "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 2517.61,
+   "usd_long": 3108.49,
    "usd_short": 0.0,
-   "n": 3,
+   "n": 4,
    "imbalance": -1.0
   }
  },
  "BTC": {
   "2min": {
-   "usd_long": 12547.14,
+   "usd_long": 4135.6,
    "usd_short": 0.0,
-   "n": 2,
+   "n": 3,
    "imbalance": -1.0
   },
   "5min": {
-   "usd_long": 83980.48,
+   "usd_long": 8890.08,
    "usd_short": 0.0,
-   "n": 13,
+   "n": 7,
    "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 83980.48,
+   "usd_long": 92870.55,
    "usd_short": 0.0,
-   "n": 13,
+   "n": 20,
    "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 518105.63,
+   "usd_long": 526764.66,
    "usd_short": 0.0,
-   "n": 76,
+   "n": 82,
    "imbalance": -1.0
   }
  },
@@ -61,10 +61,10 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 1165.93,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 1165.93,
@@ -81,88 +81,88 @@
  },
  "ETH": {
   "2min": {
-   "usd_long": 14953.35,
-   "usd_short": 0.0,
-   "n": 4,
-   "imbalance": -1.0
-  },
-  "5min": {
-   "usd_long": 19493.82,
-   "usd_short": 22.78,
-   "n": 7,
-   "imbalance": -0.9977
-  },
-  "15min": {
-   "usd_long": 19493.82,
-   "usd_short": 22.78,
-   "n": 7,
-   "imbalance": -0.9977
-  },
-  "60min": {
-   "usd_long": 237689.26,
-   "usd_short": 6171.44,
-   "n": 28,
-   "imbalance": -0.9494
-  }
- },
- "SOL": {
-  "2min": {
-   "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
-  },
-  "5min": {
-   "usd_long": 1452.05,
-   "usd_short": 46.1,
-   "n": 2,
-   "imbalance": -0.9385
-  },
-  "15min": {
-   "usd_long": 1452.05,
-   "usd_short": 46.1,
-   "n": 2,
-   "imbalance": -0.9385
-  },
-  "60min": {
-   "usd_long": 13189.11,
-   "usd_short": 1936.39,
-   "n": 11,
-   "imbalance": -0.744
-  }
- },
- "XRP": {
-  "2min": {
-   "usd_long": 7071.45,
+   "usd_long": 506.75,
    "usd_short": 0.0,
    "n": 1,
    "imbalance": -1.0
   },
   "5min": {
-   "usd_long": 8774.15,
+   "usd_long": 176428.41,
+   "usd_short": 0.0,
+   "n": 11,
+   "imbalance": -1.0
+  },
+  "15min": {
+   "usd_long": 195922.23,
+   "usd_short": 22.78,
+   "n": 18,
+   "imbalance": -0.9998
+  },
+  "60min": {
+   "usd_long": 402904.1,
+   "usd_short": 6171.44,
+   "n": 37,
+   "imbalance": -0.9698
+  }
+ },
+ "SOL": {
+  "2min": {
+   "usd_long": 802.98,
+   "usd_short": 0.0,
+   "n": 1,
+   "imbalance": -1.0
+  },
+  "5min": {
+   "usd_long": 1176.18,
    "usd_short": 0.0,
    "n": 2,
    "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 8774.15,
+   "usd_long": 2628.23,
+   "usd_short": 46.1,
+   "n": 4,
+   "imbalance": -0.9655
+  },
+  "60min": {
+   "usd_long": 14365.29,
+   "usd_short": 1936.39,
+   "n": 13,
+   "imbalance": -0.7624
+  }
+ },
+ "XRP": {
+  "2min": {
+   "usd_long": 2554.31,
    "usd_short": 0.0,
    "n": 2,
    "imbalance": -1.0
   },
-  "60min": {
-   "usd_long": 9222.83,
+  "5min": {
+   "usd_long": 2741.19,
+   "usd_short": 0.0,
+   "n": 3,
+   "imbalance": -1.0
+  },
+  "15min": {
+   "usd_long": 11515.34,
    "usd_short": 0.0,
    "n": 5,
+   "imbalance": -1.0
+  },
+  "60min": {
+   "usd_long": 11964.02,
+   "usd_short": 0.0,
+   "n": 8,
    "imbalance": -1.0
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 27,
-  "ultimo_lag_s": 0.42,
-  "max_lag_s": 0.6,
-  "media_lag_s": 0.37,
+  "n_muestras": 24,
+  "ultimo_lag_s": 0.28,
+  "max_lag_s": 0.58,
+  "media_lag_s": 0.35,
   "umbral_alerta_s": 5.0
  }
 }
