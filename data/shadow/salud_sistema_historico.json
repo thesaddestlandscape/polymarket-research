@@ -1,55 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-16T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 165,
-      "resolve_postmortem_p50_s": 8.0,
-      "resolve_postmortem_p95_s": 14.0,
-      "resolve_postmortem_max_s": 40.0,
-      "n_ciclos_live_trade": 1973,
-      "hueco_live_trade_max_s": 196.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 9,
-      "stale": [
-        "ejeclive"
-      ]
-    },
-    "disco": {
-      "pct_usado": 64.0,
-      "gb_libres": 25.85,
-      "git_gb": 0.0,
-      "data_gb": 23.7,
-      "datalogs_gb": 5.91
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.66,
-      "ram_pct_libre": 44.8
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 435,
-      "n_results_total": 147886
-    },
-    "carga_sistema": {
-      "load1": 4.28,
-      "load5": 5.79,
-      "load15": 6.52,
-      "nproc": 2,
-      "ratio5": 2.9,
-      "n_procesos_total": 186
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [
-      "⚠️ screens STALE (código en disco != código cargado): ejeclive"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-17T07:08:01+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 171,
@@ -14923,5 +14873,205 @@
     },
     "anomalias": [],
     "estado": "OK"
+  },
+  {
+    "timestamp_utc": "2026-11-04T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 134,
+      "resolve_postmortem_p50_s": 111.8,
+      "resolve_postmortem_p95_s": 197.6,
+      "resolve_postmortem_max_s": 373.0,
+      "resolve_postmortem_duraciones_s": [
+        89.2,
+        147.8,
+        127.0,
+        84.9,
+        87.2,
+        87.0,
+        93.8,
+        156.1,
+        140.5,
+        96.0,
+        96.5,
+        91.2,
+        91.2,
+        160.2,
+        126.7,
+        97.3,
+        116.5,
+        102.9,
+        91.4,
+        171.6,
+        141.1,
+        171.7,
+        195.8,
+        93.1,
+        97.0,
+        169.8,
+        151.4,
+        100.6,
+        99.4,
+        97.6,
+        96.2,
+        190.4,
+        157.3,
+        108.9,
+        100.9,
+        103.1,
+        107.5,
+        170.4,
+        142.8,
+        100.4,
+        120.1,
+        150.3,
+        108.3,
+        197.6,
+        373.0,
+        115.3,
+        110.3,
+        111.2,
+        130.6,
+        228.6,
+        149.5,
+        110.4,
+        104.5,
+        120.6,
+        136.2,
+        186.4,
+        171.5,
+        111.8,
+        116.4,
+        112.6,
+        104.0,
+        186.9,
+        167.1,
+        108.3,
+        128.0,
+        115.0,
+        205.0,
+        194.7,
+        150.7,
+        106.3,
+        108.3,
+        135.2,
+        113.4,
+        190.7,
+        158.2,
+        113.2,
+        123.0,
+        125.9,
+        123.6,
+        180.4,
+        144.2,
+        100.3,
+        103.0,
+        99.1,
+        97.4,
+        174.2,
+        143.5,
+        106.1,
+        220.8,
+        89.6,
+        91.7,
+        160.9,
+        125.4,
+        83.6,
+        95.5,
+        81.3,
+        82.8,
+        141.9,
+        128.5,
+        90.8,
+        90.3,
+        79.5,
+        84.8,
+        147.4,
+        131.3,
+        87.2,
+        99.9,
+        97.7,
+        89.3,
+        159.5,
+        219.7,
+        67.2,
+        89.2,
+        95.8,
+        93.2,
+        169.4,
+        158.6,
+        90.2,
+        86.0,
+        88.5,
+        95.1,
+        158.9,
+        176.1,
+        101.0,
+        94.1,
+        89.4,
+        101.5,
+        173.3,
+        130.1,
+        96.0,
+        96.8,
+        90.5,
+        90.3,
+        264.6
+      ],
+      "n_ciclos_live_trade": 4555,
+      "hueco_live_trade_max_s": 59.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 22,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 91.0,
+      "gb_libres": 7.16,
+      "git_gb": 0.0,
+      "data_gb": 17.83,
+      "datalogs_gb": 8.98
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 6.79,
+      "ram_pct_libre": 44.6
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 772,
+      "n_results_total": 1294962
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 3.94,
+      "load5": 4.23,
+      "load15": 4.88,
+      "nproc": 8,
+      "ratio5": 0.53,
+      "n_procesos_total": 306
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 0,
+      "eventos": []
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "💾 disco al 91% (7.16GB libres)"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
