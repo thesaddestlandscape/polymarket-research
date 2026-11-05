@@ -33,6 +33,18 @@
    }
   ]
  },
+ "LIQUIDACIONES_15M": {
+  "ic_bayes_familia": -0.0125,
+  "n_tuplas_fuertes": 1,
+  "pnl_fiel_combinado_eur": 15.3,
+  "tuplas": [
+   {
+    "k": "LIQUIDACIONES_15M#SOL#15min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 15.3044,
+    "n_ejecutado": 101
+   }
+  ]
+ },
  "MOMENTUM_IBS_15M_FADE": {
   "ic_bayes_familia": -0.0547,
   "n_tuplas_fuertes": 1,
