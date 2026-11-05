@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-05T13:01:42+00:00",
+ "generado_utc": "2026-11-05T13:12:24+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -42,15 +42,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 122827.28,
-   "n": 14,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 1763.13,
-   "usd_short": 706962.97,
-   "n": 115,
-   "imbalance": 0.995
+   "usd_short": 573512.18,
+   "n": 108,
+   "imbalance": 0.9939
   }
  },
  "DOGE": {
@@ -74,8 +74,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 5267.27,
-   "n": 5,
+   "usd_short": 5047.19,
+   "n": 4,
    "imbalance": 1.0
   }
  },
@@ -88,20 +88,20 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 173199.37,
+   "n": 8,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 904.77,
-   "n": 1,
+   "usd_short": 173199.37,
+   "n": 8,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 342194.22,
-   "n": 75,
+   "usd_short": 513829.04,
+   "n": 81,
    "imbalance": 1.0
   }
  },
@@ -119,16 +119,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 0.0,
-   "usd_short": 1902.67,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_long": 3101.12,
+   "usd_short": 0.0,
+   "n": 2,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 0.0,
-   "usd_short": 205910.1,
-   "n": 41,
-   "imbalance": 1.0
+   "usd_long": 3101.12,
+   "usd_short": 205890.97,
+   "n": 42,
+   "imbalance": 0.9703
   }
  },
  "XRP": {
@@ -152,17 +152,17 @@
   },
   "60min": {
    "usd_long": 311.69,
-   "usd_short": 61051.0,
-   "n": 34,
-   "imbalance": 0.9898
+   "usd_short": 57640.52,
+   "n": 29,
+   "imbalance": 0.9892
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 0,
-  "ultimo_lag_s": null,
-  "max_lag_s": null,
-  "media_lag_s": null,
+  "n_muestras": 8,
+  "ultimo_lag_s": 0.43,
+  "max_lag_s": 0.56,
+  "media_lag_s": 0.36,
   "umbral_alerta_s": 5.0
  }
 }
