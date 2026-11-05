@@ -232612,3 +232612,7 @@
 {"ts": "2026-11-05T12:44:55+00:00", "sym": "XRP", "value": 1.3027, "reason": "cross_source_warn coinbase=1.3027 vs mediana=1.3064 (0.56%)"}
 {"ts": "2026-11-05T12:46:00+00:00", "sym": "DOGE", "value": 0.116, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-11-05T12:46:00+00:00", "sym": "BNB", "value": 0.1648, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-05T12:49:44+00:00", "sym": "DOGE", "value": 0.004, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-05T12:49:44+00:00", "sym": "BNB", "value": 0.0113, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-05T12:51:01+00:00", "sym": "DOGE", "value": 0.0105, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-05T12:51:01+00:00", "sym": "BNB", "value": 0.0042, "reason": "cambio_fuente coingecko->binance"}
