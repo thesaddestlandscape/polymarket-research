@@ -79114,3 +79114,12 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-11-04T23:57:10+00:00,0x5eaa4147f5e9c1794dc24d2c32850a5f4d7a3cad4f484425ab9cffc96d1603bc,xrp-updown-5m-1793836500,XRP,5min,Down,2,0.5100000016333333,,,,,,0,0,0,0,fuera_de_zona_confirmada
 2026-11-04T23:57:13+00:00,0xa246fde17faad713aef23baa0a3a30c083b5a1d8b35555c44ca7c0b242f86537,sol-updown-5m-1793836500,SOL,5min,Up,2,0.38,,,,,,0,0,0,0,fuera_de_zona_confirmada
 2026-11-04T23:57:47+00:00,0x4e97e299e9fd1e355986a79d293dbf852376fdd06e5905c5c906df332ebdb1a8,doge-updown-5m-1793836500,DOGE,5min,Up,2,0.17,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:00:11+00:00,0xa4e746b500d37ddab3322330572621e74e0fe186fe46682d5a8662ee0ca07356,btc-updown-5m-1793836800,BTC,5min,Up,2,0.49,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:00:14+00:00,0x16789e58d0f93423fed61819044dbf5271aa56f6b454b09976bdefbc6ef22030,btc-updown-15m-1793836800,BTC,15min,Up,2,0.55,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:00:17+00:00,0x0947043a434d71779506aefd689d84ac8445f5d178a533df2b262a0eec5d877d,xrp-updown-5m-1793836800,XRP,5min,Up,2,0.43,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:00:25+00:00,0x2f19d983f6683209f4583d660a4b11db9e4dfc2825d7c914e133ec846c6f56c8,eth-updown-15m-1793836800,ETH,15min,Down,2,0.4800000012900558,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:00:28+00:00,0xbb9836668601dfd4bb2fda733160bbfb8c112f617b25e0bf6992811b0f5cf90b,eth-updown-5m-1793836800,ETH,5min,Up,3,0.56,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:00:31+00:00,0x6977d9e0dcf89a052977b0dc128db2782bece0a95c7649f8490a119bff15a554,sol-updown-5m-1793836800,SOL,5min,Down,2,0.3599999922162164,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:00:39+00:00,0xbb032dcc0c48276a0f14ae093b48d0c23a52b1caff7dc6973dbd181ac25549c9,xrp-updown-15m-1793836800,XRP,15min,Down,2,0.5,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:02:08+00:00,0x531f3e3d38bce6a8b7b9f5a449ef800ca73b3a3e077c7beec024b7da4d1a6efa,doge-updown-5m-1793836800,DOGE,5min,Up,2,0.37,4.2,0.38,0.0,0.47,23.68,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T00:03:27+00:00,0xf0f5e7b416d31ce2a4057c6e5d6c9feaf68cac5c6147723b01361b48b2b722b3,bnb-updown-5m-1793836800,BNB,5min,Down,2,0.3499999846491235,0.0,0.48,0.0,0.43,-10.42,0,0,0,0,fuera_de_zona_confirmada
