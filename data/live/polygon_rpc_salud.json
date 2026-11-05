@@ -47,14 +47,14 @@
    "ultimo_aviso": 1793838200.6344297
   },
   "archivo": {
-   "ok": false,
-   "detalle": "RuntimeError: {'code': -32603, 'message': 'Remote Error'}",
-   "desde": 1793841786.0764325,
-   "ultimo_aviso": 1793841786.0764325
+   "ok": true,
+   "detalle": "",
+   "desde": 1793848989.1474283,
+   "ultimo_aviso": 1793848989.1474283
   },
   "latest": {
    "ok": false,
-   "detalle": "RechazoPolitica: HTTP 403",
+   "detalle": "RuntimeError: {'code': -32603, 'message': 'Remote Error'}",
    "desde": 1793845387.245601,
    "ultimo_aviso": 1793845387.245601
   }
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-05T02:23:07+00:00"
+ "_actualizado_utc": "2026-11-05T03:23:09+00:00"
 }
