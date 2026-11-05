@@ -1,74 +1,74 @@
 {
- "generado_utc": "2026-11-04T08:12:04+00:00",
+ "generado_utc": "2026-11-05T08:12:05+00:00",
  "corte": "2026-09-30T16:00",
  "hipotesis": {
   "A CS#FADE [0,65-0,70) (LIVE)": {
-   "n": 434,
+   "n": 439,
    "dias": 36,
-   "acierto": 0.7005,
+   "acierto": 0.6993,
    "precio_medio": 0.6687,
-   "ev": 0.0349,
+   "ev": 0.0331,
    "ic90": [
-    -0.0277,
-    0.0996
+    -0.029,
+    0.0986
    ],
    "dias_positivos": 15,
    "wallet_top_pct": 12,
    "veredicto": "sin_concluir"
   },
   "B CS [0,65-0,70) cualquier disparo": {
-   "n": 545,
+   "n": 553,
    "dias": 36,
-   "acierto": 0.6862,
-   "precio_medio": 0.669,
-   "ev": 0.0143,
+   "acierto": 0.6835,
+   "precio_medio": 0.6688,
+   "ev": 0.0104,
    "ic90": [
-    -0.0351,
-    0.0614
+    -0.0394,
+    0.0576
    ],
-   "dias_positivos": 19,
+   "dias_positivos": 18,
    "wallet_top_pct": 6,
    "veredicto": "sin_concluir"
   },
   "C CS partido [0,65-0,70)": {
-   "n": 174,
-   "dias": 35,
-   "acierto": 0.7011,
+   "n": 178,
+   "dias": 36,
+   "acierto": 0.7022,
    "precio_medio": 0.6688,
-   "ev": 0.0373,
+   "ev": 0.0387,
    "ic90": [
-    -0.0326,
-    0.1068
+    -0.0308,
+    0.1057
    ],
-   "dias_positivos": 21,
+   "dias_positivos": 22,
    "wallet_top_pct": 6,
    "veredicto": "sin_concluir"
   },
   "D CS partido [0,60-0,80)": {
-   "n": 656,
-   "dias": 35,
-   "acierto": 0.6921,
-   "precio_medio": 0.6815,
-   "ev": 0.0045,
+   "n": 667,
+   "dias": 36,
+   "acierto": 0.6927,
+   "precio_medio": 0.6817,
+   "ev": 0.0049,
    "ic90": [
-    -0.0322,
-    0.0409
+    -0.0294,
+    0.0404
    ],
    "dias_positivos": 17,
    "wallet_top_pct": 5,
    "veredicto": "sin_concluir"
   },
   "M maker vende longshot [0,30-0,40)": {
-   "n": 2983,
+   "n": 3022,
    "dias": 36,
-   "acierto": 0.6507,
-   "precio_medio": 0.6496,
-   "ev": 0.0014,
+   "acierto": 0.6499,
+   "precio_medio": 0.6497,
+   "ev": 0.0001,
    "ic90": [
-    -0.0207,
-    0.0243
+    -0.0216,
+    0.0226
    ],
-   "dias_positivos": 20,
+   "dias_positivos": 18,
    "wallet_top_pct": 6,
    "veredicto": "sin_concluir"
   }
