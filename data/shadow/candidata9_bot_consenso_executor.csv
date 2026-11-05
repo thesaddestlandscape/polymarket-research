@@ -79847,3 +79847,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-11-05T15:35:13+00:00,0xfb59d3ac13c04ad57e047b29980e68688c0e28ff51624fdaaa89b62cd0f80fe3,btc-updown-5m-1793892900,BTC,5min,Down,2,0.49,0.0,0.53,0.0,0.6,13.21,0,0,0,0,fuera_de_zona_confirmada
 2026-11-05T15:35:21+00:00,0x1e41ade145140aa6002c9fa2b57151a222b25c39d1023f59041695a5c3f7c22c,eth-updown-5m-1793892900,ETH,5min,Down,2,0.49,0.0,0.74,0.0,0.69,-6.76,0,0,0,0,fuera_de_zona_confirmada
 2026-11-05T15:40:06+00:00,0xc3b7744f12a32491fa20bdb01a19676b144c402611a844f3e29c1f93804367d6,btc-updown-5m-1793893200,BTC,5min,Down,2,0.47,0.0,0.61,0.0,0.57,-6.56,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T15:44:06+00:00,0xb41b2d9e5d15eeda3ca5ac149579de5a3daac50fb85516c537f3856284d5a9e7,sol-updown-5m-1793893200,SOL,5min,Down,2,0.6599999448358255,0.0,,0.0,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T15:45:09+00:00,0x21e1fddc38d91e0e29a515d3ed0cb1142f34dbd1223eaa3e654899416b3d94da,btc-updown-5m-1793893500,BTC,5min,Up,4,0.5700000054993909,183.9,0.59,216.7,0.59,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-05T15:45:17+00:00,0x09179f6fa98a4b7cf77356404aa0f2984fa576b15ecdec61bfe7cb8d350aa640,eth-updown-15m-1793893500,ETH,15min,Down,2,0.42,2.5,0.44,0.0,0.49,11.36,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T15:45:35+00:00,0x98d58406fe87cd9ec509da077cf5add31880dfd8bcb561121001f5f47b4d1477,btc-updown-15m-1793893500,BTC,15min,Down,3,0.5,0.0,0.57,0.0,0.59,3.51,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T15:45:44+00:00,0xe6b51a2b14d70eb70a9c6bcd5545488a565cf3ff8b2bf3818f6387741b24a5b0,eth-updown-5m-1793893500,ETH,5min,Down,2,0.44,0.0,0.7,0.0,0.73,4.29,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T15:49:18+00:00,0xc3e0de21942e5b333571eabaaa06b8cadc3400aa9dea3b0c72bae792d1a6c06f,sol-updown-5m-1793893500,SOL,5min,Up,2,0.25,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-05T15:50:07+00:00,0xea54b6e90ee6c35e698ef533dda4fa9e56be45f4f057239edfed12001c71c11d,btc-updown-5m-1793893800,BTC,5min,Down,3,0.51,,,,,,0,0,0,0,fuera_de_zona_confirmada
