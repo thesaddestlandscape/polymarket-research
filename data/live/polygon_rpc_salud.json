@@ -41,10 +41,10 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": false,
-   "detalle": "retrasado 114491 bloques",
-   "desde": 1793852583.780755,
-   "ultimo_aviso": 1793852583.780755
+   "ok": true,
+   "detalle": "",
+   "desde": 1793856185.797931,
+   "ultimo_aviso": 1793856185.797931
   },
   "archivo": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-05T04:23:03+00:00"
+ "_actualizado_utc": "2026-11-05T05:23:05+00:00"
 }
