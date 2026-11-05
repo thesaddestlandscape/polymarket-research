@@ -1,51 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-17T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 171,
-      "resolve_postmortem_p50_s": 8.0,
-      "resolve_postmortem_p95_s": 12.0,
-      "resolve_postmortem_max_s": 16.0,
-      "n_ciclos_live_trade": 2060,
-      "hueco_live_trade_max_s": 197.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 9,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 65.0,
-      "gb_libres": 25.33,
-      "git_gb": 0.0,
-      "data_gb": 23.99,
-      "datalogs_gb": 5.93
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.41,
-      "ram_pct_libre": 37.9
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 435,
-      "n_results_total": 155568
-    },
-    "carga_sistema": {
-      "load1": 3.44,
-      "load5": 3.76,
-      "load15": 4.15,
-      "nproc": 2,
-      "ratio5": 1.88,
-      "n_procesos_total": 188
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [],
-    "estado": "OK"
-  },
-  {
     "timestamp_utc": "2026-08-18T06:04:50+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 390,
@@ -15071,6 +15025,166 @@
     },
     "anomalias": [
       "💾 disco al 91% (7.16GB libres)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-05T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 86,
+      "resolve_postmortem_p50_s": 112.6,
+      "resolve_postmortem_p95_s": 239.2,
+      "resolve_postmortem_max_s": 469.6,
+      "resolve_postmortem_duraciones_s": [
+        180.1,
+        117.7,
+        112.6,
+        113.0,
+        103.6,
+        184.0,
+        154.6,
+        101.9,
+        104.0,
+        104.6,
+        101.4,
+        199.3,
+        146.3,
+        130.6,
+        108.1,
+        113.4,
+        136.2,
+        224.1,
+        230.8,
+        137.3,
+        106.0,
+        112.4,
+        126.8,
+        213.5,
+        168.6,
+        123.2,
+        123.9,
+        115.6,
+        139.9,
+        212.7,
+        139.6,
+        92.9,
+        95.9,
+        102.9,
+        99.4,
+        98.3,
+        453.8,
+        96.1,
+        99.2,
+        110.3,
+        96.9,
+        192.6,
+        435.9,
+        109.9,
+        89.4,
+        85.8,
+        88.2,
+        99.9,
+        151.5,
+        139.1,
+        87.4,
+        93.4,
+        92.1,
+        100.7,
+        156.4,
+        151.0,
+        92.2,
+        100.7,
+        120.9,
+        98.5,
+        169.0,
+        139.5,
+        94.4,
+        111.9,
+        88.5,
+        87.2,
+        239.2,
+        187.0,
+        122.2,
+        94.5,
+        105.7,
+        101.7,
+        196.9,
+        204.6,
+        113.9,
+        98.0,
+        103.4,
+        102.6,
+        96.7,
+        469.6,
+        113.6,
+        106.2,
+        109.5,
+        119.2,
+        97.9,
+        272.6
+      ],
+      "n_ciclos_live_trade": 3022,
+      "hueco_live_trade_max_s": 64.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 22,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 90.0,
+      "gb_libres": 7.88,
+      "git_gb": 0.0,
+      "data_gb": 17.15,
+      "datalogs_gb": 8.88
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 5.13,
+      "ram_pct_libre": 33.7
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 773,
+      "n_results_total": 1309408
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 4.63,
+      "load5": 5.06,
+      "load15": 6.02,
+      "nproc": 8,
+      "ratio5": 0.63,
+      "n_procesos_total": 303
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 1,
+      "eventos": [
+        {
+          "ts": "Nov 04 21:55:02",
+          "pid": "1851132",
+          "nombre": "python",
+          "rss_mb": 4193.8
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 470s (umbral 400s)",
+      "💀 1 OOM-kill(s) del kernel en 24h: python(pid 1851132, 4193.8MB)"
     ],
     "estado": "ANOMALIA"
   }

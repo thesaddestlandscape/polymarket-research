@@ -164812,3 +164812,5 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-11-05T07:45:00.088+00:00,1793864700,5min,False,DOGE,Up,,0,,,,,6669690,False,no_fillable_ask=None_ratio=0.0,0.0,,,53.1,,,,,,,,RESOLUTION_SNIPER_NAIVE,,2.282575791026583
 2026-11-05T07:45:00.088+00:00,1793864700,5min,False,XRP,Up,,0,,,,,6669691,False,no_fillable_ask=None_ratio=0.0,0.0,,,62.4,,,,,,,,RESOLUTION_SNIPER_NAIVE,,8.260232303660844
 2026-11-05T07:45:00.089+00:00,1793864700,5min,False,BTC,Up,,0,,,,,6669687,False,no_fillable_ask=None_ratio=0.0,0.0,,,52.0,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.6057751574496477
+2026-11-05T07:59:48.105+00:00,1793865600,60min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
+2026-11-05T07:59:48.319+00:00,1793865600,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
