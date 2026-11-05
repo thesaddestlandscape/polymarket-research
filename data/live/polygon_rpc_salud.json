@@ -41,16 +41,16 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": false,
-   "detalle": "retrasado 15183 bloques",
-   "desde": 1793863383.1166487,
-   "ultimo_aviso": 1793863383.1166487
+   "ok": true,
+   "detalle": "",
+   "desde": 1793870583.7335806,
+   "ultimo_aviso": 1793870583.7335806
   },
   "archivo": {
-   "ok": false,
-   "detalle": "RuntimeError: {'code': -32002, 'message': 'request timed out'}",
-   "desde": 1793867045.617557,
-   "ultimo_aviso": 1793867045.617557
+   "ok": true,
+   "detalle": "",
+   "desde": 1793870583.7335806,
+   "ultimo_aviso": 1793870583.7335806
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-05T08:24:05+00:00"
+ "_actualizado_utc": "2026-11-05T09:23:03+00:00"
 }
