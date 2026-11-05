@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-05 09:22 UTC
+# Estado del bot — 2026-11-05 09:27 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +59448.88 $ |
-| P&L sim compuesto | 🟢 +175317.35 $ (ficción Kelly: +689141% s/ operativo) |
-| P&L sim hoy (2026-11-05) | 🟢 +936.21 $ |
-| Operaciones resueltas | 1311055 (750030 WIN / 561025 LOSS) — 57.2% |
-| Señales abiertas | 219084 |
+| P&L fiel (stake fijo 1$) | +59446.04 $ |
+| P&L sim compuesto | 🟢 +175317.33 $ (ficción Kelly: +689140% s/ operativo) |
+| P&L sim hoy (2026-11-05) | 🟢 +936.19 $ |
+| Operaciones resueltas | 1311089 (750044 WIN / 561045 LOSS) — 57.2% |
+| Señales abiertas | 219617 |
 
 ## Estrategias (visión global)
 
@@ -32,8 +32,8 @@
 | UPDOWN_GBM_15M_TARDIO | 27223 | 50.3% | +0.003 | 📉 agota (-0.06) (últ. 1000) | +7715.58$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 11756 | 62.4% | +0.124 | 📈 madura (+0.11) (últ. 1000) | +5766.19$ | 1.26$ | ✅ activa |
 | MOMENTUM_IBS_15M_BALLENA | 62740 | 50.0% | +0.000 | ➡️ estable (últ. 1000) | +3425.50$ | 0.50$ | ✅ activa |
-| CANDIDATA10_CONFIRMACION_CRUZADA | 45371 | 48.7% | -0.013 | ➡️ estable (últ. 1000) | +3033.66$ | 0.50$ | ⚠️ IC negativo |
-| MOMENTUM_IBS_5M_BALLENA | 154364 | 42.3% | -0.077 | 📈 madura (+0.03) (últ. 1000) | +2230.53$ | 0.50$ | ⚠️ IC negativo |
+| CANDIDATA10_CONFIRMACION_CRUZADA | 45372 | 48.7% | -0.013 | ➡️ estable (últ. 1000) | +3032.59$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_BALLENA | 154374 | 42.3% | -0.077 | 📈 madura (+0.03) (últ. 1000) | +2235.85$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 4380 | 80.3% | +0.302 | ➡️ estable (últ. 1000) | +2025.13$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 1805 | 78.6% | +0.285 | ➡️ estable (últ. 1000) | +1500.58$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 4655 | 55.1% | +0.051 | ➡️ estable (últ. 1000) | +1232.04$ | 0.51$ | ✅ activa |
@@ -42,7 +42,7 @@
 | GBM_LATE_60M_PYCONFIRMADO | 1900 | 58.4% | +0.084 | ➡️ estable (últ. 1000) | +486.80$ | 0.84$ | ✅ activa |
 | RESOLUTION_SNIPER | 516 | 88.8% | +0.386 | 📉 agota (-0.06) | +476.17$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 1241 | 85.3% | +0.352 | 📈 madura (+0.06) (últ. 1000) | +406.32$ | 2.00$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 41762 | 61.6% | +0.116 | 📉 agota (-0.03) (últ. 1000) | +287.60$ | 1.16$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 41764 | 61.6% | +0.116 | 📉 agota (-0.04) (últ. 1000) | +285.46$ | 1.16$ | ✅ activa |
 | LATE_WINDOW_5MIN | 608 | 55.9% | +0.059 | 📈 madura (+0.21) | +219.07$ | 2.00$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M | 3827 | 56.9% | +0.069 | ➡️ estable (últ. 1000) | +198.70$ | 0.86$ | ✅ activa |
 | STREAK_FADE_15M | 1190 | 55.0% | +0.050 | ➡️ estable (últ. 1000) | +100.60$ | 0.50$ | ✅ activa |
@@ -73,41 +73,41 @@
 | MOMENTUM_IBS_5M_FADE | 9001 | 46.5% | -0.035 | 📈 madura (+0.04) (últ. 1000) | -188.10$ | 0.50$ | ⚠️ IC negativo |
 | CANDIDATA9_BOT_CONSENSO | 1488 | 39.8% | -0.102 | ➡️ estable (últ. 1000) | -189.14$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M | 14666 | 48.8% | -0.012 | ➡️ estable (últ. 1000) | -217.20$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 78079 | 60.1% | +0.101 | 📈 madura (+0.05) (últ. 1000) | -1846.96$ | 1.01$ | ✅ activa |
+| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 78084 | 60.1% | +0.101 | 📈 madura (+0.05) (últ. 1000) | -1847.06$ | 1.01$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 30341 | 69.4% | +0.194 | 📈 madura (+0.05) (últ. 1000) | -2020.02$ | 1.94$ | ✅ activa |
-| BALLENAS_TARDIAS | 50672 | 41.9% | -0.081 | 📉 agota (-0.07) (últ. 1000) | -6468.57$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO | 208658 | 61.3% | +0.113 | 📉 agota (-0.03) (últ. 1000) | -8427.70$ | 1.14$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 118379 | 70.0% | +0.200 | ➡️ estable (últ. 1000) | -8704.03$ | 2.00$ | ✅ activa |
+| BALLENAS_TARDIAS | 50674 | 41.9% | -0.081 | 📉 agota (-0.06) (últ. 1000) | -6464.53$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO | 208665 | 61.3% | +0.113 | 📉 agota (-0.04) (últ. 1000) | -8433.61$ | 1.13$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 118386 | 70.0% | +0.200 | ➡️ estable (últ. 1000) | -8704.18$ | 2.00$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-11-05T09:22 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min | … | ✅ WIN | +0.43$ |
-| 2026-11-05T09:22 | FAVORITO_CONFIRMADO_DEPTH_FASE0#SOL#5min | … | ✅ WIN | +0.80$ |
-| 2026-11-05T09:22 | FAVORITO_CONFIRMADO#SOL#5min | … | ❌ LOSS | -1.07$ |
-| 2026-11-05T09:22 | MOMENTUM_IBS_5M_BALLENA#SOL#5min | … | ✅ WIN | +1.69$ |
-| 2026-11-05T09:22 | GBM_LATE_15M_ESPACIO_ATR#BNB#15min | BNB Up or Down - November 5, 4:00AM-4:15AM ET… | ✅ WIN | +1.47$ |
+| 2026-11-05T09:27 | BALLENAS_TARDIAS#SOL#5min | … | ❌ LOSS | -1.07$ |
+| 2026-11-05T09:27 | FAVORITO_CONFIRMADO_DEPTH_FASE0#ETH#5min | … | ✅ WIN | +0.84$ |
+| 2026-11-05T09:27 | MOMENTUM_IBS_5M_BALLENA#SOL#5min | … | ✅ WIN | +2.97$ |
+| 2026-11-05T09:27 | MOMENTUM_IBS_5M_BALLENA#ETH#5min | … | ✅ WIN | +2.97$ |
+| 2026-11-05T09:27 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min | … | ❌ LOSS | -1.07$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-11-05T09:22 UTC
+✅ **OK** — última verificación 2026-11-05T09:27 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $80,300.82 | 0.1min |  |
-| ✅ ETH | $2,413.49 | 0.1min |  |
-| ✅ SOL | $96.60 | 0.1min |  |
+| ✅ BTC | $80,256.96 | 0.1min |  |
+| ✅ ETH | $2,410.71 | 0.1min |  |
+| ✅ SOL | $96.50 | 0.1min |  |
 | ✅ XRP | $1.32 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $80,300.82 | consenso |  |
-| ETH | $2,413.49 | consenso |  |
-| SOL | $96.47 | consenso |  |
-| XRP | $1.31 | consenso |  |
+| BTC | $80,281.50 | consenso |  |
+| ETH | $2,411.30 | consenso |  |
+| SOL | $96.50 | consenso |  |
+| XRP | $1.32 | consenso |  |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
