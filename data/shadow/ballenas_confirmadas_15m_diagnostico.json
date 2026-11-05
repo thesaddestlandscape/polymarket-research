@@ -12086,7 +12086,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 421472,
+        "conteo": 421495,
         "mercados": {
           "0x6f4fb57b0bd0e87ccb66c70d20636035e8e5ca4b5590908e9c8cbc81f6c14207": 51,
           "0x44f3cef4951a8eda8c9b45df8b69bf128b53879f117dbf4b5fc345e4a1fb78fa": 54,
@@ -18925,15 +18925,15 @@
           "0x3a5d600cbdc0d43c6dc26c053658ee44530ed9e9782b1b80cc2a9222e3d65aa1": 67,
           "0x09179f6fa98a4b7cf77356404aa0f2984fa576b15ecdec61bfe7cb8d350aa640": 68,
           "0xe03c37a474c581e0fb3b3256016a316255714cf25b01eed6668444f262bfece1": 63,
-          "0xa6b4e9e322c7b3609a296e3afdddcc5a04a077916c05b08a78dfcd935b2f5845": 58,
-          "0x05be9bc1714e31edf84c801d1bf46bddb6fd3e2f63ab6f0ca3e21714bb1db0bf": 50,
-          "0xf5217360c03f054939e2171f8bc340fef87cf3b445b7cac2451a608656f8bf8b": 40,
-          "0x10794f710eefb907d16508d526f17c6dcf1c82c4c1094da68a8a567ec8a0fcbb": 11,
-          "0x5c79e1869356b0330eae30c9df0163ab3eac5a32244b1b6cc940c0507f0a070c": 5
+          "0xa6b4e9e322c7b3609a296e3afdddcc5a04a077916c05b08a78dfcd935b2f5845": 63,
+          "0x05be9bc1714e31edf84c801d1bf46bddb6fd3e2f63ab6f0ca3e21714bb1db0bf": 53,
+          "0xf5217360c03f054939e2171f8bc340fef87cf3b445b7cac2451a608656f8bf8b": 45,
+          "0x10794f710eefb907d16508d526f17c6dcf1c82c4c1094da68a8a567ec8a0fcbb": 16,
+          "0x5c79e1869356b0330eae30c9df0163ab3eac5a32244b1b6cc940c0507f0a070c": 10
         }
       },
       "error_api": {
-        "conteo": 187221,
+        "conteo": 187223,
         "mercados": {
           "0xed88f70265795c86c515fe960e284493271a340d3ba74f3a1adad4a7c3db8e1a": 6,
           "0x7a17f8c622ac283b4bd5b3f79becb24e19ba2036326c9157bc0f9f583a2ea6a0": 18,
@@ -23528,7 +23528,8 @@
           "0x520d54424287fa701212cb3a28ac511f5a8ffb46d13c7fc0e6b49b2e90e0b636": 2,
           "0x933f9819534ecb41b7b32973efae34304eee5efd4cf08347d95268abdce9598d": 4,
           "0x8b55ffec213c16420fae53f25dcf64078bd7649fb37021c2c6f034e8915daa67": 5,
-          "0x43ee0c5f8b7841a6eddd7d69cb0ebfdcfeb02275f03bd9b87f5ffe69af7bb6e5": 6
+          "0x43ee0c5f8b7841a6eddd7d69cb0ebfdcfeb02275f03bd9b87f5ffe69af7bb6e5": 6,
+          "0x05be9bc1714e31edf84c801d1bf46bddb6fd3e2f63ab6f0ca3e21714bb1db0bf": 2
         }
       }
     },
@@ -26937,7 +26938,7 @@
         }
       },
       "volumen_bajo": {
-        "conteo": 9908,
+        "conteo": 9913,
         "mercados": {
           "0x392f0e3560600308f946c9fc14e3c261a1dd3b4133db9025ce09d9a352a371c8": 3,
           "0x057398db1e6fbb9e400cb83a25851e0e5ee80058cb94904df5aaa9ca8a53689b": 3,
@@ -29170,7 +29171,7 @@
           "0x6fc70b32b2841227c34def137a5bdc76678d573087b89028ce99afa9ccd1ea76": 7,
           "0x1cbd3ae2dd9283e3b15f68a9df9f6c601d9b1b835022c026bd843afaa45b9179": 11,
           "0x7a723e3d003f95198259888037adca2f0e038d5a87f8cc8681f5c0b9f9758c72": 1,
-          "0x471baf6293f60d90d6c65e71ef6ec57c26fd2ac8af0a5031d6132ca6d6b2f41b": 1
+          "0x471baf6293f60d90d6c65e71ef6ec57c26fd2ac8af0a5031d6132ca6d6b2f41b": 6
         }
       },
       "concentracion_baja": {
@@ -31650,7 +31651,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 596908,
+        "conteo": 596912,
         "mercados": {
           "0xf6ad48a0d23cd91b9a9368d070dd43eb4db884165273398e9838c628c8690747": 3,
           "0x5822d9be8248fc11c5b09a2533e0a6e1c4a76c841dcf85e810dfe74ff456056e": 1,
@@ -38673,11 +38674,12 @@
           "0x1cbd3ae2dd9283e3b15f68a9df9f6c601d9b1b835022c026bd843afaa45b9179": 2,
           "0x9df3dc17655116d836670c5fb00089020d4254e9f15be0fe2761a29fa82f4682": 13,
           "0x7a723e3d003f95198259888037adca2f0e038d5a87f8cc8681f5c0b9f9758c72": 6,
-          "0x471baf6293f60d90d6c65e71ef6ec57c26fd2ac8af0a5031d6132ca6d6b2f41b": 6
+          "0x471baf6293f60d90d6c65e71ef6ec57c26fd2ac8af0a5031d6132ca6d6b2f41b": 6,
+          "0x93ea957c9d7901f079566ec46ba700497dde4cae593813a8f3844a6de9bea66c": 4
         }
       },
       "error_api": {
-        "conteo": 190148,
+        "conteo": 190174,
         "mercados": {
           "0xc7332b863bfd2c637fd50c6a5e93d01b8dbaf8bdbe442d07cb66fd1bdc1a1199": 7,
           "0xee07c9f085353ff5d5bcc72a1cc08b0a512d4654618efd5c0a28239549ad4c1e": 15,
@@ -42636,28 +42638,28 @@
           "0x9df3dc17655116d836670c5fb00089020d4254e9f15be0fe2761a29fa82f4682": 69,
           "0x7a723e3d003f95198259888037adca2f0e038d5a87f8cc8681f5c0b9f9758c72": 70,
           "0x471baf6293f60d90d6c65e71ef6ec57c26fd2ac8af0a5031d6132ca6d6b2f41b": 70,
-          "0x93ea957c9d7901f079566ec46ba700497dde4cae593813a8f3844a6de9bea66c": 66,
-          "0xf432e711eef662b52372b25e95ac2c666d2330efb17c35e61e7cf66684072a00": 54,
-          "0x867fb14eccf97b2d4f49b5e28c2060a4c18e2a160e4adebbf79632a45cf6b72b": 36,
-          "0xdba85d07a382dfe7f19f83b71f1af5faf67b10eb24d4a0f894cc479085bdcd9c": 23,
-          "0x5c54fe06b7d82023278247bb40305bd7f8c681d138837f210eab83824bedd2b3": 11,
-          "0xd510255a38c4ad348aa691a4a2c2b6f49aea31ffd35c59835f550448586668c3": 5
+          "0x93ea957c9d7901f079566ec46ba700497dde4cae593813a8f3844a6de9bea66c": 67,
+          "0xf432e711eef662b52372b25e95ac2c666d2330efb17c35e61e7cf66684072a00": 59,
+          "0x867fb14eccf97b2d4f49b5e28c2060a4c18e2a160e4adebbf79632a45cf6b72b": 41,
+          "0xdba85d07a382dfe7f19f83b71f1af5faf67b10eb24d4a0f894cc479085bdcd9c": 28,
+          "0x5c54fe06b7d82023278247bb40305bd7f8c681d138837f210eab83824bedd2b3": 16,
+          "0xd510255a38c4ad348aa691a4a2c2b6f49aea31ffd35c59835f550448586668c3": 10
         }
       }
     },
     "ultimo_detalle": {
-      "n_total_lado": 5,
+      "n_total_lado": 14,
       "umbral": 35,
-      "pct_lado": 0.75,
+      "pct_lado": 0.857,
       "motivo": "volumen_bajo",
       "condition_id": "0x471baf6293f60d90d6c65e71ef6ec57c26fd2ac8af0a5031d6132ca6d6b2f41b",
-      "ts": "2026-11-05T16:17:03+00:00"
+      "ts": "2026-11-05T16:24:08+00:00"
     }
   },
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 394546,
+        "conteo": 394566,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -51596,10 +51598,10 @@
           "0x3eb2dac67fffbd4b5c877be6c4ffbff474d5516b2713df36f025340dd8b44770": 41,
           "0x33e8fbb117e751cbb7f57103dbfc9b7f4891ab754774217b70e70dcaa462c91f": 40,
           "0x33fa579017d2522cafd6cbe490fc4e16f3774cc4f90ca82d3c139c4fa4e24948": 40,
-          "0xa55d2fec925b51bd24c1f009c56df7f44dbbf2ddb8926975ae604176320ad77f": 33,
-          "0x8475934b82a86be25477d09c46a40f7b4f09b8685e8d0f938a74631a0732d81e": 23,
-          "0xd9fc110bd4a731909d332a2f7a1c44de804dba89872303feb3e159540f0fb1e4": 11,
-          "0x33d2967effbe8368f78fa86ae063cb4a5f6ea78820ecffaf3af6bda21426321d": 1
+          "0xa55d2fec925b51bd24c1f009c56df7f44dbbf2ddb8926975ae604176320ad77f": 38,
+          "0x8475934b82a86be25477d09c46a40f7b4f09b8685e8d0f938a74631a0732d81e": 28,
+          "0xd9fc110bd4a731909d332a2f7a1c44de804dba89872303feb3e159540f0fb1e4": 16,
+          "0x33d2967effbe8368f78fa86ae063cb4a5f6ea78820ecffaf3af6bda21426321d": 6
         }
       },
       "pocos_trades_en_banda": {
@@ -57148,7 +57150,7 @@
         }
       },
       "concentracion_baja": {
-        "conteo": 7709,
+        "conteo": 7714,
         "mercados": {
           "0x6acde7acde45b2828c43801a1a38b546b2b10750a8c92136fff6dd73f6c8edae": 1,
           "0xfac2af4e89482d7c4f19fba1c340def43c18680daae5842d14b1ea52df33166d": 2,
@@ -58381,11 +58383,11 @@
           "0xe4cd935b083dadcf8f95802635fd1a1e371fa950664828c8f391a1219fd06cef": 9,
           "0x4c654211c6bdd086081177441c71f5816271469546dab2b79152e9bffe6993cb": 2,
           "0xffaada172b1c033e371721ba6a6aee7e7df55408e40f2e250525003ce012003c": 2,
-          "0x743bcae917b59e4a47b910df7c007d69e4ec0428d8025f4221efc78dc85eed20": 1
+          "0x743bcae917b59e4a47b910df7c007d69e4ec0428d8025f4221efc78dc85eed20": 6
         }
       },
       "banda_no_confirmada": {
-        "conteo": 313175,
+        "conteo": 313186,
         "mercados": {
           "0x56401c8ec5ff84c021d4d27a719d3040826e0d7fdf6f69dd4bda1282142a846e": 7,
           "0x0723882704c5a268fa6ef74c36a8dec35216039cf327027205d497a3613c7b57": 6,
@@ -66369,13 +66371,13 @@
           "0x924b8eef4c87248035a5c0bdcf2be3d3ac78404338cee4fb0a461ace7bc87fac": 25,
           "0xd0bcc15f1059f7e5e3f124f502879093488a63ac067f68e09a633aeebcd434a6": 40,
           "0x743bcae917b59e4a47b910df7c007d69e4ec0428d8025f4221efc78dc85eed20": 26,
-          "0x1ec06f2fd8f3d99ca021762d4d53d79b3051d3db67c542c736dfd38f0538f56e": 23,
-          "0x3d7b2f22c44f2ad301d1c6197a0d4656aa4161f914a500011b7f31562890b099": 11,
-          "0x28a0b49e45a24b629a4063b3d58aab9308eb36dbe0e3779d16fdd83996aa5065": 1
+          "0x1ec06f2fd8f3d99ca021762d4d53d79b3051d3db67c542c736dfd38f0538f56e": 24,
+          "0x3d7b2f22c44f2ad301d1c6197a0d4656aa4161f914a500011b7f31562890b099": 16,
+          "0x28a0b49e45a24b629a4063b3d58aab9308eb36dbe0e3779d16fdd83996aa5065": 6
         }
       },
       "error_api": {
-        "conteo": 56549,
+        "conteo": 56553,
         "mercados": {
           "0x72b2ee27425109db606ad6eb74bd6196c9dea23dff34decc178cfe445224c468": 7,
           "0x613e5825b8fe01803bbcc6e545137bf01830f7f78fbbc6b40591e90e2ce9ec8e": 11,
@@ -69418,7 +69420,8 @@
           "0xe4cd935b083dadcf8f95802635fd1a1e371fa950664828c8f391a1219fd06cef": 7,
           "0x4c654211c6bdd086081177441c71f5816271469546dab2b79152e9bffe6993cb": 3,
           "0x924b8eef4c87248035a5c0bdcf2be3d3ac78404338cee4fb0a461ace7bc87fac": 4,
-          "0x743bcae917b59e4a47b910df7c007d69e4ec0428d8025f4221efc78dc85eed20": 5
+          "0x743bcae917b59e4a47b910df7c007d69e4ec0428d8025f4221efc78dc85eed20": 5,
+          "0x1ec06f2fd8f3d99ca021762d4d53d79b3051d3db67c542c736dfd38f0538f56e": 4
         }
       },
       "disparada": {
@@ -69592,12 +69595,12 @@
       }
     },
     "ultimo_detalle": {
-      "pct_lado": 0.2,
-      "n": 5,
-      "n_total_lado": 1,
+      "pct_lado": 0.1,
+      "n": 10,
+      "n_total_lado": 21,
       "motivo": "concentracion_baja",
       "condition_id": "0x743bcae917b59e4a47b910df7c007d69e4ec0428d8025f4221efc78dc85eed20",
-      "ts": "2026-11-05T16:17:03+00:00"
+      "ts": "2026-11-05T16:24:08+00:00"
     }
   },
   "SOL#BUY_YES": {
