@@ -42,15 +42,15 @@
  "https://1rpc.io/matic": {
   "cabeza": {
    "ok": false,
-   "detalle": "retrasado 20052 bloques",
+   "detalle": "retrasado 22453 bloques",
    "desde": 1793913784.5589137,
    "ultimo_aviso": 1793913784.5589137
   },
   "archivo": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1793881392.1591616,
-   "ultimo_aviso": 1793881392.1591616
+   "ok": false,
+   "detalle": "RechazoPolitica: HTTP 403",
+   "desde": 1793920983.5573716,
+   "ultimo_aviso": 1793920983.5573716
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-05T22:23:03+00:00"
+ "_actualizado_utc": "2026-11-05T23:23:03+00:00"
 }
