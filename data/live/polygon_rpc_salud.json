@@ -48,15 +48,15 @@
   },
   "archivo": {
    "ok": false,
-   "detalle": "HTTPError: 410 Client Error: Gone for url: https://1rpc.io/matic",
+   "detalle": "RuntimeError: {'code': -32603, 'message': 'Remote Error'}",
    "desde": 1793841786.0764325,
    "ultimo_aviso": 1793841786.0764325
   },
   "latest": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1793841786.0764325,
-   "ultimo_aviso": 1793841786.0764325
+   "ok": false,
+   "detalle": "RechazoPolitica: HTTP 403",
+   "desde": 1793845387.245601,
+   "ultimo_aviso": 1793845387.245601
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-05T01:23:06+00:00"
+ "_actualizado_utc": "2026-11-05T02:23:07+00:00"
 }
