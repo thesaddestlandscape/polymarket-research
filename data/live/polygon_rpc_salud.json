@@ -41,10 +41,10 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": false,
-   "detalle": "retrasado 107819 bloques",
-   "desde": 1793830983.4712386,
-   "ultimo_aviso": 1793830983.4712386
+   "ok": true,
+   "detalle": "",
+   "desde": 1793838200.6344297,
+   "ultimo_aviso": 1793838200.6344297
   },
   "archivo": {
    "ok": true,
@@ -53,10 +53,10 @@
    "ultimo_aviso": 1793597012.174644
   },
   "latest": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1793794990.3196235,
-   "ultimo_aviso": 1793794990.3196235
+   "ok": false,
+   "detalle": "RuntimeError: {'code': -32603, 'message': 'Remote Error'}",
+   "desde": 1793838200.6344297,
+   "ultimo_aviso": 1793838200.6344297
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-04T23:23:06+00:00"
+ "_actualizado_utc": "2026-11-05T00:23:20+00:00"
 }
