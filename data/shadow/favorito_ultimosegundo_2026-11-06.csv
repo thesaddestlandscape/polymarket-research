@@ -1,0 +1,4 @@
+timestamp_utc,slug,market_id,condition_id,activo,end_date,restante_s,py_yes,lado,direccion,best_bid,best_ask,spread,profundidad_usd,n_niveles,outcome_real,acierto
+2026-11-06T00:04:50+00:00,xrp-updown-5m-1793923200,6702039,0xfeb24d120c485799ea2ff799f0c270920d0a4c0417729e7f50b3828a399803e2,XRP,2026-11-06T00:05:00+00:00,9.9,0.43,Down,BUY_NO,,0.001,,831.47,34,,
+2026-11-06T00:04:50+00:00,doge-updown-5m-1793923200,6702055,0x286a989c12e767a8b3e29d882dad9c1b9d82fdffb9e77d4989064ad989e7fc89,DOGE,2026-11-06T00:05:00+00:00,9.9,0.885,Up,BUY_YES,0.999,,,,0,,
+2026-11-06T00:04:50+00:00,bnb-updown-5m-1793923200,6702056,0x90c284c18e1fb558591e8a4910c1d860d337b4af08bccef0beccd3b9ceae3e82,BNB,2026-11-06T00:05:00+00:00,9.9,0.8,Up,BUY_YES,0.999,,,,0,,
