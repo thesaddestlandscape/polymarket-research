@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-11-05T08:10:11+00:00",
+ "actualizado_utc": "2026-11-06T08:10:09+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
@@ -20,55 +20,68 @@
    ]
   },
   "LoL#SEGUIR#0.45": {
-   "n": 287,
-   "dias": 64,
-   "frac_dias_pos": 0.641,
-   "top_wallet": 0.049,
-   "n_wallets": 141,
-   "pnl_medio": 0.1239,
+   "n": 293,
+   "dias": 65,
+   "frac_dias_pos": 0.631,
+   "top_wallet": 0.048,
+   "n_wallets": 144,
+   "pnl_medio": 0.1078,
    "medias_tramos": [
-    0.1278,
-    0.0699,
-    0.1731
+    0.1258,
+    0.0935,
+    0.1042
    ]
   },
   "LoL#FADE#0.85": {
-   "n": 106,
-   "dias": 43,
-   "frac_dias_pos": 0.884,
-   "top_wallet": 0.113,
+   "n": 107,
+   "dias": 44,
+   "frac_dias_pos": 0.886,
+   "top_wallet": 0.112,
    "n_wallets": 53,
-   "pnl_medio": 0.0687,
+   "pnl_medio": 0.0692,
    "medias_tramos": [
     0.0765,
     0.1142,
-    0.017
+    0.0197
    ]
   },
   "Dota#SEGUIR#0.85": {
-   "n": 73,
-   "dias": 35,
-   "frac_dias_pos": 0.8,
-   "top_wallet": 0.082,
-   "n_wallets": 41,
-   "pnl_medio": 0.0196,
+   "n": 75,
+   "dias": 36,
+   "frac_dias_pos": 0.806,
+   "top_wallet": 0.08,
+   "n_wallets": 43,
+   "pnl_medio": 0.0234,
    "medias_tramos": [
-    0.002,
-    0.0008,
-    0.0545
+    0.0076,
+    0.006,
+    0.0565
    ]
   },
   "Dota#SEGUIR#0.75": {
-   "n": 118,
-   "dias": 44,
-   "frac_dias_pos": 0.705,
-   "top_wallet": 0.102,
+   "n": 119,
+   "dias": 45,
+   "frac_dias_pos": 0.711,
+   "top_wallet": 0.101,
    "n_wallets": 59,
-   "pnl_medio": 0.0704,
+   "pnl_medio": 0.0719,
    "medias_tramos": [
     0.1196,
     0.0264,
-    0.0652
+    0.0698
+   ]
+  },
+  "Dota#FADE#0.80": {
+   "n": 94,
+   "dias": 39,
+   "frac_dias_pos": 0.769,
+   "top_wallet": 0.074,
+   "n_wallets": 46,
+   "pnl_medio": 0.0305,
+   "medias_tramos": [
+    0.0178,
+    0.016,
+    0.0568
    ]
   },
   "epl-otros#SEGUIR#0.75": {
@@ -124,16 +137,16 @@
    ]
   },
   "NBA#FADE#0.20": {
-   "n": 90,
-   "dias": 16,
-   "frac_dias_pos": 0.688,
-   "top_wallet": 0.233,
+   "n": 91,
+   "dias": 17,
+   "frac_dias_pos": 0.647,
+   "top_wallet": 0.231,
    "n_wallets": 23,
-   "pnl_medio": 0.257,
+   "pnl_medio": 0.2432,
    "medias_tramos": [
     0.3342,
     0.2436,
-    0.1933
+    0.1548
    ]
   }
  }
