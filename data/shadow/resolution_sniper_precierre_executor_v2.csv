@@ -168560,3 +168560,16 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-11-06T07:29:15.152+00:00,1793950200,5min,False,BTC,Down,,0,,,,,6707672,False,sin_ask,,,,52.0,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,10.578624280600222
 2026-11-06T07:29:15.152+00:00,1793950200,5min,False,BNB,Down,,0,,,,,6707668,False,sin_ask,,,,48.2,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,12.873885834941936
 2026-11-06T07:29:15.152+00:00,1793950200,5min,False,XRP,Down,,0,,,,,6707670,False,sin_ask,,,,52.8,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,11.469545882772406
+2026-11-06T07:29:48.376+00:00,1793950200,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
+2026-11-06T07:30:00.080+00:00,1793950200,5min,False,XRP,Down,,0,,,,,6707670,False,no_fillable_ask=None_ratio=0.0,0.0,,,54.2,,,,,,,,RESOLUTION_SNIPER_NAIVE,,8.22980262843072
+2026-11-06T07:30:00.080+00:00,1793950200,5min,False,ETH,Down,,0,,,,,6707667,False,no_fillable_ask=None_ratio=0.0,0.0,,,66.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,7.6210580054918315
+2026-11-06T07:30:00.080+00:00,1793950200,5min,False,BTC,Down,,0,,,,,6707672,False,no_fillable_ask=None_ratio=0.0,0.0,,,60.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,8.991140687789077
+2026-11-06T07:30:00.080+00:00,1793950200,5min,False,SOL,Down,,0,,,,,6707671,False,no_fillable_ask=None_ratio=0.0,0.0,,,61.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,9.175290530903125
+2026-11-06T07:30:00.080+00:00,1793950200,5min,False,DOGE,Down,,0,,,,,6707666,False,no_fillable_ask=None_ratio=0.0,0.0,,,48.1,,,,,,,,RESOLUTION_SNIPER_NAIVE,,9.267366057042432
+2026-11-06T07:30:00.080+00:00,1793950200,5min,False,BNB,Down,,0,,,,,6707668,False,no_fillable_ask=None_ratio=0.0,0.0,,,46.6,,,,,,,,RESOLUTION_SNIPER_NAIVE,,11.590714788452566
+2026-11-06T07:34:17.512+00:00,1793950500,5min,False,BNB,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-06T07:34:17.515+00:00,1793950500,5min,False,BTC,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-06T07:34:17.516+00:00,1793950500,5min,False,ETH,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-06T07:34:17.516+00:00,1793950500,5min,False,DOGE,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-06T07:34:17.516+00:00,1793950500,5min,False,SOL,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-06T07:34:17.516+00:00,1793950500,5min,False,XRP,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
