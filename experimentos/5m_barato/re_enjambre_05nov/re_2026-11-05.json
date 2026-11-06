@@ -1,0 +1,1144 @@
+{
+ "dia": "2026-11-05",
+ "n_aggr_orders": 584398,
+ "n_wallets_aggr": 7904,
+ "top5_share_usd": [
+  [
+   "0xeebde7a0",
+   0.0345
+  ],
+  [
+   "0xc53375ff",
+   0.0215
+  ],
+  [
+   "0x45fb42d0",
+   0.0159
+  ],
+  [
+   "0x5e4aa0f1",
+   0.0145
+  ],
+  [
+   "0x5a06acba",
+   0.0141
+  ]
+ ],
+ "pos_sin_desenlace": 0,
+ "pos_netas_vendedoras_excluidas": 10813,
+ "arquetipos_wallets": {
+  "HIBRIDO_MAKER": 327,
+  "APERTURA": 515,
+  "PARES": 276,
+  "MIXTO": 2608,
+  "COLA_<10": 3472,
+  "VENDEDOR": 322,
+  "LONGSHOT_BARATO": 144,
+  "SNIPER_TARDIO_FAV": 240
+ },
+ "arq_usd": {
+  "LONGSHOT_BARATO": 0.0041,
+  "MIXTO": 0.475,
+  "SNIPER_TARDIO_FAV": 0.0641,
+  "APERTURA": 0.0563,
+  "HIBRIDO_MAKER": 0.1188,
+  "VENDEDOR": 0.029,
+  "PARES": 0.2195,
+  "COLA_<10": 0.0333
+ },
+ "ev": {
+  "APERTURA": {
+   "n_pos": 21450,
+   "coste": 436982.4,
+   "pnl": -39039.2,
+   "ev_eur": -0.0893,
+   "ic90_mercado": [
+    -0.1433,
+    -0.0316,
+    1415
+   ]
+  },
+  "APERTURA|ETH|mid": {
+   "n_pos": 1929,
+   "coste": 21834.3,
+   "pnl": -299.5,
+   "ev_eur": -0.0137,
+   "ic90_mercado": [
+    -0.1075,
+    0.0901,
+    281
+   ]
+  },
+  "ALL|ETH|mid": {
+   "n_pos": 13838,
+   "coste": 225214.2,
+   "pnl": -9651.1,
+   "ev_eur": -0.0429,
+   "ic90_mercado": [
+    -0.0661,
+    -0.0196,
+    287
+   ]
+  },
+  "APERTURA|BTC|mid": {
+   "n_pos": 16079,
+   "coste": 386646.0,
+   "pnl": -34983.9,
+   "ev_eur": -0.0905,
+   "ic90_mercado": [
+    -0.1539,
+    -0.0244,
+    286
+   ]
+  },
+  "ALL|BTC|mid": {
+   "n_pos": 121848,
+   "coste": 4576450.4,
+   "pnl": -109127.1,
+   "ev_eur": -0.0238,
+   "ic90_mercado": [
+    -0.0409,
+    -0.0075,
+    286
+   ]
+  },
+  "PARES": {
+   "n_pos": 34308,
+   "coste": 1894500.2,
+   "pnl": 10041.9,
+   "ev_eur": 0.0053,
+   "ic90_mercado": [
+    -0.0104,
+    0.0241,
+    1340
+   ]
+  },
+  "PARES|ETH|mid": {
+   "n_pos": 2454,
+   "coste": 62549.3,
+   "pnl": -2109.6,
+   "ev_eur": -0.0337,
+   "ic90_mercado": [
+    -0.0532,
+    -0.0149,
+    283
+   ]
+  },
+  "HIBRIDO_MAKER": {
+   "n_pos": 17424,
+   "coste": 945777.3,
+   "pnl": -33988.1,
+   "ev_eur": -0.0359,
+   "ic90_mercado": [
+    -0.053,
+    -0.0188,
+    1538
+   ]
+  },
+  "HIBRIDO_MAKER|ETH|mid": {
+   "n_pos": 1331,
+   "coste": 18363.6,
+   "pnl": -218.2,
+   "ev_eur": -0.0119,
+   "ic90_mercado": [
+    -0.0922,
+    0.0638,
+    259
+   ]
+  },
+  "MIXTO": {
+   "n_pos": 129585,
+   "coste": 3674071.9,
+   "pnl": -56529.7,
+   "ev_eur": -0.0154,
+   "ic90_mercado": [
+    -0.0322,
+    0.0045,
+    1718
+   ]
+  },
+  "MIXTO|ETH|mid": {
+   "n_pos": 7195,
+   "coste": 112198.0,
+   "pnl": -6509.1,
+   "ev_eur": -0.058,
+   "ic90_mercado": [
+    -0.1056,
+    -0.0107,
+    287
+   ]
+  },
+  "COLA_<10": {
+   "n_pos": 9309,
+   "coste": 261415.9,
+   "pnl": -14108.6,
+   "ev_eur": -0.054,
+   "ic90_mercado": [
+    -0.1102,
+    0.0004,
+    908
+   ]
+  },
+  "COLA_<10|ETH|mid": {
+   "n_pos": 360,
+   "coste": 3925.7,
+   "pnl": -592.1,
+   "ev_eur": -0.1508,
+   "ic90_mercado": [
+    -0.3747,
+    0.0694,
+    174
+   ]
+  },
+  "MIXTO|BTC|mid": {
+   "n_pos": 63517,
+   "coste": 2063863.0,
+   "pnl": -33888.7,
+   "ev_eur": -0.0164,
+   "ic90_mercado": [
+    -0.0486,
+    0.0173,
+    286
+   ]
+  },
+  "VENDEDOR": {
+   "n_pos": 6247,
+   "coste": 113468.5,
+   "pnl": 9251.9,
+   "ev_eur": 0.0815,
+   "ic90_mercado": [
+    0.0155,
+    0.1439,
+    764
+   ]
+  },
+  "VENDEDOR|ETH|mid": {
+   "n_pos": 307,
+   "coste": 3708.1,
+   "pnl": 256.1,
+   "ev_eur": 0.0691,
+   "ic90_mercado": [
+    -0.0758,
+    0.2136,
+    156
+   ]
+  },
+  "COLA_<10|BTC|mid": {
+   "n_pos": 5136,
+   "coste": 107137.5,
+   "pnl": -14186.3,
+   "ev_eur": -0.1324,
+   "ic90_mercado": [
+    -0.2673,
+    0.0119,
+    284
+   ]
+  },
+  "MIXTO|ETH|<=0.20": {
+   "n_pos": 855,
+   "coste": 4495.1,
+   "pnl": 76.4,
+   "ev_eur": 0.017,
+   "ic90_mercado": [
+    -0.3422,
+    0.4279,
+    233
+   ]
+  },
+  "ALL|ETH|<=0.20": {
+   "n_pos": 2046,
+   "coste": 11373.5,
+   "pnl": 752.7,
+   "ev_eur": 0.0662,
+   "ic90_mercado": [
+    -0.2242,
+    0.3799,
+    281
+   ]
+  },
+  "MIXTO|ETH|>=0.80": {
+   "n_pos": 5008,
+   "coste": 107900.9,
+   "pnl": -2492.6,
+   "ev_eur": -0.0231,
+   "ic90_mercado": [
+    -0.0476,
+    0.0009,
+    288
+   ]
+  },
+  "ALL|ETH|>=0.80": {
+   "n_pos": 7601,
+   "coste": 216347.1,
+   "pnl": -3205.9,
+   "ev_eur": -0.0148,
+   "ic90_mercado": [
+    -0.0325,
+    0.0027,
+    288
+   ]
+  },
+  "PARES|ETH|<=0.20": {
+   "n_pos": 451,
+   "coste": 3778.6,
+   "pnl": 377.5,
+   "ev_eur": 0.0999,
+   "ic90_mercado": [
+    -0.2141,
+    0.3999,
+    205
+   ]
+  },
+  "HIBRIDO_MAKER|ETH|>=0.80": {
+   "n_pos": 629,
+   "coste": 49150.2,
+   "pnl": -192.4,
+   "ev_eur": -0.0039,
+   "ic90_mercado": [
+    -0.0248,
+    0.015,
+    241
+   ]
+  },
+  "PARES|ETH|>=0.80": {
+   "n_pos": 434,
+   "coste": 22430.7,
+   "pnl": -610.2,
+   "ev_eur": -0.0272,
+   "ic90_mercado": [
+    -0.0713,
+    0.0099,
+    210
+   ]
+  },
+  "PARES|BTC|mid": {
+   "n_pos": 23724,
+   "coste": 1550132.1,
+   "pnl": 7742.3,
+   "ev_eur": 0.005,
+   "ic90_mercado": [
+    -0.0144,
+    0.0244,
+    285
+   ]
+  },
+  "SNIPER_TARDIO_FAV": {
+   "n_pos": 10770,
+   "coste": 566208.6,
+   "pnl": -7862.4,
+   "ev_eur": -0.0139,
+   "ic90_mercado": [
+    -0.0327,
+    0.0026,
+    1269
+   ]
+  },
+  "HIBRIDO_MAKER|BTC|mid": {
+   "n_pos": 7805,
+   "coste": 359177.4,
+   "pnl": -34431.5,
+   "ev_eur": -0.0959,
+   "ic90_mercado": [
+    -0.1381,
+    -0.054,
+    286
+   ]
+  },
+  "VENDEDOR|BTC|mid": {
+   "n_pos": 4293,
+   "coste": 84582.7,
+   "pnl": 5756.8,
+   "ev_eur": 0.0681,
+   "ic90_mercado": [
+    -0.0186,
+    0.15,
+    283
+   ]
+  },
+  "MIXTO|BTC|>=0.80": {
+   "n_pos": 32118,
+   "coste": 1206370.4,
+   "pnl": 12973.6,
+   "ev_eur": 0.0108,
+   "ic90_mercado": [
+    -0.0141,
+    0.0343,
+    285
+   ]
+  },
+  "ALL|BTC|>=0.80": {
+   "n_pos": 45740,
+   "coste": 2452067.3,
+   "pnl": 17783.7,
+   "ev_eur": 0.0073,
+   "ic90_mercado": [
+    -0.0118,
+    0.025,
+    285
+   ]
+  },
+  "PARES|BTC|>=0.80": {
+   "n_pos": 2034,
+   "coste": 164860.1,
+   "pnl": 2577.6,
+   "ev_eur": 0.0156,
+   "ic90_mercado": [
+    -0.0495,
+    0.0737,
+    280
+   ]
+  },
+  "MIXTO|BTC|<=0.20": {
+   "n_pos": 6960,
+   "coste": 64643.7,
+   "pnl": -23634.8,
+   "ev_eur": -0.3656,
+   "ic90_mercado": [
+    -0.5886,
+    -0.1141,
+    285
+   ]
+  },
+  "ALL|BTC|<=0.20": {
+   "n_pos": 14061,
+   "coste": 140224.6,
+   "pnl": -25265.6,
+   "ev_eur": -0.1802,
+   "ic90_mercado": [
+    -0.4878,
+    0.1543,
+    285
+   ]
+  },
+  "PARES|BTC|<=0.20": {
+   "n_pos": 1978,
+   "coste": 34526.0,
+   "pnl": 1863.5,
+   "ev_eur": 0.054,
+   "ic90_mercado": [
+    -0.5418,
+    0.5736,
+    273
+   ]
+  },
+  "LONGSHOT_BARATO": {
+   "n_pos": 3418,
+   "coste": 18449.3,
+   "pnl": -1846.0,
+   "ev_eur": -0.1001,
+   "ic90_mercado": [
+    -0.5512,
+    0.5814,
+    941
+   ]
+  },
+  "LONGSHOT_BARATO|BTC|mid": {
+   "n_pos": 530,
+   "coste": 4099.8,
+   "pnl": -1256.2,
+   "ev_eur": -0.3064,
+   "ic90_mercado": [
+    -0.5106,
+    -0.0787,
+    228
+   ]
+  },
+  "COLA_<10|BTC|>=0.80": {
+   "n_pos": 1821,
+   "coste": 132007.1,
+   "pnl": 2176.4,
+   "ev_eur": 0.0165,
+   "ic90_mercado": [
+    0.0003,
+    0.0307,
+    278
+   ]
+  },
+  "APERTURA|BTC|<=0.20": {
+   "n_pos": 326,
+   "coste": 4920.1,
+   "pnl": -2299.4,
+   "ev_eur": -0.4674,
+   "ic90_mercado": [
+    -0.8483,
+    0.1025,
+    175
+   ]
+  },
+  "SNIPER_TARDIO_FAV|BTC|mid": {
+   "n_pos": 764,
+   "coste": 20812.0,
+   "pnl": -3879.6,
+   "ev_eur": -0.1864,
+   "ic90_mercado": [
+    -0.3306,
+    -0.0425,
+    212
+   ]
+  },
+  "COLA_<10|ETH|>=0.80": {
+   "n_pos": 133,
+   "coste": 4675.7,
+   "pnl": -100.5,
+   "ev_eur": -0.0215,
+   "ic90_mercado": [
+    -0.0921,
+    0.026,
+    97
+   ]
+  },
+  "SNIPER_TARDIO_FAV|BTC|>=0.80": {
+   "n_pos": 5106,
+   "coste": 462128.1,
+   "pnl": -3050.8,
+   "ev_eur": -0.0066,
+   "ic90_mercado": [
+    -0.0289,
+    0.0114,
+    278
+   ]
+  },
+  "HIBRIDO_MAKER|BTC|>=0.80": {
+   "n_pos": 3711,
+   "coste": 466717.5,
+   "pnl": 2002.4,
+   "ev_eur": 0.0043,
+   "ic90_mercado": [
+    -0.0103,
+    0.0175,
+    285
+   ]
+  },
+  "HIBRIDO_MAKER|BTC|<=0.20": {
+   "n_pos": 1151,
+   "coste": 12565.6,
+   "pnl": -1704.9,
+   "ev_eur": -0.1357,
+   "ic90_mercado": [
+    -0.5408,
+    0.1958,
+    262
+   ]
+  },
+  "LONGSHOT_BARATO|BTC|<=0.20": {
+   "n_pos": 1870,
+   "coste": 11790.6,
+   "pnl": -107.6,
+   "ev_eur": -0.0091,
+   "ic90_mercado": [
+    -0.6879,
+    0.9574,
+    283
+   ]
+  },
+  "SNIPER_TARDIO_FAV|ETH|mid": {
+   "n_pos": 182,
+   "coste": 2192.5,
+   "pnl": -35.8,
+   "ev_eur": -0.0164,
+   "ic90_mercado": [
+    -0.1098,
+    0.0792,
+    92
+   ]
+  },
+  "VENDEDOR|BTC|>=0.80": {
+   "n_pos": 627,
+   "coste": 14640.7,
+   "pnl": 670.2,
+   "ev_eur": 0.0458,
+   "ic90_mercado": [
+    0.0076,
+    0.088,
+    231
+   ]
+  },
+  "COLA_<10|BTC|<=0.20": {
+   "n_pos": 1177,
+   "coste": 6633.8,
+   "pnl": -773.5,
+   "ev_eur": -0.1166,
+   "ic90_mercado": [
+    -0.7822,
+    0.9701,
+    267
+   ]
+  },
+  "SNIPER_TARDIO_FAV|ETH|>=0.80": {
+   "n_pos": 1302,
+   "coste": 31167.5,
+   "pnl": 154.7,
+   "ev_eur": 0.005,
+   "ic90_mercado": [
+    -0.0176,
+    0.0232,
+    211
+   ]
+  },
+  "SNIPER_TARDIO_FAV|BTC|<=0.20": {
+   "n_pos": 131,
+   "coste": 517.8,
+   "pnl": -168.4,
+   "ev_eur": -0.3253,
+   "ic90_mercado": [
+    -0.7264,
+    0.0572,
+    97
+   ]
+  },
+  "COLA_<10|ETH|<=0.20": {
+   "n_pos": 69,
+   "coste": 291.7,
+   "pnl": -154.9,
+   "ev_eur": -0.531,
+   "ic90_mercado": [
+    -0.9875,
+    0.2014,
+    59
+   ]
+  },
+  "LONGSHOT_BARATO|ETH|<=0.20": {
+   "n_pos": 298,
+   "coste": 786.1,
+   "pnl": -342.7,
+   "ev_eur": -0.4359,
+   "ic90_mercado": [
+    -0.7352,
+    -0.0913,
+    182
+   ]
+  },
+  "APERTURA|BTC|>=0.80": {
+   "n_pos": 302,
+   "coste": 5262.8,
+   "pnl": 419.1,
+   "ev_eur": 0.0796,
+   "ic90_mercado": [
+    -0.0574,
+    0.1917,
+    174
+   ]
+  },
+  "VENDEDOR|ETH|>=0.80": {
+   "n_pos": 81,
+   "coste": 794.9,
+   "pnl": 45.8,
+   "ev_eur": 0.0577,
+   "ic90_mercado": [
+    0.0111,
+    0.0924,
+    61
+   ]
+  },
+  "VENDEDOR|BTC|<=0.20": {
+   "n_pos": 468,
+   "coste": 4627.0,
+   "pnl": 1559.5,
+   "ev_eur": 0.337,
+   "ic90_mercado": [
+    -0.1028,
+    0.8693,
+    211
+   ]
+  },
+  "HIBRIDO_MAKER|ETH|<=0.20": {
+   "n_pos": 287,
+   "coste": 1472.7,
+   "pnl": 642.7,
+   "ev_eur": 0.4364,
+   "ic90_mercado": [
+    -0.1413,
+    1.0072,
+    173
+   ]
+  },
+  "LONGSHOT_BARATO|ETH|mid": {
+   "n_pos": 80,
+   "coste": 442.7,
+   "pnl": -143.0,
+   "ev_eur": -0.3229,
+   "ic90_mercado": [
+    -0.6918,
+    0.1642,
+    63
+   ]
+  },
+  "SNIPER_TARDIO_FAV|ETH|<=0.20": {
+   "n_pos": 54,
+   "coste": 225.0,
+   "pnl": -205.5,
+   "ev_eur": -0.9135,
+   "ic90_mercado": [
+    -1.0417,
+    -0.6391,
+    50
+   ]
+  },
+  "APERTURA|ETH|<=0.20": {
+   "n_pos": 15,
+   "coste": 63.6,
+   "pnl": 87.7,
+   "ev_eur": 1.3799,
+   "ic90_mercado": [
+    -0.7042,
+    2.8797,
+    12
+   ]
+  },
+  "VENDEDOR|ETH|<=0.20": {
+   "n_pos": 17,
+   "coste": 260.8,
+   "pnl": 271.5,
+   "ev_eur": 1.0411,
+   "ic90_mercado": [
+    -0.8392,
+    3.2128,
+    16
+   ]
+  },
+  "LONGSHOT_BARATO|BTC|>=0.80": {
+   "n_pos": 21,
+   "coste": 80.5,
+   "pnl": 15.2,
+   "ev_eur": 0.1887,
+   "ic90_mercado": [
+    -0.1635,
+    0.5571,
+    20
+   ]
+  }
+ },
+ "maker_bid_barato_BTC_por_arq_agresor": {
+  "PARES": {
+   "n_pos": 31488,
+   "coste": 45985.3,
+   "pnl": -9650.9,
+   "ev_eur": -0.2099,
+   "ic90_mercado": [
+    -0.4528,
+    0.0356,
+    284
+   ]
+  },
+  "MIXTO": {
+   "n_pos": 90958,
+   "coste": 116186.8,
+   "pnl": -20733.3,
+   "ev_eur": -0.1784,
+   "ic90_mercado": [
+    -0.4589,
+    0.0833,
+    285
+   ]
+  },
+  "VENDEDOR": {
+   "n_pos": 6444,
+   "coste": 3576.0,
+   "pnl": -1001.1,
+   "ev_eur": -0.2799,
+   "ic90_mercado": [
+    -0.6402,
+    0.1629,
+    284
+   ]
+  },
+  "COLA_<10": {
+   "n_pos": 4067,
+   "coste": 6330.7,
+   "pnl": -2185.8,
+   "ev_eur": -0.3453,
+   "ic90_mercado": [
+    -0.6576,
+    0.0731,
+    281
+   ]
+  },
+  "APERTURA": {
+   "n_pos": 1089,
+   "coste": 2009.8,
+   "pnl": -1052.3,
+   "ev_eur": -0.5236,
+   "ic90_mercado": [
+    -0.7727,
+    -0.2085,
+    223
+   ]
+  },
+  "SNIPER_TARDIO_FAV": {
+   "n_pos": 12311,
+   "coste": 8238.1,
+   "pnl": 1878.8,
+   "ev_eur": 0.2281,
+   "ic90_mercado": [
+    -0.6036,
+    1.2413,
+    278
+   ]
+  },
+  "HIBRIDO_MAKER": {
+   "n_pos": 14955,
+   "coste": 22715.4,
+   "pnl": -3423.8,
+   "ev_eur": -0.1507,
+   "ic90_mercado": [
+    -0.4385,
+    0.1638,
+    285
+   ]
+  },
+  "LONGSHOT_BARATO": {
+   "n_pos": 214,
+   "coste": 561.5,
+   "pnl": -501.8,
+   "ev_eur": -0.8936,
+   "ic90_mercado": [
+    -0.9664,
+    -0.72,
+    75
+   ]
+  }
+ },
+ "umbral_grande_usd_p95_btc": 55.73,
+ "big_btc": 24556,
+ "big_match_ws": 23551,
+ "lag_onchain_ms_(ts_est-recvWS)": {
+  "0.1": 1551,
+  "0.5": 2465,
+  "0.9": 3276
+ },
+ "hermanos": {
+  "BTC15|WS+0.3s->oc": {
+   "n": 23551,
+   "n_merc": 281,
+   "media": 0.0014,
+   "ic90": [
+    0.0009,
+    0.002
+   ]
+  },
+  "BTC15|oc->oc+30s|nuevo": {
+   "n": 1197,
+   "n_merc": 258,
+   "media": -0.0007,
+   "ic90": [
+    -0.0072,
+    0.0058
+   ]
+  },
+  "BTC15|oc->oc+30s|COLA_<10": {
+   "n": 810,
+   "n_merc": 229,
+   "media": 0.0013,
+   "ic90": [
+    -0.0085,
+    0.0112
+   ]
+  },
+  "BTC15|oc->oc+30s|ALL": {
+   "n": 23551,
+   "n_merc": 281,
+   "media": 0.0021,
+   "ic90": [
+    -0.0003,
+    0.0044
+   ]
+  },
+  "BTC5_mismo|WS+0.3s->oc": {
+   "n": 23551,
+   "n_merc": 281,
+   "media": 0.0017,
+   "ic90": [
+    0.0009,
+    0.0025
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|nuevo": {
+   "n": 1197,
+   "n_merc": 258,
+   "media": -0.0025,
+   "ic90": [
+    -0.0113,
+    0.0063
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|COLA_<10": {
+   "n": 810,
+   "n_merc": 229,
+   "media": -0.0137,
+   "ic90": [
+    -0.0247,
+    -0.0024
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|ALL": {
+   "n": 23551,
+   "n_merc": 281,
+   "media": 0.0001,
+   "ic90": [
+    -0.0031,
+    0.0034
+   ]
+  },
+  "ETH5|WS+0.3s->oc": {
+   "n": 23551,
+   "n_merc": 281,
+   "media": 0.0008,
+   "ic90": [
+    0.0001,
+    0.0017
+   ]
+  },
+  "ETH5|oc->oc+30s|nuevo": {
+   "n": 1197,
+   "n_merc": 258,
+   "media": -0.0029,
+   "ic90": [
+    -0.0123,
+    0.0073
+   ]
+  },
+  "ETH5|oc->oc+30s|COLA_<10": {
+   "n": 810,
+   "n_merc": 229,
+   "media": -0.0041,
+   "ic90": [
+    -0.015,
+    0.0067
+   ]
+  },
+  "ETH5|oc->oc+30s|ALL": {
+   "n": 23551,
+   "n_merc": 281,
+   "media": 0.0027,
+   "ic90": [
+    -0.0006,
+    0.0064
+   ]
+  },
+  "BN_ret_5s_previo_signed_bps": {
+   "n": 23551,
+   "n_merc": 281,
+   "media": 0.2629,
+   "ic90": [
+    0.2156,
+    0.3147
+   ]
+  },
+  "BTC15|oc->oc+30s|PARES": {
+   "n": 3408,
+   "n_merc": 280,
+   "media": 0.0053,
+   "ic90": [
+    0.0009,
+    0.0097
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|PARES": {
+   "n": 3408,
+   "n_merc": 280,
+   "media": -0.0034,
+   "ic90": [
+    -0.0111,
+    0.0043
+   ]
+  },
+  "ETH5|oc->oc+30s|PARES": {
+   "n": 3408,
+   "n_merc": 280,
+   "media": 0.0005,
+   "ic90": [
+    -0.0075,
+    0.0079
+   ]
+  },
+  "BTC15|oc->oc+30s|APERTURA": {
+   "n": 1458,
+   "n_merc": 264,
+   "media": -0.0036,
+   "ic90": [
+    -0.0094,
+    0.002
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|APERTURA": {
+   "n": 1458,
+   "n_merc": 264,
+   "media": -0.0001,
+   "ic90": [
+    -0.0095,
+    0.0095
+   ]
+  },
+  "ETH5|oc->oc+30s|APERTURA": {
+   "n": 1458,
+   "n_merc": 264,
+   "media": -0.0025,
+   "ic90": [
+    -0.0111,
+    0.007
+   ]
+  },
+  "BTC15|oc->oc+30s|HIBRIDO_MAKER": {
+   "n": 2928,
+   "n_merc": 281,
+   "media": 0.0019,
+   "ic90": [
+    -0.0023,
+    0.0064
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|HIBRIDO_MAKER": {
+   "n": 2928,
+   "n_merc": 281,
+   "media": 0.0019,
+   "ic90": [
+    -0.0029,
+    0.0069
+   ]
+  },
+  "ETH5|oc->oc+30s|HIBRIDO_MAKER": {
+   "n": 2928,
+   "n_merc": 281,
+   "media": 0.0043,
+   "ic90": [
+    -0.0015,
+    0.0101
+   ]
+  },
+  "BTC15|oc->oc+30s|visto": {
+   "n": 22354,
+   "n_merc": 281,
+   "media": 0.002,
+   "ic90": [
+    -0.0004,
+    0.0045
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|visto": {
+   "n": 22354,
+   "n_merc": 281,
+   "media": -0.0001,
+   "ic90": [
+    -0.0034,
+    0.0034
+   ]
+  },
+  "ETH5|oc->oc+30s|visto": {
+   "n": 22354,
+   "n_merc": 281,
+   "media": 0.0029,
+   "ic90": [
+    -0.0007,
+    0.0067
+   ]
+  },
+  "BTC15|oc->oc+30s|MIXTO": {
+   "n": 12615,
+   "n_merc": 281,
+   "media": 0.0016,
+   "ic90": [
+    -0.001,
+    0.0041
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|MIXTO": {
+   "n": 12615,
+   "n_merc": 281,
+   "media": 0.0017,
+   "ic90": [
+    -0.0019,
+    0.0056
+   ]
+  },
+  "ETH5|oc->oc+30s|MIXTO": {
+   "n": 12615,
+   "n_merc": 281,
+   "media": 0.0026,
+   "ic90": [
+    -0.0011,
+    0.0067
+   ]
+  },
+  "BTC15|oc->oc+30s|SNIPER_TARDIO_FAV": {
+   "n": 1383,
+   "n_merc": 223,
+   "media": 0.0058,
+   "ic90": [
+    -0.0044,
+    0.0163
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|SNIPER_TARDIO_FAV": {
+   "n": 1383,
+   "n_merc": 223,
+   "media": -0.0024,
+   "ic90": [
+    -0.0086,
+    0.0031
+   ]
+  },
+  "ETH5|oc->oc+30s|SNIPER_TARDIO_FAV": {
+   "n": 1383,
+   "n_merc": 223,
+   "media": 0.0112,
+   "ic90": [
+    -0.0003,
+    0.0228
+   ]
+  },
+  "BTC15|oc->oc+30s|LONGSHOT_BARATO": {
+   "n": 78,
+   "n_merc": 63,
+   "media": 0.0029,
+   "ic90": [
+    -0.0091,
+    0.0162
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|LONGSHOT_BARATO": {
+   "n": 78,
+   "n_merc": 63,
+   "media": 0.0059,
+   "ic90": [
+    -0.0244,
+    0.0436
+   ]
+  },
+  "ETH5|oc->oc+30s|LONGSHOT_BARATO": {
+   "n": 78,
+   "n_merc": 63,
+   "media": -0.0081,
+   "ic90": [
+    -0.0335,
+    0.0201
+   ]
+  },
+  "BTC15|oc->oc+30s|VENDEDOR": {
+   "n": 871,
+   "n_merc": 210,
+   "media": 0.0063,
+   "ic90": [
+    -0.0039,
+    0.0168
+   ]
+  },
+  "BTC5_mismo|oc->oc+30s|VENDEDOR": {
+   "n": 871,
+   "n_merc": 210,
+   "media": 0.0092,
+   "ic90": [
+    -0.0043,
+    0.0217
+   ]
+  },
+  "ETH5|oc->oc+30s|VENDEDOR": {
+   "n": 871,
+   "n_merc": 210,
+   "media": -0.0032,
+   "ic90": [
+    -0.0174,
+    0.0107
+   ]
+  }
+ }
+}
