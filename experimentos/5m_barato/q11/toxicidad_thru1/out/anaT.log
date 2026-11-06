@@ -1,0 +1,102 @@
+
+== 10 DIAS (quemados): 10 dias, cierres 1064
+G0         n  2938 EUR  2187.9 pnl  -166.9 EV -0.076 sin2 -0.177 dias+ 3/10 thru1 0.79 | dPnL    +0.0 IC90cie (+0.0,+0.0) IC97.5cie (+0.0,+0.0) IC90dia (+0.0,+0.0) p(d<=0) 1.000 dias d>0 0/10
+GEO6       n  2297 EUR  1722.8 pnl   -26.9 EV -0.016 sin2 -0.116 dias+ 5/10 thru1 0.79 | dPnL  +140.0 IC90cie (+43.8,+226.0) IC97.5cie (+9.3,+253.3) IC90dia (+62.7,+223.8) p(d<=0) 0.009 dias d>0 9/10
+NJ3        n  2900 EUR  2160.9 pnl  -155.2 EV -0.072 sin2 -0.173 dias+ 3/10 thru1 0.79 | dPnL   +11.7 IC90cie (-8.1,+30.0) IC97.5cie (-15.6,+36.9) IC90dia (-5.1,+29.4) p(d<=0) 0.165 dias d>0 8/10
+NJ3A       n  2907 EUR  2165.1 pnl  -164.4 EV -0.076 sin2 -0.177 dias+ 3/10 thru1 0.79 | dPnL    +2.5 IC90cie (-15.7,+18.2) IC97.5cie (-22.3,+23.6) IC90dia (-10.0,+14.7) p(d<=0) 0.369 dias d>0 7/10
+CALM3      n  2440 EUR  1813.0 pnl  -125.9 EV -0.069 sin2 -0.184 dias+ 3/10 thru1 0.78 | dPnL   +40.9 IC90cie (-57.9,+133.0) IC97.5cie (-94.1,+167.6) IC90dia (-30.1,+119.5) p(d<=0) 0.235 dias d>0 6/10
+GEO6NJ3    n  2262 EUR  1697.6 pnl    -2.0 EV -0.001 sin2 -0.102 dias+ 5/10 thru1 0.79 | dPnL  +164.9 IC90cie (+72.9,+254.2) IC97.5cie (+36.3,+285.7) IC90dia (+83.3,+252.5) p(d<=0) 0.003 dias d>0 9/10
+CXB150     n   952 EUR   684.1 pnl   +53.2 EV +0.078 sin2 -0.077 dias+ 4/10 thru1 0.65 | dPnL  +220.1 IC90cie (-2.1,+436.3) IC97.5cie (-78.1,+507.3) IC90dia (+51.4,+401.0) p(d<=0) 0.051 dias d>0 8/10
+CXB300     n  1025 EUR   742.9 pnl   +31.6 EV +0.043 sin2 -0.103 dias+ 4/10 thru1 0.67 | dPnL  +198.5 IC90cie (-18.0,+407.9) IC97.5cie (-104.5,+486.6) IC90dia (+32.1,+377.3) p(d<=0) 0.068 dias d>0 7/10
+CXB1000    n  1455 EUR  1067.4 pnl    -6.1 EV -0.006 sin2 -0.135 dias+ 4/10 thru1 0.74 | dPnL  +160.8 IC90cie (-16.3,+330.0) IC97.5cie (-88.3,+385.3) IC90dia (+33.1,+293.6) p(d<=0) 0.067 dias d>0 6/10
+CXB3000    n  1916 EUR  1410.6 pnl   -14.9 EV -0.011 sin2 -0.134 dias+ 4/10 thru1 0.76 | dPnL  +152.0 IC90cie (+8.3,+286.1) IC97.5cie (-52.0,+338.5) IC90dia (+38.7,+260.8) p(d<=0) 0.042 dias d>0 8/10
+CXJ150     n  2533 EUR  1885.8 pnl   -38.6 EV -0.020 sin2 -0.130 dias+ 3/10 thru1 0.79 | dPnL  +128.3 IC90cie (+52.4,+203.1) IC97.5cie (+20.4,+225.3) IC90dia (+70.4,+191.8) p(d<=0) 0.004 dias d>0 9/10
+CXJ1000    n  2647 EUR  1971.2 pnl   -93.0 EV -0.047 sin2 -0.162 dias+ 3/10 thru1 0.79 | dPnL   +73.9 IC90cie (+11.9,+132.2) IC97.5cie (-12.7,+152.8) IC90dia (+37.8,+112.1) p(d<=0) 0.024 dias d>0 9/10
+  placebo PNJ3A_: n 19 dPnL media +3.0 [-3.7,+8.0] obs NJ3A +2.5 p_bilat(|.|) 0.650 p_bilat(centrado) 0.950
+  placebo PCXB300_: n 5 dPnL media +70.3 [+52.8,+90.0] obs CXB300 +198.5 p_bilat(|.|) 0.167 p_bilat(centrado) 0.167
+
+== OOS 01-04 Nov: 4 dias, cierres 268
+G0         n   745 EUR   556.1 pnl    -7.0 EV -0.013 sin2 -0.271 dias+ 2/4 thru1 0.83 | dPnL    +0.0 IC90cie (+0.0,+0.0) IC97.5cie (+0.0,+0.0) IC90dia (+0.0,+0.0) p(d<=0) 1.000 dias d>0 0/4
+GEO6       n   601 EUR   453.4 pnl   +24.5 EV +0.054 sin2 -0.214 dias+ 3/4 thru1 0.84 | dPnL   +31.5 IC90cie (-16.3,+73.3) IC97.5cie (-34.7,+85.1) IC90dia (-4.1,+66.7) p(d<=0) 0.132 dias d>0 3/4
+NJ3        n   736 EUR   550.0 pnl    -0.9 EV -0.002 sin2 -0.255 dias+ 2/4 thru1 0.83 | dPnL    +6.1 IC90cie (+2.4,+10.3) IC97.5cie (+1.5,+12.2) IC90dia (+2.0,+12.8) p(d<=0) 0.001 dias d>0 4/4
+NJ3A       n   736 EUR   549.5 pnl    -0.5 EV -0.001 sin2 -0.255 dias+ 2/4 thru1 0.83 | dPnL    +6.5 IC90cie (+2.7,+11.1) IC97.5cie (+1.5,+12.8) IC90dia (+2.0,+11.1) p(d<=0) 0.000 dias d>0 4/4
+CALM3      n   638 EUR   476.0 pnl    +2.1 EV +0.005 sin2 -0.271 dias+ 1/4 thru1 0.82 | dPnL    +9.2 IC90cie (-52.9,+56.2) IC97.5cie (-83.4,+66.9) IC90dia (-17.8,+36.1) p(d<=0) 0.354 dias d>0 3/4
+GEO6NJ3    n   590 EUR   444.3 pnl   +33.4 EV +0.075 sin2 -0.192 dias+ 3/4 thru1 0.84 | dPnL   +40.5 IC90cie (-8.4,+83.3) IC97.5cie (-31.1,+96.9) IC90dia (-0.1,+82.6) p(d<=0) 0.076 dias d>0 3/4
+CXB150     n   256 EUR   188.5 pnl   +18.7 EV +0.099 sin2 -0.249 dias+ 2/4 thru1 0.75 | dPnL   +25.7 IC90cie (-87.3,+132.0) IC97.5cie (-131.3,+163.9) IC90dia (-46.3,+97.7) p(d<=0) 0.340 dias d>0 3/4
+CXB300     n   276 EUR   204.5 pnl   +12.9 EV +0.063 sin2 -0.321 dias+ 2/4 thru1 0.74 | dPnL   +19.9 IC90cie (-85.1,+122.8) IC97.5cie (-134.1,+155.1) IC90dia (-50.8,+90.6) p(d<=0) 0.358 dias d>0 2/4
+CXB1000    n   405 EUR   301.2 pnl    +7.3 EV +0.024 sin2 -0.173 dias+ 2/4 thru1 0.79 | dPnL   +14.3 IC90cie (-72.4,+92.4) IC97.5cie (-106.3,+118.3) IC90dia (-46.5,+75.1) p(d<=0) 0.380 dias d>0 2/4
+CXB3000    n   523 EUR   390.9 pnl   +31.3 EV +0.080 sin2 -0.233 dias+ 2/4 thru1 0.80 | dPnL   +38.3 IC90cie (-19.9,+93.9) IC97.5cie (-43.1,+110.2) IC90dia (-11.5,+88.1) p(d<=0) 0.136 dias d>0 3/4
+CXJ150     n   628 EUR   468.6 pnl   +41.9 EV +0.089 sin2 -0.281 dias+ 2/4 thru1 0.83 | dPnL   +48.9 IC90cie (+14.8,+80.9) IC97.5cie (+1.1,+94.5) IC90dia (+14.5,+83.4) p(d<=0) 0.011 dias d>0 3/4
+CXJ1000    n   657 EUR   491.7 pnl   +24.1 EV +0.049 sin2 -0.276 dias+ 2/4 thru1 0.83 | dPnL   +31.1 IC90cie (+1.2,+58.8) IC97.5cie (-10.8,+68.1) IC90dia (+15.6,+48.1) p(d<=0) 0.045 dias d>0 4/4
+  placebo PNJ3A_: n 19 dPnL media +0.2 [-3.6,+1.7] obs NJ3A +6.5 p_bilat(|.|) 0.050 p_bilat(centrado) 0.050
+  placebo PCXB300_: n 5 dPnL media +14.4 [-0.4,+30.3] obs CXB300 +19.9 p_bilat(|.|) 0.333 p_bilat(centrado) 0.500
+
+== TRAIN 26-31 Oct: 6 dias, cierres 796
+G0         n  2193 EUR  1631.8 pnl  -159.9 EV -0.098 sin2 -0.227 dias+ 1/6 thru1 0.78 | dPnL    +0.0 IC90cie (+0.0,+0.0) IC97.5cie (+0.0,+0.0) IC90dia (+0.0,+0.0) p(d<=0) 1.000 dias d>0 0/6
+GEO6       n  1696 EUR  1269.3 pnl   -51.3 EV -0.040 sin2 -0.175 dias+ 2/6 thru1 0.77 | dPnL  +108.6 IC90cie (+31.2,+182.8) IC97.5cie (+4.6,+207.5) IC90dia (+42.5,+178.8) p(d<=0) 0.011 dias d>0 6/6
+NJ3        n  2164 EUR  1610.9 pnl  -154.2 EV -0.096 sin2 -0.233 dias+ 1/6 thru1 0.78 | dPnL    +5.6 IC90cie (-13.3,+23.3) IC97.5cie (-20.4,+29.1) IC90dia (-11.0,+23.8) p(d<=0) 0.309 dias d>0 4/6
+NJ3A       n  2171 EUR  1615.6 pnl  -163.9 EV -0.101 sin2 -0.233 dias+ 1/6 thru1 0.78 | dPnL    -4.0 IC90cie (-21.9,+11.3) IC97.5cie (-28.5,+16.0) IC90dia (-14.6,+6.0) p(d<=0) 0.649 dias d>0 3/6
+CALM3      n  1802 EUR  1336.9 pnl  -128.1 EV -0.096 sin2 -0.256 dias+ 2/6 thru1 0.77 | dPnL   +31.8 IC90cie (-48.6,+107.7) IC97.5cie (-79.5,+131.2) IC90dia (-34.8,+101.9) p(d<=0) 0.235 dias d>0 3/6
+GEO6NJ3    n  1672 EUR  1253.3 pnl   -35.5 EV -0.028 sin2 -0.163 dias+ 2/6 thru1 0.77 | dPnL  +124.4 IC90cie (+42.4,+199.3) IC97.5cie (+16.7,+221.6) IC90dia (+61.1,+193.4) p(d<=0) 0.006 dias d>0 6/6
+CXB150     n   696 EUR   495.6 pnl   +34.5 EV +0.070 sin2 -0.149 dias+ 2/6 thru1 0.62 | dPnL  +194.4 IC90cie (-0.8,+381.9) IC97.5cie (-77.3,+440.5) IC90dia (+54.6,+334.4) p(d<=0) 0.051 dias d>0 5/6
+CXB300     n   749 EUR   538.4 pnl   +18.7 EV +0.035 sin2 -0.157 dias+ 2/6 thru1 0.64 | dPnL  +178.6 IC90cie (-14.5,+351.2) IC97.5cie (-82.9,+412.2) IC90dia (+34.3,+328.7) p(d<=0) 0.063 dias d>0 5/6
+CXB1000    n  1050 EUR   766.1 pnl   -13.4 EV -0.018 sin2 -0.218 dias+ 2/6 thru1 0.71 | dPnL  +146.5 IC90cie (-9.9,+292.0) IC97.5cie (-70.3,+339.8) IC90dia (+44.6,+255.7) p(d<=0) 0.062 dias d>0 4/6
+CXB3000    n  1393 EUR  1019.8 pnl   -46.2 EV -0.045 sin2 -0.243 dias+ 2/6 thru1 0.74 | dPnL  +113.7 IC90cie (-18.4,+239.1) IC97.5cie (-72.9,+287.8) IC90dia (+17.8,+208.5) p(d<=0) 0.075 dias d>0 5/6
+CXJ150     n  1905 EUR  1417.2 pnl   -80.5 EV -0.057 sin2 -0.188 dias+ 1/6 thru1 0.78 | dPnL   +79.4 IC90cie (+9.8,+145.2) IC97.5cie (-17.9,+168.9) IC90dia (+33.5,+130.3) p(d<=0) 0.034 dias d>0 6/6
+CXJ1000    n  1990 EUR  1479.5 pnl  -117.1 EV -0.079 sin2 -0.214 dias+ 1/6 thru1 0.78 | dPnL   +42.8 IC90cie (-11.6,+94.0) IC97.5cie (-32.7,+111.7) IC90dia (+11.1,+77.7) p(d<=0) 0.089 dias d>0 5/6
+  placebo PNJ3A_: n 19 dPnL media +2.8 [-4.6,+7.3] obs NJ3A -4.0 p_bilat(|.|) 0.450 p_bilat(centrado) 0.100
+  placebo PCXB300_: n 5 dPnL media +55.9 [+33.4,+81.0] obs CXB300 +178.6 p_bilat(|.|) 0.167 p_bilat(centrado) 0.167
+
+== Descomposicion G0 por segmento (10 dias): segs, P(relleno), EV|relleno [IC90 cierre del pnl], EUR/seg, frac thru1
+ -- por bidLc
+  <2c                    segs   1703 P(rell) 0.295 rell   502 EV|rell -0.321 pnl  -120.2 IC90cie (-194.8,-41.9) EUR/seg -0.0706 thru1 0.78 EV|thru1 -0.393
+  2-4c                   segs    757 P(rell) 0.267 rell   202 EV|rell -0.214 pnl   -31.8 IC90cie (-68.8,+8.5) EUR/seg -0.0420 thru1 0.83 EV|thru1 -0.143
+  4-6c                   segs    857 P(rell) 0.235 rell   201 EV|rell -0.414 pnl   -61.2 IC90cie (-91.3,-28.5) EUR/seg -0.0715 thru1 0.82 EV|thru1 -0.418
+  6-8c                   segs    819 P(rell) 0.225 rell   184 EV|rell -0.214 pnl   -28.9 IC90cie (-64.4,+8.4) EUR/seg -0.0353 thru1 0.73 EV|thru1 -0.253
+  >=8c                   segs  26662 P(rell) 0.069 rell  1849 EV|rell +0.055 pnl   +75.3 IC90cie (-175.1,+334.9) EUR/seg +0.0028 thru1 0.79 EV|thru1 -0.007
+ -- por Tc
+  <120                   segs   5350 P(rell) 0.097 rell   520 EV|rell -0.151 pnl   -56.7 IC90cie (-159.8,+50.6) EUR/seg -0.0106 thru1 0.83 EV|thru1 -0.157
+  120-200                segs   9575 P(rell) 0.102 rell   972 EV|rell -0.085 pnl   -59.9 IC90cie (-218.3,+100.1) EUR/seg -0.0063 thru1 0.79 EV|thru1 -0.139
+  >=200                  segs  15873 P(rell) 0.091 rell  1446 EV|rell -0.045 pnl   -50.3 IC90cie (-259.7,+171.0) EUR/seg -0.0032 thru1 0.77 EV|thru1 -0.104
+ -- por r3adv
+  NaN                    segs     24 P(rell) 0.042 rell     1 EV|rell -0.989 pnl    -0.9 IC90cie (+nan,+nan) EUR/seg -0.0391 thru1 0.00 EV|thru1 +0.000
+  adv>=3                 segs   1700 P(rell) 0.126 rell   215 EV|rell -0.159 pnl   -25.1 IC90cie (-82.9,+36.7) EUR/seg -0.0148 thru1 0.75 EV|thru1 -0.331
+  calma                  segs  27943 P(rell) 0.095 rell  2650 EV|rell -0.070 pnl  -138.0 IC90cie (-415.1,+160.8) EUR/seg -0.0049 thru1 0.79 EV|thru1 -0.111
+  fav>=3                 segs   1131 P(rell) 0.064 rell    72 EV|rell -0.052 pnl    -2.8 IC90cie (-40.1,+43.2) EUR/seg -0.0024 thru1 0.81 EV|thru1 -0.040
+ -- por act
+  ETH                    segs  10281 P(rell) 0.139 rell  1428 EV|rell -0.008 pnl    -8.7 IC90cie (-197.7,+187.0) EUR/seg -0.0008 thru1 0.79 EV|thru1 -0.022
+  SOL                    segs  12088 P(rell) 0.079 rell   953 EV|rell -0.172 pnl  -122.7 IC90cie (-265.8,+28.5) EUR/seg -0.0102 thru1 0.77 EV|thru1 -0.264
+  XRP                    segs   8429 P(rell) 0.066 rell   557 EV|rell -0.085 pnl   -35.5 IC90cie (-139.2,+76.4) EUR/seg -0.0042 thru1 0.83 EV|thru1 -0.150
+ -- por lado
+  NO                     segs  16405 P(rell) 0.093 rell  1530 EV|rell -0.261 pnl  -296.7 IC90cie (-491.5,-93.7) EUR/seg -0.0181 thru1 0.80 EV|thru1 -0.312
+  YES                    segs  14393 P(rell) 0.098 rell  1408 EV|rell +0.123 pnl  +129.8 IC90cie (-107.6,+380.7) EUR/seg +0.0090 thru1 0.78 EV|thru1 +0.082
+ -- bidL x r3adv
+  ('<2c', 'NaN')         segs      1 P(rell) 0.000 rell     0 EV|rell +0.000 pnl    +0.0 IC90cie (+nan,+nan) EUR/seg +0.0000 thru1 nan EV|thru1 +0.000
+  ('<2c', 'adv>=3')      segs    160 P(rell) 0.300 rell    48 EV|rell -0.424 pnl   -15.1 IC90cie (-31.3,+3.5) EUR/seg -0.0941 thru1 0.69 EV|thru1 -0.785
+  ('<2c', 'calma')       segs   1416 P(rell) 0.302 rell   427 EV|rell -0.266 pnl   -84.8 IC90cie (-154.4,-11.4) EUR/seg -0.0599 thru1 0.79 EV|thru1 -0.316
+  ('<2c', 'fav>=3')      segs    126 P(rell) 0.214 rell    27 EV|rell -0.988 pnl   -20.3 IC90cie (-24.4,-16.5) EUR/seg -0.1612 thru1 0.81 EV|thru1 -0.988
+  ('2-4c', 'NaN')        segs      1 P(rell) 0.000 rell     0 EV|rell +0.000 pnl    +0.0 IC90cie (+nan,+nan) EUR/seg +0.0000 thru1 nan EV|thru1 +0.000
+  ('2-4c', 'adv>=3')     segs     66 P(rell) 0.333 rell    22 EV|rell -0.384 pnl    -6.4 IC90cie (-16.2,+4.4) EUR/seg -0.0963 thru1 0.86 EV|thru1 -0.303
+  ('2-4c', 'calma')      segs    664 P(rell) 0.268 rell   178 EV|rell -0.184 pnl   -24.0 IC90cie (-59.0,+14.8) EUR/seg -0.0362 thru1 0.82 EV|thru1 -0.110
+  ('2-4c', 'fav>=3')     segs     26 P(rell) 0.077 rell     2 EV|rell -0.988 pnl    -1.4 IC90cie (-1.6,-1.3) EUR/seg -0.0551 thru1 1.00 EV|thru1 -0.988
+  ('4-6c', 'adv>=3')     segs     63 P(rell) 0.190 rell    12 EV|rell -0.423 pnl    -3.7 IC90cie (-9.8,+6.3) EUR/seg -0.0594 thru1 0.83 EV|thru1 -0.988
+  ('4-6c', 'calma')      segs    766 P(rell) 0.245 rell   188 EV|rell -0.411 pnl   -56.9 IC90cie (-87.0,-25.1) EUR/seg -0.0742 thru1 0.82 EV|thru1 -0.381
+  ('4-6c', 'fav>=3')     segs     28 P(rell) 0.036 rell     1 EV|rell -0.988 pnl    -0.6 IC90cie (+nan,+nan) EUR/seg -0.0229 thru1 0.00 EV|thru1 +0.000
+  ('6-8c', 'NaN')        segs      1 P(rell) 0.000 rell     0 EV|rell +0.000 pnl    +0.0 IC90cie (+nan,+nan) EUR/seg +0.0000 thru1 nan EV|thru1 +0.000
+  ('6-8c', 'adv>=3')     segs     61 P(rell) 0.164 rell    10 EV|rell -0.988 pnl    -6.9 IC90cie (-7.9,-5.8) EUR/seg -0.1125 thru1 0.80 EV|thru1 -0.988
+  ('6-8c', 'calma')      segs    734 P(rell) 0.236 rell   173 EV|rell -0.169 pnl   -21.6 IC90cie (-56.4,+15.0) EUR/seg -0.0294 thru1 0.73 EV|thru1 -0.202
+  ('6-8c', 'fav>=3')     segs     23 P(rell) 0.043 rell     1 EV|rell -0.987 pnl    -0.5 IC90cie (+nan,+nan) EUR/seg -0.0215 thru1 1.00 EV|thru1 -0.987
+  ('>=8c', 'NaN')        segs     21 P(rell) 0.048 rell     1 EV|rell -0.989 pnl    -0.9 IC90cie (+nan,+nan) EUR/seg -0.0447 thru1 0.00 EV|thru1 +0.000
+  ('>=8c', 'adv>=3')     segs   1350 P(rell) 0.091 rell   123 EV|rell +0.076 pnl    +6.9 IC90cie (-44.5,+62.5) EUR/seg +0.0051 thru1 0.74 EV|thru1 -0.046
+  ('>=8c', 'calma')      segs  24363 P(rell) 0.069 rell  1684 EV|rell +0.039 pnl   +49.2 IC90cie (-177.2,+290.1) EUR/seg +0.0020 thru1 0.80 EV|thru1 -0.021
+  ('>=8c', 'fav>=3')     segs    928 P(rell) 0.044 rell    41 EV|rell +0.665 pnl   +20.1 IC90cie (-15.9,+65.2) EUR/seg +0.0217 thru1 0.80 EV|thru1 +0.700
+ -- por tipo de relleno
+  cola                   segs    271 P(rell) 1.000 rell   271 EV|rell -0.036 pnl    -6.4 IC90cie (-53.0,+45.2) EUR/seg -0.0236 thru1 0.00 EV|thru1 +0.000
+  nivel                  segs    346 P(rell) 1.000 rell   346 EV|rell +0.222 pnl   +57.7 IC90cie (-24.5,+149.2) EUR/seg +0.1667 thru1 0.00 EV|thru1 +0.000
+  thru1                  segs   2321 P(rell) 1.000 rell  2321 EV|rell -0.125 pnl  -218.2 IC90cie (-464.0,+43.3) EUR/seg -0.0940 thru1 1.00 EV|thru1 -0.125
+
+== NaN r3 (rellenos G0): NaN n 1 EV -0.989 | no NaN n 2937 EV -0.076; dias con NaN: {'2026-10-28': 1}
+
+== Curva de latencia de cancelacion CXB_l (10 dias / OOS):  {'CXB150': (np.float64(220.1), np.float64(25.7)), 'CXB300': (np.float64(198.5), np.float64(19.9)), 'CXB1000': (np.float64(160.8), np.float64(14.3)), 'CXB3000': (np.float64(152.0), np.float64(38.3))}
+== cancelaciones por variante: {'CALM3': 0.0, 'CXB1000': 0.946, 'CXB150': 0.977, 'CXB300': 0.971, 'CXB3000': 0.919, 'CXJ1000': 0.281, 'CXJ150': 0.238, 'G0': 0.0, 'GEO6': 0.0, 'GEO6NJ3': 0.0, 'NJ3': 0.0, 'NJ3A': 0.0}
+ANA_FIN
