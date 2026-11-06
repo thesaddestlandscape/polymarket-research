@@ -1,74 +1,74 @@
 {
- "generado_utc": "2026-11-05T08:12:05+00:00",
+ "generado_utc": "2026-11-06T08:12:05+00:00",
  "corte": "2026-09-30T16:00",
  "hipotesis": {
   "A CS#FADE [0,65-0,70) (LIVE)": {
-   "n": 439,
-   "dias": 36,
-   "acierto": 0.6993,
+   "n": 441,
+   "dias": 37,
+   "acierto": 0.6984,
    "precio_medio": 0.6687,
-   "ev": 0.0331,
+   "ev": 0.0318,
    "ic90": [
-    -0.029,
-    0.0986
+    -0.032,
+    0.0964
    ],
    "dias_positivos": 15,
    "wallet_top_pct": 12,
    "veredicto": "sin_concluir"
   },
   "B CS [0,65-0,70) cualquier disparo": {
-   "n": 553,
-   "dias": 36,
-   "acierto": 0.6835,
-   "precio_medio": 0.6688,
-   "ev": 0.0104,
+   "n": 559,
+   "dias": 37,
+   "acierto": 0.6852,
+   "precio_medio": 0.6689,
+   "ev": 0.0127,
    "ic90": [
-    -0.0394,
-    0.0576
+    -0.0359,
+    0.0608
    ],
-   "dias_positivos": 18,
+   "dias_positivos": 19,
    "wallet_top_pct": 6,
    "veredicto": "sin_concluir"
   },
   "C CS partido [0,65-0,70)": {
-   "n": 178,
-   "dias": 36,
-   "acierto": 0.7022,
-   "precio_medio": 0.6688,
-   "ev": 0.0387,
+   "n": 182,
+   "dias": 37,
+   "acierto": 0.7088,
+   "precio_medio": 0.6689,
+   "ev": 0.0482,
    "ic90": [
-    -0.0308,
-    0.1057
+    -0.0213,
+    0.117
    ],
-   "dias_positivos": 22,
+   "dias_positivos": 23,
    "wallet_top_pct": 6,
    "veredicto": "sin_concluir"
   },
   "D CS partido [0,60-0,80)": {
-   "n": 667,
-   "dias": 36,
-   "acierto": 0.6927,
-   "precio_medio": 0.6817,
-   "ev": 0.0049,
+   "n": 677,
+   "dias": 37,
+   "acierto": 0.6942,
+   "precio_medio": 0.6821,
+   "ev": 0.0069,
    "ic90": [
-    -0.0294,
-    0.0404
+    -0.0275,
+    0.0447
    ],
-   "dias_positivos": 17,
+   "dias_positivos": 18,
    "wallet_top_pct": 5,
    "veredicto": "sin_concluir"
   },
   "M maker vende longshot [0,30-0,40)": {
-   "n": 3022,
-   "dias": 36,
-   "acierto": 0.6499,
-   "precio_medio": 0.6497,
-   "ev": 0.0001,
+   "n": 3056,
+   "dias": 38,
+   "acierto": 0.6502,
+   "precio_medio": 0.6498,
+   "ev": 0.0005,
    "ic90": [
-    -0.0216,
-    0.0226
+    -0.0211,
+    0.0229
    ],
-   "dias_positivos": 18,
+   "dias_positivos": 20,
    "wallet_top_pct": 6,
    "veredicto": "sin_concluir"
   }
