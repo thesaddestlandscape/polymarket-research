@@ -42,21 +42,21 @@
  "https://1rpc.io/matic": {
   "cabeza": {
    "ok": false,
-   "detalle": "retrasado 34452 bloques",
+   "detalle": "retrasado 36853 bloques",
    "desde": 1793913784.5589137,
    "ultimo_aviso": 1793913784.5589137
   },
   "archivo": {
-   "ok": false,
-   "detalle": "RechazoPolitica: HTTP 403",
-   "desde": 1793938983.3241441,
-   "ultimo_aviso": 1793938983.3241441
+   "ok": true,
+   "detalle": "",
+   "desde": 1793942583.3179104,
+   "ultimo_aviso": 1793942583.3179104
   },
   "latest": {
-   "ok": false,
-   "detalle": "RechazoPolitica: HTTP 403",
-   "desde": 1793938983.3241441,
-   "ultimo_aviso": 1793938983.3241441
+   "ok": true,
+   "detalle": "",
+   "desde": 1793942583.3179104,
+   "ultimo_aviso": 1793942583.3179104
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-06T04:23:03+00:00"
+ "_actualizado_utc": "2026-11-06T05:23:03+00:00"
 }
