@@ -24,12 +24,12 @@
  "UPDOWN_GBM": {
   "ic_bayes_familia": 0.0588,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 25.91,
+  "pnl_fiel_combinado_eur": 24.99,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#ETH#240min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 25.909,
-    "n_ejecutado": 342
+    "pnl_fiel_eur_sin_suelo": 24.9902,
+    "n_ejecutado": 343
    }
   ]
  }
