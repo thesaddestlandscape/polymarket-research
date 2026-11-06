@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-11-06T17:00:10+00:00",
-  "bankroll_sim": 177846.89,
-  "pnl_total": 177826.89,
-  "n_ops": 1329212,
+  "timestamp_utc": "2026-11-06T17:11:07+00:00",
+  "bankroll_sim": 177937.29,
+  "pnl_total": 177917.29,
+  "n_ops": 1329458,
   "win_rate": 0.5719,
   "estrategias_activas": 600,
   "desactivadas": [
@@ -32,13 +32,13 @@
   "top3_ic": [
     {
       "k": "RESOLUTION_SNIPER#SOL#sniper",
-      "ic": 0.457,
-      "n": 300
+      "ic": 0.4571,
+      "n": 301
     },
     {
       "k": "RESOLUTION_SNIPER#SOL",
-      "ic": 0.457,
-      "n": 300
+      "ic": 0.4571,
+      "n": 301
     },
     {
       "k": "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min",
