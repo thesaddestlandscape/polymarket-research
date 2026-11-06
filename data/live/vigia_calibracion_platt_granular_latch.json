@@ -1626,5 +1626,13 @@
   "PRICE_TARGET_GBM#SOL": {
     "n": 200,
     "confirmado": false
+  },
+  "LIQUIDACIONES_5M#BNB": {
+    "n": 200,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_5M#BNB#5min": {
+    "n": 200,
+    "confirmado": true
   }
 }
