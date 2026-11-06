@@ -1,51 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-18T06:04:50+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 390,
-      "resolve_postmortem_p50_s": 11.0,
-      "resolve_postmortem_p95_s": 16.0,
-      "resolve_postmortem_max_s": 45.0,
-      "n_ciclos_live_trade": 4690,
-      "hueco_live_trade_max_s": 272.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 10,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 66.0,
-      "gb_libres": 24.66,
-      "git_gb": 0.0,
-      "data_gb": 24.23,
-      "datalogs_gb": 6.1
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.89,
-      "ram_pct_libre": 50.9
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 437,
-      "n_results_total": 167508
-    },
-    "carga_sistema": {
-      "load1": 5.66,
-      "load5": 5.37,
-      "load15": 4.86,
-      "nproc": 2,
-      "ratio5": 2.69,
-      "n_procesos_total": 181
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [],
-    "estado": "OK"
-  },
-  {
     "timestamp_utc": "2026-08-18T07:08:02+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 403,
@@ -15185,6 +15139,213 @@
     "anomalias": [
       "⏱️ ciclo resolve+postmortem tardó 470s (umbral 400s)",
       "💀 1 OOM-kill(s) del kernel en 24h: python(pid 1851132, 4193.8MB)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-06T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 133,
+      "resolve_postmortem_p50_s": 120.3,
+      "resolve_postmortem_p95_s": 213.0,
+      "resolve_postmortem_max_s": 305.3,
+      "resolve_postmortem_duraciones_s": [
+        240.9,
+        117.1,
+        93.1,
+        105.3,
+        130.7,
+        181.5,
+        172.2,
+        98.6,
+        117.5,
+        114.1,
+        106.4,
+        183.7,
+        168.9,
+        143.1,
+        96.8,
+        98.1,
+        101.3,
+        165.2,
+        170.5,
+        108.3,
+        89.3,
+        100.3,
+        191.6,
+        170.1,
+        133.7,
+        98.4,
+        96.1,
+        103.0,
+        97.1,
+        182.4,
+        137.3,
+        94.1,
+        106.2,
+        102.5,
+        103.6,
+        181.0,
+        142.5,
+        104.4,
+        92.0,
+        99.7,
+        113.7,
+        182.6,
+        166.2,
+        136.2,
+        305.3,
+        117.3,
+        98.0,
+        191.3,
+        150.5,
+        110.3,
+        103.2,
+        113.0,
+        120.6,
+        186.9,
+        184.8,
+        124.2,
+        130.2,
+        124.8,
+        118.5,
+        195.9,
+        163.6,
+        116.5,
+        133.3,
+        132.1,
+        119.7,
+        213.0,
+        255.4,
+        110.7,
+        150.0,
+        136.5,
+        110.1,
+        216.5,
+        163.2,
+        113.8,
+        119.9,
+        120.3,
+        123.5,
+        205.6,
+        188.0,
+        118.1,
+        95.1,
+        98.3,
+        93.4,
+        172.6,
+        146.6,
+        105.1,
+        102.4,
+        106.0,
+        197.3,
+        171.6,
+        139.5,
+        95.9,
+        87.4,
+        130.0,
+        91.9,
+        180.4,
+        136.1,
+        111.5,
+        102.9,
+        119.4,
+        118.1,
+        150.6,
+        131.1,
+        98.8,
+        108.8,
+        91.9,
+        98.1,
+        177.6,
+        217.3,
+        99.0,
+        184.9,
+        92.3,
+        94.2,
+        186.5,
+        166.0,
+        109.4,
+        114.5,
+        136.0,
+        106.0,
+        170.0,
+        167.3,
+        115.8,
+        103.8,
+        125.8,
+        123.8,
+        174.9,
+        154.7,
+        102.4,
+        127.2,
+        102.4,
+        103.1,
+        185.0,
+        238.3
+      ],
+      "n_ciclos_live_trade": 4602,
+      "hueco_live_trade_max_s": 58.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 23,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 92.0,
+      "gb_libres": 6.38,
+      "git_gb": 0.0,
+      "data_gb": 17.05,
+      "datalogs_gb": 9.42
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 5.89,
+      "ram_pct_libre": 38.7
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 773,
+      "n_results_total": 1323736
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 4.6,
+      "load5": 5.08,
+      "load15": 5.98,
+      "nproc": 8,
+      "ratio5": 0.64,
+      "n_procesos_total": 304
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 1,
+      "eventos": [
+        {
+          "ts": "Nov 05 21:48:40",
+          "pid": "2304236",
+          "nombre": "python",
+          "rss_mb": 4329.4
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "💾 disco al 92% (6.38GB libres)",
+      "💀 1 OOM-kill(s) del kernel en 24h: python(pid 2304236, 4329.4MB)"
     ],
     "estado": "ANOMALIA"
   }
