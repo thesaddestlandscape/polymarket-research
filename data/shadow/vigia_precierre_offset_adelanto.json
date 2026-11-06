@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-11-05T09:40:10+00:00",
+ "actualizado_utc": "2026-11-06T09:40:09+00:00",
  "fok_reales": {
   "enviadas": 36,
   "muertas": 12,
@@ -51,27 +51,27 @@
    "dif_ev_T47_menos_T45": 0.1
   },
   "15m#-47": {
-   "n": 25,
+   "n": 26,
    "pendientes": 0,
-   "dias": 16,
-   "acierto": 0.76,
+   "dias": 17,
+   "acierto": 0.769,
    "ask_medio": 0.772,
-   "ev_eur": -0.007,
+   "ev_eur": 0.004,
    "ic90_cierre": [
-    -0.216,
-    0.187
+    -0.195,
+    0.184
    ]
   },
   "15m#-46": {
-   "n": 24,
+   "n": 25,
    "pendientes": 0,
-   "dias": 14,
-   "acierto": 0.875,
-   "ask_medio": 0.728,
-   "ev_eur": 0.209,
+   "dias": 15,
+   "acierto": 0.88,
+   "ask_medio": 0.732,
+   "ev_eur": 0.208,
    "ic90_cierre": [
-    0.022,
-    0.385
+    0.032,
+    0.377
    ]
   },
   "15m#-45": {
@@ -89,7 +89,7 @@
   "15m#emparejado": {
    "senales_T45": 18,
    "tambien_a_T47": 6,
-   "solo_a_T47": 19,
+   "solo_a_T47": 20,
    "comunes_resueltos": 6,
    "dif_ev_T47_menos_T45": 0.019
   }
