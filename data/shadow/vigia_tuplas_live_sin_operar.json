@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-06T09:50:02+00:00",
+ "generado": "2026-11-07T09:50:02+00:00",
  "ventana_h": 24,
  "dias_alerta": 3,
  "unidades": [
@@ -15,15 +15,15 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#BNB#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-17T08:34:16",
-   "dias_sin_operar": 20.1,
+   "dias_sin_operar": 21.1,
    "senales_24h": 0,
    "motivos_24h": []
   },
   {
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#BTC#15min",
    "estado": "OPERA",
-   "ultimo_trade": "2026-11-03T10:44:17",
-   "dias_sin_operar": 3.0,
+   "ultimo_trade": "2026-11-07T06:59:15",
+   "dias_sin_operar": 0.1,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -31,7 +31,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#BTC#5min",
    "estado": "OPERA",
    "ultimo_trade": "2026-11-04T16:54:15",
-   "dias_sin_operar": 1.7,
+   "dias_sin_operar": 2.7,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -47,7 +47,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#DOGE#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-10T08:14:17",
-   "dias_sin_operar": 27.1,
+   "dias_sin_operar": 28.1,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -55,7 +55,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#ETH#15min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-22T22:59:15",
-   "dias_sin_operar": 14.5,
+   "dias_sin_operar": 15.5,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -63,7 +63,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#ETH#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-31T11:14:17",
-   "dias_sin_operar": 5.9,
+   "dias_sin_operar": 6.9,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -71,7 +71,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#SOL#15min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-21T16:14:17",
-   "dias_sin_operar": 15.7,
+   "dias_sin_operar": 16.7,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -79,7 +79,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#SOL#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-14T06:24:17",
-   "dias_sin_operar": 23.1,
+   "dias_sin_operar": 24.1,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -87,7 +87,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#XRP#15min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-09T17:14:15",
-   "dias_sin_operar": 27.7,
+   "dias_sin_operar": 28.7,
    "senales_24h": 0,
    "motivos_24h": []
   },
@@ -95,7 +95,7 @@
    "unidad": "RESOLUTION_SNIPER_PRECIERRE#XRP#5min",
    "estado": "SIN_SEÑALES",
    "ultimo_trade": "2026-10-30T09:44:15",
-   "dias_sin_operar": 7.0,
+   "dias_sin_operar": 8.0,
    "senales_24h": 0,
    "motivos_24h": []
   }
