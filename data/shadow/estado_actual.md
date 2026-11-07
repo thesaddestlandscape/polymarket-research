@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-07 07:39 UTC
+# Estado del bot — 2026-11-07 07:48 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +178857.90 $ (ficción Kelly: +703058% s/ operativo) |
 | P&L sim hoy (2026-11-07) | 🟢 +566.35 $ |
 | Operaciones resueltas | 1338381 (765332 WIN / 573049 LOSS) — 57.2% |
-| Señales abiertas | 197165 |
+| Señales abiertas | 197955 |
 
 ## Estrategias (visión global)
 
@@ -49,7 +49,7 @@
 | LIQUIDACIONES_5M | 4279 | 51.2% | +0.012 | 📈 madura (+0.04) (últ. 1000) | +100.88$ | 0.50$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M_BUYNO_DEPTH_FASE0 | 1059 | 47.7% | -0.023 | ➡️ estable (últ. 1000) | +72.10$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_MOM_5M | 11924 | 51.2% | +0.012 | ➡️ estable (últ. 1000) | +41.93$ | 0.50$ | ✅ activa |
-| UPDOWN_GBM_ETH_15M_HORA7 | 326 | 56.1% | +0.061 | 📈 madura (+0.04) | +27.43$ | 0.66$ | ✅ activa |
+| UPDOWN_GBM_ETH_15M_HORA7 | 326 | 56.1% | +0.061 | 📈 madura (+0.04) | +27.43$ | 0.68$ | ✅ activa |
 | LIQUIDACIONES_15M | 1015 | 48.1% | -0.019 | 📈 madura (+0.10) (últ. 1000) | +4.50$ | 0.50$ | ⚠️ IC negativo |
 | 0.5000 | 1 | 0.0% | -0.008 | — | +0.00$ | 0.90$ | ⏳ acumulando |
 | FAVORITO_CONFIRMADO_60MIN_EXTREMO | 1147 | 94.1% | +0.440 | ➡️ estable (últ. 1000) | -0.04$ | 2.00$ | ✅ activa |
@@ -91,12 +91,12 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-11-07T07:38 UTC
+✅ **OK** — última verificación 2026-11-07T07:47 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $75,923.15 | 0.1min |  |
-| ✅ ETH | $2,241.45 | 0.1min |  |
+| ✅ BTC | $75,967.00 | 0.1min |  |
+| ✅ ETH | $2,243.01 | 0.1min |  |
 | ✅ SOL | $90.09 | 0.1min |  |
 | ✅ XRP | $1.17 | 0.1min |  |
 
@@ -104,8 +104,8 @@
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $75,926.30 | consenso |  |
-| ETH | $2,241.99 | consenso |  |
+| BTC | $75,935.00 | consenso |  |
+| ETH | $2,242.25 | consenso |  |
 | SOL | $90.06 | consenso |  |
 | XRP | $1.17 | consenso |  |
 
