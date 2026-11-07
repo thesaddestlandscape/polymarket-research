@@ -1,31 +1,51 @@
 {
-  "generado_utc": "2026-11-06T06:03:14.691765+00:00",
-  "n_wallets_analizadas": 39,
+  "generado_utc": "2026-11-07T06:03:15.533588+00:00",
+  "n_wallets_analizadas": 44,
   "resumen_por_activo_marco": {},
   "detalle_wallets": {
+    "0xfea31bc088000ff909be1dfd8d0e3f2c7ef2d227": {
+      "nombre": "ndb1",
+      "pnl_ventana_diaria": 8755545.13,
+      "por_activo_marco": {}
+    },
     "0x73e35ce0b7e36ef3ce29ebd12b30b28007383239": {
       "nombre": "Stonktrader",
-      "pnl_ventana_diaria": 7100774.239999999,
+      "pnl_ventana_diaria": 5326753.28,
       "por_activo_marco": {}
     },
     "0x56f609c609975454bf851f0d91079fbc4a5fe251": {
       "nombre": "arcsine-barrister",
-      "pnl_ventana_diaria": 3798044.7500000005,
-      "por_activo_marco": {}
-    },
-    "0xe5e1072b676d83ba78d1a20460fd4d072b85badc": {
-      "nombre": "0x1a5de81b8313e63ef64aD72CdcC60FDc00610543-1775560822430",
-      "pnl_ventana_diaria": 1138608.04,
-      "por_activo_marco": {}
-    },
-    "0x111f73e91f85b6fe4de1ddec3de2fe32122e355b": {
-      "nombre": "Papeasy",
-      "pnl_ventana_diaria": 1094740.56,
+      "pnl_ventana_diaria": 3667390.0300000003,
       "por_activo_marco": {}
     },
     "0x6765c1c000e3b99c7fffea752c561cb868f1fa0d": {
       "nombre": "JanAMEX",
-      "pnl_ventana_diaria": 1058467.13,
+      "pnl_ventana_diaria": 2117498.95,
+      "por_activo_marco": {}
+    },
+    "0xed107a85a4585a381e48c7f7ca4144909e7dd2e5": {
+      "nombre": "elmcap2",
+      "pnl_ventana_diaria": 1648638.15,
+      "por_activo_marco": {}
+    },
+    "0x1465b79bff7992bc703e1aafb3683b1089647072": {
+      "nombre": "JnStrtPrdctnMrkts",
+      "pnl_ventana_diaria": 1295242.82,
+      "por_activo_marco": {}
+    },
+    "0xf705fa045201391d9632b7f3cde06a5e24453ca7": {
+      "nombre": "0xf705fa045201391d9632b7f3cde06a5e24453ca7",
+      "pnl_ventana_diaria": 1204218.47,
+      "por_activo_marco": {}
+    },
+    "0x111f73e91f85b6fe4de1ddec3de2fe32122e355b": {
+      "nombre": "Papeasy",
+      "pnl_ventana_diaria": 1169951.19,
+      "por_activo_marco": {}
+    },
+    "0xe5e1072b676d83ba78d1a20460fd4d072b85badc": {
+      "nombre": "0x1a5de81b8313e63ef64aD72CdcC60FDc00610543-1775560822430",
+      "pnl_ventana_diaria": 1162079.24,
       "por_activo_marco": {}
     },
     "0xa3eb7c5ff848d073ac9b6dd91c6a9eee6c3985e2": {
@@ -33,9 +53,9 @@
       "pnl_ventana_diaria": 975848.1599999999,
       "por_activo_marco": {}
     },
-    "0xf705fa045201391d9632b7f3cde06a5e24453ca7": {
-      "nombre": "0xf705fa045201391d9632b7f3cde06a5e24453ca7",
-      "pnl_ventana_diaria": 915766.47,
+    "0x8b4bca1d794779e66e023d44391b2a86c5ab541b": {
+      "nombre": "0x8B4bcA1D794779E66e023D44391B2A86C5ab541B-1769764313952",
+      "pnl_ventana_diaria": 675260.32,
       "por_activo_marco": {}
     },
     "0x92b5f14c68ccae0cd7d0ba52b098ffaab990fec6": {
@@ -43,14 +63,14 @@
       "pnl_ventana_diaria": 649354.32,
       "por_activo_marco": {}
     },
-    "0x8b4bca1d794779e66e023d44391b2a86c5ab541b": {
-      "nombre": "0x8B4bcA1D794779E66e023D44391B2A86C5ab541B-1769764313952",
-      "pnl_ventana_diaria": 568926.83,
-      "por_activo_marco": {}
-    },
     "0x1d4affdc390c00991acf70f6e010c9702b2d46f5": {
       "nombre": "Carry99",
-      "pnl_ventana_diaria": 485466.74999999994,
+      "pnl_ventana_diaria": 573866.88,
+      "por_activo_marco": {}
+    },
+    "0xb6fef4c2c436ab8bbf07d017952e851dcf717394": {
+      "nombre": "0xb6fef4c2c436ab8bbf07d017952e851dcf717394",
+      "pnl_ventana_diaria": 447187.63,
       "por_activo_marco": {}
     },
     "0xb4f8df877a319789b857ec02b49338b7bcdf0213": {
@@ -60,17 +80,7 @@
     },
     "0x5188fa0e8a77e87bc6a58e6781fdfc4e165cc804": {
       "nombre": "AllByMyseIf",
-      "pnl_ventana_diaria": 295879.63,
-      "por_activo_marco": {}
-    },
-    "0xb6fef4c2c436ab8bbf07d017952e851dcf717394": {
-      "nombre": "0xb6fef4c2c436ab8bbf07d017952e851dcf717394",
-      "pnl_ventana_diaria": 263631.72,
-      "por_activo_marco": {}
-    },
-    "0x8ff04326388b1c024c45d7a7ffdd12cdedd0a0ed": {
-      "nombre": "HellsAngelx",
-      "pnl_ventana_diaria": 231561.35,
+      "pnl_ventana_diaria": 366847.46,
       "por_activo_marco": {}
     },
     "0x301e286fd88abb7cda0a19a24e4dc4823c4db752": {
@@ -78,14 +88,14 @@
       "pnl_ventana_diaria": 174108.78,
       "por_activo_marco": {}
     },
+    "0x8ff04326388b1c024c45d7a7ffdd12cdedd0a0ed": {
+      "nombre": "HellsAngelx",
+      "pnl_ventana_diaria": 173753.67,
+      "por_activo_marco": {}
+    },
     "0x7a1c743ac51f74ab332bf0534e354567b6c90c67": {
       "nombre": "8373",
       "pnl_ventana_diaria": 165235.44,
-      "por_activo_marco": {}
-    },
-    "0x731a241767938bb23d1b2fac4c9cd2f3cea9033f": {
-      "nombre": "CoinTrick",
-      "pnl_ventana_diaria": 136285.05999999997,
       "por_activo_marco": {}
     },
     "0xebf0a333fcc4648aacc7826f7183fd4360dbe275": {
@@ -93,14 +103,14 @@
       "pnl_ventana_diaria": 111966.43,
       "por_activo_marco": {}
     },
+    "0xc1a58674dbcc1d3208f7e61a0a8b252162caf290": {
+      "nombre": "amis",
+      "pnl_ventana_diaria": 111314.73,
+      "por_activo_marco": {}
+    },
     "0x7c0f251fa42ab204fe3a81690f09f513550e9f7b": {
       "nombre": "zimmer888",
       "pnl_ventana_diaria": 95452.36,
-      "por_activo_marco": {}
-    },
-    "0x4d6e3a0404b4c2455090d2a2f05d816edcedf977": {
-      "nombre": "10Alexander321",
-      "pnl_ventana_diaria": 94284.70999999999,
       "por_activo_marco": {}
     },
     "0x4c5cd4953c3ec9212b6d15e21ea100dbcc679652": {
@@ -108,9 +118,19 @@
       "pnl_ventana_diaria": 90566.68,
       "por_activo_marco": {}
     },
+    "0x731a241767938bb23d1b2fac4c9cd2f3cea9033f": {
+      "nombre": "CoinTrick",
+      "pnl_ventana_diaria": 70241.99999999999,
+      "por_activo_marco": {}
+    },
     "0x7789957157a13aa3610e26d61ef8f99317b7a280": {
       "nombre": "beatyesterday",
       "pnl_ventana_diaria": 69537.14,
+      "por_activo_marco": {}
+    },
+    "0x4d6e3a0404b4c2455090d2a2f05d816edcedf977": {
+      "nombre": "10Alexander321",
+      "pnl_ventana_diaria": 66217.68,
       "por_activo_marco": {}
     },
     "0x9e3ed7b661a903fc97afcf49e0f014ebe869f882": {
@@ -118,14 +138,19 @@
       "pnl_ventana_diaria": 60847.16,
       "por_activo_marco": {}
     },
+    "0xcbc5d8509552a47be7a2386311e43a05cee3e175": {
+      "nombre": "larkspur",
+      "pnl_ventana_diaria": 59144.43,
+      "por_activo_marco": {}
+    },
+    "0x3b7ed1242417f4b8f6992b5dd53aa9415a2c23eb": {
+      "nombre": "phdcapital",
+      "pnl_ventana_diaria": 55796.59,
+      "por_activo_marco": {}
+    },
     "0x7894991b387feef283138229220418ede71b455f": {
       "nombre": "notfairplay",
       "pnl_ventana_diaria": 55685.28999999999,
-      "por_activo_marco": {}
-    },
-    "0x49ba059622b862007ce522ffa86148ac3c2bd2f6": {
-      "nombre": "Nobey1",
-      "pnl_ventana_diaria": 52221.06999999999,
       "por_activo_marco": {}
     },
     "0x751a2b86cab503496efd325c8344e10159349ea1": {
@@ -135,7 +160,12 @@
     },
     "0xcf0c70317fd5e4e4429758b3d80a7b7f3762f2bb": {
       "nombre": "oxe78sh4w98",
-      "pnl_ventana_diaria": 49442.88,
+      "pnl_ventana_diaria": 48580.71,
+      "por_activo_marco": {}
+    },
+    "0x49ba059622b862007ce522ffa86148ac3c2bd2f6": {
+      "nombre": "Nobey1",
+      "pnl_ventana_diaria": 34037.46,
       "por_activo_marco": {}
     },
     "0xede186f37ead91aa618cf8101db2bfe6b6c57dd1": {
@@ -145,12 +175,7 @@
     },
     "0x6916cc00aa1c3e75ecf4081df7cae7d2f3592fd4": {
       "nombre": "x6916Cc00AA1c3e75ECf4081DF7caE7D2f3592fd4",
-      "pnl_ventana_diaria": 26460.01,
-      "por_activo_marco": {}
-    },
-    "0x664a25f165a0150ce687410470f3352f5783fc5f": {
-      "nombre": "itsonlyamatteroftime",
-      "pnl_ventana_diaria": 22208.89,
+      "pnl_ventana_diaria": 28620.35,
       "por_activo_marco": {}
     },
     "0x2d2d2b32e5199edf833594a99b9c54e5668ab69d": {
@@ -163,11 +188,6 @@
       "pnl_ventana_diaria": 17596.86,
       "por_activo_marco": {}
     },
-    "0x9d57c42e847173d06841703825d3fe2299e456ea": {
-      "nombre": "Polkadot-Frog",
-      "pnl_ventana_diaria": 9379.52,
-      "por_activo_marco": {}
-    },
     "0xe94bf89e66b852d60866667bddf7bff9dad65abe": {
       "nombre": "PhongLeXBT",
       "pnl_ventana_diaria": 7537.26,
@@ -175,7 +195,7 @@
     },
     "0x41e2e1ccf1e4940029af02259a31c6b89b9fa354": {
       "nombre": "norm1e69",
-      "pnl_ventana_diaria": 4722.43,
+      "pnl_ventana_diaria": 4225.18,
       "por_activo_marco": {}
     },
     "0xfcda969d818f49fb945b889275405f929221eecc": {
@@ -183,19 +203,24 @@
       "pnl_ventana_diaria": 3891.5,
       "por_activo_marco": {}
     },
-    "0xab155a20ff29debee4128e9dd1ea6ab8541c46e5": {
-      "nombre": "196874353278",
-      "pnl_ventana_diaria": 3232.4799999999996,
+    "0xe3eeb127d5763a6e4ad597f773f9d259c94d5176": {
+      "nombre": "sin_nombre_e3ee",
+      "pnl_ventana_diaria": 3426.77,
+      "por_activo_marco": {}
+    },
+    "0xc38904e5da4c2e962e2a3c72511bfdddaa42d228": {
+      "nombre": "RLWG",
+      "pnl_ventana_diaria": 2664.3,
       "por_activo_marco": {}
     },
     "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d": {
       "nombre": "sin_nombre_20d2",
-      "pnl_ventana_diaria": 2126.6799999999994,
+      "pnl_ventana_diaria": 622.33,
       "por_activo_marco": {}
     },
-    "0xa5ca94b389e0fc0d9fe8b5f23c2e7741cdbe7bd1": {
-      "nombre": "0x883Ee943ffdeeaAB652E402E7C5E",
-      "pnl_ventana_diaria": 119.91,
+    "0x9bbf8abf929eddbb4da10535cf4c02db33f4c59f": {
+      "nombre": "HandsomeLi",
+      "pnl_ventana_diaria": 442.15,
       "por_activo_marco": {}
     }
   }
