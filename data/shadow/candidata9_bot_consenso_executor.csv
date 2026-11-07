@@ -81775,3 +81775,7 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-11-07T09:52:35+00:00,0xf0d49a0767e4bed575c636c225ba96aa33bc1d1c1b159d6ae24ecf228c76a9a2,sol-updown-5m-1794045000,SOL,5min,Down,2,0.32,47.5,0.29,63.4,0.29,0.0,1,0,0,0,fuera_de_zona_confirmada
 2026-11-07T09:55:09+00:00,0xcf96b08c4f2d0ab26b3cf7014675ee62051a7bb6468240524ccd75aa0e5b136b,eth-updown-5m-1794045300,ETH,5min,Down,2,0.47,0.0,0.53,0.0,0.5,-5.66,0,0,0,0,fuera_de_zona_confirmada
 2026-11-07T09:55:18+00:00,0x798612f07641f91d889010b9a5511f2807fc7b73ecc41fe79922481349664f52,btc-updown-5m-1794045300,BTC,5min,Down,2,0.44,0.0,0.47,422.0,0.46,-2.13,1,0,0,0,fuera_de_zona_confirmada
+2026-11-07T09:57:12+00:00,0x6f9246e1950987d3663e8cdf509143ccaa18e2ae6ff4b85454328fcd1754fc3c,sol-updown-5m-1794045300,SOL,5min,Up,4,0.6,120.9,0.47,134.9,0.44,-6.38,1,0,0,0,fuera_de_zona_confirmada
+2026-11-07T10:00:21+00:00,0x5c7ffc010ac7e149319816f0d7f128cf7223fecb8b0c52c7e2ea5cacc209c6f5,btc-updown-5m-1794045600,BTC,5min,Up,2,0.4,0.0,0.44,0.0,0.45,2.27,0,0,0,0,fuera_de_zona_confirmada
+2026-11-07T10:00:29+00:00,0xe0d87ed4173389c2304400cda2f6f3a913bf03bd3f56bc8e637eaa7b9f21c5b5,eth-updown-5m-1794045600,ETH,5min,Up,2,0.23,0.0,0.31,0.0,0.29,-6.45,0,0,0,0,fuera_de_zona_confirmada
+2026-11-07T10:00:48+00:00,0xcd9badc498966dc68afc9e5363c5344caf7c05b429f5e95ea638c8e4507ae0f0,sol-updown-5m-1794045600,SOL,5min,Down,3,0.4,13.8,0.4,30.1,0.38,-5.0,1,0,0,0,fuera_de_zona_confirmada
