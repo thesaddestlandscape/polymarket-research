@@ -1,0 +1,3 @@
+timestamp_utc,slug,market_id,condition_id,activo,end_date,restante_s,py_yes,lado,direccion,best_bid,best_ask,spread,profundidad_usd,n_niveles,outcome_real,acierto
+2026-11-08T00:04:50+00:00,doge-updown-5m-1794096000,6765328,0xe6d01aa63fb3603f3ff9f77d1b1b8bf1e836fc0a2e286edbe15af323ab727aa1,DOGE,2026-11-08T00:05:00+00:00,9.9,0.12,Down,BUY_NO,0.99,,,,0,,
+2026-11-08T00:04:50+00:00,bnb-updown-5m-1794096000,6765319,0x8b08054ed201084ab3277ef8989e6589f37800f0fe0cb50bacfdb0d4c008e19c,BNB,2026-11-08T00:05:00+00:00,9.9,0.95,Up,BUY_YES,0.99,,,,0,,
