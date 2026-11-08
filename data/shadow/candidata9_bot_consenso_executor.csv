@@ -83058,3 +83058,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-11-08T16:54:22+00:00,0xda98d54fad9cff114dc4dd0ccc9a21a42e35bd754d4a41d58cab79dbb7ad2c11,btc-updown-5m-1794156900,BTC,5min,Up,2,0.5099999278301989,0.0,0.59,0.0,0.57,-3.39,0,0,0,0,fuera_de_zona_confirmada
 2026-11-08T16:56:21+00:00,0x79ba1e0b1539602793040611501810f2c33dc13e4581a51e6ead7ab749c062c7,sol-updown-5m-1794156900,SOL,5min,Up,2,0.53,309.9,0.46,513.8,0.43,-6.52,1,0,0,0,fuera_de_zona_confirmada
 2026-11-08T16:57:10+00:00,0xf273fe8c040d717a7fbf11481d2c8ecb3c34cc2c5d5d46d9cc9f37d88d04e6bb,xrp-updown-5m-1794156900,XRP,5min,Down,2,0.25,160.0,0.12,167.2,0.12,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-08T16:59:34+00:00,0x9efcc524b51682e0cf1bf483b5d3359eaf729f0b5fb999264a5bb68e33155e19,btc-updown-5m-1794157200,BTC,5min,Down,2,0.48,58.4,0.49,51.3,0.49,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-08T17:00:12+00:00,0xdf74728a4ff1b2448f6dcf9aeba55801e6f3261020ea4ba1b822c195b85b00d8,eth-updown-5m-1794157200,ETH,5min,Down,2,0.4300000284999986,172.3,0.4,307.7,0.36,-10.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-08T17:00:26+00:00,0x990df9a954ea81d89ed1fdc13cafcf014931ec213b085fdde0d12771ad115a7e,btc-updown-15m-1794157200,BTC,15min,Down,4,0.45,3423.9,0.42,3412.1,0.42,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-08T17:00:29+00:00,0xd7677595dddc842be72e466f6364efada0163e1a51f8168543d120b74dceb1ef,sol-updown-15m-1794157200,SOL,15min,Up,2,0.5599998682353251,0.0,0.63,0.0,0.59,-6.35,0,0,0,0,fuera_de_zona_confirmada
+2026-11-08T17:00:32+00:00,0x1857fa2f2f5e676281e03ec459ecbe71926fb11ee8c3a7efddb08358d8798cbd,bitcoin-up-or-down-november-8-2026-12pm-et,BTC,60min,Down,2,0.5,835.4,0.47,890.1,0.47,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-08T17:00:50+00:00,0xcf1c1131f5325314af34fd1fc0ae0ea9688622f8b0c82b2ad66d79d7f3d8348b,eth-updown-15m-1794157200,ETH,15min,Up,2,0.53,0.0,0.61,0.0,0.63,3.28,0,0,0,0,fuera_de_zona_confirmada
+2026-11-08T17:04:00+00:00,0x94973bd58c9c76b8cc9cc09401fbb14c6b58cd05def750c574c55ecdc3736af0,ethereum-up-or-down-november-8-2026-12pm-et,ETH,60min,Down,2,0.49,305.0,0.4,250.9,0.42,5.0,1,0,0,0,fuera_de_zona_confirmada
