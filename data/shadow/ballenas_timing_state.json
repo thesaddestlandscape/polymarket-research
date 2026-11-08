@@ -6,80 +6,80 @@
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": true,
-        "n": 19063,
-        "hit": 0.4306,
-        "precio_medio": 0.3899,
-        "z": 11.519,
-        "n_wallets": 2097,
-        "top1_share": 0.274
+        "n": 19302,
+        "hit": 0.4321,
+        "precio_medio": 0.3902,
+        "z": 11.925,
+        "n_wallets": 2113,
+        "top1_share": 0.3
       },
       {
         "banda_lo": 0.0,
         "banda_hi": 0.05,
         "pasa_gates": true,
-        "n": 55372,
-        "hit": 0.023,
+        "n": 55405,
+        "hit": 0.0231,
         "precio_medio": 0.017,
-        "z": 10.93,
-        "n_wallets": 2993,
-        "top1_share": 0.251
+        "z": 11.12,
+        "n_wallets": 2995,
+        "top1_share": 0.247
       },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": true,
-        "n": 55187,
-        "hit": 0.1565,
+        "n": 55158,
+        "hit": 0.1568,
         "precio_medio": 0.1447,
-        "z": 7.879,
-        "n_wallets": 3230,
-        "top1_share": 0.248
+        "z": 8.117,
+        "n_wallets": 3227,
+        "top1_share": 0.24
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": false,
-        "n": 18026,
-        "hit": 0.5569,
-        "precio_medio": 0.5997,
-        "z": -11.711,
-        "n_wallets": 2028,
+        "n": 18241,
+        "hit": 0.5549,
+        "precio_medio": 0.5993,
+        "z": -12.25,
+        "n_wallets": 2046,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.7,
         "banda_hi": 0.9,
         "pasa_gates": false,
-        "n": 32361,
-        "hit": 0.7809,
-        "precio_medio": 0.8111,
-        "z": -13.894,
-        "n_wallets": 2001,
+        "n": 32408,
+        "hit": 0.78,
+        "precio_medio": 0.811,
+        "z": -14.285,
+        "n_wallets": 2003,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": false,
-        "n": 137045,
-        "hit": 0.967,
+        "n": 137200,
+        "hit": 0.9668,
         "precio_medio": 0.975,
-        "z": -18.917,
-        "n_wallets": 11374,
+        "z": -19.442,
+        "n_wallets": 11386,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
+    "actualizado": "2026-11-08T11:08:01+00:00",
     "banda_lo": 0.3,
     "banda_hi": 0.5,
-    "z": 11.519,
-    "n": 19063,
-    "n_wallets": 2097,
-    "top1_share": 0.274,
-    "rest_lo_min": 319.75,
-    "rest_hi_min": 2917.95,
-    "rest_mediana_min": 1090.2,
-    "n_ganadoras": 8208
+    "z": 11.925,
+    "n": 19302,
+    "n_wallets": 2113,
+    "top1_share": 0.3,
+    "rest_lo_min": 325.3,
+    "rest_hi_min": 2924.5,
+    "rest_mediana_min": 1090.22,
+    "n_ganadoras": 8340
   },
   "ETH#weekly": {
     "significativo": true,
@@ -88,10 +88,10 @@
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": true,
-        "n": 20927,
+        "n": 20924,
         "hit": 0.1861,
         "precio_medio": 0.1494,
-        "z": 14.892,
+        "z": 14.898,
         "n_wallets": 1209,
         "top1_share": 0.353
       },
@@ -99,63 +99,63 @@
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 7637,
-        "hit": 0.4494,
+        "n": 7632,
+        "hit": 0.4493,
         "precio_medio": 0.3935,
-        "z": 10.003,
-        "n_wallets": 683,
-        "top1_share": 0.474
+        "z": 9.985,
+        "n_wallets": 682,
+        "top1_share": 0.475
       },
       {
         "banda_lo": 0.0,
         "banda_hi": 0.05,
         "pasa_gates": false,
-        "n": 20849,
+        "n": 20841,
         "hit": 0.0193,
         "precio_medio": 0.0179,
-        "z": 1.486,
-        "n_wallets": 1025,
-        "top1_share": 0.774
+        "z": 1.492,
+        "n_wallets": 1023,
+        "top1_share": 0.771
       },
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": false,
-        "n": 63711,
+        "n": 63700,
         "hit": 0.9755,
         "precio_medio": 0.9747,
-        "z": 1.169,
-        "n_wallets": 6228,
-        "top1_share": 1.785
+        "z": 1.162,
+        "n_wallets": 6227,
+        "top1_share": 1.791
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": false,
-        "n": 8604,
-        "hit": 0.5812,
+        "n": 8589,
+        "hit": 0.581,
         "precio_medio": 0.6007,
-        "z": -3.686,
-        "n_wallets": 653,
+        "z": -3.729,
+        "n_wallets": 649,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.7,
         "banda_hi": 0.9,
         "pasa_gates": false,
-        "n": 15193,
+        "n": 15190,
         "hit": 0.7734,
         "precio_medio": 0.8084,
-        "z": -10.936,
+        "z": -10.956,
         "n_wallets": 831,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
+    "actualizado": "2026-11-08T11:08:01+00:00",
     "banda_lo": 0.05,
     "banda_hi": 0.3,
-    "z": 14.892,
-    "n": 20927,
+    "z": 14.898,
+    "n": 20924,
     "n_wallets": 1209,
     "top1_share": 0.353,
     "rest_lo_min": 334.47,
@@ -214,11 +214,11 @@
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": false,
-        "n": 15756,
+        "n": 15753,
         "hit": 0.9504,
         "precio_medio": 0.9776,
-        "z": -23.095,
-        "n_wallets": 1714,
+        "z": -23.096,
+        "n_wallets": 1713,
         "top1_share": 1.0
       },
       {
@@ -233,7 +233,7 @@
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "SOL#240m": {
     "significativo": false,
@@ -305,7 +305,7 @@
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "XRP#240m": {
     "significativo": false,
@@ -377,7 +377,7 @@
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "DOGE#240m": {
     "significativo": false,
@@ -449,7 +449,7 @@
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "ETH#240m": {
     "significativo": false,
@@ -521,7 +521,7 @@
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "BTC#240m": {
     "significativo": false,
@@ -593,7 +593,7 @@
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "BNB#240m": {
     "significativo": false,
@@ -665,89 +665,89 @@
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
-  "ETH#60m": {
+  "BTC#60m": {
     "significativo": true,
     "bandas": [
-      {
-        "banda_lo": 0.5,
-        "banda_hi": 0.7,
-        "pasa_gates": true,
-        "n": 8489,
-        "hit": 0.6069,
-        "precio_medio": 0.5853,
-        "z": 4.038,
-        "n_wallets": 339,
-        "top1_share": 0.294
-      },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": true,
-        "n": 7349,
-        "hit": 0.2055,
-        "precio_medio": 0.1872,
-        "z": 4.01,
-        "n_wallets": 317,
-        "top1_share": 0.376
-      },
-      {
-        "banda_lo": 0.0,
-        "banda_hi": 0.05,
-        "pasa_gates": false,
-        "n": 938,
-        "hit": 0.049,
-        "precio_medio": 0.028,
-        "z": 3.903,
-        "n_wallets": 140,
-        "top1_share": 0.632
-      },
-      {
-        "banda_lo": 0.3,
-        "banda_hi": 0.5,
-        "pasa_gates": false,
-        "n": 10739,
-        "hit": 0.4143,
-        "precio_medio": 0.397,
-        "z": 3.652,
-        "n_wallets": 332,
-        "top1_share": 1.269
+        "n": 16576,
+        "hit": 0.1943,
+        "precio_medio": 0.1764,
+        "z": 6.053,
+        "n_wallets": 1035,
+        "top1_share": 0.184
       },
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
+        "pasa_gates": true,
+        "n": 14372,
+        "hit": 0.9633,
+        "precio_medio": 0.9566,
+        "z": 3.916,
+        "n_wallets": 774,
+        "top1_share": 0.309
+      },
+      {
+        "banda_lo": 0.5,
+        "banda_hi": 0.7,
         "pasa_gates": false,
-        "n": 10397,
-        "hit": 0.9581,
-        "precio_medio": 0.958,
-        "z": 0.027,
-        "n_wallets": 368,
-        "top1_share": 12.953
+        "n": 25413,
+        "hit": 0.5949,
+        "precio_medio": 0.588,
+        "z": 2.226,
+        "n_wallets": 1233,
+        "top1_share": 0.501
       },
       {
         "banda_lo": 0.7,
         "banda_hi": 0.9,
         "pasa_gates": false,
-        "n": 7045,
-        "hit": 0.7953,
-        "precio_medio": 0.8051,
-        "z": -2.064,
-        "n_wallets": 298,
+        "n": 18472,
+        "hit": 0.7925,
+        "precio_medio": 0.7923,
+        "z": 0.059,
+        "n_wallets": 906,
+        "top1_share": 20.505
+      },
+      {
+        "banda_lo": 0.0,
+        "banda_hi": 0.05,
+        "pasa_gates": false,
+        "n": 2500,
+        "hit": 0.0212,
+        "precio_medio": 0.0244,
+        "z": -1.034,
+        "n_wallets": 361,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.3,
+        "banda_hi": 0.5,
+        "pasa_gates": false,
+        "n": 17840,
+        "hit": 0.3941,
+        "precio_medio": 0.4016,
+        "z": -2.044,
+        "n_wallets": 1279,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
-    "banda_lo": 0.5,
-    "banda_hi": 0.7,
-    "z": 4.038,
-    "n": 8489,
-    "n_wallets": 339,
-    "top1_share": 0.294,
-    "rest_lo_min": 21.75,
-    "rest_hi_min": 55.68,
-    "rest_mediana_min": 40.58,
-    "n_ganadoras": 5152
+    "actualizado": "2026-11-08T11:08:01+00:00",
+    "banda_lo": 0.05,
+    "banda_hi": 0.3,
+    "z": 6.053,
+    "n": 16576,
+    "n_wallets": 1035,
+    "top1_share": 0.184,
+    "rest_lo_min": 10.0,
+    "rest_hi_min": 37.7,
+    "rest_mediana_min": 22.5,
+    "n_ganadoras": 3221
   },
   "SOL#60m": {
     "significativo": false,
@@ -756,34 +756,34 @@
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": true,
-        "n": 2565,
+        "n": 2563,
         "hit": 0.9828,
         "precio_medio": 0.973,
-        "z": 3.071,
-        "n_wallets": 225,
-        "top1_share": 0.228
+        "z": 3.082,
+        "n_wallets": 226,
+        "top1_share": 0.227
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": false,
-        "n": 1331,
-        "hit": 0.6176,
-        "precio_medio": 0.5877,
-        "z": 2.218,
+        "n": 1326,
+        "hit": 0.6169,
+        "precio_medio": 0.5875,
+        "z": 2.172,
         "n_wallets": 138,
-        "top1_share": 0.799
+        "top1_share": 0.797
       },
       {
         "banda_lo": 0.7,
         "banda_hi": 0.9,
         "pasa_gates": false,
-        "n": 1246,
-        "hit": 0.8178,
+        "n": 1250,
+        "hit": 0.8192,
         "precio_medio": 0.7975,
-        "z": 1.786,
+        "z": 1.913,
         "n_wallets": 117,
-        "top1_share": 0.889
+        "top1_share": 0.828
       },
       {
         "banda_lo": 0.0,
@@ -800,205 +800,123 @@
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 1018,
-        "hit": 0.3625,
-        "precio_medio": 0.4013,
-        "z": -2.527,
-        "n_wallets": 127,
+        "n": 1017,
+        "hit": 0.3628,
+        "precio_medio": 0.4011,
+        "z": -2.487,
+        "n_wallets": 128,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": false,
-        "n": 1711,
-        "hit": 0.1157,
-        "precio_medio": 0.1821,
-        "z": -7.118,
+        "n": 1712,
+        "hit": 0.1151,
+        "precio_medio": 0.182,
+        "z": -7.18,
         "n_wallets": 131,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
-  "BTC#60m": {
+  "ETH#60m": {
     "significativo": true,
     "bandas": [
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": true,
-        "n": 16610,
-        "hit": 0.1943,
-        "precio_medio": 0.1764,
-        "z": 6.065,
-        "n_wallets": 1037,
-        "top1_share": 0.185
-      },
-      {
-        "banda_lo": 0.9,
-        "banda_hi": 1.0,
-        "pasa_gates": true,
-        "n": 14465,
-        "hit": 0.9635,
-        "precio_medio": 0.9566,
-        "z": 4.086,
-        "n_wallets": 777,
-        "top1_share": 0.296
+        "n": 7345,
+        "hit": 0.2052,
+        "precio_medio": 0.187,
+        "z": 4.002,
+        "n_wallets": 316,
+        "top1_share": 0.394
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
-        "pasa_gates": false,
-        "n": 25487,
-        "hit": 0.5944,
-        "precio_medio": 0.588,
-        "z": 2.081,
-        "n_wallets": 1235,
-        "top1_share": 0.545
-      },
-      {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
-        "pasa_gates": false,
-        "n": 18464,
-        "hit": 0.7918,
-        "precio_medio": 0.7921,
-        "z": -0.113,
-        "n_wallets": 907,
-        "top1_share": 1.0
+        "pasa_gates": true,
+        "n": 8479,
+        "hit": 0.6064,
+        "precio_medio": 0.5852,
+        "z": 3.962,
+        "n_wallets": 338,
+        "top1_share": 0.287
       },
       {
         "banda_lo": 0.0,
         "banda_hi": 0.05,
         "pasa_gates": false,
-        "n": 2519,
-        "hit": 0.021,
-        "precio_medio": 0.0244,
-        "z": -1.094,
-        "n_wallets": 362,
-        "top1_share": 1.0
+        "n": 938,
+        "hit": 0.049,
+        "precio_medio": 0.028,
+        "z": 3.903,
+        "n_wallets": 140,
+        "top1_share": 0.632
       },
       {
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 17874,
-        "hit": 0.3949,
-        "precio_medio": 0.4017,
-        "z": -1.836,
-        "n_wallets": 1283,
+        "n": 10722,
+        "hit": 0.4143,
+        "precio_medio": 0.3971,
+        "z": 3.644,
+        "n_wallets": 331,
+        "top1_share": 1.275
+      },
+      {
+        "banda_lo": 0.9,
+        "banda_hi": 1.0,
+        "pasa_gates": false,
+        "n": 10369,
+        "hit": 0.958,
+        "precio_medio": 0.958,
+        "z": -0.011,
+        "n_wallets": 368,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
+        "pasa_gates": false,
+        "n": 7035,
+        "hit": 0.796,
+        "precio_medio": 0.8051,
+        "z": -1.92,
+        "n_wallets": 297,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
+    "actualizado": "2026-11-08T11:08:01+00:00",
     "banda_lo": 0.05,
     "banda_hi": 0.3,
-    "z": 6.065,
-    "n": 16610,
-    "n_wallets": 1037,
-    "top1_share": 0.185,
-    "rest_lo_min": 10.03,
-    "rest_hi_min": 37.73,
-    "rest_mediana_min": 22.55,
-    "n_ganadoras": 3228
+    "z": 4.002,
+    "n": 7345,
+    "n_wallets": 316,
+    "top1_share": 0.394,
+    "rest_lo_min": 22.48,
+    "rest_hi_min": 50.4,
+    "rest_mediana_min": 38.43,
+    "n_ganadoras": 1507
   },
   "DOGE#weekly": {
     "significativo": false,
     "bandas": [],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "XRP#weekly": {
     "significativo": false,
     "bandas": [],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "BNB#weekly": {
     "significativo": false,
     "bandas": [],
-    "actualizado": "2026-11-08T10:08:01+00:00"
-  },
-  "XRP#15m": {
-    "significativo": true,
-    "bandas": [
-      {
-        "banda_lo": 0.05,
-        "banda_hi": 0.3,
-        "pasa_gates": true,
-        "n": 4811,
-        "hit": 0.2112,
-        "precio_medio": 0.1834,
-        "z": 4.982,
-        "n_wallets": 226,
-        "top1_share": 0.37
-      },
-      {
-        "banda_lo": 0.5,
-        "banda_hi": 0.7,
-        "pasa_gates": false,
-        "n": 4680,
-        "hit": 0.6041,
-        "precio_medio": 0.5811,
-        "z": 3.184,
-        "n_wallets": 299,
-        "top1_share": 0.845
-      },
-      {
-        "banda_lo": 0.3,
-        "banda_hi": 0.5,
-        "pasa_gates": false,
-        "n": 4066,
-        "hit": 0.4134,
-        "precio_medio": 0.398,
-        "z": 2.01,
-        "n_wallets": 251,
-        "top1_share": 0.531
-      },
-      {
-        "banda_lo": 0.9,
-        "banda_hi": 1.0,
-        "pasa_gates": false,
-        "n": 4622,
-        "hit": 0.9645,
-        "precio_medio": 0.9626,
-        "z": 0.684,
-        "n_wallets": 255,
-        "top1_share": 2.075
-      },
-      {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
-        "pasa_gates": false,
-        "n": 3752,
-        "hit": 0.7934,
-        "precio_medio": 0.7959,
-        "z": -0.373,
-        "n_wallets": 247,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.0,
-        "banda_hi": 0.05,
-        "pasa_gates": false,
-        "n": 362,
-        "hit": 0.0138,
-        "precio_medio": 0.0235,
-        "z": -1.222,
-        "n_wallets": 76,
-        "top1_share": 1.0
-      }
-    ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
-    "banda_lo": 0.05,
-    "banda_hi": 0.3,
-    "z": 4.982,
-    "n": 4811,
-    "n_wallets": 226,
-    "top1_share": 0.37,
-    "rest_lo_min": 3.45,
-    "rest_hi_min": 10.85,
-    "rest_mediana_min": 6.68,
-    "n_ganadoras": 1016
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "ETH#15m": {
     "significativo": true,
@@ -1007,316 +925,80 @@
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": true,
-        "n": 17693,
-        "hit": 0.5913,
-        "precio_medio": 0.5778,
-        "z": 3.634,
-        "n_wallets": 750,
-        "top1_share": 0.085
+        "n": 17664,
+        "hit": 0.5919,
+        "precio_medio": 0.5777,
+        "z": 3.813,
+        "n_wallets": 753,
+        "top1_share": 0.089
       },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": true,
-        "n": 13685,
-        "hit": 0.2011,
-        "precio_medio": 0.1891,
-        "z": 3.591,
-        "n_wallets": 562,
-        "top1_share": 0.211
+        "n": 13612,
+        "hit": 0.2,
+        "precio_medio": 0.189,
+        "z": 3.296,
+        "n_wallets": 557,
+        "top1_share": 0.206
       },
       {
         "banda_lo": 0.0,
         "banda_hi": 0.05,
         "pasa_gates": false,
-        "n": 1482,
-        "hit": 0.0263,
+        "n": 1472,
+        "hit": 0.0265,
         "precio_medio": 0.0231,
-        "z": 0.819,
-        "n_wallets": 197,
-        "top1_share": 1.118
+        "z": 0.876,
+        "n_wallets": 196,
+        "top1_share": 1.05
       },
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": false,
-        "n": 13231,
-        "hit": 0.955,
-        "precio_medio": 0.9564,
-        "z": -0.762,
-        "n_wallets": 562,
+        "n": 13215,
+        "hit": 0.9551,
+        "precio_medio": 0.9563,
+        "z": -0.68,
+        "n_wallets": 559,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
+        "pasa_gates": false,
+        "n": 13855,
+        "hit": 0.7962,
+        "precio_medio": 0.8,
+        "z": -1.114,
+        "n_wallets": 618,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 17275,
-        "hit": 0.4021,
+        "n": 17173,
+        "hit": 0.4002,
         "precio_medio": 0.4051,
-        "z": -0.782,
-        "n_wallets": 666,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
-        "pasa_gates": false,
-        "n": 13899,
-        "hit": 0.7941,
-        "precio_medio": 0.7999,
-        "z": -1.706,
-        "n_wallets": 620,
+        "z": -1.311,
+        "n_wallets": 664,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
+    "actualizado": "2026-11-08T11:08:01+00:00",
     "banda_lo": 0.5,
     "banda_hi": 0.7,
-    "z": 3.634,
-    "n": 17693,
-    "n_wallets": 750,
-    "top1_share": 0.085,
-    "rest_lo_min": 5.38,
+    "z": 3.813,
+    "n": 17664,
+    "n_wallets": 753,
+    "top1_share": 0.089,
+    "rest_lo_min": 5.43,
     "rest_hi_min": 14.73,
-    "rest_mediana_min": 11.78,
-    "n_ganadoras": 10461
-  },
-  "BTC#15m": {
-    "significativo": true,
-    "bandas": [
-      {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
-        "pasa_gates": true,
-        "n": 70931,
-        "hit": 0.8685,
-        "precio_medio": 0.7984,
-        "z": 46.517,
-        "n_wallets": 2252,
-        "top1_share": 0.037
-      },
-      {
-        "banda_lo": 0.9,
-        "banda_hi": 1.0,
-        "pasa_gates": true,
-        "n": 58721,
-        "hit": 0.9848,
-        "precio_medio": 0.9536,
-        "z": 35.943,
-        "n_wallets": 1704,
-        "top1_share": 0.05
-      },
-      {
-        "banda_lo": 0.5,
-        "banda_hi": 0.7,
-        "pasa_gates": true,
-        "n": 66011,
-        "hit": 0.6447,
-        "precio_medio": 0.5883,
-        "z": 29.407,
-        "n_wallets": 2627,
-        "top1_share": 0.051
-      },
-      {
-        "banda_lo": 0.0,
-        "banda_hi": 0.05,
-        "pasa_gates": false,
-        "n": 9210,
-        "hit": 0.0065,
-        "precio_medio": 0.0226,
-        "z": -10.394,
-        "n_wallets": 847,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.3,
-        "banda_hi": 0.5,
-        "pasa_gates": false,
-        "n": 58206,
-        "hit": 0.3539,
-        "precio_medio": 0.3995,
-        "z": -22.415,
-        "n_wallets": 2496,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.05,
-        "banda_hi": 0.3,
-        "pasa_gates": false,
-        "n": 60475,
-        "hit": 0.1215,
-        "precio_medio": 0.1797,
-        "z": -37.281,
-        "n_wallets": 2201,
-        "top1_share": 1.0
-      }
-    ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
-    "banda_lo": 0.7,
-    "banda_hi": 0.9,
-    "z": 46.517,
-    "n": 70931,
-    "n_wallets": 2252,
-    "top1_share": 0.037,
-    "rest_lo_min": 1.15,
-    "rest_hi_min": 8.35,
-    "rest_mediana_min": 3.95,
-    "n_ganadoras": 61604
-  },
-  "BNB#15m": {
-    "significativo": false,
-    "bandas": [
-      {
-        "banda_lo": 0.5,
-        "banda_hi": 0.7,
-        "pasa_gates": false,
-        "n": 4358,
-        "hit": 0.6122,
-        "precio_medio": 0.5821,
-        "z": 4.036,
-        "n_wallets": 176,
-        "top1_share": 0.535
-      },
-      {
-        "banda_lo": 0.9,
-        "banda_hi": 1.0,
-        "pasa_gates": false,
-        "n": 2560,
-        "hit": 0.9629,
-        "precio_medio": 0.9626,
-        "z": 0.079,
-        "n_wallets": 161,
-        "top1_share": 4.945
-      },
-      {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
-        "pasa_gates": false,
-        "n": 2738,
-        "hit": 0.7878,
-        "precio_medio": 0.7959,
-        "z": -1.045,
-        "n_wallets": 145,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.0,
-        "banda_hi": 0.05,
-        "pasa_gates": false,
-        "n": 155,
-        "hit": 0.0065,
-        "precio_medio": 0.0241,
-        "z": -1.431,
-        "n_wallets": 40,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.3,
-        "banda_hi": 0.5,
-        "pasa_gates": false,
-        "n": 3294,
-        "hit": 0.3934,
-        "precio_medio": 0.4058,
-        "z": -1.44,
-        "n_wallets": 149,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.05,
-        "banda_hi": 0.3,
-        "pasa_gates": false,
-        "n": 2475,
-        "hit": 0.1851,
-        "precio_medio": 0.1971,
-        "z": -1.512,
-        "n_wallets": 122,
-        "top1_share": 1.0
-      }
-    ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
-  },
-  "SOL#15m": {
-    "significativo": true,
-    "bandas": [
-      {
-        "banda_lo": 0.5,
-        "banda_hi": 0.7,
-        "pasa_gates": true,
-        "n": 6263,
-        "hit": 0.608,
-        "precio_medio": 0.5788,
-        "z": 4.68,
-        "n_wallets": 397,
-        "top1_share": 0.208
-      },
-      {
-        "banda_lo": 0.3,
-        "banda_hi": 0.5,
-        "pasa_gates": false,
-        "n": 5343,
-        "hit": 0.4112,
-        "precio_medio": 0.4021,
-        "z": 1.358,
-        "n_wallets": 330,
-        "top1_share": 1.202
-      },
-      {
-        "banda_lo": 0.05,
-        "banda_hi": 0.3,
-        "pasa_gates": false,
-        "n": 5195,
-        "hit": 0.1846,
-        "precio_medio": 0.1788,
-        "z": 1.091,
-        "n_wallets": 293,
-        "top1_share": 1.01
-      },
-      {
-        "banda_lo": 0.9,
-        "banda_hi": 1.0,
-        "pasa_gates": false,
-        "n": 4548,
-        "hit": 0.9637,
-        "precio_medio": 0.9619,
-        "z": 0.652,
-        "n_wallets": 300,
-        "top1_share": 0.752
-      },
-      {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
-        "pasa_gates": false,
-        "n": 4727,
-        "hit": 0.7895,
-        "precio_medio": 0.7913,
-        "z": -0.306,
-        "n_wallets": 300,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.0,
-        "banda_hi": 0.05,
-        "pasa_gates": false,
-        "n": 491,
-        "hit": 0.0163,
-        "precio_medio": 0.0249,
-        "z": -1.219,
-        "n_wallets": 89,
-        "top1_share": 1.0
-      }
-    ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
-    "banda_lo": 0.5,
-    "banda_hi": 0.7,
-    "z": 4.68,
-    "n": 6263,
-    "n_wallets": 397,
-    "top1_share": 0.208,
-    "rest_lo_min": 3.0,
-    "rest_hi_min": 14.65,
-    "rest_mediana_min": 9.43,
-    "n_ganadoras": 3808
+    "rest_mediana_min": 11.8,
+    "n_ganadoras": 10455
   },
   "DOGE#15m": {
     "significativo": false,
@@ -1324,56 +1006,56 @@
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
-        "pasa_gates": true,
-        "n": 2770,
-        "hit": 0.9617,
-        "precio_medio": 0.9533,
-        "z": 2.099,
-        "n_wallets": 145,
-        "top1_share": 0.334
+        "pasa_gates": false,
+        "n": 2731,
+        "hit": 0.9608,
+        "precio_medio": 0.9535,
+        "z": 1.805,
+        "n_wallets": 144,
+        "top1_share": 0.384
       },
       {
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 2235,
-        "hit": 0.4081,
-        "precio_medio": 0.3955,
-        "z": 1.211,
-        "n_wallets": 147,
-        "top1_share": 1.062
+        "n": 2233,
+        "hit": 0.4048,
+        "precio_medio": 0.3948,
+        "z": 0.975,
+        "n_wallets": 144,
+        "top1_share": 1.32
       },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": false,
-        "n": 2330,
-        "hit": 0.1828,
-        "precio_medio": 0.1795,
-        "z": 0.42,
-        "n_wallets": 133,
-        "top1_share": 2.113
+        "n": 2338,
+        "hit": 0.1848,
+        "precio_medio": 0.18,
+        "z": 0.6,
+        "n_wallets": 134,
+        "top1_share": 1.496
       },
       {
         "banda_lo": 0.7,
         "banda_hi": 0.9,
         "pasa_gates": false,
-        "n": 3306,
-        "hit": 0.801,
-        "precio_medio": 0.8024,
-        "z": -0.204,
-        "n_wallets": 132,
+        "n": 3267,
+        "hit": 0.8017,
+        "precio_medio": 0.8026,
+        "z": -0.139,
+        "n_wallets": 129,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": false,
-        "n": 2621,
-        "hit": 0.5734,
+        "n": 2608,
+        "hit": 0.5736,
         "precio_medio": 0.587,
-        "z": -1.405,
-        "n_wallets": 167,
+        "z": -1.391,
+        "n_wallets": 168,
         "top1_share": 1.0
       },
       {
@@ -1388,233 +1070,325 @@
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
-  "XRP#5m": {
+  "BNB#15m": {
     "significativo": false,
     "bandas": [
       {
-        "banda_lo": 0.05,
-        "banda_hi": 0.3,
+        "banda_lo": 0.5,
+        "banda_hi": 0.7,
         "pasa_gates": false,
-        "n": 1640,
-        "hit": 0.1909,
-        "precio_medio": 0.184,
-        "z": 0.718,
-        "n_wallets": 216,
-        "top1_share": 1.763
+        "n": 4311,
+        "hit": 0.6135,
+        "precio_medio": 0.5821,
+        "z": 4.186,
+        "n_wallets": 176,
+        "top1_share": 0.568
       },
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": false,
-        "n": 2966,
-        "hit": 0.969,
-        "precio_medio": 0.9695,
-        "z": -0.176,
-        "n_wallets": 255,
-        "top1_share": 1.0
+        "n": 2552,
+        "hit": 0.9636,
+        "precio_medio": 0.9626,
+        "z": 0.253,
+        "n_wallets": 160,
+        "top1_share": 1.526
       },
       {
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 1935,
-        "hit": 0.3933,
-        "precio_medio": 0.3982,
-        "z": -0.443,
-        "n_wallets": 255,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.5,
-        "banda_hi": 0.7,
-        "pasa_gates": false,
-        "n": 1925,
-        "hit": 0.561,
-        "precio_medio": 0.569,
-        "z": -0.707,
-        "n_wallets": 255,
-        "top1_share": 1.0
-      },
-      {
-        "banda_lo": 0.0,
-        "banda_hi": 0.05,
-        "pasa_gates": false,
-        "n": 163,
-        "hit": 0.0123,
-        "precio_medio": 0.0226,
-        "z": -0.886,
-        "n_wallets": 49,
+        "n": 3264,
+        "hit": 0.3964,
+        "precio_medio": 0.4055,
+        "z": -1.057,
+        "n_wallets": 148,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.7,
         "banda_hi": 0.9,
         "pasa_gates": false,
-        "n": 1420,
-        "hit": 0.7535,
-        "precio_medio": 0.7954,
-        "z": -3.909,
-        "n_wallets": 237,
+        "n": 2731,
+        "hit": 0.7869,
+        "precio_medio": 0.796,
+        "z": -1.178,
+        "n_wallets": 145,
         "top1_share": 1.0
-      }
-    ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
-  },
-  "BNB#5m": {
-    "significativo": false,
-    "bandas": [
+      },
       {
         "banda_lo": 0.0,
         "banda_hi": 0.05,
         "pasa_gates": false,
-        "n": 77,
-        "hit": 0.0649,
-        "precio_medio": 0.0218,
-        "z": 2.596,
-        "n_wallets": 30,
-        "top1_share": 0.581
-      },
-      {
-        "banda_lo": 0.9,
-        "banda_hi": 1.0,
-        "pasa_gates": false,
-        "n": 1429,
-        "hit": 0.979,
-        "precio_medio": 0.9747,
-        "z": 1.028,
-        "n_wallets": 156,
-        "top1_share": 0.379
+        "n": 154,
+        "hit": 0.0065,
+        "precio_medio": 0.0237,
+        "z": -1.406,
+        "n_wallets": 40,
+        "top1_share": 1.0
       },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": false,
-        "n": 621,
-        "hit": 0.2013,
-        "precio_medio": 0.1876,
-        "z": 0.875,
-        "n_wallets": 94,
-        "top1_share": 0.277
-      },
-      {
-        "banda_lo": 0.5,
-        "banda_hi": 0.7,
-        "pasa_gates": false,
-        "n": 712,
-        "hit": 0.5913,
-        "precio_medio": 0.578,
-        "z": 0.72,
-        "n_wallets": 108,
-        "top1_share": 0.582
-      },
-      {
-        "banda_lo": 0.3,
-        "banda_hi": 0.5,
-        "pasa_gates": false,
-        "n": 727,
-        "hit": 0.4085,
-        "precio_medio": 0.401,
-        "z": 0.415,
-        "n_wallets": 112,
-        "top1_share": 1.653
-      },
-      {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
-        "pasa_gates": false,
-        "n": 606,
-        "hit": 0.7756,
-        "precio_medio": 0.809,
-        "z": -2.091,
-        "n_wallets": 109,
+        "n": 2472,
+        "hit": 0.1849,
+        "precio_medio": 0.1967,
+        "z": -1.484,
+        "n_wallets": 122,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00"
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
-  "SOL#5m": {
+  "SOL#15m": {
     "significativo": true,
     "bandas": [
       {
-        "banda_lo": 0.0,
-        "banda_hi": 0.05,
+        "banda_lo": 0.5,
+        "banda_hi": 0.7,
         "pasa_gates": true,
-        "n": 612,
-        "hit": 0.0392,
-        "precio_medio": 0.0241,
-        "z": 2.439,
-        "n_wallets": 99,
-        "top1_share": 0.278
-      },
-      {
-        "banda_lo": 0.3,
-        "banda_hi": 0.5,
-        "pasa_gates": true,
-        "n": 3716,
-        "hit": 0.4201,
-        "precio_medio": 0.4016,
-        "z": 2.301,
-        "n_wallets": 365,
-        "top1_share": 0.39
+        "n": 6261,
+        "hit": 0.6082,
+        "precio_medio": 0.5789,
+        "z": 4.703,
+        "n_wallets": 397,
+        "top1_share": 0.216
       },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": false,
-        "n": 3725,
-        "hit": 0.193,
-        "precio_medio": 0.1858,
-        "z": 1.132,
-        "n_wallets": 284,
-        "top1_share": 0.365
+        "n": 5183,
+        "hit": 0.1856,
+        "precio_medio": 0.1792,
+        "z": 1.208,
+        "n_wallets": 290,
+        "top1_share": 0.873
       },
       {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
+        "banda_lo": 0.3,
+        "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 3321,
-        "hit": 0.791,
-        "precio_medio": 0.7947,
-        "z": -0.519,
-        "n_wallets": 323,
-        "top1_share": 1.0
+        "n": 5359,
+        "hit": 0.4094,
+        "precio_medio": 0.4021,
+        "z": 1.09,
+        "n_wallets": 332,
+        "top1_share": 1.356
       },
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": false,
-        "n": 4890,
-        "hit": 0.9648,
-        "precio_medio": 0.9675,
-        "z": -1.057,
-        "n_wallets": 360,
+        "n": 4507,
+        "hit": 0.9636,
+        "precio_medio": 0.9619,
+        "z": 0.587,
+        "n_wallets": 300,
+        "top1_share": 0.82
+      },
+      {
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
+        "pasa_gates": false,
+        "n": 4735,
+        "hit": 0.7897,
+        "precio_medio": 0.7912,
+        "z": -0.262,
+        "n_wallets": 299,
         "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.0,
+        "banda_hi": 0.05,
+        "pasa_gates": false,
+        "n": 486,
+        "hit": 0.0165,
+        "precio_medio": 0.0249,
+        "z": -1.188,
+        "n_wallets": 88,
+        "top1_share": 1.0
+      }
+    ],
+    "actualizado": "2026-11-08T11:08:01+00:00",
+    "banda_lo": 0.5,
+    "banda_hi": 0.7,
+    "z": 4.703,
+    "n": 6261,
+    "n_wallets": 397,
+    "top1_share": 0.216,
+    "rest_lo_min": 2.95,
+    "rest_hi_min": 14.63,
+    "rest_mediana_min": 9.35,
+    "n_ganadoras": 3808
+  },
+  "XRP#15m": {
+    "significativo": true,
+    "bandas": [
+      {
+        "banda_lo": 0.05,
+        "banda_hi": 0.3,
+        "pasa_gates": true,
+        "n": 4801,
+        "hit": 0.2104,
+        "precio_medio": 0.1835,
+        "z": 4.801,
+        "n_wallets": 224,
+        "top1_share": 0.354
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": false,
-        "n": 4243,
-        "hit": 0.5685,
-        "precio_medio": 0.5814,
-        "z": -1.708,
-        "n_wallets": 439,
+        "n": 4639,
+        "hit": 0.5997,
+        "precio_medio": 0.5813,
+        "z": 2.535,
+        "n_wallets": 297,
+        "top1_share": 0.868
+      },
+      {
+        "banda_lo": 0.3,
+        "banda_hi": 0.5,
+        "pasa_gates": false,
+        "n": 4024,
+        "hit": 0.413,
+        "precio_medio": 0.3982,
+        "z": 1.927,
+        "n_wallets": 249,
+        "top1_share": 0.439
+      },
+      {
+        "banda_lo": 0.9,
+        "banda_hi": 1.0,
+        "pasa_gates": false,
+        "n": 4589,
+        "hit": 0.9649,
+        "precio_medio": 0.9628,
+        "z": 0.754,
+        "n_wallets": 253,
+        "top1_share": 1.796
+      },
+      {
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
+        "pasa_gates": false,
+        "n": 3716,
+        "hit": 0.7904,
+        "precio_medio": 0.7959,
+        "z": -0.842,
+        "n_wallets": 248,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.0,
+        "banda_hi": 0.05,
+        "pasa_gates": false,
+        "n": 359,
+        "hit": 0.0139,
+        "precio_medio": 0.0236,
+        "z": -1.204,
+        "n_wallets": 76,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
-    "banda_lo": 0.0,
-    "banda_hi": 0.05,
-    "z": 2.439,
-    "n": 612,
-    "n_wallets": 99,
-    "top1_share": 0.278,
-    "rest_lo_min": 0.4,
-    "rest_hi_min": 1.0,
-    "rest_mediana_min": 0.58,
-    "n_ganadoras": 24
+    "actualizado": "2026-11-08T11:08:01+00:00",
+    "banda_lo": 0.05,
+    "banda_hi": 0.3,
+    "z": 4.801,
+    "n": 4801,
+    "n_wallets": 224,
+    "top1_share": 0.354,
+    "rest_lo_min": 3.43,
+    "rest_hi_min": 10.93,
+    "rest_mediana_min": 6.68,
+    "n_ganadoras": 1010
+  },
+  "BTC#15m": {
+    "significativo": true,
+    "bandas": [
+      {
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
+        "pasa_gates": true,
+        "n": 70875,
+        "hit": 0.8689,
+        "precio_medio": 0.7985,
+        "z": 46.722,
+        "n_wallets": 2286,
+        "top1_share": 0.036
+      },
+      {
+        "banda_lo": 0.9,
+        "banda_hi": 1.0,
+        "pasa_gates": true,
+        "n": 58894,
+        "hit": 0.9848,
+        "precio_medio": 0.9535,
+        "z": 36.051,
+        "n_wallets": 1702,
+        "top1_share": 0.05
+      },
+      {
+        "banda_lo": 0.5,
+        "banda_hi": 0.7,
+        "pasa_gates": true,
+        "n": 66078,
+        "hit": 0.6486,
+        "precio_medio": 0.5888,
+        "z": 31.237,
+        "n_wallets": 2618,
+        "top1_share": 0.05
+      },
+      {
+        "banda_lo": 0.0,
+        "banda_hi": 0.05,
+        "pasa_gates": false,
+        "n": 9219,
+        "hit": 0.0065,
+        "precio_medio": 0.0227,
+        "z": -10.418,
+        "n_wallets": 849,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.3,
+        "banda_hi": 0.5,
+        "pasa_gates": false,
+        "n": 58064,
+        "hit": 0.3519,
+        "precio_medio": 0.3995,
+        "z": -23.431,
+        "n_wallets": 2497,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.05,
+        "banda_hi": 0.3,
+        "pasa_gates": false,
+        "n": 60705,
+        "hit": 0.1211,
+        "precio_medio": 0.1794,
+        "z": -37.414,
+        "n_wallets": 2207,
+        "top1_share": 1.0
+      }
+    ],
+    "actualizado": "2026-11-08T11:08:01+00:00",
+    "banda_lo": 0.7,
+    "banda_hi": 0.9,
+    "z": 46.722,
+    "n": 70875,
+    "n_wallets": 2286,
+    "top1_share": 0.036,
+    "rest_lo_min": 1.18,
+    "rest_hi_min": 8.33,
+    "rest_mediana_min": 3.95,
+    "n_ganadoras": 61585
   },
   "DOGE#5m": {
     "significativo": true,
@@ -1623,80 +1397,80 @@
         "banda_lo": 0.7,
         "banda_hi": 0.9,
         "pasa_gates": true,
-        "n": 936,
-        "hit": 0.8429,
-        "precio_medio": 0.7915,
-        "z": 3.872,
-        "n_wallets": 156,
-        "top1_share": 0.22
-      },
-      {
-        "banda_lo": 0.3,
-        "banda_hi": 0.5,
-        "pasa_gates": false,
-        "n": 1224,
-        "hit": 0.4093,
-        "precio_medio": 0.3982,
-        "z": 0.795,
-        "n_wallets": 147,
-        "top1_share": 1.218
-      },
-      {
-        "banda_lo": 0.0,
-        "banda_hi": 0.05,
-        "pasa_gates": false,
-        "n": 160,
-        "hit": 0.025,
-        "precio_medio": 0.0209,
-        "z": 0.363,
-        "n_wallets": 36,
-        "top1_share": 1.834
+        "n": 912,
+        "hit": 0.8531,
+        "precio_medio": 0.7917,
+        "z": 4.561,
+        "n_wallets": 151,
+        "top1_share": 0.209
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": false,
-        "n": 837,
-        "hit": 0.5854,
-        "precio_medio": 0.5808,
-        "z": 0.274,
-        "n_wallets": 153,
-        "top1_share": 1.4
+        "n": 819,
+        "hit": 0.5946,
+        "precio_medio": 0.5803,
+        "z": 0.833,
+        "n_wallets": 155,
+        "top1_share": 0.481
+      },
+      {
+        "banda_lo": 0.3,
+        "banda_hi": 0.5,
+        "pasa_gates": false,
+        "n": 1203,
+        "hit": 0.404,
+        "precio_medio": 0.3981,
+        "z": 0.42,
+        "n_wallets": 149,
+        "top1_share": 2.201
+      },
+      {
+        "banda_lo": 0.0,
+        "banda_hi": 0.05,
+        "pasa_gates": false,
+        "n": 159,
+        "hit": 0.0252,
+        "precio_medio": 0.0208,
+        "z": 0.384,
+        "n_wallets": 36,
+        "top1_share": 1.748
       },
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": false,
-        "n": 1602,
-        "hit": 0.9707,
+        "n": 1574,
+        "hit": 0.9708,
         "precio_medio": 0.9699,
-        "z": 0.187,
-        "n_wallets": 181,
-        "top1_share": 1.225
+        "z": 0.212,
+        "n_wallets": 180,
+        "top1_share": 1.375
       },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": false,
-        "n": 932,
-        "hit": 0.1685,
-        "precio_medio": 0.189,
-        "z": -1.601,
-        "n_wallets": 131,
+        "n": 916,
+        "hit": 0.1561,
+        "precio_medio": 0.1892,
+        "z": -2.56,
+        "n_wallets": 129,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
+    "actualizado": "2026-11-08T11:08:01+00:00",
     "banda_lo": 0.7,
     "banda_hi": 0.9,
-    "z": 3.872,
-    "n": 936,
-    "n_wallets": 156,
-    "top1_share": 0.22,
-    "rest_lo_min": 1.65,
+    "z": 4.561,
+    "n": 912,
+    "n_wallets": 151,
+    "top1_share": 0.209,
+    "rest_lo_min": 1.68,
     "rest_hi_min": 3.78,
     "rest_mediana_min": 2.85,
-    "n_ganadoras": 789
+    "n_ganadoras": 778
   },
   "ETH#5m": {
     "significativo": true,
@@ -1705,80 +1479,234 @@
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": true,
-        "n": 8623,
-        "hit": 0.9688,
+        "n": 8764,
+        "hit": 0.9694,
         "precio_medio": 0.9592,
-        "z": 4.521,
-        "n_wallets": 617,
-        "top1_share": 0.069
+        "z": 4.85,
+        "n_wallets": 621,
+        "top1_share": 0.064
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": true,
-        "n": 10156,
-        "hit": 0.5972,
-        "precio_medio": 0.5838,
-        "z": 2.734,
-        "n_wallets": 805,
-        "top1_share": 0.149
+        "n": 10235,
+        "hit": 0.5961,
+        "precio_medio": 0.5836,
+        "z": 2.569,
+        "n_wallets": 808,
+        "top1_share": 0.172
       },
       {
-        "banda_lo": 0.05,
-        "banda_hi": 0.3,
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
         "pasa_gates": false,
-        "n": 6601,
-        "hit": 0.1803,
-        "precio_medio": 0.1859,
-        "z": -1.169,
-        "n_wallets": 555,
+        "n": 8458,
+        "hit": 0.7881,
+        "precio_medio": 0.796,
+        "z": -1.79,
+        "n_wallets": 730,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.0,
         "banda_hi": 0.05,
         "pasa_gates": false,
-        "n": 993,
-        "hit": 0.0141,
+        "n": 1002,
+        "hit": 0.014,
         "precio_medio": 0.0225,
-        "z": -1.787,
+        "z": -1.826,
         "n_wallets": 179,
         "top1_share": 1.0
       },
       {
-        "banda_lo": 0.7,
-        "banda_hi": 0.9,
+        "banda_lo": 0.05,
+        "banda_hi": 0.3,
         "pasa_gates": false,
-        "n": 8417,
-        "hit": 0.7864,
-        "precio_medio": 0.7959,
-        "z": -2.16,
-        "n_wallets": 712,
+        "n": 6641,
+        "hit": 0.1765,
+        "precio_medio": 0.1853,
+        "z": -1.841,
+        "n_wallets": 559,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 8547,
-        "hit": 0.3797,
-        "precio_medio": 0.4019,
-        "z": -4.195,
-        "n_wallets": 764,
+        "n": 8654,
+        "hit": 0.3838,
+        "precio_medio": 0.4023,
+        "z": -3.518,
+        "n_wallets": 770,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
+    "actualizado": "2026-11-08T11:08:01+00:00",
     "banda_lo": 0.5,
     "banda_hi": 0.7,
-    "z": 2.734,
-    "n": 10156,
-    "n_wallets": 805,
-    "top1_share": 0.149,
+    "z": 2.569,
+    "n": 10235,
+    "n_wallets": 808,
+    "top1_share": 0.172,
     "rest_lo_min": 2.08,
     "rest_hi_min": 4.7,
     "rest_mediana_min": 3.73,
-    "n_ganadoras": 6065
+    "n_ganadoras": 6101
+  },
+  "SOL#5m": {
+    "significativo": true,
+    "bandas": [
+      {
+        "banda_lo": 0.0,
+        "banda_hi": 0.05,
+        "pasa_gates": true,
+        "n": 608,
+        "hit": 0.0395,
+        "precio_medio": 0.024,
+        "z": 2.498,
+        "n_wallets": 100,
+        "top1_share": 0.273
+      },
+      {
+        "banda_lo": 0.3,
+        "banda_hi": 0.5,
+        "pasa_gates": false,
+        "n": 3710,
+        "hit": 0.4175,
+        "precio_medio": 0.4015,
+        "z": 1.993,
+        "n_wallets": 365,
+        "top1_share": 0.451
+      },
+      {
+        "banda_lo": 0.05,
+        "banda_hi": 0.3,
+        "pasa_gates": false,
+        "n": 3736,
+        "hit": 0.1943,
+        "precio_medio": 0.1864,
+        "z": 1.237,
+        "n_wallets": 281,
+        "top1_share": 0.391
+      },
+      {
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
+        "pasa_gates": false,
+        "n": 3362,
+        "hit": 0.7903,
+        "precio_medio": 0.7945,
+        "z": -0.595,
+        "n_wallets": 321,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.9,
+        "banda_hi": 1.0,
+        "pasa_gates": false,
+        "n": 4859,
+        "hit": 0.9642,
+        "precio_medio": 0.9676,
+        "z": -1.324,
+        "n_wallets": 358,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.5,
+        "banda_hi": 0.7,
+        "pasa_gates": false,
+        "n": 4245,
+        "hit": 0.5701,
+        "precio_medio": 0.5813,
+        "z": -1.476,
+        "n_wallets": 438,
+        "top1_share": 1.0
+      }
+    ],
+    "actualizado": "2026-11-08T11:08:01+00:00",
+    "banda_lo": 0.0,
+    "banda_hi": 0.05,
+    "z": 2.498,
+    "n": 608,
+    "n_wallets": 100,
+    "top1_share": 0.273,
+    "rest_lo_min": 0.4,
+    "rest_hi_min": 1.0,
+    "rest_mediana_min": 0.58,
+    "n_ganadoras": 24
+  },
+  "BNB#5m": {
+    "significativo": false,
+    "bandas": [
+      {
+        "banda_lo": 0.0,
+        "banda_hi": 0.05,
+        "pasa_gates": false,
+        "n": 72,
+        "hit": 0.0694,
+        "precio_medio": 0.0226,
+        "z": 2.676,
+        "n_wallets": 30,
+        "top1_share": 0.572
+      },
+      {
+        "banda_lo": 0.5,
+        "banda_hi": 0.7,
+        "pasa_gates": false,
+        "n": 698,
+        "hit": 0.5989,
+        "precio_medio": 0.5788,
+        "z": 1.072,
+        "n_wallets": 106,
+        "top1_share": 0.455
+      },
+      {
+        "banda_lo": 0.9,
+        "banda_hi": 1.0,
+        "pasa_gates": false,
+        "n": 1407,
+        "hit": 0.9787,
+        "precio_medio": 0.9746,
+        "z": 0.976,
+        "n_wallets": 153,
+        "top1_share": 0.404
+      },
+      {
+        "banda_lo": 0.05,
+        "banda_hi": 0.3,
+        "pasa_gates": false,
+        "n": 614,
+        "hit": 0.202,
+        "precio_medio": 0.1878,
+        "z": 0.897,
+        "n_wallets": 95,
+        "top1_share": 0.293
+      },
+      {
+        "banda_lo": 0.3,
+        "banda_hi": 0.5,
+        "pasa_gates": false,
+        "n": 701,
+        "hit": 0.3966,
+        "precio_medio": 0.4001,
+        "z": -0.192,
+        "n_wallets": 111,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
+        "pasa_gates": false,
+        "n": 583,
+        "hit": 0.7787,
+        "precio_medio": 0.8101,
+        "z": -1.933,
+        "n_wallets": 104,
+        "top1_share": 1.0
+      }
+    ],
+    "actualizado": "2026-11-08T11:08:01+00:00"
   },
   "BTC#5m": {
     "significativo": true,
@@ -1787,80 +1715,152 @@
         "banda_lo": 0.7,
         "banda_hi": 0.9,
         "pasa_gates": true,
-        "n": 49822,
-        "hit": 0.905,
-        "precio_medio": 0.8062,
-        "z": 55.764,
-        "n_wallets": 3823,
-        "top1_share": 0.035
+        "n": 50729,
+        "hit": 0.9034,
+        "precio_medio": 0.8064,
+        "z": 55.339,
+        "n_wallets": 3854,
+        "top1_share": 0.034
       },
       {
         "banda_lo": 0.5,
         "banda_hi": 0.7,
         "pasa_gates": true,
-        "n": 36366,
-        "hit": 0.6724,
-        "precio_medio": 0.592,
-        "z": 31.214,
-        "n_wallets": 3865,
+        "n": 36727,
+        "hit": 0.6729,
+        "precio_medio": 0.5925,
+        "z": 31.339,
+        "n_wallets": 3894,
         "top1_share": 0.046
       },
       {
         "banda_lo": 0.9,
         "banda_hi": 1.0,
         "pasa_gates": true,
-        "n": 59776,
-        "hit": 0.9711,
-        "precio_medio": 0.9572,
-        "z": 16.824,
-        "n_wallets": 3152,
-        "top1_share": 0.04
+        "n": 61371,
+        "hit": 0.9702,
+        "precio_medio": 0.9571,
+        "z": 16.099,
+        "n_wallets": 3211,
+        "top1_share": 0.036
       },
       {
         "banda_lo": 0.0,
         "banda_hi": 0.05,
         "pasa_gates": false,
-        "n": 7599,
-        "hit": 0.0242,
+        "n": 7755,
+        "hit": 0.0237,
         "precio_medio": 0.0212,
-        "z": 1.824,
-        "n_wallets": 1576,
-        "top1_share": 0.17
+        "z": 1.526,
+        "n_wallets": 1589,
+        "top1_share": 0.201
       },
       {
         "banda_lo": 0.3,
         "banda_hi": 0.5,
         "pasa_gates": false,
-        "n": 31749,
-        "hit": 0.3209,
-        "precio_medio": 0.3977,
-        "z": -27.968,
-        "n_wallets": 3475,
+        "n": 32307,
+        "hit": 0.3157,
+        "precio_medio": 0.3971,
+        "z": -29.908,
+        "n_wallets": 3486,
         "top1_share": 1.0
       },
       {
         "banda_lo": 0.05,
         "banda_hi": 0.3,
         "pasa_gates": false,
-        "n": 39503,
-        "hit": 0.0947,
-        "precio_medio": 0.1725,
-        "z": -40.944,
-        "n_wallets": 3488,
+        "n": 40560,
+        "hit": 0.0954,
+        "precio_medio": 0.172,
+        "z": -40.917,
+        "n_wallets": 3518,
         "top1_share": 1.0
       }
     ],
-    "actualizado": "2026-11-08T10:08:01+00:00",
+    "actualizado": "2026-11-08T11:08:01+00:00",
     "banda_lo": 0.7,
     "banda_hi": 0.9,
-    "z": 55.764,
-    "n": 49822,
-    "n_wallets": 3823,
-    "top1_share": 0.035,
+    "z": 55.339,
+    "n": 50729,
+    "n_wallets": 3854,
+    "top1_share": 0.034,
     "rest_lo_min": 1.58,
-    "rest_hi_min": 3.38,
-    "rest_mediana_min": 2.5,
-    "n_ganadoras": 45088
+    "rest_hi_min": 3.4,
+    "rest_mediana_min": 2.48,
+    "n_ganadoras": 45831
   },
-  "_actualizado": "2026-11-08T10:08:01+00:00"
+  "XRP#5m": {
+    "significativo": false,
+    "bandas": [
+      {
+        "banda_lo": 0.05,
+        "banda_hi": 0.3,
+        "pasa_gates": false,
+        "n": 1642,
+        "hit": 0.1888,
+        "precio_medio": 0.184,
+        "z": 0.504,
+        "n_wallets": 208,
+        "top1_share": 2.65
+      },
+      {
+        "banda_lo": 0.9,
+        "banda_hi": 1.0,
+        "pasa_gates": false,
+        "n": 2969,
+        "hit": 0.969,
+        "precio_medio": 0.9696,
+        "z": -0.182,
+        "n_wallets": 253,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.3,
+        "banda_hi": 0.5,
+        "pasa_gates": false,
+        "n": 1927,
+        "hit": 0.3913,
+        "precio_medio": 0.3983,
+        "z": -0.627,
+        "n_wallets": 253,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.5,
+        "banda_hi": 0.7,
+        "pasa_gates": false,
+        "n": 1895,
+        "hit": 0.5615,
+        "precio_medio": 0.5688,
+        "z": -0.643,
+        "n_wallets": 255,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.0,
+        "banda_hi": 0.05,
+        "pasa_gates": false,
+        "n": 162,
+        "hit": 0.0123,
+        "precio_medio": 0.0225,
+        "z": -0.873,
+        "n_wallets": 48,
+        "top1_share": 1.0
+      },
+      {
+        "banda_lo": 0.7,
+        "banda_hi": 0.9,
+        "pasa_gates": false,
+        "n": 1400,
+        "hit": 0.7571,
+        "precio_medio": 0.7951,
+        "z": -3.523,
+        "n_wallets": 238,
+        "top1_share": 1.0
+      }
+    ],
+    "actualizado": "2026-11-08T11:08:01+00:00"
+  },
+  "_actualizado": "2026-11-08T11:08:01+00:00"
 }
