@@ -29300,3 +29300,33 @@ ts_utc,activo,slug,market_id,min_restantes,spot,ref,sigma_1m,z,prob_justa_up,ask
 2026-11-08T15:58:01+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 2026-11-08T15:58:01+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 2026-11-08T15:58:01+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T15:59:01+00:00,BTC,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T15:59:01+00:00,ETH,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T15:59:01+00:00,SOL,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T15:59:01+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T15:59:01+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T15:59:01+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:00:02+00:00,BTC,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:00:02+00:00,ETH,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:00:02+00:00,SOL,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:00:02+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:00:02+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:00:02+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:01:00+00:00,BTC,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:01:00+00:00,ETH,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:01:00+00:00,SOL,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:01:00+00:00,XRP,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:01:00+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:01:00+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-11-08T16:02:01+00:00,BTC,bitcoin-up-or-down-on-november-8-2026,6753233,57.97,76095.32,75795.9,0.000180,2.847,0.9978,0.97,0.96,3067.51,0.04,0.03,377.02,630,
+2026-11-08T16:02:01+00:00,ETH,ethereum-up-or-down-on-november-8-2026,6753234,57.97,2243.24,2235.9,0.000225,1.901,0.9713,0.94,0.93,2012.8,0.07,0.06,289.59,603,
+2026-11-08T16:02:01+00:00,SOL,solana-up-or-down-on-november-8-2026,6753237,57.97,89.82,89.66,0.000401,0.579,0.7188,0.72,0.69,83.4,0.31,0.28,422.2,600,
+2026-11-08T16:02:01+00:00,XRP,xrp-up-or-down-on-november-8-2026,6753238,57.97,1.1576,1.1622,0.000579,-0.892,0.1863,0.17,0.14,221.0,0.86,0.83,13.76,641,
+2026-11-08T16:02:01+00:00,DOGE,dogecoin-up-or-down-on-november-8-2026,6753239,57.97,0.07147,0.07173,0.000478,-0.99,0.161,0.19,0.09,2.47,0.91,0.81,181.69,628,
+2026-11-08T16:02:01+00:00,BNB,bnb-up-or-down-on-november-8-2026,6753241,57.97,698.92,694.65,0.000238,3.355,0.9996,0.989,0.951,190.92,0.049,0.011,8.22,612,
+2026-11-08T16:03:01+00:00,BTC,bitcoin-up-or-down-on-november-8-2026,6753233,56.97,76095.31,75795.9,0.000180,2.885,0.998,0.97,0.96,2704.91,0.04,0.03,308.42,652,
+2026-11-08T16:03:01+00:00,ETH,ethereum-up-or-down-on-november-8-2026,6753234,56.97,2242.62,2235.9,0.000226,1.746,0.9596,0.94,0.92,2168.9,0.08,0.06,332.69,615,
+2026-11-08T16:03:01+00:00,SOL,solana-up-or-down-on-november-8-2026,6753237,56.97,89.81,89.66,0.000401,0.547,0.7078,0.73,0.64,40.94,0.34,0.27,1.7,622,
+2026-11-08T16:03:01+00:00,XRP,xrp-up-or-down-on-november-8-2026,6753238,56.97,1.157,1.1622,0.000584,-1.009,0.1564,0.13,0.08,169.0,0.88,0.87,8.8,605,
+2026-11-08T16:03:01+00:00,DOGE,dogecoin-up-or-down-on-november-8-2026,6753239,56.97,0.07148,0.07173,0.000477,-0.961,0.1684,0.19,0.09,2.47,0.91,0.81,142.4,620,
+2026-11-08T16:03:01+00:00,BNB,bnb-up-or-down-on-november-8-2026,6753241,56.97,698.9,694.65,0.000229,3.503,0.9998,0.989,0.961,190.92,0.039,0.011,2.67,634,
