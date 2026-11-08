@@ -1,204 +1,184 @@
 {
- "generado_utc": "2026-11-07T07:58:15+00:00",
+ "generado_utc": "2026-11-08T07:58:14+00:00",
  "umbral": 0.9,
  "avisos": [],
  "ficheros": [
   {
    "fichero": "data/shadow/ballenas_15min_dry_run.csv",
-   "n": 528,
-   "resueltas": 528,
+   "n": 535,
+   "resueltas": 535,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
-     24,
-     24
+     15,
+     15
     ],
     "DOGE": [
-     54,
-     54
+     71,
+     71
     ],
     "ETH": [
      232,
      232
     ],
     "SOL": [
-     127,
-     127
+     115,
+     115
     ],
     "XRP": [
-     91,
-     91
+     102,
+     102
     ]
    }
   },
   {
    "fichero": "data/shadow/ballenas_5min_dry_run.csv",
-   "n": 1196,
-   "resueltas": 1196,
+   "n": 1027,
+   "resueltas": 1027,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
-     68,
-     68
+     65,
+     65
     ],
     "DOGE": [
-     130,
-     130
+     132,
+     132
     ],
     "ETH": [
-     437,
-     437
+     315,
+     315
     ],
     "SOL": [
-     357,
-     357
+     350,
+     350
     ],
     "XRP": [
-     204,
-     204
+     165,
+     165
     ]
    }
   },
   {
    "fichero": "data/shadow/ballenas_btc15m_adelantado_dry.csv",
-   "n": 77,
-   "resueltas": 77,
+   "n": 102,
+   "resueltas": 102,
    "cobertura": 1.0,
    "por_activo": {}
   },
   {
    "fichero": "data/shadow/ballenas_timing_history.csv",
-   "n": 738761,
-   "resueltas": 738761,
+   "n": 740489,
+   "resueltas": 740489,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
-     16989,
-     16989
+     16037,
+     16037
     ],
     "BTC": [
-     504511,
-     504511
+     514778,
+     514778
     ],
     "DOGE": [
-     15841,
-     15841
+     15836,
+     15836
     ],
     "ETH": [
-     128116,
-     128116
+     122489,
+     122489
     ],
     "SOL": [
-     45278,
-     45278
+     44923,
+     44923
     ],
     "XRP": [
-     28026,
-     28026
+     26426,
+     26426
     ]
    }
   },
   {
    "fichero": "data/shadow/bot_consenso_amplio_fase0.csv",
-   "n": 1528,
-   "resueltas": 1528,
+   "n": 1485,
+   "resueltas": 1485,
    "cobertura": 1.0,
    "por_activo": {
     "BTC": [
-     1431,
-     1431
+     1419,
+     1419
     ],
     "ETH": [
-     90,
-     90
+     53,
+     53
     ],
     "SOL": [
-     7,
-     7
+     13,
+     13
     ]
    }
   },
   {
    "fichero": "data/shadow/bot_wallets_gate_bucket_fase0.csv",
-   "n": 38634,
-   "resueltas": 38595,
-   "cobertura": 0.999,
+   "n": 37544,
+   "resueltas": 37513,
+   "cobertura": 0.9992,
    "por_activo": {
     "BNB": [
-     1856,
-     1856
+     1757,
+     1757
     ],
     "BTC": [
-     18626,
-     18626
+     17757,
+     17757
     ],
     "DOGE": [
-     1714,
-     1714
+     1574,
+     1574
     ],
     "ETH": [
-     8455,
-     8455
+     8300,
+     8300
     ],
     "SOL": [
-     4677,
-     4677
+     4766,
+     4766
     ],
     "XRP": [
-     3246,
-     3246
+     3341,
+     3341
     ]
    }
   },
   {
    "fichero": "data/shadow/desfase_twap_apertura_fase0.csv",
-   "n": 7055,
-   "resueltas": 6809,
-   "cobertura": 0.9651,
+   "n": 6937,
+   "resueltas": 6691,
+   "cobertura": 0.9645,
    "por_activo": {
     "BNB": [
-     1164,
-     1205
+     1132,
+     1173
     ],
     "BTC": [
-     1095,
-     1136
+     1093,
+     1134
     ],
     "DOGE": [
-     1166,
-     1207
+     1136,
+     1177
     ],
     "ETH": [
-     1106,
-     1147
+     1100,
+     1141
     ],
     "SOL": [
-     1130,
-     1171
+     1112,
+     1153
     ],
     "XRP": [
-     1148,
-     1189
-    ]
-   }
-  },
-  {
-   "fichero": "data/shadow/favorito_ultimosegundo_2026-11-04.csv",
-   "n": 712,
-   "resueltas": 712,
-   "cobertura": 1.0,
-   "por_activo": {
-    "BNB": [
-     253,
-     253
-    ],
-    "DOGE": [
-     241,
-     241
-    ],
-    "XRP": [
-     218,
-     218
+     1118,
+     1159
     ]
    }
   },
@@ -244,28 +224,48 @@
   },
   {
    "fichero": "data/shadow/favorito_ultimosegundo_2026-11-07.csv",
-   "n": 57,
-   "resueltas": 57,
+   "n": 719,
+   "resueltas": 719,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
-     20,
-     20
+     246,
+     246
     ],
     "DOGE": [
-     19,
-     19
+     251,
+     251
     ],
     "XRP": [
-     18,
-     18
+     222,
+     222
+    ]
+   }
+  },
+  {
+   "fichero": "data/shadow/favorito_ultimosegundo_2026-11-08.csv",
+   "n": 65,
+   "resueltas": 65,
+   "cobertura": 1.0,
+   "por_activo": {
+    "BNB": [
+     22,
+     22
+    ],
+    "DOGE": [
+     23,
+     23
+    ],
+    "XRP": [
+     20,
+     20
     ]
    }
   },
   {
    "fichero": "data/shadow/libro_multinivel_fase0.csv",
-   "n": 25392,
-   "resueltas": 25392,
+   "n": 25391,
+   "resueltas": 25391,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
@@ -277,8 +277,8 @@
      4232
     ],
     "DOGE": [
-     4232,
-     4232
+     4231,
+     4231
     ],
     "ETH": [
      4232,
@@ -296,97 +296,65 @@
   },
   {
    "fichero": "data/shadow/mean_reversion_reactivo_fase0.csv",
-   "n": 7841,
-   "resueltas": 7841,
+   "n": 7976,
+   "resueltas": 7976,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
-     1295,
-     1295
+     1316,
+     1316
     ],
     "BTC": [
-     1435,
-     1435
+     1454,
+     1454
     ],
     "DOGE": [
-     1223,
-     1223
+     1265,
+     1265
     ],
     "ETH": [
-     1335,
-     1335
+     1363,
+     1363
     ],
     "SOL": [
-     1290,
-     1290
+     1309,
+     1309
     ],
     "XRP": [
-     1263,
-     1263
+     1269,
+     1269
     ]
    }
   },
   {
    "fichero": "data/shadow/penny_clipper_fase0.csv",
-   "n": 8533,
-   "resueltas": 8533,
+   "n": 8646,
+   "resueltas": 8646,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
-     768,
-     768
+     765,
+     765
     ],
     "BTC": [
-     2619,
-     2619
+     2598,
+     2598
     ],
     "DOGE": [
-     912,
-     912
+     923,
+     923
     ],
     "ETH": [
-     1641,
-     1641
+     1727,
+     1727
     ],
     "SOL": [
-     1373,
-     1373
+     1400,
+     1400
     ],
     "XRP": [
-     1220,
-     1220
-    ]
-   }
-  },
-  {
-   "fichero": "data/shadow/photo_finish_2026-11-04.csv",
-   "n": 1357,
-   "resueltas": 1357,
-   "cobertura": 1.0,
-   "por_activo": {
-    "BNB": [
-     244,
-     244
-    ],
-    "BTC": [
-     260,
-     260
-    ],
-    "DOGE": [
-     211,
-     211
-    ],
-    "ETH": [
-     229,
-     229
-    ],
-    "SOL": [
-     191,
-     191
-    ],
-    "XRP": [
-     222,
-     222
+     1233,
+     1233
     ]
    }
   },
@@ -456,8 +424,40 @@
   },
   {
    "fichero": "data/shadow/photo_finish_2026-11-07.csv",
-   "n": 174,
-   "resueltas": 174,
+   "n": 1964,
+   "resueltas": 1964,
+   "cobertura": 1.0,
+   "por_activo": {
+    "BNB": [
+     357,
+     357
+    ],
+    "BTC": [
+     357,
+     357
+    ],
+    "DOGE": [
+     316,
+     316
+    ],
+    "ETH": [
+     348,
+     348
+    ],
+    "SOL": [
+     322,
+     322
+    ],
+    "XRP": [
+     264,
+     264
+    ]
+   }
+  },
+  {
+   "fichero": "data/shadow/photo_finish_2026-11-08.csv",
+   "n": 175,
+   "resueltas": 175,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
@@ -465,48 +465,24 @@
      30
     ],
     "BTC": [
-     29,
-     29
+     30,
+     30
     ],
     "DOGE": [
+     28,
+     28
+    ],
+    "ETH": [
      30,
      30
     ],
-    "ETH": [
-     29,
-     29
-    ],
     "SOL": [
+     27,
+     27
+    ],
+    "XRP": [
      30,
      30
-    ],
-    "XRP": [
-     26,
-     26
-    ]
-   }
-  },
-  {
-   "fichero": "data/shadow/punto_confirmacion_2026-11-04.csv",
-   "n": 926,
-   "resueltas": 926,
-   "cobertura": 1.0,
-   "por_activo": {
-    "BTC": [
-     90,
-     90
-    ],
-    "ETH": [
-     387,
-     387
-    ],
-    "SOL": [
-     358,
-     358
-    ],
-    "XRP": [
-     91,
-     91
     ]
    }
   },
@@ -560,8 +536,32 @@
   },
   {
    "fichero": "data/shadow/punto_confirmacion_2026-11-07.csv",
-   "n": 81,
-   "resueltas": 81,
+   "n": 922,
+   "resueltas": 922,
+   "cobertura": 1.0,
+   "por_activo": {
+    "BTC": [
+     90,
+     90
+    ],
+    "ETH": [
+     384,
+     384
+    ],
+    "SOL": [
+     358,
+     358
+    ],
+    "XRP": [
+     90,
+     90
+    ]
+   }
+  },
+  {
+   "fichero": "data/shadow/punto_confirmacion_2026-11-08.csv",
+   "n": 80,
+   "resueltas": 80,
    "cobertura": 1.0,
    "por_activo": {
     "BTC": [
@@ -573,44 +573,12 @@
      34
     ],
     "SOL": [
-     32,
-     32
+     31,
+     31
     ],
     "XRP": [
      8,
      8
-    ]
-   }
-  },
-  {
-   "fichero": "data/shadow/resolution_sniper_obs_2026-11-04.csv",
-   "n": 23100,
-   "resueltas": 23100,
-   "cobertura": 1.0,
-   "por_activo": {
-    "BNB": [
-     3760,
-     3760
-    ],
-    "BTC": [
-     3940,
-     3940
-    ],
-    "DOGE": [
-     3760,
-     3760
-    ],
-    "ETH": [
-     3940,
-     3940
-    ],
-    "SOL": [
-     3940,
-     3940
-    ],
-    "XRP": [
-     3760,
-     3760
     ]
    }
   },
@@ -680,6 +648,38 @@
   },
   {
    "fichero": "data/shadow/resolution_sniper_obs_2026-11-07.csv",
+   "n": 23160,
+   "resueltas": 23160,
+   "cobertura": 1.0,
+   "por_activo": {
+    "BNB": [
+     3770,
+     3770
+    ],
+    "BTC": [
+     3950,
+     3950
+    ],
+    "DOGE": [
+     3770,
+     3770
+    ],
+    "ETH": [
+     3950,
+     3950
+    ],
+    "SOL": [
+     3950,
+     3950
+    ],
+    "XRP": [
+     3770,
+     3770
+    ]
+   }
+  },
+  {
+   "fichero": "data/shadow/resolution_sniper_obs_2026-11-08.csv",
    "n": 1890,
    "resueltas": 1890,
    "cobertura": 1.0,
@@ -712,105 +712,105 @@
   },
   {
    "fichero": "data/shadow/wallet_first_buy_longshot_executor_dryrun.csv",
-   "n": 8914,
-   "resueltas": 8363,
-   "cobertura": 0.9382,
+   "n": 8040,
+   "resueltas": 7561,
+   "cobertura": 0.9404,
    "por_activo": {
     "BNB": [
-     674,
-     718
+     465,
+     493
     ],
     "BTC": [
-     1644,
-     1758
+     1622,
+     1732
     ],
     "DOGE": [
-     879,
-     931
+     695,
+     740
     ],
     "ETH": [
-     2154,
-     2286
+     1840,
+     1944
     ],
     "SOL": [
-     1588,
-     1699
+     1549,
+     1645
     ],
     "XRP": [
-     1424,
-     1522
+     1390,
+     1486
     ]
    }
   },
   {
    "fichero": "data/shadow/wallet_mirror_executor_dryrun.csv",
-   "n": 150728,
-   "resueltas": 150728,
+   "n": 140109,
+   "resueltas": 140109,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
-     1360,
-     1360
+     835,
+     835
     ],
     "BTC": [
-     143851,
-     143851
+     135651,
+     135651
     ],
     "DOGE": [
-     789,
-     789
+     737,
+     737
     ],
     "ETH": [
-     3914,
-     3914
+     1639,
+     1639
     ],
     "SOL": [
-     480,
-     480
+     981,
+     981
     ],
     "XRP": [
-     334,
-     334
+     266,
+     266
     ]
    }
   },
   {
    "fichero": "data/shadow/wallet_mirror_sniper_dry_run.csv",
-   "n": 211842,
-   "resueltas": 211842,
+   "n": 204271,
+   "resueltas": 204271,
    "cobertura": 1.0,
    "por_activo": {
     "BNB": [
-     2192,
-     2192
+     1180,
+     1180
     ],
     "BTC": [
-     195700,
-     195700
+     193778,
+     193778
     ],
     "DOGE": [
-     1388,
-     1388
+     967,
+     967
     ],
     "ETH": [
-     9930,
-     9930
+     4838,
+     4838
     ],
     "SOL": [
-     2017,
-     2017
+     3101,
+     3101
     ],
     "XRP": [
-     615,
-     615
+     407,
+     407
     ]
    }
   },
   {
    "fichero": "data/sports/wallet_mirror_sniper_dry_run.csv",
-   "n": 39760,
-   "resueltas": 36621,
-   "cobertura": 0.9211,
+   "n": 45428,
+   "resueltas": 43040,
+   "cobertura": 0.9474,
    "por_activo": {}
   }
  ]
