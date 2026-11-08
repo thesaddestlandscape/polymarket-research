@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-08 23:45 UTC
+# Estado del bot — 2026-11-08 23:50 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +181786.65 $ (ficción Kelly: +714570% s/ operativo) |
 | P&L sim hoy (2026-11-08) | 🟢 +1746.68 $ |
 | Operaciones resueltas | 1360701 (778087 WIN / 582614 LOSS) — 57.2% |
-| Señales abiertas | 261912 |
+| Señales abiertas | 262441 |
 
 ## Estrategias (visión global)
 
@@ -77,7 +77,7 @@
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 31465 | 69.4% | +0.194 | ➡️ estable (últ. 1000) | -2145.88$ | 1.93$ | ✅ activa |
 | BALLENAS_TARDIAS | 51701 | 41.8% | -0.082 | ➡️ estable (últ. 1000) | -6795.12$ | 0.50$ | ⚠️ IC negativo |
 | FAVORITO_CONFIRMADO | 215386 | 61.2% | +0.112 | ➡️ estable (últ. 1000) | -8890.67$ | 1.13$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 122594 | 69.9% | +0.199 | ➡️ estable (últ. 1000) | -9173.02$ | 2.00$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 122594 | 69.9% | +0.199 | ➡️ estable (últ. 1000) | -9173.02$ | 1.99$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
@@ -91,26 +91,26 @@
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-11-08T23:45 UTC | rechazos 1h: 6 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-11-08T23:50 UTC | rechazos 1h: 8 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $75,077.07 | 0.1min |  |
-| ✅ ETH | $2,138.78 | 0.1min |  |
-| ✅ SOL | $86.81 | 0.1min |  |
+| ✅ BTC | $74,811.49 | 0.1min |  |
+| ✅ ETH | $2,131.00 | 0.1min |  |
+| ✅ SOL | $86.77 | 0.1min |  |
 | ✅ XRP | $1.12 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $75,089.50 | consenso |  |
-| ETH | $2,138.78 | consenso |  |
-| SOL | $87.03 | consenso |  |
-| XRP | $1.12 | consenso |  |
+| BTC | $74,820.20 | consenso |  |
+| ETH | $2,131.00 | consenso |  |
+| SOL | $86.67 | consenso |  |
+| XRP | $1.11 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:6 (rango=0, spike=0)
+- ⚠ rechazos_1h:8 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
