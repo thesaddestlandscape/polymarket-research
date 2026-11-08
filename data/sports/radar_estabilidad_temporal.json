@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-11-07T08:10:09+00:00",
+ "actualizado_utc": "2026-11-08T08:10:08+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
@@ -20,16 +20,16 @@
    ]
   },
   "LoL#SEGUIR#0.45": {
-   "n": 296,
+   "n": 299,
    "dias": 67,
    "frac_dias_pos": 0.627,
-   "top_wallet": 0.051,
-   "n_wallets": 145,
-   "pnl_medio": 0.104,
+   "top_wallet": 0.05,
+   "n_wallets": 147,
+   "pnl_medio": 0.0998,
    "medias_tramos": [
-    0.1143,
-    0.0824,
-    0.1151
+    0.1238,
+    0.0918,
+    0.0841
    ]
   },
   "LoL#FADE#0.85": {
@@ -45,95 +45,121 @@
     0.0197
    ]
   },
-  "Dota#SEGUIR#0.85": {
-   "n": 77,
-   "dias": 37,
-   "frac_dias_pos": 0.811,
-   "top_wallet": 0.078,
-   "n_wallets": 45,
-   "pnl_medio": 0.0261,
-   "medias_tramos": [
-    0.0076,
-    0.006,
-    0.0619
-   ]
-  },
   "Dota#SEGUIR#0.75": {
-   "n": 120,
-   "dias": 46,
-   "frac_dias_pos": 0.717,
-   "top_wallet": 0.1,
-   "n_wallets": 60,
-   "pnl_medio": 0.0739,
+   "n": 126,
+   "dias": 47,
+   "frac_dias_pos": 0.723,
+   "top_wallet": 0.095,
+   "n_wallets": 61,
+   "pnl_medio": 0.0733,
    "medias_tramos": [
-    0.1247,
-    0.0313,
-    0.0656
+    0.1328,
+    0.0443,
+    0.0427
    ]
   },
   "Dota#FADE#0.80": {
-   "n": 95,
-   "dias": 40,
-   "frac_dias_pos": 0.775,
-   "top_wallet": 0.074,
-   "n_wallets": 47,
-   "pnl_medio": 0.0325,
+   "n": 100,
+   "dias": 41,
+   "frac_dias_pos": 0.756,
+   "top_wallet": 0.08,
+   "n_wallets": 48,
+   "pnl_medio": 0.0285,
    "medias_tramos": [
-    0.0178,
-    0.016,
-    0.0619
+    0.0282,
+    0.0291,
+    0.0281
    ]
   },
-  "epl-otros#SEGUIR#0.75": {
-   "n": 85,
-   "dias": 23,
-   "frac_dias_pos": 0.609,
-   "top_wallet": 0.141,
-   "n_wallets": 30,
-   "pnl_medio": 0.0293,
+  "epl-otros#SEGUIR#0.45": {
+   "n": 99,
+   "dias": 27,
+   "frac_dias_pos": 0.667,
+   "top_wallet": 0.131,
+   "n_wallets": 33,
+   "pnl_medio": 0.2419,
    "medias_tramos": [
-    0.0153,
-    0.0139,
-    0.0578
+    0.4092,
+    0.2914,
+    0.0251
+   ]
+  },
+  "epl-otros#SEGUIR#0.55": {
+   "n": 102,
+   "dias": 23,
+   "frac_dias_pos": 0.696,
+   "top_wallet": 0.196,
+   "n_wallets": 32,
+   "pnl_medio": 0.0362,
+   "medias_tramos": [
+    0.063,
+    0.0255,
+    0.02
+   ]
+  },
+  "cfb-otros#SEGUIR#0.85": {
+   "n": 73,
+   "dias": 29,
+   "frac_dias_pos": 0.793,
+   "top_wallet": 0.205,
+   "n_wallets": 21,
+   "pnl_medio": 0.0336,
+   "medias_tramos": [
+    0.092,
+    0.0019,
+    0.0081
    ]
   },
   "epl-otros#FADE#0.40": {
-   "n": 88,
-   "dias": 23,
-   "frac_dias_pos": 0.739,
-   "top_wallet": 0.159,
-   "n_wallets": 29,
-   "pnl_medio": 0.1766,
+   "n": 99,
+   "dias": 24,
+   "frac_dias_pos": 0.708,
+   "top_wallet": 0.152,
+   "n_wallets": 31,
+   "pnl_medio": 0.0934,
    "medias_tramos": [
-    0.1215,
-    0.0659,
-    0.3369
+    0.0536,
+    0.1524,
+    0.0742
    ]
   },
-  "epl-otros#FADE#0.45": {
-   "n": 101,
-   "dias": 23,
-   "frac_dias_pos": 0.652,
-   "top_wallet": 0.198,
-   "n_wallets": 27,
-   "pnl_medio": 0.1091,
+  "mls-otros#FADE#0.45": {
+   "n": 105,
+   "dias": 28,
+   "frac_dias_pos": 0.679,
+   "top_wallet": 0.248,
+   "n_wallets": 32,
+   "pnl_medio": 0.1413,
    "medias_tramos": [
-    0.29,
-    0.0237,
-    0.0192
+    0.1342,
+    0.0253,
+    0.2645
+   ]
+  },
+  "NHL#FADE#0.45": {
+   "n": 281,
+   "dias": 46,
+   "frac_dias_pos": 0.609,
+   "top_wallet": 0.117,
+   "n_wallets": 64,
+   "pnl_medio": 0.0776,
+   "medias_tramos": [
+    0.0625,
+    0.1572,
+    0.0144
    ]
   },
   "NBA#SEGUIR#0.15": {
-   "n": 104,
-   "dias": 21,
-   "frac_dias_pos": 0.619,
+   "n": 109,
+   "dias": 22,
+   "frac_dias_pos": 0.636,
    "top_wallet": 0.202,
    "n_wallets": 32,
-   "pnl_medio": 0.3123,
+   "pnl_medio": 0.3,
    "medias_tramos": [
-    0.5555,
-    0.366,
-    0.0318
+    0.6223,
+    0.137,
+    0.145
    ]
   },
   "ucl-otros#SEGUIR#0.50": {
@@ -147,19 +173,6 @@
     0.1538,
     0.1526,
     0.1116
-   ]
-  },
-  "NBA#FADE#0.20": {
-   "n": 102,
-   "dias": 18,
-   "frac_dias_pos": 0.667,
-   "top_wallet": 0.216,
-   "n_wallets": 25,
-   "pnl_medio": 0.2459,
-   "medias_tramos": [
-    0.1772,
-    0.48,
-    0.0806
    ]
   }
  }
