@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-07T08:27:35+00:00",
+ "generado_utc": "2026-11-08T08:27:29+00:00",
  "corte": "2026-09-30T10:00:00",
  "offset_s": 0.6,
  "hipotesis": {
@@ -15,12 +15,12 @@
     "dias_positivos": 3
    },
    "forward": {
-    "n": 6124,
-    "dias": 39,
-    "ev": -0.0705,
+    "n": 6136,
+    "dias": 40,
+    "ev": -0.0709,
     "ic90": [
-     -0.1641,
-     0.0259
+     -0.1644,
+     0.026
     ],
     "dias_positivos": 11
    },
@@ -39,14 +39,14 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 2060,
-    "dias": 39,
-    "ev": -0.1025,
+    "n": 2064,
+    "dias": 40,
+    "ev": -0.1017,
     "ic90": [
-     -0.2304,
-     0.0323
+     -0.2289,
+     0.0349
     ],
-    "dias_positivos": 14
+    "dias_positivos": 15
    },
    "activo_top_pct": 33,
    "confirmada": false
