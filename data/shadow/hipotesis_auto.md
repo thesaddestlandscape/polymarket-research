@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-11-09 15:42 UTC
-_Generado por shadow_postmortem.py sobre 1261618 resoluciones (PNL=+172049.70€)_
+# Hipótesis automáticas — 2026-11-09 15:56 UTC
+_Generado por shadow_postmortem.py sobre 1261620 resoluciones (PNL=+172049.31€)_
 
 ## Patrones causales activos
 
@@ -49,12 +49,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ BALLENAS_TARDIAS#SOL#5min | 12715 | -0.114 | -1331.48€ | 1 | 0 |
 | ✅ BALLENAS_TARDIAS#XRP | 8779 | -0.128 | -1431.19€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#XRP#5min | 8779 | -0.128 | -1431.19€ | 1 | 0 |
-| ✅ CANDIDATA10_CONFIRMACION_CRUZADA | 47872 | -0.012 | +2930.53€ | 0 | 0 |
+| ✅ CANDIDATA10_CONFIRMACION_CRUZADA | 47873 | -0.012 | +2931.21€ | 0 | 0 |
 | ✅ CANDIDATA10_CONFIRMACION_CRUZADA#15min | 12380 | +0.004 | +1534.68€ | 0 | 0 |
-| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#5min | 35492 | -0.018 | +1395.85€ | 0 | 0 |
-| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC | 47872 | -0.012 | +2930.53€ | 0 | 0 |
+| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#5min | 35493 | -0.018 | +1396.52€ | 0 | 0 |
+| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC | 47873 | -0.012 | +2931.21€ | 0 | 0 |
 | ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC#15min | 12380 | +0.004 | +1534.68€ | 0 | 0 |
-| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | 35492 | -0.018 | +1395.85€ | 0 | 0 |
+| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | 35493 | -0.018 | +1396.52€ | 0 | 0 |
 | ✅ CANDIDATA9_BOT_CONSENSO | 1486 | -0.102 | -190.28€ | 3 | 0 |
 | ✅ CANDIDATA9_BOT_CONSENSO#15min | 176 | -0.045 | -19.67€ | 0 | 0 |
 | ✅ CANDIDATA9_BOT_CONSENSO#5min | 1310 | -0.110 | -170.61€ | 0 | 0 |
@@ -457,8 +457,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M#SOL#5min | 341 | +0.141 | +175.28€ | 0 | 4 |
 | ✅ ORDER_FLOW_5M#XRP | 396 | +0.098 | +114.91€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 396 | +0.098 | +114.91€ | 0 | 2 |
-| ✅ ORDER_FLOW_5M_REACTIVO | 2134 | -0.016 | -18.16€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M_REACTIVO#5min | 2134 | -0.016 | -18.16€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M_REACTIVO | 2135 | -0.017 | -19.24€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M_REACTIVO#5min | 2135 | -0.017 | -19.24€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M_REACTIVO#BNB | 394 | +0.015 | +25.85€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M_REACTIVO#BNB#5min | 394 | +0.015 | +25.85€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M_REACTIVO#DOGE | 394 | -0.045 | -26.65€ | 0 | 0 |
@@ -467,8 +467,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M_REACTIVO#ETH#5min | 539 | -0.036 | -26.63€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M_REACTIVO#SOL | 432 | -0.002 | -0.65€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M_REACTIVO#SOL#5min | 432 | -0.002 | -0.65€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M_REACTIVO#XRP | 375 | -0.007 | +9.92€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M_REACTIVO#XRP#5min | 375 | -0.007 | +9.92€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M_REACTIVO#XRP | 376 | -0.008 | +8.85€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M_REACTIVO#XRP#5min | 376 | -0.008 | +8.85€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM | 1135 | -0.074 | -43.83€ | 3 | 1 |
 | ✅ PRICE_TARGET_GBM#BTC | 525 | -0.109 | -79.18€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC#atexpiry | 404 | -0.123 | -58.64€ | 0 | 0 |
