@@ -24,17 +24,17 @@
  "MOMENTUM_IBS_15M_FADE": {
   "ic_bayes_familia": -0.0547,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 20.59,
+  "pnl_fiel_combinado_eur": 20.55,
   "tuplas": [
    {
     "k": "MOMENTUM_IBS_15M_FADE#SOL#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 20.5927,
+    "pnl_fiel_eur_sin_suelo": 20.555,
     "n_ejecutado": 306
    }
   ]
  },
  "STREAK_FADE_15M": {
-  "ic_bayes_familia": 0.0425,
+  "ic_bayes_familia": 0.043,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 18.84,
   "tuplas": [
