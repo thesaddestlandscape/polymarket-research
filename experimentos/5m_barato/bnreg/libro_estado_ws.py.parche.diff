@@ -1,0 +1,187 @@
+--- /root/polymarket-research/libro_estado_ws.py	2026-10-24 22:15:00.137668392 +0000
++++ dev_main/libro_estado_ws.py	2026-11-09 18:41:07.743741594 +0000
+@@ -30,6 +30,7 @@
+   con ~100 módulos).
+ """
+ import asyncio
++import fcntl
+ import gzip
+ import queue
+ import collections
+@@ -71,8 +72,20 @@
+ # x = aggTrade (T, símbolo, precio, cantidad, comprador_es_maker, E, recepción); q = top de Polymarket SIN muestrear
+ # (cada cambio de precio o tamaño del mejor bid/ask, hora del exchange + recepción; t también lleva recepción): t1/t2 al ms. El top muestreado (h) se mantiene.
+ _SIMB_BN = ("btcusdt", "ethusdt", "solusdt", "xrpusdt", "dogeusdt", "bnbusdt")
+-BINANCE_WS = "wss://stream.binance.com:9443/stream?streams=" + "/".join(
+-    [f"{s}@bookTicker" for s in _SIMB_BN] + [f"{s}@aggTrade" for s in _SIMB_BN])
++BINANCE_WS = os.environ.get("BINANCE_WS_URL") or ("wss://stream.binance.com:9443/stream?streams=" + "/".join(
++    [f"{s}@bookTicker" for s in _SIMB_BN] + [f"{s}@aggTrade" for s in _SIMB_BN]))   # BINANCE_WS_URL: solo pruebas en dev (servidor falso)
++# 09-Nov (FASE 1 captura independiente, DISENO_CAPTURA_INDEPENDIENTE_L2_09nov.md): el registro Binance vive ahora en el proceso `bnreg` (binance_registro_ms.py). Este hijo CONSERVA el
++# codigo pero queda en RESERVA: solo escribe Binance si consigue el mismo flock que bnreg (un solo escritor). Con bnreg vivo no escribe; si bnreg cae, asume en <=5 s. Marcha atras sin
++# redeploy: borrar BNREG_HABILITADO (bnreg suelta el lock y el hijo asume).
++# Retorno a bnreg: si bnreg vuelve y escribe estado `espera_lock` en su latido (binance_registro_estado.json, fresco <10 s) durante >=BNREG_CEDE_S (30 s de histeresis), el hijo que asumio CEDE el lock
++# (cierra su socket Binance, suelta el flock, espera 10 s para que bnreg lo tome) UNA sola vez por episodio de cobertura (sin flapping). Mientras cubre deja marcas en binance_huecos_<dia>.csv
++# (hijo_asume / hijo_conexion / hijo_cede; mismo formato que bnreg). BNREG_CEDE_S solo se cambia en pruebas (suelo 2 s).
++BNREG_LOCK = REGISTRO_MS_DIR / ".binance_registro.lock"
++BNREG_ESTADO = REGISTRO_MS_DIR / "binance_registro_estado.json"
++BNREG_RESERVA_S = 5.0
++BNREG_CEDE_S = max(2.0, float(os.environ.get("BNREG_CEDE_S", "30")))
++BNREG_POST_CESION_S = 10.0
++_BN_LOCK_FD = [None]       # (hijo) fd del flock mientras este proceso es el escritor de Binance
+ 
+ _LIB = {}                  # (hijo) token -> {"bids": {p: s}, "asks": {p: s}}
+ _ULT = {}                  # (hijo) token -> t_ms del último registro (muestreo mínimo entre registros)
+@@ -1001,27 +1014,135 @@
+         await asyncio.sleep(0.2)
+ 
+ 
++def _bn_tomar_lock():
++    """True si este proceso es (o pasa a ser) el escritor de Binance: flock exclusivo no bloqueante sobre BNREG_LOCK. El kernel lo libera al morir el proceso."""
++    if _BN_LOCK_FD[0] is not None:
++        return True
++    try:
++        REGISTRO_MS_DIR.mkdir(parents=True, exist_ok=True)
++        fd = os.open(str(BNREG_LOCK), os.O_CREAT | os.O_RDWR, 0o644)
++    except OSError as e:
++        _log(f"registro_ms: no se puede abrir el lock de Binance ({type(e).__name__}: {e}); sigo en reserva")
++        return False
++    try:
++        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
++    except OSError:
++        os.close(fd)
++        return False
++    os.ftruncate(fd, 0)
++    os.write(fd, f"hijo libro_estado_ws pid={os.getpid()}\n".encode())
++    _BN_LOCK_FD[0] = fd
++    return True
++
++
++def _bn_soltar_lock():
++    fd, _BN_LOCK_FD[0] = _BN_LOCK_FD[0], None
++    if fd is not None:
++        try:
++            os.close(fd)
++        except OSError:
++            pass
++
++
++def _bn_marca(evento, conn_id="", motivo=""):
++    """Marca en binance_huecos_<dia>.csv (columnas de bnreg: evento,t_ms,conn_id,pid,motivo). O_APPEND: seguro con bnreg escribiendo el mismo fichero."""
++    try:
++        t = int(time.time() * 1000)
++        ruta = REGISTRO_MS_DIR / f"binance_huecos_{time.strftime('%Y-%m-%d', time.gmtime(t / 1000))}.csv"
++        fd = os.open(str(ruta), os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o644)
++        try:
++            if os.fstat(fd).st_size == 0:
++                os.write(fd, b"evento,t_ms,conn_id,pid,motivo\n")
++            os.write(fd, f"{evento},{t},{conn_id},{os.getpid()},{str(motivo).replace(',', ';')}\n".encode())
++        finally:
++            os.close(fd)
++    except OSError as e:
++        _log(f"registro_ms: marca de hueco {evento} fallida: {type(e).__name__}: {e}")
++
++
++def _bn_bnreg_espera():
++    """True si bnreg anuncia `espera_lock` con latido fresco (<10 s): quiere recuperar el registro."""
++    try:
++        e = json.loads(BNREG_ESTADO.read_text())
++        return e.get("estado") == "espera_lock" and time.time() - e["ts"] / 1000 < 10
++    except Exception:
++        return False
++
++
+ async def _binance_registro():
+-    """Mid de Binance (6 monedas) al registro cuando cambia, con hora de RECEPCIÓN en ms."""
++    """Mid de Binance (6 monedas) al registro cuando cambia, con hora de RECEPCIÓN en ms. Solo si este proceso tiene el lock de Binance (si no, RESERVA: reintenta cada 5 s, avisa UNA vez).
++    Si asume y bnreg vuelve (espera_lock >= BNREG_CEDE_S), cede el lock una vez por episodio y vuelve a la reserva."""
+     ult = {}
+-    while True:
++    avisado = False
++    while True:                                                   # un episodio por vuelta: reserva -> cobertura -> (cesion) -> reserva
++        while not _bn_tomar_lock():
++            if not avisado:
++                _log("registro_ms: Binance lo registra bnreg (lock tomado); este hijo queda en RESERVA y asume en <=5 s si bnreg cae")
++                avisado = True
++            await asyncio.sleep(BNREG_RESERVA_S)
++        if avisado:
++            _log("registro_ms: lock de Binance libre -> este hijo ASUME el registro de Binance")
++        _bn_marca("hijo_asume", motivo="toma el lock de Binance" + (" tras reserva" if avisado else " (sin bnreg)"))
++        avisado = False
++        cede = [False]
++        espera_desde = [None]
++
++        async def vigilar_cesion(ws_ref):
++            while not cede[0]:
++                await asyncio.sleep(1.0)
++                if _bn_bnreg_espera():
++                    espera_desde[0] = espera_desde[0] or time.time()
++                    if time.time() - espera_desde[0] >= BNREG_CEDE_S:
++                        cede[0] = True
++                        if ws_ref[0] is not None:
++                            await ws_ref[0].close()
++                else:
++                    espera_desde[0] = None
++
++        ws_ref = [None]
++        vig = asyncio.create_task(vigilar_cesion(ws_ref))
++        cid = 0
+         try:
+-            async with websockets.connect(BINANCE_WS, ping_interval=20, ping_timeout=20, max_queue=None) as ws:
+-                _log("registro_ms: conectado a Binance bookTicker + aggTrade")
+-                async for raw in ws:
+-                    t_ms = int(time.time() * 1000)
+-                    d = json.loads(raw).get("data") or {}
+-                    if d.get("e") == "aggTrade":
+-                        _REGISTRO.put(f"x,{d.get('T')},{d.get('s')},{d.get('p')},{d.get('q')},{int(bool(d.get('m')))},"
+-                                      f"{d.get('E')},{t_ms}\n")
+-                        continue
+-                    s, b, a = d.get("s"), d.get("b"), d.get("a")
+-                    if s and b and a and ult.get(s) != (b, a):
+-                        ult[s] = (b, a)
+-                        _REGISTRO.put(f"b,{t_ms},{s},{b},{a},{d.get('B')},{d.get('A')},\n")
+-        except Exception as e:
+-            _log(f"registro_ms: Binance caído: {type(e).__name__}: {e}; reconecta en 2 s")
+-            await asyncio.sleep(2)
++            while not cede[0]:
++                try:
++                    async with websockets.connect(BINANCE_WS, ping_interval=20, ping_timeout=20, max_queue=None) as ws:
++                        ws_ref[0] = ws
++                        cid += 1
++                        _log("registro_ms: conectado a Binance bookTicker + aggTrade")
++                        _bn_marca("hijo_conexion", cid)
++                        async for raw in ws:
++                            t_ms = int(time.time() * 1000)
++                            try:
++                                d = json.loads(raw).get("data")
++                            except Exception:
++                                d = None
++                            if not isinstance(d, dict):        # no JSON / sin `data` dict: ignorar sin cerrar la conexion
++                                continue
++                            if d.get("e") == "aggTrade":
++                                _REGISTRO.put(f"x,{d.get('T')},{d.get('s')},{d.get('p')},{d.get('q')},{int(bool(d.get('m')))},"
++                                              f"{d.get('E')},{t_ms}\n")
++                                continue
++                            s, b, a = d.get("s"), d.get("b"), d.get("a")
++                            if s and b and a and ult.get(s) != (b, a):
++                                ult[s] = (b, a)
++                                _REGISTRO.put(f"b,{t_ms},{s},{b},{a},{d.get('B')},{d.get('A')},\n")
++                    if not cede[0]:
++                        await asyncio.sleep(1)                 # cierre normal sin cesion: no reconectar en bucle cerrado
++                except Exception as e:
++                    if cede[0]:
++                        break
++                    _log(f"registro_ms: Binance caído: {type(e).__name__}: {e}; reconecta en 2 s")
++                    _bn_marca("hijo_caida", cid, f"{type(e).__name__}")
++                    await asyncio.sleep(2)
++                finally:
++                    ws_ref[0] = None
++        finally:
++            vig.cancel()
++        # cesion: el socket ya esta cerrado; soltar el lock y dar tiempo a que bnreg lo tome (poll 1 s) antes de volver a competir
++        _bn_soltar_lock()
++        _bn_marca("hijo_cede", motivo=f"bnreg en espera_lock >= {BNREG_CEDE_S:.0f} s")
++        _log(f"registro_ms: bnreg espera el lock >= {BNREG_CEDE_S:.0f} s: este hijo CEDE el registro de Binance y vuelve a la reserva")
++        await asyncio.sleep(BNREG_POST_CESION_S)
+ 
+ 
+ async def _sesion_grupo(k, emisor):

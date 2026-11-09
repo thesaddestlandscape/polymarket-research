@@ -1,0 +1,156 @@
+--- /root/polymarket-research/vigia_loggers_silenciosos.py	2026-10-17 11:41:11.190402749 +0000
++++ dev_main/vigia_loggers_silenciosos.py	2026-11-09 18:41:40.608258109 +0000
+@@ -145,6 +145,143 @@
+         return True
+ 
+ 
++# 09-Nov (FASE 1 captura independiente, DISENO_CAPTURA_INDEPENDIENTE_L2_09nov.md): el registro Binance (x/b) vive en el proceso `bnreg`. Este vigia va por horas y la familia maker_ms sigue VIVA por las
++# filas h/q del hijo de observadores aunque Binance lleve minutos caido: el hueco seria INVISIBLE para el resto del vigia. Se vigila, con latch por episodio (la firma NO lleva valores recalculados):
++#  (1) LATIDO de bnreg (binance_registro_estado.json, cada 2 s) CUANDO el centinela BNREG_HABILITADO existe (sin centinela bnreg esta ocioso a proposito = kill-switch): latido parado >120 s,
++#      bnreg sin ser el escritor (espera_lock/ocioso/salida...), escritor_fallando, o sin recibir datos de Binance >120 s estando activo/reconectando.
++#  (2) HUECOS de la ultima hora en binance_huecos_<dia>.csv (SIEMPRE, con o sin centinela; escriben bnreg y el hijo de reserva): episodio = evento de apertura (caida, caida_proceso, parada,
++#      parada_centinela, salida_sin_datos, hijo_cede, hijo_caida) hasta el siguiente de cierre (conexion, hijo_conexion); avisa si dura >10 s o sigue abierto >10 s. cola_llena, escritor_fallo y
++#      escritor_abandono avisan siempre (perdida de filas). Firma = evento@t_ms de la apertura.
++#  (3) INTEGRIDAD de ayer: si ayer hubo centinela (visto por este vigia o `lock_tomado`/`hijo_asume` en los huecos de ayer) y falta binance_integridad_<ayer>.csv -> aviso; si existe, aviso por
++#      aggTradeId faltantes (una vez al dia).
++BNREG_DIR = Path("/root/polymarket-research-datalogs")
++BNREG_LATCH = REPO / "data" / "live" / "vigia_bnreg_latido_latch.json"
++BNREG_LATIDO_MAX_S = 120
++BNREG_SIN_DATOS_MAX_S = 120
++BNREG_HUECO_MAX_S = 10
++BNREG_VENTANA_S = 3700
++BNREG_ESTADOS_MALOS = ("ocioso", "espera_lock", "salida", "parado", "arrancando")
++HUECO_ABRE = ("caida", "caida_proceso", "parada", "parada_centinela", "salida_sin_datos", "hijo_cede", "hijo_caida")
++HUECO_CIERRA = ("conexion", "hijo_conexion")
++HUECO_PERDIDA = ("cola_llena", "escritor_fallo", "escritor_abandono")
++
++
++def _huecos_eventos(dir_, ahora):
++    ev = []
++    for d in (ahora - 86400, ahora):
++        f = Path(dir_) / f"binance_huecos_{time.strftime('%Y-%m-%d', time.gmtime(d))}.csv"
++        try:
++            with open(f, encoding="utf-8") as fh:
++                for r in csv.DictReader(fh):
++                    try:
++                        ev.append((int(r["t_ms"]), r["evento"], r.get("motivo", "")))
++                    except (ValueError, KeyError, TypeError):
++                        continue                               # cabecera duplicada (carrera de creacion) o fila rota
++        except OSError:
++            pass
++    ev.sort()
++    return ev
++
++
++def _huecos_episodios(dir_, ahora):
++    """-> lista de (firma, descripcion) de episodios de la ultima hora que merecen aviso."""
++    out = []
++    abre = None
++    lim_ms = (ahora - BNREG_VENTANA_S) * 1000
++    for t, e, motivo in _huecos_eventos(dir_, ahora):
++        if e in HUECO_ABRE and abre is None:
++            abre = (e, t)
++        elif e in HUECO_CIERRA and abre is not None:
++            dur = (t - abre[1]) / 1000
++            if abre[1] >= lim_ms and dur > BNREG_HUECO_MAX_S:
++                out.append((f"{abre[0]}@{abre[1]}", f"hueco Binance {abre[0]} -> reconectado tras {dur:.0f} s"))
++            abre = None
++        elif e in HUECO_PERDIDA and t >= lim_ms:
++            out.append((f"{e}@{t}", f"{e} (perdida de filas Binance): {motivo[:120]}"))
++    if abre is not None and abre[1] >= lim_ms and ahora * 1000 - abre[1] > BNREG_HUECO_MAX_S * 1000:
++        out.append((f"{abre[0]}@{abre[1]}", f"hueco Binance ABIERTO desde {abre[0]} hace {(ahora * 1000 - abre[1]) / 1000:.0f} s sin reconexion registrada"))
++    return out
++
++
++def _bnreg_avisos(ahora, dir_=BNREG_DIR, latch_path=BNREG_LATCH):
++    """-> (avisos, vuelven). Latch por episodio (un aviso; al recuperarse lo dice). Huecos de la ultima hora, integridad de ayer."""
++    avisos, vuelven = [], []
++    try:
++        latch = json.loads(Path(latch_path).read_text(encoding="utf-8"))
++    except Exception:
++        latch = {}
++    hoy = time.strftime("%Y-%m-%d", time.gmtime(ahora))
++    ayer = time.strftime("%Y-%m-%d", time.gmtime(ahora - 86400))
++    hay_centinela = (Path(dir_) / "BNREG_HABILITADO").exists()
++    if hay_centinela:
++        dias = set(latch.get("dias_centinela", []))
++        dias.add(hoy)
++        latch["dias_centinela"] = sorted(dias)[-5:]
++    # (1) latido (solo con centinela)
++    problema = None
++    if hay_centinela:
++        try:
++            e = json.loads((Path(dir_) / "binance_registro_estado.json").read_text(encoding="utf-8"))
++            edad = ahora - e["ts"] / 1000
++            sin_datos = ahora - e["ultimo_recv_ms"] / 1000 if e.get("ultimo_recv_ms") else None
++            if edad > BNREG_LATIDO_MAX_S:
++                problema = f"latido de bnreg parado hace {edad:.0f} s (>{BNREG_LATIDO_MAX_S} s; estado {e.get('estado')})"
++            elif e.get("estado") in BNREG_ESTADOS_MALOS or not e.get("lock"):
++                problema = f"bnreg con centinela pero sin ser el escritor (estado {e.get('estado')}, lock={e.get('lock')}): el registro Binance puede estar en el hijo o parado"
++            elif e.get("escritor_fallando"):
++                problema = f"el escritor de bnreg FALLA (errores {e.get('escritor_errores')}, cola {e.get('cola')}): filas Binance sin escribir"
++            elif e.get("estado") in ("activo", "reconectando") and sin_datos is not None and sin_datos > BNREG_SIN_DATOS_MAX_S:
++                problema = f"bnreg sin recibir datos de Binance desde hace {sin_datos:.0f} s (estado {e.get('estado')})"
++        except Exception as ex:
++            problema = f"sin latido legible de bnreg ({type(ex).__name__}: {ex})"
++    if problema and not latch.get("avisado"):
++        latch["avisado"] = True
++        avisos.append(f"· bnreg (registro Binance): {problema}")
++    elif not problema and latch.get("avisado"):
++        latch["avisado"] = False
++        vuelven.append("· bnreg (registro Binance): latido recuperado")
++    # (2) huecos de la ultima hora
++    vistos = list(latch.get("episodios", []))
++    for firma, desc in _huecos_episodios(dir_, ahora):
++        if firma not in vistos:
++            vistos.append(firma)
++            avisos.append(f"· {desc}")
++    latch["episodios"] = vistos[-300:]
++    # (3) integridad de ayer
++    if latch.get("dia_integridad") != ayer:
++        f = Path(dir_) / f"binance_integridad_{ayer}.csv"
++        huecos_ayer = [e for _, e, _m in _huecos_eventos(dir_, ahora - 86400) if e in ("lock_tomado", "hijo_asume")]
++        hubo_centinela = ayer in latch.get("dias_centinela", []) or bool(huecos_ayer)
++        if f.exists():
++            try:
++                falt = dup = fo = 0
++                with open(f, encoding="utf-8") as fh:
++                    for r in csv.DictReader(fh):
++                        falt += int(r["faltantes"] or 0)
++                        dup += int(r["dup"] or 0)
++                        fo += int(r["fuera_orden"] or 0)
++                latch["dia_integridad"] = ayer
++                if falt:
++                    avisos.append(f"· binance_integridad {ayer}: {falt} aggTradeId faltantes (duplicados {dup}, fuera de orden {fo}); mirar binance_huecos_{ayer}.csv")
++            except Exception as ex:
++                avisos.append(f"· binance_integridad {ayer} ilegible: {type(ex).__name__}: {ex}")
++        elif hubo_centinela:
++            latch["dia_integridad"] = ayer
++            avisos.append(f"· falta binance_integridad_{ayer}.csv aunque ayer hubo centinela/registro Binance: bnreg no escribio la integridad (revisar el proceso)")
++    _guardar_latch(latch_path, latch)
++    return avisos, vuelven
++
++
++def _guardar_latch(latch_path, latch):
++    try:
++        p = Path(latch_path)
++        tmp = p.with_name(p.name + f".tmp{os.getpid()}")
++        tmp.write_text(json.dumps(latch), encoding="utf-8")
++        tmp.replace(p)
++    except Exception as e:
++        print(f"latch bnreg: {type(e).__name__}: {e}")
++
++
+ def main() -> int:
+     ahora = time.time()
+     try:
+@@ -188,6 +325,9 @@
+             e["avisado"] = True
+             avisos.append(f"· {os.path.relpath(clave, REPO) if clave.startswith(str(REPO)) else clave}: {callado:.1f} h sin escribir "
+                           f"(su mayor hueco habitual: {e['gap_max_h']:.1f} h)")
++    a_bn, v_bn = _bnreg_avisos(ahora)
++    avisos += a_bn
++    vuelven += v_bn
+     vivas = _familias()
+     for clave in [c for c in est if c not in vivas]:     # 08-Oct: claves que ya no existen (p. ej. viejas por PID) fuera
+         est.pop(clave, None)

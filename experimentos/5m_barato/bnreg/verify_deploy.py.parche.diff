@@ -1,0 +1,12 @@
+--- /root/polymarket-research/verify_deploy.py	2026-11-05 11:49:35.137061231 +0000
++++ dev_main/verify_deploy.py	2026-11-09 18:22:11.751793046 +0000
+@@ -122,6 +122,9 @@
+                  "probe": "log:logs/r3_shadow.log:r3_shadow arrancando"},
+     # 05-Nov: logger de anticipacion del barrido (solo lectura, sin choom; ver pipeline_watchdog.py::SCREEN_RESTART).
+     "logl2": {"entry": "logger_anticipo_barrido.py", "probe": "log:logs/logger_anticipo_barrido.log:conectado a fstream"},
++    # 09-Nov: registro Binance en proceso propio (FASE 1, solo lectura; ver pipeline_watchdog.py::SCREEN_RESTART). Sin imports locales: STALE solo si se edita su .py.
++    # Probe "arrancado" (linea de arranque, sale tambien en modo ocioso sin centinela); "conectado a Binance spot" solo sale con centinela y lock (lo comprueba el script de traspaso).
++    "bnreg": {"entry": "binance_registro_ms.py", "probe": "log:logs/binance_registro_ms.log:arrancado"},
+     # 21-Oct: dashboard 5m barato SOLO LECTURA, puerto 8892 (ver pipeline_watchdog.py::SCREEN_RESTART). 401 = vivo (tiene auth).
+     "dash5m": {"entry": "experimentos/5m_barato/dashboard/dashboard_5m_barato.py", "probe": "http:8892"},
+     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).

@@ -1,0 +1,355 @@
+#!/usr/bin/env python3
+"""vigia_loggers_silenciosos.py -- avisa cuando un logger/observador DEJA DE ESCRIBIR (30-Sep, Javi: "no podemos
+permitirnos huecos de datos").
+
+Motivo: `wallet_mirror_executor_dryrun.csv` estuvo del 8 al 22 de septiembre sin registrar nada y se descubrió
+después, al ir a usarlo. Los avisos existentes miran screens caídas y logs, no si el FICHERO de datos sigue
+creciendo: un hilo puede seguir vivo y no escribir.
+
+Cómo funciona (coste: un stat por fichero, cada hora, dentro de vigias_horarios_fase0):
+  - Familias: data/shadow/*.csv, data/sports/*.csv, data/live/*.csv y /root/polymarket-research-datalogs/*.csv*;
+    los ficheros con fecha en el nombre (xxx_YYYY-MM-DD.csv) cuentan como UNA familia.
+  - Aprende el ritmo de cada familia: el mayor hueco entre escrituras visto en los últimos días (un logger que solo
+    escribe de 13 a 17 UTC, o una vez al día, no dispara en falso).
+  - Avisa por Telegram si una familia lleva callada más de max(3 h, 2 x su mayor hueco conocido) y ya tiene al
+    menos 48 h de historial. Un aviso por episodio; al volver a escribir se rearma y lo dice.
+  - Familia sin escribir 10 días: se da por retirada y sale del estado.
+  - 07-Oct: el olvido del mayor hueco es por TIEMPO (x0,98 por día), no por muestra: antes decaía x0,98 cada hora
+    con escrituras (~-40 %/día) y stink_bids (eventos, huecos nocturnos de 4,7 h) avisaba en falso con 2,5 h.
+  - 07-Oct: CONDICIONALES = loggers que solo escriben con posiciones OPEN (smart_exit_prices): sin OPEN en su
+    trades.csv el silencio es correcto, el reloj de silencio se reinicia y no se aprende ese hueco. Si no se puede
+    leer trades.csv se trata como "hay posiciones" (avisa: fail-loud).
+  - 07-Oct: COMPUERTAS de régimen: si el log compañero logs/<stem>.log está vivo (<30 min) y su última línea dice que
+    se salta la ventana (PATRONES_COMPUERTA), el silencio del CSV es correcto (xrp15min_contrario_fase0 con XRP#15m no
+    significativo en ballenas_timing_state.json).
+Estado: data/live/vigia_loggers_silenciosos_estado.json.  Uso manual: vigia_loggers_silenciosos.py [--sin-telegram]
+"""
+import csv
+import glob
+import json
+import os
+import re
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO))
+ESTADO = REPO / "data" / "live" / "vigia_loggers_silenciosos_estado.json"
+PATRONES = [str(REPO / "data/shadow/*.csv"), str(REPO / "data/sports/*.csv"), str(REPO / "data/live/*.csv"),
+            "/root/polymarket-research-datalogs/*.csv", "/root/polymarket-research-datalogs/*.csv.gz",
+            "/mnt/HC_Volume_106538179/libro5_ms/*.csv.gz",   # 17-Oct: feed crudo 5m (libro_estado_ws, en el volumen)
+            "/mnt/HC_Volume_106538179/multivenue_ms/*.csv.gz"]   # 17-Oct: grabador multi-bolsa (multivenue_ms_fase0)
+MIN_H, FACTOR, HIST_MIN_H, RETIRO_DIAS, GAP_OLVIDO = 3.0, 2.0, 48.0, 10, 0.98
+CONDICIONALES = {str(REPO / "data/sports/smart_exit_prices.csv"): REPO / "data/sports/trades.csv",
+                 str(REPO / "data/live/smart_exit_prices.csv"): REPO / "data/live/trades.csv"}
+# 07-Oct: loggers con COMPUERTA de régimen (p. ej. xrp15min_contrario_fase0: solo observa si la calibración de ballenas
+# dice que XRP#15m es significativo). Su log compañero logs/<stem>.log sigue escribiendo el motivo de no disparo: si ese
+# log está vivo (< 30 min) y su ÚLTIMA línea dice que se salta, el silencio del CSV es correcto (como CONDICIONALES).
+# Si el log también calla -> se avisa (el hilo puede estar muerto).
+PATRONES_COMPUERTA = ("se salta ventana", "no significativo")
+_FECHA = re.compile(r"[_-]?\d{4}-\d{2}-\d{2}")
+# 08-Oct: sufijo de PID (maker_ms_<fecha>_<pid>) o de versión (arbitraje_anidado_dryrun_<fecha>_v<epoch>): es el MISMO
+# logger. Sin quitarlo, cada reinicio de observadores dejaba una familia huérfana que avisaba en falso ~48 h después.
+# 12-Oct: tras el reinicio del VPS los PID son cortos (maker_ms_<fecha>_2928 avisó en falso a las 34,7 h): en
+# maker_ms se quita el PID tenga los dígitos que tenga; en el resto, solo sufijos de >=6 dígitos.
+_SUFIJO_PROCESO = re.compile(r"(?:_v?\d{6,}|(?<=^maker_ms)_\d+|(?<=^libro5_ms)_\d+(?:_e\d+)?)(?=\.csv)")   # 17-Oct: + libro5_ms
+# 08-Oct: loggers por EVENTOS con latido horario en su log ("N eventos en la última hora"): el silencio del CSV es
+# correcto si el log está vivo (< 2 h) y TODOS los latidos posteriores a la última escritura dicen 0 eventos. Si un
+# latido cuenta eventos y el CSV no crece, o el log calla, se avisa como siempre.
+EVENTOS = {"/root/polymarket-research-datalogs/arbitraje_anidado_dryrun.csv": REPO / "logs" / "arbitraje_anidado_dryrun_fase0.log"}
+_LATIDO = re.compile(r"^\[([^\]]+)\] (\d+) eventos en la última hora")
+
+
+def _libro5_en_pausa(clave) -> bool:
+    """17-Oct: libro5 apagado a mano (interruptor) no es un logger roto; una pausa por volumen bajo se silencia solo
+    sus primeras 3 h (después hay que actuar). Si está muerto o el estado es viejo (> 10 min), sí se avisa."""
+    if "libro5_ms" not in str(clave):
+        return False
+    try:
+        e = json.loads(Path("/root/polymarket-research-datalogs/libro5_estado.json").read_text())
+        if time.time() - e.get("ts", 0) >= 600:
+            return False
+        if e.get("estado") == "apagado":               # interruptor manual: silencio buscado
+            return True
+        return e.get("estado") == "pausa" and time.time() - e.get("desde", 0) < 3 * 3600   # pausa por disco: 3 h
+    except Exception:
+        return False
+
+
+def _familias() -> dict:
+    fam = {}
+    for pat in PATRONES:
+        for f in glob.glob(pat):
+            base = os.path.basename(f)
+            if "_antes_" in base or "reconstruido" in base or base.endswith(".bak"):
+                continue
+            limpio = _FECHA.sub("", base).replace(".gz", "")
+            if limpio.startswith("multivenue_ms"):          # multivenue_ms_<bolsa>_<pid>[_e<n>]: una familia por bolsa
+                limpio = re.sub(r"_\d+(?:_e\d+)?(?=\.csv)", "", limpio)
+            clave = os.path.join(os.path.dirname(f), _SUFIJO_PROCESO.sub("", limpio))
+            try:
+                mt = os.path.getmtime(f)
+            except OSError:
+                continue
+            if mt > fam.get(clave, 0):
+                fam[clave] = mt
+    return fam
+
+
+def _es_logger(clave: str, e: dict, mt: float) -> bool:
+    """09-Oct: solo es un LOGGER lo que se ha visto escribir al menos una vez DESPUÉS de empezar a seguirlo. Un
+    fichero escrito una sola vez y cerrado (dataset de un análisis puntual: m15_maestro_06oct.csv avisó a las 49 h de
+    su única escritura) no es un hueco de datos. Criterio directo: mtime POSTERIOR a la primera vez que se siguió (la
+    rama de compuerta reescribe ultimo_mtime con la hora actual y oculta las escrituras reales: xrp15min_contrario).
+    Estado anterior a este campo: gap_max_h > 0 implica escrituras vistas; los CONDICIONALES cuentan siempre."""
+    return (bool(e.get("escrituras")) or mt > e["primera_vez"] + 60 or e.get("gap_max_h", 0) > 0
+            or clave in CONDICIONALES)
+
+
+def _compuerta_cerrada(clave: str) -> bool:
+    log = REPO / "logs" / (_FECHA.sub("", os.path.basename(clave)).replace(".gz", "").rsplit(".", 1)[0] + ".log")
+    try:
+        if time.time() - os.path.getmtime(log) > 1800:
+            return False
+        with open(log, "rb") as f:
+            f.seek(max(0, os.path.getsize(log) - 2000))
+            ult = [x for x in f.read().decode("utf-8", "replace").splitlines() if x.strip()]
+        return bool(ult) and any(p in ult[-1] for p in PATRONES_COMPUERTA)
+    except OSError:
+        return False
+
+
+def _sin_eventos(clave: str, ultimo_mtime: float) -> bool:
+    log = EVENTOS.get(clave)
+    try:
+        if log is None or time.time() - os.path.getmtime(log) > 7200:
+            return False
+        with open(log, "rb") as f:
+            f.seek(max(0, os.path.getsize(log) - 20000))
+            lineas = f.read().decode("utf-8", "replace").splitlines()
+        latidos = [(datetime.fromisoformat(m.group(1)).timestamp(), int(m.group(2)))
+                   for m in map(_LATIDO.match, lineas) if m]
+        posteriores = [n for ts, n in latidos if ts - 3600 > ultimo_mtime]   # ventana del latido = hora previa
+        return bool(posteriores) and all(n == 0 for n in posteriores)
+    except (OSError, ValueError):
+        return False
+
+
+def _hay_open(trades: Path) -> bool:
+    try:
+        with open(trades, encoding="utf-8", newline="") as f:
+            return any(r.get("status") == "OPEN" for r in csv.DictReader(f))
+    except Exception:
+        return True
+
+
+# 09-Nov (FASE 1 captura independiente, DISENO_CAPTURA_INDEPENDIENTE_L2_09nov.md): el registro Binance (x/b) vive en el proceso `bnreg`. Este vigia va por horas y la familia maker_ms sigue VIVA por las
+# filas h/q del hijo de observadores aunque Binance lleve minutos caido: el hueco seria INVISIBLE para el resto del vigia. Se vigila, con latch por episodio (la firma NO lleva valores recalculados):
+#  (1) LATIDO de bnreg (binance_registro_estado.json, cada 2 s) CUANDO el centinela BNREG_HABILITADO existe (sin centinela bnreg esta ocioso a proposito = kill-switch): latido parado >120 s,
+#      bnreg sin ser el escritor (espera_lock/ocioso/salida...), escritor_fallando, o sin recibir datos de Binance >120 s estando activo/reconectando.
+#  (2) HUECOS de la ultima hora en binance_huecos_<dia>.csv (SIEMPRE, con o sin centinela; escriben bnreg y el hijo de reserva): episodio = evento de apertura (caida, caida_proceso, parada,
+#      parada_centinela, salida_sin_datos, hijo_cede, hijo_caida) hasta el siguiente de cierre (conexion, hijo_conexion); avisa si dura >10 s o sigue abierto >10 s. cola_llena, escritor_fallo y
+#      escritor_abandono avisan siempre (perdida de filas). Firma = evento@t_ms de la apertura.
+#  (3) INTEGRIDAD de ayer: si ayer hubo centinela (visto por este vigia o `lock_tomado`/`hijo_asume` en los huecos de ayer) y falta binance_integridad_<ayer>.csv -> aviso; si existe, aviso por
+#      aggTradeId faltantes (una vez al dia).
+BNREG_DIR = Path("/root/polymarket-research-datalogs")
+BNREG_LATCH = REPO / "data" / "live" / "vigia_bnreg_latido_latch.json"
+BNREG_LATIDO_MAX_S = 120
+BNREG_SIN_DATOS_MAX_S = 120
+BNREG_HUECO_MAX_S = 10
+BNREG_VENTANA_S = 3700
+BNREG_ESTADOS_MALOS = ("ocioso", "espera_lock", "salida", "parado", "arrancando")
+HUECO_ABRE = ("caida", "caida_proceso", "parada", "parada_centinela", "salida_sin_datos", "hijo_cede", "hijo_caida")
+HUECO_CIERRA = ("conexion", "hijo_conexion")
+HUECO_PERDIDA = ("cola_llena", "escritor_fallo", "escritor_abandono")
+
+
+def _huecos_eventos(dir_, ahora):
+    ev = []
+    for d in (ahora - 86400, ahora):
+        f = Path(dir_) / f"binance_huecos_{time.strftime('%Y-%m-%d', time.gmtime(d))}.csv"
+        try:
+            with open(f, encoding="utf-8") as fh:
+                for r in csv.DictReader(fh):
+                    try:
+                        ev.append((int(r["t_ms"]), r["evento"], r.get("motivo", "")))
+                    except (ValueError, KeyError, TypeError):
+                        continue                               # cabecera duplicada (carrera de creacion) o fila rota
+        except OSError:
+            pass
+    ev.sort()
+    return ev
+
+
+def _huecos_episodios(dir_, ahora):
+    """-> lista de (firma, descripcion) de episodios de la ultima hora que merecen aviso."""
+    out = []
+    abre = None
+    lim_ms = (ahora - BNREG_VENTANA_S) * 1000
+    for t, e, motivo in _huecos_eventos(dir_, ahora):
+        if e in HUECO_ABRE and abre is None:
+            abre = (e, t)
+        elif e in HUECO_CIERRA and abre is not None:
+            dur = (t - abre[1]) / 1000
+            if abre[1] >= lim_ms and dur > BNREG_HUECO_MAX_S:
+                out.append((f"{abre[0]}@{abre[1]}", f"hueco Binance {abre[0]} -> reconectado tras {dur:.0f} s"))
+            abre = None
+        elif e in HUECO_PERDIDA and t >= lim_ms:
+            out.append((f"{e}@{t}", f"{e} (perdida de filas Binance): {motivo[:120]}"))
+    if abre is not None and abre[1] >= lim_ms and ahora * 1000 - abre[1] > BNREG_HUECO_MAX_S * 1000:
+        out.append((f"{abre[0]}@{abre[1]}", f"hueco Binance ABIERTO desde {abre[0]} hace {(ahora * 1000 - abre[1]) / 1000:.0f} s sin reconexion registrada"))
+    return out
+
+
+def _bnreg_avisos(ahora, dir_=BNREG_DIR, latch_path=BNREG_LATCH):
+    """-> (avisos, vuelven). Latch por episodio (un aviso; al recuperarse lo dice). Huecos de la ultima hora, integridad de ayer."""
+    avisos, vuelven = [], []
+    try:
+        latch = json.loads(Path(latch_path).read_text(encoding="utf-8"))
+    except Exception:
+        latch = {}
+    hoy = time.strftime("%Y-%m-%d", time.gmtime(ahora))
+    ayer = time.strftime("%Y-%m-%d", time.gmtime(ahora - 86400))
+    hay_centinela = (Path(dir_) / "BNREG_HABILITADO").exists()
+    if hay_centinela:
+        dias = set(latch.get("dias_centinela", []))
+        dias.add(hoy)
+        latch["dias_centinela"] = sorted(dias)[-5:]
+    # (1) latido (solo con centinela)
+    problema = None
+    if hay_centinela:
+        try:
+            e = json.loads((Path(dir_) / "binance_registro_estado.json").read_text(encoding="utf-8"))
+            edad = ahora - e["ts"] / 1000
+            sin_datos = ahora - e["ultimo_recv_ms"] / 1000 if e.get("ultimo_recv_ms") else None
+            if edad > BNREG_LATIDO_MAX_S:
+                problema = f"latido de bnreg parado hace {edad:.0f} s (>{BNREG_LATIDO_MAX_S} s; estado {e.get('estado')})"
+            elif e.get("estado") in BNREG_ESTADOS_MALOS or not e.get("lock"):
+                problema = f"bnreg con centinela pero sin ser el escritor (estado {e.get('estado')}, lock={e.get('lock')}): el registro Binance puede estar en el hijo o parado"
+            elif e.get("escritor_fallando"):
+                problema = f"el escritor de bnreg FALLA (errores {e.get('escritor_errores')}, cola {e.get('cola')}): filas Binance sin escribir"
+            elif e.get("estado") in ("activo", "reconectando") and sin_datos is not None and sin_datos > BNREG_SIN_DATOS_MAX_S:
+                problema = f"bnreg sin recibir datos de Binance desde hace {sin_datos:.0f} s (estado {e.get('estado')})"
+        except Exception as ex:
+            problema = f"sin latido legible de bnreg ({type(ex).__name__}: {ex})"
+    if problema and not latch.get("avisado"):
+        latch["avisado"] = True
+        avisos.append(f"· bnreg (registro Binance): {problema}")
+    elif not problema and latch.get("avisado"):
+        latch["avisado"] = False
+        vuelven.append("· bnreg (registro Binance): latido recuperado")
+    # (2) huecos de la ultima hora
+    vistos = list(latch.get("episodios", []))
+    for firma, desc in _huecos_episodios(dir_, ahora):
+        if firma not in vistos:
+            vistos.append(firma)
+            avisos.append(f"· {desc}")
+    latch["episodios"] = vistos[-300:]
+    # (3) integridad de ayer
+    if latch.get("dia_integridad") != ayer:
+        f = Path(dir_) / f"binance_integridad_{ayer}.csv"
+        huecos_ayer = [e for _, e, _m in _huecos_eventos(dir_, ahora - 86400) if e in ("lock_tomado", "hijo_asume")]
+        hubo_centinela = ayer in latch.get("dias_centinela", []) or bool(huecos_ayer)
+        if f.exists():
+            try:
+                falt = dup = fo = 0
+                with open(f, encoding="utf-8") as fh:
+                    for r in csv.DictReader(fh):
+                        falt += int(r["faltantes"] or 0)
+                        dup += int(r["dup"] or 0)
+                        fo += int(r["fuera_orden"] or 0)
+                latch["dia_integridad"] = ayer
+                if falt:
+                    avisos.append(f"· binance_integridad {ayer}: {falt} aggTradeId faltantes (duplicados {dup}, fuera de orden {fo}); mirar binance_huecos_{ayer}.csv")
+            except Exception as ex:
+                avisos.append(f"· binance_integridad {ayer} ilegible: {type(ex).__name__}: {ex}")
+        elif hubo_centinela:
+            latch["dia_integridad"] = ayer
+            avisos.append(f"· falta binance_integridad_{ayer}.csv aunque ayer hubo centinela/registro Binance: bnreg no escribio la integridad (revisar el proceso)")
+    _guardar_latch(latch_path, latch)
+    return avisos, vuelven
+
+
+def _guardar_latch(latch_path, latch):
+    try:
+        p = Path(latch_path)
+        tmp = p.with_name(p.name + f".tmp{os.getpid()}")
+        tmp.write_text(json.dumps(latch), encoding="utf-8")
+        tmp.replace(p)
+    except Exception as e:
+        print(f"latch bnreg: {type(e).__name__}: {e}")
+
+
+def main() -> int:
+    ahora = time.time()
+    try:
+        est = json.loads(ESTADO.read_text(encoding="utf-8"))
+    except Exception:
+        est = {}
+    avisos, vuelven = [], []
+    for clave, mt in _familias().items():
+        e = est.get(clave)
+        if e is None:
+            if ahora - mt < 2 * 86400:                     # solo se empieza a seguir lo que está vivo
+                est[clave] = {"primera_vez": ahora, "ultimo_mtime": mt, "gap_max_h": 0.0, "avisado": False,
+                              "escrituras": False}
+            continue
+        if (clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave])) or _compuerta_cerrada(clave) or _libro5_en_pausa(clave):
+            e["ultimo_mtime"] = max(e["ultimo_mtime"], mt, ahora)   # sin posiciones: callar es lo correcto
+            e["avisado"] = False
+            e["escrituras"] = True                 # 09-Oct: logger real (log compañero vivo / condicional): se vigila
+            e["gap_max_h"] = 0.0                                   # el ritmo se aprende solo con posiciones abiertas
+            continue
+        if mt > e["ultimo_mtime"] + 1:
+            gap = (mt - e["ultimo_mtime"]) / 3600
+            # el mayor hueco conocido decae despacio (x GAP_OLVIDO por día) para adaptarse si el logger cambia de ritmo
+            dias = (ahora - e.get("ts_olvido", ahora)) / 86400
+            e["ts_olvido"] = ahora
+            e["gap_max_h"] = round(max(gap, e["gap_max_h"] * GAP_OLVIDO ** dias), 2)
+            e["ultimo_mtime"] = mt
+            e["escrituras"] = True
+            if e.get("avisado"):
+                vuelven.append(f"· {os.path.relpath(clave, REPO) if clave.startswith(str(REPO)) else clave}: vuelve a escribir tras {gap:.1f} h")
+                e["avisado"] = False
+            continue
+        if _sin_eventos(clave, e["ultimo_mtime"]):
+            continue                                       # hilo vivo y sin episodios: callar es lo correcto
+        callado = (ahora - e["ultimo_mtime"]) / 3600
+        umbral = max(MIN_H, FACTOR * e["gap_max_h"])
+        if callado > RETIRO_DIAS * 24:
+            est.pop(clave, None)
+        elif (not e.get("avisado") and (ahora - e["primera_vez"]) / 3600 >= HIST_MIN_H and callado > umbral
+              and _es_logger(clave, e, mt)):
+            e["avisado"] = True
+            avisos.append(f"· {os.path.relpath(clave, REPO) if clave.startswith(str(REPO)) else clave}: {callado:.1f} h sin escribir "
+                          f"(su mayor hueco habitual: {e['gap_max_h']:.1f} h)")
+    a_bn, v_bn = _bnreg_avisos(ahora)
+    avisos += a_bn
+    vuelven += v_bn
+    vivas = _familias()
+    for clave in [c for c in est if c not in vivas]:     # 08-Oct: claves que ya no existen (p. ej. viejas por PID) fuera
+        est.pop(clave, None)
+    tmp = ESTADO.with_name(ESTADO.name + f".tmp{os.getpid()}")
+    tmp.write_text(json.dumps(est, indent=0), encoding="utf-8")
+    tmp.replace(ESTADO)
+    print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] {len(est)} familias seguidas, {len(avisos)} calladas, {len(vuelven)} vuelven")
+    for a in avisos + vuelven:
+        print(a)
+    if (avisos or vuelven) and "--sin-telegram" not in sys.argv:
+        try:
+            from shadow_digest import enviar_telegram
+            msg = ""
+            if avisos:
+                msg += "🔇 *Loggers que han dejado de escribir* (hueco de datos en curso: mirar el hilo/cron que los alimenta)\n" + "\n".join(avisos[:20])
+            if vuelven:
+                msg += ("\n" if msg else "") + "🔊 Vuelven a escribir:\n" + "\n".join(vuelven[:20])
+            enviar_telegram(msg, bot="cripto")
+        except Exception as e:
+            print(f"telegram falló: {e}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
