@@ -1,0 +1,2 @@
+- [Predictor ex-ante de B (28-Oct): REJECTED](project_predictor_as_b_28oct.md) — nivel/ask predecibles (AUC 0,71-0,75), P(gana|relleno) no (dAUC +0,007); techo oráculo ≈0
+- [Trampas del arnés del predictor (28-Oct)](reference_traps_predictor_harness_28oct.md) — sklearn 1.9 y columnas NaN, fugas te_age/nivel, registro sin libros 15m, planificar con tope de llamadas

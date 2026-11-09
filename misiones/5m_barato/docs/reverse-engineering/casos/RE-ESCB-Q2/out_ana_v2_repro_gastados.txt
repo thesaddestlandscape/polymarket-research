@@ -1,0 +1,31 @@
+dias: 7
+rango: 2026-10-26..2026-11-01
+rellenos: 1194
+tokens: 588
+EUR: 778.5
+EV: 0.149
+IC_cierre: (np.float64(-0.064), np.float64(0.38))
+IC_dia: (np.float64(-0.074), np.float64(0.39))
+EV_m100: 0.093
+EV_sin2: -0.067
+EV_PLA: 0.012
+dias_V_gt_PLA: 5/7
+EV_INV: -0.329
+IC_INV_cierre: (np.float64(-0.533), np.float64(-0.118))
+dEUR_vs_G0: 154.5
+IC_dEUR_dia: (np.float64(103.9), np.float64(206.8))
+IC_dEUR_cierre: (np.float64(82.7), np.float64(219.7))
+EV_nob: 0.069
+IC_nob_dia: (np.float64(-0.136), np.float64(0.298))
+frac_barr: 0.08
+EV_c300: 0.069
+  EV>0 SI
+  EV_m100>0 SI
+  sin2>0 NO
+  IC_cierre_inf>0 NO
+  V>PLA pooled SI
+  V>PLA >=2/3 dias SI
+  INV<0 (IC sup<0) SI
+  dEUR IC dia>0 SI
+  dEUR IC cierre>0 SI
+VEREDICTO: INSUFFICIENT (<10 dias) | diagnostico AS eliminada: NO
