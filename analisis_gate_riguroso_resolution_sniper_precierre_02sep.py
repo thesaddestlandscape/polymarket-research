@@ -30,8 +30,10 @@ FEE=0.07 (crypto). Cada fila = comprar `direccion_implicita` al precio
 Solo lectura -- no conecta a ninguna decisión real. Genera
 data/shadow/resolution_sniper_precierre_gate_riguroso.json.
 """
+import fcntl
 import glob
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -55,7 +57,8 @@ STEP_SCAN = 0.01
 WIDTH_FINO = 0.05
 N_MIN_FINO = 40
 ITERS = 2000
-OUTCOME_CACHE = REPO / "data/shadow/resolution_sniper_outcomes_cache.json"
+OUTCOME_CACHE = Path("/root/polymarket-research-datalogs/resolution_sniper_outcomes_cache.json")   # fuera de git (3,7 MB, crece)
+LOCK_PATH = REPO / "data/live/resolution_sniper_precierre_gate.lock"
 HIST_VEREDICTOS = REPO / "data/live/resolution_sniper_precierre_veredicto_hist.json"
 ESTABLE_DIAS = 2   # días naturales consecutivos con bueno en TODAS las corridas del día para confirmar
 OUT = REPO / "data" / "shadow" / "resolution_sniper_precierre_gate_riguroso.json"
@@ -74,11 +77,15 @@ def _cargar_filas() -> list[dict]:
     # 09-Nov: caché PERMANENTE de desenlaces market_id -> outcome_real. Los resolution_sniper_obs_* se borran/rotan (el 22-Oct 15:40
     # se borró el de 2026-09-02): 2.336 desenlaces perdidos, 352 filas -2/-1 caían en silencio y n de -2|grid|BTC#0.50 pasó de 93 a 58.
     outcome: dict[str, str] = {}
+    cache_ok = True
     try:
         outcome.update(json.loads(OUTCOME_CACHE.read_text(encoding="utf-8")))
-    except (OSError, ValueError):
+    except FileNotFoundError:
         pass
-    n_cache = len(outcome)
+    except (OSError, ValueError) as e:
+        cache_ok = False   # caché ilegible: se sigue con los CSV pero NO se sobrescribe (no destruir la historia)
+        print(f"[gate_riguroso_resolution_sniper_precierre] AVISO caché de desenlaces ilegible ({type(e).__name__}); no se reescribe", flush=True)
+    cache_prev = dict(outcome)
     for f in sorted(glob.glob(str(REPO / "data/shadow/resolution_sniper_obs_2026-*.csv"))):
         import csv
         with open(f, encoding="utf-8") as fh:
@@ -86,8 +93,8 @@ def _cargar_filas() -> list[dict]:
                 if row.get("outcome_real") not in (None, ""):
                     outcome[row["market_id"]] = row["outcome_real"]
 
-    if len(outcome) != n_cache:
-        tmp = OUTCOME_CACHE.with_suffix(".json.tmp")
+    if cache_ok and outcome != cache_prev:   # contenido, no tamaño: un desenlace corregido también se persiste
+        tmp = OUTCOME_CACHE.with_suffix(f".json.tmp{os.getpid()}")
         tmp.write_text(json.dumps(outcome, separators=(",", ":")), encoding="utf-8")
         tmp.replace(OUTCOME_CACHE)
     import csv
@@ -311,37 +318,54 @@ def _fino_por_activo_OBSOLETO(filas: list[dict]) -> dict:
     return resultado
 
 
+def _clave_fino(off: str, k: str, ev: dict) -> str:
+    # la ventana fina se re-elige en cada corrida: la estabilidad es de ESA zona de precio, no de (offset, activo)
+    return f"fino|{off}|{k}|{ev.get('lo')}|{ev.get('hi')}"
+
+
 def aplicar_estabilidad(grid: dict, fino: dict, hoy: str | None = None) -> None:
     """09-Nov: un `bueno_confirmado` solo es efectivo tras ESTABLE_DIAS días naturales consecutivos en los que TODAS las corridas del
-    día lo dieron (ausente un día = día malo). Democión inmediata: cualquier corrida sin_concluir lo deja en sin_concluir.
-    El veredicto crudo queda en `veredicto_crudo`. Historia en HIST_VEREDICTOS (primera vez: los bueno de hoy se siembran como
-    estables, para no apagar de golpe lo que ya opera; el resto cuenta desde hoy)."""
+    día lo dieron (ausente un día o una corrida = día malo). Democión inmediata: cualquier corrida sin_concluir lo deja en
+    sin_concluir. El veredicto crudo queda en `veredicto_crudo`. Historia en HIST_VEREDICTOS, que debe llamarse BAJO el lock.
+    Siembra inicial SOLO si el fichero NO existe (OK Javi 09-Nov: lo que ya opera no se apaga). Fail-closed: histórico ilegible o con
+    fechas futuras (reloj) -> todo bueno crudo pasa a sin_concluir y NO se toca el fichero."""
     import datetime as _dt
     hoy = hoy or _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d")
+    primera = False; roto = None
     try:
         hist = json.loads(HIST_VEREDICTOS.read_text(encoding="utf-8"))
-        primera = False
-    except (OSError, ValueError):
+        if not isinstance(hist, dict): raise ValueError("no es dict")
+        if any(d > hoy for h in hist.values() for d in h): roto = "fechas futuras en el histórico (reloj)"
+    except FileNotFoundError:
         hist, primera = {}, True
+    except (OSError, ValueError) as e:
+        hist, roto = {}, f"histórico ilegible ({type(e).__name__})"
     ayer = [(_dt.date.fromisoformat(hoy) - _dt.timedelta(days=k)).isoformat() for k in range(1, ESTABLE_DIAS)]
+    corte = (_dt.date.fromisoformat(hoy) - _dt.timedelta(days=30)).isoformat()
+    vistas = set()
     for tipo, bloque in (("grid", grid), ("fino", fino)):
         for off, claves in bloque.items():
             for k, ev in claves.items():
                 if "veredicto" not in ev:
                     continue
-                hk = f"{tipo}|{off}|{k}"; h = hist.setdefault(hk, {})
                 crudo = ev["veredicto"]; ev["veredicto_crudo"] = crudo
+                if roto:
+                    if crudo == "bueno_confirmado": ev["veredicto"] = "sin_concluir"; ev["motivo_veto"] = "estabilidad_fail_closed: " + roto
+                    continue
+                hk = f"grid|{off}|{k}" if tipo == "grid" else _clave_fino(off, k, ev); vistas.add(hk); h = hist.setdefault(hk, {})
                 h[hoy] = "bueno_confirmado" if (crudo == "bueno_confirmado" and h.get(hoy, "bueno_confirmado") == "bueno_confirmado") else "no_bueno"
                 if primera and crudo == "bueno_confirmado":
                     for d in ayer: h.setdefault(d, "bueno_confirmado")
-                for d in list(h):
-                    if d < (_dt.date.fromisoformat(hoy) - _dt.timedelta(days=30)).isoformat(): del h[d]
+                for d in [d for d in h if d < corte]: del h[d]
                 if crudo == "bueno_confirmado":
-                    estable = h[hoy] == "bueno_confirmado" and all(h.get(d) == "bueno_confirmado" for d in ayer)
                     ev["dias_estables"] = 1 + sum(1 for d in ayer if h.get(d) == "bueno_confirmado")
-                    if not estable:
+                    if not (h[hoy] == "bueno_confirmado" and all(h.get(d) == "bueno_confirmado" for d in ayer)):
                         ev["veredicto"] = "sin_concluir"; ev["motivo_veto"] = "bueno_crudo_sin_estabilidad_diaria"
-    tmp = HIST_VEREDICTOS.with_suffix(".json.tmp")
+    if roto:
+        print(f"[gate_riguroso_resolution_sniper_precierre] AVISO estabilidad fail-closed: {roto}", flush=True); return
+    for hk, h in hist.items():   # clave que no salió en esta corrida = corrida mala para hoy
+        if hk not in vistas and h.get(hoy) == "bueno_confirmado": h[hoy] = "no_bueno"
+    tmp = HIST_VEREDICTOS.with_suffix(f".json.tmp{os.getpid()}")
     tmp.write_text(json.dumps(hist, separators=(",", ":")), encoding="utf-8"); tmp.replace(HIST_VEREDICTOS)
 
 
@@ -349,6 +373,9 @@ def main() -> None:
     filas = _cargar_filas()
     grid = grid_por_offset_activo(filas)
     fino = fino_por_offset_activo(filas)
+    # El script corre desde vigiasfreq Y desde el vigía: el lock serializa leer-modificar-escribir del histórico y la salida.
+    LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
+    lockf = open(LOCK_PATH, "w"); fcntl.flock(lockf, fcntl.LOCK_EX)
     aplicar_estabilidad(grid, fino)
     # Formato con EJE DE OFFSET (03-Sep). El gate vivo
     # (resolution_sniper_precierre_gate.py) exige el offset y falla cerrado
@@ -366,7 +393,9 @@ def main() -> None:
         "n_por_offset": n_por_offset,
         "por_offset": por_offset,
     }
-    OUT.write_text(json.dumps(resultado, indent=1, ensure_ascii=False), encoding="utf-8")
+    tmp_out = OUT.with_suffix(f".json.tmp{os.getpid()}")
+    tmp_out.write_text(json.dumps(resultado, indent=1, ensure_ascii=False), encoding="utf-8"); tmp_out.replace(OUT)
+    fcntl.flock(lockf, fcntl.LOCK_UN); lockf.close()
     print(f"[gate_riguroso_resolution_sniper_precierre] n={len(filas)} "
           f"offsets={sorted(n_por_offset, key=lambda o: -abs(int(o)))}")
     for off, blq in por_offset.items():
