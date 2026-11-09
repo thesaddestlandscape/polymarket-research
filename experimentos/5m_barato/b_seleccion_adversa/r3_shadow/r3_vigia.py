@@ -190,7 +190,9 @@ def cargar(dirn, desde, con_prueba=False):
             elif t == "smp":
                 smp.append(r)
             elif t == "dec":
-                decs.append(r)
+                # 09-Nov: OOM diario del 10:50 (5-6 GB con 18 dias): b_real solo usa las dec BASE/cons_x con r2; filtrar aqui (mismo criterio) y guardar solo sus campos
+                if r.get("lado") and r.get("r2") is not None and r.get("pol") == "BASE" and r.get("esc") == "cons_x":
+                    decs.append({k: r.get(k) for k in ("tipo", "slug", "lado", "r", "r2", "r3", "pol", "esc")})
             elif t == "fin_t":
                 fint.append(r)
     for d in dias_en(dirn, "r3_desenlaces"):

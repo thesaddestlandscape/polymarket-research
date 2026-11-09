@@ -95,7 +95,8 @@ def main():
     try:
         sys.path.insert(0, str(REPO))
         from shadow_digest import enviar_telegram
-        enviar_telegram(msg, bot="cripto")
+        # 09-Nov: HTTP 400 si >4096 caracteres (limite de Telegram): truncar
+        enviar_telegram(msg if len(msg) <= 4000 else msg[:3990] + "\n[...]", bot="cripto")
     except Exception as e:
         print(f"[vigia_ya_decidido_diario] error Telegram: {e}")
 
