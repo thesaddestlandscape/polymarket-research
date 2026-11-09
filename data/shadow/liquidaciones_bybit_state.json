@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-09T10:12:22+00:00",
+ "generado_utc": "2026-11-09T10:17:53+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -48,8 +48,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 66805.85,
-   "n": 16,
+   "usd_short": 61761.0,
+   "n": 15,
    "imbalance": 1.0
   }
  },
@@ -82,15 +82,15 @@
  "ETH": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 94997.34,
-   "n": 3,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 94997.34,
-   "n": 3,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -100,28 +100,28 @@
   },
   "60min": {
    "usd_long": 42.25,
-   "usd_short": 387703.15,
-   "n": 20,
+   "usd_short": 382388.37,
+   "n": 17,
    "imbalance": 0.9998
   }
  },
  "SOL": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 85.66,
-   "n": 2,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 85.66,
-   "n": 2,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 25259.09,
-   "n": 15,
+   "usd_short": 18808.86,
+   "n": 8,
    "imbalance": 1.0
   },
   "60min": {
@@ -139,16 +139,16 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 125.62,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 125.62,
-   "usd_short": 3741.56,
-   "n": 9,
-   "imbalance": 0.935
+   "usd_short": 3432.91,
+   "n": 8,
+   "imbalance": 0.9294
   },
   "60min": {
    "usd_long": 125.62,
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 6,
-  "ultimo_lag_s": 0.36,
-  "max_lag_s": 0.5,
-  "media_lag_s": 0.35,
+  "n_muestras": 0,
+  "ultimo_lag_s": null,
+  "max_lag_s": null,
+  "media_lag_s": null,
   "umbral_alerta_s": 5.0
  }
 }
