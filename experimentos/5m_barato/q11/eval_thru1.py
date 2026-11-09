@@ -14,7 +14,8 @@ HERE = os.path.dirname(os.path.abspath(__file__)) + '/'
 P2 = '/root/polymarket-research-dev/misiones/5m_barato/sonda1/p2/'; PB = P2 + 'precursores_barrido/out/'
 TX, RTD, BCO, RXD = HERE + 'toxicidad_thru1/out/', HERE + 'redteam/out/', HERE + 'barrido_corr/out/', HERE + 'redteam/out_cxj150/'
 PRICES = '/root/polymarket-research/data/prices/'
-FWD_DESDE = '2026-11-07'; SEED = 20261107; B = 4000
+FWD_DESDE = '2026-11-09'; DESCRIPTIVOS_DESDE = '2026-11-07';   # ADDENDUM6 3.1: 07 y 08-Nov DESCRIPTIVOS-QUEMADOS (no cuentan)
+SEED = 20261107; B = 4000
 PREREG = '/root/polymarket-research/misiones/5m_barato/docs/reverse-engineering/casos/RE-THRU1/PREREG_Q11_THRU1_FWD.md'
 SHAS = {  # codigo/modelo registrados (prereg: engine.py, passT.py, rt_sim.py, modelo OWN; engine fijado aqui el 06-Nov con el valor vigente)
     P2 + 'escalera_B/engine.py': 'a7b8431a73952524917ffd90e65b2dcf2779fabd3c452bc0407d36e34b1e8feb',
@@ -42,8 +43,11 @@ def cargar(dias):
     """-> (T, R, S, RX, err). err = lista de ERROR_DATOS (filas con dia != D): el llamador NO escribe estado y muestra los terminales (ADDENDUM4 5b)."""
     T, R, S, X, err = [], [], [], [], []
     for d in dias:
-        T.append(pd.read_pickle(f'{TX}RT_{d}.pkl')); R.append(pd.read_pickle(f'{RTD}RT_{d}.pkl')); S.append(pd.read_pickle(f'{TX}SEGT_{d}.pkl'))
-        if os.path.exists(f'{RXD}RX_{d}.pkl'): X.append(pd.read_pickle(f'{RXD}RX_{d}.pkl'))   # CXJ150 bajo BASE/CROSS (rt_cxj150_cross.py); su falta solo invalida el dia para CXJ150
+        try:   # un pickle ilegible es ERROR_DATOS (no una excepcion que deje el evaluador sin informe ni B2)
+            T.append(pd.read_pickle(f'{TX}RT_{d}.pkl')); R.append(pd.read_pickle(f'{RTD}RT_{d}.pkl')); S.append(pd.read_pickle(f'{TX}SEGT_{d}.pkl'))
+            if os.path.exists(f'{RXD}RX_{d}.pkl'): X.append(pd.read_pickle(f'{RXD}RX_{d}.pkl'))   # CXJ150 bajo BASE/CROSS (rt_cxj150_cross.py); su falta solo invalida el dia para CXJ150
+        except Exception as e_:
+            err.append(f'RT_{d}.pkl (o SEGT/RX del dia {d}) ilegible: {type(e_).__name__}: {e_}'); return pd.DataFrame(), pd.DataFrame(), pd.DataFrame(), pd.DataFrame(), err
         for nm, x in (('passT', T[-1]), ('rt_sim', R[-1])) + ((('rt_cxj150_cross', X[-1]),) if os.path.exists(f'{RXD}RX_{d}.pkl') else ()):
             if len(x) and (x['dia'].astype(str) != d).any(): err.append(f'{nm} RT_{d}.pkl: filas con dia != {d}')
     cat = lambda L: pd.concat(L, ignore_index=True) if L else pd.DataFrame()
@@ -74,7 +78,7 @@ def armar_base(T, R, S, X, dias, hoy=None, cache=None):
     for f in ('BASE', 'CROSS'): A[f'rt_CXJ150_{f}'] = X[X.fv == f] if len(X) else R.iloc[:0]   # script rt_cxj150_cross.py (ADDENDUM4: C3 de CXJ150)
     # PC_AS: unidades NO de los segmentos G0 (cobertura del rasgo) y marca por (fin, act)
     U = S[S.lado == 'NO'][['dia', 'fin', 'act']].drop_duplicates().reset_index(drop=True); U, cl_err = feat_chainlink(dias, U, hoy, cache)
-    U['flag'] = (U.r1 > 0) & (U.r4 < 0); cov = float(U.r1.notna().mean()) if len(U) else float('nan')
+    U['flag'] = (U.r1 > 0) & (U.r4 < 0); cov = float((U.r1.notna() & U.r4.notna()).mean()) if len(U) else float('nan')   # ADDENDUM7 A2: r1 Y r4 finitos
     fl = set(map(tuple, U[U.flag][['fin', 'act']].values))
     def pcas(x): return x[~((x.lado == 'NO') & pd.Series([(a, b) in fl for a, b in zip(x.fin, x.act)], index=x.index))] if len(x) else x
     A['PC_AS'] = pcas(g0)
@@ -115,26 +119,166 @@ def placebo_pcas(U, pnl_no, days_cnt):
     m = float(np.mean(perm)); pv = (1 + sum(abs(x - m) >= abs(obs - m) for x in perm)) / 1001
     return float(obs), m, pv
 # ---------------- validez de dia ----------------
-def dia_valido(d):
-    """Insumos completos, horas sanas (bad_D.json), Binance 3 monedas con cobertura >=0,95 de segundos en horas sanas. (El rasgo de PC_AS >=95 % se comprueba en evaluar.)"""
-    cache = HERE + f'thru1_fwd/validez_{d}.json'
-    if os.path.exists(cache): return json.load(open(cache))
+# ---------------- salud del feed Binance (ADDENDUM6 sec. 2, 2b, 5) ----------------
+CRITERIO = 'ADDENDUM7'                      # clave de validez_D.json: una cache sin ella (regla vieja de cobertura por moneda) se rechaza y se recalcula
+SIMB_FLUJO = ('BTC', 'ETH', 'SOL', 'XRP', 'DOGE', 'BNB')   # ADDENDUM7 B3: flujo CONJUNTO de TODOS los simbolos del logger (= libro_estado_ws._SIMB_BN, una sola conexion; un test lo cruza con el codigo); BTC/DOGE/BNB centinelas, no entran en ningun brazo
+SIMB_H3 = ('BTC', 'ETH', 'SOL', 'XRP')      # H3: los unicos con kline REST y los que entran o centinelean los brazos
+SIMB_4 = SIMB_H3                           # sensibilidad H2 con 4 simbolos (ADDENDUM7 B4)
+H1_S, H2_MIN, H3_MIN = 60, 0.95, 0.95       # decisorios (por diseno, ADDENDUM6 3.3); sensibilidad solo se REPORTA
+H1_VAR, H3_VAR = (50, 60, 73), (0.93, 0.95, 0.97)
+KCACHE = '/root/polymarket-research-datalogs/q11_binance_salud/'   # klines REST 1m del dia por simbolo (no se repiten las llamadas)
+DAY_MS = 86400000
+class ErrorDatos(Exception): pass
+BIGMS = np.iinfo(np.int64).max
+REST_TRIES, ESPERA_REST = 3, 2              # reintentos con espera creciente (2, 4 s) antes de declarar ERROR_DATOS por REST
+def acc_nuevo():
+    """Acumulador en STREAMING del x_D (memoria O(86400): ni se guardan las filas ni se reescanea): por simbolo de SIMB_FLUJO y segundo de RECEPCION, min y max del tick (ms; un tick por segundo basta para
+    todos los huecos >= 1 s, exactos); n por simbolo; por segundo de hora de TRADE T, min y max conjuntos de los 6 simbolos (H1b); suma de q por minuto de T de los simbolos de SIMB_H3 (H3)."""
+    return dict(rmin=np.full((len(SIMB_FLUJO), 86400), BIGMS, np.int64), rmax=np.full((len(SIMB_FLUJO), 86400), -1, np.int64), n=np.zeros(len(SIMB_FLUJO), np.int64),
+                tmin=np.full(86400, BIGMS, np.int64), tmax=np.full(86400, -1, np.int64), qsum=np.zeros((len(SIMB_H3), 1440)))
+def _minmax(mn, mx, sec, ms):
+    df = pd.DataFrame({'s': sec, 'v': ms}).groupby('s').v.agg(['min', 'max']); i = df.index.values; mn[i] = np.minimum(mn[i], df['min'].values); mx[i] = np.maximum(mx[i], df['max'].values)
+def acc_add(acc, k, recv, T, q, day0):
+    """Suma al acumulador las filas de UN simbolo k: recv/T/q (arrays). Solo cuentan recepciones dentro del dia (H1/H2) y T dentro del dia (H3, H1b)."""
+    if k not in SIMB_FLUJO: return
+    ik = SIMB_FLUJO.index(k); recv = np.asarray(recv, np.int64); T = np.asarray(T, np.int64); q = np.asarray(q, float)
+    m = (recv >= day0) & (recv < day0 + DAY_MS)
+    if m.any(): _minmax(acc['rmin'][ik], acc['rmax'][ik], (recv[m] - day0) // 1000, recv[m]); acc['n'][ik] += int(m.sum())
+    mt = (T >= day0) & (T < day0 + DAY_MS)
+    if mt.any():
+        _minmax(acc['tmin'], acc['tmax'], (T[mt] - day0) // 1000, T[mt])
+        if k in SIMB_H3: acc['qsum'][SIMB_H3.index(k)] += np.bincount(((T[mt] - day0) // 60000).astype(int), weights=q[mt], minlength=1440)[:1440]
+def acc_from(rec=None, tr=None, day0=0):
+    """Acumulador desde arrays ya en memoria (pruebas y compatibilidad): rec {simbolo: recv ms}, tr {simbolo: (T ms, q)}."""
+    acc = acc_nuevo(); e = np.array([], np.int64)
+    for k, v in (rec or {}).items(): acc_add(acc, k, v, e, np.array([], float), day0)
+    for k, (T, q) in (tr or {}).items(): acc_add(acc, k, e, T, q, day0)
+    return acc
+def _huecos(mn, mx, day0):
+    """Intervalos entre ticks consecutivos (ini, fin en ms) con bordes virtuales 00:00 y 24:00; exactos para huecos >= 1 s (dentro de un segundo no se calculan: < 1 s)."""
+    s = np.nonzero(mx >= 0)[0]; return np.concatenate([[day0], mx[s]]), np.concatenate([mn[s], [day0 + DAY_MS]])
+def salud_h1h2(acc, day0, sanas):
+    """H1/H2 sobre el flujo conjunto de SIMB_FLUJO (ms de RECEPCION; ADDENDUM7 B3, C1) a partir del acumulador en streaming (o de un dict {simbolo: recv} que se convierte). sanas: horas sanas (0..23).
+    Bordes (C1): 00:00 y 24:00 UTC actuan como ticks virtuales (el primer intervalo empieza en 00:00 y el ultimo en el ultimo tick); un intervalo cuenta si su INICIO cae en hora sana
+    (aunque termine en hora mala) y se ignora si empieza en hora mala; H1 valido si todo intervalo contado <= H1_S (> H1_S invalida); ticks con recepcion fuera del dia no entran. Sin horas
+    sanas: NO VALIDO. Simbolo de SIMB_FLUJO sin ninguna fila en el dia => h1=h2=False (nunca se mide con menos simbolos en silencio).
+    H2: fraccion de segundos de horas sanas con >=1 tick conjunto >= H2_MIN; h2_cobertura_4 (BTC/ETH/SOL/XRP) es sensibilidad (B4). Diagnosticos por moneda y n de intervalos >=30 s sobre los 6."""
+    if 'rmin' not in acc: acc = acc_from(rec=acc, day0=day0)
+    sanas = sorted(sanas); ausentes = [k for i, k in enumerate(SIMB_FLUJO) if acc['n'][i] == 0]; ns = 3600 * len(sanas)
+    pres = acc['rmax'] >= 0; hora = lambda pr: pr.reshape(24, 3600).sum(1)   # segundos con tick por hora
+    cov_ = lambda pr: (float(hora(pr)[sanas].sum() / ns) if sanas else 0.0)
+    i4 = [SIMB_FLUJO.index(k) for k in SIMB_4]; cov = cov_(pres.any(0)); cov4 = cov_(pres[i4].any(0))
+    def gaps(mn, mx):
+        ini, fin = _huecos(mn, mx, day0); en = np.isin((ini - day0) // 3600000, sanas); return ini, fin, en
+    ini, fin, en = gaps(acc['rmin'].min(0), acc['rmax'].max(0)); gap = fin - ini; gmax = int(gap[en].max()) if en.any() else 0; g30 = en & (gap >= 30000)
+    pm = {}   # diagnosticos por moneda (NO decisorios)
+    for ik, k in enumerate(SIMB_FLUJO):
+        a, b, ek = gaps(acc['rmin'][ik], acc['rmax'][ik]); hr = hora(pres[ik]) / 3600
+        pm[k] = dict(cobertura=cov_(pres[ik]), hueco_max_s=float((b - a)[ek].max() / 1000) if ek.any() else 0.0, min_horario=float(hr[sanas].min()) if sanas else 0.0, n=int(acc['n'][ik]))
+    h1 = bool(gmax <= H1_S * 1000 and len(sanas) > 0 and not ausentes); h2 = bool(len(sanas) > 0 and cov >= H2_MIN and not ausentes)
+    return dict(h1_hueco_max_s=gmax / 1000, h1_var={str(v): bool(gmax <= v * 1000 and not ausentes) for v in H1_VAR}, h1=h1, h2_cobertura=cov, h2=h2, h2_cobertura_4=cov4, simbolos_ausentes=ausentes,
+                n_intervalos_ge30s=int(g30.sum()), intervalos_ge30s=[[int(x), int(y)] for x, y in zip(ini[g30], fin[g30])], por_moneda=pm)
+def salud_h3(acc, kvol, day0):
+    """H3: ratio por simbolo de SIMB_H3 (BTC/ETH/SOL/XRP; BNB/DOGE no entran) = suma de q logueada en x_D (por MINUTO de hora de trade T) / volumen del kline 1m REST del dia completo; valido si el MINIMO de los 4 >= H3_MIN.
+    acc: acumulador (o dict {simbolo: (T_ms, q)}); kvol: {simbolo: ndarray de 1440 volumenes}. Diagnosticos: n minutos con ratio<0,5 y kline>10x mediana; H1b (hueco conjunto en T, 6 simbolos)."""
+    if 'qsum' not in acc: acc = acc_from(tr=acc, day0=day0)
+    rat, diag = {}, {}
+    for i, k in enumerate(SIMB_H3):
+        kv = np.asarray(kvol[k], float); lm = acc['qsum'][i]; tot = float(kv.sum()); rat[k] = float(lm.sum() / tot) if tot > 0 else float('nan')
+        med = float(np.median(kv)); bad = (kv > 10 * med) & (lm < 0.5 * kv) if med > 0 else np.zeros(1440, bool); diag[k] = dict(n_min_ratio_lt05_vol_gt10x=int(bad.sum()), vol_kline=tot, vol_log=float(lm.sum()))
+    a, b = _huecos(acc['tmin'], acc['tmax'], day0)
+    mn = min(rat.values()) if rat and all(v == v for v in rat.values()) else float('nan')   # cualquier simbolo sin ratio (kline 0) => NaN => no valido
+    ok = lambda thr: bool(mn == mn and mn >= thr)
+    return dict(h3_ratio=rat, h3_min=mn, h3=ok(H3_MIN), h3_var={str(v): ok(v) for v in H3_VAR}, h3_diag=diag, h1b_hueco_trade_max_s=float((b - a).max() / 1000))
+def kl_rest(sym, day0):
+    """Klines 1m REST de Binance (publico) del dia completo: 2 llamadas de hasta 1000, UN intento por llamada (los reintentos con espera los hace klines_dia). -> [(openTime, volumen_base)]."""
+    import urllib.request
+    out = []; t = day0
+    for _ in range(2):
+        u = f'https://api.binance.com/api/v3/klines?symbol={sym}USDT&interval=1m&startTime={t}&endTime={day0 + DAY_MS - 1}&limit=1000'; ch = json.load(urllib.request.urlopen(u, timeout=20))
+        out += [(int(r[0]), float(r[5])) for r in ch]
+        if len(ch) < 1000: break
+        t = int(ch[-1][0]) + 60000
+    return out
+def _kl_ok(vol):
+    v = np.asarray(vol, float); return v.shape == (1440,) and bool(np.isfinite(v).all()) and float(v.sum()) > 0
+def klines_dia(sym, d, kcache=None, fetch=None):
+    """Volumen por minuto (1440) del dia d para el simbolo; cache por dia en datalogs (sin repetir llamadas). La cache se valida AL LEER y AL ESCRIBIR (1440 valores, finitos, suma > 0): si no, se descarta y se
+    vuelve a descargar. REST con REST_TRIES intentos con espera (ESPERA_REST*k s); fallo, kline incompleto/no contiguo, no finito o volumen 0 => ErrorDatos (ERROR_DATOS, no se cachea)."""
+    import time
+    kcache = KCACHE if kcache is None else kcache; fetch = kl_rest if fetch is None else fetch; f = f'{kcache}klines_{sym}_{d}.json'; day0 = int(pd.Timestamp(d, tz='UTC').timestamp()) * 1000
+    if os.path.exists(f):
+        try:
+            c = json.load(open(f))
+            if c['dia'] == d and c['sym'] == sym and _kl_ok(c['vol']): return np.array(c['vol'], float)
+        except Exception: pass   # cache ilegible o invalida: se descarta y se vuelve a pedir
+    ex = None
+    for k in range(REST_TRIES):
+        try: ks = fetch(sym, day0); break
+        except Exception as e:
+            ex = e
+            if k < REST_TRIES - 1: time.sleep(ESPERA_REST * (k + 1))
+    else: raise ErrorDatos(f'REST klines {sym} {d}: {type(ex).__name__}: {ex} (tras {REST_TRIES} intentos)')
+    if len(ks) != 1440 or any(int(ks[i][0]) != day0 + 60000 * i for i in range(len(ks))): raise ErrorDatos(f'kline {sym} {d} incompleto o no contiguo ({len(ks)} de 1440)')
+    vol = [float(x[1]) for x in ks]
+    if not _kl_ok(vol): raise ErrorDatos(f'kline {sym} {d}: volumen no finito o total 0')   # ADDENDUM7 C3: ERROR_DATOS global, no se cachea ni se declara dia NO VALIDO
+    atomic(f, json.dumps(dict(dia=d, sym=sym, creado=dt.datetime.now(dt.timezone.utc).strftime('%FT%TZ'), vol=vol))); return np.array(vol, float)
+def leer_x(xfile, day0):
+    """x_D (aggTrade) en STREAMING por chunks -> acumulador (memoria O(86400)). UN solo recorrido para H1, H2, H3, los 4 y los 6 simbolos y los diagnosticos por moneda."""
+    acc = acc_nuevo()
+    for ch in pd.read_csv(xfile, header=None, usecols=[1, 2, 4, 7], names=['T', 'sym', 'q', 'recv'], dtype={'T': 'int64', 'sym': 'category', 'q': 'float64', 'recv': 'int64'}, chunksize=1000000):
+        for sym, g in ch.groupby('sym', observed=True): acc_add(acc, str(sym)[:-4], g.recv.values, g['T'].values, g.q.values, day0)
+    return acc
+def evaluar_salud(d, xfile, sanas, kcache=None, fetch=None):
+    """Salud del feed del dia d (H1, H2, H3 de ADDENDUM6) con diagnosticos y sensibilidad (H1 50/60/73 y H3 0,93/0,95/0,97). Lanza ErrorDatos si falla la consulta REST."""
+    day0 = int(pd.Timestamp(d, tz='UTC').timestamp()) * 1000; acc = leer_x(xfile, day0)
+    h12 = salud_h1h2(acc, day0, sanas); kv = {k: klines_dia(k, d, kcache, fetch) for k in SIMB_H3}; h3 = salud_h3(acc, kv, day0)
+    r = dict(dia=d, criterio=CRITERIO, horas_sanas=len(sanas)); r.update(h12); r.update(h3)
+    r['valido'] = bool(r['h1'] and r['h2'] and r['h3']); fal = [n for n, v in (('H1 hueco conjunto <= %ds' % H1_S, r['h1']), ('H2 cobertura conjunta >= %.2f' % H2_MIN, r['h2']), ('H3 ratio volumen >= %.2f' % H3_MIN, r['h3'])) if not v]
+    if r['simbolos_ausentes']: fal.append('simbolo del flujo ausente: ' + ','.join(r['simbolos_ausentes']))
+    r['motivo'] = '' if r['valido'] else 'Binance NO sano: ' + '; '.join(fal)
+    r['fragil_criterio_salud'] = bool(r['valido'] and r['h2_cobertura_4'] < H2_MIN)   # ADDENDUM7 B4: valido con 6 simbolos pero H2(4) < 0,95
+    r['sensibilidad'] = {**{f'H1={v}s': bool(r['h1_var'][str(v)] and r['h2'] and r['h3']) for v in H1_VAR}, **{f'H3={v}': bool(r['h1'] and r['h2'] and r['h3_var'][str(v)]) for v in H3_VAR}, 'H2=4simb': bool(r['h1'] and r['h3'] and r['h2_cobertura_4'] >= H2_MIN and not r['simbolos_ausentes'])}
+    return r
+ASENTAR_MIN, ESTABLE_MIN = 30, 10   # dia asentado: >= 30 min tras la medianoche de d+1 y x_D/bad_D.json ESCRITOS despues de esa hora y sin tocar en los ultimos 10 min
+def asentado(d, xpath, bpath, ahora):
+    """-> (ok, motivo). Dia d asentado: ahora >= medianoche de d+1 + ASENTAR_MIN min, y x_D y bad_D.json con mtime >= esa hora (producidos DESPUES del cierre del dia: un fichero con mtime anterior pudo copiarse
+    incompleto) y <= ahora - ESTABLE_MIN min (no se estan escribiendo). INTERPRETACION ANOTADA: el encargo decia "mtime anterior a esa hora"; en este pipeline x_D/bad_D se extraen a las ~11-12Z de d+1, asi que
+    la lectura literal dejaria TODO dia PENDIENTE para siempre; se aplica la lectura "producidos despues del asentamiento y ya estables"."""
+    t = pd.Timestamp(d, tz='UTC') + pd.Timedelta(days=1, minutes=ASENTAR_MIN)
+    if ahora < t: return False, f'sin asentar: antes de las {t:%FT%TZ} (ahora {ahora:%FT%TZ})'
+    for pth in (xpath, bpath):
+        mt = os.path.getmtime(pth)
+        if mt < t.timestamp(): return False, f'sin asentar: {os.path.basename(pth)} producido antes de {t:%FT%TZ} (pudo copiarse incompleto)'
+        if mt > (ahora - pd.Timedelta(minutes=ESTABLE_MIN)).timestamp(): return False, f'sin asentar: {os.path.basename(pth)} modificado hace menos de {ESTABLE_MIN} min'
+    return True, ''
+def dia_valido(d, hoy=None, vdir=None, kcache=None, fetch=None, ahora=None):
+    """Dia que cuenta (ADDENDUM6 2 + ADDENDUM7): insumos completos, horas sanas (bad_D.json) y Binance sano H1+H2+H3. Estados:
+    - EN CURSO (C2: d >= fecha UTC de la ejecucion): en_curso=True, ni valido ni NO VALIDO, sin cache y sin llamada REST.
+    - PENDIENTE (C5: d < hoy con insumos incompletos, o dia SIN ASENTAR [< 30 min tras la medianoche de d+1 o x_D/bad_D.json modificados despues]): pendiente=True, valido=False, sin cache ni REST.
+    - NO VALIDO por H1/H2/H3 (dia cerrado y asentado): se cachea en validez_D.json y es DEFINITIVO (no se recalcula por reintento; solo por correccion de bug anotada en DECISION_LOG).
+    - REST fallido (3 intentos con espera) / kline != 1440 min contiguos / no finito / volumen 0 (C3): dict error=True (ERROR_DATOS GLOBAL del evaluador), sin cache de validez.
+    Cache validez_D.json con clave `criterio`: una cache sin ella o con otra (p.ej. ADDENDUM6) se RECHAZA y se recalcula. `ahora` (Timestamp UTC): por defecto el reloj real; si se simula `hoy`, la 01:00Z de ese dia.
+    (El rasgo de PC_AS >=95 % se comprueba en evaluar, solo para PC_AS.)"""
+    vdir = HERE + 'thru1_fwd/' if vdir is None else vdir; ahora = pd.Timestamp.now(tz='UTC') if (ahora is None and hoy is None) else (ahora if ahora is not None else pd.Timestamp(hoy, tz='UTC') + pd.Timedelta(hours=1))
+    hoy = hoy or Q.hoy_utc(); cache = vdir + f'validez_{d}.json'
+    if d >= hoy: return dict(dia=d, valido=False, en_curso=True, motivo='EN CURSO (el dia no esta completo: sin cache, sin REST)')
+    if os.path.exists(cache):
+        try:
+            c = json.load(open(cache))
+            if c.get('criterio') == CRITERIO: return c
+        except Exception: pass
     sys.path.insert(0, HERE + 'barrido_multi'); import bfeat
     falta = [n for n, ok in (('tape', os.path.exists(PB + f'tape_{d}.pkl')), ('bad', os.path.exists(PB + f'bad_{d}.json')), ('x_binance', bool(bfeat.xfile(d))),
                              ('RT_passT', os.path.exists(f'{TX}RT_{d}.pkl')), ('RT_rt_sim', os.path.exists(f'{RTD}RT_{d}.pkl'))) if not ok]
-    if falta: return dict(dia=d, valido=False, motivo='faltan: ' + ','.join(falta))   # sin cache: puede completarse mas tarde
+    if falta: return dict(dia=d, valido=False, pendiente=True, motivo='PENDIENTE: faltan ' + ','.join(falta))   # sin cache: puede completarse mas tarde
+    okas, why = asentado(d, bfeat.xfile(d), PB + f'bad_{d}.json', ahora)
+    if not okas: return dict(dia=d, valido=False, pendiente=True, motivo='PENDIENTE: dia ' + why)
     bad = {int(h) for dd, h in json.load(open(PB + f'bad_{d}.json'))['bad'] if dd == d}; sanas = [h for h in range(24) if h not in bad]
-    if not sanas: r = dict(dia=d, valido=False, motivo='0 horas sanas')
+    if not sanas: r = dict(dia=d, criterio=CRITERIO, valido=False, motivo='0 horas sanas')
     else:
-        t0 = int(pd.Timestamp(d, tz='UTC').timestamp()); segs = {}
-        for ch in pd.read_csv(bfeat.xfile(d), header=None, usecols=[2, 7], names=['sym', 'recv'], dtype={'sym': 'category', 'recv': 'int64'}, chunksize=1500000):
-            for sym, g in ch.groupby('sym', observed=True):
-                s = np.unique(g.recv.values // 1000 - t0); segs.setdefault(str(sym)[:-4], []).append(s[(s >= 0) & (s < 86400)])
-        cov = {}
-        for c in ('ETH', 'SOL', 'XRP'):
-            s = np.unique(np.concatenate(segs[c])) if c in segs else np.array([], int); ok = np.isin(s // 3600, sanas)
-            cov[c] = float(ok.sum() / (3600 * len(sanas)))
-        r = dict(dia=d, valido=min(cov.values()) >= 0.95, motivo='' if min(cov.values()) >= 0.95 else 'Binance cobertura < 0,95', cobertura_binance=cov, horas_sanas=len(sanas))
+        try: r = evaluar_salud(d, bfeat.xfile(d), sanas, kcache, fetch)
+        except ErrorDatos as e: return dict(dia=d, valido=False, error=True, motivo=f'ERROR_DATOS: {e}')
     atomic(cache, json.dumps(r, indent=1)); return r
 # ---------------- checkpoint de un brazo ----------------
 def checkpoint(arm, A, days, cp, U, plc):
@@ -210,30 +354,72 @@ def evaluar(a):
             if s_.get('terminal'): tok_, why_, _ = Q.veredicto({'terminal': s_['terminal']}, list(err), 0, 0, False, False, hoy); L.append(f'VEREDICTO {arm_}: {tok_} ({why_})')
     def fin_(msg):
         L.append(msg); atomic(f'{sal}/informe_thru1_{hoy}.txt', '\n'.join(L) + '\n'); print('\n'.join(L)); sys.exit(0)
+    rt_tx = {os.path.basename(f)[3:13] for f in glob.glob(TX + 'RT_2026-*.pkl')}; rt_rd = {os.path.basename(f)[3:13] for f in glob.glob(RTD + 'RT_2026-*.pkl')}
+    cand0 = sorted(rt_tx | rt_rd)   # ADDENDUM7 C5: un dia con solo uno de los RT es candidato incompleto => PENDIENTE (no se descarta en silencio)
+    cand_all = [d for d in cand0 if a.desde <= d <= Q.TOPE]; vz = {}   # ADDENDUM4: un dia posterior al tope nunca entra
+    en_curso = [d for d in cand_all if d >= hoy]; cand = [d for d in cand_all if d < hoy]   # ADDENDUM7 C2: el dia EN CURSO no es valido ni NO VALIDO, sin cache/REST, fuera de nd_validos y de nd_ficheros
+    nd_fich = len([d for d in cand if d in rt_tx and d in rt_rd])   # ADDENDUM5 sec. 2: nd_ficheros = dias candidatos con RT_D en toxicidad_thru1 y redteam, SOLO por nombre
+    ST = json.load(open(spath)) if os.path.exists(spath) else {'arms': {}}
+    if a.reevaluar_b2:   # ADDENDUM5 sec. 3 (sin automatismo): reabre solo los terminales B2 (con `causa`) por brazo; la reevaluacion no puede emitir CANDIDATO/PROMOCION
+        for arm_, s_ in ST['arms'].items():
+            t_ = s_.get('terminal')
+            if t_ and t_.get('causa'): s_['reabierto'] = list(s_.get('reabierto', [])) + [dict(terminal=t_, ref=a.reevaluar_b2, fecha=hoy)]; s_['terminal'] = None; s_['racha'] = 0; s_['last_nd'] = max([int(k_) for k_ in s_.get('cp', {})] or [0]); L.append(f'B2 reabierto ({arm_}) con ref: {a.reevaluar_b2} (cp ya emitidos se conservan: ADDENDUM7 A5; last_nd coherente con ellos)')
+        if any(s_.get('reabierto') for s_ in ST['arms'].values()): atomic(spath, json.dumps(ST, indent=1, default=float))   # la reapertura se persiste YA (tambien si luego hay salida temprana)
+    def terminales(err=()):
+        """ADDENDUM4 A/5b: ante sha distinto, ERROR_DATOS o aceptacion pendiente, un terminal ya emitido se muestra igualmente (con ' [EN REVISION]' si el error afecta a dias <= su fecha o si el B2 lo trae). NO escribe estado."""
+        for arm_, s_ in ST['arms'].items():
+            if s_.get('terminal'): tok_, why_, _ = Q.veredicto({'terminal': s_['terminal']}, list(err), 0, 0, False, False, hoy); L.append(f'VEREDICTO {arm_}: {tok_} ({why_})')
+    def salida_temprana(msg, causa, err=(), arms=None):
+        """ADDENDUM5 sec. 2: funcion UNICA de salida temprana (sha, aceptacion, 0 dias, ERROR_DATOS de insumos/Chainlink, 0 tras PC_AS). Fecha < 2027-01-01: fila B (INSUFFICIENT, parada, SIN escribir estado).
+        Fecha >= 2027-01-01: fila B2 = CERRADO_INSUFFICIENT administrativo por cada brazo de `arms` (None = todos) SIN terminal, con nd = last_nd del brazo, causa, motivo, nd_ficheros, en_revision=true; escribe el estado."""
+        terminales(err)
+        if hoy >= Q.EJEC_CIERRE:
+            for arm_ in (arms or ARMS):
+                s_ = ST['arms'].setdefault(arm_, {'terminal': None, 'cp': {}})
+                if s_.get('terminal'): continue
+                s_['terminal'] = dict(veredicto='CERRADO_INSUFFICIENT', fecha=hoy, nd=s_.get('last_nd', 0), cp=None, causa=causa, motivo=msg[:300], nd_ficheros=nd_fich, en_revision=Q.en_revision(causa, nd_fich, err, thru1=True))
+                L.append(f'VEREDICTO {arm_}: CERRADO_INSUFFICIENT [EN REVISION] (B2 ADDENDUM5: ejecucion {hoy}>={Q.EJEC_CIERRE}, causa={causa}; cierre ADMINISTRATIVO nd=last_nd={s_["terminal"]["nd"]}, nd_ficheros={nd_fich}: no es evidencia)')
+            atomic(spath, json.dumps(ST, indent=1, default=float)); fin_(f'B2: {msg}')
+        fin_(msg + ' (fila B: no se escribe estado)')
     bad = check_shas()
-    if bad: terminales(); fin_('INSUFFICIENT (ERROR_DATOS: sha distinto del registrado => parada hasta corregir; no se escribe estado): ' + '; '.join(bad))
+    if bad: salida_temprana('INSUFFICIENT (ERROR_DATOS: sha distinto del registrado => parada hasta corregir): ' + '; '.join(bad), 'SHA_DISTINTO', bad)
     if not a.ensayo:
         ac = json.load(open(sal + '/aceptacion.json')) if os.path.exists(sal + '/aceptacion.json') else None
-        if not ac or not ac['pass_'] or ac['eval_sha'] != eval_sha(): terminales(); fin_('INSUFFICIENT: aceptacion sobre quemados no pasada/obsoleta (correr --aceptacion); los dias se acumulan sin evaluarse')
-    cand = sorted(os.path.basename(f)[3:13] for f in glob.glob(TX + 'RT_2026-*.pkl') if os.path.exists(RTD + os.path.basename(f)))
-    cand = [d for d in cand if a.desde <= d <= Q.TOPE]; vz = {}   # ADDENDUM4: un dia posterior al tope nunca entra
-    for d in cand: vz[d] = {'valido': True, 'motivo': 'ensayo'} if a.ensayo else dia_valido(d)
-    dias = [d for d in cand if vz[d]['valido']]; L.append(f'Dias candidatos {len(cand)} | validos {len(dias)}: ' + ', '.join(f'{d}{"" if vz[d]["valido"] else " NO VALIDO(" + vz[d]["motivo"] + ")"}' for d in cand))
-    if not dias: terminales(); fin_('INSUFFICIENT: 0 dias validos')
+        if not ac or not ac['pass_'] or ac['eval_sha'] != eval_sha(): salida_temprana('INSUFFICIENT: aceptacion sobre quemados no pasada/obsoleta (correr --aceptacion); los dias se acumulan sin evaluarse', 'ACEPTACION')
+    desc = [d for d in cand0 if DESCRIPTIVOS_DESDE <= d < a.desde]
+    if desc: L.append(f'Dias DESCRIPTIVOS-QUEMADOS (ADDENDUM6: no cuentan, no deciden): {", ".join(desc)}')
+    if en_curso: L.append(f'Dia EN CURSO (ADDENDUM7 C2: ni valido ni NO VALIDO, no cuenta): {", ".join(en_curso)}')
+    for d in cand: vz[d] = {'valido': True, 'motivo': 'ensayo'} if a.ensayo else dia_valido(d, hoy, ahora=(None if a.hoy else pd.Timestamp.now(tz='UTC')))   # ejecucion real: reloj real; --hoy simulado: 01:00Z de ese dia
+    errs = [f'{d}: {vz[d]["motivo"]}' for d in cand if vz[d].get('error')]   # ADDENDUM6 2b: REST fallido/kline incompleto => ERROR_DATOS (INSUFFICIENT), nunca dia valido
+    if errs: salida_temprana('INSUFFICIENT (ERROR_DATOS salud Binance H3: ' + '; '.join(errs[:3]) + ')', 'ERROR_DATOS', errs)
+    dias = [d for d in cand if vz[d]['valido']]; L.append(f'Dias candidatos {len(cand)} | validos {len(dias)}: ' + ', '.join(f'{d}{"" if vz[d]["valido"] else (" " + vz[d]["motivo"] if vz[d].get("pendiente") else " NO VALIDO(" + vz[d]["motivo"] + ")")}' for d in cand))
+    pend = [d for d in cand if vz[d].get('pendiente')]; bloquea = bool(any(d < max(cand) for d in pend) if cand else False) and hoy < Q.EJEC_CIERRE   # ADDENDUM7 C5: un PENDIENTE anterior al ultimo candidato impide congelar checkpoints
+    if pend: L.append(f'PENDIENTES (ADDENDUM7 C5, no se cachean): {pend}' + (f' | BLOQUEAN checkpoints/terminales por checkpoint hasta completarse (orden cronologico)' if bloquea else '') + ''.join(f' | ESCALAR A LA SESION PRINCIPAL: {d} lleva {(pd.Timestamp(hoy) - pd.Timestamp(d)).days} dias pendiente (>7)' for d in pend if (pd.Timestamp(hoy) - pd.Timestamp(d)).days > 7))
+    if pend and hoy >= Q.EJEC_CIERRE: L.append(f'PENDIENTES a >= 2027-01-01 ({pend}): tratados como NO VALIDOS/PERDIDOS, no cuentan y NO bloquean; cada brazo cierra por las reglas normales (F/G con su nd). Requiere entrada DECISION_LOG manual, redactada sin mirar signos (ADDENDUM7 C5)')
+    for d in cand:   # diagnostico NO decisorio y sensibilidad (ADDENDUM6 2, 3.4)
+        v = vz[d]
+        if v.get('fragil_criterio_salud'): L.append(f'  [salud {d}] FRAGIL AL CRITERIO DE SALUD (H2 con 4 simbolos {v["h2_cobertura_4"]:.4f} < 0,95): un contraste que cambie de signo o de CANDIDATO por incluirlo/excluirlo = no confirmado (ADDENDUM7 B4)')
+        if 'h1_hueco_max_s' in v: L.append(f'  [salud {d}] H1 hueco conjunto max {v["h1_hueco_max_s"]:.1f}s ({"ok" if v["h1"] else "NO"}) | H2 cob conjunta {v["h2_cobertura"]:.4f} ({"ok" if v["h2"] else "NO"}) | H3 min ratio {v["h3_min"]:.4f} ({"ok" if v["h3"] else "NO"}) | n intervalos>=30s {v["n_intervalos_ge30s"]} | sensibilidad {v["sensibilidad"]} | por moneda ' + ' '.join(f'{k}:cob{m["cobertura"]:.2f},hueco{m["hueco_max_s"]:.0f}s,minh{m["min_horario"]:.2f}' for k, m in v['por_moneda'].items()))
+    if not dias: salida_temprana('INSUFFICIENT: 0 dias validos', 'SIN_DIAS_VALIDOS')
     T, R, S, X, err = cargar(dias)
-    if err: terminales(err); fin_('INSUFFICIENT (ERROR_DATOS: ' + '; '.join(err[:3]) + '; no cuenta ningun dia nuevo; no se escribe estado)')
+    if err: salida_temprana('INSUFFICIENT (ERROR_DATOS: ' + '; '.join(err[:3]) + '; no cuenta ningun dia nuevo)', 'ERROR_DATOS', err)
     A, U, cov, cl_err = armar_base(T, R, S, X, dias, hoy, a.cl_cache)
-    covd = U.groupby('dia').r1.apply(lambda x: float(x.notna().mean())); malos = [] if cl_err else [d for d in dias if covd.get(d, 0) < 0.95]   # con ERROR_DATOS de Chainlink el rasgo es NaN por falta de datos: no se declaran NO VALIDOS los dias (afecta solo al brazo PC_AS)
-    if malos: L.append(f'NO VALIDOS por rasgo PC_AS <95 %: {malos}'); dias = [d for d in dias if d not in malos]; T, R, S, X, err = cargar(dias); A, U, cov, cl_err = armar_base(T, R, S, X, dias, hoy, a.cl_cache)
-    if not dias: terminales(); fin_('INSUFFICIENT: 0 dias validos tras cobertura PC_AS')
-    L.append(f'Cobertura rasgo PC_AS (unidades cierre-moneda NO): {cov:.3f} | G0 rellenos {len(A["G0"])} pnl {A["G0"].pnl.sum():+.2f} EV {Q.f3(Q.ev(A["G0"]))}')
-    ST = json.load(open(spath)) if os.path.exists(spath) else {'arms': {}}
+    # ADDENDUM7 A: la condicion de rasgo PC_AS NO recorta `dias` (dia comun de todos los brazos): define arm_dias de PC_AS. Cobertura = (r1 Y r4 finitos) sobre las unidades (cierre, moneda) NO del dia; sin unidades = no cumple.
+    covd = U.assign(ok_=U.r1.notna() & U.r4.notna()).groupby('dia').ok_.mean().to_dict() if len(U) else {}
+    dias_pcas = [] if cl_err else [d for d in dias if covd.get(d, 0.0) >= 0.95]   # con ERROR_DATOS de Chainlink el rasgo es NaN por falta de datos: no se declaran no validos los dias (ruta A5)
+    if not cl_err and len(dias_pcas) < len(dias): L.append(f'PC_AS: dias no validos por rasgo (cobertura r1&r4 < 0,95; solo afecta a PC_AS): {[d for d in dias if d not in dias_pcas]}')
+    _upc = U[U.dia.isin(dias_pcas)]; _gpc = A['G0'][A['G0'].dia.isin(dias_pcas)]   # ADDENDUM7 A3/A4: el descriptivo de PC_AS solo usa arm_dias(PC_AS), no los dias G0 excluidos por rasgo
+    L.append(f'Cobertura rasgo PC_AS (unidades cierre-moneda NO, SOLO en arm_dias(PC_AS)={len(dias_pcas)} dias): ' + (f'{float((_upc.r1.notna() & _upc.r4.notna()).mean()):.3f} | G0 rellenos {len(_gpc)} pnl {_gpc.pnl.sum():+.2f} EV {Q.f3(Q.ev(_gpc))}' if len(dias_pcas) else 'n/d (ningun dia con rasgo >= 95 %)') + f' | G0 todos los dias comunes: {len(A["G0"])} rellenos, EV {Q.f3(Q.ev(A["G0"]))}')
     if cl_err: L.append('ERROR_DATOS (Chainlink; solo afecta al brazo PC_AS): ' + '; '.join(cl_err[:3]))
     for arm in ARMS:
-        if arm == 'PC_AS' and cl_err:   # fail-closed: sin rasgo no hay brazo; un terminal ya emitido se muestra (A, con EN REVISION si afecta a dias <= su fecha); no se escribe nada del brazo
-            t_ = (ST['arms'].get('PC_AS') or {}).get('terminal')
-            tok_, why_, _ = Q.veredicto({'terminal': t_}, cl_err, 0, 0, False, False, hoy) if t_ else ('INSUFFICIENT', 'ERROR_DATOS: ' + '; '.join(cl_err[:3]) + ' (no cuenta ningun dia nuevo; sin estado)', None)
-            L.append(f'\n## PC_AS: ERROR_DATOS Chainlink\nVEREDICTO PC_AS: {tok_} ({why_})'); continue
+        if arm == 'PC_AS' and (cl_err or not dias_pcas):   # ADDENDUM7 A5, ruta unica: ERROR_DATOS de Chainlink o arm_dias vacio => fila B (INSUFFICIENT sin estado) / B2 (>= 2027-01-01) SOLO para PC_AS; los demas brazos siguen
+            t_ = (ST['arms'].get('PC_AS') or {}).get('terminal'); causa_ = 'ERROR_DATOS' if cl_err else 'SIN_DIAS_VALIDOS'; mot_ = '; '.join(cl_err[:3])[:300] if cl_err else 'rasgo PC_AS < 95 %'
+            tok_, why_, _ = Q.veredicto({'terminal': t_}, cl_err, 0, 0, False, False, hoy) if t_ else ('INSUFFICIENT', (('ERROR_DATOS: ' + '; '.join(cl_err[:3])) if cl_err else 'ningun dia con rasgo PC_AS >= 95 % (r1&r4)') + ' (no cuenta ningun dia nuevo; sin estado)', None)
+            L.append(f'\n## PC_AS: {"ERROR_DATOS Chainlink" if cl_err else "0 dias con rasgo >= 95 %"}\nVEREDICTO PC_AS: {tok_} ({why_})')
+            if hoy >= Q.EJEC_CIERRE and not t_:   # B2 solo para PC_AS (ADDENDUM5 sec. 2 / ADDENDUM7 A5)
+                s_ = ST['arms'].setdefault('PC_AS', {'terminal': None, 'cp': {}}); s_['terminal'] = dict(veredicto='CERRADO_INSUFFICIENT', fecha=hoy, nd=s_.get('last_nd', 0), cp=None, causa=causa_, motivo=mot_, nd_ficheros=nd_fich, en_revision=Q.en_revision(causa_, nd_fich, cl_err))
+                L.append(f'VEREDICTO PC_AS: CERRADO_INSUFFICIENT{" [EN REVISION]" if s_["terminal"]["en_revision"] else ""} (B2 ADDENDUM5: ejecucion {hoy}>={Q.EJEC_CIERRE}, causa={causa_}; cierre ADMINISTRATIVO nd=last_nd={s_["terminal"]["nd"]}: no es evidencia)')
+            continue
         s = ST['arms'].setdefault(arm, {'terminal': None, 'cp': {}})
         if arm == 'PG_O50':   # dia valido para PG_O50 solo si hay Po_D Y filas PG_O50 de rt_sim (si rt_sim corrio antes que Po_D, el brazo faltaria y dPnL = -G0: falso)
             arm_dias = [d for d in dias if os.path.exists(BCO + f'Po_{d}.pkl') and (A['rt_PG_O50_BASE'].dia == d).any()]
@@ -241,11 +427,14 @@ def evaluar(a):
         elif arm == 'CXJ150':   # C3 exige rt_cxj150_cross.py: dia sin RX_D no cuenta para este brazo (no hay cota CROSS)
             arm_dias = [d for d in dias if os.path.exists(f'{RXD}RX_{d}.pkl')]
             if len(arm_dias) < len(dias): L.append(f'CXJ150: dias sin RX_D (rt_cxj150_cross.py; no cuentan para CXJ150): {[d for d in dias if d not in arm_dias]}')
+        elif arm == 'PC_AS': arm_dias = list(dias_pcas)   # ADDENDUM7 A1: PC_AS = dias comunes con cobertura de rasgo >= 95 % (r1&r4) y sin ERROR_DATOS de Chainlink
         else: arm_dias = list(dias)
         ab, gb = (A['rt_PG_O50_BASE'], A['rt_G0_BASE']) if arm == 'PG_O50' else (A[arm], A['G0'])
         con = sorted(d for d in arm_dias if (ab.dia == d).any() or (gb.dia == d).any()); nd = len(con)   # cuenta: relleno BASE del brazo o de G0
+        s['last_nd'] = nd   # ADDENDUM5 sec. 5.4: last_nd por brazo en cada evaluacion valida (lo usa B2)
         L.append(f'\n## {arm}: dias que cuentan nd_validos={nd} (validos {len(arm_dias)}); G0 {len(gb[gb.dia.isin(con)])} rellenos, brazo {len(ab[ab.dia.isin(con)])}')
-        if not s['terminal']:
+        if not s['terminal'] and bloquea: L.append('  checkpoints NO evaluados: dia PENDIENTE anterior al ultimo candidato (ADDENDUM7 C5); ejecucion descriptiva')
+        if not s['terminal'] and not bloquea:
             for cp in (10, 20):
                 if nd >= cp and str(cp) not in s['cp']:
                     plc = None
@@ -253,20 +442,23 @@ def evaluar(a):
                         pf = f'{sal}/placebo_cxj150_cp{cp}.json'; plc = json.load(open(pf)) if os.path.exists(pf) else None
                         if not plc or sorted(plc.get('dias', [])) != con[:cp]:
                             L.append(f'  PENDIENTE checkpoint {cp} de CXJ150: falta placebo (99 semillas) para los dias {",".join(con[:cp])}. Ejecutar: nice -n 19 ionice -c3 python3 -I placebo_cxj150.py cp {cp} {",".join(con[:cp])}'); break
-                    res = checkpoint(arm, A, con[:cp], cp, U, plc); s['cp'][str(cp)] = res; r5 = res['dpnl']; fuerte, fdet = refuta_fuerte(res)
+                    res = checkpoint(arm, A, con[:cp], cp, U, plc)
+                    if s.get('reabierto') and res['candidato']: res['label'] = 'CANDIDATO NO EMITIBLE (reevaluacion B2)'   # ADDENDUM7 C4: sin efecto en cp10; en cp20 cierra CERRADO_INSUFFICIENT
+                    s['cp'][str(cp)] = res; r5 = res['dpnl']; fuerte, fdet = refuta_fuerte(res)
                     if cp == 10 and arm != 'PG_O50' and fuerte: s['terminal'] = dict(veredicto='REFUTA', fecha=hoy, nd=nd, cp=cp, motivo=fdet)   # fila C (PG_O50 no se declara fallido antes del checkpoint 20)
                     elif cp == 20:
-                        if res['candidato']: s['terminal'] = dict(veredicto='CANDIDATO', fecha=hoy, nd=nd, cp=cp)   # fila D
+                        if res['candidato'] and s.get('reabierto'): s['terminal'] = dict(veredicto='CERRADO_INSUFFICIENT', fecha=hoy, nd=nd, cp=cp, motivo='reevaluacion tras B2 (ADDENDUM5 sec. 3): CANDIDATO/PROMOCION no emitibles')
+                        elif res['candidato']: s['terminal'] = dict(veredicto='CANDIDATO', fecha=hoy, nd=nd, cp=cp)   # fila D
                         elif not (r5['tot'] == r5['tot']) or r5['ncierres'] < 3: s['terminal'] = dict(veredicto='CERRADO_INSUFFICIENT', fecha=hoy, nd=nd, cp=cp, motivo='dPnL BASE NaN o <3 cierres en el checkpoint 20')   # fila E
                         else: s['terminal'] = dict(veredicto='REFUTED', fecha=hoy, nd=nd, cp=cp, motivo=('REFUTA fuerte: ' + fdet) if fuerte else motivo_refuted(res))   # fila F
                     if s['terminal']: break
             if not s['terminal'] and hoy >= Q.EJEC_CIERRE and nd < 20: s['terminal'] = dict(veredicto='CERRADO_INSUFFICIENT', fecha=hoy, nd=nd, cp=None, motivo='fila G: ejecucion >= 2027-01-01 con nd<20')   # ADDENDUM4 fila G
         tok = s['terminal']['veredicto'] if s['terminal'] else ('INSUFFICIENT' if nd <= 2 else ('EN_CURSO (checkpoint 10 evaluado)' if s['cp'] else 'EN_CURSO' if nd < 10 else 'EN_CURSO (checkpoint pendiente)'))
-        L.append(f'VEREDICTO {arm}: {tok}' + (f' (terminal desde {s["terminal"]["fecha"]}, cp={s["terminal"]["cp"]}{"; " + s["terminal"]["motivo"] if s["terminal"].get("motivo") else ""})' if s['terminal'] else f' (nd={nd}; checkpoints evaluados: {sorted(s["cp"])})'))
+        L.append(f'VEREDICTO {arm}: {tok}' + (f' (terminal desde {s["terminal"]["fecha"]}, cp={s["terminal"]["cp"]}{"; causa=" + s["terminal"]["causa"] if s["terminal"].get("causa") else ""}{"; " + s["terminal"]["motivo"] if s["terminal"].get("motivo") else ""}{" [EN REVISION]" if s["terminal"].get("en_revision") else ""})' if s['terminal'] else f' (nd={nd}; checkpoints evaluados: {sorted(s["cp"])})'))
         for k_, res in sorted(s['cp'].items()):
             L.append(f'  [checkpoint {k_}] {res["label"]} | dPnL BASE {res["dpnl"]["tot"]:+.2f} EUR IC90c ({Q.f3(res["dpnl"]["ic_c"][0])},{Q.f3(res["dpnl"]["ic_c"][1])}) IC90d inf {Q.f3(res["dpnl"]["ic_d"][0])} | CROSS {Q.f3(res["cross"])} | EV abs {Q.f3(res["ev"]["ev"])} n={res["n_arm"]}')
             L += [f'     - [{"x" if v else " "}] {c_}' for c_, v in res['conds'].items()]
-            if k_ == '20': L.append('  ' + promocion(arm, res, tok))
+            if k_ == '20' and not s.get('reabierto'): L.append('  ' + promocion(arm, res, tok))
         # descriptivo diario (no decide)
         d_ = stats_dpnl(ab[ab.dia.isin(con)], gb[gb.dia.isin(con)], con) if nd else None
         if d_: L.append(f'  [descriptivo acumulado] dPnL BASE {d_["tot"]:+.2f} cierres {d_["ncierres"]} IC90c ({Q.f3(d_["ic_c"][0])},{Q.f3(d_["ic_c"][1])}) sin2dias {Q.f3(d_["sin2dias"])} | por dia: ' + ' '.join(f'{k}:{v:+.1f}' for k, v in d_['dias'].items()))
@@ -275,7 +467,7 @@ def evaluar(a):
     sec = []
     for v in ('NJ3A', 'CXJ1000', 'GEO6NJ3', 'CXB150', 'CXB300', 'CXB1000', 'CXB3000'): sec.append(f'{v}={float(dser(A[v], A["G0"]).sum()):+.1f}')
     pg, g6 = A['rt_PG_O50_BASE'], A['rt_GEO6_BASE']; sec.append(f'PG_O50-GEO6={float(dser(pg, g6).sum()):+.1f}' if len(pg) else 'PG_O50-GEO6=n/d')
-    L.append('\n[secundarios descriptivos dPnL BASE vs G0, todos los dias validos; no deciden] ' + ' '.join(sec) + ' | GEO6+CXJ150: no disponible (requiere simulacion nueva)')
+    L.append('\n[secundarios descriptivos dPnL BASE vs G0: DIAS COMUNES (todos los validos), NO son arm_dias(PC_AS) ni de ningun brazo; los descriptivos por brazo van arriba con sus propios dias; no deciden] ' + ' '.join(sec) + ' | GEO6+CXJ150: no disponible (requiere simulacion nueva)')
     L.append('NOTA: CXJ150 bajo BASE/CROSS = redteam/rt_cxj150_cross.py (script nuevo, sha propio, rt_sim.py/passT.py sin tocar); dia sin RX_D no cuenta para CXJ150.')
     atomic(spath, json.dumps(ST, indent=1, default=float)); fin_('FIN')
 # ---------------- produccion por dia ----------------
@@ -300,7 +492,7 @@ def producir(d):
         if r.returncode: raise SystemExit(f'FALLO ({r.returncode}): {c}')
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(); ap.add_argument('--aceptacion', action='store_true'); ap.add_argument('--evaluar', action='store_true'); ap.add_argument('--producir'); ap.add_argument('--puntuar')
-    ap.add_argument('--cl-cache', default=Q.CL_CACHE); ap.add_argument('--desde', default=FWD_DESDE); ap.add_argument('--salida', default=HERE + 'thru1_fwd'); ap.add_argument('--hoy'); ap.add_argument('--ensayo', action='store_true', help='sin validez de dia ni aceptacion (solo ensayo sobre quemados)')
+    ap.add_argument('--reevaluar-b2', default=None, metavar='REF', help='ADDENDUM5 sec. 3: reabre los terminales B2 con la referencia escrita (DECISION_LOG); la reevaluacion no puede emitir CANDIDATO/PROMOCION'); ap.add_argument('--cl-cache', default=Q.CL_CACHE); ap.add_argument('--desde', default=FWD_DESDE); ap.add_argument('--salida', default=HERE + 'thru1_fwd'); ap.add_argument('--hoy'); ap.add_argument('--ensayo', action='store_true', help='sin validez de dia ni aceptacion (solo ensayo sobre quemados)')
     a = ap.parse_args()
     if a.aceptacion:
         r = aceptacion(a.salida); print(json.dumps(r, indent=1, default=float)); sys.exit(0 if r['pass_'] else 2)

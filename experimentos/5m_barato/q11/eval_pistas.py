@@ -7,8 +7,11 @@ sys.path.insert(0, '/root/polymarket-research/misiones/5m_barato/forward_sol013/
 import numpy as np, pandas as pd
 import q11_decision as Q
 HERE = os.path.dirname(os.path.abspath(__file__)) + '/'
-ap = argparse.ArgumentParser(); ap.add_argument('--desde', default='2026-11-06'); ap.add_argument('--hasta', default='9999-12-31'); ap.add_argument('--salida', default=HERE); ap.add_argument('--out', default=Q.DEC_OUT); ap.add_argument('--hoy', default=None); ap.add_argument('--cl-cache', default=Q.CL_CACHE)
+ap = argparse.ArgumentParser(); ap.add_argument('--desde', default='2026-11-06'); ap.add_argument('--hasta', default='9999-12-31'); ap.add_argument('--salida', default=HERE); ap.add_argument('--out', default=Q.DEC_OUT); ap.add_argument('--hoy', default=None); ap.add_argument('--cl-cache', default=Q.CL_CACHE); ap.add_argument('--reevaluar-b2', default=None, metavar='REF', help='ADDENDUM5 sec. 3: reabre un terminal B2 con la referencia escrita (DECISION_LOG); la reevaluacion no puede emitir CONFIRMA')
 a = ap.parse_args(); PR = '/root/polymarket-research/data/prices/'; os.makedirs(a.salida, exist_ok=True)
+if a.reevaluar_b2:
+    for _nm in ('P-A', 'P-B'):
+        if Q.reabrir_si_b2(a.salida + f'/estado_{_nm}.json', a.reevaluar_b2, a.hoy): print(f'B2 reabierto ({_nm}) con ref:', a.reevaluar_b2)
 dias, R2, R3, err = Q.cargar_dias(a.out, a.desde, a.hasta)
 out = []; P = out.append
 _sp, _g = Q.dias_sin_pareja(a.out, a.desde, a.hasta)
@@ -18,7 +21,7 @@ def cerrar(nombre='eval_pistas_resultado.txt'):   # ERROR_DATOS/sin dias: nombre
 def sin_datos(nombres, motivo, err_=None):
     """Salida temprana: NO escribe estado; cada terminal ya emitido se imprime (ADDENDUM4 A) junto al aviso de ERROR_DATOS (sec. 5b)."""
     for nm in nombres:
-        tok, why = Q.veredicto_sin_datos(a.salida + f'/estado_{nm}.json', err if err_ is None else err_, a.hoy); P(f'[{nm}] {motivo} | VEREDICTO {nm}: {tok} ({why})')
+        tok, why = Q.veredicto_sin_datos(a.salida + f'/estado_{nm}.json', err if err_ is None else err_, a.hoy, Q.nd_ficheros(a.out, a.desde, a.hasta)); P(f'[{nm}] {motivo} | VEREDICTO {nm}: {tok} ({why})')
 if err or not dias:
     sin_datos(('P-A', 'P-B'), ('ERROR_DATOS: ' + '; '.join(err[:3]) + ' => INSUFFICIENT (no cuenta ningun dia nuevo)') if err else f'sin dias validos >= {a.desde} (dec2+dec3s100)'); cerrar('eval_pistas_AVISO.txt'); sys.exit(0)
 t1 = R2[R2['var'] == 'T1']; s100 = R3[R3['var'] == 'T1']

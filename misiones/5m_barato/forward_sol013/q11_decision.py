@@ -48,6 +48,12 @@ def cargar_dias(out, desde, hasta='9999-12-31'):
     return dias, cat(R2), cat(R3), err
 
 
+def nd_ficheros(out, desde, hasta='9999-12-31'):
+    """ADDENDUM5 sec. 1: numero de dias D, desde <= D <= min(hasta, TOPE), con dec2_D y dec3s100_D canonicos presentes, contado SOLO por nombre (sin leer ni calcular nada)."""
+    _, got = dias_sin_pareja(out, desde, hasta); hasta = min(hasta, TOPE)
+    return len([d for d in got['dec2'] & got['dec3s100'] if desde <= d <= hasta])
+
+
 def dias_sin_pareja(out, desde, hasta='9999-12-31'):
     """Dias de la ventana con dec2_D pero sin dec3s100_D (o al reves): no son error ni dia valido; los evaluadores los muestran como AVISO explicito (nunca en silencio)."""
     hasta = min(hasta, TOPE); got = {}
@@ -214,23 +220,43 @@ def refuta_r123(n, cierres, n_min, cierres_min, evx, ic_c, ic_d, signo):
     return bool(r1 and r2 and r3), dict(R1=bool(r1), R2=bool(r2), R3=r3)
 
 
-def veredicto(st, err, nvalid, nd, confirma, refuta, hoy=None):
-    """Tabla de decision ADDENDUM4 sec. 4 (filas A-H, primera que se cumpla). Devuelve (token, detalle, estado_nuevo).
+def en_revision(causa, nd_ficheros=0, err=(), thru1=False):
+    """UNICA regla de `en_revision` del terminal B2 (ADDENDUM5 sec. 1): true si la causa es ERROR_DATOS (o hay `err`) o si nd_ficheros >= 20. `thru1=True`: el B2 por brazo de thru1 lleva en_revision=true
+    siempre (ADDENDUM5 sec. 2). La usan SOL013, P-A/P-B/P-C (via veredicto), thru1 (salida temprana) y la rama PC_AS."""
+    return bool(thru1 or err or causa == 'ERROR_DATOS' or nd_ficheros >= 20)
+
+
+def veredicto(st, err, nvalid, nd, confirma, refuta, hoy=None, nd_ficheros=0):
+    """Tabla de decision ADDENDUM4 sec. 4 (filas A-H) con la fila B2 de ADDENDUM5 sec. 1. Devuelve (token, detalle, estado_nuevo).
     confirma: sec. 3 de ADDENDUM3 cumplida (NaN = no cumplida). refuta: R1-R3 de ADDENDUM4 sec. 1 YA evaluadas por el llamador (False si NaN/minimos).
-    nd = nd_validos de la comparacion principal; nvalid = dias validos. NaN y minimos solo condicionan REFUTA (a3). El tope va despues de REFUTA y de
-    REFUTED y antes de CONFIRMA provisional (a1, a2); los dias cargados ya se cortan en 2026-12-31 (cargar_dias).
-    A: terminal emitido => se mantiene (sec. 5b); si hay ERROR_DATOS se anota en el detalle (el llamador NO escribe estado) y, si afecta a un dia <= la
-    fecha del terminal, el token lleva ' [EN REVISION]' (nunca se anula solo)."""
-    hoy = hoy or hoy_utc(); st = dict(st)
+    nd = nd_validos de la comparacion principal; nvalid = dias validos (dec2+dec3s100 canonicos); nd_ficheros = dias con ambos ficheros por nombre (B2).
+    A: terminal emitido => se mantiene (5b); ERROR_DATOS se anota y el llamador NO escribe estado; el token lleva ' [EN REVISION]' si el terminal trae en_revision=true
+       (B2, persistido) o si el error afecta a un dia <= fecha del terminal (nunca se anula solo).
+    B (hoy < 2027-01-01): ERROR_DATOS o nvalid=0 => INSUFFICIENT sin escribir estado. B2 (hoy >= 2027-01-01): => CERRADO_INSUFFICIENT terminal con nd = last_nd del estado cargado
+       (NO el nd actual), causa ERROR_DATOS|SIN_DIAS_VALIDOS, motivo, nd_ficheros, en_revision (causa ERROR_DATOS o nd_ficheros>=20): cierre ADMINISTRATIVO. El llamador debe
+       guardar el estado si el devuelto trae terminal nuevo (veredicto_sin_datos lo hace).
+    Reevaluacion tras reabrir un B2 (ADDENDUM5 sec. 3, st['reabierto'] persistido por reabrir_b2): CONFIRMA_FINAL (fila C) y CONFIRMA provisional (fila G) NO se emiten; solo
+    REFUTA, REFUTED o CERRADO_INSUFFICIENT."""
+    hoy = hoy or hoy_utc(); st = dict(st); reeval = bool(st.get('reabierto'))
+    if reeval: confirma = False
     if st.get('terminal'):   # A
         t = st['terminal']; tok = t['veredicto']; why = f"terminal desde {t['fecha']} (nd={t['nd']}); no se recalcula"
+        if t.get('causa'): why += f" | cierre B2 ADMINISTRATIVO (causa={t['causa']}, nd_ficheros={t.get('nd_ficheros')}): no es evidencia a favor ni en contra de la hipotesis"
+        en_rev = bool(t.get('en_revision'))
         if err:
             afecta = any(d is None or d <= t['fecha'] for d in err_dias(err))
             why += ' | ERROR_DATOS (no se escribe estado): ' + '; '.join(err[:3])
-            if afecta: tok += ' [EN REVISION]'; why += ' | EN REVISION: el error afecta a dias <= fecha del terminal; escalar a la sesion principal (solo se anula por correccion de bug anotada en DECISION_LOG)'
+            if afecta: en_rev = True; why += ' | EN REVISION: el error afecta a dias <= fecha del terminal; escalar a la sesion principal (solo se anula por correccion de bug anotada en DECISION_LOG)'
+        if en_rev: tok += ' [EN REVISION]'
         return tok, why, st
-    if err: return 'INSUFFICIENT', 'ERROR_DATOS: ' + '; '.join(err[:3]), st   # B (no cuenta ningun dia nuevo; el llamador no escribe estado)
-    if nvalid == 0: return 'INSUFFICIENT', '0 dias validos', st
+    if err or nvalid == 0:
+        causa = 'ERROR_DATOS' if err else 'SIN_DIAS_VALIDOS'; motivo = '; '.join(err[:3]) if err else '0 dias validos'
+        if hoy >= EJEC_CIERRE:   # B2
+            st['last_eval'] = hoy
+            st['terminal'] = {'veredicto': 'CERRADO_INSUFFICIENT', 'fecha': hoy, 'nd': st.get('last_nd', 0), 'causa': causa, 'motivo': motivo, 'nd_ficheros': nd_ficheros, 'en_revision': en_revision(causa, nd_ficheros, err)}
+            tok = 'CERRADO_INSUFFICIENT' + (' [EN REVISION]' if st['terminal']['en_revision'] else '')
+            return tok, f'B2 tope: ejecucion {hoy}>={EJEC_CIERRE} con causa={causa} ({motivo}); cierre ADMINISTRATIVO (nd=last_nd={st["terminal"]["nd"]}, nd_ficheros={nd_ficheros})', st
+        return 'INSUFFICIENT', ('ERROR_DATOS: ' + motivo) if err else '0 dias validos', st   # B (no cuenta ningun dia nuevo; el llamador no escribe estado)
     baja = nd < st.get('last_nd', 0)
     if baja: st['racha'] = 0; st['last_nd'] = nd   # invariante last_nd <= nd: si nd baja (dia perdido, datos retirados) la racha se reinicia sin credito
     nuevo = nd > st.get('last_nd', 0)
@@ -262,9 +288,29 @@ def congelar_promocion(st_antes, st, linea, ok):
     return linea, bool(ok), st
 
 
-def veredicto_sin_datos(estado_path, err, hoy=None):
-    """Salida temprana de un evaluador (ERROR_DATOS o 0 dias validos): NO escribe estado, pero un terminal ya emitido se imprime (A) con el aviso de error."""
-    tok, why, _ = veredicto(cargar_estado(estado_path), err, 0, 0, False, False, hoy)
+def reabrir_b2(estado_path, ref, hoy=None):
+    """ADDENDUM5 sec. 3 (unica via, sin automatismo): anula un terminal B2 (el que trae `causa`) SOLO con una referencia escrita (ref: asiento de DECISION_LOG con sha, decidida
+    ANTES de reevaluar). Conserva el terminal anulado y la ref en st['reabierto'], reinicia racha y last_nd; desde entonces veredicto() no puede emitir CONFIRMA_FINAL/CONFIRMA."""
+    if not ref or not str(ref).strip(): raise SystemExit('reabrir B2: falta la referencia escrita (DECISION_LOG) de la decision')
+    st = cargar_estado(estado_path); t = st.get('terminal')
+    if not t or not t.get('causa'): raise SystemExit('reabrir B2: el estado no tiene un terminal B2 (CERRADO_INSUFFICIENT con causa)')
+    st['reabierto'] = list(st.get('reabierto', [])) + [{'terminal': t, 'ref': str(ref), 'fecha': hoy or hoy_utc()}]; st['terminal'] = None; st['racha'] = 0; st['last_nd'] = 0
+    guardar_estado(estado_path, st); return st
+
+
+def reabrir_si_b2(estado_path, ref, hoy=None):
+    """Para evaluadores con flag --reevaluar-b2 REF: reabre solo si el estado trae un terminal B2 (con `causa`); otros terminales NO se tocan. Devuelve True si reabrio."""
+    if not os.path.exists(estado_path): return False
+    t = cargar_estado(estado_path).get('terminal')
+    if not t or not t.get('causa'): return False
+    reabrir_b2(estado_path, ref, hoy); return True
+
+
+def veredicto_sin_datos(estado_path, err, hoy=None, nd_ficheros=0):
+    """Salida temprana de un evaluador (ERROR_DATOS, 0 dias validos, Chainlink ausente): un terminal ya emitido se imprime (A) con el aviso; el estado se guarda SOLO si
+    veredicto() devuelve un terminal NUEVO (B2, hoy >= 2027-01-01; ADDENDUM5 sec. 1). Antes de esa fecha NO escribe estado (B)."""
+    st0 = cargar_estado(estado_path); tok, why, st = veredicto(st0, err, 0, 0, False, False, hoy, nd_ficheros)
+    if st.get('terminal') and not st0.get('terminal'): guardar_estado(estado_path, st)
     return tok, why
 
 

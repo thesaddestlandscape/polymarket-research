@@ -6,8 +6,9 @@ sys.path.insert(0, '/root/polymarket-research/misiones/5m_barato/forward_sol013/
 import numpy as np, pandas as pd
 import q11_decision as Q
 HERE = os.path.dirname(os.path.abspath(__file__)) + '/'
-ap = argparse.ArgumentParser(); ap.add_argument('--desde', default='2026-11-06'); ap.add_argument('--hasta', default='9999-12-31'); ap.add_argument('--salida', default=HERE); ap.add_argument('--out', default=Q.DEC_OUT); ap.add_argument('--hoy', default=None); ap.add_argument('--cl-cache', default=Q.CL_CACHE)
+ap = argparse.ArgumentParser(); ap.add_argument('--desde', default='2026-11-06'); ap.add_argument('--hasta', default='9999-12-31'); ap.add_argument('--salida', default=HERE); ap.add_argument('--out', default=Q.DEC_OUT); ap.add_argument('--hoy', default=None); ap.add_argument('--cl-cache', default=Q.CL_CACHE); ap.add_argument('--reevaluar-b2', default=None, metavar='REF', help='ADDENDUM5 sec. 3: reabre un terminal B2 con la referencia escrita (DECISION_LOG); la reevaluacion no puede emitir CONFIRMA')
 a = ap.parse_args(); os.makedirs(a.salida, exist_ok=True)
+if a.reevaluar_b2 and Q.reabrir_si_b2(a.salida + '/estado_P-C.json', a.reevaluar_b2, a.hoy): print('B2 reabierto (P-C) con ref:', a.reevaluar_b2)
 dias, R2, R3, err = Q.cargar_dias(a.out, a.desde, a.hasta)
 out = []; P = out.append
 _sp, _g = Q.dias_sin_pareja(a.out, a.desde, a.hasta)
@@ -16,7 +17,7 @@ def cerrar(nombre='eval_giro_resultado.txt'):   # ERROR_DATOS/sin dias: nombre='
     tmp = a.salida + '/.eval_giro.tmp'; open(tmp, 'w').write('\n'.join(out) + '\n'); os.replace(tmp, a.salida + '/' + nombre); print('\n'.join(out))
 def sin_datos(motivo, err_=None):
     """Salida temprana: NO escribe estado; un terminal ya emitido se imprime (ADDENDUM4 A) junto al aviso de ERROR_DATOS (sec. 5b)."""
-    tok, why = Q.veredicto_sin_datos(a.salida + '/estado_P-C.json', err if err_ is None else err_, a.hoy); P(f'[P-C] {motivo} | VEREDICTO P-C: {tok} ({why})')
+    tok, why = Q.veredicto_sin_datos(a.salida + '/estado_P-C.json', err if err_ is None else err_, a.hoy, Q.nd_ficheros(a.out, a.desde, a.hasta)); P(f'[P-C] {motivo} | VEREDICTO P-C: {tok} ({why})')
 if err or not dias:
     sin_datos(('ERROR_DATOS: ' + '; '.join(err[:3]) + ' => INSUFFICIENT (no cuenta ningun dia nuevo)') if err else f'sin dias validos >= {a.desde} (dec2+dec3s100)'); cerrar('eval_giro_AVISO.txt'); sys.exit(0)
 t1 = R2[(R2['var'] == 'T1') & (R2.lado == 'NO')].copy()

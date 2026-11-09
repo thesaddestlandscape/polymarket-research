@@ -8,18 +8,19 @@ HERE = os.path.dirname(os.path.abspath(__file__)) + '/'
 sys.path.insert(0, HERE)
 import numpy as np, pandas as pd
 import q11_decision as Q
-ap = argparse.ArgumentParser(); ap.add_argument('--desde', default='2026-11-06'); ap.add_argument('--hasta', default='9999-12-31'); ap.add_argument('--salida', default=HERE); ap.add_argument('--out', default=Q.DEC_OUT); ap.add_argument('--hoy', default=None)
+ap = argparse.ArgumentParser(); ap.add_argument('--desde', default='2026-11-06'); ap.add_argument('--hasta', default='9999-12-31'); ap.add_argument('--salida', default=HERE); ap.add_argument('--out', default=Q.DEC_OUT); ap.add_argument('--hoy', default=None); ap.add_argument('--reevaluar-b2', default=None, metavar='REF', help='ADDENDUM5 sec. 3: reabre un terminal B2 con la referencia escrita (DECISION_LOG); la reevaluacion no puede emitir CONFIRMA')
 a = ap.parse_args(); SEED, B = 13, 4000
 os.makedirs(a.salida, exist_ok=True)
 def escribir(L, jd):
     tmp = a.salida + '/.RESUMEN.tmp'; open(tmp, 'w').write('\n'.join(L) + '\n'); os.replace(tmp, a.salida + '/RESUMEN.md')
     tmpj = a.salida + '/.resumen.tmp'; json.dump(jd, open(tmpj, 'w'), indent=1, default=float); os.replace(tmpj, a.salida + '/resumen.json')
+if a.reevaluar_b2 and Q.reabrir_si_b2(a.salida + '/estado_sol013.json', a.reevaluar_b2, a.hoy): print('B2 reabierto con ref:', a.reevaluar_b2)
 dias, R2, R3, err = Q.cargar_dias(a.out, a.desde, a.hasta)
 cab = f'# RESUMEN H-Q11-SOL013 (generado {dt.datetime.now(dt.timezone.utc):%FT%TZ})'
 sp, _g = Q.dias_sin_pareja(a.out, a.desde, a.hasta); aviso_sp = f'AVISO: dias con dec2 sin dec3s100 (o al reves) en la ventana, NO cuentan (no es error): {sp}' if sp else None
 if err or not dias:
     estado_path = a.salida + '/estado_sol013.json'
-    try: tok, dt_ = Q.veredicto_sin_datos(estado_path, err, a.hoy)   # NO escribe estado; un terminal ya emitido se muestra (A) y se avisa del ERROR_DATOS
+    try: tok, dt_ = Q.veredicto_sin_datos(estado_path, err, a.hoy, Q.nd_ficheros(a.out, a.desde, a.hasta))   # B2 (hoy>=2027-01-01) escribe el terminal; si no, # NO escribe estado; un terminal ya emitido se muestra (A) y se avisa del ERROR_DATOS
     except Exception as ex: tok, dt_ = 'INSUFFICIENT', f'ERROR: estado ilegible/corrupto ({type(ex).__name__}: {ex}); no se toca' + ('; ERROR_DATOS: ' + '; '.join(err[:3]) if err else '')   # fail-closed pero el aviso se escribe igualmente
     why = (f'Dias validos desde {a.desde}: 0 (aun no hay dec2+dec3s100 de dias que cuenten) | ' if not err else '') + dt_
     # NO se sobrescriben RESUMEN.md/resumen.json (ultimo resultado valido): el aviso va a AVISO_ultima_ejecucion.txt y se antepone UNA linea de aviso/fecha a RESUMEN.md (su contenido y formato siguen intactos; la proxima ejecucion valida lo reescribe entero)
