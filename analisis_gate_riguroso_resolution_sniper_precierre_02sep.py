@@ -55,6 +55,9 @@ STEP_SCAN = 0.01
 WIDTH_FINO = 0.05
 N_MIN_FINO = 40
 ITERS = 2000
+OUTCOME_CACHE = REPO / "data/shadow/resolution_sniper_outcomes_cache.json"
+HIST_VEREDICTOS = REPO / "data/live/resolution_sniper_precierre_veredicto_hist.json"
+ESTABLE_DIAS = 2   # días naturales consecutivos con bueno en TODAS las corridas del día para confirmar
 OUT = REPO / "data" / "shadow" / "resolution_sniper_precierre_gate_riguroso.json"
 
 
@@ -68,7 +71,14 @@ def _pnl(ask: float, acierto: bool) -> float:
 
 
 def _cargar_filas() -> list[dict]:
+    # 09-Nov: caché PERMANENTE de desenlaces market_id -> outcome_real. Los resolution_sniper_obs_* se borran/rotan (el 22-Oct 15:40
+    # se borró el de 2026-09-02): 2.336 desenlaces perdidos, 352 filas -2/-1 caían en silencio y n de -2|grid|BTC#0.50 pasó de 93 a 58.
     outcome: dict[str, str] = {}
+    try:
+        outcome.update(json.loads(OUTCOME_CACHE.read_text(encoding="utf-8")))
+    except (OSError, ValueError):
+        pass
+    n_cache = len(outcome)
     for f in sorted(glob.glob(str(REPO / "data/shadow/resolution_sniper_obs_2026-*.csv"))):
         import csv
         with open(f, encoding="utf-8") as fh:
@@ -76,6 +86,10 @@ def _cargar_filas() -> list[dict]:
                 if row.get("outcome_real") not in (None, ""):
                     outcome[row["market_id"]] = row["outcome_real"]
 
+    if len(outcome) != n_cache:
+        tmp = OUTCOME_CACHE.with_suffix(".json.tmp")
+        tmp.write_text(json.dumps(outcome, separators=(",", ":")), encoding="utf-8")
+        tmp.replace(OUTCOME_CACHE)
     import csv
     depth_path = REPO / "data/shadow/resolution_sniper_precierre_depth_fase0.csv"
     # 03-Sep: NO se colapsa entre offsets. Antes se guardaba una sola fila por
@@ -127,7 +141,7 @@ def _wilson90_lo(hit: float, n: int) -> float:
     return float(centro - margen)
 
 
-def _evaluar_grupo(filas: list[dict], resto: list[dict]) -> dict:
+def _evaluar_grupo(filas: list[dict], resto: list[dict], seed_key: str | None = None) -> dict:
     n = len(filas)
     hit = sum(1 for f in filas if f["acierto"]) / n
     pnl_medio = sum(f["pnl"] for f in filas) / n
@@ -135,7 +149,7 @@ def _evaluar_grupo(filas: list[dict], resto: list[dict]) -> dict:
     wilson90lo = _wilson90_lo(hit, n)
     pnls_a = [f["pnl"] for f in filas]
     pnls_b = [f["pnl"] for f in resto] if resto else [0.0]
-    diff, p_shuffle = shuffle_test(pnls_a, pnls_b, iters=ITERS) if resto else (pnl_medio, None)
+    diff, p_shuffle = shuffle_test(pnls_a, pnls_b, iters=ITERS, seed_key=seed_key) if resto else (pnl_medio, None)
     mitad = n // 2
     sh1 = filas[:mitad]
     sh2 = filas[mitad:]
@@ -179,7 +193,9 @@ def grid_por_offset_activo(filas: list[dict]) -> dict:
                     continue
                 ids_grupo = {id(f) for f in grupo}
                 resto = [f for f in del_offset if id(f) not in ids_grupo]
-                ev = _evaluar_grupo(grupo, resto)
+                # 09-Nov: semilla propia por (offset, activo, bucket): sin ella el p dependía del orden de llamadas (_rng compartido)
+                # y el veredicto de buckets al borde del BH-FDR parpadeaba entre corridas con los mismos datos.
+                ev = _evaluar_grupo(grupo, resto, seed_key=f"rsp|{off}|{activo}|{b:.2f}")
                 claves.append((off, activo, b))
                 evals[(off, activo, b)] = ev
                 p_valores.append(ev["p_shuffle"] if ev["p_shuffle"] is not None else 1.0)
@@ -295,10 +311,45 @@ def _fino_por_activo_OBSOLETO(filas: list[dict]) -> dict:
     return resultado
 
 
+def aplicar_estabilidad(grid: dict, fino: dict, hoy: str | None = None) -> None:
+    """09-Nov: un `bueno_confirmado` solo es efectivo tras ESTABLE_DIAS días naturales consecutivos en los que TODAS las corridas del
+    día lo dieron (ausente un día = día malo). Democión inmediata: cualquier corrida sin_concluir lo deja en sin_concluir.
+    El veredicto crudo queda en `veredicto_crudo`. Historia en HIST_VEREDICTOS (primera vez: los bueno de hoy se siembran como
+    estables, para no apagar de golpe lo que ya opera; el resto cuenta desde hoy)."""
+    import datetime as _dt
+    hoy = hoy or _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d")
+    try:
+        hist = json.loads(HIST_VEREDICTOS.read_text(encoding="utf-8"))
+        primera = False
+    except (OSError, ValueError):
+        hist, primera = {}, True
+    ayer = [(_dt.date.fromisoformat(hoy) - _dt.timedelta(days=k)).isoformat() for k in range(1, ESTABLE_DIAS)]
+    for tipo, bloque in (("grid", grid), ("fino", fino)):
+        for off, claves in bloque.items():
+            for k, ev in claves.items():
+                if "veredicto" not in ev:
+                    continue
+                hk = f"{tipo}|{off}|{k}"; h = hist.setdefault(hk, {})
+                crudo = ev["veredicto"]; ev["veredicto_crudo"] = crudo
+                h[hoy] = "bueno_confirmado" if (crudo == "bueno_confirmado" and h.get(hoy, "bueno_confirmado") == "bueno_confirmado") else "no_bueno"
+                if primera and crudo == "bueno_confirmado":
+                    for d in ayer: h.setdefault(d, "bueno_confirmado")
+                for d in list(h):
+                    if d < (_dt.date.fromisoformat(hoy) - _dt.timedelta(days=30)).isoformat(): del h[d]
+                if crudo == "bueno_confirmado":
+                    estable = h[hoy] == "bueno_confirmado" and all(h.get(d) == "bueno_confirmado" for d in ayer)
+                    ev["dias_estables"] = 1 + sum(1 for d in ayer if h.get(d) == "bueno_confirmado")
+                    if not estable:
+                        ev["veredicto"] = "sin_concluir"; ev["motivo_veto"] = "bueno_crudo_sin_estabilidad_diaria"
+    tmp = HIST_VEREDICTOS.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(hist, separators=(",", ":")), encoding="utf-8"); tmp.replace(HIST_VEREDICTOS)
+
+
 def main() -> None:
     filas = _cargar_filas()
     grid = grid_por_offset_activo(filas)
     fino = fino_por_offset_activo(filas)
+    aplicar_estabilidad(grid, fino)
     # Formato con EJE DE OFFSET (03-Sep). El gate vivo
     # (resolution_sniper_precierre_gate.py) exige el offset y falla cerrado
     # si no hay evidencia de ESE offset -- un edge medido a -1s no autoriza
