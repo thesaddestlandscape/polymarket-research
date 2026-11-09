@@ -1,17 +1,17 @@
 {
  "CS#SEGUIR": {
-  "n_dias": 22,
+  "n_dias": 23,
   "pnl_sin_mejores_dias": -1.0,
   "robusto_dias": false,
   "lo": 0.06,
   "hi": 0.11,
-  "n": 54,
+  "n": 56,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9716,
+  "diff_vs_resto": -0.9718,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9716,
-   -0.9716
+   -0.9718,
+   -0.9718
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -21,7 +21,7 @@
    -1.0
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 90,
+  "n_posiciones_buscadas": 91,
   "g_kelly_f10": -0.10536,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
@@ -31,28 +31,28 @@
  },
  "Tennis#FADE": {
   "n_dias": 44,
-  "pnl_sin_mejores_dias": -0.7751,
+  "pnl_sin_mejores_dias": -0.7794,
   "robusto_dias": false,
   "lo": 0.03,
   "hi": 0.08,
-  "n": 156,
-  "pnl_medio": -0.6008,
-  "diff_vs_resto": -0.5804,
-  "p_valor": 0.0075,
+  "n": 159,
+  "pnl_medio": -0.6083,
+  "diff_vs_resto": -0.5891,
+  "p_valor": 0.0035,
   "split_half_diff": [
-   -0.3637,
-   -0.797
+   -0.3727,
+   -0.8027
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.727,
+  "pnl_medio_loo": -0.7321,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.9087,
-   -0.2382
+   -0.9104,
+   -0.2576
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.07974,
+  "g_kelly_f10": -0.08022,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -67,11 +67,11 @@
   "hi": 0.14,
   "n": 55,
   "pnl_medio": -0.6343,
-  "diff_vs_resto": -0.6077,
-  "p_valor": 0.003,
+  "diff_vs_resto": -0.6073,
+  "p_valor": 0.0035,
   "split_half_diff": [
-   -0.2284,
-   -0.9733
+   -0.2281,
+   -0.973
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8325,
@@ -97,11 +97,11 @@
   "hi": 0.16,
   "n": 55,
   "pnl_medio": -0.7357,
-  "diff_vs_resto": -0.6926,
+  "diff_vs_resto": -0.6936,
   "p_valor": 0.001,
   "split_half_diff": [
-   -0.6499,
-   -0.7338
+   -0.6509,
+   -0.7348
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8843,
@@ -119,6 +119,12 @@
   ],
   "veredicto": "malo_confirmado"
  },
+ "Dota#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ]
+ },
  "NFL#FADE": {
   "n_dias": 20,
   "pnl_sin_mejores_dias": -1.0,
@@ -127,11 +133,11 @@
   "hi": 0.11,
   "n": 47,
   "pnl_medio": -0.7646,
-  "diff_vs_resto": -0.7249,
-  "p_valor": 0.001,
+  "diff_vs_resto": -0.723,
+  "p_valor": 0.002,
   "split_half_diff": [
-   -0.9603,
-   -0.4992
+   -0.9585,
+   -0.4974
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -148,12 +154,6 @@
    "malo_confirmado"
   ],
   "veredicto": "malo_confirmado"
- },
- "epl-otros#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado"
-  ]
  },
  "mls-otros#SEGUIR": {
   "n_dias": 16,
@@ -193,11 +193,11 @@
   "hi": 0.19,
   "n": 60,
   "pnl_medio": -0.5914,
-  "diff_vs_resto": -0.5641,
+  "diff_vs_resto": -0.5649,
   "p_valor": 0.0005,
   "split_half_diff": [
-   -0.5833,
-   -0.5449
+   -0.5841,
+   -0.5458
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6968,
@@ -268,29 +268,29 @@
   "veredicto": "malo_confirmado"
  },
  "NBA#FADE": {
-  "n_dias": 16,
-  "pnl_sin_mejores_dias": 0.1329,
+  "n_dias": 17,
+  "pnl_sin_mejores_dias": 0.2085,
   "robusto_dias": true,
   "lo": 0.14,
   "hi": 0.19,
-  "n": 57,
-  "pnl_medio": 0.5664,
-  "diff_vs_resto": 0.5771,
+  "n": 60,
+  "pnl_medio": 0.6064,
+  "diff_vs_resto": 0.6244,
   "p_valor": 0.0,
   "split_half_diff": [
-   1.155,
-   0.0192
+   1.0193,
+   0.2295
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.4676,
+  "pnl_medio_loo": 0.5133,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.0116,
-   1.1696
+   0.0457,
+   1.1912
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 86,
-  "g_kelly_f10": 0.0281,
+  "g_kelly_f10": 0.03112,
   "veredicto_crudo_hoy": "bueno_confirmado",
   "historial_crudo": [
    "bueno_confirmado",
@@ -299,10 +299,10 @@
   ],
   "veredicto": "bueno_confirmado"
  },
- "Dota#SEGUIR": {
+ "epl-otros#SEGUIR": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
-   "malo_confirmado"
+   "bueno_confirmado"
   ]
  },
  "NBA#SEGUIR": {
