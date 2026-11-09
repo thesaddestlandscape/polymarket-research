@@ -1,109 +1,109 @@
 {
-  "actualizado_utc": "2026-11-08T18:20:08+00:00",
+  "actualizado_utc": "2026-11-09T00:20:08+00:00",
   "cutoff": "2026-09-24T08:00:00",
-  "n_unidades_fade_forward": 74526,
+  "n_unidades_fade_forward": 75581,
   "hipotesis": {
     "H1_peores_todas": {
-      "n_unidades": 1553,
+      "n_unidades": 1569,
       "n_dias": 46,
-      "n_wallets": 458,
-      "top_wallet_pct": 0.035,
-      "hit": 0.5119,
-      "ask_medio": 0.4916,
-      "wilson90lo": 0.491,
-      "pnl_medio": 0.0509,
-      "exceso_hit_vs_ask_pp": 2.04,
+      "n_wallets": 463,
+      "top_wallet_pct": 0.034,
+      "hit": 0.5099,
+      "ask_medio": 0.4913,
+      "wilson90lo": 0.4891,
+      "pnl_medio": 0.046,
+      "exceso_hit_vs_ask_pp": 1.86,
       "split_half": [
-        0.0807,
-        0.0211
+        0.0795,
+        0.0126
       ],
       "ci90_bootstrap_dia": [
-        -0.0102,
-        0.1187
+        -0.0137,
+        0.1122
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H2_malas_ask_020_030": {
-      "n_unidades": 1945,
+      "n_unidades": 1981,
       "n_dias": 46,
-      "n_wallets": 326,
-      "top_wallet_pct": 0.174,
-      "hit": 0.2514,
-      "ask_medio": 0.2482,
-      "wilson90lo": 0.2356,
-      "pnl_medio": 0.007,
-      "exceso_hit_vs_ask_pp": 0.32,
+      "n_wallets": 331,
+      "top_wallet_pct": 0.176,
+      "hit": 0.2509,
+      "ask_medio": 0.2481,
+      "wilson90lo": 0.2352,
+      "pnl_medio": 0.0038,
+      "exceso_hit_vs_ask_pp": 0.28,
       "split_half": [
-        0.0538,
-        -0.0397
+        0.0589,
+        -0.0513
       ],
       "ci90_bootstrap_dia": [
-        -0.0653,
-        0.0745
+        -0.0662,
+        0.0695
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H3_peores_longshot_ask_lt_050": {
-      "n_unidades": 801,
+      "n_unidades": 810,
       "n_dias": 46,
-      "n_wallets": 325,
+      "n_wallets": 329,
       "top_wallet_pct": 0.052,
-      "hit": 0.3583,
+      "hit": 0.3568,
       "ask_medio": 0.3483,
-      "wilson90lo": 0.331,
-      "pnl_medio": 0.0583,
-      "exceso_hit_vs_ask_pp": 1.0,
+      "wilson90lo": 0.3296,
+      "pnl_medio": 0.0521,
+      "exceso_hit_vs_ask_pp": 0.85,
       "split_half": [
-        0.1025,
-        0.0142
+        0.1031,
+        0.0011
       ],
       "ci90_bootstrap_dia": [
-        -0.0433,
-        0.1642
+        -0.0484,
+        0.156
       ],
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H4_ufc_fade": {
-      "n_unidades": 422,
+      "n_unidades": 423,
       "n_dias": 45,
-      "n_wallets": 75,
+      "n_wallets": 76,
       "top_wallet_pct": 0.284,
-      "hit": 0.481,
-      "ask_medio": 0.4829,
-      "wilson90lo": 0.4413,
-      "pnl_medio": -0.0546,
-      "exceso_hit_vs_ask_pp": -0.18,
+      "hit": 0.4823,
+      "ask_medio": 0.4831,
+      "wilson90lo": 0.4425,
+      "pnl_medio": -0.0528,
+      "exceso_hit_vs_ask_pp": -0.08,
       "split_half": [
         0.0529,
-        -0.162
+        -0.1579
       ],
       "ci90_bootstrap_dia": [
-        -0.2043,
-        0.0716
+        -0.2,
+        0.0726
       ],
       "cutoff": "2026-09-24T08:40:00",
       "veredicto": "sin_concluir"
     },
     "H5_epl_otros_fade": {
-      "n_unidades": 1188,
+      "n_unidades": 1230,
       "n_dias": 32,
-      "n_wallets": 64,
-      "top_wallet_pct": 0.216,
-      "hit": 0.5455,
-      "ask_medio": 0.5458,
-      "wilson90lo": 0.5216,
-      "pnl_medio": -0.0614,
-      "exceso_hit_vs_ask_pp": -0.04,
+      "n_wallets": 66,
+      "top_wallet_pct": 0.21,
+      "hit": 0.5423,
+      "ask_medio": 0.5459,
+      "wilson90lo": 0.5188,
+      "pnl_medio": -0.0562,
+      "exceso_hit_vs_ask_pp": -0.36,
       "split_half": [
-        -0.04,
-        -0.0828
+        -0.046,
+        -0.0665
       ],
       "ci90_bootstrap_dia": [
-        -0.0946,
-        -0.0219
+        -0.0933,
+        -0.0179
       ],
       "cutoff": "2026-09-24T08:40:00",
       "veredicto": "refutado_forward"
