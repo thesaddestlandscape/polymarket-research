@@ -77,6 +77,14 @@ def _slug(S, slug):
         j = r.json()
         if isinstance(j, list) and j: return j, n
     return [], n
+def _fines_4h(a, b):
+    """Fines de ventana 4h alineados a la medianoche ET (cambia con DST: 02-Nov-2026 las rejillas pasaron de 0 a 1 mod 4h UTC)."""
+    from zoneinfo import ZoneInfo
+    et = ZoneInfo('America/New_York'); out = []
+    for te in range(a - a % 3600, b + 1, 3600):
+        h = dt.datetime.fromtimestamp(te, et).hour
+        if h % 4 == 0 and te >= a: out.append(te)
+    return out
 def gamma_dia(dia, session=None):
     """Tokens 4h/24h con trading en el dia. Cache datalogs/mapa_infra/tokmap/gamma_D.json. Lanza si hay errores de red (no cachea)."""
     f = TM() / f'gamma_{dia}.json'; c = L.read_json(f)
@@ -84,7 +92,7 @@ def gamma_dia(dia, session=None):
     import requests; S = session or requests.Session(); out = {}; n_req = 0; vacios = 0
     d0 = dt.datetime.fromisoformat(dia).replace(tzinfo=dt.timezone.utc); t0 = int(d0.timestamp())
     for c4, C in COIN4.items():
-        for te in range(t0, t0 + 86400 + 8 * 3600 + 1, 14400):
+        for te in _fines_4h(t0, t0 + 86400 + 8 * 3600):
             ok = False
             for ts in (te, te - 14400):
                 j, n = _slug(S, f'{c4}-updown-4h-{ts}'); n_req += n
