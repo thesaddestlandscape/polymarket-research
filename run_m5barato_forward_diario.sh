@@ -27,6 +27,6 @@ bash -c "ulimit -v 4500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_pastel_
 # 4) FV v4 (15-Oct, Javi: "dejar el forward de FV v4 acumulando días"): dataset del día + juicio OOS desde 14-Oct con el
 #    modelo elegido SOLO en DESC 05-13 (determinista); hash del código en el log para detectar cambios de regla.
 echo "FV v4 sha $(sha256sum analisis_5m_barato_fv_modelo_v4.py | cut -c1-16)"
-bash -c "ulimit -v 3500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_fv_modelo_v4.py --solo-dataset $D" > /dev/null || avisa "FV v4 dataset"
-bash -c "ulimit -v 3500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_fv_modelo_v4.py --oos-desde 2026-10-14 --oos-hasta $D" | grep -E "ELEGIDO|OOS" || avisa "FV v4 juicio"
+bash -c "ulimit -v 5500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_fv_modelo_v4.py --solo-dataset $D" > /dev/null || avisa "FV v4 dataset"
+bash -c "ulimit -v 5500000; nice -n 15 ionice -c3 $PY analisis_5m_barato_fv_modelo_v4.py --oos-desde 2026-10-14 --oos-hasta $D" | grep -E "ELEGIDO|OOS" || avisa "FV v4 juicio"
 echo "=== fin $(date -u +%FT%TZ)"

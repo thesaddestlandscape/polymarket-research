@@ -17,3 +17,6 @@ Decisión del investigador: no cerrar la línea 5m barato/B; descartadas la reac
 
 ## 2026-10-29 — R11 cola B (RE-B-COLA-R11)
 Decisión del investigador: no construir simulador de toque para B (sobreestima +0,11..+0,24 €/€ por la clase oculta C); siguiente = prerregistro EVAP sobre libro5_ms. EVIDENCE_INSUFFICIENT. Pendiente validador independiente.
+- 2026-11-04 RE-ESCB-Q2: escalera_B NO_ECONOMIC_EDGE_DETECTED; pérdida = rellenos no-barrido en movimiento Binance (−124 €); residuo calma ≈0 dependiente de 2 días; V2 (sin 0,19) prerregistrada 3bfcb173…, forward ≥03-Nov, prior desfavorable (sin2 −0,067 en muestra).
+## 2026-11-05 — RE-Q11 toxicidad del relleno
+Decisión del investigador: no implementar nada; proponer (a) descomposición quitados/añadidos, (b) control de régimen por lado y día y (c) markouts como añadidos al prereg forward de PG_O50 (los redacta el validador, sin cambiar umbrales); T1 calma 3 s solo con OK del chief (VOI bajo). EVIDENCE_INSUFFICIENT. Pendiente validación independiente y red-team del relleno rancio.

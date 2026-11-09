@@ -4,7 +4,7 @@
 # Cron 11:30Z (fuera de 06-09Z y del horario USA pesado). Heavy: nice 19 + ionice idle + ulimit -v 3 GB (RSS medido 1,5 GB, ~5 min por dia).
 cd "$(dirname "$0")" || exit 1
 D=${E1B_DIR:-/root/polymarket-research-datalogs/e1b}; D=${D%/}; export E1B_DIR="$D/"; FWD0=${E1B_FWD0:-2026-10-23}; mkdir -p "$D/logs"; LOG="$D/logs/e1b_$(date -u +%F).log"
-ulimit -v 3000000
+ulimit -v 5000000
 aviso() { /usr/bin/python3 -c "import sys; sys.path.insert(0,'/root/polymarket-research'); from shadow_digest import enviar_telegram as e; e(sys.argv[1])" "$1"; }
 H=$(date -u +%H)
 if [ "$H" -ge 6 ] && [ "$H" -lt 9 ]; then echo "$(date -u +%FT%TZ) fuera de horario (06-09Z): no se lanza" >> "$LOG"; exit 0; fi

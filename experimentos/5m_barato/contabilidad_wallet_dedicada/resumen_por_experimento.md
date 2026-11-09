@@ -1,15 +1,15 @@
 # Resumen por experimento -- wallet dedicada 0x659a40FF9920fEBc5a66836213040924343d297F
 
-Generado 2026-10-27T05:59:39Z por actualizar.py. Fuente: pUSD on-chain (hasta bloque 96250254) + data-api + gamma + ledgers. Cifras en pUSD (~ USD).
+Generado 2026-11-02T22:22:50Z por actualizar.py. Fuente: pUSD on-chain (hasta bloque 96635120) + data-api + gamma + ledgers. Cifras en pUSD (~ USD).
 
-Saldo on-chain 3.412408 (2026-10-27T05:59:12Z); capital depositado neto 19.00; cuadre OK (dif 0.0).
+Saldo on-chain 1.412681 (2026-11-02T22:22:16Z); capital depositado neto 19.00; cuadre OK (dif 0.0).
 
 ## PnL por experimento (PnL realizado = mercados con desenlace oficial: payout - coste incl. comision; abiertas aparte, nunca en el realizado)
 
 | experimento | filas | posiciones (liq.) | ganadoras/perdedoras | coste liq. | payout liq. | PnL realizado | PnL sin 2 mejores pos. | EV pond. por EUR | EUR/fila | comisiones | abiertas/pend.: coste | MTM abierto |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | F1 medir_camino_caliente (15-Oct) | 3 | 3 (3) | 3/0 | 20.41 | 21.00 | +0.59 | +0.20 | +0.029 | +0.196 | 0.0428 | 0.00 | 0.00 |
-| H47-B | 215 | 202 (202) | 39/163 | 221.30 | 205.28 | -16.02 | -33.82 | -0.072 | -0.075 | 0.0000 | 0.00 | 0.00 |
+| H47-B | 239 | 224 (224) | 39/185 | 223.30 | 205.28 | -18.02 | -35.82 | -0.081 | -0.075 | 0.0000 | 0.00 | 0.00 |
 | H47-A | 0 | 0 (0) | 0/0 | 0.00 | 0.00 | +0.00 | n/d | n/d | n/d | 0.0000 | 0.00 | 0.00 |
 
 PnL realizado sin las 2 mejores posiciones = trampa 'PnL concentrado en 1-2 episodios' (CLAUDE.md raiz): una muestra de pocos aciertos baratos domina el total.
@@ -45,12 +45,12 @@ PnL realizado sin las 2 mejores posiciones = trampa 'PnL concentrado en 1-2 epis
 | 25 | 2026-10-22T15:36:14Z | 2026-10-23T06:30:54Z | 4 | 4 | 0/4 | 4.32 | -4.32 | -1.000 | -1.080 | 0.00 | 0.00 |
 | 26 | 2026-10-23T06:30:54Z | 2026-10-23T07:50:24Z | 4 | 4 | 0/4 | 4.78 | -4.78 | -1.000 | -1.195 | 0.00 | 0.00 |
 | 27 | 2026-10-23T07:50:24Z | 2026-10-23T08:50:17Z | 9 | 8 | 1/7 | 8.01 | -1.01 | -0.126 | -0.113 | 0.00 | 0.00 |
-| 28 | 2026-10-23T08:50:17Z | abierta | 4 | 4 | 0/4 | 4.05 | -4.05 | -1.000 | -1.013 | 0.00 | 0.00 |
+| 28 | 2026-10-23T08:50:17Z | abierta | 28 | 26 | 0/26 | 6.05 | -6.05 | -1.000 | -0.216 | 0.00 | 0.00 |
 
 ## Cuadre
 
 - OK  saldo_movimientos_vs_balanceOf_mismo_bloque: {"diferencia_pusd": 0.0}
-- OK  identidad_efectivo_vs_suma_por_fills(PnL): {"diferencia_pusd": -0.0}
+- OK  identidad_efectivo_vs_suma_por_fills(PnL): {"diferencia_pusd": 0.0}
 - OK  redenciones_onchain_vs_payout_ganadoras_redimidas: {"diferencia_pusd": 0.0}
 - OK  importes_onchain_vs_actividad_por_tx: {"anomalias": []}
 - OK  actividad_sin_transferencia_onchain: {"n": 0}
@@ -60,7 +60,29 @@ PnL realizado sin las 2 mejores posiciones = trampa 'PnL concentrado en 1-2 epis
 
 ## Conciliacion ledger H47-B vs on-chain (acciones por mercado)
 
-Mercados con fill: ledger 198, on-chain 202; acciones ledger 1055.890755 vs on-chain 1072.296158; discrepancias 4.
+Mercados con fill: ledger 198, on-chain 224; acciones ledger 1055.890755 vs on-chain 1182.287058; discrepancias 26.
+- btc-updown-5m-1793380500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793385000: ledger None vs on-chain 5.0
+- btc-updown-5m-1793386500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793389500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793397000: ledger None vs on-chain 5.0
+- btc-updown-5m-1793404500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793406000: ledger None vs on-chain 5.0
+- btc-updown-5m-1793407500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793410500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793412000: ledger None vs on-chain 5.0
+- btc-updown-5m-1793416500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793491500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793494500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793503500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793506500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793517000: ledger None vs on-chain 5.0
+- btc-updown-5m-1793581500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793590500: ledger None vs on-chain 4.9909
+- btc-updown-5m-1793592000: ledger None vs on-chain 5.0
+- btc-updown-5m-1793595000: ledger None vs on-chain 5.0
+- btc-updown-5m-1793602500: ledger None vs on-chain 5.0
+- btc-updown-5m-1793628000: ledger None vs on-chain 5.0
 - eth-updown-5m-1792566300: ledger None vs on-chain 5.0
 - eth-updown-5m-1792654200: ledger None vs on-chain 5.0
 - sol-updown-5m-1792654200: ledger None vs on-chain 5.0

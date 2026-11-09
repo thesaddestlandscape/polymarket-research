@@ -18,8 +18,17 @@ def filas(p):
     try:
         with gzip.open(p, "rt") as f: return sum(1 for _ in f) - 1
     except Exception: return -1
+def b_opero(dia):
+    """B solo genera etiquetas L1 los dias con fills de B (posiciones.csv). Sin fills ese dia no hay fichero: no es fallo (05-Nov)."""
+    import csv
+    try:
+        with open("/root/polymarket-research/experimentos/5m_barato/contabilidad_wallet_dedicada/posiciones.csv") as f:
+            return any(str(r.get("fecha_primer_fill_utc", ""))[:10] == dia for r in csv.DictReader(f))
+    except Exception:
+        return True   # fail-loud: si no se puede leer, exigir el fichero
 mal = []
 for k, p in CHK.items():
+    if k == "L1 etiquetas B" and not b_opero(d1): continue
     n = filas(p) if os.path.exists(p) else -1
     if n <= 0: mal.append(f"{k}: {'falta' if n < 0 else '0 filas'} ({os.path.basename(p)})")
 try: lat = json.load(open(LATCH))

@@ -120,6 +120,8 @@ SCREENS = {
     # si se edita hay que reiniciar a mano (--restart r3shadow).
     "r3shadow": {"entry": "experimentos/5m_barato/b_seleccion_adversa/r3_shadow/r3_shadow.py",
                  "probe": "log:logs/r3_shadow.log:r3_shadow arrancando"},
+    # 05-Nov: logger de anticipacion del barrido (solo lectura, sin choom; ver pipeline_watchdog.py::SCREEN_RESTART).
+    "logl2": {"entry": "logger_anticipo_barrido.py", "probe": "log:logs/logger_anticipo_barrido.log:conectado a fstream"},
     # 21-Oct: dashboard 5m barato SOLO LECTURA, puerto 8892 (ver pipeline_watchdog.py::SCREEN_RESTART). 401 = vivo (tiene auth).
     "dash5m": {"entry": "experimentos/5m_barato/dashboard/dashboard_5m_barato.py", "probe": "http:8892"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).

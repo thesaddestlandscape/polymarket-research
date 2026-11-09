@@ -246,6 +246,9 @@ SCREEN_RESTART = {
     # publica); sin ordenes, sin claves -> nice 5 (como a6shadow/h23shadow: con 19 el WS se queda sin CPU) y SIN choom. Salida gz diaria en
     # /root/polymarket-research-datalogs/r3_shadow/ (retencion 45 d, fuera de git). RSS < 150 MB; el propio proceso sale si pasa de 450. Cron asociado: r3_cron.sh.
     "r3shadow": f"cd {REPO}/experimentos/5m_barato/b_seleccion_adversa/r3_shadow && nice -n 5 {REPO}/.venv/bin/python -I r3_shadow.py >> {REPO}/logs/r3_shadow.log 2>&1",
+    # logl2 (05-Nov, OK Javi): logger de anticipacion del barrido, SOLO LECTURA de feeds publicos (fstream perp aggTrade/forceOrder + OI REST), sin ordenes ni claves -> SIN choom.
+    # Salida gz diaria en el volumen (symlink en datalogs), retencion 21 d propia, append en reinicio. Ver logger_anticipo_barrido.py.
+    "logl2": f"cd {REPO} && ulimit -v 3000000; nice -n 19 .venv/bin/python logger_anticipo_barrido.py >> logs/logger_anticipo_barrido.log 2>&1",
     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
@@ -384,7 +387,7 @@ def check_screens() -> dict[str, bool]:
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow"]}
+                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow", "logl2"]}
     except Exception:
         return {}
 

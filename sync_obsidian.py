@@ -349,7 +349,7 @@ def main():
 
     # git add/commit/push solo si hay cambios reales
     subprocess.run(["git", "pull", "--rebase", "--autostash"], cwd=VAULT_DIR, check=False)
-    subprocess.run(["git", "add", "09_estrategias", "10_hipotesis"], cwd=VAULT_DIR, check=True)
+    subprocess.run(["git", "add", "09_estrategias", "10_hipotesis", "03_decisions"], cwd=VAULT_DIR, check=True)
     diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=VAULT_DIR)
     if diff.returncode == 0:
         print("  Sin cambios respecto al último sync.")
