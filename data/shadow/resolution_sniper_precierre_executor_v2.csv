@@ -178919,3 +178919,15 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-11-08T23:45:00.087+00:00,1794181500,5min,False,SOL,Down,,0,,,,,6827303,False,no_fillable_ask=None_ratio=0.0,0.0,,,58.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,7.410064552664908
 2026-11-08T23:59:48.100+00:00,1794182400,60min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
 2026-11-08T23:59:48.349+00:00,1794182400,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
+2026-11-09T00:04:15.902+00:00,1794182700,5min,False,BTC,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-09T00:04:15.902+00:00,1794182700,5min,False,SOL,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-09T00:04:15.903+00:00,1794182700,5min,False,XRP,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-09T00:04:15.903+00:00,1794182700,5min,False,DOGE,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-09T00:04:15.903+00:00,1794182700,5min,False,ETH,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-09T00:04:15.903+00:00,1794182700,5min,False,BNB,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-09T00:05:00.075+00:00,1794182700,5min,False,DOGE,Down,,0,,,,,6827805,False,no_fillable_ask=None_ratio=0.0,0.0,,,45.0,,,,,,,,RESOLUTION_SNIPER_NAIVE,,4.878218651178725
+2026-11-09T00:05:00.075+00:00,1794182700,5min,False,ETH,Down,,0,,,,,6827791,False,no_fillable_ask=None_ratio=0.0,0.0,,,45.2,,,,,,,,RESOLUTION_SNIPER_NAIVE,,4.358085842952756
+2026-11-09T00:05:00.075+00:00,1794182700,5min,False,XRP,Down,,0,,,,,6827795,False,no_fillable_ask=None_ratio=0.0,0.0,,,57.7,,,,,,,,RESOLUTION_SNIPER_NAIVE,,7.947773811041807
+2026-11-09T00:05:00.075+00:00,1794182700,5min,False,BTC,Down,,0,,,,,6827797,False,no_fillable_ask=None_ratio=0.0,0.0,,,51.9,,,,,,,,RESOLUTION_SNIPER_NAIVE,,4.742586467731144
+2026-11-09T00:05:00.075+00:00,1794182700,5min,False,SOL,Down,,0,,,,,6827799,False,no_fillable_ask=None_ratio=0.0,0.0,,,51.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,4.043304715825267
+2026-11-09T00:05:00.075+00:00,1794182700,5min,False,BNB,Down,,0,,,,,6827788,False,no_fillable_ask=None_ratio=0.0,0.0,,,56.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,4.005874033709066
