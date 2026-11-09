@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-08T08:27:29+00:00",
+ "generado_utc": "2026-11-09T08:27:42+00:00",
  "corte": "2026-09-30T10:00:00",
  "offset_s": 0.6,
  "hipotesis": {
@@ -15,16 +15,16 @@
     "dias_positivos": 3
    },
    "forward": {
-    "n": 6136,
-    "dias": 40,
-    "ev": -0.0709,
+    "n": 6325,
+    "dias": 41,
+    "ev": -0.0718,
     "ic90": [
-     -0.1644,
-     0.026
+     -0.1612,
+     0.0212
     ],
-    "dias_positivos": 11
+    "dias_positivos": 12
    },
-   "activo_top_pct": 30,
+   "activo_top_pct": 31,
    "confirmada": false
   },
   "H2 5m valor>=0,20": {
@@ -39,14 +39,14 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 2064,
-    "dias": 40,
-    "ev": -0.1017,
+    "n": 2127,
+    "dias": 41,
+    "ev": -0.0794,
     "ic90": [
-     -0.2289,
-     0.0349
+     -0.2044,
+     0.051
     ],
-    "dias_positivos": 15
+    "dias_positivos": 16
    },
    "activo_top_pct": 33,
    "confirmada": false
@@ -63,16 +63,16 @@
     "dias_positivos": 3
    },
    "forward": {
-    "n": 1455,
-    "dias": 39,
-    "ev": -0.017,
+    "n": 1523,
+    "dias": 41,
+    "ev": -0.0236,
     "ic90": [
-     -0.1407,
-     0.0908
+     -0.1429,
+     0.0848
     ],
-    "dias_positivos": 15
+    "dias_positivos": 16
    },
-   "activo_top_pct": 28,
+   "activo_top_pct": 29,
    "confirmada": false
   },
   "H4 5m valor>=0,10 solo en RAFAGA": {
@@ -87,14 +87,14 @@
     "dias_positivos": 5
    },
    "forward": {
-    "n": 3943,
-    "dias": 35,
-    "ev": -0.0985,
+    "n": 4105,
+    "dias": 37,
+    "ev": -0.0955,
     "ic90": [
-     -0.244,
-     0.0465
+     -0.23,
+     0.0419
     ],
-    "dias_positivos": 9
+    "dias_positivos": 10
    },
    "activo_top_pct": 30,
    "confirmada": false
