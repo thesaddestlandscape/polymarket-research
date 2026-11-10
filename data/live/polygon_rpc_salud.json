@@ -47,10 +47,10 @@
    "ultimo_aviso": 1793956984.17517
   },
   "archivo": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1794176584.4061782,
-   "ultimo_aviso": 1794176584.4061782
+   "ok": false,
+   "detalle": "RuntimeError: {'code': -32002, 'message': 'request timed out'}",
+   "desde": 1794288245.4625044,
+   "ultimo_aviso": 1794288245.4625044
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-10T04:23:03+00:00"
+ "_actualizado_utc": "2026-11-10T05:24:05+00:00"
 }
