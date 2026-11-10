@@ -1,22 +1,22 @@
 {
- "actualizado_utc": "2026-11-09T09:40:11+00:00",
+ "actualizado_utc": "2026-11-10T09:40:11+00:00",
  "fok_reales": {
-  "enviadas": 41,
+  "enviadas": 42,
   "muertas": 12,
   "muertas_resueltas": 12,
   "muertas_que_ganarian": 10
  },
  "offsets": {
   "5m#-47": {
-   "n": 25,
+   "n": 27,
    "pendientes": 0,
-   "dias": 15,
-   "acierto": 0.68,
-   "ask_medio": 0.508,
-   "ev_eur": 0.434,
+   "dias": 16,
+   "acierto": 0.704,
+   "ask_medio": 0.512,
+   "ev_eur": 0.454,
    "ic90_cierre": [
-    0.067,
-    0.791
+    0.088,
+    0.782
    ]
   },
   "5m#-46": {
@@ -46,20 +46,20 @@
   "5m#emparejado": {
    "senales_T45": 24,
    "tambien_a_T47": 9,
-   "solo_a_T47": 16,
+   "solo_a_T47": 18,
    "comunes_resueltos": 9,
    "dif_ev_T47_menos_T45": 0.094
   },
   "15m#-47": {
-   "n": 27,
+   "n": 28,
    "pendientes": 0,
-   "dias": 18,
-   "acierto": 0.778,
-   "ask_medio": 0.763,
-   "ev_eur": 0.032,
+   "dias": 19,
+   "acierto": 0.75,
+   "ask_medio": 0.766,
+   "ev_eur": -0.005,
    "ic90_cierre": [
-    -0.175,
-    0.212
+    -0.207,
+    0.178
    ]
   },
   "15m#-46": {
@@ -75,21 +75,21 @@
    ]
   },
   "15m#-45": {
-   "n": 23,
+   "n": 25,
    "pendientes": 0,
-   "dias": 17,
-   "acierto": 0.739,
-   "ask_medio": 0.714,
-   "ev_eur": 0.032,
+   "dias": 19,
+   "acierto": 0.72,
+   "ask_medio": 0.719,
+   "ev_eur": 0.001,
    "ic90_cierre": [
-    -0.2,
-    0.245
+    -0.214,
+    0.21
    ]
   },
   "15m#emparejado": {
-   "senales_T45": 23,
+   "senales_T45": 25,
    "tambien_a_T47": 7,
-   "solo_a_T47": 20,
+   "solo_a_T47": 21,
    "comunes_resueltos": 7,
    "dif_ev_T47_menos_T45": 0.017
   }
@@ -121,22 +121,22 @@
    "bajar_escalon": false
   },
   "15m": {
-   "n": 11,
-   "dias": 9,
-   "pnl_eur": 2.46,
-   "ev_eur": 0.112,
+   "n": 12,
+   "dias": 10,
+   "pnl_eur": 3.28,
+   "ev_eur": 0.137,
    "ic90_dias": [
-    -0.159,
-    0.383
+    -0.121,
+    0.387
    ],
-   "ev_sin_2_mejores": 0.007,
-   "ev_ultimas_20": 0.112,
-   "enviadas": 13,
+   "ev_sin_2_mejores": 0.051,
+   "ev_ultimas_20": 0.137,
+   "enviadas": 14,
    "fok_muertas": 2,
-   "fok_muertas_pct": 0.154,
+   "fok_muertas_pct": 0.143,
    "gates": {
     "n>=40": false,
-    "dias>=10": false,
+    "dias>=10": true,
     "EV>=+0,05": true,
     "IC90_dias>0": false,
     "sin_2_mejores>0": true,
