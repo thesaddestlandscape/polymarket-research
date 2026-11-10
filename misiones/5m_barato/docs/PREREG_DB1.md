@@ -1,0 +1,53 @@
+# PREREG_DB1 — quitar la puja de B ante disparadores de ráfaga C2 (H-DB1, H-DB2) — forward pasivo desde 2026-11-10
+Redactado 2026-11-10 ~07:50Z por cheap5m-statistical-validator, ANTES de producir ni mirar ningún dato de los días que cuentan. 0 órdenes. Solo simulación.
+Base: misiones/5m_barato/informes/DISECCION_BOTS_B_09nov.md §2 y §4 (EXPLORATORY, FALTA_INFO). Mandato: memoria project_mandato_mitigar_AS_rafagas_B_09nov.
+Etiqueta máxima alcanzable con este prereg: CANDIDATO (EXPLORATORY hasta medición L2 de la carrera cancelación-vs-tomador). Nunca autoriza dinero real.
+
+## 0. Sesgos declarados (no se corrigen después)
+- Umbrales (1 bp, 1 s, W = 1 s) elegidos mirando DISC 20-29 Oct y los 210 rellenos in-sample de B. Todo 20-Oct..09-Nov está QUEMADO para esta familia.
+- Familia emparentada ya congelada: PREREG_Q11_THRU1_FWD (sha 68ca25a0…) brazo CXJ150 = no armar/cancelar tras salto Binance adverso >= 3 bps en 1 s + 150 ms; y CXB_l (cancelar cuando el bid real cae bajo L) como descriptivo. H-DB1 es su variante de umbral bajo y H-DB2 es la versión por print. Multiplicidad: familia {CXJ150, DB1, DB2}; aquí se decide DB1 y DB2 a alfa/2 cada una; si DB1 y CXJ150 pasan a la vez se reportan como UN solo hallazgo (correlados), nunca sumados.
+- Este prereg NO modifica PREREG_Q11_THRU1_FWD, ni su evaluador, ni passT.py, ni engine.py, ni ningún vigía congelado.
+
+## 1. Simulador, guardas y aceptación (antes de mirar un solo día forward)
+- Motor: el MISMO de thru1 = escalera_B `engine.py` (dev, /root/polymarket-research-dev/misiones/5m_barato/sonda1/p2/escalera_B/, sha256 a7b8431a73952524… a 2026-11-10) con la cinta re-sincronizada de passT.py (sha256 a8b9d7a0158fd0b0…: hora del relleno = primera cotización que muestra el nivel consumido en [t−400, t], si no t−63 ms). Brazos nuevos en un arnés NUEVO que importe engine/passT sin editarlos (patrón placebo_cxj150.py: leer código, comprobar sha, sustituir solo la lista de variantes).
+- Línea base G0 = política de B del motor (gate_vec 'G', niveles G.LEVELS, ask > L + EPS, tope y tamaños del ejecutor, rejilla 500 ms, armado con rasgos a t−300 ms). Mismas guardas para todos los brazos: un brazo solo puede QUITAR exposición de G0 (no arma donde G0 no arma).
+- Aceptación obligatoria sobre quemados 2026-10-26..11-04 (antes del día 1 forward): G0 n = 2.938 rellenos, PnL −166,9 € (±1), EV −0,076; CXJ150 dPnL +128 (±1). Si no reproduce: los días se acumulan sin evaluarse (estado INSUFFICIENT, motivo ACEPTACION). Sobre quemados se escribe también, solo como descriptivo, el dPnL de DB1/DB2 (no decide nada).
+- Reloj: TODO disparador por hora de RECEPCIÓN (Binance: c[7] recv_ms de las filas x de maker_ms_<D>_<pid> que escribe bnreg; Polymarket: recepción del print en el WS del CLOB). Prohibido usar E de Binance o el timestamp del WS de mercado (sello de lote, trampa 07-Oct).
+- Cancelación: una orden se da por cancelada para todo relleno con t_relleno >= t_disparo_recepción + l; l primaria = 150 ms (cancelación 60 ms ida-vuelta + margen; igual que CXJ150). l = 300 y 1000 ms descriptivas (curva de latencia). Rellenos con t < t_disparo + l se QUEDAN (no hay cancelación retroactiva; la orden en taker delay no se puede cancelar, trampa 14-Oct).
+- Comisión: maker 0. Rebate (0,2 de la comisión del tomador) EXCLUIDO del criterio, reportado aparte.
+
+## 2. Brazos (fijados ahora; no se añaden ni se retocan)
+- H-DB1 (DB1_150): r1(t) = retorno de Binance spot de la moneda del mercado en (t−1000, t] ms por recepción, en bps, firmado a favor del lado L (YES +, NO −); frescura del último tick <= 15 s, si no NaN => se comporta como G0 en ese instante (no inventa disparo). (i) no arma en un punto de rejilla si min de r1 en (t−1300, t−300] <= −1 bp; (ii) cancela la orden viva en el primer instante de recepción con r1 <= −1 bp + l; (iii) re-arma solo tras 1.000 ms seguidos sin r1 <= −1 bp, y solo si G0 armaría en ese punto de rejilla.
+- H-DB2 (DB2_150): print contrario = print del WS del CLOB en el mismo mercado que VENDE el token L (tomador vendedor) o COMPRA el token complementario C, cualquier tamaño (definición de s10_rafagas.py: t_buy del print). (i) no arma si hubo print contrario recibido en (t−1300, t−300]; (ii) cancela al primer print contrario recibido durante la vida + l; (iii) re-arma tras 1.000 ms sin print contrario y si G0 armaría. Validación previa obligatoria del lado del print: concordancia >= 95 % del lado del WS con el on-chain (m5_onchain, fila tomadora) en el día; si < 95 % el día es no válido para DB2.
+- Descriptivos (no deciden): DB1∪DB2 (cancela con cualquiera), DB1_300, DB1_1000, DB2_300, DB2_1000.
+- PLACEBOS (99 semillas, semilla base 20261110): DB1 = desplazamiento circular de la serie de disparos Binance dentro del día, τ' = D0 + ((τ − D0 + s) mod 86400 s), s ~ U[60, 86340] s, UNA s por (semilla, día) común a las 3 monedas (misma tasa y simultaneidad). DB2 = disparos de print tomados del mercado de la MISMA moneda y lado de otro cierre del mismo día (desfase entero de cierres k ~ U{1..287}, una k por semilla y día), alineados por tiempo hasta el cierre (misma tasa y estructura intra-ventana).
+- INVERSIÓN: INV_DB1 = misma regla con el signo cambiado (r1 >= +1 bp a favor); INV_DB2 = print a favor (compra de L o venta de C).
+
+## 3. Métrica, unidad e inferencia
+- Unidad de cuenta = (mercado, lado) = token k del motor. Unidad de inferencia = CIERRE (fin de ventana, agregando monedas y lados; los 3 cierres simultáneos de ETH/SOL/XRP son una apuesta) y DÍA (UTC).
+- Desenlace OFICIAL (G.capt_outcome; gamma closed=true). Sin desenlace => missing (nunca 0); cobertura por día reportada; día con cobertura < 0,98 no válido.
+- EV del brazo PONDERADO POR € = Σpnl / Σcoste de sus rellenos; además EV medio por unidad (descriptivo). dPnL_brazo = Σ por cierre de pnl(brazo) − pnl(G0). Exceso por € = dPnL / Σcoste(G0).
+- IC90 por cierre (bootstrap de cierres 4000) e IC90 por día (bootstrap de días 4000), semilla 20261110. Cotas de relleno BASE y CROSS de redteam/rt_sim.py deciden; STRICT/OPT/THIN se reportan.
+- Robustez obligatoria en cada informe: dPnL sin los 2 mejores días; dPnL por moneda (ETH/SOL/XRP); por lado (YES/NO); por franja de precio de L (0,05-0,15 / 0,15-0,25 / 0,25-0,35); fracción de tiempo de cotización que quita el brazo (coste de oportunidad); rellenos quitados buenos vs malos (por desenlace, contable, no ex ante).
+- Universo: el de G0 en el motor (5m ETH/SOL/XRP). BTC (subvariante de B) solo descriptivo si el motor lo cubre; si no, DATA_BLOCKED para BTC.
+
+## 4. Días que cuentan
+D >= 2026-11-10 y D <= 2026-12-31 con: insumos del motor completos; horas sanas (tx_ws >= 0,95, mismo filtro que thru1); Binance de las 3 monedas por bnreg con cobertura >= 0,95 (binance_integridad_<D>.csv: segundos de horas sanas con >= 1 tick; mínimo de las 3) y sin hueco en binance_huecos_<D>.csv > 60 s dentro de horas sanas (si lo hay, esas horas fuera); desenlace oficial >= 0,98; lado del print validado (solo DB2). Días válidos se comparten con thru1 cuando ambos lo son, pero cada prereg cuenta los suyos.
+
+## 5. Checkpoints y veredictos (solo en checkpoints; informes diarios DESCRIPTIVOS)
+- Checkpoint 10 (10.º día válido) y checkpoint 20 (20.º día válido, no antes de 2026-11-30). Un único vistazo de decisión por checkpoint.
+- CANDIDATO (cada brazo por separado), todas: C1 >= 10 días válidos y G0 >= 300 rellenos y >= 40 rellenos de G0 quitados por el brazo; C2 dPnL BASE > 0 con IC90 por día inf > 0 y IC90 por cierre inf > 0; C3 dPnL CROSS > 0; C4 dPnL sin los 2 mejores días > 0; C5 dPnL_d > 0 en >= 60 % de los días válidos; C6 placebo p <= 0,10 con p = (1 + #{|d_perm − m| >= |d_obs − m|}) / 100 y d_obs > m; placebo no calculado => no CANDIDATO; C7 inversión dPnL <= media del placebo; C8 ninguna moneda aporta > 70 % del dPnL positivo; C9 dPnL_YES > 0 y dPnL_NO > 0 por separado, o "NO SEPARABLE DEL RÉGIMEN" (no CANDIDATO); C10 en el checkpoint 20 no CANDIDATO si se encoge (media dPnL_d días 11-20 < 50 % de la de días 1-10).
+- PROMOCIÓN (solo checkpoint 20, alfa/2 por brazo): CANDIDATO + IC por día y por cierre al 2,5/97,5 % con inf > 0 + placebo p <= 0,05. SÍ = propuesta de prereg de micro-real (wallet dedicada, <= 5 €, /code-review medium, OK de Javi); nunca dinero real directo.
+- REFUTA (terminal): dPnL BASE <= 0 puntual en un checkpoint con >= 10 días válidos; o checkpoint 20 sin CANDIDATO. NaN, < 3 cierres o <= 2 días válidos => INSUFFICIENT, nunca REFUTA. Tope 2026-12-31 sin checkpoint 20 => INSUFFICIENT.
+- Techo de etiqueta sin L2 (logger previsto 16-17 Nov): el motor supone que una cancelación a t_disparo + l gana a todo tomador posterior; hasta medir esa carrera en L2 o micro-real, máximo "CANDIDATO (EXPLORATORY hasta medición L2)".
+
+## 6. Restricción de Javi: cancelar NO basta — métrica de RELLENO MALO RESIDUAL (RMR) para la fase de salida
+Se reporta en cada informe para G0, DB1_150, DB2_150 y DB1∪DB2, sobre los rellenos que el brazo NO consigue evitar:
+- Ráfaga = >= 2 tomadores distintos en el mismo bloque y mercado contra bids de banda (identidad on-chain, m5_onchain); relleno de ráfaga = el nuestro dentro de una ráfaga.
+- RMR_n, RMR_€, RMR_pnl = número, coste y PnL (desenlace oficial) de los rellenos residuales DE RÁFAGA. Fracción cancelable = 1 − RMR_€(brazo) / RMR_€(G0) (la disección estima 0,25-0,30).
+- Pérdida residual atribuible = RMR_pnl(brazo); objetivo del mandato: B total con EV > 0 y RMR_pnl -> 0. Cancelar solo cumple el mandato si EV_brazo > 0 con IC90 por día inf > 0; si no, el residuo pasa a la fase de salida.
+- Marca ex ante de "relleno malo" (para la salida, sin oráculo): markout del mid del token L a +1 s, +5 s y +30 s del relleno (recepción) <= −2c; se reporta su precisión/recobrado contra el desenlace, por día. La clasificación por desenlace es SOLO contable.
+- Valor de salida (descriptivo aquí; la regla se congela en un prereg propio posterior): para TODOS los rellenos residuales y para los marcados ex ante, pnl(vender al mejor bid de L a t_relleno + Δ, Δ = 150/500/1000 ms por recepción, limitado a la profundidad visible, comisión de tomador del feeSchedule real del mercado, mínimo 5 acciones y tick) − pnl(mantener a resolución). Prohibido evaluar la salida solo sobre los rellenos que acabaron perdiendo.
+
+## 7. Ejecución
+Evaluador: cheap5m-execution-engineer en dev, arnés nuevo que reutiliza engine/passT/rt_sim sin tocarlos; nice 19, ionice 3, ulimit -v 3000000, fuera de 06:00-09:15Z y 22:15-22:30Z, un proceso pesado a la vez (cola de cron_pesado.sh); manifest, checkpoint idempotente por día, log y cobertura por día. Placebos solo en checkpoints. Sin desviaciones: cualquier cambio tras ver un día forward = nueva versión con nuevo OOS.
