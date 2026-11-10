@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-10T20:50:31+00:00",
+ "generado_utc": "2026-11-10T20:56:33+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -29,16 +29,16 @@
  },
  "BTC": {
   "2min": {
-   "usd_long": 23107.11,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 5,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
-   "usd_long": 60037.1,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 17,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 60037.1,
@@ -47,10 +47,10 @@
    "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 106974.02,
+   "usd_long": 106531.43,
    "usd_short": 4188.04,
-   "n": 37,
-   "imbalance": -0.9246
+   "n": 36,
+   "imbalance": -0.9243
   }
  },
  "DOGE": {
@@ -81,42 +81,42 @@
  },
  "ETH": {
   "2min": {
-   "usd_long": 8718.64,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 6,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
-   "usd_long": 33955.68,
+   "usd_long": 82.73,
    "usd_short": 0.0,
-   "n": 11,
+   "n": 1,
    "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 33955.68,
+   "usd_long": 34038.41,
    "usd_short": 0.0,
-   "n": 11,
+   "n": 12,
    "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 41565.02,
+   "usd_long": 39923.57,
    "usd_short": 2333.23,
    "n": 26,
-   "imbalance": -0.8937
+   "imbalance": -0.8896
   }
  },
  "SOL": {
   "2min": {
-   "usd_long": 394.28,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
-   "usd_long": 394.28,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 394.28,
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 29,
-  "ultimo_lag_s": 0.13,
-  "max_lag_s": 0.59,
-  "media_lag_s": 0.32,
+  "n_muestras": 1,
+  "ultimo_lag_s": 0.3,
+  "max_lag_s": 0.3,
+  "media_lag_s": 0.3,
   "umbral_alerta_s": 5.0
  }
 }
