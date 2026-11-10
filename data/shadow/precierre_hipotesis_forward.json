@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-09T07:28:31+00:00",
+ "generado_utc": "2026-11-10T07:28:29+00:00",
  "corte": "2026-09-30T13:30",
  "hipotesis": {
   "H1 SOLITARIO 5m (contrario)": {
@@ -11,12 +11,12 @@
     "dias_positivos": 0
    },
    "forward": {
-    "n": 2172,
-    "dias": 41,
-    "ev": -0.1712,
+    "n": 2215,
+    "dias": 42,
+    "ev": -0.1642,
     "ic90": [
-     -0.2451,
-     -0.1011
+     -0.2323,
+     -0.0977
     ],
     "dias_positivos": 10
    },
@@ -35,14 +35,14 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 551,
-    "dias": 41,
-    "ev": -0.01,
+    "n": 556,
+    "dias": 42,
+    "ev": -0.0098,
     "ic90": [
-     -0.0515,
-     0.0387
+     -0.0507,
+     0.0352
     ],
-    "dias_positivos": 21
+    "dias_positivos": 22
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -59,12 +59,12 @@
     "dias_positivos": 5
    },
    "forward": {
-    "n": 605,
-    "dias": 41,
-    "ev": -0.0027,
+    "n": 615,
+    "dias": 42,
+    "ev": -0.0026,
     "ic90": [
-     -0.033,
-     0.0241
+     -0.0308,
+     0.022
     ],
     "dias_positivos": 25
    },
@@ -83,12 +83,12 @@
     "dias_positivos": 6
    },
    "forward": {
-    "n": 4847,
-    "dias": 41,
-    "ev": -0.0092,
+    "n": 4947,
+    "dias": 42,
+    "ev": -0.0097,
     "ic90": [
      -0.0201,
-     0.0018
+     0.0007
     ],
     "dias_positivos": 19
    },
@@ -107,14 +107,14 @@
     "dias_positivos": 4
    },
    "forward": {
-    "n": 1342,
-    "dias": 40,
-    "ev": -0.0179,
+    "n": 1369,
+    "dias": 41,
+    "ev": -0.0166,
     "ic90": [
-     -0.0398,
-     0.0047
+     -0.0368,
+     0.0057
     ],
-    "dias_positivos": 16
+    "dias_positivos": 17
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -128,14 +128,14 @@
     "dias_positivos": 0
    },
    "forward": {
-    "n": 2495,
+    "n": 2452,
     "dias": 22,
-    "ev": -0.0173,
+    "ev": -0.0224,
     "ic90": [
-     -0.0342,
-     -0.0022
+     -0.0378,
+     -0.0084
     ],
-    "dias_positivos": 10
+    "dias_positivos": 8
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
@@ -152,14 +152,14 @@
     "dias_positivos": 6
    },
    "forward": {
-    "n": 2353,
-    "dias": 33,
-    "ev": -0.0005,
+    "n": 2496,
+    "dias": 35,
+    "ev": 0.0028,
     "ic90": [
-     -0.0143,
-     0.0135
+     -0.0104,
+     0.0164
     ],
-    "dias_positivos": 19
+    "dias_positivos": 21
    },
    "confirmada": false,
    "ev_minimo_dinero_real": false
