@@ -1,0 +1,65 @@
+ADDENDUM2 (PREREG_DB1 sec. 6, RMR) - CRITERIO PREVIO. Congelado ANTES de calcular ninguna metrica con desenlace.
+Fecha: 2026-11-10 ~08:45Z. Autor: polymarket-quantum-alpha-miner. Solo dias quemados 20-Oct..08-Nov; nada >= 10-Nov.
+No es una hipotesis de alfa: se fija una ETIQUETA CONTABLE ex post (puede usar el bloque entero) para RMR.
+
+0. Conocido antes (no es seleccion): diseccion s10.out (>=2 tomadores, mismo bloque y mercado, banda economica pc 0,05-0,35,
+   muestra feat): poblacion suelta +0,094 (DISC) / +0,046 (HOLD), rafaga -0,05/-0,08 (DISC), ~-0,01 (HOLD);
+   B 123 sueltos +0,189 frente a 87 en rafaga -0,39/-0,41.
+
+1. Datos. VOL diseccion_bots_b_09nov: mk_D, feat_D, tok_D (20-Oct..08-Nov; 09-Nov no esta extraido: no se extrae),
+   maker_ms_desenlaces_cache.json (desenlace oficial), wallet_cluster.json (C2, ajustado en DISC), b_fills_vida.csv (B real),
+   q11/toxicidad_thru1/out/RT_D.pkl var=G0 (B simulado con las guardas del motor) + precursores_barrido/out/tape_D.pkl (print->tx).
+   Periodos: DISC 20-29 Oct, HOLD 30-Oct..08-Nov.
+   Guardas: horas de bad_<d>.json (las mismas de passdb/passT) donde existan (26-Oct..08-Nov; 20-25 Oct sin fichero = sin
+   exclusion, declarado; sensibilidad sin guardas). Desenlace oficial (sin desenlace = fuera, se reporta cobertura). Universo de
+   seleccion ETH/SOL/XRP; BTC = subvariante, solo descriptivo. Wallet de B fuera de la poblacion. Takers contrato
+   (CHAIN_CONTRACTS de passdb) fuera.
+
+2. Unidades.
+   S_pop: fila maker de mk con venta=False y pc <= 0,2049 (bid de banda de B), 5m ETH/SOL/XRP, maker != B.
+          pnl = acc*(1{L=res} - pc); coste = acc*pc (sin rebate: identico para todas las reglas).
+   S_sim: relleno G0 de RT (pnl y cost del motor) emparejado a su tx por tape (mismo token, price <= L+0,0049,
+          t_ws_ms - tf en [0, 400] ms, el primero); sin emparejar = fuera (se reporta).
+   S_real: rellenos reales de B (b_fills_vida) por (tx, log_index).
+
+3. Reglas candidatas (lista cerrada; ninguna usa el desenlace). Grupo = (bloque, mercado).
+   R0  status quo (passdb hoy): >=2 tomadores distintos entre filas maker venta=False, pc <= 0,2049.
+   R1  econ20: como R0 contando tambien venta=True (ask del complementario >= 0,80 levantada).
+   R2  bid40: venta=False, pc <= 0,40.
+   R3  econ40: ambas, pc <= 0,40.
+   R4  >=3 tomadores distintos (conjunto de R0).
+   R5  C2-rafaga: R0 y >=1 tomador del grupo en C2.
+   R6  C2-identidad: tomador propio en C2 (sin rafaga).
+   R7  >=2 ordenes (tx) distintas aunque sean de la misma wallet (conjunto de R0).
+   R10 barrido: R0 o la orden propia rellena >=3 makers distintos en bids <= 0,20 en ese grupo.
+   R11 tamano: R0 y acciones totales del grupo (conjunto R0) >= 100.
+   Ventana de ms (solo filas cuya orden tiene tau en feat; comparador justo R0f = >=2 tw distintos por grupo en el MISMO
+   conjunto feat): R8 +-250 ms, R9 +-1000 ms = >=2 tw distintos en el mercado con tau (hora de exchange del print
+   emparejado) a <= W de la tau de nuestra orden.
+
+4. Placebos.
+   P-comp: permutacion de la etiqueta dentro de estratos dia x moneda x tick de precio (0,01) x minuto del mercado (0-4);
+           200 permutaciones (S_pop) y 1000 (S_sim, S_real; estrato dia x moneda x nivel).
+   P-temp: la misma regla evaluada en (bloque +-15, mercado) (+15 si el relleno esta en la 1a mitad del mercado, -15 si no):
+           conserva "mercado activo", rompe la simultaneidad.
+
+5. Metricas. cob_n, cob_EUR; EV_EUR rafaga y suelto (sum pnl / sum coste); Delta = EV_suelto - EV_rafaga;
+   V = -sum pnl_rafaga / sum coste_total (valor oraculo de quitar las marcadas); V_adj = V - media(V_P-comp);
+   Delta_adj = Delta - media(Delta_P-comp). Por dia: % dias con Delta_dia > 0 (dias con >=30 rellenos por clase en S_pop,
+   >=5 en S_sim); IC90 por dia (bootstrap de dias, 2000).
+
+6. Regla de seleccion (lexicografica, conservadora; status quo = R0).
+   Una alternativa sustituye a R0 solo si cumple TODO:
+   (a) cob_EUR en [0,10, 0,70] en S_pop DISC y HOLD;
+   (b) Delta_adj > 0 con IC90-dia inf > 0 en S_pop DISC, y Delta > Delta_P-temp en DISC y HOLD;
+   (c) V_adj(alt) - V_adj(R0) > 0 con IC90-dia pareado inf > 0 en S_pop DISC y punto > 0 en S_pop HOLD;
+   (d) en S_sim (todos sus dias) V_adj(alt) - V_adj(R0) >= 0 (punto) y Delta_alt > 0;
+   (e) veto descriptivo en S_real: Delta_B > 0 y fraccion de la perdida EUR de B capturada >= la de R0 - 0,10.
+   R5/R6 (identidad ajustada en DISC) solo se evaluan en HOLD: no pueden cumplir (c), se reportan.
+   R8/R9 se comparan con R0f con (b)-(d) en el subconjunto con tau; si no la superan, se queda el bloque.
+   Si varias pasan: mayor V_adj en S_pop DISC; si el IC pareado entre ellas cruza 0, la mas simple
+   (bloque > ms; sin identidad > identidad; menos parametros).
+   R0 debe cumplir (a)-(b) por si misma; si R0 no cumple y ninguna alternativa cumple: "ninguna definicion discrimina",
+   RMR se reporta con R0 como DESCRIPTIVA (INSUFFICIENT_EVIDENCE).
+   Sensibilidad (no cambia la eleccion): sin guardas; sin los 2 mejores dias; BTC (S_pop BTC y rellenos reales BTC);
+   1a vs siguientes en la rafaga (orden por log_index minimo de cada tomador).
