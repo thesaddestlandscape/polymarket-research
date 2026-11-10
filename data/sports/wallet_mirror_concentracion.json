@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-09T08:00:01+00:00",
+ "generado_utc": "2026-11-10T08:00:01+00:00",
  "buckets": {
   "CS#SEGUIR[0.06,0.11)#ventana_fina": {
    "n_senales": 56,
@@ -39,38 +39,38 @@
    "veredicto_gate": "malo_confirmado"
   },
   "Tennis#FADE[0.03,0.08)#ventana_fina": {
-   "n_senales": 159,
-   "n_wallets_distintas": 52,
-   "n_mercados_distintos": 158,
+   "n_senales": 166,
+   "n_wallets_distintas": 53,
+   "n_mercados_distintos": 165,
    "top5_wallets": [
     {
      "wallet": "0xd218e474776403a330142299f7796e8ba32eb5c9",
-     "n": 26,
-     "pct": 16.4
+     "n": 28,
+     "pct": 16.9
+    },
+    {
+     "wallet": "0xc07d5961e7a361992983c1a3a865d00dc28cb1df",
+     "n": 16,
+     "pct": 9.6
     },
     {
      "wallet": "0x7c1ee865a785de4c00ee90ed86a38489fb8bbab3",
      "n": 16,
-     "pct": 10.1
-    },
-    {
-     "wallet": "0xc07d5961e7a361992983c1a3a865d00dc28cb1df",
-     "n": 12,
-     "pct": 7.5
+     "pct": 9.6
     },
     {
      "wallet": "0xfe787d2da716d60e8acff57fb87eb13cd4d10319",
      "n": 10,
-     "pct": 6.3
+     "pct": 6.0
     },
     {
      "wallet": "0xf0680621c349997c8a65f610eaf83cb230a3849c",
      "n": 8,
-     "pct": 5.0
+     "pct": 4.8
     }
    ],
-   "top1_wallet_pct": 16.4,
-   "top1_mercado_pct": 1.3,
+   "top1_wallet_pct": 16.9,
+   "top1_mercado_pct": 1.2,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "malo_confirmado"
@@ -145,6 +145,43 @@
    ],
    "top1_wallet_pct": 7.3,
    "top1_mercado_pct": 1.8,
+   "alerta_wallet": false,
+   "alerta_mercado": false,
+   "veredicto_gate": "malo_confirmado"
+  },
+  "Dota#SEGUIR[0.15,0.20)#ventana_fina": {
+   "n_senales": 41,
+   "n_wallets_distintas": 30,
+   "n_mercados_distintos": 41,
+   "top5_wallets": [
+    {
+     "wallet": "0x86df6ce94c9263d09a6052b43d652adb7b51d902",
+     "n": 4,
+     "pct": 9.8
+    },
+    {
+     "wallet": "0xc9f4bec86118be62d973fd53004efca8fed8c1e4",
+     "n": 3,
+     "pct": 7.3
+    },
+    {
+     "wallet": "0x9a0ea697ae93234076254ecc76ca4dd992a42330",
+     "n": 3,
+     "pct": 7.3
+    },
+    {
+     "wallet": "0x216050de6080fac3926226b2b8ce3d5544784c78",
+     "n": 3,
+     "pct": 7.3
+    },
+    {
+     "wallet": "0x9e3ed7b661a903fc97afcf49e0f014ebe869f882",
+     "n": 2,
+     "pct": 4.9
+    }
+   ],
+   "top1_wallet_pct": 9.8,
+   "top1_mercado_pct": 2.4,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "malo_confirmado"
@@ -298,38 +335,38 @@
    "veredicto_gate": "malo_confirmado"
   },
   "NBA#FADE[0.14,0.19)#ventana_fina": {
-   "n_senales": 60,
+   "n_senales": 61,
    "n_wallets_distintas": 17,
-   "n_mercados_distintos": 60,
+   "n_mercados_distintos": 61,
    "top5_wallets": [
     {
      "wallet": "0xa38a455bbdd4b68486548b7e19da99903f4f821d",
      "n": 23,
-     "pct": 38.3
+     "pct": 37.7
     },
     {
      "wallet": "0x9b11866433281ade9f2811dbde8acdefc45f5375",
      "n": 14,
-     "pct": 23.3
+     "pct": 23.0
     },
     {
      "wallet": "0xd218e474776403a330142299f7796e8ba32eb5c9",
      "n": 4,
-     "pct": 6.7
+     "pct": 6.6
     },
     {
      "wallet": "0xd9fe6f0f41ca99fefa93c55d8890000e5a84db0d",
      "n": 4,
-     "pct": 6.7
+     "pct": 6.6
     },
     {
-     "wallet": "0xf60aac5de7b026ab4a06670f7f182b9f05d780f4",
-     "n": 2,
-     "pct": 3.3
+     "wallet": "0xdd5ef115f801999575b03d78d0115ad8b2d59040",
+     "n": 3,
+     "pct": 4.9
     }
    ],
-   "top1_wallet_pct": 38.3,
-   "top1_mercado_pct": 1.7,
+   "top1_wallet_pct": 37.7,
+   "top1_mercado_pct": 1.6,
    "alerta_wallet": true,
    "alerta_mercado": false,
    "veredicto_gate": "bueno_confirmado"
