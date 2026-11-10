@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-11-09T08:10:11+00:00",
+ "actualizado_utc": "2026-11-10T08:10:11+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
@@ -45,19 +45,6 @@
     0.017
    ]
   },
-  "Dota#SEGUIR#0.75": {
-   "n": 129,
-   "dias": 48,
-   "frac_dias_pos": 0.729,
-   "top_wallet": 0.093,
-   "n_wallets": 61,
-   "pnl_medio": 0.0784,
-   "medias_tramos": [
-    0.1065,
-    0.0811,
-    0.0477
-   ]
-  },
   "lal-otros#FADE#0.55": {
    "n": 88,
    "dias": 26,
@@ -69,6 +56,19 @@
     0.2564,
     0.0804,
     0.1581
+   ]
+  },
+  "NFL#FADE#0.80": {
+   "n": 223,
+   "dias": 42,
+   "frac_dias_pos": 0.69,
+   "top_wallet": 0.175,
+   "n_wallets": 38,
+   "pnl_medio": 0.0276,
+   "medias_tramos": [
+    0.0003,
+    0.0482,
+    0.0344
    ]
   },
   "epl-otros#SEGUIR#0.45": {
@@ -124,29 +124,29 @@
    ]
   },
   "NHL#SEGUIR#0.80": {
-   "n": 88,
-   "dias": 34,
-   "frac_dias_pos": 0.765,
-   "top_wallet": 0.148,
+   "n": 90,
+   "dias": 35,
+   "frac_dias_pos": 0.743,
+   "top_wallet": 0.144,
    "n_wallets": 23,
-   "pnl_medio": 0.0624,
+   "pnl_medio": 0.0523,
    "medias_tramos": [
-    0.1343,
-    0.045,
-    0.0098
+    0.1378,
+    0.0096,
+    0.0093
    ]
   },
   "NBA#SEGUIR#0.15": {
-   "n": 117,
-   "dias": 23,
-   "frac_dias_pos": 0.609,
-   "top_wallet": 0.188,
-   "n_wallets": 32,
-   "pnl_medio": 0.2582,
+   "n": 132,
+   "dias": 24,
+   "frac_dias_pos": 0.625,
+   "top_wallet": 0.189,
+   "n_wallets": 34,
+   "pnl_medio": 0.3428,
    "medias_tramos": [
-    0.6314,
-    0.0854,
-    0.0579
+    0.5871,
+    0.0903,
+    0.3509
    ]
   },
   "ucl-otros#SEGUIR#0.50": {
