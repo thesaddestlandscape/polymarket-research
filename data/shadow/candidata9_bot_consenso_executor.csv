@@ -84883,3 +84883,11 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-11-10T11:46:20+00:00,0x46186fedecaf68873e62eadf7b356f1898eee5751bc5bb52a1cf843126458182,eth-updown-5m-1794311100,ETH,5min,Up,2,0.5799999437575643,,,,,,0,0,0,0,fuera_de_zona_confirmada
 2026-11-10T11:50:10+00:00,0x470e3756267a898d0dd3b9bccaf6626b2c3bb3b0e6f30a566b91b62162c816a6,btc-updown-5m-1794311400,BTC,5min,Up,5,0.45,,,,,,0,0,0,0,fuera_de_zona_confirmada
 2026-11-10T11:50:58+00:00,0x1051e8b27dd3b6dcd9d813cbdc9ac8c345050d0763a8b31bf412a157d3900534,eth-updown-5m-1794311400,ETH,5min,Down,2,0.6999999684684628,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-10T11:55:33+00:00,0x9cdfc8cb5599d95c7e06db942d3b3d5114e83e29224e50cccfa3f9189d22ad19,sol-updown-5m-1794311700,SOL,5min,Down,2,0.6699999952816902,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-10T11:56:47+00:00,0xf4810d348356af5c316f40934cfbfd20eae43626fe88762bbd0be3fa322b2dcb,btc-updown-5m-1794311700,BTC,5min,Up,5,0.51,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-10T11:56:55+00:00,0xfbebdaa92fef6658a54705a8ac49cddd8dbca7c0a1ab9ad6c3fca1254fc34aac,doge-updown-5m-1794311700,DOGE,5min,Up,2,0.36,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-10T11:57:23+00:00,0x5e770b8d512be58f277d4db65b0fa5216156fb0784e336123d54bfe429d4d9f6,eth-updown-15m-1794311100,ETH,15min,Down,2,0.15,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-10T11:57:52+00:00,0xd21b7b28e4f9a7e9d3be8e2c2a67adac9a670aca5f62d402c9e30a2e2c4d2782,ethereum-up-or-down-november-10-2026-6am-et,ETH,60min,Down,4,0.44,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-10T12:00:06+00:00,0xdff6f42c449466d4d17fd7cfe746597fde594a885781c8ff07379f01542ce348,btc-updown-5m-1794312000,BTC,5min,Up,4,0.51,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-10T12:00:19+00:00,0x49dec63d2eaaa9a4bd50020907c97503e75d7ec76ee256464149af6f07a600cf,btc-updown-15m-1794312000,BTC,15min,Up,3,0.55,,,,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-10T12:01:23+00:00,0xa7b23327b59cdcdb7bce89a3b0a319eaa63258d038b7ddbc80d01802e725b7b0,sol-updown-5m-1794312000,SOL,5min,Up,2,0.42,0.0,0.72,0.0,0.68,-5.56,0,0,0,0,fuera_de_zona_confirmada
