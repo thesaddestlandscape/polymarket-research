@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-11-10T17:03:23+00:00",
-  "bankroll_sim": 185813.52,
-  "pnl_total": 185793.52,
-  "n_ops": 1384646,
+  "timestamp_utc": "2026-11-10T17:12:59+00:00",
+  "bankroll_sim": 185872.97,
+  "pnl_total": 185852.97,
+  "n_ops": 1384879,
   "win_rate": 0.5719,
-  "estrategias_activas": 600,
+  "estrategias_activas": 602,
   "desactivadas": [
     "SMART_FLOW_1H",
     "GBM_LATE_60M_FADE",
@@ -19,8 +19,6 @@
     "PRICE_TARGET_GBM_FADE#ETH#atexpiry",
     "PRICE_TARGET_GBM_FADE#ETH",
     "PRICE_TARGET_GBM_FADE#atexpiry",
-    "PRICE_TARGET_GBM_FADE#BTC#atexpiry",
-    "PRICE_TARGET_GBM_FADE#BTC",
     "PRICE_TARGET_GBM_FADE#SOL",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL",
@@ -47,7 +45,7 @@
     }
   ],
   "brier_medio": 0.2296,
-  "clv_medio": 0.0416,
+  "clv_medio": 0.0417,
   "monitor_5min": {
     "ou_5m": {
       "n": 1258,
