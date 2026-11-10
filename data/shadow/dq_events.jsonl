@@ -242716,3 +242716,16 @@
 {"ts": "2026-11-10T13:24:42+00:00", "sym": "BNB", "value": 0.1355, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-11-10T13:26:14+00:00", "sym": "DOGE", "value": 0.0519, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-11-10T13:26:14+00:00", "sym": "BNB", "value": 0.0495, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-10T13:28:58+00:00", "sym": "DOGE", "value": 0.179, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-10T13:28:58+00:00", "sym": "BNB", "value": 0.1253, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-10T13:30:26+00:00", "sym": "DOGE", "value": 0.6074, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-10T13:30:26+00:00", "sym": "BNB", "value": 0.2273, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-10T13:30:45+00:00", "sym": "BTC", "value": 74242.0, "reason": "cross_source_warn coingecko=74242.0000 vs mediana=73915.8025 (0.89%)"}
+{"ts": "2026-11-10T13:30:45+00:00", "sym": "ETH", "value": 2092.8, "reason": "cross_source_warn coingecko=2092.8000 vs mediana=2075.5250 (1.68%)"}
+{"ts": "2026-11-10T13:30:45+00:00", "sym": "SOL", "value": 84.52, "reason": "cross_source_warn coingecko=84.5200 vs mediana=84.1125 (0.97%)"}
+{"ts": "2026-11-10T13:30:45+00:00", "sym": "XRP", "value": 1.066, "reason": "cross_source_warn coinbase=1.0660 vs mediana=1.0710 (0.94%)"}
+{"ts": "2026-11-10T13:31:49+00:00", "sym": "XRP", "value": 1.071, "reason": "cross_source_warn coingecko=1.0710 vs mediana=1.0670 (0.75%)"}
+{"ts": "2026-11-10T13:32:04+00:00", "sym": "DOGE", "value": 0.1922, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-10T13:32:04+00:00", "sym": "BNB", "value": 0.1025, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-11-10T13:32:51+00:00", "sym": "ETH", "value": 2067.04, "reason": "cross_source_warn coingecko=2067.0400 vs mediana=2060.7875 (0.61%)"}
+{"ts": "2026-11-10T13:32:51+00:00", "sym": "XRP", "value": 1.066, "reason": "cross_source_warn coingecko=1.0660 vs mediana=1.0627 (0.63%)"}
