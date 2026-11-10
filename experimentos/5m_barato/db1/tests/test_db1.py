@@ -26,19 +26,62 @@ def _occ(huecos=()):
     for a, b in huecos:
         for c in P.COINS: o[c][a:b] = False
     return o
-def test_salud_hueco_union_gt60_excluye_hora_y_cobertura():
-    s = P.salud_desde_occ(_occ(), {c: 1 for c in P.COINS}, [3]); assert s['valido'] and s['horas_sanas'] == 23 and s['horas_excluidas'] == []
-    s = P.salud_desde_occ(_occ([(7200, 7300)]), {c: 1 for c in P.COINS}, []); assert s['horas_excluidas'] == [1, 2] or s['horas_excluidas'] == [2]   # hueco de 100 s en la hora 2
-    assert s['valido'] and 2 in s['horas_excluidas'] and s['huecos_union_gt60s'] == 1
-    s = P.salud_desde_occ(_occ([(7200, 7230)]), {c: 1 for c in P.COINS}, []); assert s['huecos_union_gt60s'] == 0 and s['horas_excluidas'] == []     # 30 s: no es hueco
-    o = _occ(); o['XRP'][::2] = False   # una moneda con 50 % de segundos con tick (sin hueco de union): cobertura < 0,95
-    s = P.salud_desde_occ(o, {c: 1 for c in P.COINS}, []); assert not s['valido'] and s['cobertura']['XRP'] == pytest.approx(0.5, abs=0.01)
-def test_salud_sin_horas_sanas_no_valido(): assert not P.salud_desde_occ(_occ(), {}, list(range(24)))['valido']
+def _ticks(occ_huecos=None, solo=None):
+    o = _occ(occ_huecos or ()); return o
+def test_salud_addendum1_cobertura_baja_no_invalida_y_dia_perfecto_valido():
+    o = _occ(); o['XRP'][::2] = False; o['SOL'][::2] = False   # densidad 50 % por moneda (como el feed real): ya NO invalida (R1), sin silencio > 30 s
+    s = P.salud_desde_occ(o, {c: 1 for c in P.COINS}, [3]); assert s['valido'] and s['regla'] == 'ADDENDUM1' and s['horas_sanas'] == 23 and s['horas_excluidas'] == [] and s['cobertura']['XRP'] == pytest.approx(0.5, abs=0.01)
+def test_salud_hueco_moneda_gt30s_excluye_solo_su_hora_y_30s_exacto_no_cuenta():
+    o = _occ(); o['SOL'][7200 + 100:7200 + 100 + 40] = False       # SOL calla 41 s (diferencia entre ticks 41 > 30) en la hora 2; ETH/XRP siguen: la union no tiene hueco
+    s = P.salud_desde_occ(o, {c: 1 for c in P.COINS}, []); assert s['horas_excluidas_hueco'] == [2] and s['huecos_por_moneda_gt30s']['SOL'] == 1 and s['huecos_union_gt10s'] == 0 and s['valido']
+    o = _occ(); o['SOL'][7300:7329] = False                       # 30 s entre ticks: NO es > 30
+    s = P.salud_desde_occ(o, {c: 1 for c in P.COINS}, []); assert s['horas_excluidas'] == [] and s['valido']
+def test_salud_hueco_union_gt10s_y_fin_de_hueco_mas_15s_cruza_hora():
+    s = P.salud_desde_occ(_occ([(7200 + 3560, 7200 + 3585)]), {c: 1 for c in P.COINS}, []); assert s['huecos_union_gt10s'] == 1 and s['horas_excluidas'] == [2, 3]   # hueco termina en 3585 + 15 s > 3600
+    s = P.salud_desde_occ(_occ([(7200, 7209)]), {c: 1 for c in P.COINS}, []); assert s['huecos_union_gt10s'] == 0 and s['horas_excluidas'] == []              # union 10 s no pasa de 10
+def test_salud_r4_muchas_horas_o_hueco_prolongado_no_valido():
+    s = P.salud_desde_occ(_occ([(3600 * h + 100, 3600 * h + 200) for h in (1, 3, 5, 7)]), {c: 1 for c in P.COINS}, []); assert len(s['horas_excluidas_hueco']) == 4 and not s['valido']      # 4+ horas
+    s = P.salud_desde_occ(_occ([(3600 * h + 100, 3600 * h + 200) for h in (1, 3, 5)]), {c: 1 for c in P.COINS}, []); assert s['valido'] and len(s['horas_excluidas_hueco']) == 3
+    s = P.salud_desde_occ(_occ([(3600 * h + 100, 3600 * h + 500) for h in (1, 3, 5)]), {c: 1 for c in P.COINS}, []); assert len(s['horas_hueco_union_gt300s']) == 3 and not s['valido']   # caida prolongada en >2 horas
+    s = P.salud_desde_occ(_occ(), {c: 1 for c in P.COINS}, list(range(10))); assert s['valido'] and s['horas_sanas'] == 14 and s['horas_restantes'] == 14   # ADDENDUM3-B2: las horas bad tx_ws salen sin mas (ya no exigen >= 20)
+    s = P.salud_desde_occ(_occ(), {c: 1 for c in P.COINS}, list(range(12))); assert s['valido'] and s['horas_restantes'] == 12                       # B3: 12 horas bastan
+    s = P.salud_desde_occ(_occ(), {c: 1 for c in P.COINS}, list(range(13))); assert not s['valido'] and s['horas_restantes'] == 11 and '< 12' in s['motivo']   # B3: 11 no
+def test_r4_addendum3_cuentan_solo_horas_binance_y_las_txws_no_suman():
+    o = _occ([(3600 * h + 100, 3600 * h + 200) for h in (1, 3, 5)])               # 3 horas por hueco de union: valido (<= 3)
+    s = P.salud_desde_occ(o, {}, [10, 11, 12, 13]); assert s['valido'] and s['horas_excluidas'] == [1, 3, 5] and s['horas_bad_txws'] == [10, 11, 12, 13] and s['horas_restantes'] == 17 and s['lectura_r4'] == 'ADDENDUM3-B'
+    o = _occ([(3600 * h + 100, 3600 * h + 200) for h in (1, 3, 5, 7)]); assert not P.salud_desde_occ(o, {}, [10, 11])['valido']                        # 4 horas de Binance: no
+    o = _occ([(3600 * 15 + 100, 3600 * 15 + 200)]); assert P.salud_desde_occ(o, {}, list(range(12)))['horas_restantes'] == 11 and not P.salud_desde_occ(o, {}, list(range(12)))['valido']   # 12 tx_ws + 1 Binance = 11 < 12
+    o = _occ([(3600 * h + 100, 3600 * h + 500) for h in (1, 3)]); s = P.salud_desde_occ(o, {}, []); assert s['valido'] and len(s['horas_hueco_union_gt300s']) == 2      # <= 2 con hueco > 300 s
+    s = P.salud_desde_occ(o, {}, [1]); assert len(s['horas_hueco_union_gt300s']) == 1                                                                  # la hora 1 es bad tx_ws: no cuenta contra Binance
+def test_salud_moneda_sin_ticks_o_dia_sin_datos_no_valido():
+    o = _occ(); o['XRP'][:] = False; assert not P.salud_desde_occ(o, {}, [])['valido']
+    assert not P.salud_desde_occ(_occ(), {}, list(range(24)))['valido']
+def test_salud_eventos_r5_y_fichero_ausente():
+    ev = [('caida', 3 * 3600 + 5), ('hijo_asume', 9 * 3600 + 1)]
+    s = P.salud_desde_occ(_occ(), {}, [], ev); assert s['horas_excluidas'] == [3, 9] and s['valido'] and s['huecos_csv'].startswith('2')
+    s = P.salud_desde_occ(_occ(), {}, [], None); assert s['horas_excluidas'] == [] and s['huecos_csv'] == 'ausente'     # missing != sin eventos: se anota
+def test_eventos_huecos_ignora_benignos(tmp_path, monkeypatch):
+    monkeypatch.setattr(P, 'DL', str(tmp_path) + '/'); assert P.eventos_huecos('2026-11-10', D0) is None
+    (tmp_path / 'binance_huecos_2026-11-10.csv').write_text(f'evento,t_ms,conn_id,pid,motivo\narranque,{D0+10},,1,x\nlock_tomado,{D0+11},,1,\nconexion,{D0+12},1,1,\ncaida,{D0+7200000+5},1,1,x\nparada,{D0-5},,1,\n')
+    assert P.eventos_huecos('2026-11-10', D0) == [('caida', 7200)]     # la parada del dia anterior no entra
+def test_salud_sensibilidad_R6_se_guarda():
+    o = _occ(); o['SOL'][7300:7340] = False; s = P.salud_desde_occ(o, {}, []); assert s['excl_sensibilidad_R6']['15'] == [2] and s['excl_sensibilidad_R6']['60'] == [] and s['horas_excluidas'] == [2]
 def test_sv_delta_minimo_5_comision_profundidad():
     assert P.sv_delta(4.99, 0.2, 100, 0.0) == 0.0                                  # < 5 acciones: no se puede vender
     assert P.sv_delta(5.0, 0.2, 3.0, 0.0) == 0.0                                   # profundidad visible 3 < 5
     assert P.sv_delta(5.0, 0.2, 100, 0.0) == pytest.approx(5 * (0.2 - 0.0) - 0.07 * 0.2 * 0.8 * 5)   # perdedor: vender gana 1 - fee
     assert P.sv_delta(5.0, 0.2, 100, 1.0) == pytest.approx(5 * (0.2 - 1.0) - 0.07 * 0.2 * 0.8 * 5)   # ganador: vender cuesta
+def test_sv_delta_redondea_tick_y_evita_autocruce_con_escalera():
+    assert P.sv_delta(5.0, 0.2000001, 100, 0.0) == pytest.approx(5 * 0.2 - 0.07 * 0.2 * 0.8 * 5)       # ruido float -> tick
+    assert P.sv_delta(5.0, 0.13, 100, 0.0, propios=(0.10, 0.13, 0.16, 0.19)) == 0.0                 # el mejor bid puede ser NUESTRA orden: no se vende contra uno mismo
+    assert P.sv_delta(5.0, 0.12, 100, 0.0, propios=(0.10, 0.13, 0.16, 0.19)) > 0
+    assert P.sv_delta(5.0, 0.0, 100, 0.0) == 0.0
+def test_band_max_levels_todas_las_variantes():
+    assert max(P.niveles_desde_fuente()) <= P.BAND_MAX      # engine.py registrado
+    P.check_band((0.10, 0.19)); R = pd.DataFrame(dict(var=['G0', 'DB1_150@CROSS'], L=[0.19, 0.19])); P.check_band((0.10, 0.19), R)
+    with pytest.raises(AssertionError): P.check_band((0.10, 0.25))
+    with pytest.raises(AssertionError): P.check_band((0.10, 0.19), pd.DataFrame(dict(var=['G0', 'DB1_150@THIN'], L=[0.19, 0.21])))
+    assert set(P.FVS) == {'CROSS', 'STRICT', 'OPT', 'THIN'}      # las cotas de relleno no cambian los niveles: check_band comprueba L de TODAS las variantes (incl. @cota)
 def test_pvalor_formula_y_signo():
     m, p = E.pvalor(10.0, [0.0] * 99); assert m == 0.0 and p == pytest.approx(1 / 100)
     m, p = E.pvalor(0.0, list(np.linspace(-1, 1, 99))); assert p >= 0.9
@@ -105,6 +148,16 @@ def test_validar_lado_concordancia():
     C = pd.DataFrame(dict(kidx=D.tk, pr=np.full(6, 0.1), sz=D.tsz, ts_ms=ts + 500, side=D.tsd))
     r = P.validar_lado(C, D, ks); assert r['n_match'] == 6 and r['concordancia'] == 1.0 and not r['valido']   # < 1000 casados: no valido (missing != OK)
     assert P.validar_lado(None, D, ks)['valido'] is False
+def test_extras_sin_libro_es_nan_y_sin_bid_es_cero():
+    class DN(FakeD):
+        def book(s, k, t): return None
+    class DB(FakeD):
+        def book(s, k, t): return (float('nan'), 0.12, 0.0, 3.0)
+    C = pd.DataFrame(dict(tx=['t1'], li=[1], bloque=[7], taker=['A'], side=[0], kidx=[0], pr=[0.1], sz=[5.0], ts_ms=[0]))
+    R = pd.DataFrame(dict(var=['G0'], dia=['2026-11-10'], act=['ETH'], lado=['YES'], fin=[D0 // 1000 + 300], k=[0], L=[0.10], q=[5.0], tf=[D0 + 100], gana=[0.0], cost=[0.5], pnl=[0.0]))
+    tpx = pd.DataFrame(dict(k=[0], tx=['t1'], log_index=[1], tm=[D0 + 100]))
+    a = P.extras(dict(D=DN(), _TPX=tpx), R.copy(), C); assert np.isnan(a.sv150[0]) and np.isnan(a.sv1000[0]) and np.isnan(a.mk1[0])
+    b = P.extras(dict(D=DB(), _TPX=tpx), R.copy(), C); assert b.sv150[0] == 0.0 and np.isnan(b.mk1[0])
 def test_extras_burst_markout_y_salida():
     class D_(FakeD):
         def book(s, k, t): return (0.10, 0.12, 20.0, 3.0)
@@ -113,7 +166,7 @@ def test_extras_burst_markout_y_salida():
     ns = dict(D=D, _TPX=pd.DataFrame(dict(k=[0, 0], tx=['t1', 't2'], log_index=[1, 2], tm=[D0 + 100, D0 + 100]))); R = P.extras(ns, R, C)
     assert bool(R.burst[0]) and bool(R.burst_known[0]) and R.mk1[0] == pytest.approx(0.01) and R.sv150[0] == pytest.approx(5 * 0.10 - 0.07 * 0.1 * 0.9 * 5) and R.pnl_nr[0] == pytest.approx(5 * (0.0 - 0.1))
     C1 = C.iloc[:1]; R2 = P.extras(ns, R.drop(columns=[c for c in R.columns if c in ('burst', 'burst_known')]).copy(), C1); assert not bool(R2.burst[0]) and bool(R2.burst_known[0])   # un solo tomador: no es rafaga
-    R3 = P.extras(ns, R.copy(), None); assert not bool(R3.burst[0]) and not bool(R3.burst_known[0])    # sin on-chain: desconocido, no 'no rafaga' confirmada
+    R3 = P.extras(ns, R.copy(), None); assert np.isnan(R3.burst[0]) and not bool(R3.burst_known[0])    # sin on-chain: desconocido = NaN, no 'no rafaga' confirmada
 # ---- metricas y veredicto con datos sinteticos
 def _R(dias=10, extra_pnl=0.5):
     rows = []; fin = 0
@@ -141,7 +194,38 @@ def test_veredicto_refuta_insufficient_y_candidato():
     m3 = dict(m, dim=dict(m['dim'], lado={'YES': 5.0, 'NO': -1.0})); assert 'REGIMEN' in E.veredicto_cp(m3, 10, pl, None)[0]
     neg = dict(m, base=dict(m['base'], tot=-1.0)); assert E.veredicto_cp(neg, 10, pl, None)[0] == 'REFUTA'
     assert E.veredicto_cp(dict(m, nd=2), 10, pl, None)[0] == 'INSUFFICIENT' and E.veredicto_cp(dict(m, base=dict(m['base'], ncierres=2)), 10, pl, None)[0] == 'INSUFFICIENT'
-    assert E.veredicto_cp(m, 20, dict(pl, p=0.5), None)[0] == 'REFUTA'   # checkpoint 20 sin CANDIDATO = REFUTA terminal
+    R20 = _R(20); d20 = sorted(R20.dia.unique()); m20 = E.metricas(R20, 'DB1', d20)
+    assert E.veredicto_cp(m20, 20, dict(pl, p=0.5, d_obs=m20['base']['tot']), None)[0] == 'REFUTA'   # checkpoint 20 sin CANDIDATO = REFUTA terminal
+    assert E.veredicto_cp(m, 20, dict(pl, p=0.5), None)[0] == 'INSUFFICIENT'   # 10 dias no son el checkpoint 20
+def test_veredicto_rechaza_fuera_de_checkpoint_y_con_menos_de_10_dias():
+    R = _R(5); m = E.metricas(R, 'DB1', sorted(R.dia.unique()))
+    with pytest.raises(ValueError): E.veredicto_cp(m, 5, None, None)
+    et, c = E.veredicto_cp(m, 10, None, None); assert et == 'INSUFFICIENT' and 'fuera de checkpoint' in c['motivo']      # nunca REFUTA/CANDIDATO con 5 dias
+    neg = dict(m, base=dict(m['base'], tot=-5.0)); assert E.veredicto_cp(neg, 10, None, None)[0] == 'INSUFFICIENT'
+@pytest.fixture(autouse=True)
+def _sin_r6_en_fixtures(request, monkeypatch):
+    if 'sens_r6' not in request.node.name: monkeypatch.setattr(E, 'sens_r6', lambda arm, days, tot: dict({'15': tot, '30': tot, '60': tot}, cambio_signo=False))     # R6 lee RX/excl/cov del disco: se prueba aparte
+def test_rmr_solo_conocidos_y_cobertura():
+    R = _R(); R['burst'] = R.burst.astype(float); R.loc[(R['var'] == 'G0') & (R.index % 2 == 0), 'burst_known'] = False; R.loc[(R['var'] == 'G0') & (R.index % 2 == 0), 'burst'] = np.nan
+    r = E.rmr(R); assert r['G0']['n_conocidos'] < r['G0']['n_todos'] and r['G0']['conocido'] < 1 and r['G0']['n'] <= r['G0']['n_conocidos'] and r['DB1_150']['conocido'] == 1.0
+def test_cache_validez_invalida_por_clave_addendum_y_codigo(tmp_path, monkeypatch):
+    monkeypatch.setattr(E, 'OUT', str(tmp_path) + '/'); monkeypatch.setattr(E, 'tiene_insumos', lambda d: [])
+    (tmp_path / 'validez_2026-11-01.json').write_text(json.dumps(dict(dia='2026-11-01', prereg_sha=E.PREREG_SHA, valido_db1=True, valido_db2=True, motivo='')))    # cache de la clave vieja (solo prereg)
+    r = E.dia_valido('2026-11-01', hoy='2026-11-10'); assert r.get('pendiente') and r['valido_db1'] is False         # no se reutiliza (sin RX/cov)
+    k0 = E.clave_validez(); monkeypatch.setattr(E.P, 'ADD1_SHA', 'x' * 64); assert E.clave_validez() != k0
+    monkeypatch.undo(); monkeypatch.setattr(E, 'sha_codigo', lambda: 'otro'); assert E.clave_validez() != k0
+def test_dia_con_cov_sin_regla_addendum1_no_valido(tmp_path, monkeypatch):
+    monkeypatch.setattr(E, 'OUT', str(tmp_path) + '/'); monkeypatch.setattr(E, 'tiene_insumos', lambda d: []); monkeypatch.setattr(E.E1, 'asentado', lambda *a: (True, ''))
+    (tmp_path / 'RX_2026-11-01.pkl').write_bytes(b'x'); lp = dict(valido=True, concordancia=1.0, motivo='')
+    (tmp_path / 'cov_2026-11-01.json').write_text(json.dumps(dict(cobertura_desenlace=1.0, lado_print=lp, binance=dict(valido=True, cobertura_min=0.4, horas_excluidas=[], motivo=''))))
+    r = E.dia_valido('2026-11-01', hoy='2026-11-10'); assert not r['valido_db1'] and 'ADDENDUM1' in r['motivo']
+    (tmp_path / 'validez_2026-11-01.json').unlink()
+    (tmp_path / 'cov_2026-11-01.json').write_text(json.dumps(dict(cobertura_desenlace=1.0, lado_print=lp, binance=dict(regla='ADDENDUM1', addendum1_sha=E.P.ADD1_SHA, valido=True, cobertura_min=0.4, horas_excluidas=[], horas_excluidas_hueco=[], motivo=''))))
+    r = E.dia_valido('2026-11-01', hoy='2026-11-10'); assert not r['valido_db1'] and 'ADDENDUM3-B' in r['motivo']      # cov con la lectura antigua de R4: se reproduce
+    (tmp_path / 'validez_2026-11-01.json').unlink()
+    (tmp_path / 'cov_2026-11-01.json').write_text(json.dumps(dict(cobertura_desenlace=1.0, lado_print=lp, binance=dict(regla='ADDENDUM1', lectura_r4='ADDENDUM3-B', addendum1_sha=E.P.ADD1_SHA, valido=True, cobertura_min=0.4, horas_excluidas=[], horas_excluidas_hueco=[], horas_bad_txws=[3], horas_restantes=23, motivo=''))))
+    r = E.dia_valido('2026-11-01', hoy='2026-11-10'); assert r['valido_db1'] and r['horas_restantes'] == 23 and r['horas_txws_perdidas'] == [3] and r['clave'] == E.clave_validez() and r['binance_min'] == 0.4
+def test_congelados_coinciden_con_los_ficheros(): E.verificar_congelados(); assert P.ADD1_SHA == open(E.PREREG_ADD1.replace('.md', '.sha256')).read().split()[0]
 def test_rmr_fraccion_cancelable():
     R = _R(); r = E.rmr(R); assert r['G0']['n'] == 80 and r['DB1_150']['n'] == 60 or r['DB1_150']['n'] <= r['G0']['n']
     assert 0 <= r['DB1_150']['fraccion_cancelable'] <= 1
@@ -150,3 +234,82 @@ def test_markout_precision_recobrado():
 def test_seguridad_dry_run_sin_envio_ni_secretos():
     src = open(HERE + 'passdb.py').read() + open(HERE + 'eval_db1.py').read()
     for prohibido in ('py_clob_client', 'post_order', 'create_order', '.env', 'private_key', 'PRIVATE_KEY', 'requests.post', 'sign_order', 'enviar_orden'): assert prohibido not in src.replace('SOLO lectura', ''), prohibido
+
+def test_fichero_ficticio_out_no_se_dobla():   # regresion 10-Nov: passT hace OUT = dirname(__file__)+'/out/'
+    for od in (P.HERE + 'out/', P.HERE + 'placebo/s3/out/'):
+        assert os.path.dirname(P.fichero_ficticio(od)) + '/out/' == od
+
+def test_validar_lado_kidx_int16_del_engine_no_rompe_merge_asof():   # regresion 10-Nov: D.tk int16 vs kidx int64 -> MergeError
+    D = types.SimpleNamespace(tk=np.array([0, 1, 1], np.int16), tt=np.array([1000, 2000, 3000]), tp=np.array([.5, .5, .4]), tsz=np.array([10., 10., 5.]), tsd=np.array([1, 0, 1]))
+    C = pd.DataFrame(dict(kidx=np.array([0, 1], np.int64), pr=[.5, .5], sz=[10., 10.], ts_ms=[1000, 2000], side=[1, 0]))
+    r = P.validar_lado(C, D, [0, 1]); assert r['n_ws'] == 3 and r['n_match'] == 2 and r['concordancia'] == 1.0
+
+# ---- ADDENDUM3 (a): la exclusion de Binance es un FILTRO posterior; (b) vida por (variante, mercado, lado); aceptacion A1-A3
+def _fin(h, m=0): return D0 // 1000 + h * 3600 + m * 60 + 300      # fin del mercado cuya apertura (fin-300) cae en la hora h, minuto m
+def test_mascara_excluidas_equivale_a_engine_sane_por_apertura_o_cierre():
+    fin = np.array([_fin(5), _fin(5, 56), _fin(6), D0 // 1000 + 6 * 3600], np.int64)   # apertura en 5, apertura 5:56 (cierre 6:01), apertura 6:00, cierre justo a las 6:00 (apertura 5:55)
+    assert P.mascara_excluidas(fin, [5]).tolist() == [True, True, False, True] and P.mascara_excluidas(fin, [6]).tolist() == [False, True, True, True] and P.mascara_excluidas(fin, []).tolist() == [False] * 4
+    for f in fin:   # misma regla que engine.sane: horas de t0 = (fin-300)*1000 y de fin*1000
+        hs = {pd.Timestamp((f - 300) * 1000, unit='ms', tz='UTC').hour, pd.Timestamp(f * 1000, unit='ms', tz='UTC').hour}
+        for h in range(24): assert bool(P.mascara_excluidas([f], [h])[0]) == (h in hs)
+def test_filtrar_y_excluidas_fallan_ruidosos_si_falta_el_fichero(tmp_path, monkeypatch):
+    monkeypatch.setattr(E, 'OUT', str(tmp_path) + '/'); x = pd.DataFrame(dict(dia=['2026-11-10'] * 3, fin=[_fin(5), _fin(7), _fin(5, 58)], pnl=[1., 2., 3.]))
+    x.to_pickle(tmp_path / 'RX_2026-11-10.pkl')
+    with pytest.raises(FileNotFoundError): E.cargar(['2026-11-10'])          # missing != 'sin horas excluidas'
+    (tmp_path / 'excl_2026-11-10.json').write_text(json.dumps(dict(dia='2026-11-10', horas_excluidas=[5])))
+    assert E.cargar(['2026-11-10']).pnl.tolist() == [2.0] and E.cargar(['2026-11-10'], filtro=False).pnl.tolist() == [1., 2., 3.]
+    (tmp_path / 'cov_2026-11-10.json').write_text(json.dumps(dict(binance=dict(excl_sensibilidad_R6={'15': [5, 7], '60': []}))))
+    assert E.cargar(['2026-11-10'], G='15').pnl.tolist() == [] and E.cargar(['2026-11-10'], G='60').pnl.tolist() == [1., 2., 3.]
+def test_vida_por_variante_mercado_lado_y_filtro(tmp_path, monkeypatch):
+    c = _ctx(); c.acc('G0', D0 + 10, D0 + 110, 0); c.acc('G0', D0 + 200, D0 + 250, 0); c.acc('G0', D0, D0 + 70, 2); c.acc('DB1_150', D0, D0 + 5, 1)
+    f0 = int(c.D.fin[0]); f2 = int(c.D.fin[2]); assert c.vida == {'G0': {f'ETH|{f0}|YES': 150, f'ETH|{f2}|YES': 70}, 'DB1_150': {f'ETH|{f0}|NO': 5}}
+    monkeypatch.setattr(E, 'OUT', str(tmp_path) + '/'); (tmp_path / 'vida_2026-11-10.json').write_text(json.dumps(c.vida)); (tmp_path / 'excl_2026-11-10.json').write_text(json.dumps(dict(horas_excluidas=[])))
+    assert E.vida_suma('2026-11-10') == {'G0': 220.0, 'DB1_150': 5.0}
+    (tmp_path / 'excl_2026-11-10.json').write_text(json.dumps(dict(horas_excluidas=[0])))        # f0 = D0+300 s: apertura hora 0 -> fuera; f2 = D0+600 s tambien -> todo fuera
+    assert E.vida_suma('2026-11-10') == {'G0': 0.0, 'DB1_150': 0.0}
+def test_passdb_ya_no_inyecta_extra_bad_y_pasa_k_a_acc():
+    assert not any('_EXTRA_BAD' in a or '_EXTRA_BAD' in b for a, b in P.REEMPL) and any('_ACC(name, t_arr, t_end, k)' in b for a, b in P.REEMPL)
+def _fx(tmp_path, monkeypatch, dias, ex, rx_extra=None):
+    """RT sintetico (toxicidad_thru1/out) y RX = RT filtrado (como produce la ruta nueva: sin Binance, luego filtro). Devuelve (RT por dia)."""
+    monkeypatch.setattr(E, 'OUT', str(tmp_path) + '/'); (tmp_path / 'tx').mkdir(); monkeypatch.setattr(E.E1, 'TX', str(tmp_path / 'tx') + '/'); monkeypatch.setattr(E, 'QUEMADOS', dias); monkeypatch.setattr(E, 'verificar_congelados', lambda: None); monkeypatch.setattr(E.Q, 'hoy_utc', lambda: '2026-11-10')
+    out = {}
+    for i, d in enumerate(dias):
+        fins = [_fin(5), _fin(6), _fin(7), _fin(8)]; rows = []
+        for v in ('G0', 'CXJ150'):
+            for j, f in enumerate(fins): rows.append(dict(**{'var': v, 'dia': d, 'fin': f, 'k': j, 'L': 0.1, 'tf': f * 1000 - 5000 - (3 if v == 'CXJ150' else 0), 'q': 5.0, 'cost': 0.5, 'pnl': -0.5 + j + (0.2 if v == 'CXJ150' else 0), 'gana': 0.0, 'act': 'ETH', 'lado': 'YES', 'pnl_nr': -0.5, 'reb': 0.0}))
+        rt = pd.DataFrame(rows); out[d] = rt; rt.to_pickle(tmp_path / 'tx' / f'RT_{d}.pkl'); (tmp_path / f'excl_{d}.json').write_text(json.dumps(dict(dia=d, horas_excluidas=ex.get(d, []))))
+        rx = rt.copy() if rx_extra is None else rx_extra(d, rt); rx.to_pickle(tmp_path / f'RX_{d}.pkl')
+    return out
+def test_aceptacion_a1_a3_pasa_con_rx_igual_a_rt_y_detecta_diferencias(tmp_path, monkeypatch):
+    dias = ['2026-11-01', '2026-11-02']; ex = {'2026-11-01': [5]}                 # 11-01 pierde los mercados de la hora 5 (fin 5:05 y 5:00+... ver _fin); 11-02 sin horas excluidas
+    _fx(tmp_path, monkeypatch, dias, ex); r = E.aceptacion(str(tmp_path / 'a.json'))
+    assert r['checks']['A1 RX filtrado == RT filtrado (G0 y CXJ150, 10 dias, fila a fila y suma pnl)'] and r['checks']['A3 dias sin filas excluidas: RX == RT sin filtro (>=1 dia)'] and list(r['A3_dias_sin_filas_excluidas']) == ['2026-11-02']
+    assert r['valores']['union_g0_n'] == 8 and r['valores']['filtrado_g0_n'] == 7 and not r['checks']['A2 G0 n=2938']        # A2 sobre el objetivo literal: n distinto -> falla (no hay tolerancia)
+    # RX con una fila de mas dentro de las horas NO excluidas -> A1 falla; en un dia sin exclusiones -> A3 falla
+    def extra(d, rt): return pd.concat([rt, rt[(rt['var'] == 'G0') & (rt.k == 3)].assign(tf=1)], ignore_index=True)
+    _fx(tmp_path / 'x', monkeypatch, dias, ex, extra) if (tmp_path / 'x').mkdir() is None else None
+    r = E.aceptacion(str(tmp_path / 'x' / 'a.json')); assert not r['checks']['A1 RX filtrado == RT filtrado (G0 y CXJ150, 10 dias, fila a fila y suma pnl)'] and not r['checks']['A3 dias sin filas excluidas: RX == RT sin filtro (>=1 dia)']
+def test_aceptacion_a3_exige_al_menos_un_dia_de_control(tmp_path, monkeypatch):
+    dias = ['2026-11-01']; _fx(tmp_path, monkeypatch, dias, {'2026-11-01': [5]}); r = E.aceptacion(str(tmp_path / 'a.json')); assert not r['checks']['A3 dias sin filas excluidas: RX == RT sin filtro (>=1 dia)']
+# ---- test (a) con datos reales: ruta nueva (RX sin Binance + filtro) == ruta actual (Binance excluido DENTRO de la simulacion), TODAS las variantes, 10 dias quemados
+REF = HERE + 'ref_ruta_actual_10nov/'
+@pytest.mark.skipif(not os.path.exists(REF + 'RX_2026-11-04.pkl') or not os.path.exists(E.OUT + 'RX_2026-11-04.pkl'), reason='faltan la ruta actual de referencia o la ruta nueva producida')
+def test_ruta_nueva_filtrada_igual_a_ruta_actual_todas_las_variantes_10_quemados():
+    cols_num = ['k', 'L', 'q', 'tf', 'cost', 'pnl', 'pnl_nr', 'reb', 'gana', 'seg', 't_dec', 'canc']; malos = []
+    for d in E.QUEMADOS:
+        old = pd.read_pickle(REF + f'RX_{d}.pkl'); new = E.filtrar(pd.read_pickle(E.OUT + f'RX_{d}.pkl'), E.excluidas(d, d_ex=REF)); assert E.excluidas(d, d_ex=REF) == E.excluidas(d)
+        assert set(old['var']) == set(new['var']), d
+        for v in old['var'].unique():
+            a = old[old['var'] == v].sort_values(['k', 'L', 'seg', 'tf']).reset_index(drop=True); b = new[new['var'] == v].sort_values(['k', 'L', 'seg', 'tf']).reset_index(drop=True)
+            ok = len(a) == len(b) and all(np.allclose(a[c].astype(float), b[c].astype(float), atol=1e-9, equal_nan=True) for c in cols_num) and (a['ftype'].astype(str).values == b['ftype'].astype(str).values).all()
+            if not ok: malos.append((d, v, len(a), len(b)))
+    assert not malos, malos
+
+def test_sens_r6_usa_las_horas_g15_g60_y_anota_cambio_de_signo(tmp_path, monkeypatch):
+    monkeypatch.setattr(E, 'OUT', str(tmp_path) + '/'); d = '2026-11-10'; rows = []
+    for v, ps in (('G0', [-1.0, -1.0]), ('DB1_150', [-1.0, 0.5])):          # mercado 0 en la hora 5 (empate con G0), mercado 1 en la hora 7: el brazo gana 1,5 solo ahi
+        for j, f in enumerate((_fin(5), _fin(7))): rows.append({'var': v, 'dia': d, 'fin': f, 'k': j, 'L': 0.1, 'tf': f, 'q': 5.0, 'cost': 0.5, 'pnl': ps[j], 'pnl_nr': ps[j], 'gana': 0.0, 'act': 'ETH', 'lado': 'YES'})
+    pd.DataFrame(rows).to_pickle(tmp_path / 'RX_2026-11-10.pkl'); (tmp_path / 'excl_2026-11-10.json').write_text(json.dumps(dict(horas_excluidas=[])))
+    (tmp_path / 'cov_2026-11-10.json').write_text(json.dumps(dict(binance=dict(excl_sensibilidad_R6={'15': [7], '60': []}))))
+    monkeypatch.setattr(E.E1, 'dser', lambda a, b: (a.groupby('k').pnl.sum() - b.groupby('k').pnl.sum()).fillna(0.0))
+    r = E.sens_r6('DB1', [d], 1.5); assert r['15'] == pytest.approx(0.0) and r['60'] == pytest.approx(1.5) and r['cambio_signo'] is True      # G=15 quita el unico mercado donde el brazo gana: dPnL 0 vs +1,5

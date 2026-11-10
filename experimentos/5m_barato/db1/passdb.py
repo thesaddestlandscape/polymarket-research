@@ -24,6 +24,18 @@ ARMS_FV = ('G0', 'DB1_150', 'DB2_150', 'DBU_150')       # variantes que ademas c
 BASE_VN = ['G0', 'CXJ150'] + [f'{a}_{l}' for a, ls in LSPEC.items() for l in ls]
 MAIN_VN = BASE_VN + [f'{a}@{f}' for a in ARMS_FV for f in FVS]
 PLA_VN = ['PDB1_150', 'PDB2_150']
+def niveles_desde_fuente(eng=None):
+    """LEVELS de engine.py leidos por AST (sin importarlo ni ejecutarlo) -> tupla."""
+    t = ast.parse(open(eng or ENG).read())
+    for n_ in t.body:
+        if isinstance(n_, ast.Assign) and any(getattr(x, 'id', None) == 'LEVELS' for x in n_.targets): return tuple(float(x) for x in ast.literal_eval(n_.value))
+    raise AssertionError('no encuentro LEVELS en engine.py')
+def check_band(levels, R=None):
+    """Coherencia fallo-ruidoso: ningun nivel de NINGUNA variante (G0, brazos, @CROSS/@STRICT/@OPT/@THIN) pasa de BAND_MAX (la banda de la rafaga, sec. 6, filtra bids <= BAND_MAX)."""
+    assert len(levels) and max(levels) <= BAND_MAX + 1e-9, f'LEVELS {levels} > BAND_MAX {BAND_MAX}'
+    if R is not None and len(R):
+        mx = R.groupby('var').L.max(); mal = mx[mx > BAND_MAX + 1e-9]
+        assert mal.empty, f'variantes con L > BAND_MAX {BAND_MAX}: {mal.to_dict()}'
 def sha_f(p): return hashlib.sha256(open(p, 'rb').read()).hexdigest()
 def atomic_json(path, obj):
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True); tmp = path + '.tmp'
@@ -43,32 +55,66 @@ def recent(tr, tq):
     """True donde hubo disparo con hora de recepcion en (tq-1000, tq] = (t-1300, t-300] (sec. 2 (i) y (iii): re-arma tras 1000 ms seguidos sin disparo)."""
     return (np.searchsorted(tr, tq, side='right') - np.searchsorted(tr, tq - 1000, side='right')) > 0
 def union_sorted(a, b): return np.sort(np.concatenate([np.asarray(a, np.int64), np.asarray(b, np.int64)]))
-# ------------------------------------------------------------------ salud Binance (sec. 4)
+# ------------------------------------------------------------------ salud Binance (sec. 4 + ADDENDUM1 secc. A, R1-R6)
+ADD1_SHA = 'b083b7a58c9dda13e673675ea2366c50f0cdb74e2ded972c469509298690bd1d'     # PREREG_DB1_ADDENDUM1.md (congelado 10-Nov)
+MIN_HORAS_DIA = 12; G_COIN = 30; G_UNION = 10; G_UNION_LARGO = 300; PAD_FIN = 15     # R2 (segundos), R4 (hueco prolongado), R3 (fin de hueco + 15 s)
+HUECOS_BENIGNOS = ('arranque', 'lock_tomado', 'conexion')        # R5: cualquier otro evento de binance_huecos_<D>.csv excluye su hora
+def eventos_huecos(d, day0):
+    """R5: filas de binance_huecos_<D>.csv con evento NO benigno -> [(evento, segundo_del_dia)]; None si el fichero no existe (missing != 'sin eventos')."""
+    f = DL + f'binance_huecos_{d}.csv'
+    if not os.path.exists(f): return None
+    h = pd.read_csv(f, dtype={'evento': str}); out = []
+    for e, t in zip(h.evento.values, h.t_ms.values):
+        if str(e) in HUECOS_BENIGNOS or not (t == t): continue
+        sd = (int(t) - day0) // 1000
+        if 0 <= sd < 86400: out.append((str(e), int(sd)))
+    return out
 def salud_binance(d, bad_h, xfile):
-    """Cobertura por moneda (segundos de horas sanas con >=1 tick de recepcion) y huecos de la UNION de las 3 monedas > 60 s: las horas que cruza un hueco salen (sec. 4). -> dict (valido si min cobertura >= 0,95)."""
+    """Ocupacion por segundo y moneda (ticks de recepcion) -> salud_desde_occ (ADDENDUM1: huecos de silencio, no densidad)."""
     day0 = int(pd.Timestamp(d, tz='UTC').timestamp()) * 1000; occ = {c: np.zeros(86400, bool) for c in COINS}; n = {c: 0 for c in COINS}
     for ch in pd.read_csv(xfile, header=None, usecols=[2, 7], names=['sym', 'recv'], dtype={'sym': 'category', 'recv': 'int64'}, chunksize=1500000):
         for sym, g in ch.groupby('sym', observed=True):
             c = str(sym)[:-4]
             if c not in occ: continue
             s = (g.recv.values - day0) // 1000; s = s[(s >= 0) & (s < 86400)]; occ[c][s] = True; n[c] += len(s)
-    return salud_desde_occ(occ, n, bad_h)
-def salud_desde_occ(occ, n, bad_h):
-    sanas = [h for h in range(24) if h not in set(bad_h)]; U = np.zeros(86400, bool)
+    return salud_desde_occ(occ, n, bad_h, eventos_huecos(d, day0))
+def horas_de_mercado(fin):
+    """horas UTC (0-23) de [fin-300, fin] de cada mercado (fin en segundos): las dos que mira engine.sane -> (h_apertura, h_cierre)."""
+    f = np.asarray(fin, np.int64); return ((f - 300) // 3600) % 24, (f // 3600) % 24
+def mascara_excluidas(fin, horas):
+    """True donde el mercado cae en una hora excluida (apertura o cierre), identico a engine.sane con _EXTRA_BAD = horas (ADDENDUM3 (a): la exclusion de Binance es un FILTRO posterior)."""
+    h1, h2 = horas_de_mercado(fin); hs = [int(h) for h in horas]; return np.isin(h1, hs) | np.isin(h2, hs)
+def _huecos_de(occ_bool, G):
+    """[(s1, s2)] pares de segundos ocupados consecutivos con s2 - s1 > G; los bordes del dia cuentan (0 y 86400), como en el criterio anterior. Precision 1 s."""
+    idx = np.flatnonzero(occ_bool); a = np.concatenate([[0], idx, [86400]]); dd = np.diff(a); m = dd > G
+    return [(int(x), int(y)) for x, y in zip(a[:-1][m], a[1:][m])]
+def _horas(s1, s2):
+    """R3: horas UTC que contiene [inicio del hueco, fin del hueco + 15 s]."""
+    return set(range(int(s1) // 3600, min(int(s2) + PAD_FIN, 86399) // 3600 + 1))
+def _excl(occ, sanas, G, ev):
+    U = np.zeros(86400, bool)
     for c in COINS: U |= occ[c]
-    hsec = np.repeat(np.arange(24), 3600); excl = set(); huecos = []; i = 0
-    while i < 86400:
-        if U[i]: i += 1; continue
-        j = i
-        while j < 86400 and not U[j]: j += 1
-        if j - i > 60:
-            hs = sorted(set(hsec[i:j].tolist()) & set(sanas)); huecos.append((int(i), int(j), hs)); excl |= set(hs)
-        i = j
-    resto = [h for h in sanas if h not in excl]; m = np.isin(hsec, resto)
-    cov = {c: (float(occ[c][m].mean()) if m.any() else float('nan')) for c in COINS}
-    mn = min(cov.values()) if resto else float('nan')
-    return dict(horas_sanas=len(sanas), horas_excluidas=sorted(excl), huecos_union_gt60s=len(huecos), cobertura=cov, cobertura_min=mn, ticks=n,
-                valido=bool(resto and mn == mn and mn >= 0.95), motivo='' if (resto and mn == mn and mn >= 0.95) else f'Binance bnreg cobertura min {mn} < 0,95 o sin horas sanas')
+    por_moneda = {c: _huecos_de(occ[c], G) for c in COINS}; un = _huecos_de(U, G_UNION); un_largo = _huecos_de(U, G_UNION_LARGO)
+    hs = set(); [hs.update(_horas(a, b)) for gs in por_moneda.values() for a, b in gs]; [hs.update(_horas(a, b)) for a, b in un]
+    he = set(); [he.update(_horas(sd, sd)) for _, sd in (ev or [])]
+    h300 = set(); [h300.update(_horas(a, b)) for a, b in un_largo]
+    S = set(sanas); return dict(hueco=sorted(hs & S), eventos=sorted(he & S), union300=sorted(h300 & S), n_moneda={c: len(g) for c, g in por_moneda.items()}, n_union=len(un),
+                                max_gap_s={c: int(np.diff(np.concatenate([[0], np.flatnonzero(occ[c]), [86400]])).max()) for c in COINS})
+def salud_desde_occ(occ, n, bad_h, eventos=None):
+    """ADDENDUM1 (sha ADD1_SHA). R1: cobertura solo informativa. R2: hueco por moneda > 30 s o de la UNION > 10 s (ticks de recepcion, 1 s de precision, bordes del dia incluidos).
+    R3: sale la HORA que contiene [inicio, fin+15 s]. R5: eventos no benignos de binance_huecos (eventos=None = fichero ausente -> se anota, no se inventa). R4 (lectura ADDENDUM3 §B, borrador del validator): cuentan SOLO las horas excluidas por Binance (<= 3 por hueco/evento y <= 2 con hueco de union > 300 s); las horas bad tx_ws salen sin
+    mas (B2) y el dia cuenta si quedan >= MIN_HORAS_DIA (12) horas tras tx_ws y Binance (B3). R6: se guardan las horas excluidas con G=15 y G=60 (sensibilidad, informativa)."""
+    sanas = [h for h in range(24) if h not in set(bad_h)]; hsec = np.repeat(np.arange(24), 3600)
+    ev = _excl(occ, sanas, G_COIN, eventos); excl = sorted(set(ev['hueco']) | set(ev['eventos'])); resto = [h for h in sanas if h not in excl]; m = np.isin(hsec, resto)
+    cov = {c: (float(occ[c][m].mean()) if m.any() else float('nan')) for c in COINS}; mn = min(cov.values()) if resto else float('nan')
+    alt = {str(G): sorted(set(_excl(occ, sanas, G, eventos)['hueco']) | set(ev['eventos'])) for G in (15, 60)}
+    mot = []
+    if len(resto) < MIN_HORAS_DIA: mot.append(f'quedan {len(resto)} horas tras tx_ws y Binance < {MIN_HORAS_DIA}')
+    if len(ev['union300']) > 2: mot.append(f"{len(ev['union300'])} horas con hueco de union > {G_UNION_LARGO} s (> 2)")
+    if len(excl) >= 4: mot.append(f'{len(excl)} horas excluidas por hueco (>= 4)')
+    return dict(regla='ADDENDUM1', lectura_r4='ADDENDUM3-B', addendum1_sha=ADD1_SHA, horas_sanas=len(sanas), horas_bad_txws=sorted(set(bad_h)), horas_restantes=len(resto), horas_excluidas=excl, horas_excluidas_hueco=excl, horas_excluidas_eventos=ev['eventos'], horas_hueco_union_gt300s=ev['union300'],
+                huecos_por_moneda_gt30s=ev['n_moneda'], huecos_union_gt10s=ev['n_union'], max_gap_s=ev['max_gap_s'], huecos_csv=('ausente' if eventos is None else f'{len(eventos)} eventos no benignos'),
+                excl_sensibilidad_R6=alt, cobertura=cov, cobertura_min=mn, ticks=n, valido=not mot, motivo='; '.join('Binance ' + x for x in mot))
 # ------------------------------------------------------------------ parche de passT
 def extraer_rt():
     src = open(RT).read(); assert sha_f(RT) == SHA['RT'], 'rt_sim.py distinto del registrado'; tree = ast.parse(src); keep = []
@@ -79,10 +125,9 @@ def extraer_rt():
 REEMPL = [  # (viejo, nuevo): cada viejo debe aparecer EXACTAMENTE una vez en passT.py
     ("def first_after(arr, t0, t1):", "_DBH = _db_prepare(globals())\ndef first_after(arr, t0, t1):"),
     ("E.tape = G.Tape('chain', D, tp.drop(columns=['k', 'tm'])); KEY = {}", "_TPX = tp[['k', 'tx', 'log_index', 'tm']].copy(); E.tape = G.Tape('chain', D, tp.drop(columns=['k', 'tm'])); KEY = {}"),
-    ("bad = {tuple(x) for x in json.load(open(PB + f'bad_{d}.json'))['bad']}", "bad = {tuple(x) for x in json.load(open(PB + f'bad_{d}.json'))['bad']} | _EXTRA_BAD"),
     ("q, tf, _ = E.run_segment(k, L, t_arr, t_end, rem, 'BASE')", "q, tf = _FVX(k, L, t_arr, t_end, rem)"),
     ("        for name in VN:\n            can, cf = specs[name]\n", "        specs.update(_DB_SPECS(k, L, g, base, Gm, coin, lado, tq))\n        for name in VN:\n            can, cf = specs[name]; _SETFV(name)\n"),
-    ("            for (si, t, t_arr, t_end, q, tf, canc) in run_var(k, L, g, can, Gm, fin, cf):\n", "            for (si, t, t_arr, t_end, q, tf, canc) in run_var(k, L, g, can, Gm, fin, cf):\n                _ACC(name, t_arr, t_end)\n"),
+    ("            for (si, t, t_arr, t_end, q, tf, canc) in run_var(k, L, g, can, Gm, fin, cf):\n", "            for (si, t, t_arr, t_end, q, tf, canc) in run_var(k, L, g, can, Gm, fin, cf):\n                _ACC(name, t_arr, t_end, k)\n"),
 ]
 def parchear(vn):
     assert sha_f(PT) == SHA['PT'], 'passT.py distinto del registrado'; assert sha_f(ENG) == SHA['ENG'], 'engine.py distinto del registrado'
@@ -138,7 +183,9 @@ class Ctx:
             for f in FVS: out[f'{a}@{f}'] = out[a]
         return out
     def setfv(s, name): s.fv = name.split('@')[1] if '@' in name else 'BASE'
-    def acc(s, name, t_arr, t_end): s.vida[name] = s.vida.get(name, 0) + int(t_end - t_arr)
+    def acc(s, name, t_arr, t_end, k):
+        """vida (ms de orden viva) por (variante, mercado, lado): vida[variante]['ACT|fin|LADO'] (apartado C: P(relleno) x EV|relleno, dPnL incondicional)."""
+        key = f'{s.D.act[k]}|{int(s.D.fin[k])}|{s.D.lado[k]}'; v = s.vida.setdefault(name, {}); v[key] = v.get(key, 0) + int(t_end - t_arr)
     def fvx(s, k, L, t_arr, t_end, rem): return s.ns['fill_v'](k, L, t_arr, t_end, rem, s.fv)
 # ------------------------------------------------------------------ extras (sec. 6): rafaga, markout, valor de salida; validacion del lado del print (sec. 2 DB2)
 def cargar_chain(d, D):
@@ -156,18 +203,22 @@ def cargar_chain(d, D):
 def validar_lado(C, D, ks):
     """concordancia del lado del print WS (tsd: 0 = tomador vende) con el on-chain (fila maker: side 0 = bid => tomador vende) por (token, precio, tamano) y hora <= 10 s."""
     if C is None or not len(C): return dict(n_ws=0, n_match=0, concordancia=float('nan'), valido=False, motivo='sin on-chain')
-    kset = set(ks); m = np.isin(D.tk, list(kset)); W = pd.DataFrame(dict(kidx=D.tk[m], t=D.tt[m].astype('int64'), pr=np.round(D.tp[m].astype(np.float64), 2), sz=np.round(D.tsz[m].astype(np.float64), 2), sd=D.tsd[m]))
+    kset = set(ks); m = np.isin(D.tk, list(kset)); W = pd.DataFrame(dict(kidx=D.tk[m].astype('int64'), t=D.tt[m].astype('int64'), pr=np.round(D.tp[m].astype(np.float64), 2), sz=np.round(D.tsz[m].astype(np.float64), 2), sd=D.tsd[m]))
     Cc = C[C.kidx.isin(kset)].assign(pr=lambda x: x.pr.round(2), sz=lambda x: x.sz.round(2))[['kidx', 'pr', 'sz', 'ts_ms', 'side']].sort_values('ts_ms'); W = W.sort_values('t')
     M = pd.merge_asof(W, Cc, left_on='t', right_on='ts_ms', by=['kidx', 'pr', 'sz'], direction='nearest', tolerance=10000); ok = M.side.notna(); conc = float((M.sd[ok] == M.side[ok]).mean()) if ok.any() else float('nan')
     return dict(n_ws=int(len(W)), n_match=int(ok.sum()), tasa_match=float(ok.mean()) if len(W) else float('nan'), concordancia=conc, valido=bool(ok.sum() >= 1000 and conc == conc and conc >= 0.95),
                 motivo='' if (ok.sum() >= 1000 and conc == conc and conc >= 0.95) else f'lado del print: concordancia {conc} con {int(ok.sum())} casados (< 0,95 o < 1000)')
-def sv_delta(q, bid, bsz, gana):
-    """pnl(vender al mejor bid) - pnl(mantener a resolucion): acciones vendibles = min(q, profundidad visible) con minimo 5 acciones; comision de tomador 0,07*p*(1-p) por accion (feeSchedule cripto); bid en rejilla de tick."""
+TICK = 0.01
+def sv_delta(q, bid, bsz, gana, propios=(), tick=TICK):
+    """pnl(vender al mejor bid) - pnl(mantener a resolucion): acciones vendibles = min(q, profundidad visible) con minimo 5 acciones; comision de tomador 0,07*p*(1-p) por accion (feeSchedule cripto).
+    El bid se redondea al tick (ruido float). Autocruce: si el bid redondeado cae en un nivel de NUESTRA escalera (`propios`) el mejor bid puede ser nuestra propia orden (no se casa consigo misma): conservador, delta 0 (mantener)."""
+    bt = round(round(float(bid) / tick) * tick, 6)
+    if not (bt > 0.0) or bt in {round(float(x), 6) for x in propios}: return 0.0
     qs = np.floor(min(q, bsz) * 100 + 1e-9) / 100
-    return 0.0 if qs < 5.0 - 1e-9 else float(qs * (bid - gana) - 0.07 * bid * (1 - bid) * qs)
+    return 0.0 if qs < 5.0 - 1e-9 else float(qs * (bt - gana) - 0.07 * bt * (1 - bt) * qs)
 def extras(ns, R, C):
     """columnas extra de R (variantes planas, BASE): pnl_nr/reb, burst (sec. 6), mk1/mk5/mk30 (mid de L a +1/+5/+30 s menos el precio de relleno), sv150/500/1000 (pnl(vender al mejor bid en tf+delta) - pnl(mantener))."""
-    D = ns['D']; TPX = ns['_TPX']; R['pnl_nr'] = R.q * (R.gana - R.L); R['reb'] = R.pnl - R.pnl_nr
+    D = ns['D']; TPX = ns['_TPX']; propios = tuple(getattr(ns.get('G'), 'LEVELS', ())); R['pnl_nr'] = R.q * (R.gana - R.L); R['reb'] = R.pnl - R.pnl_nr
     if len(R) == 0:
         for c in ('burst', 'burst_known', 'mk1', 'mk5', 'mk30', 'sv150', 'sv500', 'sv1000'): R[c] = []
         return R
@@ -179,16 +230,20 @@ def extras(ns, R, C):
     cols = {c: [] for c in ('burst', 'burst_known', 'mk1', 'mk5', 'mk30', 'sv150', 'sv500', 'sv1000')}
     for r in R.itertuples():
         k = int(r.k); tf = int(r.tf); rows = idx.get((k, tf), []); bks = [bl.get((a, b)) for a, b in rows]
-        cols['burst_known'].append(any(x is not None for x in bks)); cols['burst'].append(any((x, D.mid[k]) in rafagas for x in bks if x is not None))
+        kn = any(x is not None for x in bks); cols['burst_known'].append(kn); cols['burst'].append(float(any((x, D.mid[k]) in rafagas for x in bks if x is not None)) if kn else float('nan'))   # burst DESCONOCIDO = NaN, no False
         for nm, dt_ in (('mk1', 1000), ('mk5', 5000), ('mk30', 30000)):
             b = D.book(k, tf + dt_); cols[nm].append(((b[0] + b[1]) / 2 - r.L) if (b is not None and np.isfinite(b[0]) and np.isfinite(b[1])) else np.nan)
         for nm, dt_ in (('sv150', 150), ('sv500', 500), ('sv1000', 1000)):
             b = D.book(k, tf + dt_)
-            if b is None or not np.isfinite(b[0]) or b[0] <= 0.0: cols[nm].append(0.0); continue
-            cols[nm].append(sv_delta(float(r.q), float(b[0]), float(b[2]), float(r.gana)))
+            if b is None: cols[nm].append(np.nan); continue      # sin libro = dato FALTANTE (no 0)
+            if not np.isfinite(b[0]) or b[0] <= 0.0: cols[nm].append(0.0); continue      # libro sin bid = no se puede vender: delta 0
+            cols[nm].append(sv_delta(float(r.q), float(b[0]), float(b[2]), float(r.gana), propios))
     for c, v in cols.items(): R[c] = v
     return R
 # ------------------------------------------------------------------ ejecucion
+def fichero_ficticio(od):
+    """passT.py calcula OUT = dirname(__file__) + '/out/': el __file__ ficticio debe colgar del PADRE de `od` (od = .../out/) para que OUT == od (bug 10-Nov: con od + 'passdb_run.py' salia .../out/out/)."""
+    return os.path.dirname(os.path.dirname(od)) + '/passdb_run.py'
 def correr(d, seed=None):
     T0 = time.time(); main = seed is None; od = HERE + 'out/' if main else HERE + f'placebo/s{seed}/out/'; os.makedirs(od, exist_ok=True)
     if os.path.exists(od + f'RX_{d}.pkl'): print('ya', d, seed); return
@@ -201,20 +256,22 @@ def correr(d, seed=None):
         if not xf: raise SystemExit(f'ERROR_DATOS: falta x_{d}')
         sal = salud_binance(d, bad_h, xf); excl = {'dia': d, 'horas_excluidas': sal['horas_excluidas']}; atomic_json(HERE + f'out/excl_{d}.json', excl)
     else:
-        sal = None; excl = json.load(open(HERE + f'out/excl_{d}.json'))
+        sal = None
     ctx = Ctx(d, seed); vn = MAIN_VN if main else PLA_VN
+    check_band(niveles_desde_fuente())
     src = parchear(vn); sys.argv = ['passT.py', d]
-    ns = {'__file__': od + 'passdb_run.py', '__name__': '__main__', '_VN': vn, '_EXTRA_BAD': {(d, int(h)) for h in excl['horas_excluidas']}, '_db_prepare': ctx.prepare, '_DB_SPECS': ctx.db_specs,
+    ns = {'__file__': fichero_ficticio(od), '__name__': '__main__', '_VN': vn, '_db_prepare': ctx.prepare, '_DB_SPECS': ctx.db_specs,
           '_SETFV': ctx.setfv, '_ACC': ctx.acc, '_FVX': ctx.fvx}
     exec(extraer_rt(), ns)    # qall, mid_at, cross_events, fill_v (rt_sim.py, sin editar) en el mismo espacio que passT
     exec(compile(src, 'passT_parcheado', 'exec'), ns)
-    R = ns['R']; D = ns['D']; E = ns['E']; ks = ns['ks']
+    R = ns['R']; D = ns['D']; E = ns['E']; ks = ns['ks']; check_band(tuple(ns['G'].LEVELS), R)
     R = R.copy(); R['pnl_nr'] = R.q * (R.gana - R.L); R['reb'] = R.pnl - R.pnl_nr
     if main:
         C = cargar_chain(d, D); Rp = R[~R['var'].str.contains('@')].copy(); Rp = extras(ns, Rp, C); Rc = R[R['var'].str.contains('@')]
         R = pd.concat([Rp, Rc], ignore_index=True)
-        tot = [k for k in E.ks if E.sane(k) == 'ok']; vl = validar_lado(C, D, ks)
-        cov = dict(dia=d, tokens_ok=len(tot), tokens_con_desenlace=len(ks), cobertura_desenlace=(len(ks) / len(tot) if tot else float('nan')), binance=sal, lado_print=vl,
+        hx = excl['horas_excluidas']; fuera = lambda k: not bool(mascara_excluidas([int(D.fin[k])], hx)[0])      # la exclusion de Binance se aplica DESPUES (filtro), RX trae todas las horas buenas de tx_ws
+        tot = [k for k in E.ks if E.sane(k) == 'ok' and fuera(k)]; ksf = [k for k in ks if fuera(k)]; vl = validar_lado(C, D, ksf)
+        cov = dict(dia=d, tokens_ok=len(tot), tokens_con_desenlace=len(ksf), cobertura_desenlace=(len(ksf) / len(tot) if tot else float('nan')), binance=sal, lado_print=vl,
                    burst_known=float(Rp.burst_known.mean()) if len(Rp) else float('nan'), segundos=round(time.time() - T0, 1),
                    eval_sha=sha_f(__file__))
         atomic_json(HERE + f'out/cov_{d}.json', cov); atomic_json(HERE + f'out/vida_{d}.json', ctx.vida)

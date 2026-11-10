@@ -1,0 +1,261 @@
+{
+ "pass_": true,
+ "checks": {
+  "A1 RX filtrado == RT filtrado (G0 y CXJ150, 10 dias, fila a fila y suma pnl)": true,
+  "A2 G0 n=2938": true,
+  "A2 G0 pnl -166,9+-1": true,
+  "A2 G0 EV -0,076": true,
+  "A2 dPnL CXJ150 +128+-1": true,
+  "A3 dias sin filas excluidas: RX == RT sin filtro (>=1 dia)": true
+ },
+ "valores": {
+  "union_g0_n": 2938,
+  "union_g0_pnl": -166.88727978950766,
+  "union_g0_ev": -0.07627655042735415,
+  "union_d_cxj150": 128.28510099734768,
+  "filtrado_g0_n": 2499,
+  "filtrado_g0_pnl": -106.29251782247226,
+  "filtrado_g0_ev": -0.05708616353776551,
+  "filtrado_d_cxj150": 120.2612149397667
+ },
+ "A1_por_dia": {
+  "2026-10-26": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-10-27": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-10-28": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-10-29": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-10-30": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-10-31": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-11-01": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-11-02": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-11-03": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-11-04": {
+   "G0": true,
+   "CXJ150": true
+  }
+ },
+ "A3_dias_sin_filas_excluidas": {
+  "2026-10-30": {
+   "G0": true,
+   "CXJ150": true
+  },
+  "2026-11-03": {
+   "G0": true,
+   "CXJ150": true
+  }
+ },
+ "informativo_por_dia": {
+  "2026-10-26": {
+   "horas_excluidas": [
+    5,
+    21,
+    22
+   ],
+   "filas_RT_excluidas": {
+    "G0": 69,
+    "CXJ150": 68
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-10-27": {
+   "horas_excluidas": [
+    6,
+    10,
+    22
+   ],
+   "filas_RT_excluidas": {
+    "G0": 92,
+    "CXJ150": 79
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-10-28": {
+   "horas_excluidas": [
+    3,
+    12,
+    22
+   ],
+   "filas_RT_excluidas": {
+    "G0": 48,
+    "CXJ150": 44
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-10-29": {
+   "horas_excluidas": [
+    3,
+    10,
+    22
+   ],
+   "filas_RT_excluidas": {
+    "G0": 44,
+    "CXJ150": 32
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-10-30": {
+   "horas_excluidas": [
+    3
+   ],
+   "filas_RT_excluidas": {
+    "G0": 0,
+    "CXJ150": 0
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-10-31": {
+   "horas_excluidas": [
+    0,
+    14,
+    18,
+    19,
+    21
+   ],
+   "filas_RT_excluidas": {
+    "G0": 83,
+    "CXJ150": 81
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-11-01": {
+   "horas_excluidas": [
+    1,
+    2,
+    10,
+    18,
+    20,
+    21
+   ],
+   "filas_RT_excluidas": {
+    "G0": 69,
+    "CXJ150": 68
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-11-02": {
+   "horas_excluidas": [
+    22
+   ],
+   "filas_RT_excluidas": {
+    "G0": 16,
+    "CXJ150": 14
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-11-03": {
+   "horas_excluidas": [],
+   "filas_RT_excluidas": {
+    "G0": 0,
+    "CXJ150": 0
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  },
+  "2026-11-04": {
+   "horas_excluidas": [
+    21
+   ],
+   "filas_RT_excluidas": {
+    "G0": 18,
+    "CXJ150": 16
+   },
+   "RX_sin_filtrar_igual_RT": {
+    "G0": true,
+    "CXJ150": true
+   }
+  }
+ },
+ "descriptivo_quemados_NO_DECIDE": {
+  "DB1_BASE": {
+   "dpnl_con_rebate": 144.46281890635657,
+   "dpnl_sin_rebate": 152.5453295236876,
+   "n_arm": 1597,
+   "n_g0": 2499
+  },
+  "DB1_CROSS": {
+   "dpnl_con_rebate": 37.81947932860025,
+   "dpnl_sin_rebate": 41.01079141580625,
+   "n_arm": 2977,
+   "n_g0": 3348
+  },
+  "DB2_BASE": {
+   "dpnl_con_rebate": 83.0997096668971,
+   "dpnl_sin_rebate": 87.68701474746756,
+   "n_arm": 2006,
+   "n_g0": 2499
+  },
+  "DB2_CROSS": {
+   "dpnl_con_rebate": -40.80545108269154,
+   "dpnl_sin_rebate": -38.70466474017542,
+   "n_arm": 3110,
+   "n_g0": 3348
+  }
+ },
+ "code_sha": "f33f2e4dd1483d6f7ae249ae6bdd7baddeda42f4b7d0edf854a6cbf142f2c3d4",
+ "fecha": "2026-11-10",
+ "dias": [
+  "2026-10-26",
+  "2026-10-27",
+  "2026-10-28",
+  "2026-10-29",
+  "2026-10-30",
+  "2026-10-31",
+  "2026-11-01",
+  "2026-11-02",
+  "2026-11-03",
+  "2026-11-04"
+ ],
+ "criterio": "ADDENDUM3 \u00a7A (borrador)"
+}

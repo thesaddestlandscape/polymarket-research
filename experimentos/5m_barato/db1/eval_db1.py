@@ -14,19 +14,39 @@ import eval_thru1 as E1, passdb as P
 Q = E1.Q
 OUT = HERE + 'out/'; PLA = HERE + 'placebo/'; PBD = E1.PB; DESDE = '2026-11-10'; TOPE = '2026-12-31'; CP20_NO_ANTES = '2026-11-30'
 PREREG = '/root/polymarket-research/misiones/5m_barato/docs/PREREG_DB1.md'; PREREG_SHA = '1d12afa2f22a1bbb3ccece15b2aec01f437d86b7ef83f2a23479708e1197e998'
-SEED = 20261110; B = 4000; QUEMADOS = E1.QUEMADOS
+PREREG_ADD1 = '/root/polymarket-research/misiones/5m_barato/docs/PREREG_DB1_ADDENDUM1.md'; SEED = 20261110; B = 4000; QUEMADOS = E1.QUEMADOS
 ARMS = {'DB1': dict(v='DB1_150', inv='INV1_150', pla='PDB1_150', desc=['DB1_300', 'DB1_1000']), 'DB2': dict(v='DB2_150', inv='INV2_150', pla='PDB2_150', desc=['DB2_300', 'DB2_1000'])}
 RMR_ARMS = ['G0', 'DB1_150', 'DB2_150', 'DBU_150']
 def sha_codigo(): return hashlib.sha256((P.sha_f(P.__file__) + P.sha_f(__file__)).encode()).hexdigest()
+def verificar_congelados():
+    """Fallo ruidoso si PREREG_DB1 o su ADDENDUM1 no son los congelados (sha256 del fichero)."""
+    for f, sh in ((PREREG, PREREG_SHA), (PREREG_ADD1, P.ADD1_SHA)):
+        assert P.sha_f(f) == sh, f'{os.path.basename(f)} distinto del congelado ({sh[:8]})'
+def clave_validez(): return f'{PREREG_SHA}|{P.ADD1_SHA}|{sha_codigo()}'     # un cambio de prereg, addendum o codigo invalida la cache de validez
 def hora_bloqueada(now=None):
     h = now or dt.datetime.now(dt.timezone.utc); m = h.hour * 60 + h.minute; return (360 <= m < 555) or (1335 <= m < 1350)
 def nr(x): return x.assign(pnl=x.pnl_nr) if len(x) else x      # decisiones SIN rebate
 def V(R, name): return R[R['var'] == name]
-def cargar(dias, d_out=None):
+def excluidas(d, G=None, d_ex=None):
+    """horas UTC excluidas por Binance del dia d (ADDENDUM1; G=None -> G=30 s de excl_<D>.json; G='15'|'60' -> sensibilidad R6 de cov_<D>.json). Falta el fichero = ERROR (missing != 'sin exclusiones')."""
+    d_ex = d_ex or OUT
+    if G is None: return [int(h) for h in json.load(open(d_ex + f'excl_{d}.json'))['horas_excluidas']]
+    return [int(h) for h in json.load(open(d_ex + f'cov_{d}.json'))['binance']['excl_sensibilidad_R6'][str(G)]]
+def filtrar(x, horas):
+    """ADDENDUM3 (a): RX se produce con todas las horas buenas de tx_ws y la exclusion de Binance se aplica DESPUES: fuera los mercados cuya hora de apertura (fin-300) o de cierre esta excluida."""
+    return x[~P.mascara_excluidas(x.fin.values, horas)] if len(x) else x
+def cargar(dias, d_out=None, G=None, d_ex=None, filtro=True):
     d_out = d_out or OUT; fr = [pd.read_pickle(d_out + f'RX_{d}.pkl') for d in dias]
     for d, x in zip(dias, fr):
         if len(x) and (x['dia'].astype(str) != d).any(): raise ValueError(f'RX_{d}: filas con dia != {d}')
+    if filtro: fr = [filtrar(x, excluidas(d, G, d_ex)) for d, x in zip(dias, fr)]
     return pd.concat(fr, ignore_index=True) if fr else pd.DataFrame()
+def vida_suma(d, G=None):
+    """vida_<D>.json = {variante: {'ACT|fin|LADO': ms}} -> {variante: ms} de los mercados NO excluidos por Binance."""
+    out = {}
+    for v, m in leer_json(OUT + f'vida_{d}.json', {}).items():
+        fin = np.array([int(k.split('|')[1]) for k in m], np.int64); ms = np.array(list(m.values()), np.float64); ok = ~P.mascara_excluidas(fin, excluidas(d, G)) if len(fin) else np.zeros(0, bool); out[v] = float(ms[ok].sum())
+    return out
 def atomic(path, text): E1.atomic(path, text)
 def fechas(desde, hasta): return [(pd.Timestamp(desde) + pd.Timedelta(days=i)).strftime('%Y-%m-%d') for i in range((pd.Timestamp(hasta) - pd.Timestamp(desde)).days + 1)]
 # ---------------------------------------------------------------- produccion / checkpoint durable
@@ -37,7 +57,7 @@ def tiene_insumos(d):
 def producir(d, quemado=False, ahora=None):
     if hora_bloqueada(ahora): raise SystemExit('BLOQUEADO: no se lanza trabajo pesado entre 06:00-09:15Z ni 22:15-22:30Z')
     if os.path.exists(OUT + f'RX_{d}.pkl'): print('ya', d); return 0
-    falta = tiene_insumos(d)
+    verificar_congelados(); falta = tiene_insumos(d)
     if falta: raise SystemExit('PENDIENTE: faltan ' + ','.join(falta))
     t0 = dt.datetime.now(dt.timezone.utc); os.makedirs(OUT, exist_ok=True)
     r = subprocess.run(['nice', '-n', '19', 'ionice', '-c3', 'bash', '-c', f'ulimit -v 3000000; export OMP_NUM_THREADS=1; cd {HERE} && python3 -I passdb.py dia {d}'], capture_output=True, text=True)
@@ -55,37 +75,49 @@ def dia_valido(d, hoy=None, ahora=None):
     hoy = hoy or Q.hoy_utc(); cache = OUT + f'validez_{d}.json'
     if d >= hoy: return dict(dia=d, valido_db1=False, valido_db2=False, en_curso=True, motivo='EN CURSO')
     c = leer_json(cache, None)
-    if c and c.get('prereg_sha') == PREREG_SHA: return c
+    if c and c.get('clave') == clave_validez(): return c
     falta = tiene_insumos(d) + ([] if os.path.exists(OUT + f'RX_{d}.pkl') and os.path.exists(OUT + f'cov_{d}.json') else ['RX/cov'])
     if falta: return dict(dia=d, valido_db1=False, valido_db2=False, pendiente=True, motivo='PENDIENTE: faltan ' + ','.join(falta))
     ahora = ahora or pd.Timestamp.now(tz='UTC'); ok, why = E1.asentado(d, _xpath(d), PBD + f'bad_{d}.json', ahora)
     if not ok: return dict(dia=d, valido_db1=False, valido_db2=False, pendiente=True, motivo='PENDIENTE: dia ' + why)
     cov = json.load(open(OUT + f'cov_{d}.json')); bn = cov['binance']; mot = []
-    if not bn['valido']: mot.append(bn['motivo'])
+    if bn.get('regla') != 'ADDENDUM1' or bn.get('addendum1_sha') != P.ADD1_SHA or bn.get('lectura_r4') != 'ADDENDUM3-B': mot.append('cov generado con un criterio de salud Binance distinto de ADDENDUM1 + lectura R4 de ADDENDUM3-B (reproducir el dia)')
+    elif not bn['valido']: mot.append(bn['motivo'])
     cd = cov['cobertura_desenlace']
     if not (cd == cd and cd >= 0.98): mot.append(f'desenlace oficial {cd} < 0,98')
     v1 = not mot; lp = cov['lado_print']; mot2 = list(mot) + ([] if lp['valido'] else [lp['motivo']])
-    r = dict(dia=d, prereg_sha=PREREG_SHA, valido_db1=v1, valido_db2=bool(v1 and lp['valido']), motivo='; '.join(mot2), cobertura_desenlace=cd, binance_min=bn['cobertura_min'], concordancia_lado=lp.get('concordancia'), horas_excluidas=bn['horas_excluidas'])
+    r = dict(dia=d, clave=clave_validez(), prereg_sha=PREREG_SHA, addendum1_sha=P.ADD1_SHA, valido_db1=v1, valido_db2=bool(v1 and lp['valido']), motivo='; '.join(mot2), cobertura_desenlace=cd, binance_min=bn['cobertura_min'], concordancia_lado=lp.get('concordancia'), horas_excluidas=bn['horas_excluidas'], horas_excluidas_hueco=bn.get('horas_excluidas_hueco'), excl_sensibilidad_R6=bn.get('excl_sensibilidad_R6'), horas_txws_perdidas=bn.get('horas_bad_txws'), horas_binance_perdidas=bn['horas_excluidas'], horas_restantes=bn.get('horas_restantes'))
     atomic(cache, json.dumps(r, indent=1, default=float)); return r
 def _xpath(d):
     sys.path.insert(0, Q11 + 'barrido_multi'); import bfeat; return bfeat.xfile(d)
 # ---------------------------------------------------------------- aceptacion
+def _claves(x): return x[['k', 'L', 'tf', 'q']].round(6).sort_values(['k', 'L', 'tf', 'q']).reset_index(drop=True)
+def _iguales(a, b): return bool(len(a) == len(b) and _claves(a).equals(_claves(b)) and abs(float(a.pnl.sum()) - float(b.pnl.sum())) <= 1e-6)
 def aceptacion(salida=None):
+    """ADDENDUM3 §A (borrador del validator; criterio sustituto POST HOC, igualdad EXACTA, sin umbrales): sobre los 10 QUEMADOS y var in {G0, CXJ150}, con RX sin filtrar (todas las horas buenas de tx_ws) y RT de toxicidad_thru1/out:
+    A1: RX filtrado por las horas de Binance == RT filtrado igual (filas (k,L,tf,q) a 1e-6 y suma de pnl). A2: RX filtrado + RT de los mercados excluidos reproduce el objetivo literal del prereg sec. 1 (G0 n=2938, -166,9+-1, EV -0,076; dPnL CXJ150 +128+-1).
+    A3: los dias sin filas de RT en horas excluidas tienen RX == RT sin filtro (debe haber >= 1). Informativo (no decide): RX sin filtrar == RT en todos los dias."""
+    verificar_congelados()
     salida = salida or HERE + 'aceptacion.json'; falta = [d for d in QUEMADOS if not os.path.exists(OUT + f'RX_{d}.pkl')]
     if falta: r = dict(pass_=False, motivo='faltan RX de quemados: ' + ','.join(falta)); atomic(salida, json.dumps(r, indent=1)); return r
-    R = cargar(QUEMADOS); g0 = V(R, 'G0'); cx = V(R, 'CXJ150'); ev = float(g0.pnl.sum() / g0.cost.sum()); dcx = float(E1.dser(cx, g0).sum())
-    ref = pd.concat([pd.read_pickle(E1.TX + f'RT_{d}.pkl') for d in QUEMADOS], ignore_index=True); difs = {}
-    for v in ('G0', 'CXJ150'):
-        a = V(R, v)[['k', 'L', 'tf', 'q']].round(6).sort_values(['k', 'L', 'tf', 'q']).reset_index(drop=True); b = ref[ref['var'] == v][['k', 'L', 'tf', 'q']].round(6).sort_values(['k', 'L', 'tf', 'q']).reset_index(drop=True)
-        difs[v] = int(len(a) != len(b) or not a.equals(b))
-    chk = {'G0 n=2938': len(g0) == 2938, 'G0 pnl -166,9+-1': abs(float(g0.pnl.sum()) + 166.9) <= 1.0, 'G0 EV -0,076': round(ev, 3) == -0.076, 'dPnL CXJ150 +128+-1': abs(dcx - 128.0) <= 1.0,
-           'G0 igual a toxicidad_thru1/out (fila a fila)': difs['G0'] == 0, 'CXJ150 igual a toxicidad_thru1/out (fila a fila)': difs['CXJ150'] == 0}
-    desc = {}
+    VARS = ('G0', 'CXJ150'); a1 = {}; a3 = {}; info = {}; unionR = {v: [] for v in VARS}
+    for d in QUEMADOS:
+        rx = pd.read_pickle(OUT + f'RX_{d}.pkl'); rt = pd.read_pickle(E1.TX + f'RT_{d}.pkl'); ex = excluidas(d); mx = P.mascara_excluidas(rx.fin.values, ex); mr = P.mascara_excluidas(rt.fin.values, ex)
+        a1[d] = {v: _iguales(rx[(rx['var'] == v) & ~mx], rt[(rt['var'] == v) & ~mr]) for v in VARS}
+        vacio = not bool(mr[rt['var'].isin(VARS).values].any()); info[d] = dict(horas_excluidas=ex, filas_RT_excluidas={v: int((mr & (rt['var'] == v).values).sum()) for v in VARS}, RX_sin_filtrar_igual_RT={v: _iguales(rx[rx['var'] == v], rt[rt['var'] == v]) for v in VARS})
+        if vacio: a3[d] = {v: _iguales(rx[rx['var'] == v], rt[rt['var'] == v]) for v in VARS}
+        for v in VARS: unionR[v] += [rx[(rx['var'] == v) & ~mx], rt[(rt['var'] == v) & mr]]
+    g0 = pd.concat(unionR['G0'], ignore_index=True); cx = pd.concat(unionR['CXJ150'], ignore_index=True); ev = float(g0.pnl.sum() / g0.cost.sum()); dcx = float(E1.dser(cx, g0).sum())
+    chk = {'A1 RX filtrado == RT filtrado (G0 y CXJ150, 10 dias, fila a fila y suma pnl)': all(all(x.values()) for x in a1.values()),
+           'A2 G0 n=2938': len(g0) == 2938, 'A2 G0 pnl -166,9+-1': abs(float(g0.pnl.sum()) + 166.9) <= 1.0, 'A2 G0 EV -0,076': round(ev, 3) == -0.076, 'A2 dPnL CXJ150 +128+-1': abs(dcx - 128.0) <= 1.0,
+           'A3 dias sin filas excluidas: RX == RT sin filtro (>=1 dia)': bool(a3) and all(all(x.values()) for x in a3.values())}
+    R = cargar(QUEMADOS); gf = V(R, 'G0'); cf = V(R, 'CXJ150'); desc = {}
     for a, c in ARMS.items():
         for f in ('BASE', 'CROSS'):
-            n = c['v'] if f == 'BASE' else c['v'] + '@CROSS'; g = g0 if f == 'BASE' else V(R, 'G0@CROSS'); x = V(R, n)
+            n = c['v'] if f == 'BASE' else c['v'] + '@CROSS'; g = gf if f == 'BASE' else V(R, 'G0@CROSS'); x = V(R, n)
             desc[f'{a}_{f}'] = dict(dpnl_con_rebate=float(E1.dser(x, g).sum()), dpnl_sin_rebate=float(E1.dser(nr(x), nr(g)).sum()), n_arm=len(x), n_g0=len(g))
-    r = dict(pass_=all(chk.values()), checks=chk, valores=dict(g0_n=len(g0), g0_pnl=float(g0.pnl.sum()), g0_ev=ev, d_cxj150=dcx), descriptivo_quemados_NO_DECIDE=desc, code_sha=sha_codigo(), fecha=Q.hoy_utc(), dias=QUEMADOS)
+    r = dict(pass_=all(chk.values()), checks=chk, valores=dict(union_g0_n=len(g0), union_g0_pnl=float(g0.pnl.sum()), union_g0_ev=ev, union_d_cxj150=dcx, filtrado_g0_n=len(gf), filtrado_g0_pnl=float(gf.pnl.sum()), filtrado_g0_ev=float(gf.pnl.sum() / gf.cost.sum()),
+             filtrado_d_cxj150=float(E1.dser(cf, gf).sum())), A1_por_dia=a1, A3_dias_sin_filas_excluidas=a3, informativo_por_dia=info, descriptivo_quemados_NO_DECIDE=desc, code_sha=sha_codigo(), fecha=Q.hoy_utc(), dias=QUEMADOS, criterio='ADDENDUM3 §A (borrador)')
     atomic(salida, json.dumps(r, indent=1, default=float)); return r
 def aceptacion_ok():
     a = leer_json(HERE + 'aceptacion.json', {}); return bool(a.get('pass_') and a.get('code_sha') == sha_codigo()), a
@@ -107,15 +139,23 @@ def metricas(R, arm, days):
     fr = lambda df: df.L.map(franja); dim['franja_L'] = {v: float(E1.dser(x[fr(x) == v], g0[fr(g0) == v]).sum()) for v in ('0,05-0,15', '0,15-0,25', '0,25-0,35')}; out['dim'] = dim
     vid = {}
     for d in days:
-        for k_, v in leer_json(OUT + f'vida_{d}.json', {}).items(): vid[k_] = vid.get(k_, 0) + v
+        for k_, v in vida_suma(d).items(): vid[k_] = vid.get(k_, 0) + v
     out['tiempo_quitado'] = (1 - vid.get(c['v'], 0) / vid['G0']) if vid.get('G0') else float('nan')
-    out['coin_pos_max'] = max_coin_share(dim['moneda']); return out
+    out['coin_pos_max'] = max_coin_share(dim['moneda']); out['r6'] = sens_r6(arm, days, out['base']['tot']); return out
+def sens_r6(arm, days, tot30):
+    """PREREG_DB1_ADDENDUM1 R6 (informe, no veredicto): dPnL BASE (sin rebate) con G=15 s y G=60 s sobre las mismas RX; se anota si el signo del dPnL global cambia entre G=15, 30 y 60."""
+    c = ARMS[arm]; o = {'30': float(tot30)}
+    for G in ('15', '60'):
+        R = cargar(days, G=G); o[G] = float(E1.dser(nr(V(R, c['v'])), nr(V(R, 'G0'))).sum())
+    o['cambio_signo'] = bool(len({np.sign(v) for v in o.values()}) > 1); return o
 def max_coin_share(by):
     pos = {k: v for k, v in by.items() if v > 0}; tot = sum(pos.values()); return (max(pos.values()) / tot) if tot > 0 else float('nan')
 def rmr(R):
-    out = {}; g0e = None
+    """RMR solo sobre rellenos de rafaga CONOCIDA (burst_known); los desconocidos no cuentan como 'no rafaga'. Reporta cobertura (conocidos/todos) por variante."""
+    out = {}
     for v in RMR_ARMS:
-        x = V(R, v); b = x[x.burst]; out[v] = dict(n=int(len(b)), eur=float(b.cost.sum()), pnl=float(b.pnl_nr.sum()), n_todos=int(len(x)), conocido=float(x.burst_known.mean()) if len(x) else float('nan'))
+        x = V(R, v); kn = x[x.burst_known.astype(bool)] if len(x) else x; b = kn[kn.burst == 1] if len(kn) else kn
+        out[v] = dict(n=int(len(b)), eur=float(b.cost.sum()), pnl=float(b.pnl_nr.sum()), n_conocidos=int(len(kn)), n_todos=int(len(x)), conocido=(len(kn) / len(x)) if len(x) else float('nan'))
     g = out['G0']['eur']
     for v in RMR_ARMS[1:]: out[v]['fraccion_cancelable'] = (1 - out[v]['eur'] / g) if g > 0 else float('nan')
     return out
@@ -127,14 +167,14 @@ def markout_salida(R, arms=('G0', 'DB1_150', 'DB2_150', 'DBU_150')):
         for h in ('mk1', 'mk5', 'mk30'):
             m = x[h] <= -0.02; perd = x.gana == 0
             r[h] = dict(marcados=int(m.sum()), precision=float((m & perd).sum() / m.sum()) if m.sum() else float('nan'), recobrado=float((m & perd).sum() / perd.sum()) if perd.sum() else float('nan'))
-        r['salida'] = {s: dict(todos=float(x[s].sum()), marcados_mk1=float(x[x.mk1 <= -0.02][s].sum()), marcados_mk5=float(x[x.mk5 <= -0.02][s].sum())) for s in ('sv150', 'sv500', 'sv1000')}; o[v] = r
+        r['salida'] = {s: dict(todos=float(x[s].sum()), marcados_mk1=float(x[x.mk1 <= -0.02][s].sum()), marcados_mk5=float(x[x.mk5 <= -0.02][s].sum()), faltan=int(x[s].isna().sum()), n=int(len(x))) for s in ('sv150', 'sv500', 'sv1000')}; o[v] = r      # sum() ignora NaN (sin libro = faltante)
     return o
 def pvalor(d_obs, perm):
     m = float(np.mean(perm)); p = (1 + sum(abs(x - m) >= abs(d_obs - m) for x in perm)) / (len(perm) + 1); return m, float(p)
 def agregar_placebo(cp, arm, days, R=None):
     c = ARMS[arm]; R = R if R is not None else cargar(days); g0 = nr(V(R, 'G0')); d_obs = float(E1.dser(nr(V(R, c['v'])), g0).sum()); perm = []
     for s in range(1, 100):
-        Pp = pd.concat([pd.read_pickle(PLA + f's{s}/out/RX_{d}.pkl') for d in days], ignore_index=True); perm.append(float(E1.dser(nr(V(Pp, c['pla'])), g0).sum()))
+        Pp = cargar(days, PLA + f's{s}/out/', d_ex=OUT); perm.append(float(E1.dser(nr(V(Pp, c['pla'])), g0).sum()))
     m, p = pvalor(d_obs, perm); r = dict(arm=arm, cp=cp, dias=list(days), d_obs=d_obs, m=m, p=p, n_semillas=len(perm), perm=perm)
     atomic(HERE + f'placebo_db1_cp{cp}_{arm}.json', json.dumps(r, indent=1)); return r
 def placebo(cp, arm, days):
@@ -148,7 +188,9 @@ def placebo(cp, arm, days):
 # ---------------------------------------------------------------- veredicto de checkpoint (sec. 5)
 def veredicto_cp(m, cp, pl, inv_m):
     """-> (etiqueta, dict de criterios). m = metricas; pl = placebo json o None; inv_m = media del placebo (m del json) para C7."""
+    if cp not in (10, 20): raise ValueError(f'veredicto_cp: cp={cp} no es un checkpoint (10 o 20)')
     b = m['base']; c = {}; nd = m['nd']; dd = list(b['dias'].values())
+    if nd < cp: return 'INSUFFICIENT', {'motivo': f'{nd} dias validos < checkpoint {cp}: no se emite veredicto fuera de checkpoint'}
     if nd <= 2 or b['ncierres'] < 3 or b['tot'] != b['tot']: return 'INSUFFICIENT', {'motivo': 'NaN, <3 cierres o <=2 dias validos'}
     if b['tot'] <= 0: return 'REFUTA', {'motivo': f"dPnL BASE {b['tot']:+.2f} <= 0 en checkpoint {cp} con {nd} dias validos"}
     c['C1'] = nd >= 10 and m['n_g0'] >= 300 and m['quitados'] >= 40
@@ -174,23 +216,25 @@ def fmt_arm(m, rm=None):
     if x: L.append(f"   dPnL CROSS {x['tot']:+.2f} IC90 cierre ({x['ic_c'][0]:+.2f},{x['ic_c'][1]:+.2f}) dia ({x['ic_d'][0]:+.2f},{x['ic_d'][1]:+.2f}); STRICT/OPT/THIN {m['otras_cotas']['STRICT']:+.2f}/{m['otras_cotas']['OPT']:+.2f}/{m['otras_cotas']['THIN']:+.2f}; con rebate (aparte) BASE {m['dpnl_con_rebate']:+.2f}")
     L.append(f"   EV por EUR (Σpnl/Σcoste, sin rebate): G0 {m['ev_g0_por_eur']:+.3f} -> arm {m['ev_arm_por_eur']:+.3f}; EV por unidad arm {m['ev_arm_por_unidad']:+.3f}; rebate arm {m['rebate_arm']:+.2f} / G0 {m['rebate_g0']:+.2f}")
     L.append(f"   por moneda {fmt_d(m['dim']['moneda'])} | por lado {fmt_d(m['dim']['lado'])} | por franja L {fmt_d(m['dim']['franja_L'])} | mayor moneda del dPnL positivo {m['coin_pos_max']:.2f} | inversion dPnL {m['inv']:+.2f}")
-    L.append('   dPnL por dia: ' + ' '.join(f"{d[5:]}:{v:+.1f}" for d, v in b['dias'].items())); return L
+    L.append('   dPnL por dia: ' + ' '.join(f"{d[5:]}:{v:+.1f}" for d, v in b['dias'].items()))
+    r6 = m['r6']; L.append(f"   R6 sensibilidad dPnL BASE (sin rebate) G=15 s {r6['15']:+.2f} | G=30 s {r6['30']:+.2f} | G=60 s {r6['60']:+.2f}" + (' | CAMBIO DE SIGNO entre G (anotar)' if r6['cambio_signo'] else ' | mismo signo')); return L
 def fmt_d(d): return ' '.join(f'{k}:{v:+.1f}' for k, v in d.items())
 def informe(hoy, a):
     L = [f'# INFORME DIARIO PREREG_DB1 (DESCRIPTIVO; veredicto solo en checkpoints) generado {dt.datetime.now(dt.timezone.utc):%FT%TZ} | hoy={hoy} | codigo {sha_codigo()[:12]} | prereg {PREREG_SHA[:8]}']
     ok, ac = aceptacion_ok(); est = leer_json(HERE + 'estado_db1.json', {'cp': {}, 'terminal': {}}); cand = [d for d in fechas(DESDE, hoy) if d < hoy and d <= TOPE]
     V_ = {d: dia_valido(d, hoy) for d in cand}; cob = {d: ('valido_db1' if v['valido_db1'] else ('pendiente' if v.get('pendiente') else 'NO VALIDO')) + ('+db2' if v['valido_db2'] else '') for d, v in V_.items()}
     L.append(f'Dias candidatos {len(cand)}: ' + ', '.join(f'{d}={cob[d]}' for d in cand)); [L.append(f"  {d}: {v['motivo']}") for d, v in V_.items() if v['motivo'] and not v.get('en_curso')]
+    L.append('Horas por dia (tx_ws perdidas / Binance perdidas / restantes de 24; ADDENDUM3-B): ' + ', '.join(f"{d[5:]}: {len(v['horas_txws_perdidas'])}/{len(v['horas_binance_perdidas'])}/{v['horas_restantes']}" for d, v in V_.items() if v.get('horas_restantes') is not None))
     if not ok: L.append(f"INSUFFICIENT (motivo ACEPTACION): aceptacion sobre quemados {'no pasa' if ac else 'no ejecutada'} o sha de codigo distinto ({ac.get('motivo','') if ac else ''}); los dias se acumulan sin evaluarse"); return L, 'INSUFFICIENT'
     estado = 'OK'
     for arm in ARMS:
         days = [d for d in cand if V_[d]['valido_db2' if arm == 'DB2' else 'valido_db1']]; nd = len(days)
         if nd == 0: L.append(f'[{arm}] INSUFFICIENT: 0 dias validos'); continue
         R = cargar(days); m = metricas(R, arm, days); L += fmt_arm(m)
-        rm = rmr(R); L.append('   RMR (rellenos de rafaga residuales; sec. 6): ' + ' | '.join(f"{v}: n {x['n']} / {x['n_todos']} EUR {x['eur']:.1f} pnl {x['pnl']:+.1f}" + (f" cancelable {x['fraccion_cancelable']:.2f}" if 'fraccion_cancelable' in x else '') + f" (rafaga conocida {x['conocido']:.2f})" for v, x in rm.items()))
+        rm = rmr(R); L.append('   RMR (rellenos de rafaga residuales; sec. 6): ' + ' | '.join(f"{v}: n {x['n']} / {x['n_todos']} EUR {x['eur']:.1f} pnl {x['pnl']:+.1f}" + (f" cancelable {x['fraccion_cancelable']:.2f}" if 'fraccion_cancelable' in x else '') + f" (rafaga conocida {x['conocido']:.2f}, {x['n_conocidos']}/{x['n_todos']})" for v, x in rm.items()))
         ms = markout_salida(R)
         for v in ('G0', ARMS[arm]['v']):
-            r = ms[v]; L.append(f"   marcador ex ante {v}: " + ' '.join(f"{h}: marc {r[h]['marcados']} prec {r[h]['precision']:.2f} recob {r[h]['recobrado']:.2f}" for h in ('mk1', 'mk5', 'mk30')) + ' | salida (Δpnl vs mantener, todos/marc mk1) ' + ' '.join(f"{s}:{r['salida'][s]['todos']:+.1f}/{r['salida'][s]['marcados_mk1']:+.1f}" for s in ('sv150', 'sv500', 'sv1000')))
+            r = ms[v]; L.append(f"   marcador ex ante {v}: " + ' '.join(f"{h}: marc {r[h]['marcados']} prec {r[h]['precision']:.2f} recob {r[h]['recobrado']:.2f}" for h in ('mk1', 'mk5', 'mk30')) + ' | salida (Δpnl vs mantener, todos/marc mk1) ' + ' '.join(f"{s}:{r['salida'][s]['todos']:+.1f}/{r['salida'][s]['marcados_mk1']:+.1f} (sin libro {r['salida'][s]['faltan']}/{r['salida'][s]['n']})" for s in ('sv150', 'sv500', 'sv1000')))
         for cp_ in (10, 20):
             key = f'{arm}_cp{cp_}'
             if key in est['terminal']: L.append(f'   CHECKPOINT {cp_} ya decidido: {est["terminal"][key]}'); continue
@@ -206,7 +250,7 @@ def informe(hoy, a):
     L.append('Nota: techo de etiqueta sin L2 = CANDIDATO (EXPLORATORY hasta medicion L2). Si DB1 y CXJ150 (PREREG_Q11_THRU1_FWD) pasan a la vez: UN solo hallazgo, nunca sumados.')
     atomic(HERE + 'estado_db1.json', json.dumps(est, indent=1, default=float)); return L, estado
 def evaluar(a):
-    hoy = a.hoy or Q.hoy_utc(); t0 = dt.datetime.now(dt.timezone.utc)
+    verificar_congelados(); hoy = a.hoy or Q.hoy_utc(); t0 = dt.datetime.now(dt.timezone.utc)
     L, st = informe(hoy, a); txt = '\n'.join(L); atomic(HERE + 'ultimo_informe.txt', txt + '\n'); atomic(HERE + f'informe_db1_{hoy}.txt', txt + '\n'); print(txt)
     atomic(HERE + 'manifest_db1.json', json.dumps(dict(job='db1_forward_diario', prereg=PREREG, prereg_sha=PREREG_SHA, code_sha=sha_codigo(), engine_sha=P.SHA['ENG'], passT_sha=P.SHA['PT'], rt_sim_sha=P.SHA['RT'], hoy=hoy, inicio=f'{t0:%FT%TZ}',
         fin=f'{dt.datetime.now(dt.timezone.utc):%FT%TZ}', estado=('COMPLETE' if st == 'OK' else 'PARTIAL'), motivo=st, dias_con_RX=sorted(os.path.basename(f)[3:13] for f in glob.glob(OUT + 'RX_*.pkl')),
