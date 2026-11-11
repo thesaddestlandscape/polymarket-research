@@ -1,0 +1,4 @@
+timestamp_utc,slug,market_id,condition_id,activo,ventana_min,end_date,restante_s,strike,strike_src,spot,spot_src,dist_pct,lado_rezagado,best_ask,ask_usd_le2c,ask_usd_le3c,ask_usd_le5c,best_bid,py_yes_evento,outcome_real,rezagado_gano
+2026-11-11T00:04:48+00:00,btc-updown-5m-1794355200,6918031,0x5531557a15d856878cfbf6e4105062bf3083a32a31ec2658e0ba52bd6084b711,BTC,5,2026-11-11T00:05:00+00:00,11.6,73796.06,kline_open,73799.99,binance_ticker,0.00533,Down,,0,0,0,0.99,0.505,,
+2026-11-11T00:04:48+00:00,eth-updown-5m-1794355200,6918045,0x076b96460fada350ef2bebb04a8452bf75b2f048da73ee0854b66b803e81ea71,ETH,5,2026-11-11T00:05:00+00:00,11.6,2053.22,kline_open,2053.7,binance_ticker,0.02338,Down,,0,0,0,0.99,0.185,,
+2026-11-11T00:04:48+00:00,bnb-updown-5m-1794355200,6918041,0x7abdb9452bda6d5b5bfffe20d6f6906917d730255bfeef4e6154b485a682df4e,BNB,5,2026-11-11T00:05:00+00:00,11.6,680.59,kline_open,680.43,binance_ticker,-0.02351,Up,0.01,159.41,161.21,163.59,,0.425,,
