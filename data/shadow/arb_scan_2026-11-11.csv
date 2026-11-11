@@ -1,0 +1,12 @@
+timestamp_utc,tipo,accionable,event,end_date,n_brackets,suma_yes,suma_ask,suma_bid,gap_pct,profit_pct,roi_no_pct,liq_min,liq_total,rango_min,rango_max
+2026-11-11T00:01:03+00:00,OVERROUND,False,Bitcoin hashprice: week of November 9?,2026-11-16,3,1.47,2.91,0.03,-191.0,-193.0,-34.01,1.0,4.0,,
+2026-11-11T00:01:03+00:00,OVERROUND,False,Solana price on November 16?,2026-11-16,9,1.093,1.275,0.911,-27.5,-29.5,-3.08,927.0,10847.0,110,130
+2026-11-11T00:01:03+00:00,OVERROUND,False,Solana price on November 13?,2026-11-13,9,1.0785,1.234,0.923,-23.4,-25.4,-2.93,942.0,28509.0,110,140
+2026-11-11T00:01:03+00:00,OVERROUND,False,Solana price on November 15?,2026-11-15,9,1.102,1.233,0.971,-23.3,-25.3,-2.35,1217.0,17315.0,110,130
+2026-11-11T00:01:03+00:00,OVERROUND,False,Ethereum price on November 13?,2026-11-13,9,1.054,1.215,0.893,-21.5,-23.5,-3.29,3195.0,77445.0,1800,2700
+2026-11-11T00:01:03+00:00,OVERROUND,False,Solana price on November 14?,2026-11-14,9,1.048,1.191,0.905,-19.1,-21.1,-3.15,795.0,36557.0,110,130
+2026-11-11T00:01:03+00:00,OVERROUND,False,Ethereum price on November 15?,2026-11-15,9,1.0285,1.172,0.885,-17.2,-19.2,-3.39,1923.0,49011.0,1800,2700
+2026-11-11T00:01:03+00:00,OVERROUND,False,Ethereum price on November 14?,2026-11-14,9,1.0265,1.165,0.888,-16.5,-18.5,-3.35,1947.0,62392.0,1800,2700
+2026-11-11T00:01:03+00:00,OVERROUND,False,Solana price on November 12?,2026-11-12,9,1.0315,1.162,0.901,-16.2,-18.2,-3.2,908.0,11255.0,110,140
+2026-11-11T00:01:03+00:00,BRACKET_ARB,True,Ethereum price on November 11?,2026-11-11,9,0.845,0.865,0.825,13.5,11.5,-4.1,9678.0,138304.0,2000,2900
+2026-11-11T00:01:03+00:00,BRACKET_ARB,True,Bitcoin price on November 11?,2026-11-11,9,0.922,0.933,0.911,6.7,4.7,-3.08,20390.0,323204.0,72000,90000
