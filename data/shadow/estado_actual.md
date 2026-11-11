@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-11 12:50 UTC
+# Estado del bot — 2026-11-11 13:01 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,27 +13,27 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +64492.84 $ |
-| P&L sim compuesto | 🟢 +187993.70 $ (ficción Kelly: +738969% s/ operativo) |
-| P&L sim hoy (2026-11-11) | 🟢 +1289.64 $ |
-| Operaciones resueltas | 1397267 (799216 WIN / 598051 LOSS) — 57.2% |
-| Señales abiertas | 236931 |
+| P&L fiel (stake fijo 1$) | +64503.28 $ |
+| P&L sim compuesto | 🟢 +188010.88 $ (ficción Kelly: +739036% s/ operativo) |
+| P&L sim hoy (2026-11-11) | 🟢 +1306.82 $ |
+| Operaciones resueltas | 1397277 (799226 WIN / 598051 LOSS) — 57.2% |
+| Señales abiertas | 238022 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
 | GBM_LATE_15M_TARDIO | 66795 | 67.3% | +0.173 | ➡️ estable (últ. 1000) | +50392.56$ | 1.88$ | ✅ activa |
-| GBM_LATE_15M_ESPACIO_ATR | 69851 | 59.1% | +0.091 | ➡️ estable (últ. 1000) | +39766.30$ | 0.85$ | ✅ activa |
-| GBM_LATE_15M_MULTIHORIZONTE | 45490 | 67.9% | +0.179 | ➡️ estable (últ. 1000) | +37499.26$ | 1.78$ | ✅ activa |
-| GBM_LATE_15M | 69407 | 60.0% | +0.100 | ➡️ estable (últ. 1000) | +35963.09$ | 1.00$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 69853 | 59.1% | +0.091 | ➡️ estable (últ. 1000) | +39769.73$ | 0.85$ | ✅ activa |
+| GBM_LATE_15M_MULTIHORIZONTE | 45492 | 67.9% | +0.179 | ➡️ estable (últ. 1000) | +37503.18$ | 1.78$ | ✅ activa |
+| GBM_LATE_15M | 69409 | 60.0% | +0.100 | ➡️ estable (últ. 1000) | +35967.01$ | 1.00$ | ✅ activa |
 | GBM_LATE_5M | 16407 | 68.8% | +0.188 | ➡️ estable (últ. 1000) | +11952.47$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM | 111191 | 56.0% | +0.060 | ➡️ estable (últ. 1000) | +10766.23$ | 0.60$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 28955 | 50.1% | +0.001 | 📈 madura (+0.05) (últ. 1000) | +8130.31$ | 0.50$ | ✅ activa |
-| GBM_LATE_15M_PYCONFIRMADO | 12721 | 62.3% | +0.123 | 📉 agota (-0.04) (últ. 1000) | +6245.31$ | 1.25$ | ✅ activa |
-| MOMENTUM_IBS_15M_BALLENA | 67821 | 50.0% | -0.000 | ➡️ estable (últ. 1000) | +3602.37$ | 0.50$ | ⚠️ IC negativo |
+| GBM_LATE_15M_PYCONFIRMADO | 12722 | 62.3% | +0.123 | 📉 agota (-0.04) (últ. 1000) | +6247.27$ | 1.25$ | ✅ activa |
+| MOMENTUM_IBS_15M_BALLENA | 67822 | 50.0% | -0.000 | ➡️ estable (últ. 1000) | +3602.86$ | 0.50$ | ⚠️ IC negativo |
 | CANDIDATA10_CONFIRMACION_CRUZADA | 49050 | 48.8% | -0.012 | ➡️ estable (últ. 1000) | +2851.19$ | 0.50$ | ⚠️ IC negativo |
-| MOMENTUM_IBS_5M_BALLENA | 166134 | 42.2% | -0.078 | ➡️ estable (últ. 1000) | +2208.39$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_BALLENA | 166136 | 42.2% | -0.078 | ➡️ estable (últ. 1000) | +2211.85$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 4702 | 80.0% | +0.300 | ➡️ estable (últ. 1000) | +2113.75$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 1913 | 78.3% | +0.282 | ➡️ estable (últ. 1000) | +1583.82$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 5076 | 55.2% | +0.052 | 📈 madura (+0.06) (últ. 1000) | +1392.11$ | 0.52$ | ✅ activa |
@@ -83,30 +83,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-11-11T12:49 | BALLENAS_CONFIRMADAS_15M#SOL#15min | Solana Up or Down - November 11, 7:30AM-7:45AM ET… | ❌ LOSS | -0.51$ |
-| 2026-11-11T12:49 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - November 11, 7:30AM-7:45AM E… | ✅ WIN | +1.73$ |
-| 2026-11-11T12:49 | CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | … | ✅ WIN | +0.80$ |
-| 2026-11-11T12:49 | UPDOWN_GBM_15M_TARDIO#BTC#15min | … | ❌ LOSS | -1.07$ |
-| 2026-11-11T12:49 | FAVORITO_CONFIRMADO_DEPTH_FASE0#BTC#5min | … | ✅ WIN | +0.68$ |
+| 2026-11-11T12:51 | GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min | Dogecoin Up or Down - November 11, 7:30AM-7:45AM E… | ✅ WIN | +1.96$ |
+| 2026-11-11T12:51 | MOMENTUM_IBS_5M_BALLENA#BNB#5min | … | ✅ WIN | +1.69$ |
+| 2026-11-11T12:51 | MOMENTUM_IBS_5M_BALLENA#DOGE#5min | … | ✅ WIN | +1.77$ |
+| 2026-11-11T12:51 | MOMENTUM_IBS_15M_BALLENA#BNB#15min | BNB Up or Down - November 11, 7:30AM-7:45AM ET… | ✅ WIN | +0.49$ |
+| 2026-11-11T12:51 | GBM_LATE_15M_ESPACIO_ATR#BNB#15min | BNB Up or Down - November 11, 7:30AM-7:45AM ET… | ✅ WIN | +1.47$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-11-11T12:49 UTC
+✅ **OK** — última verificación 2026-11-11T13:00 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $73,970.49 | 0.1min |  |
-| ✅ ETH | $2,054.32 | 0.1min |  |
-| ✅ SOL | $84.12 | 0.1min |  |
-| ✅ XRP | $1.06 | 0.1min |  |
+| ✅ BTC | $73,805.12 | 0.2min |  |
+| ✅ ETH | $2,051.01 | 0.2min |  |
+| ✅ SOL | $83.87 | 0.2min |  |
+| ✅ XRP | $1.06 | 0.2min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $73,978.90 | consenso |  |
-| ETH | $2,055.00 | consenso |  |
-| SOL | $83.99 | consenso |  |
+| BTC | $73,818.80 | consenso |  |
+| ETH | $2,051.24 | consenso |  |
+| SOL | $83.87 | consenso |  |
 | XRP | $1.06 | consenso |  |
 
 ---
