@@ -3,6 +3,7 @@
 
 ## Reglas de comportamiento
 - **Fail Loud**: "completado"/"verificado" es INCORRECTO si algo se asumió sin confirmar explícitamente. Surfacear incertidumbre siempre.
+- **No cerrar puertas** (Javi 11-Nov): jamás marcar inviable/cerrada/descartada/«solo informativa» una vía sin refutación completa (gates, n efectivo, placebo, relojes correctos). Si no: «fuera de foco», «sin datos», «INSUFFICIENT», «no validada». Predicciones de potencia = riesgo, no veredicto. Al heredar un REJECTED/CERRADO/KILL, mirar en qué dato y reloj se apoyó. Memoria `feedback_no_cerrar_puertas_sin_refutar_11nov`.
 - **Checkpoint**: en tareas ≥3 pasos, resumir tras cada paso qué está verificado y qué queda antes de continuar.
 - **Antes de escribir código nuevo** (decisión ladder): ¿ya existe en el codebase? → ¿lo hace la stdlib/requests/csv/json? → ¿una línea? → solo entonces: mínimo viable. Excepción: código de seguridad live (circuit breakers, filtros end_date, Kelly) — no minimizar.
 - **Antes de concluir, promocionar, refutar o construir**: repasar la sección "🪤 Trampas ya cazadas" de este fichero (está siempre cargada). Para las cifras históricas de una pieza concreta, su memoria enlazada y el archivo.
