@@ -52,6 +52,16 @@ def test_doble_conteo_demostrado():
         assert d['paired'] == (0 if tp == 999 else 1) or tp == 1090   # a 90 ms sigue dentro de row_win=100: se empareja; a 999 ya iba bien (se empareja tambien: print en (t_fila-.., t_fila])
 
 
+def test_dedupe_conserva_tf_del_print():
+    """el relleno fechado por un print reordenado antes de su fila conserva el SELLO DEL PRINT como tf (bug visto en CX/TRAIN: tf = hora de la fila, 21 'nomatch' de 4.601)."""
+    book = (0.10, 0.12, 4.0, 5.0)
+    q = _qupd([(1000, 0.10, 4.0, 14.0)])                               # fila: szb 14 -> 4 (consumo 10)
+    p = _prints([(1060, 0.10, 10.0)])                                  # print sellado 60 ms despues de la fila, cola 4 < 10: relleno de 5
+    d = {}
+    r = E3.fill_segment_v3(book, 0.0, q, p, 0.10, 0, 5000, 5.0, 'BASE', dedupe=True, diag=d)
+    assert d['paired'] == 1 and r[0] == pytest.approx(5.0) and r[1] == 1060
+
+
 def test_dedupe_no_quita_rellenos_reales():
     """Si el consumo SI llega a nuestra posicion (cola 4 < consumo 10) el relleno sigue ahi con dedupe, con los tres sellados."""
     book = (0.10, 0.12, 4.0, 5.0)

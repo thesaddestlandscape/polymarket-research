@@ -49,15 +49,15 @@ def fill_segment_v3(book_arr, xa, qupd, prints, L, t_arr, t_end, rem, variant, d
     evs = []
     for (t, v, vp) in rows: evs.append((t, 1, 0, v))                  # (t, orden, tipo, dato): fila
     for i, (t, q, s) in enumerate(pr):
-        if i in first_before: evs.append((pair_t[i], 0, 1, (q, s)))   # print antes de su fila
-        else: evs.append((t, 2, 1, (q, s)))                           # orden normal: fila (1) antes que print (2) en empates, como el original
+        if i in first_before: evs.append((pair_t[i], 0, 1, (q, s, t)))   # print antes de su fila (tf conserva el sello ORIGINAL del print)
+        else: evs.append((t, 2, 1, (q, s, t)))                         # orden normal: fila (1) antes que print (2) en empates, como el original
     evs.sort(key=lambda e: (e[0], e[1]))
     if variant == 'BASE' and top: ahead = min(ahead, bsz)
     qty = 0.0; tf = None
     for (t, _o, kind, v) in evs:
         if kind == 0:
             ahead = min(ahead, v); continue
-        q, s = v
+        q, s, t = v                                                   # t = sello original del print (no el de la fila con la que se reordena)
         if q < L - TOLP: g = rem - qty; qty += g; tf = t if tf is None else tf; break
         if abs(q - L) <= TOLP:
             if ahead >= s - 1e-9: ahead -= s
