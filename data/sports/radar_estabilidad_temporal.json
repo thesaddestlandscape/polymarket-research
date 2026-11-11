@@ -1,48 +1,61 @@
 {
- "actualizado_utc": "2026-11-10T08:10:11+00:00",
+ "actualizado_utc": "2026-11-11T08:10:09+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
   "TOP_MAX": 0.3
  },
  "radar": {
-  "LoL#SEGUIR#0.85": {
-   "n": 109,
-   "dias": 43,
-   "frac_dias_pos": 0.884,
-   "top_wallet": 0.101,
-   "n_wallets": 56,
-   "pnl_medio": 0.083,
+  "CS#SEGUIR#0.85": {
+   "n": 263,
+   "dias": 71,
+   "frac_dias_pos": 0.746,
+   "top_wallet": 0.106,
+   "n_wallets": 80,
+   "pnl_medio": 0.025,
    "medias_tramos": [
-    0.0529,
-    0.1119,
-    0.0842
+    0.001,
+    0.071,
+    0.0035
+   ]
+  },
+  "LoL#SEGUIR#0.85": {
+   "n": 112,
+   "dias": 44,
+   "frac_dias_pos": 0.864,
+   "top_wallet": 0.098,
+   "n_wallets": 58,
+   "pnl_medio": 0.0641,
+   "medias_tramos": [
+    0.056,
+    0.1113,
+    0.0259
    ]
   },
   "LoL#SEGUIR#0.45": {
-   "n": 305,
-   "dias": 68,
-   "frac_dias_pos": 0.618,
+   "n": 306,
+   "dias": 69,
+   "frac_dias_pos": 0.623,
    "top_wallet": 0.059,
-   "n_wallets": 147,
-   "pnl_medio": 0.0922,
+   "n_wallets": 148,
+   "pnl_medio": 0.0954,
    "medias_tramos": [
-    0.1016,
-    0.0901,
-    0.0852
+    0.1109,
+    0.1005,
+    0.0748
    ]
   },
-  "LoL#FADE#0.85": {
-   "n": 108,
-   "dias": 45,
-   "frac_dias_pos": 0.889,
-   "top_wallet": 0.111,
-   "n_wallets": 54,
-   "pnl_medio": 0.07,
+  "LoL#FADE#0.70": {
+   "n": 206,
+   "dias": 60,
+   "frac_dias_pos": 0.633,
+   "top_wallet": 0.117,
+   "n_wallets": 85,
+   "pnl_medio": 0.0102,
    "medias_tramos": [
-    0.0784,
-    0.1146,
-    0.017
+    0.0116,
+    0.0163,
+    0.0031
    ]
   },
   "lal-otros#FADE#0.55": {
@@ -123,30 +136,17 @@
     0.2645
    ]
   },
-  "NHL#SEGUIR#0.80": {
-   "n": 90,
-   "dias": 35,
-   "frac_dias_pos": 0.743,
-   "top_wallet": 0.144,
-   "n_wallets": 23,
-   "pnl_medio": 0.0523,
-   "medias_tramos": [
-    0.1378,
-    0.0096,
-    0.0093
-   ]
-  },
   "NBA#SEGUIR#0.15": {
-   "n": 132,
-   "dias": 24,
-   "frac_dias_pos": 0.625,
-   "top_wallet": 0.189,
-   "n_wallets": 34,
-   "pnl_medio": 0.3428,
+   "n": 148,
+   "dias": 25,
+   "frac_dias_pos": 0.6,
+   "top_wallet": 0.182,
+   "n_wallets": 37,
+   "pnl_medio": 0.3502,
    "medias_tramos": [
-    0.5871,
-    0.0903,
-    0.3509
+    0.4252,
+    0.2409,
+    0.3838
    ]
   },
   "ucl-otros#SEGUIR#0.50": {
