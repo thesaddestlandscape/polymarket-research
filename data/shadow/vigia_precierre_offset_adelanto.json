@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-11-10T09:40:11+00:00",
+ "actualizado_utc": "2026-11-11T09:40:11+00:00",
  "fok_reales": {
   "enviadas": 42,
   "muertas": 12,
@@ -51,15 +51,15 @@
    "dif_ev_T47_menos_T45": 0.094
   },
   "15m#-47": {
-   "n": 28,
+   "n": 29,
    "pendientes": 0,
-   "dias": 19,
-   "acierto": 0.75,
-   "ask_medio": 0.766,
-   "ev_eur": -0.005,
+   "dias": 20,
+   "acierto": 0.759,
+   "ask_medio": 0.769,
+   "ev_eur": 0.001,
    "ic90_cierre": [
-    -0.207,
-    0.178
+    -0.2,
+    0.176
    ]
   },
   "15m#-46": {
@@ -89,7 +89,7 @@
   "15m#emparejado": {
    "senales_T45": 25,
    "tambien_a_T47": 7,
-   "solo_a_T47": 21,
+   "solo_a_T47": 22,
    "comunes_resueltos": 7,
    "dif_ev_T47_menos_T45": 0.017
   }
