@@ -1,0 +1,20 @@
+n 4616 by src {'drop': 2699, 'tev': 1917} amb 0.286
+ shift tf_true-tf_old drop [0, 19, 125, 243, 360] ftype {'thru1': 2042, 'nivel': 519, 'cola': 138}
+ shift tf_true-tf_old tev [-77, -22, -20, -18, -15] ftype {'thru1': 1625, 'cola': 285, 'nivel': 7}
+ftype x src shift p50 {('cola', 'drop'): 34.5, ('cola', 'tev'): -19.0, ('nivel', 'drop'): 0.0, ('nivel', 'tev'): -20.0, ('thru1', 'drop'): 163.0, ('thru1', 'tev'): -20.0}
+trig exists 0.998 by ftype {'cola': 0.983, 'nivel': 1.0, 'thru1': 1.0}
+trig_rx - tf_true (ms) when trig [-27576, -8621, -2275, -304, 27]
+TOTAL G0: n 4616 cost 3436.04 pnl -518.39 EV/EUR -0.1509
+old  l= 60 evitados n=3489 (75.6%) EV/EUR evitados=-0.1862 acierto=0.122 | mantenidos n=1127 EV/EUR=-0.0367 | Delta=+488.61 EUR IC90dias=[204.41, 795.51] dias+=12/15 sin2mejores=+281.61 | placebo p50=+372.33 p95=+450.81 p=0.008
+old  l=100 evitados n=3424 (74.2%) EV/EUR evitados=-0.1862 acierto=0.121 | mantenidos n=1192 EV/EUR=-0.0451 | Delta=+479.61 EUR IC90dias=[191.32, 771.27] dias+=10/15 sin2mejores=+278.51 | placebo p50=+362.74 p95=+443.85 p=0.010
+old  l=150 evitados n=3379 (73.2%) EV/EUR evitados=-0.1849 acierto=0.122 | mantenidos n=1237 EV/EUR=-0.0543 | Delta=+469.77 EUR IC90dias=[199.6, 759.27] dias+=9/15 sin2mejores=+268.57 | placebo p50=+355.16 p95=+432.94 p=0.009
+old  l=300 evitados n=3276 (71.0%) EV/EUR evitados=-0.1846 acierto=0.122 | mantenidos n=1340 EV/EUR=-0.0653 | Delta=+454.96 EUR IC90dias=[178.21, 731.75] dias+=10/15 sin2mejores=+264.23 | placebo p50=+344.88 p95=+427.57 p=0.019
+true l= 60 evitados n=3995 (86.5%) EV/EUR evitados=-0.1802 acierto=0.122 | mantenidos n=621 EV/EUR=+0.0521 | Delta=+541.02 EUR IC90dias=[223.52, 852.77] dias+=13/15 sin2mejores=+316.59 | placebo p50=+434.54 p95=+494.36 p=0.004
+true l=100 evitados n=3902 (84.5%) EV/EUR evitados=-0.1815 acierto=0.122 | mantenidos n=714 EV/EUR=+0.0276 | Delta=+532.29 EUR IC90dias=[234.9, 836.07] dias+=13/15 sin2mejores=+312.33 | placebo p50=+421.53 p95=+485.57 p=0.004
+true l=150 evitados n=3779 (81.9%) EV/EUR evitados=-0.1765 acierto=0.123 | mantenidos n=837 EV/EUR=-0.0285 | Delta=+501.43 EUR IC90dias=[213.69, 797.17] dias+=13/15 sin2mejores=+290.70 | placebo p50=+406.25 p95=+474.15 p=0.011
+true l=300 evitados n=3461 (75.0%) EV/EUR evitados=-0.1834 acierto=0.122 | mantenidos n=1155 EV/EUR=-0.0489 | Delta=+477.76 EUR IC90dias=[222.82, 735.7] dias+=11/15 sin2mejores=+277.62 | placebo p50=+367.29 p95=+445.58 p=0.009
+true l=100 by ftype {'cola': (242, np.float64(-0.169)), 'nivel': (326, np.float64(0.06)), 'thru1': (3334, np.float64(-0.207))}
+true l=100 by act {'ETH': (1742, np.float64(-88.57), np.float64(-0.068)), 'SOL': (1386, np.float64(-258.97), np.float64(-0.249)), 'XRP': (774, np.float64(-184.75), np.float64(-0.318))}
+true l=100 by L {0.1: (738, np.float64(-116.34), np.float64(-0.318)), 0.13: (898, np.float64(-75.68), np.float64(-0.13)), 0.16: (1055, np.float64(-174.81), np.float64(-0.208)), 0.19: (1211, np.float64(-165.46), np.float64(-0.145))}
+true l=100 by dia {'2026-10-26': (416, np.float64(56.66)), '2026-10-27': (357, np.float64(-104.26)), '2026-10-28': (348, np.float64(-73.58)), '2026-10-29': (290, np.float64(-27.77)), '2026-10-30': (164, np.float64(-7.34)), '2026-10-31': (282, np.float64(-25.68)), '2026-11-01': (146, np.float64(41.1)), '2026-11-02': (64, np.float64(-43.23)), '2026-11-03': (252, np.float64(-2.65)), '2026-11-04': (175, np.float64(-10.77)), '2026-11-05': (282, np.float64(-50.8)), '2026-11-06': (306, np.float64(-12.47)), '2026-11-07': (270, np.float64(-115.7)), '2026-11-08': (265, np.float64(-85.02)), '2026-11-09': (285, np.float64(-70.77))}
+cierres distintos evitados 949 tokens 1513

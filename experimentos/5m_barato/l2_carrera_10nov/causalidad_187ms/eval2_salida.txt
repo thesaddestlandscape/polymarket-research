@@ -1,0 +1,15 @@
+l=60: nuevos evitados (true no old) n=508 cost=378.5 pnl=-54.00 EV/EUR=-0.143 acierto=0.126 IC90 dias pnl=[-124.7,+16.9] dias_pnl<0=10/15 | dejan de evitarse n=2 pnl=-1.58; ftype nuevos {'thru1': 478, 'nivel': 24, 'cola': 6} src {'drop': 508}
+l=100: nuevos evitados (true no old) n=479 cost=357.4 pnl=-53.18 EV/EUR=-0.149 acierto=0.125 IC90 dias pnl=[-120.7,+20.6] dias_pnl<0=10/15 | dejan de evitarse n=1 pnl=-0.49; ftype nuevos {'thru1': 454, 'nivel': 21, 'cola': 4} src {'drop': 479}
+l=150: nuevos evitados (true no old) n=403 cost=302.0 pnl=-33.44 EV/EUR=-0.111 acierto=0.132 IC90 dias pnl=[-93.4,+29.7] dias_pnl<0=10/15 | dejan de evitarse n=3 pnl=-1.78; ftype nuevos {'thru1': 386, 'nivel': 16, 'cola': 1} src {'drop': 403}
+l=300: nuevos evitados (true no old) n=191 cost=144.4 pnl=-27.70 EV/EUR=-0.192 acierto=0.120 IC90 dias pnl=[-74.1,+17.4] dias_pnl<0=9/15 | dejan de evitarse n=6 pnl=-4.89; ftype nuevos {'thru1': 179, 'nivel': 11, 'cola': 1} src {'drop': 191}
+tf_true - trig_rx: frac <0 0.094 frac 0-60 0.038 60-150 0.048 150-400 0.101 >=400 0.719
+tf_old  - trig_rx: frac <0 0.212 frac 0-60 0.03 60-150 0.024 150-400 0.036 >=400 0.697
+              n      pnl      cost     ev
+var                                      
+CXB1000    2423 -154.372  1779.256 -0.087
+CXB150     1736  -84.499  1260.363 -0.067
+CXB300     1835  -93.510  1335.254 -0.070
+CXB3000    3137 -229.373  2318.325 -0.099
+G0         4630 -518.272  3446.038 -0.150
+PCXB300_1  3809 -341.395  2836.601 -0.120
+PCXB300_2  3821 -428.055  2842.710 -0.151

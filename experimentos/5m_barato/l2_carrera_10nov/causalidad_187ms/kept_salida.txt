@@ -1,0 +1,6 @@
+old l=60: mantenidos n=1127 cierres=599 coste=811.4 pnl=-29.78 EV/EUR=-0.0367 IC90dias=[-0.203,+0.144] dias+=7/15 sin2mejores EV=-0.1446 acierto=0.140 precio_medio=0.145
+old l=100: mantenidos n=1192 cierres=613 coste=860.0 pnl=-38.78 EV/EUR=-0.0451 IC90dias=[-0.204,+0.135] dias+=8/15 sin2mejores EV=-0.1515 acierto=0.139 precio_medio=0.146
+old l=150: mantenidos n=1237 cierres=630 coste=895.2 pnl=-48.62 EV/EUR=-0.0543 IC90dias=[-0.201,+0.108] dias+=7/15 sin2mejores EV=-0.1515 acierto=0.138 precio_medio=0.146
+true l=60: mantenidos n=621 cierres=401 coste=434.5 pnl=+22.63 EV/EUR=+0.0521 IC90dias=[-0.139,+0.255] dias+=10/15 sin2mejores EV=-0.0368 acierto=0.151 precio_medio=0.143
+true l=100: mantenidos n=714 cierres=445 coste=503.1 pnl=+13.90 EV/EUR=+0.0276 IC90dias=[-0.170,+0.229] dias+=10/15 sin2mejores EV=-0.0818 acierto=0.148 precio_medio=0.143
+true l=150: mantenidos n=837 cierres=490 coste=595.0 pnl=-16.96 EV/EUR=-0.0285 IC90dias=[-0.224,+0.182] dias+=9/15 sin2mejores EV=-0.1420 acierto=0.141 precio_medio=0.144
