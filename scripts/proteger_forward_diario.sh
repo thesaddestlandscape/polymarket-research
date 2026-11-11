@@ -10,3 +10,5 @@ for f in $(ls | grep -E "^(maker_ms_2026-11|onchain_fills_|anticipo_perp_|antici
   case "$f" in *.gz) gzip -t "$D/$f" 2>/dev/null || { echo "GZIP MAL: $f"; mal=$((mal+1)); };; esac
 done
 echo "copiados=$n gzip_mal=$mal total=$(du -sh $D | cut -f1) ficheros=$(ls $D | wc -l)"
+# Retencion 30 dias por mtime de origen (cp -p conserva mtime); maker_ms ~1 GB/dia domina: ~35 GB en regimen. 11-Nov (Javi: lo mas optimo y limpio).
+find "$D" -maxdepth 1 -type f -mtime +30 -delete
