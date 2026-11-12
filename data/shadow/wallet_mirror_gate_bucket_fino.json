@@ -28,11 +28,11 @@
     "hi": 0.05,
     "n": 76,
     "pnl_medio": -0.6918,
-    "diff_vs_resto": -0.625,
-    "p_valor": 0.0005,
+    "diff_vs_resto": -0.6237,
+    "p_valor": 0.0,
     "split_half_diff": [
-      -0.9333,
-      -0.3168
+      -0.932,
+      -0.3155
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -47,7 +47,7 @@
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-11-11",
+    "fecha_historial": "2026-11-12",
     "veredicto": "malo_confirmado"
   },
   "SEGUIR#BTC#60min#1": {
@@ -67,25 +67,25 @@
     "fecha_historial": null
   },
   "SEGUIR#BTC#15min#0": {
-    "n_dias": 66,
-    "pnl_sin_mejores_dias": -0.5015,
+    "n_dias": 67,
+    "pnl_sin_mejores_dias": -0.5026,
     "robusto_dias": false,
     "lo": 0.01,
     "hi": 0.06,
-    "n": 1777,
-    "pnl_medio": -0.3945,
-    "diff_vs_resto": -0.3608,
+    "n": 1781,
+    "pnl_medio": -0.3958,
+    "diff_vs_resto": -0.3619,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.2206,
-      -0.5009
+      -0.222,
+      -0.5017
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.4205,
+    "pnl_medio_loo": -0.4218,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.5402,
-      -0.2389
+      -0.5431,
+      -0.2349
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -93,7 +93,7 @@
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-11-11",
+    "fecha_historial": "2026-11-12",
     "veredicto": "malo_confirmado"
   },
   "SEGUIR#DOGE#15min#0": {
@@ -122,11 +122,11 @@
     "hi": 0.39,
     "n": 74,
     "pnl_medio": 0.2779,
-    "diff_vs_resto": 0.3162,
-    "p_valor": 0.02,
+    "diff_vs_resto": 0.3158,
+    "p_valor": 0.0165,
     "split_half_diff": [
-      0.1039,
-      0.5285
+      0.1035,
+      0.5282
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 0.2569,
@@ -143,7 +143,7 @@
       "bueno_confirmado",
       "bueno_confirmado"
     ],
-    "fecha_historial": "2026-11-11",
+    "fecha_historial": "2026-11-12",
     "veredicto": "bueno_confirmado"
   },
   "SEGUIR#SOL#15min#1": {
@@ -161,25 +161,25 @@
     "fecha_historial": null
   },
   "SEGUIR#BTC#5min#0": {
-    "n_dias": 72,
-    "pnl_sin_mejores_dias": -0.3749,
+    "n_dias": 73,
+    "pnl_sin_mejores_dias": -0.3752,
     "robusto_dias": false,
     "lo": 0.01,
     "hi": 0.06,
-    "n": 4822,
-    "pnl_medio": -0.3236,
-    "diff_vs_resto": -0.2866,
+    "n": 4824,
+    "pnl_medio": -0.3239,
+    "diff_vs_resto": -0.2869,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.2947,
-      -0.2785
+      -0.295,
+      -0.2787
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.3428,
+    "pnl_medio_loo": -0.3431,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.4446,
-      -0.1981
+      -0.4465,
+      -0.1979
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -187,7 +187,7 @@
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-11-11",
+    "fecha_historial": "2026-11-12",
     "veredicto": "malo_confirmado"
   },
   "SEGUIR#BTC#5min#1": {
@@ -198,11 +198,11 @@
     "hi": 0.08,
     "n": 416,
     "pnl_medio": -0.3279,
-    "diff_vs_resto": -0.3079,
-    "p_valor": 0.0025,
+    "diff_vs_resto": -0.3082,
+    "p_valor": 0.001,
     "split_half_diff": [
-      -0.3194,
-      -0.2965
+      -0.3197,
+      -0.2967
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4015,
@@ -217,7 +217,7 @@
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-11-11",
+    "fecha_historial": "2026-11-12",
     "veredicto": "malo_confirmado"
   },
   "SEGUIR#ETH#5min#0": {
@@ -247,7 +247,7 @@
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-11-11",
+    "fecha_historial": "2026-11-12",
     "veredicto": "malo_confirmado"
   },
   "SEGUIR#BNB#5min#0": {
@@ -295,7 +295,7 @@
       "bueno_confirmado",
       "bueno_confirmado"
     ],
-    "fecha_historial": "2026-11-11",
+    "fecha_historial": "2026-11-12",
     "veredicto": "bueno_confirmado"
   },
   "SEGUIR#XRP#5min#1": {
