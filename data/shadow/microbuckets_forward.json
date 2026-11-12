@@ -1,6 +1,6 @@
 {
  "cutoff_utc": "2026-09-29T09:29:27+00:00",
- "generado_utc": "2026-11-11T08:50:19+00:00",
+ "generado_utc": "2026-11-12T08:50:25+00:00",
  "items": [
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_NO",
@@ -8,10 +8,10 @@
    "n_hist": 41,
    "ev_hist": 0.6267,
    "fill_libro_real": 0.42,
-   "n_fwd": 72,
-   "dias_fwd": 20,
-   "ev_fwd": 0.2241,
-   "ic_lo_fwd": -0.0722,
+   "n_fwd": 71,
+   "dias_fwd": 21,
+   "ev_fwd": 0.1709,
+   "ic_lo_fwd": -0.1465,
    "veredicto": "sin_concluir"
   },
   {
@@ -22,8 +22,8 @@
    "fill_libro_real": 0.35,
    "n_fwd": 95,
    "dias_fwd": 20,
-   "ev_fwd": 0.3643,
-   "ic_lo_fwd": 0.1762,
+   "ev_fwd": 0.3461,
+   "ic_lo_fwd": 0.156,
    "veredicto": "confirmado_forward"
   },
   {
@@ -32,10 +32,10 @@
    "n_hist": 44,
    "ev_hist": 0.3542,
    "fill_libro_real": null,
-   "n_fwd": 78,
-   "dias_fwd": 20,
-   "ev_fwd": -0.0235,
-   "ic_lo_fwd": -0.218,
+   "n_fwd": 81,
+   "dias_fwd": 19,
+   "ev_fwd": -0.0098,
+   "ic_lo_fwd": -0.2081,
    "veredicto": "refutado_forward"
   },
   {
@@ -56,10 +56,10 @@
    "n_hist": 58,
    "ev_hist": 0.2717,
    "fill_libro_real": 0.218,
-   "n_fwd": 69,
-   "dias_fwd": 21,
-   "ev_fwd": 0.1066,
-   "ic_lo_fwd": -0.0771,
+   "n_fwd": 70,
+   "dias_fwd": 20,
+   "ev_fwd": 0.0387,
+   "ic_lo_fwd": -0.1632,
    "veredicto": "sin_concluir"
   },
   {
@@ -68,10 +68,10 @@
    "n_hist": 82,
    "ev_hist": 0.2616,
    "fill_libro_real": 0.606,
-   "n_fwd": 95,
-   "dias_fwd": 16,
-   "ev_fwd": -0.2402,
-   "ic_lo_fwd": -0.4,
+   "n_fwd": 80,
+   "dias_fwd": 15,
+   "ev_fwd": -0.2287,
+   "ic_lo_fwd": -0.4039,
    "veredicto": "refutado_forward"
   },
   {
@@ -80,10 +80,10 @@
    "n_hist": 114,
    "ev_hist": 0.2597,
    "fill_libro_real": 0.338,
-   "n_fwd": 144,
+   "n_fwd": 143,
    "dias_fwd": 21,
-   "ev_fwd": -0.2373,
-   "ic_lo_fwd": -0.4174,
+   "ev_fwd": -0.2779,
+   "ic_lo_fwd": -0.4301,
    "veredicto": "refutado_forward"
   },
   {
@@ -92,10 +92,10 @@
    "n_hist": 121,
    "ev_hist": 0.2135,
    "fill_libro_real": 0.413,
-   "n_fwd": 115,
-   "dias_fwd": 20,
-   "ev_fwd": 0.0618,
-   "ic_lo_fwd": -0.13,
+   "n_fwd": 116,
+   "dias_fwd": 21,
+   "ev_fwd": 0.0708,
+   "ic_lo_fwd": -0.1038,
    "veredicto": "sin_concluir"
   },
   {
@@ -104,11 +104,11 @@
    "n_hist": 76,
    "ev_hist": 0.2029,
    "fill_libro_real": 0.274,
-   "n_fwd": 98,
-   "dias_fwd": 21,
-   "ev_fwd": 0.0158,
-   "ic_lo_fwd": -0.1582,
-   "veredicto": "sin_concluir"
+   "n_fwd": 95,
+   "dias_fwd": 20,
+   "ev_fwd": -0.0094,
+   "ic_lo_fwd": -0.2102,
+   "veredicto": "refutado_forward"
   },
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_YES",
@@ -116,10 +116,10 @@
    "n_hist": 62,
    "ev_hist": 0.1559,
    "fill_libro_real": 0.107,
-   "n_fwd": 41,
-   "dias_fwd": 17,
-   "ev_fwd": -0.1642,
-   "ic_lo_fwd": -0.3084,
+   "n_fwd": 43,
+   "dias_fwd": 19,
+   "ev_fwd": -0.1648,
+   "ic_lo_fwd": -0.3121,
    "veredicto": "refutado_forward"
   },
   {
@@ -140,11 +140,11 @@
    "n_hist": 94,
    "ev_hist": 0.1357,
    "fill_libro_real": null,
-   "n_fwd": 173,
+   "n_fwd": 165,
    "dias_fwd": 21,
-   "ev_fwd": 0.0041,
-   "ic_lo_fwd": -0.0611,
-   "veredicto": "sin_concluir"
+   "ev_fwd": -0.0179,
+   "ic_lo_fwd": -0.0823,
+   "veredicto": "refutado_forward"
   },
   {
    "tupla": "FAVORITO_CONFIRMADO#ETH#60min#BUY_NO",
@@ -152,10 +152,10 @@
    "n_hist": 138,
    "ev_hist": 0.1217,
    "fill_libro_real": 0.607,
-   "n_fwd": 143,
-   "dias_fwd": 21,
-   "ev_fwd": -0.0499,
-   "ic_lo_fwd": -0.1548,
+   "n_fwd": 144,
+   "dias_fwd": 20,
+   "ev_fwd": -0.0458,
+   "ic_lo_fwd": -0.1418,
    "veredicto": "refutado_forward"
   },
   {
@@ -164,10 +164,10 @@
    "n_hist": 115,
    "ev_hist": 0.1131,
    "fill_libro_real": 0.186,
-   "n_fwd": 181,
+   "n_fwd": 184,
    "dias_fwd": 20,
-   "ev_fwd": 0.0434,
-   "ic_lo_fwd": -0.0151,
+   "ev_fwd": 0.0537,
+   "ic_lo_fwd": -0.0036,
    "veredicto": "sin_concluir"
   },
   {
@@ -176,10 +176,10 @@
    "n_hist": 116,
    "ev_hist": 0.1042,
    "fill_libro_real": 0.628,
-   "n_fwd": 69,
+   "n_fwd": 71,
    "dias_fwd": 20,
-   "ev_fwd": -0.1255,
-   "ic_lo_fwd": -0.2889,
+   "ev_fwd": -0.1723,
+   "ic_lo_fwd": -0.3455,
    "veredicto": "refutado_forward"
   }
  ]
