@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-11-11T08:10:09+00:00",
+ "actualizado_utc": "2026-11-12T08:10:10+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
@@ -7,16 +7,16 @@
  },
  "radar": {
   "CS#SEGUIR#0.85": {
-   "n": 263,
-   "dias": 71,
-   "frac_dias_pos": 0.746,
+   "n": 264,
+   "dias": 72,
+   "frac_dias_pos": 0.75,
    "top_wallet": 0.106,
-   "n_wallets": 80,
-   "pnl_medio": 0.025,
+   "n_wallets": 81,
+   "pnl_medio": 0.0255,
    "medias_tramos": [
-    0.001,
-    0.071,
-    0.0035
+    0.0026,
+    0.0716,
+    0.0024
    ]
   },
   "LoL#SEGUIR#0.85": {
@@ -32,6 +32,19 @@
     0.0259
    ]
   },
+  "LoL#SEGUIR#0.60": {
+   "n": 262,
+   "dias": 68,
+   "frac_dias_pos": 0.618,
+   "top_wallet": 0.05,
+   "n_wallets": 137,
+   "pnl_medio": 0.0223,
+   "medias_tramos": [
+    0.0092,
+    0.0579,
+    0.0002
+   ]
+  },
   "LoL#SEGUIR#0.45": {
    "n": 306,
    "dias": 69,
@@ -45,17 +58,17 @@
     0.0748
    ]
   },
-  "LoL#FADE#0.70": {
-   "n": 206,
-   "dias": 60,
-   "frac_dias_pos": 0.633,
-   "top_wallet": 0.117,
-   "n_wallets": 85,
-   "pnl_medio": 0.0102,
+  "Dota#SEGUIR#0.85": {
+   "n": 97,
+   "dias": 42,
+   "frac_dias_pos": 0.81,
+   "top_wallet": 0.082,
+   "n_wallets": 51,
+   "pnl_medio": 0.0278,
    "medias_tramos": [
-    0.0116,
-    0.0163,
-    0.0031
+    0.0015,
+    0.002,
+    0.0782
    ]
   },
   "lal-otros#FADE#0.55": {
@@ -98,16 +111,16 @@
    ]
   },
   "cfb-otros#SEGUIR#0.85": {
-   "n": 73,
-   "dias": 29,
-   "frac_dias_pos": 0.793,
-   "top_wallet": 0.205,
-   "n_wallets": 21,
-   "pnl_medio": 0.0336,
+   "n": 74,
+   "dias": 30,
+   "frac_dias_pos": 0.8,
+   "top_wallet": 0.203,
+   "n_wallets": 22,
+   "pnl_medio": 0.0347,
    "medias_tramos": [
     0.092,
     0.0019,
-    0.0081
+    0.0123
    ]
   },
   "epl-otros#FADE#0.40": {
@@ -134,19 +147,6 @@
     0.1342,
     0.0253,
     0.2645
-   ]
-  },
-  "NBA#SEGUIR#0.15": {
-   "n": 148,
-   "dias": 25,
-   "frac_dias_pos": 0.6,
-   "top_wallet": 0.182,
-   "n_wallets": 37,
-   "pnl_medio": 0.3502,
-   "medias_tramos": [
-    0.4252,
-    0.2409,
-    0.3838
    ]
   },
   "ucl-otros#SEGUIR#0.50": {
