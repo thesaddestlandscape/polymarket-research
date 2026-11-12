@@ -2041,12 +2041,27 @@ def _reconciliar_ordenes_maker() -> None:
                 if o.get("estado") == "enviando" and not o.get("order_id"):
                     try:
                         from py_clob_client_v2 import OpenOrderParams
+                        # 12-Nov: la CLOB API (14-Dic-2026) exige `market` junto a
+                        # `asset_id` al listar órdenes abiertas. Sin condition_id,
+                        # fail-closed: NO se consulta ni se da por muerta (queda
+                        # 'enviando' y se reintenta el próximo ciclo).
+                        cid_h = o.get("condition_id") or _get_token_ids(
+                            o.get("market_id"))[2]
+                        if cid_h and not o.get("condition_id"):
+                            o["condition_id"] = cid_h   # cachea: sin Gamma en ciclos siguientes
+                            cambiado = True
+                        if not cid_h or not o.get("token_id"):
+                            log(f"  ⚠️ maker: huérfana {o.get('market_id')} sin condition_id "
+                                f"-- no se puede consultar órdenes abiertas")
+                            continue
                         abiertas = client.get_open_orders(
-                            OpenOrderParams(asset_id=o.get("token_id", ""))) or []
+                            OpenOrderParams(market=cid_h,
+                                            asset_id=o.get("token_id", ""))) or []
                         candidata = None
                         for a in abiertas:
                             try:
-                                if (a.get("side", "").upper() == "BUY" and
+                                if (a.get("asset_id") == o.get("token_id") and
+                                        a.get("side", "").upper() == "BUY" and
                                         abs(float(a.get("price")) -
                                             float(o.get("precio_limit"))) < 0.005):
                                     candidata = a

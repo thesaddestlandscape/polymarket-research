@@ -460,10 +460,16 @@ def main():
                 log({"tipo": "barrido_error", "oid": oid, "e": str(e)[:200]})
         if huerfanas:
             from py_clob_client_v2 import OpenOrderParams
+            try:   # 12-Nov: CLOB API (14-Dic) retira el filtro solo-asset_id: UNA descarga, filtro en cliente
+                _abiertas = cli.get_open_orders() or []
+            except Exception as e:
+                _abiertas = []
+                log({"tipo": "barrido_error", "oid": "listado", "e": str(e)[:200]})
+            log({"tipo": "barrido_escaneo", "abiertas": len(_abiertas)})
             for tok in set(huerfanas):
                 try:
-                    for od in cli.get_open_orders(OpenOrderParams(asset_id=tok)) or []:
-                        if (abs(float(od.get("price", 0)) - 0.01) < 1e-9 and abs(float(od.get("original_size", 0)) - SIZE) < 1e-6
+                    for od in _abiertas:
+                        if (od.get("asset_id") == tok and abs(float(od.get("price", 0)) - 0.01) < 1e-9 and abs(float(od.get("original_size", 0)) - SIZE) < 1e-6
                                 and od.get("side") == "BUY" and float(od.get("created_at", 0)) >= t_inicio - 5):
                             cli.cancel_order(OrderPayload(orderID=od["id"]))
                             log({"tipo": "barrido_huerfana", "oid": od["id"]})

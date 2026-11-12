@@ -141,9 +141,19 @@ def _barrer_restos(client, tokens: set) -> int:
     """Cancela cualquier orden abierta nuestra en los tokens sondeados."""
     from py_clob_client_v2.clob_types import OpenOrderParams, OrderPayload
     n = 0
+    # 12-Nov: la CLOB API (14-Dic) retira el filtro solo-asset_id: se listan TODAS las
+    # abiertas y se filtra por token en cliente.
+    try:
+        abiertas = client.get_open_orders() or []   # UNA sola descarga
+    except Exception as e:
+        _log(f"barrido: no se pudo listar órdenes abiertas: {e}")
+        return 0
+    _log(f"barrido: {len(abiertas)} abiertas escaneadas")
     for t in tokens:
         try:
-            for o in client.get_open_orders(OpenOrderParams(asset_id=t)) or []:
+            for o in abiertas:
+                if o.get("asset_id") != t:
+                    continue
                 oid = o.get("id") or o.get("orderID")
                 if oid:
                     client.cancel_order(OrderPayload(orderID=oid))
