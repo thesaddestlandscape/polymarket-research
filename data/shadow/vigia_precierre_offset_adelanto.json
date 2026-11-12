@@ -1,7 +1,7 @@
 {
- "actualizado_utc": "2026-11-11T09:40:11+00:00",
+ "actualizado_utc": "2026-11-12T09:40:11+00:00",
  "fok_reales": {
-  "enviadas": 42,
+  "enviadas": 43,
   "muertas": 12,
   "muertas_resueltas": 12,
   "muertas_que_ganarian": 10
@@ -20,15 +20,15 @@
    ]
   },
   "5m#-46": {
-   "n": 26,
+   "n": 28,
    "pendientes": 0,
-   "dias": 15,
-   "acierto": 0.577,
-   "ask_medio": 0.518,
-   "ev_eur": 0.035,
+   "dias": 17,
+   "acierto": 0.571,
+   "ask_medio": 0.516,
+   "ev_eur": 0.044,
    "ic90_cierre": [
-    -0.284,
-    0.339
+    -0.279,
+    0.35
    ]
   },
   "5m#-45": {
@@ -51,27 +51,27 @@
    "dif_ev_T47_menos_T45": 0.094
   },
   "15m#-47": {
-   "n": 29,
+   "n": 32,
    "pendientes": 0,
-   "dias": 20,
-   "acierto": 0.759,
-   "ask_medio": 0.769,
-   "ev_eur": 0.001,
+   "dias": 21,
+   "acierto": 0.75,
+   "ask_medio": 0.753,
+   "ev_eur": 0.027,
    "ic90_cierre": [
-    -0.2,
-    0.176
+    -0.178,
+    0.216
    ]
   },
   "15m#-46": {
-   "n": 28,
+   "n": 30,
    "pendientes": 0,
-   "dias": 16,
-   "acierto": 0.893,
-   "ask_medio": 0.727,
-   "ev_eur": 0.235,
+   "dias": 17,
+   "acierto": 0.9,
+   "ask_medio": 0.708,
+   "ev_eur": 0.301,
    "ic90_cierre": [
-    0.065,
-    0.391
+    0.138,
+    0.469
    ]
   },
   "15m#-45": {
@@ -89,7 +89,7 @@
   "15m#emparejado": {
    "senales_T45": 25,
    "tambien_a_T47": 7,
-   "solo_a_T47": 22,
+   "solo_a_T47": 25,
    "comunes_resueltos": 7,
    "dif_ev_T47_menos_T45": 0.017
   }
@@ -121,19 +121,19 @@
    "bajar_escalon": false
   },
   "15m": {
-   "n": 12,
-   "dias": 10,
-   "pnl_eur": 3.28,
-   "ev_eur": 0.137,
+   "n": 13,
+   "dias": 11,
+   "pnl_eur": 6.4,
+   "ev_eur": 0.246,
    "ic90_dias": [
-    -0.121,
-    0.387
+    -0.042,
+    0.55
    ],
-   "ev_sin_2_mejores": 0.051,
-   "ev_ultimas_20": 0.137,
-   "enviadas": 14,
+   "ev_sin_2_mejores": 0.093,
+   "ev_ultimas_20": 0.246,
+   "enviadas": 15,
    "fok_muertas": 2,
-   "fok_muertas_pct": 0.143,
+   "fok_muertas_pct": 0.133,
    "gates": {
     "n>=40": false,
     "dias>=10": true,
