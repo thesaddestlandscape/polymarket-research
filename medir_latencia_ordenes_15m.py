@@ -469,7 +469,8 @@ def main():
             for tok in set(huerfanas):
                 try:
                     for od in _abiertas:
-                        if (od.get("asset_id") == tok and abs(float(od.get("price", 0)) - 0.01) < 1e-9 and abs(float(od.get("original_size", 0)) - SIZE) < 1e-6
+                        _t = next((od[k] for k in ("asset_id", "token_id", "assetId") if od.get(k)), None)
+                        if (_t in (None, tok) and abs(float(od.get("price", 0)) - 0.01) < 1e-9 and abs(float(od.get("original_size", 0)) - SIZE) < 1e-6
                                 and od.get("side") == "BUY" and float(od.get("created_at", 0)) >= t_inicio - 5):
                             cli.cancel_order(OrderPayload(orderID=od["id"]))
                             log({"tipo": "barrido_huerfana", "oid": od["id"]})

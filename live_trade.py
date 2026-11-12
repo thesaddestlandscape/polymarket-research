@@ -2045,12 +2045,26 @@ def _reconciliar_ordenes_maker() -> None:
                         # `asset_id` al listar órdenes abiertas. Sin condition_id,
                         # fail-closed: NO se consulta ni se da por muerta (queda
                         # 'enviando' y se reintenta el próximo ciclo).
-                        cid_h = o.get("condition_id") or _get_token_ids(
-                            o.get("market_id"))[2]
+                        cid_h = o.get("condition_id")
+                        if not cid_h:
+                            try:
+                                cid_h = _get_token_ids(o.get("market_id"))[2]
+                            except Exception as e_g:
+                                log(f"  ⚠️ maker: Gamma falló para huérfana {o.get('market_id')}: {e_g}")
+                                cid_h = None
                         if cid_h and not o.get("condition_id"):
                             o["condition_id"] = cid_h   # cachea: sin Gamma en ciclos siguientes
                             cambiado = True
                         if not cid_h or not o.get("token_id"):
+                            # GTD: pasada la expiración (+120 s) la orden NO puede estar viva
+                            # en el exchange -> muerta sin ambigüedad aunque Gamma falle.
+                            exp = float(o.get("expiracion_utc") or 0)
+                            if exp and ahora.timestamp() > exp + 120:
+                                o["estado"] = "muerta_sin_post"
+                                cambiado = True
+                                log(f"  maker: huérfana {o.get('market_id')} expirada por GTD "
+                                    f"-> muerta_sin_post")
+                                continue
                             log(f"  ⚠️ maker: huérfana {o.get('market_id')} sin condition_id "
                                 f"-- no se puede consultar órdenes abiertas")
                             continue
@@ -2060,7 +2074,11 @@ def _reconciliar_ordenes_maker() -> None:
                         candidata = None
                         for a in abiertas:
                             try:
-                                if (a.get("asset_id") == o.get("token_id") and
+                                # la consulta ya va filtrada en servidor (market+asset_id); el
+                                # campo de token de la respuesta solo descarta si TRAE otro token
+                                _ta = next((a[k] for k in ("asset_id", "token_id", "assetId")
+                                            if a.get(k)), None)
+                                if (_ta in (None, o.get("token_id")) and
                                         a.get("side", "").upper() == "BUY" and
                                         abs(float(a.get("price")) -
                                             float(o.get("precio_limit"))) < 0.005):
@@ -2190,7 +2208,9 @@ def _colocar_orden_maker(pred: dict, dec: str, contexto: dict) -> bool:
             return False   # demasiado tarde para que la limit tenga sentido
 
         # Libro fresco para fijar el precio límite sin cruzar.
-        yes_token, no_token, _ = _get_token_ids(mid)
+        yes_token, no_token, cid_maker = _get_token_ids(mid)
+        if not cid_maker:
+            return False   # 12-Nov: sin condition_id no se podría reconciliar una huérfana -> no colocar
         precio_yes = float(pred.get("precio_yes_mercado", 0.5))
         if dec == "BUY_YES":
             token_id, precio_plan = yes_token, precio_yes
@@ -2255,7 +2275,7 @@ def _colocar_orden_maker(pred: dict, dec: str, contexto: dict) -> bool:
         # Intent ANTES de postear (recuperable si morimos a mitad).
         entrada = {
             "estado": "enviando", "order_id": "",
-            "market_id": mid, "token_id": token_id,
+            "market_id": mid, "token_id": token_id, "condition_id": cid_maker,
             "question": pred.get("question", ""),
             "end_date": end_str,
             "strategy": contexto.get("strategy", ""),

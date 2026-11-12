@@ -47,6 +47,8 @@ from resolution_sniper_observer import mercado_slot, token_ids  # noqa: E402
 DUR_S = 300
 MARCO_TAG = "5m"
 PRECIO = 0.01
+_MIS_ORDENES: set = set()      # ids de las órdenes que ESTE script posteó (el barrido solo toca estas)
+_T_INICIO = time.time()
 SIZE = 5.0                      # min_order_size real del CLOB (17-Sep)
 MAX_ORDENES = 40                # tope duro de ordenes enviadas por ejecucion
 OFFSETS_DEFECTO = [-3.0, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0]
@@ -115,6 +117,8 @@ def _sondear(client, real: bool, ts_end: int, activo: str, ronda: int, offset: f
         t1 = time.time()
         order_id = (resp.get("orderID") or resp.get("id") or "") if isinstance(resp, dict) else ""
         aceptada = bool(order_id) and (resp.get("success", True) if isinstance(resp, dict) else True)
+        if order_id:
+            _MIS_ORDENES.add(order_id)
         if not aceptada:
             error = str(resp)[:300]
     except Exception as e:
@@ -138,28 +142,38 @@ def _sondear(client, real: bool, ts_end: int, activo: str, ronda: int, offset: f
 
 
 def _barrer_restos(client, tokens: set) -> int:
-    """Cancela cualquier orden abierta nuestra en los tokens sondeados."""
-    from py_clob_client_v2.clob_types import OpenOrderParams, OrderPayload
+    """Cancela SOLO órdenes propias de este script (12-Nov: nunca de otro ejecutor).
+    Propia = id posteado aquí, o huella exacta (BUY a PRECIO, SIZE, creada tras el
+    arranque, y token sondeado si la respuesta lo trae) para recoger posts cuya
+    respuesta se perdió. Independiente del nombre del campo de token."""
+    from py_clob_client_v2.clob_types import OrderPayload
     n = 0
-    # 12-Nov: la CLOB API (14-Dic) retira el filtro solo-asset_id: se listan TODAS las
-    # abiertas y se filtra por token en cliente.
     try:
-        abiertas = client.get_open_orders() or []   # UNA sola descarga
+        abiertas = client.get_open_orders() or []   # UNA sola descarga (CLOB API 14-Dic)
     except Exception as e:
         _log(f"barrido: no se pudo listar órdenes abiertas: {e}")
         return 0
-    _log(f"barrido: {len(abiertas)} abiertas escaneadas")
-    for t in tokens:
+    _log(f"barrido: {len(abiertas)} abiertas escaneadas, {len(_MIS_ORDENES)} ids propios")
+    for o in abiertas:
+        oid = o.get("id") or o.get("orderID")
+        if not oid:
+            continue
+        tok = next((o[k] for k in ("asset_id", "token_id", "assetId") if o.get(k)), None)
         try:
-            for o in abiertas:
-                if o.get("asset_id") != t:
-                    continue
-                oid = o.get("id") or o.get("orderID")
-                if oid:
-                    client.cancel_order(OrderPayload(orderID=oid))
-                    n += 1
+            huella = (abs(float(o.get("price", 0)) - PRECIO) < 1e-9
+                      and abs(float(o.get("original_size", 0)) - SIZE) < 1e-6
+                      and str(o.get("side", "")).upper() == "BUY"
+                      and float(o.get("created_at", 0)) >= _T_INICIO - 5
+                      and (tok is None or tok in tokens))
+        except (TypeError, ValueError):
+            huella = False
+        if oid not in _MIS_ORDENES and not huella:
+            continue
+        try:
+            client.cancel_order(OrderPayload(orderID=oid))
+            n += 1
         except Exception as e:
-            _log(f"aviso: barrido de restos fallo en {t[:10]}...: {e}")
+            _log(f"aviso: barrido no pudo cancelar {str(oid)[:12]}...: {e}")
     return n
 
 
