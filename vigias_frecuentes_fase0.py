@@ -356,6 +356,26 @@ def _instalar_enrutador() -> None:
         sys.stdout, sys.stderr = _SALIDA["out"], _SALIDA["err"]
 
 
+def _rss_mb() -> int:
+    try:
+        with open("/proc/self/statm") as f:
+            return int(f.read().split()[1]) * os.sysconf("SC_PAGE_SIZE") // (1024 * 1024)
+    except Exception:
+        return -1
+
+
+def _devolver_memoria() -> None:
+    """12-Nov (consolidar procesos / OOM): tras cada tarea, gc + malloc_trim para que
+    glibc devuelva al SO el heap libre (el scheduler llegaba a 2,5-4 GB de RSS por
+    picos de tareas que cargan CSV grandes y no lo devuelve solo). Fail-silent."""
+    try:
+        import gc, ctypes
+        gc.collect()
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        pass
+
+
 def _correr_uno(nombre: str, fn, nombre_log: str) -> bool:
     """Devuelve True si la tarea termino bien. Fallo = excepcion, o, SOLO para
     las tareas de CARRILES_APARTE (cuyo main() devuelve 0/1 por convencion),
@@ -386,7 +406,11 @@ def _correr_uno(nombre: str, fn, nombre_log: str) -> bool:
             _SALIDA["out"].destino(None)
             _SALIDA["err"].destino(None)
     dt = time.time() - t0
+    rss0 = _rss_mb()
+    _devolver_memoria()
+    rss1 = _rss_mb()
     print(f"[vigias_frecuentes_fase0] {nombre} terminado en {dt:.1f}s"
+          + f" rss {rss0}->{rss1}MB"
           + ("" if ok else " (FALLO -- reintento en %ds)" % REINTENTO_FALLO_S), flush=True)
     return ok
 
