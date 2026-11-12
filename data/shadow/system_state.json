@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-11-12T00:54:12+00:00",
-  "bankroll_sim": 188869.21,
-  "pnl_total": 188849.21,
-  "n_ops": 1403937,
+  "timestamp_utc": "2026-11-12T01:06:03+00:00",
+  "bankroll_sim": 188884.46,
+  "pnl_total": 188864.46,
+  "n_ops": 1404049,
   "win_rate": 0.5719,
   "estrategias_activas": 602,
   "desactivadas": [
@@ -40,8 +40,8 @@
     },
     {
       "k": "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min",
-      "ic": 0.4441,
-      "n": 570
+      "ic": 0.4442,
+      "n": 571
     }
   ],
   "brier_medio": 0.2296,
@@ -60,7 +60,7 @@
       "alerta_proxima": "n=608/400, CLV=-0.030/−0.030"
     },
     "of_decay": {
-      "clv_historico": 0.075,
+      "clv_historico": 0.0752,
       "clv_ult30": 0.1947,
       "decay_ratio": 2.59
     },
