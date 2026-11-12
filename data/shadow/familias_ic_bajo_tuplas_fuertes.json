@@ -27,7 +27,7 @@
   ]
  },
  "MOMENTUM_IBS_15M_FADE": {
-  "ic_bayes_familia": -0.0546,
+  "ic_bayes_familia": -0.0545,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 26.25,
   "tuplas": [
@@ -51,14 +51,14 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.06,
+  "ic_bayes_familia": 0.0599,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 17.5,
+  "pnl_fiel_combinado_eur": 16.45,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#ETH#240min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 17.5008,
-    "n_ejecutado": 371
+    "pnl_fiel_eur_sin_suelo": 16.4508,
+    "n_ejecutado": 372
    }
   ]
  }
