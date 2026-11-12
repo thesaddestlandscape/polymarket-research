@@ -1,72 +1,72 @@
 {
- "generado_utc": "2026-11-11T08:12:05+00:00",
+ "generado_utc": "2026-11-12T08:12:05+00:00",
  "corte": "2026-09-30T16:00",
  "hipotesis": {
   "A CS#FADE [0,65-0,70) (LIVE)": {
-   "n": 477,
+   "n": 488,
    "dias": 43,
-   "acierto": 0.7044,
+   "acierto": 0.707,
    "precio_medio": 0.6692,
-   "ev": 0.0401,
+   "ev": 0.0437,
    "ic90": [
-    -0.0173,
-    0.1003
+    -0.0122,
+    0.1026
    ],
    "dias_positivos": 19,
    "wallet_top_pct": 11,
    "veredicto": "sin_concluir"
   },
   "B CS [0,65-0,70) cualquier disparo": {
-   "n": 608,
-   "dias": 42,
-   "acierto": 0.6891,
+   "n": 622,
+   "dias": 43,
+   "acierto": 0.6881,
    "precio_medio": 0.6692,
-   "ev": 0.0182,
+   "ev": 0.0167,
    "ic90": [
-    -0.0284,
-    0.0619
+    -0.0259,
+    0.0593
    ],
    "dias_positivos": 22,
-   "wallet_top_pct": 6,
+   "wallet_top_pct": 7,
    "veredicto": "sin_concluir"
   },
   "C CS partido [0,65-0,70)": {
-   "n": 195,
-   "dias": 42,
-   "acierto": 0.7077,
-   "precio_medio": 0.6692,
-   "ev": 0.0464,
+   "n": 199,
+   "dias": 43,
+   "acierto": 0.7035,
+   "precio_medio": 0.669,
+   "ev": 0.0403,
    "ic90": [
-    -0.0226,
-    0.1101
+    -0.0292,
+    0.1052
    ],
    "dias_positivos": 26,
    "wallet_top_pct": 6,
    "veredicto": "sin_concluir"
   },
   "D CS partido [0,60-0,80)": {
-   "n": 730,
-   "dias": 42,
-   "acierto": 0.6986,
-   "precio_medio": 0.6822,
-   "ev": 0.0125,
+   "n": 745,
+   "dias": 43,
+   "acierto": 0.6993,
+   "precio_medio": 0.6826,
+   "ev": 0.013,
    "ic90": [
-    -0.022,
-    0.0479
+    -0.0207,
+    0.0472
    ],
-   "dias_positivos": 22,
+   "dias_positivos": 23,
    "wallet_top_pct": 5,
    "veredicto": "sin_concluir"
   },
   "M maker vende longshot [0,30-0,40)": {
-   "n": 3282,
-   "dias": 43,
-   "acierto": 0.6511,
+   "n": 3339,
+   "dias": 44,
+   "acierto": 0.6505,
    "precio_medio": 0.65,
-   "ev": 0.0016,
+   "ev": 0.0005,
    "ic90": [
-    -0.0193,
-    0.0239
+    -0.0192,
+    0.0225
    ],
    "dias_positivos": 21,
    "wallet_top_pct": 6,
