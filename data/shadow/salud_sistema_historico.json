@@ -1,53 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-23T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 60,
-      "resolve_postmortem_p50_s": 11.0,
-      "resolve_postmortem_p95_s": 24.0,
-      "resolve_postmortem_max_s": 32.0,
-      "n_ciclos_live_trade": 620,
-      "hueco_live_trade_max_s": 63.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 13,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 81.0,
-      "gb_libres": 13.84,
-      "git_gb": 0.0,
-      "data_gb": 27.78,
-      "datalogs_gb": 7.84
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 2.12,
-      "ram_pct_libre": 57.0
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 443,
-      "n_results_total": 231110
-    },
-    "carga_sistema": {
-      "load1": 5.97,
-      "load5": 7.52,
-      "load15": 9.14,
-      "nproc": 2,
-      "ratio5": 3.76,
-      "n_procesos_total": 200
-    },
-    "git_push": {
-      "commits_sin_pushear": 1
-    },
-    "anomalias": [
-      "🔥 CPU sobresuscrita: load5=7.52 en 2 cores (ratio=3.76x, umbral 3.0x) -- 200 procesos vivos"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-24T07:08:01+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 596,
@@ -16194,6 +16146,265 @@
     "anomalias": [
       "⏱️ ciclo resolve+postmortem tardó 520s (umbral 400s)",
       "💀 1 OOM-kill(s) del kernel en 24h: python(pid 221174, 3183.1MB)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-12T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 134,
+      "resolve_postmortem_p50_s": 144.7,
+      "resolve_postmortem_p95_s": 238.4,
+      "resolve_postmortem_max_s": 609.4,
+      "resolve_postmortem_duraciones_s": [
+        182.2,
+        155.8,
+        206.2,
+        181.0,
+        122.9,
+        128.4,
+        147.7,
+        125.6,
+        220.6,
+        184.8,
+        138.3,
+        138.0,
+        167.7,
+        137.2,
+        181.3,
+        176.2,
+        132.3,
+        131.9,
+        122.4,
+        134.3,
+        238.4,
+        246.7,
+        216.0,
+        128.2,
+        137.2,
+        126.2,
+        142.3,
+        609.4,
+        138.2,
+        141.5,
+        147.0,
+        143.8,
+        142.3,
+        236.9,
+        198.6,
+        134.5,
+        155.6,
+        140.9,
+        137.5,
+        145.0,
+        585.6,
+        119.4,
+        146.9,
+        152.7,
+        333.3,
+        150.5,
+        238.8,
+        207.4,
+        123.4,
+        125.3,
+        143.6,
+        144.3,
+        223.9,
+        181.2,
+        139.2,
+        143.2,
+        145.3,
+        141.5,
+        226.9,
+        179.5,
+        146.8,
+        154.7,
+        152.7,
+        153.0,
+        220.8,
+        176.8,
+        197.4,
+        142.2,
+        114.9,
+        134.4,
+        205.0,
+        184.0,
+        127.9,
+        136.8,
+        141.8,
+        160.1,
+        229.6,
+        189.9,
+        137.2,
+        153.3,
+        198.8,
+        145.6,
+        208.7,
+        201.1,
+        142.0,
+        139.4,
+        144.7,
+        129.4,
+        125.9,
+        553.2,
+        130.0,
+        194.0,
+        128.0,
+        165.8,
+        138.2,
+        196.2,
+        168.5,
+        126.5,
+        131.5,
+        122.7,
+        134.6,
+        200.8,
+        173.4,
+        136.7,
+        126.3,
+        140.5,
+        129.7,
+        202.5,
+        148.3,
+        107.5,
+        113.5,
+        144.1,
+        134.7,
+        200.6,
+        174.1,
+        124.9,
+        132.3,
+        128.0,
+        134.8,
+        190.2,
+        164.1,
+        134.5,
+        123.3,
+        122.5,
+        105.8,
+        199.7,
+        156.9,
+        103.7,
+        108.4,
+        130.1,
+        96.2,
+        170.2,
+        148.9,
+        194.3
+      ],
+      "n_ciclos_live_trade": 4401,
+      "hueco_live_trade_max_s": 74.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 24,
+      "stale": [
+        "ejeclive"
+      ]
+    },
+    "disco": {
+      "pct_usado": 82.0,
+      "gb_libres": 13.33,
+      "git_gb": 0.0,
+      "data_gb": 18.28,
+      "datalogs_gb": 6.77
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 8.58,
+      "ram_pct_libre": 56.3
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 780,
+      "n_results_total": 1408273
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 2.99,
+      "load5": 4.63,
+      "load15": 6.16,
+      "nproc": 8,
+      "ratio5": 0.58,
+      "n_procesos_total": 301
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 9,
+      "eventos": [
+        {
+          "ts": "Nov 11 10:32:13",
+          "pid": "4068762",
+          "nombre": "systemd",
+          "rss_mb": 0.9
+        },
+        {
+          "ts": "Nov 11 10:32:13",
+          "pid": "4068764",
+          "nombre": "(sd-pam)",
+          "rss_mb": 0.1
+        },
+        {
+          "ts": "Nov 11 10:32:13",
+          "pid": "385174",
+          "nombre": "python",
+          "rss_mb": 2131.2
+        },
+        {
+          "ts": "Nov 11 11:23:09",
+          "pid": "475696",
+          "nombre": "python3",
+          "rss_mb": 4056.0
+        },
+        {
+          "ts": "Nov 11 11:40:21",
+          "pid": "221223",
+          "nombre": "python",
+          "rss_mb": 1286.8
+        },
+        {
+          "ts": "Nov 11 12:54:40",
+          "pid": "508041",
+          "nombre": "python3",
+          "rss_mb": 1859.9
+        },
+        {
+          "ts": "Nov 11 16:35:33",
+          "pid": "459539",
+          "nombre": "python",
+          "rss_mb": 3792.1
+        },
+        {
+          "ts": "Nov 11 16:37:52",
+          "pid": "577504",
+          "nombre": "python",
+          "rss_mb": 4007.5
+        },
+        {
+          "ts": "Nov 11 16:39:36",
+          "pid": "578047",
+          "nombre": "python",
+          "rss_mb": 4342.2
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 609s (umbral 400s)",
+      "⚠️ screens STALE (código en disco != código cargado): ejeclive",
+      "💀 9 OOM-kill(s) del kernel en 24h: systemd(pid 4068762, 0.9MB), (sd-pam)(pid 4068764, 0.1MB), python(pid 385174, 2131.2MB), python3(pid 475696, 4056.0MB), python(pid 221223, 1286.8MB), python3(pid 508041, 1859.9MB), python(pid 459539, 3792.1MB), python(pid 577504, 4007.5MB), python(pid 578047, 4342.2MB)"
     ],
     "estado": "ANOMALIA"
   }

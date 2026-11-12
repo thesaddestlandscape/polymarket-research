@@ -1,416 +1,416 @@
 {
- "actualizado_utc": "2026-11-11T07:55:49+00:00",
- "eventos_total": 129577,
- "con_resultado": 120360,
- "eventos_24h": 6551,
+ "actualizado_utc": "2026-11-12T07:55:53+00:00",
+ "eventos_total": 132689,
+ "con_resultado": 124520,
+ "eventos_24h": 4300,
  "reprecio_ask_c": {
   "5m": {
    "0.3": [
-    1.81,
-    100916
+    1.83,
+    103345
    ],
    "1.0": [
-    2.03,
-    99862
+    2.07,
+    102256
    ],
    "4.0": [
-    2.12,
-    97562
+    2.17,
+    99896
    ]
   },
   "15m": {
    "0.3": [
-    1.27,
-    23634
+    1.29,
+    24180
    ],
    "1.0": [
-    1.44,
-    23396
+    1.46,
+    23936
    ],
    "4.0": [
-    1.64,
-    22773
+    1.67,
+    23289
    ]
   }
  },
  "celdas": {
   "ETH|5m|0.3": {
-   "n": 15985,
-   "descontado_c": 1.9,
-   "markout_c": -1.2,
-   "n_res": 15332,
+   "n": 16347,
+   "descontado_c": 2.0,
+   "markout_c": -1.1,
+   "n_res": 15972,
    "ev": -0.028,
-   "ic90_lo": -0.05,
-   "dias": 47
+   "ic90_lo": -0.051,
+   "dias": 48
   },
   "TODAS|5m|0.3": {
-   "n": 66335,
-   "descontado_c": 2.2,
+   "n": 67854,
+   "descontado_c": 2.3,
    "markout_c": -2.2,
-   "n_res": 63811,
-   "ev": -0.041,
+   "n_res": 66233,
+   "ev": -0.04,
    "ic90_lo": -0.054,
-   "dias": 47
+   "dias": 48
   },
   "ETH|5m|0.6": {
-   "n": 16210,
+   "n": 16591,
    "descontado_c": 2.2,
    "markout_c": -1.3,
-   "n_res": 15557,
+   "n_res": 16217,
    "ev": -0.031,
-   "ic90_lo": -0.055,
-   "dias": 47
+   "ic90_lo": -0.057,
+   "dias": 48
   },
   "TODAS|5m|0.6": {
-   "n": 67495,
+   "n": 69055,
    "descontado_c": 2.5,
-   "markout_c": -2.4,
-   "n_res": 65057,
-   "ev": -0.048,
+   "markout_c": -2.3,
+   "n_res": 67527,
+   "ev": -0.047,
    "ic90_lo": -0.061,
-   "dias": 47
+   "dias": 48
   },
   "ETH|5m|1.0": {
-   "n": 16298,
+   "n": 16679,
    "descontado_c": 2.3,
    "markout_c": -1.3,
-   "n_res": 15622,
+   "n_res": 16287,
    "ev": -0.036,
-   "ic90_lo": -0.059,
-   "dias": 47
+   "ic90_lo": -0.06,
+   "dias": 48
   },
   "TODAS|5m|1.0": {
-   "n": 67907,
-   "descontado_c": 2.5,
+   "n": 69465,
+   "descontado_c": 2.6,
    "markout_c": -2.3,
-   "n_res": 65351,
+   "n_res": 67817,
    "ev": -0.049,
    "ic90_lo": -0.063,
-   "dias": 47
+   "dias": 48
   },
   "BTC|5m|0.3": {
-   "n": 11589,
+   "n": 11931,
    "descontado_c": 3.5,
-   "markout_c": 1.4,
-   "n_res": 11072,
-   "ev": 0.028,
+   "markout_c": 1.5,
+   "n_res": 11576,
+   "ev": 0.031,
    "ic90_lo": -0.008,
-   "dias": 47
+   "dias": 48
   },
   "BTC|5m|0.6": {
-   "n": 11812,
+   "n": 12169,
    "descontado_c": 5.0,
-   "markout_c": 0.0,
-   "n_res": 11300,
+   "markout_c": 0.1,
+   "n_res": 11817,
    "ev": -0.014,
-   "ic90_lo": -0.045,
-   "dias": 47
+   "ic90_lo": -0.047,
+   "dias": 48
   },
   "BTC|5m|1.0": {
-   "n": 11872,
+   "n": 12227,
    "descontado_c": 5.7,
    "markout_c": -0.6,
-   "n_res": 11346,
-   "ev": -0.03,
-   "ic90_lo": -0.059,
-   "dias": 47
+   "n_res": 11862,
+   "ev": -0.032,
+   "ic90_lo": -0.063,
+   "dias": 48
   },
   "BTC|15m|0.3": {
-   "n": 1772,
-   "descontado_c": 4.0,
+   "n": 1827,
+   "descontado_c": 4.1,
    "markout_c": 1.1,
-   "n_res": 1710,
-   "ev": 0.039,
-   "ic90_lo": -0.027,
-   "dias": 47
+   "n_res": 1772,
+   "ev": 0.044,
+   "ic90_lo": -0.028,
+   "dias": 48
   },
   "TODAS|15m|0.3": {
-   "n": 8345,
+   "n": 8561,
    "descontado_c": 2.9,
-   "markout_c": -1.8,
-   "n_res": 8013,
-   "ev": -0.001,
-   "ic90_lo": -0.029,
-   "dias": 47
+   "markout_c": -1.7,
+   "n_res": 8310,
+   "ev": 0.0,
+   "ic90_lo": -0.03,
+   "dias": 48
   },
   "BTC|15m|0.6": {
-   "n": 1798,
-   "descontado_c": 4.9,
-   "markout_c": 0.3,
-   "n_res": 1741,
-   "ev": 0.008,
-   "ic90_lo": -0.049,
-   "dias": 47
+   "n": 1855,
+   "descontado_c": 5.0,
+   "markout_c": 0.4,
+   "n_res": 1801,
+   "ev": 0.009,
+   "ic90_lo": -0.05,
+   "dias": 48
   },
   "TODAS|15m|0.6": {
-   "n": 8411,
+   "n": 8631,
    "descontado_c": 3.1,
    "markout_c": -1.9,
-   "n_res": 8120,
-   "ev": -0.007,
-   "ic90_lo": -0.036,
-   "dias": 47
+   "n_res": 8420,
+   "ev": -0.005,
+   "ic90_lo": -0.035,
+   "dias": 48
   },
   "BTC|15m|1.0": {
-   "n": 1816,
-   "descontado_c": 5.5,
+   "n": 1878,
+   "descontado_c": 5.6,
    "markout_c": -0.1,
-   "n_res": 1754,
-   "ev": 0.001,
-   "ic90_lo": -0.058,
-   "dias": 47
+   "n_res": 1813,
+   "ev": -0.0,
+   "ic90_lo": -0.061,
+   "dias": 48
   },
   "TODAS|15m|1.0": {
-   "n": 8492,
+   "n": 8715,
    "descontado_c": 3.3,
    "markout_c": -2.0,
-   "n_res": 8164,
-   "ev": -0.01,
-   "ic90_lo": -0.041,
-   "dias": 47
+   "n_res": 8457,
+   "ev": -0.012,
+   "ic90_lo": -0.044,
+   "dias": 48
   },
   "XRP|5m|0.3": {
-   "n": 13196,
-   "descontado_c": 1.3,
+   "n": 13603,
+   "descontado_c": 1.4,
    "markout_c": -3.1,
-   "n_res": 12564,
+   "n_res": 13179,
    "ev": -0.052,
    "ic90_lo": -0.07,
-   "dias": 47
+   "dias": 48
   },
   "XRP|5m|0.6": {
-   "n": 13489,
-   "descontado_c": 1.2,
+   "n": 13893,
+   "descontado_c": 1.3,
    "markout_c": -2.9,
-   "n_res": 12886,
+   "n_res": 13501,
    "ev": -0.054,
-   "ic90_lo": -0.068,
-   "dias": 47
+   "ic90_lo": -0.069,
+   "dias": 48
   },
   "XRP|5m|1.0": {
-   "n": 13541,
+   "n": 13951,
    "descontado_c": 1.1,
    "markout_c": -2.7,
-   "n_res": 12912,
+   "n_res": 13529,
    "ev": -0.058,
-   "ic90_lo": -0.071,
-   "dias": 47
+   "ic90_lo": -0.072,
+   "dias": 48
   },
   "DOGE|15m|0.3": {
-   "n": 759,
-   "descontado_c": 4.4,
+   "n": 770,
+   "descontado_c": 4.3,
    "markout_c": -4.5,
-   "n_res": 739,
-   "ev": -0.055,
-   "ic90_lo": -0.112,
-   "dias": 47
+   "n_res": 751,
+   "ev": -0.052,
+   "ic90_lo": -0.103,
+   "dias": 48
   },
   "DOGE|15m|0.6": {
-   "n": 768,
+   "n": 780,
    "descontado_c": 4.3,
    "markout_c": -4.4,
-   "n_res": 757,
-   "ev": -0.071,
-   "ic90_lo": -0.144,
-   "dias": 46
+   "n_res": 768,
+   "ev": -0.068,
+   "ic90_lo": -0.132,
+   "dias": 47
   },
   "DOGE|15m|1.0": {
-   "n": 758,
+   "n": 770,
    "descontado_c": 4.4,
-   "markout_c": -4.1,
-   "n_res": 743,
-   "ev": -0.053,
-   "ic90_lo": -0.111,
-   "dias": 45
+   "markout_c": -4.2,
+   "n_res": 754,
+   "ev": -0.05,
+   "ic90_lo": -0.109,
+   "dias": 46
   },
   "XRP|15m|0.3": {
-   "n": 1715,
-   "descontado_c": 2.0,
-   "markout_c": -2.3,
-   "n_res": 1632,
-   "ev": -0.032,
-   "ic90_lo": -0.077,
-   "dias": 47
-  },
-  "XRP|15m|0.6": {
-   "n": 1735,
+   "n": 1769,
    "descontado_c": 2.1,
    "markout_c": -2.3,
-   "n_res": 1658,
-   "ev": -0.012,
-   "ic90_lo": -0.07,
-   "dias": 47
+   "n_res": 1712,
+   "ev": -0.033,
+   "ic90_lo": -0.076,
+   "dias": 48
+  },
+  "XRP|15m|0.6": {
+   "n": 1791,
+   "descontado_c": 2.1,
+   "markout_c": -2.3,
+   "n_res": 1737,
+   "ev": -0.014,
+   "ic90_lo": -0.064,
+   "dias": 48
   },
   "XRP|15m|1.0": {
-   "n": 1762,
+   "n": 1820,
    "descontado_c": 2.3,
    "markout_c": -2.4,
-   "n_res": 1681,
-   "ev": -0.022,
-   "ic90_lo": -0.085,
-   "dias": 47
+   "n_res": 1756,
+   "ev": -0.025,
+   "ic90_lo": -0.081,
+   "dias": 48
   },
   "DOGE|5m|0.3": {
-   "n": 8195,
+   "n": 8298,
    "descontado_c": 2.2,
    "markout_c": -5.1,
-   "n_res": 8017,
-   "ev": -0.082,
-   "ic90_lo": -0.096,
-   "dias": 47
+   "n_res": 8177,
+   "ev": -0.081,
+   "ic90_lo": -0.094,
+   "dias": 48
   },
   "DOGE|5m|0.6": {
-   "n": 8325,
-   "descontado_c": 2.0,
+   "n": 8432,
+   "descontado_c": 2.1,
    "markout_c": -4.8,
-   "n_res": 8164,
-   "ev": -0.076,
-   "ic90_lo": -0.094,
-   "dias": 47
+   "n_res": 8326,
+   "ev": -0.075,
+   "ic90_lo": -0.092,
+   "dias": 48
   },
   "DOGE|5m|1.0": {
-   "n": 8411,
-   "descontado_c": 1.7,
+   "n": 8516,
+   "descontado_c": 1.8,
    "markout_c": -4.3,
-   "n_res": 8240,
-   "ev": -0.066,
-   "ic90_lo": -0.084,
-   "dias": 47
+   "n_res": 8397,
+   "ev": -0.065,
+   "ic90_lo": -0.082,
+   "dias": 48
   },
   "SOL|5m|0.3": {
-   "n": 11801,
+   "n": 12014,
    "descontado_c": 2.3,
    "markout_c": -2.2,
-   "n_res": 11406,
-   "ev": -0.049,
-   "ic90_lo": -0.065,
-   "dias": 47
+   "n_res": 11780,
+   "ev": -0.046,
+   "ic90_lo": -0.063,
+   "dias": 48
   },
   "SOL|5m|0.6": {
-   "n": 11988,
-   "descontado_c": 2.4,
+   "n": 12208,
+   "descontado_c": 2.5,
    "markout_c": -2.2,
-   "n_res": 11607,
-   "ev": -0.046,
-   "ic90_lo": -0.064,
-   "dias": 47
+   "n_res": 11993,
+   "ev": -0.044,
+   "ic90_lo": -0.062,
+   "dias": 48
   },
   "SOL|5m|1.0": {
-   "n": 12111,
-   "descontado_c": 2.3,
+   "n": 12329,
+   "descontado_c": 2.4,
    "markout_c": -2.1,
-   "n_res": 11710,
-   "ev": -0.04,
-   "ic90_lo": -0.059,
-   "dias": 47
+   "n_res": 12092,
+   "ev": -0.037,
+   "ic90_lo": -0.058,
+   "dias": 48
   },
   "BNB|5m|0.3": {
-   "n": 5569,
-   "descontado_c": 2.3,
+   "n": 5661,
+   "descontado_c": 2.4,
    "markout_c": -6.2,
-   "n_res": 5420,
-   "ev": -0.121,
-   "ic90_lo": -0.139,
-   "dias": 47
+   "n_res": 5549,
+   "ev": -0.12,
+   "ic90_lo": -0.138,
+   "dias": 48
   },
   "BNB|5m|0.6": {
-   "n": 5671,
-   "descontado_c": 1.9,
+   "n": 5762,
+   "descontado_c": 2.0,
    "markout_c": -5.8,
-   "n_res": 5543,
-   "ev": -0.107,
+   "n_res": 5673,
+   "ev": -0.106,
    "ic90_lo": -0.125,
-   "dias": 47
+   "dias": 48
   },
   "BNB|5m|1.0": {
-   "n": 5674,
+   "n": 5763,
    "descontado_c": 1.8,
    "markout_c": -5.4,
-   "n_res": 5521,
-   "ev": -0.098,
-   "ic90_lo": -0.116,
-   "dias": 47
+   "n_res": 5650,
+   "ev": -0.097,
+   "ic90_lo": -0.117,
+   "dias": 48
   },
   "BNB|15m|0.3": {
-   "n": 728,
-   "descontado_c": 2.2,
+   "n": 744,
+   "descontado_c": 2.3,
    "markout_c": -5.8,
-   "n_res": 704,
-   "ev": -0.078,
-   "ic90_lo": -0.133,
-   "dias": 46
+   "n_res": 723,
+   "ev": -0.082,
+   "ic90_lo": -0.135,
+   "dias": 47
   },
   "BNB|15m|0.6": {
-   "n": 722,
-   "descontado_c": 1.9,
+   "n": 738,
+   "descontado_c": 2.0,
    "markout_c": -5.5,
-   "n_res": 702,
-   "ev": -0.093,
-   "ic90_lo": -0.154,
-   "dias": 46
+   "n_res": 723,
+   "ev": -0.094,
+   "ic90_lo": -0.151,
+   "dias": 47
   },
   "BNB|15m|1.0": {
-   "n": 722,
-   "descontado_c": 1.9,
+   "n": 735,
+   "descontado_c": 2.0,
    "markout_c": -5.2,
-   "n_res": 698,
-   "ev": -0.071,
-   "ic90_lo": -0.141,
-   "dias": 46
+   "n_res": 718,
+   "ev": -0.072,
+   "ic90_lo": -0.132,
+   "dias": 47
   },
   "SOL|15m|0.3": {
-   "n": 1362,
+   "n": 1393,
    "descontado_c": 2.9,
    "markout_c": -2.2,
-   "n_res": 1308,
-   "ev": -0.007,
-   "ic90_lo": -0.064,
-   "dias": 47
+   "n_res": 1354,
+   "ev": 0.004,
+   "ic90_lo": -0.057,
+   "dias": 48
   },
   "SOL|15m|0.6": {
-   "n": 1378,
+   "n": 1409,
    "descontado_c": 3.1,
    "markout_c": -2.2,
-   "n_res": 1330,
-   "ev": 0.006,
-   "ic90_lo": -0.052,
-   "dias": 47
+   "n_res": 1378,
+   "ev": 0.022,
+   "ic90_lo": -0.04,
+   "dias": 48
   },
   "ETH|15m|0.3": {
-   "n": 2009,
-   "descontado_c": 2.2,
+   "n": 2058,
+   "descontado_c": 2.3,
    "markout_c": -1.0,
-   "n_res": 1920,
-   "ev": 0.041,
-   "ic90_lo": -0.025,
-   "dias": 47
+   "n_res": 1998,
+   "ev": 0.036,
+   "ic90_lo": -0.04,
+   "dias": 48
   },
   "ETH|15m|0.6": {
-   "n": 2010,
-   "descontado_c": 2.3,
+   "n": 2058,
+   "descontado_c": 2.4,
    "markout_c": -1.2,
-   "n_res": 1932,
-   "ev": 0.029,
-   "ic90_lo": -0.051,
-   "dias": 47
+   "n_res": 2013,
+   "ev": 0.026,
+   "ic90_lo": -0.067,
+   "dias": 48
   },
   "ETH|15m|1.0": {
-   "n": 2070,
-   "descontado_c": 2.5,
+   "n": 2119,
+   "descontado_c": 2.6,
    "markout_c": -1.3,
-   "n_res": 1975,
-   "ev": 0.03,
-   "ic90_lo": -0.043,
-   "dias": 47
+   "n_res": 2057,
+   "ev": 0.021,
+   "ic90_lo": -0.065,
+   "dias": 48
   },
   "SOL|15m|1.0": {
-   "n": 1364,
+   "n": 1393,
    "descontado_c": 3.0,
    "markout_c": -2.3,
-   "n_res": 1313,
-   "ev": -0.015,
-   "ic90_lo": -0.082,
-   "dias": 46
+   "n_res": 1359,
+   "ev": -0.009,
+   "ic90_lo": -0.073,
+   "dias": 47
   }
  }
 }
