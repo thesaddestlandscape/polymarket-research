@@ -1,0 +1,67 @@
+--- a/pipeline_watchdog.py
++++ b/pipeline_watchdog.py
+@@ -255,6 +255,9 @@
+     # choom -n -200 (decision Javi 09-Nov, REVERSIBLE: quitar "choom -n -200 --" de esta linea): tras el OOM-kill de observadores del 09-Nov 14:00:29Z, perder bnreg reabriria el hueco; adj -200 < 0 de los
+     # demas python de datos, > -500 de los procesos de dinero real (ejeclive/precierre/walletmirror). Marcas de hueco en binance_huecos_<dia>.csv.
+     "bnreg": f"cd {REPO} && ulimit -v 2000000; choom -n -200 -- .venv/bin/python -u binance_registro_ms.py >> logs/binance_registro_ms.log 2>&1",
++    # cxb60dry (12-Nov, C6; INSTALAR SOLO tras congelar PREREG_CXB60_FORWARD): dry-run multivariante B-CXB60, SOLO simula (0 ordenes, sin claves ni red de envio), lee los maker_ms_*.csv.gz del volumen. Sin choom (sin dinero).
++    # Sin imports de la cadena de observadores_fase0 (no reinicia nada). Los ficheros ejecutados estan hasheados en dryrun/HASHES_CONGELADOS.json: el proceso aborta (exit 3) si difieren. ulimit -v holgado; el tope real es el RSS (--max-rss-mb 3000, exit 4).
++    "cxb60dry": f"cd {REPO} && nice -n 15 ionice -c3 bash -c 'ulimit -v 7000000; exec .venv/bin/python -I experimentos/5m_barato/l2_carrera_10nov/dryrun/cxb60_dryrun_fase0.py' >> logs/cxb60_dryrun.log 2>&1",
+     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
+     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
+     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
+@@ -393,7 +396,7 @@
+         output = r.stdout + r.stderr
+         return {name: (f".{name}\t" in output or f".{name} " in output)
+                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
+-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow", "logl2", "bnreg"]}
++                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow", "logl2", "bnreg", "cxb60dry"]}
+     except Exception:
+         return {}
+ 
+--- a/verify_deploy.py
++++ b/verify_deploy.py
+@@ -16,6 +16,7 @@
+ fast/slow NUNCA se reinician desde aquí (regla #8 del manual: primero
+ diagnosticar; el watchdog ya reinicia solo y hay marker orden_en_curso.json).
+ """
++import json
+ import os
+ import re
+ import subprocess
+@@ -125,6 +126,9 @@
+     # 09-Nov: registro Binance en proceso propio (FASE 1, solo lectura; ver pipeline_watchdog.py::SCREEN_RESTART). Sin imports locales: STALE solo si se edita su .py.
+     # Probe "arrancado" (linea de arranque, sale tambien en modo ocioso sin centinela); "conectado a Binance spot" solo sale con centinela y lock (lo comprueba el script de traspaso).
+     "bnreg": {"entry": "binance_registro_ms.py", "probe": "log:logs/binance_registro_ms.log:arrancado"},
++    # 12-Nov (C6, INSTALAR SOLO tras congelar el PREREG_CXB60_FORWARD): dry-run B-CXB60 (0 ordenes; ver pipeline_watchdog.py::SCREEN_RESTART). "entry" = el runner congelado; sus modulos hermanos (cxb60_core, frozen/) NO estan en la raiz del repo,
++    # asi que cierre_imports solo ve el propio .py: la integridad del resto la garantiza HASHES_CONGELADOS.json en el arranque. Probe `fresh:` sobre el heartbeat (se reescribe cada 30 s): un probe `log:...:INICIO` se pierde del tail de 20 lineas tras varios reinicios.
++    "cxb60dry": {"entry": "experimentos/5m_barato/l2_carrera_10nov/dryrun/cxb60_dryrun_fase0.py", "probe": "fresh:/root/polymarket-research-datalogs/cxb60_dryrun/heartbeat.json:180"},
+     # 21-Oct: dashboard 5m barato SOLO LECTURA, puerto 8892 (ver pipeline_watchdog.py::SCREEN_RESTART). 401 = vivo (tiene auth).
+     "dash5m": {"entry": "experimentos/5m_barato/dashboard/dashboard_5m_barato.py", "probe": "http:8892"},
+     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
+@@ -254,6 +258,25 @@
+         if any(patron in ln for ln in cola):
+             return True, f"'{patron}' en {ruta}"
+         return False, f"'{patron}' no aparece en el tail de {ruta}"
++    if spec.startswith("fresh:"):
++        # fresh:<ruta>:<max_edad_s> -- el fichero (p. ej. heartbeat.json que el proceso reescribe cada 30 s) se ha escrito en los ultimos N s, despues del restart,
++        # y si es JSON con "status" no empieza por STOPPED. No depende del tail de ningun log (el probe `log:` pierde un INICIO unico tras 20 lineas).
++        _, ruta, edad = spec.rsplit(":", 2)
++        f = BASE / ruta
++        if not f.exists():
++            return False, f"{ruta} no existe"
++        m = f.stat().st_mtime
++        if m < desde_epoch:
++            return False, f"{ruta} sin escrituras desde el restart"
++        if time.time() - m > float(edad):
++            return False, f"{ruta} parado hace {time.time() - m:.0f}s (> {edad}s)"
++        try:
++            st = str(json.loads(f.read_text(encoding="utf-8")).get("status", ""))
++        except (ValueError, OSError):
++            st = ""
++        if st.startswith("STOPPED"):
++            return False, f"{ruta} status {st}"
++        return True, f"{ruta} fresco ({time.time() - m:.0f}s)"
+     return False, f"probe desconocido: {spec}"
+ 
+ 

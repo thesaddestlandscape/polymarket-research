@@ -249,6 +249,15 @@ SCREEN_RESTART = {
     # logl2 (05-Nov, OK Javi): logger de anticipacion del barrido, SOLO LECTURA de feeds publicos (fstream perp aggTrade/forceOrder + OI REST), sin ordenes ni claves -> SIN choom.
     # Salida gz diaria en el volumen (symlink en datalogs), retencion 21 d propia, append en reinicio. Ver logger_anticipo_barrido.py.
     "logl2": f"cd {REPO} && ulimit -v 3000000; nice -n 19 .venv/bin/python logger_anticipo_barrido.py >> logs/logger_anticipo_barrido.log 2>&1",
+    # bnreg (09-Nov, FASE 1 captura independiente, DISENO_CAPTURA_INDEPENDIENTE_L2_09nov.md): registro Binance (aggTrade+bookTicker, 6 monedas) en PROCESO PROPIO, SOLO LECTURA de un feed publico, sin
+    # ordenes ni claves. Sin imports locales (cierre de imports = el propio .py). Escribe solo con el centinela datalogs/BNREG_HABILITADO (kill-switch; ocioso sin el) y con el flock
+    # .binance_registro.lock (un solo escritor; el hijo de libro_estado_ws queda en reserva y le cede el lock a bnreg tras >=30 s de espera). nice -10 lo fija el propio proceso.
+    # choom -n -200 (decision Javi 09-Nov, REVERSIBLE: quitar "choom -n -200 --" de esta linea): tras el OOM-kill de observadores del 09-Nov 14:00:29Z, perder bnreg reabriria el hueco; adj -200 < 0 de los
+    # demas python de datos, > -500 de los procesos de dinero real (ejeclive/precierre/walletmirror). Marcas de hueco en binance_huecos_<dia>.csv.
+    "bnreg": f"cd {REPO} && ulimit -v 2000000; choom -n -200 -- .venv/bin/python -u binance_registro_ms.py >> logs/binance_registro_ms.log 2>&1",
+    # cxb60dry (12-Nov, C6; INSTALAR SOLO tras congelar PREREG_CXB60_FORWARD): dry-run multivariante B-CXB60, SOLO simula (0 ordenes, sin claves ni red de envio), lee los maker_ms_*.csv.gz del volumen. Sin choom (sin dinero).
+    # Sin imports de la cadena de observadores_fase0 (no reinicia nada). Los ficheros ejecutados estan hasheados en dryrun/HASHES_CONGELADOS.json: el proceso aborta (exit 3) si difieren. ulimit -v holgado; el tope real es el RSS (--max-rss-mb 3000, exit 4).
+    "cxb60dry": f"cd {REPO} && nice -n 15 ionice -c3 bash -c 'ulimit -v 7000000; exec .venv/bin/python -I experimentos/5m_barato/l2_carrera_10nov/dryrun/cxb60_dryrun_fase0.py' >> logs/cxb60_dryrun.log 2>&1",
     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
@@ -387,7 +396,7 @@ def check_screens() -> dict[str, bool]:
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow", "logl2"]}
+                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow", "logl2", "bnreg", "cxb60dry"]}
     except Exception:
         return {}
 

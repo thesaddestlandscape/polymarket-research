@@ -6,7 +6,8 @@ T2  causalidad: el resultado no cambia si se anaden filas futuras al buffer DESP
 T3  TokBuf fuera de orden y duplicados de rx se ordenan de forma estable; TokenFeats incremental == de golpe.
 T4  placebo: solo cancela donde CXB60 dispararia y el instante cae dentro del segmento.
 T5  seguridad dry-run: el nucleo y el runner no importan py_clob_client/requests/web3/signers ni contienen llamadas de orden.
-T6  cobertura de motivos: la suma de motivos + colocaciones cubre la rejilla; el gate coincide con gate_vec."""
+T6  cobertura de motivos: la suma de motivos + colocaciones cubre la rejilla; el gate coincide con gate_vec.
+T7  motor CONGELADO (H1): engine/capt/relojes/engine_clock/engine_v3 se importan desde dryrun/frozen/ y son copia byte a byte del origen registrado en HASHES_CONGELADOS.json (si dev cambio despues, solo AVISA: el dry-run usa la copia)."""
 import os, sys, ast, re, random
 import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__)) + '/'; sys.path.insert(0, HERE)
@@ -126,7 +127,7 @@ def test_seguridad_dry_run():
     import importlib
     prohibidos = ('py_clob_client', 'requests', 'web3', 'eth_account', 'websockets', 'aiohttp')
     for m in prohibidos: assert m not in sys.modules or m in ('requests',) and False, m
-    for fn in ('cxb60_core.py', 'cxb60_dryrun_fase0.py'):
+    for fn in ('cxb60_core.py', 'cxb60_dryrun_fase0.py', 'cxb60_io.py', 'cxb60_resolve.py', 'cxb60_informe.py', 'congelar_hashes_cxb60.py'):
         p = HERE + fn
         if not os.path.exists(p): continue
         src = open(p).read(); code = re.sub(r'(""".*?"""|#.*)', '', src, flags=re.S)
@@ -143,6 +144,18 @@ def test_motivos_y_gate():
     print('T6 ok')
 
 
+def test_motor_congelado():
+    import json, hashlib, cxb60_io as IO
+    for m in (C.capt, C.relojes, C.G, C.E3): assert os.path.dirname(os.path.abspath(m.__file__)) + '/' == C.FROZEN, m.__file__
+    ref = json.load(open(IO.HASHES_FILE)); n = 0
+    for f, o in ref['origen'].items():
+        sf = IO.sha256_file(HERE + f); assert sf == o['sha256'], ('la copia congelada no es igual al origen registrado', f)
+        so = IO.sha256_file(o['ruta']) if os.path.exists(o['ruta']) else None
+        if so != o['sha256']: print('AVISO: el origen', o['ruta'], 'cambio tras congelar (el dry-run usa la copia frozen/)')
+        n += 1
+    print('T7 ok: motor congelado,', n, 'copias == origen registrado')
+
+
 if __name__ == '__main__':
-    for f in (test_tokbuf_y_feats_incremental, test_equivalencia_run_var, test_causalidad_futuro, test_placebo_cobertura, test_seguridad_dry_run, test_motivos_y_gate): f()
+    for f in (test_tokbuf_y_feats_incremental, test_equivalencia_run_var, test_causalidad_futuro, test_placebo_cobertura, test_seguridad_dry_run, test_motivos_y_gate, test_motor_congelado): f()
     print('TODOS OK')

@@ -16,6 +16,7 @@ Uso:
 fast/slow NUNCA se reinician desde aquí (regla #8 del manual: primero
 diagnosticar; el watchdog ya reinicia solo y hay marker orden_en_curso.json).
 """
+import json
 import os
 import re
 import subprocess
@@ -122,6 +123,12 @@ SCREENS = {
                  "probe": "log:logs/r3_shadow.log:r3_shadow arrancando"},
     # 05-Nov: logger de anticipacion del barrido (solo lectura, sin choom; ver pipeline_watchdog.py::SCREEN_RESTART).
     "logl2": {"entry": "logger_anticipo_barrido.py", "probe": "log:logs/logger_anticipo_barrido.log:conectado a fstream"},
+    # 09-Nov: registro Binance en proceso propio (FASE 1, solo lectura; ver pipeline_watchdog.py::SCREEN_RESTART). Sin imports locales: STALE solo si se edita su .py.
+    # Probe "arrancado" (linea de arranque, sale tambien en modo ocioso sin centinela); "conectado a Binance spot" solo sale con centinela y lock (lo comprueba el script de traspaso).
+    "bnreg": {"entry": "binance_registro_ms.py", "probe": "log:logs/binance_registro_ms.log:arrancado"},
+    # 12-Nov (C6, INSTALAR SOLO tras congelar el PREREG_CXB60_FORWARD): dry-run B-CXB60 (0 ordenes; ver pipeline_watchdog.py::SCREEN_RESTART). "entry" = el runner congelado; sus modulos hermanos (cxb60_core, frozen/) NO estan en la raiz del repo,
+    # asi que cierre_imports solo ve el propio .py: la integridad del resto la garantiza HASHES_CONGELADOS.json en el arranque. Probe `fresh:` sobre el heartbeat (se reescribe cada 30 s): un probe `log:...:INICIO` se pierde del tail de 20 lineas tras varios reinicios.
+    "cxb60dry": {"entry": "experimentos/5m_barato/l2_carrera_10nov/dryrun/cxb60_dryrun_fase0.py", "probe": "fresh:/root/polymarket-research-datalogs/cxb60_dryrun/heartbeat.json:180"},
     # 21-Oct: dashboard 5m barato SOLO LECTURA, puerto 8892 (ver pipeline_watchdog.py::SCREEN_RESTART). 401 = vivo (tiene auth).
     "dash5m": {"entry": "experimentos/5m_barato/dashboard/dashboard_5m_barato.py", "probe": "http:8892"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
@@ -251,6 +258,25 @@ def probe_ok(spec: str | None, desde_epoch: float) -> tuple[bool, str]:
         if any(patron in ln for ln in cola):
             return True, f"'{patron}' en {ruta}"
         return False, f"'{patron}' no aparece en el tail de {ruta}"
+    if spec.startswith("fresh:"):
+        # fresh:<ruta>:<max_edad_s> -- el fichero (p. ej. heartbeat.json que el proceso reescribe cada 30 s) se ha escrito en los ultimos N s, despues del restart,
+        # y si es JSON con "status" no empieza por STOPPED. No depende del tail de ningun log (el probe `log:` pierde un INICIO unico tras 20 lineas).
+        _, ruta, edad = spec.rsplit(":", 2)
+        f = BASE / ruta
+        if not f.exists():
+            return False, f"{ruta} no existe"
+        m = f.stat().st_mtime
+        if m < desde_epoch:
+            return False, f"{ruta} sin escrituras desde el restart"
+        if time.time() - m > float(edad):
+            return False, f"{ruta} parado hace {time.time() - m:.0f}s (> {edad}s)"
+        try:
+            st = str(json.loads(f.read_text(encoding="utf-8")).get("status", ""))
+        except (ValueError, OSError):
+            st = ""
+        if st.startswith("STOPPED"):
+            return False, f"{ruta} status {st}"
+        return True, f"{ruta} fresco ({time.time() - m:.0f}s)"
     return False, f"probe desconocido: {spec}"
 
 

@@ -1,0 +1,87 @@
+{
+ "creado_utc": "2026-11-12T13:02:05Z",
+ "copias": {
+  "cancel_evidencia.py": {
+   "origen": "/root/polymarket-research-dev/misiones/5m_barato/sonda1/p3_cancel_registro/cancel_evidencia.py",
+   "sha256_origen": "6e0e48e85bc247af4f1e74c0ec481a0ec49f8bf0d272628f9977aafc51cd0be0",
+   "sha256_copia": "6e0e48e85bc247af4f1e74c0ec481a0ec49f8bf0d272628f9977aafc51cd0be0"
+  },
+  "plan_paquete_l.py": {
+   "origen": "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/paquete_l/vendor/../../l_real_11nov/plan_paquete_l.py",
+   "sha256_origen": "62b7796330dd9470b026ce0822c5d71d4ba45a8dcc4709a555b33501c0c24ba7",
+   "sha256_copia": "62b7796330dd9470b026ce0822c5d71d4ba45a8dcc4709a555b33501c0c24ba7"
+  },
+  "envio_real.py": {
+   "origen": "/root/polymarket-research-dev/misiones/5m_barato/sonda1/sonda1.py",
+   "sha256_origen": "7ca2334d948c55fdf0ffb62f4421d7f39b45160248b3530dc1cc8141ea93a609",
+   "sha256_copia": "2504491951abac5d7d05f74d769a1b7a33d33d7ee3f72c1a849b5445d2087aa7",
+   "lineas_origen": [
+    [
+     75,
+     75
+    ],
+    [
+     270,
+     271
+    ],
+    [
+     274,
+     281
+    ],
+    [
+     708,
+     708
+    ],
+    [
+     711,
+     727
+    ],
+    [
+     730,
+     731
+    ],
+    [
+     734,
+     868
+    ]
+   ]
+  },
+  "vendor_main.py": {
+   "origen": "GENERADO: segmentos verbatim + plantilla manual de regenerar_vendor.py",
+   "sha256_copia": "6c7d9c2c69c3de70882e674e1600ab8236db1657bf9ed84bacd12f9288e436cc",
+   "segmentos": [
+    {
+     "origen": "/root/polymarket-research-dev/misiones/5m_barato/sonda1/vendor_main.py",
+     "sha256_origen": "3078ea996b00fe7d05978b06204e16a0bc62ca57e690c6e02af2dd6d0e8eb379",
+     "lineas": [
+      215,
+      224
+     ],
+     "nombre": "hash_orden",
+     "sha256_segmento": "940ff103124eb3d1838348349a4d211c8439a464f782487be1cb4b662a0f38db"
+    },
+    {
+     "origen": "/root/polymarket-research/live_trade.py",
+     "sha256_origen": "e70c9511fa0686c92f1e4a86124829a76def930d3d8e23801bdbd87b01146ee8",
+     "lineas": [
+      1048,
+      1048
+     ],
+     "nombre": "_clob_redondeo_parcheado",
+     "sha256_segmento": "3154e22151cf4d60d86c0d5b1326210ac61eda53d32cb8e1c4d3fcc4f8f348dc"
+    },
+    {
+     "origen": "/root/polymarket-research/live_trade.py",
+     "sha256_origen": "e70c9511fa0686c92f1e4a86124829a76def930d3d8e23801bdbd87b01146ee8",
+     "lineas": [
+      1051,
+      1118
+     ],
+     "nombre": "_parchear_redondeo_clob",
+     "sha256_segmento": "140a26e37d22f3958acc5e88bf56649792f7e35bdaeda4c30904cd2ae00c8cd5"
+    }
+   ],
+   "sha256_regenerar": "e9bd05c8ce0671754f3812b438b0713b59a8bf2001cc0696c7009a631482111e"
+  }
+ }
+}

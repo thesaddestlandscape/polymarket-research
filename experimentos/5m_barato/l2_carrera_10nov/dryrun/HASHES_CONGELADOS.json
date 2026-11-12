@@ -1,0 +1,39 @@
+{
+ "creado_utc": "2026-11-12T10:46:35Z",
+ "hashes": {
+  "frozen/engine.py": "a7b8431a73952524917ffd90e65b2dcf2779fabd3c452bc0407d36e34b1e8feb",
+  "frozen/capt.py": "3fe09524fa21b2d0478003ea4bcc6d120879758bb5d3ac2e0f2a16471716e51c",
+  "frozen/relojes.py": "6c89b85327333377fe5fbf9a11d3ae04b8928922699d3e9f8d2f8ae291c27190",
+  "frozen/engine_clock.py": "4196fbf6df9dfa58f3cf167b6ca17752ebae2587250c41d592c031ebffb41d4e",
+  "frozen/engine_v3.py": "b1bf34a16e7fb94a5a245da95aa40528ff33b78c0cc70902521a44f2f496b9a1",
+  "cxb60_core.py": "40b1099fc70276d35899a3b7fe701d51bbbceef7146d943ab56f4436b92caefc",
+  "cxb60_io.py": "0f8bb536e3d30677b181e3ebbfcb7d44fc75704c0c463ce3c64cda2e15ccc1c5",
+  "cxb60_dryrun_fase0.py": "6f743e2f2d62100c8e8d0d2b0b9c506ef320e988b1dfe05d2c517002906b0cb1",
+  "l_pool_emp.json": "fafab5541dbb6316802464c1ed21995351bd38b66a1f64d278f86d36526b2618",
+  "cxb60_resolve.py": "c0ef91255b558affae5a62853b6e0b6e827147eedceefa297d2b452c5b9b1725",
+  "cxb60_informe.py": "13934151356dc3792508dbde7cb85e6e1c1a5433c11a40823a02c2892d89c10d"
+ },
+ "origen": {
+  "frozen/engine.py": {
+   "ruta": "/root/polymarket-research-dev/misiones/5m_barato/sonda1/p2/escalera_B/engine.py",
+   "sha256": "a7b8431a73952524917ffd90e65b2dcf2779fabd3c452bc0407d36e34b1e8feb"
+  },
+  "frozen/capt.py": {
+   "ruta": "/root/polymarket-research-dev/misiones/5m_barato/sonda1/p2/capturabilidad_A_R1ws/capt.py",
+   "sha256": "3fe09524fa21b2d0478003ea4bcc6d120879758bb5d3ac2e0f2a16471716e51c"
+  },
+  "frozen/relojes.py": {
+   "ruta": "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/relojes.py",
+   "sha256": "6c89b85327333377fe5fbf9a11d3ae04b8928922699d3e9f8d2f8ae291c27190"
+  },
+  "frozen/engine_clock.py": {
+   "ruta": "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/engine_clock.py",
+   "sha256": "4196fbf6df9dfa58f3cf167b6ca17752ebae2587250c41d592c031ebffb41d4e"
+  },
+  "frozen/engine_v3.py": {
+   "ruta": "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/engine_v3.py",
+   "sha256": "b1bf34a16e7fb94a5a245da95aa40528ff33b78c0cc70902521a44f2f496b9a1"
+  }
+ },
+ "nota": "frozen/* son copias byte a byte de ORIGEN en la fecha de creado_utc; el runner aborta si cualquiera de FICHEROS_CONGELADOS difiere"
+}

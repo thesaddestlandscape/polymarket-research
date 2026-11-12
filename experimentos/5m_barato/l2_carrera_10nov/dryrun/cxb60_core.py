@@ -11,31 +11,45 @@ Reglas de integridad (mandato Javi 11-Nov):
   * La unidad de unicidad de resultados es (dia, token, L, variante, seg). Todo identificador de segmento es determinista (reproducible entre reinicios).
 Variantes (spec): kind in {'G0' (puede=base, sin cancelar), 'GEO1' (puede=base&arm, sin cancelar = CONTROL de igual colocacion), 'CXB' (puede=base&arm, cancela al ver bid<L, efectiva rx+l), 'PLC' (placebo de igual cobertura:
 mismo disparo que CXB60 pero cancelacion en instante uniforme del segmento, semilla s)}. Ver PREREG_CXB60_FORWARD_BORRADOR.md."""
-import os, sys, math
+import os, sys, math, json
 import numpy as np
 
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'          # l2_carrera_10nov/
-P2 = '/root/polymarket-research-dev/misiones/5m_barato/sonda1/p2/'
-for p in (HERE, P2 + 'escalera_B', P2 + 'capturabilidad_A_R1ws'):
-    if p not in sys.path: sys.path.insert(0, p)
-import engine as G            # constantes y gate_vec/vol30_vec del motor (dev, solo importado)
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'          # l2_carrera_10nov/ (solo para tests/replay que leen ficheros del motor ORIGINAL)
+FROZEN = os.path.dirname(os.path.abspath(__file__)) + '/frozen/'                   # copia CONGELADA del motor v3 (hash en HASHES_CONGELADOS.json; el runner aborta si difiere)
+P2 = '/root/polymarket-research-dev/misiones/5m_barato/sonda1/p2/'                 # origen de las copias (ya NO se importa de aqui)
+sys.path.insert(0, HERE)                                                           # prioridad baja (los tests importan otros modulos de l2_carrera_10nov)
+sys.path.insert(0, FROZEN)                                                         # prioridad maxima: engine/capt/relojes/engine_clock/engine_v3 salen de frozen/
+import capt, relojes                                                               # orden importa: relojes y engine importan capt
+import engine as G            # constantes y gate_vec/vol30_vec del motor (copia congelada)
 import engine_v3 as E3        # fill_segment_v3 + DayEngV3.run_segment/qupd3
-import capt                   # capt.Day.book / capt.Day.prints (solo importado)
+for _m in (capt, relojes, G, E3):
+    assert os.path.dirname(os.path.abspath(_m.__file__)) + '/' == FROZEN, ('modulo del motor NO procede de frozen/', _m.__file__)
 
 LAT_POST, GRID, TMIN, LEVELS, EPS, TOLP = G.LAT_POST, G.GRID, G.TMIN, G.LEVELS, G.EPS, G.TOLP
 SIZE = 5.0; HARD_EXTRA_MS = 60; SETTLE_MS = 2000; C_PRINT = 19                      # C_PRINT: sello de la cinta WS = t_ev - C_PRINT - 1 (c_epoca de stamp_v3: p50 d_ex 18-21 ms; fallback)
 REB = 0.2 * 0.07                                                                      # rebate maker (20 % de la comision 0,07*p*(1-p) del tomador), como el motor
 
 
+# l EMPIRICO (CXBEMP): l_efectivo = PROC_MS + valor del pool de anclas propias (copia congelada l_pool_emp.json, 1.453 valores, p50 40,9 ms, p90 96 ms), UN sorteo por segmento, determinista:
+# rng = default_rng([clave_token, round(L*100), n_segmento, 7919]) (no consume estado entre llamadas ni entre reinicios; el original passT_cxb_l.py usaba un rng por (mercado, L) con un sorteo por llamada: misma distribucion, otra secuencia).
+POOL_FILE = os.path.dirname(os.path.abspath(__file__)) + '/l_pool_emp.json'
+_P = json.load(open(POOL_FILE)); POOL_EMP = np.asarray(_P['valores'], np.int64); PROC_MS = int(_P['proc_ms'])
+assert len(POOL_EMP) == _P['n'] >= 1000 and PROC_MS == 3 and POOL_EMP.min() >= 20
+
+
+def l_emp(token_key, L, seg):
+    return PROC_MS + int(POOL_EMP[np.random.default_rng([int(token_key), int(round(L * 100)), int(seg), 7919]).integers(len(POOL_EMP))])
+
+
 class VSpec:
     def __init__(self, name, kind, l=None, seed=None, ref_l=60):
-        assert kind in ('G0', 'GEO1', 'CXB', 'PLC'), kind
+        assert kind in ('G0', 'GEO1', 'CXB', 'CXBEMP', 'PLC'), kind
         self.name, self.kind, self.l, self.seed, self.ref_l = name, kind, l, seed, ref_l
-        self.uses_arm = kind != 'G0'; self.cancels = kind in ('CXB', 'PLC')
+        self.uses_arm = kind != 'G0'; self.cancels = kind in ('CXB', 'CXBEMP', 'PLC')
 
 
-def default_specs(l_list=(35, 60, 100, 150), placebo_seeds=20):
-    s = [VSpec('G0', 'G0'), VSpec('GEO1', 'GEO1')] + [VSpec(f'CXB{l}', 'CXB', l=l) for l in l_list]
+def default_specs(l_list=(35, 45, 60, 100, 150), placebo_seeds=20, emp=True):
+    s = [VSpec('G0', 'G0'), VSpec('GEO1', 'GEO1')] + [VSpec(f'CXB{l}', 'CXB', l=l) for l in l_list] + ([VSpec('CXBEMP', 'CXBEMP')] if emp else [])
     s += [VSpec(f'PLC60_{i}', 'PLC', seed=i, ref_l=60) for i in range(1, placebo_seeds + 1)]
     return s
 
@@ -216,8 +230,9 @@ class VMachine:
             end = None; canc = 0; t_trig_rx = t_trig_ex = None
             if nat is not None and nat <= t_arr: end = nat                                               # sin segmento (motor: t_end <= t_arr no coloca ni llama a cancel_fn)
             elif sp.cancels:
-                if sp.kind == 'CXB':
-                    tc, t_trig_rx, t_trig_ex = self._trigger(t_arr, nat if nat is not None else float('inf'), sp.l, t_known)
+                if sp.kind in ('CXB', 'CXBEMP'):
+                    l_eff = sp.l if sp.kind == 'CXB' else l_emp(self.key, L, self.seg)
+                    tc, t_trig_rx, t_trig_ex = self._trigger(t_arr, nat if nat is not None else float('inf'), l_eff, t_known)
                     if tc is not None and (nat is None or tc < nat): end, canc = max(tc, t_arr), 1; nat_reason = 'cancel_bid<L'
                     elif nat is not None: end = nat
                 else:                                                                                      # PLC: necesita el fin natural y datos hasta el: instante uniforme si el disparo (ref_l) existiria
@@ -230,7 +245,7 @@ class VMachine:
             rec = None
             if end > t_arr:
                 q, tf, why = fill_fn(F.tok, L, t_arr, end, self.rem)
-                rec = dict(var=sp.name, tok=F.tok, L=L, seg=self.seg, t_dec_rx=lv['t_dec'], t_arr=t_arr, t_end=int(end), canc=canc, motivo_fin=nat_reason, t_trig_rx=t_trig_rx, t_trig_ex=t_trig_ex,
+                rec = dict(var=sp.name, tok=F.tok, L=L, seg=self.seg, t_dec_rx=lv['t_dec'], t_arr=t_arr, t_end=int(end), canc=canc, motivo_fin=nat_reason, t_trig_rx=t_trig_rx, t_trig_ex=t_trig_ex, l_eff=(l_eff if sp.kind in ('CXB', 'CXBEMP') and end > t_arr and canc else None),
                            q=float(q), tf=(int(tf) if q > 1e-9 else -1), rem_antes=float(self.rem), why=why)
                 self.seg += 1
                 if q > 1e-9: self.rem -= q
@@ -250,9 +265,9 @@ def pnl_of(q, L, gana):
 
 class Market:
     """Un mercado 5m (un token): sus TokenFeats y sus maquinas (L x variante)."""
-    def __init__(self, tok, fin, coin, lado, mid, comp_tok, buf, buf_comp, buf15, specs, levels=LEVELS):
+    def __init__(self, tok, fin, coin, lado, mid, comp_tok, buf, buf_comp, buf15, specs, levels=LEVELS, F=None):
         self.tok, self.fin, self.coin, self.lado, self.mid, self.comp_tok = tok, fin, coin, lado, mid, comp_tok
-        self.F = TokenFeats(tok, fin, buf, buf_comp, buf15, levels); key = int(tok[-9:]) if tok.isdigit() else abs(hash(tok))
+        self.F = F if F is not None else TokenFeats(tok, fin, buf, buf_comp, buf15, levels); key = int(tok[-9:]) if tok.isdigit() else abs(hash(tok))
         self.M = [VMachine(sp, self.F, L, key) for L in levels for sp in specs]; self.closed = False
 
     def advance(self, t_known, fill_fn):
