@@ -28,11 +28,11 @@
     "hi": 0.05,
     "n": 78,
     "pnl_medio": -0.6997,
-    "diff_vs_resto": -0.6304,
+    "diff_vs_resto": -0.6307,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9308,
-      -0.3301
+      -0.931,
+      -0.3304
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -68,24 +68,24 @@
   },
   "SEGUIR#BTC#15min#0": {
     "n_dias": 67,
-    "pnl_sin_mejores_dias": -0.4973,
+    "pnl_sin_mejores_dias": -0.4984,
     "robusto_dias": false,
     "lo": 0.01,
     "hi": 0.06,
-    "n": 1800,
-    "pnl_medio": -0.3918,
-    "diff_vs_resto": -0.3575,
+    "n": 1804,
+    "pnl_medio": -0.3931,
+    "diff_vs_resto": -0.3587,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.2299,
-      -0.4851
+      -0.2314,
+      -0.486
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.4175,
+    "pnl_medio_loo": -0.4187,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.5329,
-      -0.2338
+      -0.5396,
+      -0.2393
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -166,20 +166,20 @@
     "robusto_dias": false,
     "lo": 0.01,
     "hi": 0.06,
-    "n": 4846,
-    "pnl_medio": -0.2941,
-    "diff_vs_resto": -0.2573,
+    "n": 4853,
+    "pnl_medio": -0.2871,
+    "diff_vs_resto": -0.2504,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.2982,
-      -0.2164
+      -0.2992,
+      -0.2017
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.3133,
+    "pnl_medio_loo": -0.3062,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.4115,
-      -0.1566
+      -0.4145,
+      -0.1561
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -198,11 +198,11 @@
     "hi": 0.12,
     "n": 524,
     "pnl_medio": -0.2941,
-    "diff_vs_resto": -0.2748,
-    "p_valor": 0.007,
+    "diff_vs_resto": -0.2747,
+    "p_valor": 0.0055,
     "split_half_diff": [
-      -0.0538,
-      -0.4958
+      -0.0537,
+      -0.4957
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.3183,
@@ -228,11 +228,11 @@
     "hi": 0.06,
     "n": 693,
     "pnl_medio": -0.3417,
-    "diff_vs_resto": -0.3062,
-    "p_valor": 0.0045,
+    "diff_vs_resto": -0.3061,
+    "p_valor": 0.003,
     "split_half_diff": [
-      -0.4681,
-      -0.1448
+      -0.468,
+      -0.1447
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4759,
