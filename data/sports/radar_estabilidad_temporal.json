@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-11-12T08:10:10+00:00",
+ "actualizado_utc": "2026-11-13T08:10:14+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
@@ -7,16 +7,16 @@
  },
  "radar": {
   "CS#SEGUIR#0.85": {
-   "n": 264,
-   "dias": 72,
-   "frac_dias_pos": 0.75,
-   "top_wallet": 0.106,
-   "n_wallets": 81,
-   "pnl_medio": 0.0255,
+   "n": 266,
+   "dias": 73,
+   "frac_dias_pos": 0.753,
+   "top_wallet": 0.105,
+   "n_wallets": 82,
+   "pnl_medio": 0.0264,
    "medias_tramos": [
     0.0026,
     0.0716,
-    0.0024
+    0.0054
    ]
   },
   "LoL#SEGUIR#0.85": {
@@ -46,16 +46,29 @@
    ]
   },
   "LoL#SEGUIR#0.45": {
-   "n": 306,
-   "dias": 69,
-   "frac_dias_pos": 0.623,
+   "n": 307,
+   "dias": 70,
+   "frac_dias_pos": 0.629,
    "top_wallet": 0.059,
-   "n_wallets": 148,
-   "pnl_medio": 0.0954,
+   "n_wallets": 149,
+   "pnl_medio": 0.0988,
    "medias_tramos": [
     0.1109,
     0.1005,
-    0.0748
+    0.0852
+   ]
+  },
+  "LoL#FADE#0.70": {
+   "n": 208,
+   "dias": 62,
+   "frac_dias_pos": 0.645,
+   "top_wallet": 0.115,
+   "n_wallets": 87,
+   "pnl_medio": 0.0137,
+   "medias_tramos": [
+    0.0163,
+    0.0217,
+    0.0033
    ]
   },
   "Dota#SEGUIR#0.85": {
@@ -69,6 +82,19 @@
     0.0015,
     0.002,
     0.0782
+   ]
+  },
+  "Dota#SEGUIR#0.70": {
+   "n": 176,
+   "dias": 53,
+   "frac_dias_pos": 0.604,
+   "top_wallet": 0.136,
+   "n_wallets": 73,
+   "pnl_medio": 0.0717,
+   "medias_tramos": [
+    0.067,
+    0.0229,
+    0.1236
    ]
   },
   "lal-otros#FADE#0.55": {
@@ -85,16 +111,16 @@
    ]
   },
   "NFL#FADE#0.80": {
-   "n": 223,
-   "dias": 42,
-   "frac_dias_pos": 0.69,
-   "top_wallet": 0.175,
+   "n": 225,
+   "dias": 44,
+   "frac_dias_pos": 0.705,
+   "top_wallet": 0.173,
    "n_wallets": 38,
-   "pnl_medio": 0.0276,
+   "pnl_medio": 0.0293,
    "medias_tramos": [
-    0.0003,
-    0.0482,
-    0.0344
+    0.0033,
+    0.051,
+    0.0336
    ]
   },
   "epl-otros#SEGUIR#0.45": {
@@ -147,6 +173,19 @@
     0.1342,
     0.0253,
     0.2645
+   ]
+  },
+  "NHL#FADE#0.45": {
+   "n": 318,
+   "dias": 51,
+   "frac_dias_pos": 0.608,
+   "top_wallet": 0.119,
+   "n_wallets": 67,
+   "pnl_medio": 0.0647,
+   "medias_tramos": [
+    0.0917,
+    0.0537,
+    0.0488
    ]
   },
   "ucl-otros#SEGUIR#0.50": {
