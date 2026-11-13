@@ -305,10 +305,11 @@ class Paquete:
         # v19 (5): validacion cruzada contra el replay (fuente independiente: matched*precio por orden). Infracuenta posible (modo no recuperado, `coste` ausente/no numerico, fill de orden desconocida) => fail-closed: gasto_b = max(.., replay) y kill duro
         mx = {}
         for r in fil: mx[r.get('clave')] = max(mx.get(r.get('clave'), 0.0), num(r.get('size_matched')) or 0.0)
-        gasto_replay = round(sum(m * self.ordenes[c].precio for c, m in mx.items() if c in self.ordenes), 6); gasto_filas = sum(num(r.get('coste')) or 0.0 for r in fil)      # replay = size_matched maximo de las PROPIAS filas fill x precio (un `estado` con matched y sin fila fill es un relleno aun por registrar: lo recoge `_fill_detectado`, no es infracuenta)
+        gasto_replay = round(sum(m * self.ordenes[c].precio for c, m in mx.items() if c in self.ordenes and c in top), 6); gasto_filas = sum(num(r.get('coste')) or 0.0 for r in fl)      # v20 (review 17, 1): SOLO filas/ordenes de modo top (la fase A no entra en el tope de B)      # replay = size_matched maximo de las PROPIAS filas fill x precio (un `estado` con matched y sin fila fill es un relleno aun por registrar: lo recoge `_fill_detectado`, no es infracuenta)
         malas = [r.get('eid') for r in fil if num(r.get('coste')) is None]; sin_orden = sorted({str(r.get('clave')) for r in fil if r.get('clave') not in self.ordenes})
-        if malas or sin_orden or gasto_filas < gasto_replay - 1e-6:
-            self.gasto_b = round(max(self.gasto_b, gasto_replay), 6); self._alerta(f'RECONSTRUCCION FASE B INCOHERENTE: filas fill sin coste={malas[:3]} claves sin orden={sin_orden[:3]} gasto_filas={gasto_filas:.6f} gasto_replay={gasto_replay:.6f}')
+        modo_perdido = sorted({str(r.get('clave')) for r in fil if r.get('modo') == 'top' and r.get('clave') in self.ordenes and r.get('clave') not in top})     # v20 (review 17, 1): la fila dice top y la orden reconstruida no => modo no recuperado (infracuenta)
+        if malas or sin_orden or modo_perdido or gasto_filas < gasto_replay - 1e-6:
+            self.gasto_b = round(max(self.gasto_b, gasto_replay), 6); self._alerta(f'RECONSTRUCCION FASE B INCOHERENTE: filas fill sin coste={malas[:3]} claves sin orden={sin_orden[:3]} modo_perdido={modo_perdido[:3]} gasto_filas={gasto_filas:.6f} gasto_replay={gasto_replay:.6f}')
             self._matar('fase_b_reconstruccion_incoherente', 'PARTIAL')
 
     def _matched_push(self, clave):

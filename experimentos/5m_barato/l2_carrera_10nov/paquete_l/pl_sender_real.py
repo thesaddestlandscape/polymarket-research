@@ -238,6 +238,18 @@ def _tam_dir(d):
     return tot, mt
 
 
+def _sonda_en_dir(d, marca):
+    """v20: True si la marca de la sonda aparece en algun fichero cancel_evid_* (texto plano o .gz); errores de lectura => False (fail-closed)."""
+    import gzip
+    for f in glob.glob(os.path.join(d, 'cancel_evid_*.jsonl*')):
+        try:
+            op = gzip.open if f.endswith('.gz') else open
+            with op(f, 'rb') as fh:
+                if marca.encode() in fh.read(): return True
+        except (OSError, EOFError): continue          # .gz aun abierto/truncado: se sigue con el resto
+    return False
+
+
 def _verificar_canal(cfg, env, ce, toks_up, evid_dir, timeout_s):
     """v18 (C) / v19 (2,3,4): (2) el directorio de evidencia es NUEVO (creacion exclusiva) y escribible, y el escritor VUELCA: el tamano total de cancel_evid_* CRECE tras `reg.evento('preflight_sonda')` + vaciar (un fichero viejo no da verde);
     (1) con `armar_envio` (MISMO constructor que el run real) el canal de usuario se conecta y queda SUSCRITO a los 4 mercados 5m vigentes (`SenderReal.preparar` = gate_envio fail-closed). TODO (armado, preparar x tokens, vaciar) corre en un hilo
@@ -247,7 +259,7 @@ def _verificar_canal(cfg, env, ce, toks_up, evid_dir, timeout_s):
     try:
         os.makedirs(evid_dir, exist_ok=False); sonda = os.path.join(evid_dir, '.preflight_escritura'); open(sonda, 'w').write('x'); os.unlink(sonda); R['evid_escribible'] = True
     except OSError as e: R['error'] = f'directorio de evidencia NO escribible/no nuevo: {type(e).__name__}'; return R
-    fin = time.monotonic() + timeout_s
+    fin = time.monotonic() + timeout_s; H['cancelado'] = False
     def restaurar_bloq():
         reg = H['reg']; b0 = H['bloq0']
         if reg is None or b0 is None: return
@@ -265,25 +277,32 @@ def _verificar_canal(cfg, env, ce, toks_up, evid_dir, timeout_s):
     def trabajo():
         try:
             sender, _env, reg = armar_envio(cfg, evid_dir, env=env, ce=ce); H['reg'] = reg
+            if H['cancelado']: return                                                                                    # v20 (review 17, 3): el llamador ya se fue por timeout: este hilo cierra lo que armo (finally) sin tocar nada mas
             with reg._gl: H['bloq0'] = copy.deepcopy(reg._bloq)
             reg.avisar = lambda msg: None; reg._guardar_bloq = lambda copia: None; ev0 = reg.evento
             reg.evento = lambda kind, **kw: None if kind == 'envio_bloqueado' else ev0(kind, **kw)                      # el preflight no emite `envio_bloqueado` ni avisos
-            antes = _tam_dir(evid_dir); reg.evento('preflight_sonda', n=1); reg.w.vaciar(timeout=max(0.0, min(3.0, fin - time.monotonic()))); despues = _tam_dir(evid_dir)
-            R['escritor_vuelca'] = despues[0] > antes[0] and not getattr(reg.w, 'errores', 0)
+            reg.w.vaciar(timeout=max(0.0, min(2.0, fin - time.monotonic()))); antes = _tam_dir(evid_dir); marca = f'preflight_sonda_{time.time_ns()}'             # v20 (review 17, 2): vaciar ANTES de medir (los eventos del armado no cuentan) y exigir la SONDA concreta en el contenido
+            reg.evento('preflight_sonda', n=1, marca=marca); reg.w.vaciar(timeout=max(0.0, min(2.0, fin - time.monotonic()))); despues = _tam_dir(evid_dir)
+            R['escritor_vuelca'] = despues[0] > antes[0] and _sonda_en_dir(evid_dir, marca) and not getattr(reg.w, 'errores', 0)
             for coin, _lado, tok in toks_up:
                 sender.espera_gate_s = max(0.0, fin - time.monotonic()); R['suscrito'][coin] = bool(sender.preparar(tok))
             R['ok'] = bool(R['evid_escribible'] and R['escritor_vuelca'] and len(R['suscrito']) == len(C.COINS) and all(R['suscrito'].values()))
         except SystemExit as e: R['error'] = f'canal NO armado: {str(e)[:120]}'
         except BaseException as e: R['error'] = f'{type(e).__name__}: {str(e)[:120]}'
         finally:
-            restaurar_bloq(); cerrar()
-            if R['cierre_error']: R['ok'] = False
+            if not H['cancelado']: restaurar_bloq()                                                                   # tras timeout el llamador ya restauro: no competir por _bloq
+            cerrar()
+            if R['cierre_error'] and not H['cancelado']: R['ok'] = False
     h = threading.Thread(target=trabajo, daemon=True, name='preflight_canal'); h.start(); h.join(timeout_s)
     if h.is_alive():
-        out = dict(R, suscrito=dict(R['suscrito']), cierre_error=list(R['cierre_error']), ok=False, error='timeout_canal'); restaurar_bloq()
-        try:
-            if H['reg'] is not None and getattr(H['reg'], 'canal', None) is not None: H['reg'].canal.parar()
-        except BaseException as e: out['cierre_error'].append(f'canal.parar: {type(e).__name__}: {str(e)[:60]}')
+        H['cancelado'] = True; out = dict(R, suscrito=dict(R['suscrito']), cierre_error=list(R['cierre_error']), ok=False, error='timeout_canal'); restaurar_bloq()
+        reg = H['reg']                                                                                                 # v20 (review 17, 3): si ya habia canal/escritor se cierran AQUI tambien (canal.parar + w.cerrar); si el hilo sigue dentro de armar_envio, cierra el al volver (flag cancelado)
+        if reg is not None:
+            try:
+                if getattr(reg, 'canal', None) is not None: reg.canal.parar()
+            except BaseException as e: out['cierre_error'].append(f'canal.parar: {type(e).__name__}: {str(e)[:60]}')
+            try: reg.w.cerrar()
+            except BaseException as e: out['cierre_error'].append(f'w.cerrar: {type(e).__name__}: {str(e)[:60]}')
         return out
     out = dict(R, suscrito=dict(R['suscrito']), cierre_error=list(R['cierre_error']))
     if out['cierre_error']: out['ok'] = False
@@ -347,7 +366,7 @@ def preflight(cfg, autenticado=True, get=None, env_factory=None, chrony=None, ah
         except Exception as e: A['orden_firmada_local'] = dict(error=f'{type(e).__name__}: {str(e)[:120]}')
     f = A.get('orden_firmada_local') or {}
     if canal_check:                                                                               # v18 (C): canal de usuario REAL suscrito, directorio de evidencia escribible y escritor que vuelca (SOLO LECTURA, sin POST)
-        A['canal'] = _verificar_canal(cfg, env, ce or (ce_box[0] if ce_box else None), [t for t in tokens if t[1] == 'Up'], evid_dir or os.path.join(C.OUT_BASE, 'preflight', 'cancel_evid_' + time.strftime('%Y%m%dT%H%M%SZ', time.gmtime(ahora()))), canal_timeout_s)
+        A['canal'] = _verificar_canal(cfg, env, ce or (ce_box[0] if ce_box else None), [t for t in tokens if t[1] == 'Up'], evid_dir or os.path.join(C.OUT_BASE, 'preflight', 'cancel_evid_' + time.strftime('%Y%m%dT%H%M%SZ', time.gmtime(ahora())) + f'_{time.time_ns()}'), canal_timeout_s)
     if canal_check and (A.get('canal') or {}).get('cierre_error'): fallos.extend(f'canal.cierre: {x}' for x in A['canal']['cierre_error'])
     A['ok'] = bool(A['wallet_es_la_dedicada'] and A.get('api_creds_derivadas_coinciden') and A.get('saldo_dentro_de_lo_autorizado') and A['open_orders_legibles_y_vacias'] and A['reloj_ok'] and f and all(v is True for v in f.values()) and (not canal_check or (A.get('canal') or {}).get('ok') is True))
     for k, v in list(A.items()):

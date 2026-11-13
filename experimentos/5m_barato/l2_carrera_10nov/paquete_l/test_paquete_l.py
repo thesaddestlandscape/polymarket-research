@@ -2132,6 +2132,36 @@ def test_r16p5_reconstruccion_incoherente_es_kill_duro():
     print('T128 ok [R16 5]: fill sin coste / no numerico / de orden desconocida / coste < matched*precio => kill duro PARTIAL y gasto_b = max(reconstruido, replay); ledger coherente => sin kill')
 
 
+def test_r17_cierre_de_los_4_hallazgos_del_review_17():
+    # 1) la validacion cruzada solo mira filas/ordenes top: un relleno de fase A no entra en gasto_b ni dispara kill; fila top cuya orden se reconstruye NO top => kill duro
+    P, o, cl = _p_fill('r17a', 'lejos'); P.led.add('fill', cl, 1, size_matched=2.0, delta=2.0, coste=0.02, modo='lejos', t_ns=1); P.ordenes, _ = C.replay_estado(P.led.filas); P._reconstruir_contadores_b()
+    assert P.fills_b == 0 and P.gasto_b == 0.0 and 'fase_b_reconstruccion_incoherente' not in P.kills, (P.fills_b, P.gasto_b, P.kills)
+    P1, o1, cl1 = _p_fill('r17a2', 'top'); cA = 'r17a2|sA'; P1.led.add('intencion', cA, 0, slot=1, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xA', t_decision_ns=1, modo='lejos')
+    P1.led.add('fill', cl1, 1, size_matched=2.0, delta=2.0, modo='top', t_ns=1); P1.led.add('fill', cA, 1, size_matched=3.0, delta=3.0, coste=0.03, modo='lejos', t_ns=2); P1.ordenes, _ = C.replay_estado(P1.led.filas); P1._reconstruir_contadores_b()
+    assert P1.kills.get('fase_b_reconstruccion_incoherente') == 'PARTIAL' and abs(P1.gasto_b - 0.02) < 1e-9, P1.gasto_b             # kill por coste ausente: gasto_b = replay SOLO top (0,02), sin colar el relleno de fase A (0,03)
+    P2, o2, cl2 = _p_fill('r17b', 'lejos'); P2.led.add('fill', cl2, 1, size_matched=2.0, delta=2.0, coste=0.02, modo='top', t_ns=1); P2.ordenes, _ = C.replay_estado(P2.led.filas); P2._reconstruir_contadores_b()
+    assert P2.kills.get('fase_b_reconstruccion_incoherente') == 'PARTIAL' and any('modo_perdido' in a for a in P2.alertas), (P2.kills, P2.alertas)
+    # 2) la sonda concreta debe aparecer en el contenido: escritor que crece SIN volcar la sonda => False; _sonda_en_dir lee .jsonl y .gz
+    R2, cfg, get, env, ce, chr_ok, T0 = _preflight_dobles(); d = os.path.join(TMP, 'r17s'); os.makedirs(d); open(os.path.join(d, 'cancel_evid_x.jsonl'), 'w').write('{"otra":1}\n')
+    assert R2._sonda_en_dir(d, 'preflight_sonda_1') is False; open(os.path.join(d, 'cancel_evid_x.jsonl'), 'a').write('{"marca":"preflight_sonda_1"}\n'); assert R2._sonda_en_dir(d, 'preflight_sonda_1') is True
+    import gzip; dg = os.path.join(TMP, 'r17g'); os.makedirs(dg); gzip.open(os.path.join(dg, 'cancel_evid_y.jsonl.gz'), 'wb').write(b'{"marca":"preflight_sonda_2"}\n'); assert R2._sonda_en_dir(dg, 'preflight_sonda_2') is True
+    class EscCreceSinSonda(_FakeEsc):
+        def vaciar(self, timeout=5.0): open(os.path.join(self.dir, 'cancel_evid_fake.jsonl'), 'a').write('{"ruido":"x"}\n'); self.q = []
+    class CEsc(_FakeCE):
+        def Escritor(self, d_): return EscCreceSinSonda(d_, True)
+    toks = [(c_, 'Up', 'T' + c_) for c_ in C.COINS]; r = R2._verificar_canal(cfg, env, CEsc(set('T' + c_ for c_ in C.COINS)), toks, os.path.join(TMP, 'r17e'), 5.0); assert r['escritor_vuelca'] is False and r['ok'] is False, r
+    # 3) tras timeout, el hilo que sigue dentro de armar_envio cierra lo que arma al volver (flag cancelado) y no restaura _bloq por su cuenta
+    ev = threading.Event()
+    class ArmaTarde(_FakeCE):
+        def adjuntar_env(self, *a, **k): ev.wait(30); return super().adjuntar_env(*a, **k)
+    ce_t = ArmaTarde(set('T' + c_ for c_ in C.COINS)); r = R2._verificar_canal(cfg, env, ce_t, toks, os.path.join(TMP, 'r17t'), 0.5); assert r['error'] == 'timeout_canal'
+    ev.set(); t0 = time.monotonic()
+    while time.monotonic() - t0 < 3 and not (ce_t.regs and getattr(ce_t.regs[0], 'parado', False) and ce_t.regs[0].w.cerrado): time.sleep(0.05)
+    assert ce_t.regs and getattr(ce_t.regs[0], 'parado', False) and ce_t.regs[0].w.cerrado, 'el hilo huerfano no cerro canal/escritor'
+    # 4) el directorio por defecto lleva time_ns
+    import inspect as _i; assert "time.time_ns()" in _i.getsource(R2.preflight)
+    print('T129 ok [review 17]: validacion solo top + modo_perdido; sonda concreta en contenido; hilo huerfano cierra al volver; dir por defecto unico')
+
 if __name__ == '__main__':
     try:
         filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)
