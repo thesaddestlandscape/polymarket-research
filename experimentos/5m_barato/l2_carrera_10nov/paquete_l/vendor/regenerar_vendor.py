@@ -10,7 +10,8 @@ Despues de esto el paquete NO importa nada de dev ni de main: carga solo vendor/
                          * _clob_redondeo_parcheado + _parchear_redondeo_clob  VERBATIM (ast, TEXTO) de live_trade.py (codigo de seguridad live; se copia el texto, no se importa el modulo)
                          * cliente_dedicado / saldo_onchain            ESCRITOS aqui (PLANTILLA_MANUAL, para revisar): solo credenciales de la wallet DEDICADA en ruta fija, comprobacion exacta de la wallet
 Los hashes de origen y de CADA segmento copiado quedan en VENDOR_HASHES.json (deriva de un segmento de origen = aviso en --verificar; no falla: el paquete usa la copia, no el origen).
-`--verificar` comprueba solo contra los hashes (y informa de deriva)."""
+`--verificar` comprueba solo contra los hashes (y informa de deriva).
+v7: este generador es OFFLINE (nunca lo carga `cargar_vendor` ni corre en el envio real/preflight); sus `assert` pasaron a `raise`. `plan_paquete_l.plan()` (copia byte a byte, conserva un `assert`) es solo el GENERADOR de planes (`--plan`): el paquete solo usa `analiza` y un test comprueba que ningun modulo del envio llama a `plan`."""
 import os, sys, ast, json, hashlib, shutil, time
 HERE = os.path.dirname(os.path.abspath(__file__)) + '/'
 S = '/root/polymarket-research-dev/misiones/5m_barato/sonda1/'
@@ -32,6 +33,7 @@ ENVS_PRODUCCION = ("/root/polymarket-research/data/live/.env", "/root/polymarket
 CLOB = "https://clob.polymarket.com"
 PUSD = "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB"          # colateral (de sonda1/vendor_main.py)
 RPCS = ("https://polygon-bor-rpc.publicnode.com", "https://polygon.drpc.org", "https://1rpc.io/matic")     # grupo 'latest' de polygon_rpc (12-Nov); lista FIJA, no se lee ningun JSON
+RPC_MIN_VALIDAS = 2                                          # v7 (hallazgo 9): respuestas validas MINIMAS para dar un saldo (se toma el minimo); con menos => None
 
 
 '''
@@ -82,8 +84,10 @@ def cliente_dedicado(ruta=ENV_DEDICADA, wallet_esperada=WALLET_DEDICADA, _clob=N
 
 
 def saldo_onchain(wallet, _post=None):
-    """pUSD on-chain de la wallet de deposito (balanceOf, eth_call 'latest') por RPC publico. Las ordenes abiertas NO lo reducen (solo el casado). Lee hasta 2 RPC de la lista fija y devuelve el MINIMO
-    (un nodo atrasado devolveria un saldo MAS ALTO y ocultaria un relleno: el minimo es el lado conservador). None si ninguna lectura es valida (quien llama no envia / bloquea)."""
+    """pUSD on-chain de la wallet de deposito (balanceOf, eth_call 'latest') por RPC publico. Las ordenes abiertas NO lo reducen (solo el casado). v7 (5o /code-review, hallazgo 9): exige SIEMPRE >= RPC_MIN_VALIDAS (2) respuestas validas de RPC distintos de la lista fija
+    y devuelve el MINIMO (un nodo atrasado devolveria un saldo MAS ALTO y ocultaria un relleno: el minimo es el lado conservador). Con UNA sola respuesta valida (o ninguna) => None (ilegible: quien llama no envia / bloquea): una lectura sin contrastar no vale.
+    Por que NO `polygon_rpc.llamar` (regla del repo: Polygon solo via polygon_rpc.py): se detiene en la PRIMERA respuesta valida (justo lo que se prohibe aqui), importa `requests` y relee un JSON fuera del paquete, incompatible con `python -I` + vendor con hash;
+    RPCS replica su grupo 'latest' (un test lo compara con `polygon_rpc._POR_DEFECTO`)."""
     w = str(wallet or "").lower()
     if not (w.startswith("0x") and len(w) == 42):
         return None
@@ -105,9 +109,9 @@ def saldo_onchain(wallet, _post=None):
                 vals.append(int(res, 16) / 1e6)
         except Exception:
             continue
-        if len(vals) >= 2:
+        if len(vals) >= RPC_MIN_VALIDAS:
             break
-    return min(vals) if vals else None
+    return min(vals) if len(vals) >= RPC_MIN_VALIDAS else None
 '''
 
 
@@ -129,7 +133,7 @@ def extracto_envio():
         if isinstance(n, ast.FunctionDef) and n.name in quiero_f: partes.append((n.lineno, n.end_lineno, seg))
         elif isinstance(n, ast.ClassDef) and n.name in quiero_c: partes.append((n.lineno, n.end_lineno, seg))
         elif isinstance(n, ast.Assign) and len(n.targets) == 1 and ast.unparse(n.targets[0]).strip('()') in quiero_a: partes.append((n.lineno, n.end_lineno, seg))
-    assert len(partes) == 7, [p[:2] for p in partes]
+    if len(partes) != 7: raise RuntimeError(f'extracto de sonda1.py inesperado: {[p[:2] for p in partes]}')
     cab = ('"""envio_real.py -- EXTRACTO VERBATIM de sonda1/sonda1.py (sha256 origen en VENDOR_HASHES.json; lineas ' + ', '.join(f'{a}-{b}' for a, b, _ in partes) + '). NO editar: regenerar con regenerar_vendor.py.\n'
            'Dependencias: `vendor_main` (la inyecta pl_core.cargar_vendor en sys.modules con el hash verificado; este modulo NO toca sys.path), re, threading, time, datetime. Solo lo usa pl_sender_real.py con --real + confirmacion."""\n'
            'import re, sys, os, threading, time\nfrom datetime import datetime, timezone\nimport vendor_main as V\n\n\n')
@@ -138,7 +142,7 @@ def extracto_envio():
 
 def generar_vendor_main():
     a = segmentos(S + 'vendor_main.py', nombres_f=('hash_orden',)); b = segmentos(LIVE_TRADE, nombres_f=('_parchear_redondeo_clob',), nombres_a=('_clob_redondeo_parcheado',))
-    assert len(a) == 1 and len(b) == 2, (a and [x[:2] for x in a], b and [x[:2] for x in b])
+    if not (len(a) == 1 and len(b) == 2): raise RuntimeError(f'segmentos inesperados: {a and [x[:2] for x in a]} {b and [x[:2] for x in b]}')
     txt = CAB_VENDOR_MAIN + a[0][2] + '\n\n\n' + '\n\n\n'.join(x[2] for x in b) + '\n' + PLANTILLA_MANUAL
     segs = [dict(origen=S + 'vendor_main.py', sha256_origen=sha(S + 'vendor_main.py'), lineas=[a[0][0], a[0][1]], nombre='hash_orden', sha256_segmento=shat(a[0][2]))]
     segs += [dict(origen=LIVE_TRADE, sha256_origen=sha(LIVE_TRADE), lineas=[x[0], x[1]], nombre=('_clob_redondeo_parcheado' if x[2].startswith('_clob') else '_parchear_redondeo_clob'), sha256_segmento=shat(x[2])) for x in b]

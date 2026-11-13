@@ -4,7 +4,7 @@ checkpoint atomico, manifiesto, replay de estado, presupuesto duro, clasificacio
 SOLO con --real + fichero de confirmacion). Reutiliza (copia citada) los clasificadores puros de sonda1.py (clasificar_post/clasificar_excepcion_post/es_terminal) y plan_paquete_l.analiza para las anclas.
 Contrato (Javi 12-Nov): wallet dedicada 0x659a...297F, saldo on-chain verificado 12-Nov = 0,612681 pUSD, perdida dura 0,61 $ (abortar al tocar el suelo), GTD (v6: NUNCA GTC) post-only BUY a 0,01 de 5 acc (0,05 $ de colateral),
 <=12 simultaneas (12 x 0,05 = 0,60 <= 0,61: la perdida maxima es ESTRUCTURAL aunque se rellenaran todas), objetivo >=100 anclas DIRECTAS (canal de usuario) en BTC+ETH+SOL+XRP."""
-import os, sys, json, time, hashlib, re, collections, dataclasses, glob, gzip, types
+import os, sys, json, time, hashlib, re, collections, dataclasses, glob, gzip, types, zlib, fcntl
 
 HERE = os.path.dirname(os.path.abspath(__file__)) + '/'
 
@@ -17,10 +17,11 @@ def exigir(cond, msg):
     if not cond: raise Invariante(msg)
 
 
-VERSION = 'paquete_l_v6'                                  # v6 (12-Nov): 4o /code-review (9 hallazgos); invalida cualquier confirmacion escrita para v2/v3/v4/v5
+VERSION = 'paquete_l_v7'                                  # v7 (13-Nov): 5o /code-review (10 hallazgos + pendiente de la ronda 4); invalida cualquier confirmacion escrita para v2..v6
 WALLET_DEDICADA = '0x659a40FF9920fEBc5a66836213040924343d297F'
 COINS = ('BTC', 'ETH', 'SOL', 'XRP')
 FALLBACK_DIR = '/tmp'                                       # v4 (hallazgo 10): si el informe final no se puede escribir en el out, se deja aqui (y en stderr)
+LOCK_DIR = '/tmp'                                           # v7 (hallazgo 3): locks de instancia unica (por wallet y por --out) FUERA de --out
 OUT_BASE = '/root/polymarket-research-datalogs/paquete_l/'            # fuera de git; 1 directorio por run (~200 KB); retencion manual 30 d (ver LEEME)
 
 
@@ -63,6 +64,9 @@ class Config:
     fase_b_ordenes: int = 12
     hold_b_min_s: float = 10.0
     hold_b_max_s: float = 20.0
+    fase_b_min_vida_s: float = 15.0             # v7 (hallazgo 6): fase B BUSCA tokens casi resueltos, que solo existen en la recta final de un 5m (en ~0,3 de la vida): NO hereda los 90 s de la fase A (con hold 10-20 s + 2 + prep 40 = 142-152 s al elegir, casi nunca coincidia con bid==0,01 y ask<=0,05).
+                                                # Aqui: vida al POST >= 15 + hold(10-20) + 2 = 27-37 s (margen para DELETE/indexacion 1,4 s/relleno y cierre) y al elegir +prep 40 s = 67-77 s
+    fase_b_espera_s: float = 300.0              # v7 (hallazgo 6): sin token barato valido se espera hasta 1 ciclo completo de mercado 5m (la ventana aparece en la recta final) y la fase B TERMINA de forma benigna (el run conserva el status de la fase A)
     tol_saldo_usd: float = 0.004                # v3 (hallazgo 4): tolerancia de la comparacion saldo vs ledger; DEBE ser < 1 share a 0,01 (0,01 $) para ver un relleno minimo (antes 0,02 = 2 shares)
     libro_max_s: float = 1.0                    # v3 (hallazgo 2): si la lectura del libro justo antes del POST tarda mas, el libro se considera rancio y no se envia
     gtd_expira_s: int = 200                     # v4 (R2): cota DURA de vida en el exchange (GTD post-only). DOCS OFICIALES (docs.polymarket.com/trading/place-orders, leido 12-Nov): la orden GTD expira 60 s ANTES de la expiracion declarada y la expiracion debe estar >= 3 min en el futuro (si no, RECHAZADA) => 200 s = 20 s de margen sobre 180; vida efectiva maxima ~140 s. 0 = GTC. Si el CLOB rechaza GTD(+post-only) (o cualquier orden) => BLOCKED sin gasto y SIN cambiar de modo (v5: no hay caida a GTC; ese modo solo existiria con permiso explicito en la confirmacion)
@@ -79,6 +83,7 @@ class Config:
         exigir(self.fase_b_max_rellenos * self.size * self.precio <= self.fase_b_tope_usd + 1e-9, 'fase B: rellenos x coste > tope fase B')
         exigir(self.fase_b_tope_usd <= self.perdida_dura, 'tope fase B > perdida dura')
         exigir(0 < self.tol_saldo_usd < self.precio, 'tolerancia de saldo >= 1 share: no veria un relleno minimo')
+        exigir(self.fase_b_min_vida_s > 0 and self.fase_b_espera_s > 0, 'fase B: vida minima/espera > 0')
         exigir(self.gtd_expira_s >= 185, 'GTD obligatorio (sin modo GTC): el CLOB exige expiracion >= now+3 min (180 s; docs 12-Nov) y se deja >= 5 s de margen')
 
     @property
@@ -127,6 +132,31 @@ def exigir_aislamiento(base=HERE):
     if any(p in ('', '.') for p in sys.path): sys.exit('sys.path contiene el directorio actual: NO envio')
     extra = sorted(f for f in os.listdir(base) if f.endswith('.py') and f not in PERMITIDOS_EN_DIR)
     if extra: sys.exit(f'ficheros .py ajenos en el directorio del paquete (podrian sombrear modulos): {extra}: NO envio')
+
+
+def tomar_locks(wallet, out, lock_dir=None, wallet_lock=True):
+    """v7 (hallazgo 3): INSTANCIA UNICA. flock exclusivo NO bloqueante por WALLET y por --out (realpath), en ficheros FUERA de --out (LOCK_DIR), tomados antes de cualquier lectura de estado/envio y mantenidos abiertos mientras viva el proceso (o hasta `liberar_locks`).
+    Devuelve la lista de descriptores, o None si alguno esta tomado o no se puede crear (fail-closed: sin poder garantizar la instancia unica no se opera). NO toca nada de `out`."""
+    fds = []
+    for tipo, clave in ((('wallet', str(wallet).lower()),) if wallet_lock else ()) + (('out', os.path.realpath(str(out))),):
+        ruta = os.path.join(lock_dir or LOCK_DIR, f'paquete_l_{tipo}_{hashlib.sha256(clave.encode()).hexdigest()[:20]}.lock')
+        try: fd = os.open(ruta, os.O_RDWR | os.O_CREAT, 0o600)
+        except OSError: liberar_locks(fds); return None
+        try: fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            try: os.close(fd)
+            except OSError: pass
+            liberar_locks(fds); return None
+        try: os.ftruncate(fd, 0); os.write(fd, f'{os.getpid()} {tipo} {clave}\n'.encode())
+        except OSError: pass
+        fds.append(fd)
+    return fds
+
+
+def liberar_locks(fds):
+    for fd in (fds or []):
+        try: os.close(fd)
+        except OSError: pass
 
 
 def sha_codigo(base=HERE):
@@ -360,22 +390,35 @@ class Presupuesto:
 
 
 # ------------------------------------------------------------------------------------------------ anclas (cancel_evid del canal de usuario)
-def contar_anclas(patron_evid, ledger_filas=None):
-    """Anclas DIRECTAS validas por moneda: oid con `alta` + user_order PLACEMENT y CANCELLATION (mine) + cancel_try canceled. Definicion identica a plan_paquete_l.analiza. Devuelve (total, por_moneda, detalle_pct)."""
-    P = cargar_vendor('plan_paquete_l')
-    ev = []
-    for f in sorted(glob.glob(patron_evid)):
-        op = gzip.open if f.endswith('.gz') else open
-        for l in op(f, 'rt'):
-            try: ev.append(json.loads(l))
-            except ValueError: pass
-    alta = {e['oid'] for e in ev if e.get('k') == 'alta'}; plc = {e['oid'] for e in ev if e.get('k') == 'user_order' and e.get('mine') and e.get('tipo') == 'PLACEMENT'}
-    can = {e['oid'] for e in ev if e.get('k') == 'user_order' and e.get('mine') and e.get('tipo') == 'CANCELLATION'}; cct = {e['oid'] for e in ev if e.get('k') == 'cancel_try' and e.get('canceled')}
-    validas = alta & plc & can & cct
+def leer_evid(patron):
+    """v7 (hallazgo 10): UNICA lectura de los cancel_evid del canal de usuario. Tolera .gz truncado y ultima linea rota: devuelve (eventos_legibles, ilegibles) con ilegibles = [dict(fichero, error)] (NUNCA lanza). Las lineas JSON rotas se descartan (la cola de un fichero que se esta escribiendo es normal)."""
+    ev = []; ileg = []
+    for f in sorted(glob.glob(patron)):
+        try:
+            with (gzip.open(f, 'rt') if f.endswith('.gz') else open(f)) as fh:
+                for l in fh:
+                    try: r = json.loads(l)
+                    except ValueError: continue
+                    if isinstance(r, dict): ev.append(r)
+        except (OSError, EOFError, zlib.error, UnicodeError) as e: ileg.append(dict(fichero=f, error=type(e).__name__))
+    return ev, ileg
+
+
+def anclas_de_eventos(ev, ledger_filas=None):
+    """Anclas DIRECTAS validas: oid con `alta` + user_order PLACEMENT y CANCELLATION (mine) + cancel_try canceled. Misma definicion que plan_paquete_l.analiza. Devuelve (total, por_moneda) a partir de eventos YA leidos."""
+    g = lambda e: e.get('oid')
+    alta = {g(e) for e in ev if e.get('k') == 'alta'}; plc = {g(e) for e in ev if e.get('k') == 'user_order' and e.get('mine') and e.get('tipo') == 'PLACEMENT'}
+    can = {g(e) for e in ev if e.get('k') == 'user_order' and e.get('mine') and e.get('tipo') == 'CANCELLATION'}; cct = {g(e) for e in ev if e.get('k') == 'cancel_try' and e.get('canceled')}
+    validas = (alta & plc & can & cct) - {None}
     coin_de_clave = {r['clave']: r['coin'] for r in (ledger_filas or []) if r.get('k') == 'intencion'}; por = collections.Counter()
     for r in (ledger_filas or []):
         if r.get('k') == 'post' and r.get('oid') in validas: por[coin_de_clave.get(r['clave'], '?')] += 1
-    return len(validas), dict(por), P.analiza(patron_evid)
+    return len(validas), dict(por)
+
+
+def contar_anclas(patron_evid, ledger_filas=None):
+    """(total, por_moneda) con UNA lectura de los ficheros (`leer_evid`). NO lanza `plan_paquete_l.analiza` (eso solo en el informe final)."""
+    return anclas_de_eventos(leer_evid(patron_evid)[0], ledger_filas)
 
 
 def faltan_anclas(cfg, total, por_moneda):
@@ -385,12 +428,15 @@ def faltan_anclas(cfg, total, por_moneda):
 
 
 def d_proc_stats(filas):
-    """d_proc = t_send_ns - t_trig_rx_ns de cada cancelacion (ms) y d_red = t_ack_ns - t_send_ns. Percentiles."""
+    """d_proc = t_send_ns - t_trig_rx_ns del PRIMER DELETE de cada orden (intento == 1) en ms y d_red = t_ack_ns - t_send_ns de las cancelaciones OK. v7 (hallazgo 4): los reintentos (bucle de pre-indice, backoffs) comparten el t_trig_rx del primer intento
+    y NO son procesamiento: se reportan APARTE en `reintentos` (nunca mezclados en d_proc_ms). Percentiles."""
     import numpy as np
-    dp = [(r['t_send_ns'] - r['t_trig_rx_ns']) / 1e6 for r in filas if r.get('k') == 'cancel' and r.get('t_trig_rx_ns') and r.get('t_send_ns')]
+    can = [r for r in filas if r.get('k') == 'cancel' and r.get('t_trig_rx_ns') and r.get('t_send_ns')]
+    dp = [(r['t_send_ns'] - r['t_trig_rx_ns']) / 1e6 for r in can if r.get('intento') == 1]
+    rt = [(r['t_send_ns'] - r['t_trig_rx_ns']) / 1e6 for r in can if isinstance(r.get('intento'), int) and r['intento'] > 1]
     dr = [(r['t_ack_ns'] - r['t_send_ns']) / 1e6 for r in filas if r.get('k') == 'cancel' and r.get('ok') and r.get('t_ack_ns') and r.get('t_send_ns')]
     f = lambda v: dict(n=len(v)) if not v else dict(n=len(v), p50=float(np.percentile(v, 50)), p90=float(np.percentile(v, 90)), max=float(max(v)))
-    return dict(d_proc_ms=f(dp), d_red_cancel_ms=f(dr))
+    return dict(d_proc_ms=f(dp), d_red_cancel_ms=f(dr), reintentos=dict(n=len(rt), t_send_menos_t_trig_ms=f(rt), nota='reintentos de DELETE (intento > 1): tiempo desde el disparo del PRIMER intento; NO es d_proc'))
 
 
 # ------------------------------------------------------------------------------------------------ analisis de la mejora «bid sin nosotros» (fase B)

@@ -124,6 +124,14 @@ class SenderReal:
         except Exception: pass
         return C.contar_anclas(os.path.join(self.evid_dir, 'cancel_evid_*.jsonl*'))[0]
 
+    def anclas(self, filas):
+        """v7 (hallazgo 10): UNA sola lectura de los cancel_evid por lote (espera/volcado como `anclas_directas`). Devuelve (total, por_moneda, eventos, ilegibles): el orquestador reutiliza los eventos en el informe final (sin releer)."""
+        time.sleep(1.5)
+        try: self.reg.w.vaciar(timeout=5.0)
+        except Exception: pass
+        ev, ileg = C.leer_evid(os.path.join(self.evid_dir, 'cancel_evid_*.jsonl*')); tot, por = C.anclas_de_eventos(ev, filas)
+        return tot, por, ev, ileg
+
     def cerrar(self):
         try: self.reg.w.cerrar()
         except Exception: pass

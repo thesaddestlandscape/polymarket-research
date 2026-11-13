@@ -1,5 +1,5 @@
 {
- "creado_utc": "2026-11-12T13:02:05Z",
+ "creado_utc": "2026-11-13T08:05:49Z",
  "copias": {
   "cancel_evidencia.py": {
    "origen": "/root/polymarket-research-dev/misiones/5m_barato/sonda1/p3_cancel_registro/cancel_evidencia.py",
@@ -48,7 +48,7 @@
   },
   "vendor_main.py": {
    "origen": "GENERADO: segmentos verbatim + plantilla manual de regenerar_vendor.py",
-   "sha256_copia": "6c7d9c2c69c3de70882e674e1600ab8236db1657bf9ed84bacd12f9288e436cc",
+   "sha256_copia": "26d90c66e6d7e14660c4286bb6744dd01c1d8343e675de3c8b7bd12ee4a0d8fa",
    "segmentos": [
     {
      "origen": "/root/polymarket-research-dev/misiones/5m_barato/sonda1/vendor_main.py",
@@ -81,7 +81,7 @@
      "sha256_segmento": "140a26e37d22f3958acc5e88bf56649792f7e35bdaeda4c30904cd2ae00c8cd5"
     }
    ],
-   "sha256_regenerar": "e9bd05c8ce0671754f3812b438b0713b59a8bf2001cc0696c7009a631482111e"
+   "sha256_regenerar": "72bb9d3d671dc62e5229ed2cd502cf48a7a13529684b8e5e3f44928bb3746115"
   }
  }
 }

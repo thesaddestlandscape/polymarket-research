@@ -4,7 +4,8 @@ import os, sys, json, shutil, tempfile, subprocess, re, types
 H = os.path.dirname(os.path.abspath(__file__)) + '/'; sys.path.insert(0, H)
 import pl_core as C, paquete_l as PL
 from pl_sender import RelojVirtual, SenderSim, MercadosSim, ErrHTTP
-TMP = tempfile.mkdtemp(prefix='paquete_l_test_')
+TMP = tempfile.mkdtemp(prefix='paquete_l_test_'); C.LOCK_DIR = TMP                                                   # v7: los locks de instancia unica de los tests van al TMP (no chocan con un run real)
+import atexit; atexit.register(shutil.rmtree, TMP, True)
 
 
 def montar(nombre, cfg=None, sender_kw=None, run_id=None, sender=None, reloj=None, mercados=None, dir_out=None, **mk):
@@ -119,9 +120,18 @@ def test_sin_mercado_espera_y_bloquea():
     print('T25 ok: sin mercados 5m validos: reintenta cada 2 s sin quemar slots y bloquea a los 120 s, 0 ordenes')
 
 
+def fallar_cancelaciones_de_la_primera_orden(S, R, k):
+    """v7: las cancelaciones se intercalan (un paso por iteracion), asi que `cancel_falla` por NUMERO global ya no concentra los fallos en UNA orden: se fallan `k` DELETE de la 1a orden enviada (el resto funciona)."""
+    orig = S.cancelar; nf = {'n': 0}
+    def cancelar(oid):
+        if S.posts_enviados and oid == S.posts_enviados[0]['oid'] and nf['n'] < k: nf['n'] += 1; S.n_cancel += 1; R.sleep(0.062); return False
+        return orig(oid)
+    S.cancelar = cancelar
+
+
 def test_cancel_no_confirmada_bloquea():
     # v5 (hallazgo 1): la cancelacion fallida en el cuerpo NO queda INDETERMINADA si el barrido consigue cancelarla (reintenta con backoff): BLOCKED por el kill, pero 0 vivas y 0 indeterminadas
-    P, S, R, M, out = montar('nocanc', sender_kw=dict(cancel_falla={1, 2, 3, 4})); st = P.correr(); assert st == 'BLOCKED', st
+    P, S, R, M, out = montar('nocanc'); fallar_cancelaciones_de_la_primera_orden(S, R, 4); st = P.correr(); assert st == 'BLOCKED', st
     inf = json.load(open(out + '/informe_final.json')); assert inf['cobertura']['indeterminadas'] == 0 and sum(len(S.abiertas(p['tok'])) for p in S.posts_enviados) == 0 and 'cancel_no_confirmada' in inf['motivo']
     print('T10 ok: cancelacion no confirmada en el cuerpo -> BLOCKED (kill), el barrido la reintenta y la cancela: 0 vivas, 0 indeterminadas')
 
@@ -279,7 +289,7 @@ def test_contar_anclas():
     L += [dict(k='alta', oid='o9', t_envio_ms=1, tok='t'), dict(k='user_order', oid='o9', mine=True, tipo='PLACEMENT', ts_ex_ms=90)]            # sin cancelacion: NO es ancla
     open(d + '/cancel_evid_2026-11-12.jsonl', 'w').write('\n'.join(json.dumps(x) for x in L) + '\n{"cortado"')
     fl = [dict(k='intencion', clave='c%d' % i, coin='BTC' if i < 2 else 'ETH') for i in range(3)] + [dict(k='post', clave='c%d' % i, oid='o%d' % i) for i in range(3)]
-    n, por, st = C.contar_anclas(d + '/cancel_evid_*.jsonl', fl); assert n == 3 and por == {'BTC': 2, 'ETH': 1} and st['cancel_ex_menos_envio']['n'] == 3, (n, por, st)
+    n, por = C.contar_anclas(d + '/cancel_evid_*.jsonl', fl); assert n == 3 and por == {'BTC': 2, 'ETH': 1}, (n, por)
     print('T20 ok: anclas directas = alta + PLACEMENT + CANCELLATION + cancel_try; linea cortada tolerada; por moneda')
 
 
@@ -751,11 +761,11 @@ def test_r2h1_senales_siguen_instaladas_durante_barrido_e_informe():
 def test_r2h2_barrido_duerme_de_verdad_tras_una_senal():
     P, S, R, M, out = montar('r2h2', cfg=C.Config(max_ordenes=8), sender_kw=dict(cancel_falla={1})); t = []; orig_c = S.cancelar; viejo = signal.getsignal(signal.SIGTERM)
     def cancelar(oid):
-        t.append(R.now_ns())
+        t.append((oid, R.now_ns()))
         if len(t) == 1: signal.raise_signal(signal.SIGTERM)                               # bandera levantada JUSTO antes del fallo que provoca el backoff de cancelar_viva
         return orig_c(oid)
     S.cancelar = cancelar; P.correr(); signal.signal(signal.SIGTERM, viejo)
-    assert len(t) >= 2 and (t[1] - t[0]) / 1e9 >= 0.25 - 1e-9, [(x - t[0]) / 1e9 for x in t[:3]]            # el backoff de 0,25 s NO es un no-op por la bandera
+    mismo = [x for o_, x in t if o_ == t[0][0]]; assert len(mismo) >= 2 and (mismo[1] - mismo[0]) / 1e9 >= 0.25 - 1e-9, [(x - mismo[0]) / 1e9 for x in mismo[:3]]            # el backoff de 0,25 s de ESA orden NO es un no-op por la bandera (v7: las cancelaciones de otras ordenes se intercalan mientras tanto)
     r = RelojVirtual(); t0 = r.now_ns(); r.sleep(0.5); assert r.now_ns() - t0 == int(0.5e9)                  # sin `abortar` el sueno es completo
     r.sleep(0.5, abortar=lambda: True); assert r.now_ns() - t0 == int(0.5e9)                                 # con `abortar` y bandera, no-op (solo el cuerpo lo usa)
     from pl_sender import Reloj; rr = Reloj(); a = time.monotonic(); rr.sleep(0.2, abortar=lambda: True); assert time.monotonic() - a < 0.1; a = time.monotonic(); rr.sleep(0.2); assert time.monotonic() - a >= 0.19
@@ -996,7 +1006,7 @@ def _vivas_reales(S): return sum(1 for o in S.ordenes.values() if S._estado_en(o
 
 def test_r3h1_barrido_reintenta_cancelar_o_bloquea_con_alerta():
     # cancel_falla {1..8}: el barrido reintenta con backoff hasta cancelar => 0 vivas al final (BLOCKED por el kill del cuerpo, pero sin indeterminadas ni abiertas)
-    P, S, R, M, out = montar('r3h1a', sender_kw=dict(cancel_falla=set(range(1, 9)))); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
+    P, S, R, M, out = montar('r3h1a'); fallar_cancelaciones_de_la_primera_orden(S, R, 8); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
     assert st == 'BLOCKED' and _vivas_reales(S) == 0 and inf['cobertura']['indeterminadas'] == 0 and not inf['alertas'], (st, inf['motivo'], inf['alertas'])
     # cancel_falla enorme: no se puede cancelar nunca => BLOCKED con la lista de ordenes vivas y ALERTA explicita (fichero + informe), jamas silencio ni COMPLETE
     P, S, R, M, out = montar('r3h1b', sender_kw=dict(cancel_falla=set(range(1, 200)))); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
@@ -1127,15 +1137,6 @@ def test_r3h10_asentar_solo_cuando_hace_falta():
     print('T65 ok [R3 h10]: asentamiento solo si el 1er intento no da estado terminal (0 esperas tras cancelacion limpia, 1 si get_order aun no indexa)')
 
 
-if __name__ == '__main__':
-    try:
-        filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)
-        for n, f in list(globals().items()):
-            if n.startswith('test_') and callable(f) and filtro in n: f()
-        print('TODOS OK (paquete_l)')
-    finally: shutil.rmtree(TMP, ignore_errors=True)
-
-
 # ---------------------------------------------------------------- ronda 4 (v6): 4o /code-review, hallazgos 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 import inspect
 
@@ -1225,7 +1226,7 @@ def test_r4h7_liquidar_informe_no_modifica_el_ledger_y_dice_que_escribe():
     out = os.path.join(TMP, 'r4h7'); os.makedirs(out, exist_ok=True); ruta = out + '/ledger.jsonl'
     with open(ruta, 'wb') as f: f.write(b'{"eid": "intencion|a|0", "k": "intencion", "clave": "a", "slot": 0, "coin": "BTC", "tok": "T", "precio": 0.01, "size": 5.0}\n{"eid": "roto')
     antes = open(ruta, 'rb').read(); PL.liquidar_informe(out, get=lambda u, p: (_ for _ in ()).throw(RuntimeError('sin red'))); assert open(ruta, 'rb').read() == antes and not os.path.exists(ruta + '.rep')
-    ayuda = inspect.getsource(PL.main).split("'--liquidar-informe'")[1].split('\n')[0]; assert 'liquidacion_residuales.json' in ayuda and 'no modifica el ledger' in ayuda and 'solo lectura' not in ayuda, ayuda
+    ayuda = inspect.getsource(PL.construir_parser).split("'--liquidar-informe'")[1].split('\n')[0]; assert 'liquidacion_residuales.json' in ayuda and 'no modifica el ledger' in ayuda and 'solo lectura' not in ayuda, ayuda
     assert 'ESCRIBE' in PL.liquidar_informe.__doc__
 
 
@@ -1248,3 +1249,225 @@ def test_r4h10_mensaje_de_bloqueo_por_ilegibles_dice_la_verdad():
     P1 = PL.Paquete(cfg, SenderSim(reloj), M, out, reloj, 'r4h10a', stdout=False); P1.anclas_fn = lambda: 0; P1.anclas_por_moneda_fn = lambda: {}; P1.correr(); P1.led.add('ilegible', 'otro|x', 99, detalle='x'); P1.led.cerrar()
     S2 = SenderSim(reloj); P2 = PL.Paquete(cfg, S2, M, out, reloj, 'r4h10b', stdout=False); P2.anclas_fn = lambda: 0; P2.anclas_por_moneda_fn = lambda: {}                  # OTRO run-id, mismo --out
     P2.correr(); assert len(S2.posts_enviados) == 0                                                                                   # el run-id distinto NO desbloquea (el texto ya lo dice)
+
+
+# ---------------------------------------------------------------- ronda 5 (v7): 5o /code-review, hallazgos 1-10 + pendiente de la ronda 4 (ledger con filas corruptas)
+import contextlib, io, hashlib as _hl
+
+
+def _sha(ruta): return _hl.sha256(open(ruta, 'rb').read()).hexdigest()
+
+
+def test_r5h1_vida_minima_se_revalida_justo_antes_del_post():
+    class MercadosLentos(MercadosSim):                                          # el libro de UNA moneda cae 110 s durante la preparacion del lote: los slots ya preparados envejecen
+        def __init__(self, reloj, coin_mala, dur_s): super().__init__(reloj); self.cm = coin_mala; self.dur = dur_s; self.ini_ns = reloj.now_ns()
+        def libro(self, tok):
+            if tok.startswith(self.cm) and (self.r.now_ns() - self.ini_ns) / 1e9 < self.dur: raise OSError('libro caido')
+            return super().libro(tok)
+    R = RelojVirtual(t0_ns=(1_790_000_100 + 158) * 10**9); sl = C.plan_slots(C.Config(), 8); mala = sl[-1].coin if sl[-1].coin != sl[0].coin else sl[-2].coin
+    P, S, R, M, out = montar('r5h1', cfg=C.Config(max_ordenes=8, objetivo_anclas=1000), mercados=MercadosLentos(R, mala, 110.0), reloj=R); P.correr(); ints = rows(out, 'intencion'); assert ints
+    for r in ints: assert r['fin_s'] - r['t_decision_ns'] / 1e9 >= C.Config().min_vida_mercado_s + r['hold_s'] + 2.0, (r['clave'], r['fin_s'] - r['t_decision_ns'] / 1e9)       # NINGUN slot sale con menos de la vida minima de la fase A
+    sk = [r for r in rows(out, 'saltado') if str(r['motivo']).startswith('vida_minima_al_post')]; assert sk and P.cnt['saltados_mercado_caducado'] == len(sk), (sk, dict(P.cnt))
+    print('T76 ok [R5 h1]: con la preparacion/espera larga los slots viejos se SALTAN (%d) en vez de enviarse con ~32 s de vida; los enviados cumplen min_vida+hold+2' % len(sk))
+
+
+def test_r5h2_post_ambiguo_inexistente_no_retrasa_a_las_demas_ni_impide_reanudar():
+    cfg = C.Config(max_ordenes=16, objetivo_anclas=1000); P, S, R, M, out = montar('r5h2', cfg=cfg); orig = S.enviar
+    def enviar(h):
+        if S.n_post + 1 == 3: S.n_post += 1; R.sleep(0.085); raise ErrHTTP(None, 'timeout: la orden nunca llego')           # POST ambiguo cuya orden NO existe
+        return orig(h)
+    S.enviar = enviar; st = P.correr(); inf = json.load(open(out + '/informe_final.json')); amb = [r for r in rows(out, 'post') if r['clase'] == 'ambiguo']; assert len(amb) == 1
+    for r in rows(out, 'cancel'):                                               # (a) ninguna cancelacion de hold espera mas de ~1 paso a la ambigua (antes: 5-7 s de bucle de gracia+backoffs)
+        if r['intento'] == 1 and r['trig'] == 'hold': assert (r["t_send_ns"] - r["t_trig_prog_ns"]) / 1e9 < 0.3, ((r['t_send_ns'] - r['t_trig_prog_ns']) / 1e9, r['clave'])
+    cer = [r for r in rows(out, 'cerrada') if r['clave'] == amb[0]['clave']]                          # (b) el barrido PRUEBA que no existio: el kill duro se resuelve y el run no queda BLOCKED
+    assert cer[-1]['motivo'] == 'inexistente_verificada' and rows(out, 'kill_resuelto') and st != 'BLOCKED' and inf['kills_resueltos'] and P.kill is None, (st, P.kill, inf['motivo'], cer[-1])
+    assert inf['cobertura']['indeterminadas'] == 0 and sum(len(S.abiertas(p['tok'])) for p in S.posts_enviados) == 0
+    n1 = len(S.posts_enviados); P2, S2, R2, M2, _ = montar('r5h2b', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id='r5h2'); P2.correr()
+    assert 'resume_rechazado' not in str(P2.kill) and len(S.posts_enviados) > n1 and P2.kill == 'max_ordenes', (P2.kill, n1, len(S.posts_enviados))                       # reanuda y llega a su limite
+    # (b') si NO se puede verificar (el exchange SI la tiene viva y no se puede cancelar) sigue BLOQUEANDO: no se resuelve ningun kill
+    P3, S3, R3, M3, out3 = montar('r5h2c', cfg=C.Config(max_ordenes=8, objetivo_anclas=1000)); fallar_cancelaciones_de_la_primera_orden(S3, R3, 400); st3 = P3.correr()
+    assert st3 == 'BLOCKED' and not rows(out3, 'kill_resuelto') and P3.kill, (st3, P3.kill)
+    print('T77 ok [R5 h2]: la ambigua inexistente no retrasa las demas cancelaciones (<0,5 s), el barrido la verifica (kill_resuelto), el run no queda BLOCKED y se puede reanudar; sin verificacion sigue BLOCKED')
+
+
+def test_r5h2b_resume_reconcilia_una_indeterminada_previa_y_solo_continua_si_se_verifica():
+    cfg = C.Config(max_ordenes=8, objetivo_anclas=1000)
+    def preparar(nombre, abierta):
+        P1, S, R, M, out = montar(nombre, cfg=cfg); P1.correr(); n = len(rows(out, 'intencion')); cl = f'{nombre}|s900'
+        for k, kw in (('intencion', dict(slot=900, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xfantasma', t_decision_ns=R.now_ns() - int(500e9))), ('post', dict(oid='0xfantasma', t_send_ns=R.now_ns() - int(499e9), t_ack_ns=R.now_ns() - int(499e9), clase='ambiguo')),
+                      ('cerrada', dict(motivo='CANCEL_NO_CONFIRMADA', size_matched=None, indeterminada=True, t_ns=R.now_ns())), ('kill', dict(motivo=f'cancel_no_confirmada:{cl}', status='BLOCKED', t_ns=R.now_ns()))):
+            with open(out + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid=f'{k}|{cl if k != "kill" else "run"}|{0 if k != "kill" else 99}', k=k, clave=(cl if k != 'kill' else 'run'), **kw)) + '\n')
+        with open(out + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid='kill|run|98', k='kill', clave='run', motivo=f'resume_rechazado_kill_previo:cancel_no_confirmada:{cl}', status='BLOCKED', t_ns=R.now_ns())) + '\n')      # un rechazo anterior derivado del mismo kill tambien se levanta con la verificacion
+        if abierta: S.abiertas_todas = lambda: ['0xfantasma']                                                    # el exchange SI la tiene: no se puede verificar
+        return montar(nombre + 'b', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id=nombre), S, out
+    (P2, S, R, M, _), S, out = preparar('r5h2r1', False); n1 = len(S.posts_enviados); P2.correr()                          # verificable: se resuelve y el resume sigue (llega a su limite max_ordenes)
+    assert 'resume_rechazado' not in str(P2.kill) and rows(out, 'kill_resuelto') and P2.kill == 'max_ordenes', (P2.kill, rows(out, 'kill_resuelto'))
+    (P3, S3, R3, M3, _), S3, out3 = preparar('r5h2r2', True); P3.correr()                                                    # NO verificable: el resume sigue rechazado y no resuelve nada
+    assert 'orden_indeterminada' in str(P3.kill) and not rows(out3, 'kill_resuelto') and len(S3.posts_enviados) == 8, (P3.kill,)
+    print('T77b ok [R5 h2]: un resume reconcilia la INDETERMINADA previa: verificada => kill_resuelto y continua; no verificable => BLOCKED sin enviar')
+
+
+def test_r5h3_instancia_unica_por_wallet_y_por_out():
+    cfg = C.Config(); out1 = os.path.join(TMP, 'r5h3a'); out2 = os.path.join(TMP, 'r5h3b'); fds = C.tomar_locks(cfg.wallet, out1); assert fds and len(fds) == 2
+    try:
+        reloj = RelojVirtual(); S = SenderSim(reloj); P = PL.Paquete(cfg, S, MercadosSim(reloj), out2, reloj, 'r5h3b', stdout=False)                  # misma WALLET, otro --out
+        with contextlib.redirect_stderr(io.StringIO()) as e: assert P.correr() == 'LOCKED'
+        assert 'INSTANCIA UNICA' in e.getvalue() and S.n_post == 0 and S.n_saldo == 0 and S.n_colocar == 0 and not [f for f in os.listdir(out2)], os.listdir(out2)            # no toca nada: ni ledger, ni checkpoint, ni informe, ni log
+        cfg2 = C.Config(wallet='0x' + '1' * 40); reloj = RelojVirtual(); S = SenderSim(reloj); P = PL.Paquete(cfg2, S, MercadosSim(reloj), out1, reloj, 'r5h3c', stdout=False)   # otra wallet, MISMO --out
+        with contextlib.redirect_stderr(io.StringIO()): assert P.correr() == 'LOCKED'
+        assert S.n_post == 0 and not os.path.exists(out1 + '/ledger.jsonl') and not os.path.exists(out1 + '/run.log')
+        with pytest_raises_invariante(): PL.liquidar_informe(out1, get=lambda u, p: [])                                                         # liquidar escribe en el --out: tambien exige el lock
+        assert not os.path.exists(out1 + '/liquidacion_residuales.json')
+    finally: C.liberar_locks(fds)
+    P2, S2, R2, M2, out3 = montar('r5h3d', cfg=C.Config(max_ordenes=8, objetivo_anclas=1000)); assert P2.correr() == 'PARTIAL'; libre = C.tomar_locks(cfg.wallet, out3); assert libre is not None; C.liberar_locks(libre)                  # el lock se libera al terminar `correr`
+    snap = {f: _sha(os.path.join(out3, f)) for f in ('ledger.jsonl', 'checkpoint.json', 'informe_final.json', 'run_manifest.json', 'run.log', 'parcial_resumen.json')}; fds = C.tomar_locks(cfg.wallet, out3)
+    try:                                                                         # RESUME con el lock tomado: sale sin tocar NADA
+        P3, S3, R3, M3, _ = montar('r5h3d', cfg=C.Config(max_ordenes=8, objetivo_anclas=1000), dir_out=out3, run_id='r5h3d')
+        with contextlib.redirect_stderr(io.StringIO()): assert P3.correr() == 'LOCKED'
+        assert snap == {f: _sha(os.path.join(out3, f)) for f in snap} and S3.n_post == 0 and sorted(os.listdir(out3)) == sorted(set(os.listdir(out3)))
+    finally: C.liberar_locks(fds)
+    pre = C.tomar_locks(cfg.wallet, os.path.join(TMP, 'r5h3e')); P4, S4, R4, M4, out4 = montar('r5h3e', cfg=C.Config(max_ordenes=8, objetivo_anclas=1000)); P4._locks = pre              # locks ya tomados por main(): `correr` no los retoma (no choca consigo) ni los libera
+    st4 = P4.correr(); ocupado = C.tomar_locks(cfg.wallet, out4); C.liberar_locks(pre)
+    assert st4 == 'PARTIAL' and P4._locks == pre and ocupado is None, (st4, ocupado)
+    # CLI: segundo proceso sobre el mismo --out (lock en /tmp: el de produccion) sale con 2 sin crear el directorio
+    out5 = os.path.join(TMP, 'r5h3cli'); fds = C.tomar_locks(cfg.wallet, out5, lock_dir='/tmp')
+    try:
+        r = subprocess.run([sys.executable, '-I', H + 'paquete_l.py', '--out', out5, '--run-id', 'cli5', '--max-ordenes', '8', '--objetivo', '1000'], capture_output=True, text=True)
+        assert r.returncode == 2 and 'INSTANCIA UNICA' in r.stderr and not os.path.exists(out5), (r.returncode, r.stderr[-200:])
+    finally: C.liberar_locks(fds)
+    print('T78 ok [R5 h3]: flock exclusivo no bloqueante por wallet Y por --out (fuera de --out): la 2a instancia (run, resume, liquidar, CLI) sale sin tocar nada; se libera al terminar')
+
+
+@contextlib.contextmanager
+def pytest_raises_invariante():
+    try: yield
+    except C.Invariante: return
+    raise AssertionError('esperaba Invariante')
+
+
+def test_r5h4_d_proc_solo_cuenta_el_primer_intento():
+    f = [dict(k='cancel', intento=1, t_trig_rx_ns=1_000, t_send_ns=1_000 + 5_000_000, t_ack_ns=1_000 + 70_000_000, ok=False), dict(k='cancel', intento=2, t_trig_rx_ns=1_000, t_send_ns=1_000 + 1_000_000_000, t_ack_ns=1_000 + 1_060_000_000, ok=True)]
+    st = C.d_proc_stats(f); assert st['d_proc_ms']['n'] == 1 and abs(st['d_proc_ms']['p50'] - 5.0) < 1e-9 and st['reintentos']['n'] == 1 and abs(st['reintentos']['t_send_menos_t_trig_ms']['p50'] - 1000.0) < 1e-6, st
+    P, S, R, M, out = montar('r5h4', cfg=C.Config(max_ordenes=16, objetivo_anclas=1000), sender_kw=dict(index_delay_s=2.2)); P.correr(); inf = json.load(open(out + '/informe_final.json'))               # get_order sin indexar: hay reintentos (bucle de pre-indice)
+    can = rows(out, 'cancel'); p1 = [(r['t_send_ns'] - r['t_trig_rx_ns']) / 1e6 for r in can if r['intento'] == 1]; pn = [r for r in can if r['intento'] > 1]; assert pn and p1
+    dp = inf['latencias']['d_proc_ms']; assert dp['n'] == len(p1) and dp['max'] < 100 and inf['latencias']['reintentos']['n'] == len(pn) and inf['latencias']['reintentos']['t_send_menos_t_trig_ms']['max'] > 200, inf['latencias']
+    print('T79 ok [R5 h4]: d_proc solo con intento==1 (n=%d, max %.1f ms); %d reintentos aparte (max %.0f ms)' % (dp['n'], dp['max'], len(pn), inf['latencias']['reintentos']['t_send_menos_t_trig_ms']['max']))
+
+
+def test_r5h5_un_resume_rechazado_no_pisa_el_informe_del_run_original():
+    cfg = C.Config(max_ordenes=16, objetivo_anclas=1000); P, S, R, M, out = montar('r5h5', cfg=cfg)
+    def tras(nl): raise RuntimeError('fallo raro en _tras_lote')
+    P._tras_lote = tras; st = P.correr(); assert st == 'FAILED'; inf0 = json.load(open(out + '/informe_final.json')); assert inf0['excepciones']
+    snap = {f: _sha(os.path.join(out, f)) for f in ('informe_final.json', 'run_manifest.json', 'checkpoint.json', 'parcial_resumen.json') if os.path.exists(os.path.join(out, f))}; assert 'run_manifest.json' in snap and 'checkpoint.json' in snap
+    P2, S2, R2, M2, _ = montar('r5h5b', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id='r5h5'); n1 = len(S.posts_enviados); st2 = P2.correr()
+    assert st2 == 'FAILED' and 'resume_rechazado' in P2.kill and len(S.posts_enviados) == n1, (st2, P2.kill)
+    assert snap == {f: _sha(os.path.join(out, f)) for f in snap}, 'el resume rechazado piso informe/manifiesto/checkpoint del run original'
+    rech = [f for f in os.listdir(out) if f.startswith('informe_rechazo_')]; assert len(rech) == 1 and json.load(open(os.path.join(out, rech[0])))['rechazo_de_resume'] is True
+    # resume legitimo (limite benigno): el informe del proceso anterior se CONSERVA (informe_final.previo_*)
+    P3, S3, R3, M3, out3 = montar('r5h5c', cfg=cfg); P3.correr(); orig3 = open(out3 + '/informe_final.json').read()
+    P4, S4, R4, M4, _ = montar('r5h5d', cfg=cfg, sender=S3, reloj=R3, mercados=M3, dir_out=out3, run_id='r5h5c'); P4.correr()
+    prev = [f for f in os.listdir(out3) if f.startswith('informe_final.previo_')]; assert len(prev) == 1 and open(os.path.join(out3, prev[0])).read() == orig3
+    print('T80 ok [R5 h5]: el resume rechazado escribe su propio informe_rechazo_* y deja intactos informe_final/manifiesto/checkpoint; un resume que opera conserva el informe anterior (previo)')
+
+
+def test_r5h6_fase_b_realizable_benigna_y_con_topes():
+    def correrB(nombre, mk, **cfgkw):
+        cfg = C.Config(fase_b_max_rellenos=2, fase_b_ordenes=8, **cfgkw); reloj = RelojVirtual(); M = MercadosSim(reloj, **mk); P, S, R, M, out = montar(nombre, cfg=cfg, reloj=reloj, mercados=M); st = P.correr(); return st, json.load(open(out + '/informe_final.json')), out, P
+    # (a) token barato SOLO en los ultimos 100 s del mercado: con la vida heredada de la fase A (142-152 s) no habria coincidencia nunca
+    st, inf, out, P = correrB('r5h6a', dict(down_barato=True, barato_vida_max_s=100.0)); top = [r for r in rows(out, 'intencion') if r['modo'] == 'top']
+    assert st == 'COMPLETE' and top and inf['fase_b']['ordenes'] == len(top) and all(r['libro']['mejor_bid'] == 0.01 and r['libro']['mejor_ask'] <= 0.05 for r in top), (st, inf['motivo'], inf['fase_b'])
+    cfg = C.Config(); assert all(r['fin_s'] - r['t_decision_ns'] / 1e9 >= cfg.fase_b_min_vida_s + r['hold_s'] + 2.0 for r in top) and all(r['fin_s'] - r['t_decision_ns'] / 1e9 <= 100.0 for r in top)
+    assert cfg.min_vida_mercado_s + cfg.hold_b_min_s + 2.0 + cfg.prep_presupuesto_s > 100.0                                 # con la regla anterior (90 + hold + 2 + 40 = 142-152 s) esta ventana de 100 s era inalcanzable
+    # (b) nunca hay token barato: la fase B termina BENIGNA, el run conserva el status de la fase A (antes: BLOCKED sin_mercado_valido_prolongado)
+    st, inf, out, P = correrB('r5h6b', dict(down_barato=False)); assert st == 'COMPLETE' and inf['fase_b']['fin'] == 'sin_token_barato' and not [r for r in rows(out, 'intencion') if r['modo'] == 'top'] and P.kill is None and 'sin_mercado' not in inf['motivo'], (st, inf['motivo'], inf['fase_b'])
+    assert rows(out, 'fase_b_fin') and not rows(out, 'kill'), rows(out, 'kill')
+    # (c) respeta max_ordenes (A usa 8; quedan 2 para la fase B)
+    st, inf, out, P = correrB('r5h6c', dict(down_barato=True), objetivo_anclas=8, min_anclas_moneda={}, max_ordenes=10); n = len(rows(out, 'intencion')); assert n <= 10 and st == 'COMPLETE' and inf['fase_b']['fin'] == 'max_ordenes' and inf['fase_b']['ordenes'] == 2, (n, st, inf['fase_b'])
+    # (d) respeta max_minutos (A termina pasado el limite): 0 ordenes top y fin benigno
+    st, inf, out, P = correrB('r5h6d', dict(down_barato=True), objetivo_anclas=8, min_anclas_moneda={}, max_minutos=0.1); assert st == 'COMPLETE' and inf['fase_b']['fin'] == 'max_minutos' and inf['fase_b']['ordenes'] == 0, (st, inf['motivo'], inf['fase_b'])
+    print('T81 ok [R5 h6]: fase B con vida propia (%g s + hold + 2) halla tokens baratos de la recta final; sin token = fin benigno (status de A); respeta max_ordenes y max_minutos' % cfg.fase_b_min_vida_s)
+
+
+def test_r5h7_un_solo_criterio_de_saldo_contra_el_ledger():
+    P, S, R, out = _p_con_ordenes('r5h7'); S.saldo_v = 0.592681                                                       # 0,02 $ gastados (2 acc a 0,01) y EXPLICADOS por un relleno del ledger
+    P.led.add('intencion', 'r5h7|s1', 0, slot=1, coin='BTC', tok='T1', precio=0.01, size=5.0); P.led.add('estado', 'r5h7|s1', 1, matched=2.0, status='MATCHED', t_ns=R.now_ns()); P.led.add('cerrada', 'r5h7|s1', 0, motivo='cancelada', size_matched=2.0, t_ns=R.now_ns())
+    o = C.Orden(clave='r5h7|s2', slot=2, coin='ETH', tok='T2', precio=0.01, size=5.0, oid='0xfantasma', t_ack_ns=R.now_ns() - int(100e9)); P.ordenes[o.clave] = o
+    assert P.reconciliar_orden(o, 'prueba') is True and [r for r in P.led.filas if r['k'] == 'cerrada'][-1]['motivo'] == 'inexistente_verificada'              # antes: s0 - saldo (0,02) >= tol => INDETERMINADA aunque el ledger lo explicara
+    S.saldo_v = 0.562681                                                                                              # 0,05 $ de caida: 0,03 NO explicados por el ledger => no se puede probar
+    o2 = C.Orden(clave='r5h7|s3', slot=3, coin='ETH', tok='T3', precio=0.01, size=5.0, oid='0xfantasma2', t_ack_ns=R.now_ns() - int(100e9)); P.ordenes[o2.clave] = o2
+    assert P.reconciliar_orden(o2, 'prueba') is False and [r for r in P.led.filas if r['k'] == 'cerrada'][-1]['motivo'] == 'INDETERMINADA'
+    assert inspect.getsource(PL).count('tol_saldo_usd') <= 2 and 'def _saldo_cae_mas_que_ledger' in inspect.getsource(PL.Paquete)                    # la funcion unica + el descuadre bidireccional del arranque; ninguna comparacion ad hoc mas
+    print('T82 ok [R5 h7]: reconciliar_orden descuenta el gasto explicado por el ledger (misma funcion que tras-lote y barrido)')
+
+
+def test_r5h8_repro_usa_los_nombres_reales_de_argparse():
+    params = dict(run_id='real 1', out='/tmp/un dir/out', escenario='fill_total', objetivo=50, max_ordenes=30, fase_b=3, real=True, tiempo_real=True, evid_dir='/tmp/ev', confirmacion='/tmp/ok.txt')
+    P, S, R, M, out = montar('r5h8'); P.params = params; cmd = shlex_split(P._repro()); assert cmd[:2] == ['python3', '-I'] and cmd[2].endswith('paquete_l.py')
+    a = PL.construir_parser().parse_args(cmd[3:]); assert (a.run_id, a.out, a.escenario, a.objetivo, a.max_ordenes, a.fase_b, a.real, a.tiempo_real, a.evid_dir, a.confirmacion) == ('real 1', '/tmp/un dir/out', 'fill_total', 50, 30, 3, True, True, '/tmp/ev', '/tmp/ok.txt')
+    P.params = dict(run_id='x', out='/tmp/o', escenario='base', objetivo=None, max_ordenes=None, fase_b=None, real=False, tiempo_real=False, evid_dir=None, confirmacion=None); a = PL.construir_parser().parse_args(shlex_split(P._repro())[3:]); assert a.real is False and a.fase_b == 0 and a.run_id == 'x'
+    out = os.path.join(TMP, 'cli8'); r = subprocess.run([sys.executable, '-I', H + 'paquete_l.py', '--out', out, '--run-id', 'cli8', '--max-ordenes', '16', '--objetivo', '1000'], capture_output=True, text=True); assert r.returncode == 0, r.stderr[-200:]
+    repro = json.load(open(out + '/informe_final.json'))['repro']; r2 = subprocess.run([sys.executable] + shlex_split(repro)[1:], capture_output=True, text=True); assert r2.returncode == 0 and 'unrecognized' not in r2.stderr, (repro, r2.stderr[-200:])      # el comando de reproduccion ES ejecutable
+    print('T83 ok [R5 h8]: _repro genera --run-id/--max-ordenes/--fase-b...; ida y vuelta por el parser real y ejecutable')
+
+
+def shlex_split(s):
+    import shlex; return shlex.split(s)
+
+
+def test_r5h9_saldo_onchain_exige_dos_lecturas_validas_y_sin_asserts_en_el_envio():
+    V = _vm(); ok = lambda v: {'result': hex(v)}
+    assert V.saldo_onchain(C.WALLET_DEDICADA, _post=lambda u, j: ok(612681)) == 0.612681                                      # 3 RPC coinciden
+    seq = iter([ok(612681), ok(562681), ok(1)]); assert V.saldo_onchain(C.WALLET_DEDICADA, _post=lambda u, j: next(seq)) == 0.562681        # 2 validas distintas: el minimo
+    seq = iter([{'error': 'x'}, ok(612681), {'result': '0x'}]); assert V.saldo_onchain(C.WALLET_DEDICADA, _post=lambda u, j: next(seq)) is None          # UNA sola valida => ilegible (antes devolvia ese valor)
+    def uno_solo(u, j):
+        if 'drpc' in u or '1rpc' in u: raise OSError('caido')
+        return ok(612681)
+    assert V.saldo_onchain(C.WALLET_DEDICADA, _post=uno_solo) is None and V.saldo_onchain(C.WALLET_DEDICADA, _post=lambda u, j: {'error': 1}) is None
+    import ast; base = '/root/polymarket-research/polygon_rpc.py'                                                         # la lista del vendor replica el grupo 'latest' de polygon_rpc (regla: Polygon via polygon_rpc.py)
+    if os.path.exists(base):
+        d = [n for n in ast.parse(open(base).read()).body if isinstance(n, ast.Assign) and getattr(n.targets[0], 'id', '') == '_POR_DEFECTO'][0].value; lat = ast.literal_eval(d.values[[ast.literal_eval(k) for k in d.keys].index('latest')]); assert tuple(lat) == tuple(V.RPCS), (lat, V.RPCS)
+    for f in ('vendor_main.py', 'envio_real.py', 'cancel_evidencia.py', 'regenerar_vendor.py'):                             # nada de `assert` en lo que ejecuta el envio real / preflight (ni en el generador offline)
+        assert not [n for n in ast.walk(ast.parse(open(H + 'vendor/' + f).read())) if isinstance(n, ast.Assert)], f
+    for f in ('pl_core.py', 'pl_sender.py', 'pl_sender_real.py', 'paquete_l.py'):                                           # `plan_paquete_l.plan` (conserva un assert) es solo el generador de planes: ningun modulo del envio lo llama
+        assert not [n for n in ast.walk(ast.parse(open(H + f).read())) if isinstance(n, ast.Attribute) and n.attr == 'plan' and getattr(n.value, 'id', '') in ('P', 'PL', 'plan_paquete_l')], f
+    print('T84 ok [R5 h9]: saldo_onchain exige >=2 lecturas validas (minimo); RPCS = grupo latest de polygon_rpc; sin assert en vendor del envio')
+
+
+def test_r5h10_una_lectura_de_anclas_por_lote_sin_analiza_y_tolerante_a_gz_truncado():
+    import gzip
+    d = os.path.join(TMP, 'r5h10evid'); os.makedirs(d, exist_ok=True)
+    def evs(pref, n): return [e for i in range(n) for e in (dict(k='alta', oid=f'{pref}{i}', t_envio_ms=1000 + i, tok='t'), dict(k='user_order', oid=f'{pref}{i}', mine=True, tipo='PLACEMENT', ts_ex_ms=1080 + i), dict(k='user_order', oid=f'{pref}{i}', mine=True, tipo='CANCELLATION', ts_ex_ms=2100 + i), dict(k='cancel_try', oid=f'{pref}{i}', canceled=[f'{pref}{i}'], t_pre_ms=2090 + i, t_resp_ms=2150 + i))]
+    open(d + '/cancel_evid_2026-11-12.jsonl', 'w').write('\n'.join(json.dumps(x) for x in evs('a', 3)) + '\n{"cortado"')
+    gz = gzip.compress(('\n'.join(json.dumps(x) for x in evs('b', 400)) + '\n').encode()); open(d + '/cancel_evid_2026-11-11.jsonl.gz', 'wb').write(gz[:-40])                         # .gz TRUNCADO
+    pat = d + '/cancel_evid_*.jsonl*'; V = C.cargar_vendor('plan_paquete_l'); orig = V.analiza; llam = {'n': 0}; leer0 = C.leer_evid; lect = {'n': 0}
+    def analiza(p_): llam['n'] += 1; return orig(p_)
+    def leer(p_): lect['n'] += 1; return leer0(p_)
+    V.analiza = analiza; C.leer_evid = leer
+    try:
+        n, por = C.contar_anclas(pat); assert n >= 3 and llam['n'] == 0, (n, llam)                                       # no lanza con .gz truncado, cuenta lo legible y NO lanza analiza
+        ev, ileg = leer0(pat); assert [os.path.basename(x['fichero']) for x in ileg] == ['cancel_evid_2026-11-11.jsonl.gz'] and ev
+        lect['n'] = 0; P, S, R, M, out = montar('r5h10', cfg=C.Config(max_ordenes=16, objetivo_anclas=1000)); P.evid = pat
+        P.anclas_unico = lambda filas: (lambda e_, i_: (*C.anclas_de_eventos(e_, filas), e_, i_))(*C.leer_evid(pat))
+        st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
+        assert st in ('COMPLETE', 'PARTIAL') and lect['n'] == P.cnt['lotes'] + 1 and llam['n'] == 1, (st, lect, llam, dict(P.cnt))                  # UNA lectura por lote + 1 en el informe final; analiza solo en el informe final
+        assert [os.path.basename(x['fichero']) for x in inf['evid_ilegibles']] == ['cancel_evid_2026-11-11.jsonl.gz'] and any('cancel_evid ilegibles' in a for a in inf['alertas']) and 'error' in inf['anclas_detalle'], (inf['evid_ilegibles'], inf['alertas'], inf['anclas_detalle'])
+    finally: V.analiza = orig; C.leer_evid = leer0
+    print('T85 ok [R5 h10]: 1 lectura de cancel_evid por lote (+1 final), analiza solo en el informe final, .gz truncado => lo legible cuenta y el fichero queda marcado (sin excepcion)')
+
+
+def test_r5_ledger_con_filas_corruptas_no_da_complete_silencioso():
+    out = os.path.join(TMP, 'r5corr'); os.makedirs(out); open(out + '/ledger.jsonl', 'w').write('{"eid": "roto\n')
+    P, S, R, M, _ = montar('r5corr', dir_out=out); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
+    assert st == 'PARTIAL' and inf['cobertura']['filas_corruptas_ledger'] == 1 and any('LEDGER con 1' in a for a in inf['alertas']) and 'corrupta' in inf['motivo'] and os.path.exists(out + '/ALERTA_paquete_l.txt'), (st, inf['motivo'], inf['alertas'])
+    P2, S2, R2, M2, _ = montar('r5corrb', dir_out=out, run_id='r5corr', sender=S, reloj=R, mercados=M); st2 = P2.correr(); inf2 = json.load(open(out + '/informe_final.json'))                                  # un RESUME (fichero ya limpio) tampoco da COMPLETE a secas
+    assert st2 == 'PARTIAL' and inf2['cobertura']['filas_corruptas_ledger'] == 1 and any('LEDGER con 1' in a for a in inf2['alertas']), (st2, inf2['motivo'])
+    print('T86 ok [R4 pendiente]: filas corruptas del ledger => PARTIAL + alerta (fichero e informe), jamas COMPLETE a secas')
+
+
+if __name__ == '__main__':
+    try:
+        filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)
+        for n, f in list(globals().items()):
+            if n.startswith('test_') and callable(f) and filtro in n: f()
+        print('TODOS OK (paquete_l)')
+    finally: shutil.rmtree(TMP, ignore_errors=True)

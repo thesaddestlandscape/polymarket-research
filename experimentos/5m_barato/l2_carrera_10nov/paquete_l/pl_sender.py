@@ -45,6 +45,12 @@ class Limitador:
         """Cuenta una peticion SIN esperar (las cancelaciones no se retrasan nunca por el limitador)."""
         self.t.append(self.r.now_ns()); self.n += 1
 
+    def espera_s(self):
+        """Segundos hasta que haya cupo (0.0 si lo hay ahora). No consume cupo: el orquestador DIFIERE un POST en vez de bloquear el bucle (que debe seguir cancelando)."""
+        ahora = self.r.now_ns(); lim = ahora - 1_000_000_000
+        while self.t and self.t[0] <= lim: self.t.popleft()
+        return 0.0 if len(self.t) < self.por_s else max(0.005, (self.t[0] + 1_000_000_000 - ahora) / 1e9)
+
     def esperar(self):
         while True:
             ahora = self.r.now_ns(); lim = ahora - 1_000_000_000
@@ -164,8 +170,9 @@ class SenderSim:
 
 class MercadosSim:
     """Fuente de mercados 5m simulada: (slug, coin, fin_s, [tok_up, tok_down], neg_risk) y libro REST (bids, asks) por token. Mercados rotan cada 300 s con el reloj."""
-    def __init__(self, reloj, coins=('BTC', 'ETH', 'SOL', 'XRP'), bid=0.40, ask=0.45, down_barato=False):
+    def __init__(self, reloj, coins=('BTC', 'ETH', 'SOL', 'XRP'), bid=0.40, ask=0.45, down_barato=False, barato_vida_max_s=None):
         self.r = reloj; self.coins = coins; self.bid = bid; self.ask = ask; self.libros = {}; self.down_barato = down_barato      # down_barato: el token '...D' tiene bid 0,01 / ask 0,02 con cola (para la fase B)
+        self.barato_vida_max_s = barato_vida_max_s                                                                                # v7 (hallazgo 6): si no es None, el token '...D' SOLO es barato cuando al mercado le quedan <= barato_vida_max_s (como en la realidad: casi resuelto en la recta final)
 
     def mercados(self, coin=None):
         t = self.r.now_ns() // 1_000_000_000; ini = (t // 300) * 300; out = []
@@ -175,4 +182,6 @@ class MercadosSim:
         return [m for m in out if m[2] - t >= 1]
 
     def libro(self, tok):
-        b, a = self.libros.get(tok, (0.01, 0.02) if (self.down_barato and tok.endswith('D')) else (self.bid, self.ask)); return [(b, 100.0)], [(a, 100.0)]
+        barato = self.down_barato and tok.endswith('D')
+        if barato and self.barato_vida_max_s is not None: barato = int(tok[3:-1]) - self.r.now_ns() / 1e9 <= self.barato_vida_max_s
+        b, a = self.libros.get(tok, (0.01, 0.02) if barato else (self.bid, self.ask)); return [(b, 100.0)], [(a, 100.0)]

@@ -11,6 +11,7 @@ ENVS_PRODUCCION = ("/root/polymarket-research/data/live/.env", "/root/polymarket
 CLOB = "https://clob.polymarket.com"
 PUSD = "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB"          # colateral (de sonda1/vendor_main.py)
 RPCS = ("https://polygon-bor-rpc.publicnode.com", "https://polygon.drpc.org", "https://1rpc.io/matic")     # grupo 'latest' de polygon_rpc (12-Nov); lista FIJA, no se lee ningun JSON
+RPC_MIN_VALIDAS = 2                                          # v7 (hallazgo 9): respuestas validas MINIMAS para dar un saldo (se toma el minimo); con menos => None
 
 
 def hash_orden(signed, neg_risk=False):
@@ -142,8 +143,10 @@ def cliente_dedicado(ruta=ENV_DEDICADA, wallet_esperada=WALLET_DEDICADA, _clob=N
 
 
 def saldo_onchain(wallet, _post=None):
-    """pUSD on-chain de la wallet de deposito (balanceOf, eth_call 'latest') por RPC publico. Las ordenes abiertas NO lo reducen (solo el casado). Lee hasta 2 RPC de la lista fija y devuelve el MINIMO
-    (un nodo atrasado devolveria un saldo MAS ALTO y ocultaria un relleno: el minimo es el lado conservador). None si ninguna lectura es valida (quien llama no envia / bloquea)."""
+    """pUSD on-chain de la wallet de deposito (balanceOf, eth_call 'latest') por RPC publico. Las ordenes abiertas NO lo reducen (solo el casado). v7 (5o /code-review, hallazgo 9): exige SIEMPRE >= RPC_MIN_VALIDAS (2) respuestas validas de RPC distintos de la lista fija
+    y devuelve el MINIMO (un nodo atrasado devolveria un saldo MAS ALTO y ocultaria un relleno: el minimo es el lado conservador). Con UNA sola respuesta valida (o ninguna) => None (ilegible: quien llama no envia / bloquea): una lectura sin contrastar no vale.
+    Por que NO `polygon_rpc.llamar` (regla del repo: Polygon solo via polygon_rpc.py): se detiene en la PRIMERA respuesta valida (justo lo que se prohibe aqui), importa `requests` y relee un JSON fuera del paquete, incompatible con `python -I` + vendor con hash;
+    RPCS replica su grupo 'latest' (un test lo compara con `polygon_rpc._POR_DEFECTO`)."""
     w = str(wallet or "").lower()
     if not (w.startswith("0x") and len(w) == 42):
         return None
@@ -165,6 +168,6 @@ def saldo_onchain(wallet, _post=None):
                 vals.append(int(res, 16) / 1e6)
         except Exception:
             continue
-        if len(vals) >= 2:
+        if len(vals) >= RPC_MIN_VALIDAS:
             break
-    return min(vals) if vals else None
+    return min(vals) if len(vals) >= RPC_MIN_VALIDAS else None

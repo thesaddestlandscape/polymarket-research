@@ -3,9 +3,10 @@
 Envio REAL solo con `--real` Y `--confirmacion FICHERO` (que NO crea este codigo: lo escribe Javi tras /code-review) cuyo contenido fija config_sha, codigo_sha, wallet, perdida_dura y fase B; si algo no coincide, sale sin enviar.
 Uso dry:   python3 -I paquete_l.py --out /ruta/out [--run-id ID] [--escenario base|fill|429|...]
 Uso real:  python3 -I paquete_l.py --real --confirmacion /ruta/PAQUETE_L_OK.txt --out /ruta/out   (NO ejecutar sin /code-review + OK final de Javi)
+INSTANCIA UNICA (v7): flock exclusivo no bloqueante por wallet y por --out (ficheros en C.LOCK_DIR, fuera de --out), tomado antes de leer/enviar nada; si esta tomado el proceso sale sin tocar nada (run/resume/liquidar-informe).
 Contrato de largo plazo (mandato 12-Nov): run_manifest.json, ledger.jsonl (JSONL fsync, eid unico), checkpoint.json atomico, run.log con marca de tiempo, parcial_resumen.json tras CADA lote, informe_final.json con COMPLETE/PARTIAL/FAILED/BLOCKED
 y cobertura exacta. Reanudacion idempotente: el LEDGER es la verdad; un slot con intencion nunca se reenvia; las vivas se reconcilian (estado/cancelar/abiertas/saldo) antes de seguir."""
-import os, sys, json, time, math, argparse, datetime as dt, collections, signal, threading
+import os, sys, json, time, math, argparse, datetime as dt, collections, signal, threading, shlex
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))            # v3: AL FINAL (no puede sombrear la libreria estandar); `exigir_aislamiento` vigila que el directorio no tenga .py ajenos
 import pl_core as C
 from pl_sender import Reloj, RelojVirtual, Limitador, SenderSim, MercadosSim
@@ -32,20 +33,23 @@ def cfg_b(cfg): return cfg.fase_b_max_rellenos > 0
 
 
 class Paquete:
-    def __init__(self, cfg, sender, mercados, dir_out, reloj, run_id, real=False, libro=None, anclas_fn=None, evid_patron=None, params=None, stdout=True):
+    def __init__(self, cfg, sender, mercados, dir_out, reloj, run_id, real=False, libro=None, anclas_fn=None, evid_patron=None, params=None, stdout=True, locks=None):
         self.cfg, self.s, self.m, self.dir, self.r, self.run_id, self.real = cfg, sender, mercados, dir_out, reloj, run_id, real
         self.libro = libro or (mercados.libro if hasattr(mercados, 'libro') else None); self.anclas_fn = anclas_fn; self.evid = evid_patron; self.params = params or {}; self.stdout = stdout
         os.makedirs(dir_out, exist_ok=True); self.P = lambda n: os.path.join(dir_out, n)
         self.lim = Limitador(reloj, cfg.req_por_s); self.kill = None; self.kill_status = None; self.kill_sev = -1; self.exc = []; self.cnt = collections.Counter(); self.seguidos_429 = 0; self.seguidos_rech = 0; self.saldo_ileg = 0
-        self.t_inicio_ns = reloj.now_ns(); self.logf = open(self.P('run.log'), 'a'); self.vivas = {}                      # vivas: clave -> dict(oid, tok, deadline_ns, slot, modo, hold_s)
+        self.t_inicio_ns = reloj.now_ns(); self.logf = None; self.vivas = {}                      # vivas: clave -> dict(oid, tok, deadline_ns, slot, modo, hold_s)
         self.slots = C.plan_slots(cfg, n=cfg.max_ordenes + 100); self.fase = 'A'; self.sin_mercado = 0
         self.pres = None; self.led = None; self.ordenes = {}; self.senal = None; self.post_no_antes_ns = 0; self.ilegibles = []; self.abiertas_res = False; self.fills_b = 0; self.gasto_b = 0.0; self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat()
         self.ultimo_rechazo = None; self.alertas = []; self.n_senales = 0; self.lote_n0 = 0; self.ilegible_n0 = 0; self.io_fallos = 0
+        self._locks = locks; self.resume = False; self.operado = False; self.kills = {}; self.kills_resueltos = []; self.t_lim_ns = None; self.fase_b_fin = None; self.fase_b_parar = None; self.anclas_ult = (None, {}); self.anclas_ev = None; self.evid_ilegibles = []
 
     # ---------------------------------------------------------------- utilidades
     def log(self, msg, err=False):
         ts = dt.datetime.fromtimestamp(self.r.now_ns() / 1e9, dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'; linea = f'{ts} {"ERR " if err else ""}{msg}'
-        try: self.logf.write(linea + '\n'); self.logf.flush()
+        try:
+            if self.logf is None: self.logf = open(self.P('run.log'), 'a')                 # v7 (hallazgo 3): run.log se abre al primer mensaje (una instancia rechazada por el lock no toca nada)
+            self.logf.write(linea + '\n'); self.logf.flush()
         except (OSError, ValueError):                                                 # v4 (hallazgo 10): un log que no se puede escribir NUNCA detiene el barrido
             try: print('LOG NO ESCRIBIBLE: ' + linea, file=sys.stderr, flush=True)
             except Exception: pass
@@ -65,12 +69,34 @@ class Paquete:
 
     def _matar(self, motivo, status):
         """v6 (hallazgo 1): SIEMPRE queda una fila `kill` en el ledger (el resume decide por ellas: un kill benigno previo no puede ocultar uno grave posterior) y `self.kill/kill_status` conservan el MAS SEVERO (a igual severidad, el primero)."""
-        sev = self._severidad(motivo, status)
+        sev = self._severidad(motivo, status); prev = self.kills.get(motivo)
+        if prev is None or sev > self._severidad(motivo, prev): self.kills[motivo] = status                                  # v7 (hallazgo 2): kills vivos EN MEMORIA (los resueltos por verificacion salen de aqui)
         if self.led is not None and not any(r.get('k') == 'kill' and r.get('motivo') == motivo and r.get('status') == status for r in self.led.filas):
             self.led.add('kill', 'run', sum(1 for r in self.led.filas if r.get('k') == 'kill'), t_ns=self.r.now_ns(), motivo=motivo, status=status)
         if self.kill is None or sev > self.kill_sev:
             self.kill, self.kill_status, self.kill_sev = motivo, status, sev
             self.log(f'KILL {motivo} -> {status}', err=True)
+
+    def _recalcular_kill(self):
+        if self.kills: self.kill, self.kill_status = max(self.kills.items(), key=lambda kv: self._severidad(kv[0], kv[1])); self.kill_sev = self._severidad(self.kill, self.kill_status)
+        else: self.kill = self.kill_status = None; self.kill_sev = -1
+
+    @staticmethod
+    def _kills_de_orden(clave): return tuple(f'{p}:{clave}' for p in ('cancel_no_confirmada', 'estado_ilegible_tras_cancel', 'orden_indeterminada'))
+
+    def _resolver_kills_orden(self, clave):
+        """v7 (hallazgo 2b): SOLO cuando `reconciliar_orden` PRUEBA que la orden no existio (inexistente_verificada: exchange sin ella + abiertas sin ella + saldo cuadrado contra el ledger tras el asentamiento) el kill duro por esa orden (cancelacion no confirmada / estado ilegible / indeterminada)
+        deja de serlo: fila `kill_resuelto` en el ledger (la fila `kill` original NO se borra: append-only) y el kill vivo en memoria se recalcula. Una orden NO verificada sigue BLOQUEANDO (fail-closed)."""
+        for m in self._kills_de_orden(clave):
+            if any(r.get('k') == 'kill' and r.get('motivo') == m for r in self.led.filas) and not any(r.get('k') == 'kill_resuelto' and r.get('motivo') == m for r in self.led.filas):
+                self.led.add('kill_resuelto', 'run', sum(1 for r in self.led.filas if r.get('k') == 'kill_resuelto'), t_ns=self.r.now_ns(), motivo=m, razon='inexistente_verificada')
+            if m in self.kills: del self.kills[m]; self.kills_resueltos.append(m); self.log(f'KILL RESUELTO {m}: orden inexistente verificada (exchange + abiertas + saldo vs ledger)')
+        self._recalcular_kill()
+
+    def _saldo_cae_mas_que_ledger(self, sal, gasto_ledger=None):
+        """v7 (hallazgo 7): UNICO criterio de 'el saldo cayo mas de lo que explica el ledger' (tras lote, barrido final y verificacion de inexistente): s0 - saldo > gasto de rellenos del ledger + tol (< 1 share)."""
+        if gasto_ledger is None: gasto_ledger = C.replay_estado(self.led.filas)[1]['gasto_fills_usd']
+        return round(self.pres.s0 - sal, 6) > round(gasto_ledger + self.cfg.tol_saldo_usd, 6)
 
     # ---------------------------------------------------------------- senales (hallazgos 1-3 y 2a ronda)
     def _instalar_senales(self):
@@ -136,8 +162,10 @@ class Paquete:
         return 'ok' if ck.get('ledger_filas') == len(self.led.filas) else 'ledger_por_delante_ok'
 
     # ---------------------------------------------------------------- reconciliacion (arranque / POST ambiguo)
-    def _estado(self, oid):
-        self._req()
+    def _estado(self, oid, prioritario=False):
+        """`prioritario` (lecturas de la maquina de cancelacion, v7 hallazgo 2a): se CUENTAN en el limitador pero nunca esperan su cupo (las cancelaciones tienen prioridad; son los POST/lecturas de preparacion los que ceden)."""
+        if prioritario: self.lim.registrar()
+        else: self._req()
         try: return self.s.estado(oid)
         except Exception as e:
             if getattr(e, 'status_code', None) == 404: return None, 'NO_EXISTE'
@@ -174,10 +202,10 @@ class Paquete:
         ab = None
         try: self._req(); ab = self.s.abiertas_todas()
         except Exception: ab = None
-        sal = self._saldo(); tol = self.cfg.tol_saldo_usd
+        sal = self._saldo()
         pasado = ref is not None and self.r.now_ns() - ref >= self._asentamiento_ns()                      # 'inexistente_verificada' EXIGE que haya pasado el asentamiento desde el POST (sin referencia temporal => INDETERMINADA)
-        if pasado and isinstance(ab, (list, tuple, set)) and str(oid).lower() not in {str(x).lower() for x in ab} and est == 'NO_EXISTE' and sal is not None and self.pres is not None and self.pres.s0 - sal < tol:
-            o.indeterminada = False; self._cierre(o, motivo='inexistente_verificada', size_matched=0.0); return True
+        if pasado and isinstance(ab, (list, tuple, set)) and str(oid).lower() not in {str(x).lower() for x in ab} and est == 'NO_EXISTE' and sal is not None and self.pres is not None and not self._saldo_cae_mas_que_ledger(sal):
+            o.indeterminada = False; self._cierre(o, motivo='inexistente_verificada', size_matched=0.0); self._resolver_kills_orden(o.clave); return True
         o.indeterminada = True; self._cierre(o, motivo='INDETERMINADA', size_matched=(float(m) if m is not None else None), indeterminada=True); self.cnt['indeterminadas'] += 1
         self._matar(f'orden_indeterminada:{o.clave}', 'BLOCKED'); return False
 
@@ -226,8 +254,13 @@ class Paquete:
             if ma > self.cfg.top_ask_max + 1e-9: return None, 'top_no_casi_resuelto'                       # la posicion residual de un relleno debe valer ~0 (ask <= 0,05)
         return dict(mejor_bid=mb, mejor_ask=ma, q_bid=q_bid), None
 
+    def _vida_req(self, slot):
+        """v7 (hallazgos 1 y 6): vida restante minima del mercado para ENVIAR este slot = base + hold + 2 s. Fase A: min_vida_mercado_s (90: el precio no puede colapsar a 0,01 por cierre inminente). Fase B (modo 'top'): fase_b_min_vida_s (15), porque
+        BUSCA tokens casi resueltos (recta final del 5m); solo exige poder cancelar y leer el estado antes del cierre. Se aplica al elegir (+ prep_presupuesto_s) y OTRA VEZ justo antes del POST (sin prep)."""
+        return (self.cfg.fase_b_min_vida_s if slot.modo == 'top' else self.cfg.min_vida_mercado_s) + slot.hold_s + 2.0
+
     def _elegir_mercado(self, slot):
-        t = self.r.now_ns() / 1e9; hold = slot.hold_s; minv = self.cfg.min_vida_mercado_s + hold + 2.0 + self.cfg.prep_presupuesto_s; cand = []
+        t = self.r.now_ns() / 1e9; minv = self._vida_req(slot) + self.cfg.prep_presupuesto_s; cand = []
         for (slug, coin, fin, toks, neg) in self.m.mercados(slot.coin):                # hallazgo 9: SOLO la moneda del slot (1 consulta de mercado, no 8)
             if coin != slot.coin or len(toks) != 2: continue
             if fin - t >= minv: cand.append((fin, slug, toks, neg))
@@ -252,7 +285,10 @@ class Paquete:
                 sel = self._elegir_mercado(slot)
                 if sel is not None: self.sin_mercado = 0; break
                 self.cnt['reintentos_sin_mercado'] += 1; self.sin_mercado += 1
-                if self.sin_mercado * cfg.espera_mercado_s >= cfg.max_espera_mercado_s: self._matar('sin_mercado_valido_prolongado', 'BLOCKED'); break
+                if self.fase == 'B':                              # v7 (hallazgo 6): en fase B no encontrar un token barato NO es un fallo del run: termina la fase B (benigna), sin kill y sin tocar el status de la fase A
+                    if self.sin_mercado * cfg.espera_mercado_s >= cfg.fase_b_espera_s: self.fase_b_parar = 'sin_token_barato'; break
+                    if self.t_lim_ns is not None and self.r.now_ns() > self.t_lim_ns: self.fase_b_parar = 'max_minutos'; break
+                elif self.sin_mercado * cfg.espera_mercado_s >= cfg.max_espera_mercado_s: self._matar('sin_mercado_valido_prolongado', 'BLOCKED'); break
                 self._dormir(cfg.espera_mercado_s)
             if sel is None: break
             slug, fin, tok, neg, info = sel
@@ -264,14 +300,21 @@ class Paquete:
             listos.append((slot, sel))
         return listos
 
+    def _vida_ok(self, slot, fin): return fin - self.r.now_ns() / 1e9 >= self._vida_req(slot)
+
+    def _saltar_vida(self, slot, clave, fin):
+        rest = fin - self.r.now_ns() / 1e9; self.cnt['saltados_mercado_caducado'] += 1
+        self.led.add('saltado', clave, 0, slot=slot.i, coin=slot.coin, motivo=f'vida_minima_al_post:{rest:.0f}s<{self._vida_req(slot):.0f}s', t_ns=self.r.now_ns()); return 'saltado'
+
     def post_slot(self, slot, sel):
         o_prev = self.ordenes.get(f'{self.run_id}|s{slot.i}')
         if o_prev is not None: self.cnt['slot_ya_en_ledger'] += 1; return None
         if self.kill: return None
         if self.r.now_ns() < self.post_no_antes_ns: return 'diferido'                    # backoff 429: SOLO se difiere el siguiente POST; el bucle sigue cancelando (hallazgo 7)
         if not self.pres.puede_enviar(len(self.vivas)): self.cnt['espera_presupuesto'] += 1; return 'espera'
+        if self.lim.espera_s() > 0: self.cnt['post_diferido_por_limitador'] += 1; return 'diferido'                      # v7 (hallazgo 2a): un POST NUNCA espera el cupo dentro del bucle (bloquearia las cancelaciones vencidas): se difiere y el bucle sigue cancelando
         slug, fin, tok, neg, info = sel; clave = f'{self.run_id}|s{slot.i}'; cfg = self.cfg
-        if fin - self.r.now_ns() / 1e9 < slot.hold_s + 2.0: self.cnt['saltados_mercado_caducado'] += 1; self.led.add('saltado', clave, 0, slot=slot.i, coin=slot.coin, motivo='mercado_caducado_tras_preparar', t_ns=self.r.now_ns()); return 'saltado'
+        if not self._vida_ok(slot, fin): return self._saltar_vida(slot, clave, fin)                          # v7 (hallazgo 1): la vida minima se revalida AQUI (antes de firmar) y otra vez justo antes del POST: una preparacion/espera larga NO deja salir un slot con poca vida
         try: t_dec = self.r.now_ns(); oid_local, handle = self.s.colocar(tok, cfg.precio, cfg.size, clave, neg_risk=neg, expira_s=cfg.gtd_expira_s)      # neg_risk de gamma (verificado) + expiracion dura GTD (hallazgos 10 y 3)
         except Exception as e:
             self.cnt['saltados_firma'] += 1; self.led.add('saltado', clave, 0, slot=slot.i, coin=slot.coin, motivo=f'prepost:{type(e).__name__}:{str(e)[:80]}', t_ns=self.r.now_ns()); return 'saltado'
@@ -281,6 +324,7 @@ class Paquete:
             motivo = f'libro_revalidacion:{why}' if info2 is None else f'libro_rancio:{dt_libro:.2f}s'; self.cnt['saltados_libro_revalidacion'] += 1
             self.led.add('saltado', clave, 0, slot=slot.i, coin=slot.coin, motivo=motivo, t_ns=self.r.now_ns()); return 'saltado'
         if self.vivas and min(v['deadline_ns'] for v in self.vivas.values()) <= self.r.now_ns(): self.cnt['post_diferido_por_cancelacion_vencida'] += 1; return 'diferido'     # la lectura del libro se comio el hold de otra: primero cancelar
+        if not self._vida_ok(slot, fin): return self._saltar_vida(slot, clave, fin)                          # tras firmar y leer el libro: la ultima comprobacion antes de dejar rastro (intencion)
         info = info2
         self.led.add('intencion', clave, 0, slot=slot.i, coin=slot.coin, slug=slug, tok=tok, modo=slot.modo, precio=cfg.precio, size=cfg.size, hold_s=slot.hold_s, oid_local=oid_local, t_decision_ns=t_dec, libro=info, fin_s=fin, neg_risk=neg, expira_s=(cfg.gtd_expira_s or None))
         o = C.Orden(clave=clave, slot=slot.i, coin=slot.coin, tok=tok, modo=slot.modo, precio=cfg.precio, size=cfg.size, oid=oid_local); o.t_intencion_ns = t_dec; self.ordenes[clave] = o; self.cnt['intenciones'] += 1
@@ -318,29 +362,38 @@ class Paquete:
         return 'ok'
 
     # ---------------------------------------------------------------- cancelacion con medicion d_proc
+    def _reprogramar(self, v, s): v['deadline_ns'] = self.r.now_ns() + int(s * 1e9); return None
+
+    def _due(self, v):
+        """Hora a la que una viva exige atencion: su deadline, o AHORA si hay kill y aun no se ha empezado a cancelarla (una que esta esperando un reintento conserva su hora)."""
+        return self.r.now_ns() if (self.kill and v.get('cx') is None) else v['deadline_ns']
+
     def cancelar_viva(self, clave, forzada=False):
-        v = self.vivas[clave]; o = self.ordenes[clave]; oid = v['oid']; t_prog = v['deadline_ns']; t_trig = self.r.now_ns()           # t_trig_rx_ns: el evento (vencimiento de hold / kill) YA recibido por el hilo
-        ok = False; n = 0; fallos = 0; backoffs = (0.25, 0.5, 1.0); gracia_ns = int(self.cfg.index_gracia_s * 1e9); t_ack0 = v.get('t_ack_ns') or t_trig
-        while True:
-            n += 1; self.lim.registrar(); t_send = self.r.now_ns(); err = None; r_ok = False
+        """v7 (hallazgo 2a): UN PASO de la maquina de cancelacion (DELETE + lectura de estado, o una lectura de confirmacion). Las esperas (gracia de indexacion de get_order, backoffs, relecturas del estado) NO bloquean: se programan en `v['deadline_ns']` y la funcion devuelve None; el bucle del lote
+        atiende primero cualquier deadline vencido de las DEMAS vivas (una orden ambigua cuyo POST nunca llego ya no retrasa las cancelaciones ajenas mas que un paso). Devuelve True/False al TERMINAR (cancelada o terminal / INDETERMINADA). `_cancelar_completa` la repite hasta el final (barrido)."""
+        v = self.vivas[clave]; o = self.ordenes[clave]; oid = v['oid']; ahora = self.r.now_ns(); backoffs = (0.25, 0.5, 1.0); gracia_ns = int(self.cfg.index_gracia_s * 1e9)
+        cx = v.get('cx')
+        if cx is None: cx = v['cx'] = dict(fase='cancelar', n=0, fallos=0, ok=False, t_prog=v['deadline_ns'], t_trig=ahora, t_ack0=v.get('t_ack_ns') or ahora, leidas=0, m=None, est=None)       # t_trig_rx_ns: el evento (vencimiento de hold / kill) YA recibido por el hilo; compartido por los reintentos
+        if cx['fase'] == 'cancelar':
+            cx['n'] += 1; n = cx['n']; self.lim.registrar(); t_send = self.r.now_ns(); err = None; r_ok = False
             try: r_ok = bool(self.s.cancelar(oid))
             except Exception as e: err = f'{type(e).__name__}: {str(e)[:150]}'; self.cnt['cancel_excepciones'] += 1; self.cnt['cancel_429'] += 1 if C.es_429(e) else 0
             t_ack = self.r.now_ns()
-            self.led.add('cancel', clave, n, oid=oid, ok=r_ok, intento=n, t_trig_prog_ns=t_prog, t_trig_rx_ns=t_trig, t_send_ns=t_send, t_ack_ns=t_ack, error=err, forzada=bool(forzada), trig=v['trig'])
-            if r_ok: ok = True; break
-            m, est = self._estado(oid)                                       # ya casada/cancelada (= terminal) o seguimos
-            if C.es_terminal(est): self.led.add('estado', clave, 10 + n, matched=float(m or 0.0), status=est, t_ns=self.r.now_ns(), fuente='post_cancel_fallido'); break
-            if est == 'NO_EXISTE' and self.r.now_ns() - t_ack0 < gracia_ns:                        # get_order devuelve null hasta ~1,4 s tras el POST: aun sin indexar, NO es un fallo de cancelacion
-                self.cnt['cancel_pre_indice'] += 1; self.r.sleep(0.25); continue
-            fallos += 1
-            if fallos > len(backoffs): break
-            self.r.sleep(backoffs[fallos - 1])
-        m, est = self._estado(oid)
-        for _ in range(3):                                                    # hallazgo 4: tras cancelar el estado tiene que ser LEGIBLE y terminal (size_matched conocido); se reintenta brevemente (indexacion/red) antes de rendirse
-            if m is not None and C.es_terminal(est): break
-            self.r.sleep(0.25); m, est = self._estado(oid)
+            self.led.add('cancel', clave, n, oid=oid, ok=r_ok, intento=n, t_trig_prog_ns=cx['t_prog'], t_trig_rx_ns=cx['t_trig'], t_send_ns=t_send, t_ack_ns=t_ack, error=err, forzada=bool(forzada), trig=v['trig'])
+            if r_ok: cx['ok'] = True; cx['fase'] = 'leer'
+            else:
+                m, est = self._estado(oid, prioritario=True)                     # ya casada/cancelada (= terminal) o seguimos
+                if C.es_terminal(est): self.led.add('estado', clave, 10 + n, matched=float(m or 0.0), status=est, t_ns=self.r.now_ns(), fuente='post_cancel_fallido'); cx['fase'] = 'leer'
+                elif est == 'NO_EXISTE' and self.r.now_ns() - cx['t_ack0'] < gracia_ns: self.cnt['cancel_pre_indice'] += 1; return self._reprogramar(v, 0.25)      # get_order devuelve null hasta ~1,4 s tras el POST: aun sin indexar, NO es un fallo de cancelacion
+                else:
+                    cx['fallos'] += 1
+                    if cx['fallos'] > len(backoffs): cx['fase'] = 'leer'
+                    else: return self._reprogramar(v, backoffs[cx['fallos'] - 1])
+            if cx['fase'] == 'leer': v['deadline_ns'] = self.r.now_ns(); return None          # la lectura de confirmacion es el SIGUIENTE paso (las demas vivas vencidas pasan antes)
+        cx['leidas'] += 1; m, est = self._estado(oid, prioritario=True); cx['m'], cx['est'] = m, est         # hallazgo 4 (v4): tras cancelar el estado tiene que ser LEGIBLE y terminal (size_matched conocido); hasta 4 lecturas espaciadas 0,25 s (indexacion/red) antes de rendirse
         legible = m is not None and C.es_terminal(est)
-        self.led.add('estado', clave, 0, matched=(float(m) if m is not None else None), status=est, t_ns=self.r.now_ns(), fuente='post_cancel', legible=legible)
+        if not legible and cx['leidas'] < 4: return self._reprogramar(v, 0.25)
+        ok = cx['ok']; self.led.add('estado', clave, 0, matched=(float(m) if m is not None else None), status=est, t_ns=self.r.now_ns(), fuente='post_cancel', legible=legible)
         if not legible:                                                       # cancel_ok pero estado ilegible NO es 'matched=0': pudo casarse antes del DELETE => INDETERMINADO, corte (BLOCKED); el saldo on-chain lo cruza en el barrido final
             motivo = 'CANCEL_NO_CONFIRMADA' if not ok else 'ESTADO_ILEGIBLE_TRAS_CANCEL'
             self.led.add('cerrada', clave, 0, motivo=motivo, size_matched=(float(m) if m is not None else None), indeterminada=True, t_ns=self.r.now_ns()); o.cerrada = True; o.indeterminada = True
@@ -351,6 +404,14 @@ class Paquete:
         self.led.add('cerrada', clave, 0, motivo=('cancelada' if ok else f'terminal:{est}'), size_matched=mm, t_ns=self.r.now_ns())
         self.cnt['canceladas_ok'] += 1 if ok else 0
         return True
+
+    def _cancelar_completa(self, clave):
+        """Barrido final: repite `cancelar_viva` (duerme DE VERDAD entre pasos, sin abortar con senales) hasta que la orden queda cerrada o INDETERMINADA."""
+        while True:
+            r = self.cancelar_viva(clave, forzada=True)
+            if r is not None: return r
+            esp = self.vivas[clave]['deadline_ns'] - self.r.now_ns()
+            if esp > 0: self.r.sleep(esp / 1e9)
 
     # ---------------------------------------------------------------- relleno por PUSH (canal de usuario) ademas de estado/saldo
     def _chequear_push(self):
@@ -378,19 +439,19 @@ class Paquete:
             if self.kill and pend: self.log(f'kill activo: se descartan {len(pend)} slots pendientes del lote'); pend = []
             now = self.r.now_ns()
             if self.vivas and now >= t_push: self._chequear_push(); t_push = self.r.now_ns() + int(self.cfg.push_poll_s * 1e9); now = self.r.now_ns()
-            t_dl = min((v['deadline_ns'] for v in self.vivas.values()), default=None) if not self.kill else now
+            t_dl = min((self._due(v) for v in self.vivas.values()), default=None)
             t_po = next_post if pend else None
-            t_pl = min((v['next_poll_ns'] for v in self.vivas.values() if v.get('next_poll_ns')), default=None) if not self.kill else None
+            t_pl = min((v['next_poll_ns'] for v in self.vivas.values() if v.get('next_poll_ns') and v.get('cx') is None), default=None) if not self.kill else None
             t_ps = t_push if (self.vivas and not self.kill and hasattr(self.s, 'fills_push')) else None
             cands = [t for t in (t_dl, t_po, t_pl, t_ps) if t is not None]
             if not cands: break
             t_next = min(cands)
-            if t_next > now: self._dormir((t_next - now) / 1e9)               # el cuerpo del lote despierta con una senal; cancelar_viva y el barrido duermen de verdad
+            if t_next > now: (self.r.sleep if self.kill else self._dormir)((t_next - now) / 1e9)               # el cuerpo del lote despierta con una senal; con kill (cancelaciones/reintentos pendientes) y en el barrido se duerme DE VERDAD (sin abortar: no hay bucle caliente)
             now = self.r.now_ns()
-            if self.vivas and (self.kill or min(v['deadline_ns'] for v in self.vivas.values()) <= now):                 # las cancelaciones tienen PRIORIDAD sobre cualquier otra tarea del bucle
-                clave = min(self.vivas, key=lambda c: self.vivas[c]['deadline_ns']); self.cancelar_viva(clave, forzada=bool(self.kill)); continue
+            if self.vivas and min(self._due(v) for v in self.vivas.values()) <= now:                 # las cancelaciones tienen PRIORIDAD sobre cualquier otra tarea del bucle; v7: UN paso por iteracion, siempre la mas vencida
+                clave = min(self.vivas, key=lambda c: (self._due(self.vivas[c]), self.vivas[c]['deadline_ns'])); self.cancelar_viva(clave, forzada=bool(self.kill)); continue
             if self.vivas and now >= t_push: continue                       # toca leer el push antes que nada
-            pol = [c for c, v in self.vivas.items() if v.get('next_poll_ns') and v['next_poll_ns'] <= now]
+            pol = [c for c, v in self.vivas.items() if v.get('next_poll_ns') and v['next_poll_ns'] <= now and v.get('cx') is None]
             if pol and not self.kill:                                       # fase B: seguimiento 1 Hz de size_matched (parciales) mientras la orden esta viva
                 for c in pol:
                     v = self.vivas[c]; m, est = self._estado(v['oid']); v['next_poll_ns'] = self.r.now_ns() + int(1e9)
@@ -424,8 +485,16 @@ class Paquete:
         if v is None: self.cnt['saldo_lecturas_agotadas'] += 1
         return v
 
+    anclas_unico = None                                                      # v7 (hallazgo 10): real = sender.anclas(filas) -> (total, por_moneda, eventos, ilegibles); una sola lectura de los cancel_evid por lote
+
+    def _leer_anclas(self):
+        """(total|None, por_moneda) con UNA lectura por llamada; guarda en `anclas_ult` y los eventos leidos (real) en `anclas_ev` para el informe final."""
+        if self.anclas_unico is not None: tot, por, ev, ileg = self.anclas_unico(self.led.filas); self.anclas_ev = (ev, ileg)
+        else: tot = self.anclas_fn() if self.anclas_fn else None; por = self.anclas_por_moneda_fn() if self.anclas_por_moneda_fn else {}
+        self.anclas_ult = (tot, por); return tot, por
+
     def _tras_lote(self, n_lote):
-        ancl = self.anclas_fn() if self.anclas_fn else None                 # hallazgo 5: PRIMERO la espera del canal de usuario (anclas); el saldo se lee DESPUES
+        ancl = self._leer_anclas()[0]                                       # hallazgo 5: PRIMERO la espera del canal de usuario (anclas); el saldo se lee DESPUES
         sal = None; lote_id = self.lote_n0 + self.cnt['lotes']
         if self._asentar(self._ult_post_ns(), interrumpible=True):           # y solo tras >= index_gracia_s + 3 s desde el ultimo POST (bloque on-chain / indexacion)
             sal = self._saldo()
@@ -437,7 +506,7 @@ class Paquete:
         O, res = C.replay_estado(self.led.filas); self.pres.actualizar(gasto_ledger=res['gasto_fills_usd'])
         if self.pres.toca_suelo(): self._matar(f'TOCA_SUELO gasto={self.pres.gasto} saldo={self.pres.saldo}', 'FAILED')
         # discrepancia saldo vs ledger: si el saldo cayo mas de lo que explica el ledger => relleno no visto: se corta
-        if sal is not None and round(self.pres.s0 - sal, 6) > round(res['gasto_fills_usd'] + self.cfg.tol_saldo_usd, 6): self._matar(f'saldo_cae_mas_que_ledger {self.pres.s0 - sal:.4f} > {res["gasto_fills_usd"]:.4f}', 'PARTIAL')       # tol < 1 share (hallazgo 4)
+        if sal is not None and self._saldo_cae_mas_que_ledger(sal, res['gasto_fills_usd']): self._matar(f'saldo_cae_mas_que_ledger {self.pres.s0 - sal:.4f} > {res["gasto_fills_usd"]:.4f}', 'PARTIAL')       # tol < 1 share (hallazgo 4)
         resumen = dict(lote=lote_id, n_ordenes_lote=n_lote, ts_utc=dt.datetime.now(dt.timezone.utc).isoformat(), cnt=dict(self.cnt), saldo=sal, gasto=self.pres.gasto, suelo=self.pres.suelo, anclas_directas=ancl, kill=self.kill, **res)
         self._escribir('parcial_resumen.json', resumen)
         self.led.add('lote', f'{self.run_id}|l{lote_id}', 0, **{k: v for k, v in resumen.items() if k != 'cnt'})                # hallazgo 6: numeracion global (filas ya presentes + lotes de este proceso): un resume no choca con las filas previas
@@ -453,9 +522,16 @@ class Paquete:
     # ---------------------------------------------------------------- ejecucion
     def correr(self):
         """UNICO punto de entrada. v4 (hallazgo 1): los manejadores de senal se instalan ANTES de todo y se restauran SOLO al final (tras barrido e informe): una 2a senal durante el barrido solo incrementa un contador."""
+        propios = self._locks is None
+        if propios: self._locks = C.tomar_locks(self.cfg.wallet, self.dir)                  # v7 (hallazgo 3): ANTES de cualquier lectura de estado, apertura de ledger o envio
+        if not self._locks:
+            print(f'INSTANCIA UNICA: ya hay otro proceso con la wallet {self.cfg.wallet} o el --out {self.dir} (o no se pudo tomar el lock): no se toca nada (ni ledger, ni checkpoint, ni informe)', file=sys.stderr, flush=True)
+            self._locks = None; return 'LOCKED'
         prev = self._instalar_senales()
         try: return self._correr()
-        finally: self._restaurar_senales(prev)
+        finally:
+            self._restaurar_senales(prev)
+            if propios: C.liberar_locks(self._locks); self._locks = None
 
     def _excepcion(self, donde, e):
         """Hallazgo 10: registrar una excepcion NUNCA puede impedir el barrido: cada paso va en su propio try (disco lleno, log roto...)."""
@@ -483,7 +559,7 @@ class Paquete:
             except BaseException: self.ilegibles.append(dict(lectura='barrido_final', detalle=f'excepcion:{type(e).__name__}'))
         try:
             if accion[0] == 'rechazo': return self._final(accion[1], accion[2], sin_pres=True)
-            return self._final(None, None)
+            return self._final(None, None, sin_pres=(self.resume and not self.operado))                          # v7 (hallazgo 5): un resume que NO llego a operar (rechazado) no pisa informe/manifiesto/checkpoint del run original
         except BaseException as e:
             self._excepcion('final', e); return self._final_emergencia(e)
 
@@ -498,23 +574,28 @@ class Paquete:
         if os.path.exists(self.P('run_manifest.json')):
             try: man = json.load(open(self.P('run_manifest.json')))
             except ValueError: man = None
-        resume = man is not None and man.get('run_id') == self.run_id
+        resume = man is not None and man.get('run_id') == self.run_id; self.resume = resume
         if resume and man.get('config_sha') != self.cfg.sha(): self.log('RESUME con config distinta: BLOQUEADO', err=True); return ('rechazo', 'FAILED', 'config_distinta_en_resume')
         if resume and man.get('estado') == 'FINALIZADO' and man.get('status_final') == 'COMPLETE': self.log('run ya COMPLETE: nada que hacer'); return ('ya_complete',)
         s0 = man['saldo_inicial'] if resume else self._saldo()
         try: self.pres = C.Presupuesto(self.cfg, s0)
         except C.Invariante as e: self.pres = None; self.log(f'preflight: {e}', err=True); return ('rechazo', 'BLOCKED', f'preflight:{e}')
         if resume: self.t_ini_iso = man.get('inicio_utc', self.t_ini_iso)
-        self.chrony = (self.s.chrony() if self.real and hasattr(self.s, 'chrony') else None); self._manifest('EN_CURSO')
+        self.chrony = (self.s.chrony() if self.real and hasattr(self.s, 'chrony') else None)
+        if not resume: self._manifest('EN_CURSO')                                                           # v7 (hallazgo 5): un RESUME no pisa el manifiesto del run original hasta que de verdad va a operar (si se rechaza, el manifiesto/informe/checkpoint originales quedan intactos)
         self.log(f'INICIO run={self.run_id} real={self.real} resume={resume} saldo_inicial={self.pres.s0} suelo={self.pres.suelo} config_sha={self.cfg.sha()[:12]} codigo_sha={C.sha_codigo()[:12]}')
         ck = self._validar_checkpoint(); self.log(f'checkpoint: {ck}'); self.ordenes, res = C.replay_estado(self.led.filas)
         if self.led.corruptas or self.led.duplicadas: self.log(f'ledger: corruptas={self.led.corruptas} duplicadas={self.led.duplicadas} (reparado)', err=True)
+        if self.led.corruptas:                                                                                          # v7 (pendiente ronda 4): la reparacion queda REGISTRADA en el ledger (un resume posterior, con el fichero ya limpio, tampoco puede dar COMPLETE a secas)
+            self.led.add('ledger_reparado', 'run', sum(1 for r in self.led.filas if r.get('k') == 'ledger_reparado'), corruptas=self.led.corruptas, duplicadas=self.led.duplicadas, t_ns=self.r.now_ns())
+            self._alerta(f'LEDGER con {self.led.corruptas} fila(s) corrupta(s) descartada(s) al abrir (reparado; las ordenes sin cierre se reconcilian): el informe final nunca sera COMPLETE a secas')
         if self.kill: return ('normal',)
-        duros = [r for r in self.led.filas if r.get('k') == 'kill' and r.get('motivo') not in BENIGNOS and not str(r.get('motivo')).startswith(BENIGNOS_PREFIJO)]
         for o in [o for o in self.ordenes.values() if (not o.cerrada or o.indeterminada) and o.clase_post != 'rechazo']:            # reconciliacion de vivas/ambiguas/INDETERMINADAS de una ejecucion anterior
             if o.t_envio_ns is None and o.clase_post is None: self.cnt['intencion_sin_post'] += 1                  # intencion sin POST registrado: pudo salir: se reconcilia igual
             self.reconciliar_orden(o, 'arranque'); o.cerrada = True
             if self.kill: return ('normal',)
+        resueltos = {r.get('motivo') for r in self.led.filas if r.get('k') == 'kill_resuelto'}                          # v7 (hallazgo 2b): un kill por una orden luego VERIFICADA como inexistente no impide reanudar
+        duros = [r for r in self.led.filas if r.get('k') == 'kill' and r.get('motivo') not in BENIGNOS and not str(r.get('motivo')).startswith(BENIGNOS_PREFIJO) and r.get('motivo') not in resueltos and str(r.get('motivo')).replace('resume_rechazado_kill_previo:', '', 1) not in resueltos]
         try: self._req(); ab = self.s.abiertas_todas()                                                          # v5 (hallazgo 4): la wallet dedicada debe tener 0 abiertas ANTES de enviar (propias ya reconciliadas, ajenas = nunca se tocan)
         except Exception: ab = None
         if not isinstance(ab, (list, tuple, set)) or ab:
@@ -532,7 +613,8 @@ class Paquete:
             motivo = duros[-1]['motivo'] if duros else (f'ledger_con_rellenos={res["n_fills"]}' if res['n_fills'] > 0 else (f'ledger_con_indeterminadas={res["n_indeterminadas"]}' if res['n_indeterminadas'] > 0 else f'ledger_con_lecturas_ilegibles={n_ileg} (cuenta del ledger de ESTE --out: verificar a mano y relanzar con OTRO --out; cambiar solo el run-id NO lo desbloquea)'))
             self._matar(f'resume_rechazado_kill_previo:{motivo}', (duros[-1].get('status') if duros else None) or ('PARTIAL' if res['n_fills'] > 0 else 'BLOCKED')); self.log(f'RESUME RECHAZADO: {motivo}; no se envia nada', err=True)
             return ('normal',)
-        t_lim = self.t_inicio_ns + int(self.cfg.max_minutos * 60e9); idx = 0; enviadas0 = sum(1 for r in self.led.filas if r.get('k') == 'intencion'); self.cnt['enviadas_previas'] = enviadas0
+        if resume: self._manifest('EN_CURSO')                                                               # v7 (hallazgo 5): ya no hay rechazo posible: el resume pasa a ser el run en curso
+        self.operado = True; self.t_lim_ns = t_lim = self.t_inicio_ns + int(self.cfg.max_minutos * 60e9); idx = 0; enviadas0 = sum(1 for r in self.led.filas if r.get('k') == 'intencion'); self.cnt['enviadas_previas'] = enviadas0
         while not self.kill:
             if self._chequear_senal(): break
             if self.r.now_ns() > t_lim: self._matar('max_minutos', 'PARTIAL'); break
@@ -547,26 +629,35 @@ class Paquete:
             self.cnt['lotes'] += 1; self.lote(lote); ancl = self._tras_lote(len(lote))
             self.log(f'lote {self.lote_n0 + self.cnt["lotes"]}: anclas_directas={ancl} intenciones={self.cnt["intenciones"]} fills={self.cnt["fills"]} saldo={self.pres.saldo} gasto={self.pres.gasto}')
             if ancl is not None and not self.kill:
-                tot, por = ancl, getattr(self, 'por_moneda', {})
-                if self.anclas_por_moneda_fn: por = self.anclas_por_moneda_fn()
+                tot, por = ancl, self.anclas_ult[1]
                 if not C.faltan_anclas(self.cfg, tot, por): self.log('objetivo de anclas alcanzado'); break
         if not self.kill and cfg_b(self.cfg): self._fase_b()
         return ('normal',)
 
+    def _fase_b_terminar(self, motivo):
+        """v7 (hallazgo 6): FIN BENIGNO de la fase B (sin kill: el status del run es el de la fase A). Queda en el ledger y en el informe (`fase_b.fin`)."""
+        if self.fase_b_fin is None:
+            self.fase_b_fin = motivo; self.log(f'FASE B terminada ({motivo}); el run conserva el status de la fase A')
+            if self.led is not None: self.led.add('fase_b_fin', 'run', 0, motivo=motivo, t_ns=self.r.now_ns(), rellenos=self.fills_b, gasto=self.gasto_b)
+
     def _fase_b(self):
-        """Fase B (opcional, solo con fase_b_max_rellenos>0 Y confirmada): ordenes 'top' a 0,01 sobre el nivel con cola de un token barato, para provocar rellenos PARCIALES y orden propia VISIBLE en el libro publico.
-        Tope propio de rellenos y de coste; seguimiento 1 Hz de size_matched. Cualquier relleno cuenta contra el mismo presupuesto duro."""
+        """Fase B (opcional, solo con fase_b_max_rellenos>0 Y confirmada): ordenes 'top' a 0,01 sobre el nivel con cola de un token barato (casi resuelto: bid==0,01, ask<=0,05), para provocar rellenos PARCIALES y orden propia VISIBLE en el libro publico.
+        v7 (hallazgo 6): vida propia (`fase_b_min_vida_s`, no los 90 s de A); respeta max_ordenes, max_minutos y los topes fase_b_*; sin token barato (tras `fase_b_espera_s`) / limites de tiempo o cantidad = fin BENIGNO (el run conserva COMPLETE/PARTIAL de la fase A, nunca BLOCKED por eso). Tope propio de rellenos y de coste; seguimiento 1 Hz de size_matched. Cualquier relleno cuenta contra el mismo presupuesto duro."""
         import random
-        cfg = self.cfg; rg = random.Random(cfg.seed + 1); self.fase = 'B'; self.log(f'FASE B: hasta {cfg.fase_b_ordenes} ordenes top, max {cfg.fase_b_max_rellenos} rellenos / {cfg.fase_b_tope_usd} $')
+        cfg = self.cfg; rg = random.Random(cfg.seed + 1); self.fase = 'B'; self.sin_mercado = 0; self.log(f'FASE B: hasta {cfg.fase_b_ordenes} ordenes top, max {cfg.fase_b_max_rellenos} rellenos / {cfg.fase_b_tope_usd} $')
         sl = [C.Slot(1000 + j, C.COINS[j % 4], j % 2, round(rg.uniform(cfg.hold_b_min_s, cfg.hold_b_max_s), 3), 'top') for j in range(cfg.fase_b_ordenes)]
         i = 0
         while i < len(sl) and not self.kill:
             if self._chequear_senal(): break
-            n_ok = min(4, cfg.fase_b_max_rellenos - self.fills_b, int((cfg.fase_b_tope_usd - self.gasto_b) / cfg.coste_orden + 1e-9))   # nunca mas ordenes vivas que rellenos que aun caben en el tope
+            if self.t_lim_ns is not None and self.r.now_ns() > self.t_lim_ns: self._fase_b_terminar('max_minutos'); break
+            resto = cfg.max_ordenes - sum(1 for r in self.led.filas if r.get('k') == 'intencion')
+            if resto < 1: self._fase_b_terminar('max_ordenes'); break
+            n_ok = min(4, resto, cfg.fase_b_max_rellenos - self.fills_b, int((cfg.fase_b_tope_usd - self.gasto_b) / cfg.coste_orden + 1e-9))   # nunca mas ordenes vivas que rellenos que aun caben en el tope (ni mas ordenes que max_ordenes)
             if n_ok < 1: self._matar('fase_b_tope_rellenos', 'PARTIAL'); break
             lote = [s for s in sl[i:i + n_ok] if f'{self.run_id}|s{s.i}' not in self.ordenes]; i += n_ok
             if not lote: continue
             self.cnt['lotes'] += 1; self.lote(lote); self._tras_lote(len(lote))
+            if self.fase_b_parar and not self.kill: self._fase_b_terminar(self.fase_b_parar); break
 
     anclas_por_moneda_fn = None
 
@@ -588,7 +679,7 @@ class Paquete:
         """Barrido (hallazgos 3 y 9 v3; 1, 4 y 6 v5), SIEMPRE: (1) cancela cada viva; (2) reconcilia (con reintentos y backoff) toda orden sin cierre o INDETERMINADA; (3) espera el asentamiento desde el ultimo POST y lee get_open_orders SIN filtro de
         asset: cada id propio se cancela con reintentos, y lo que siga abierto (o sea ajeno) => BLOCKED con la lista y ALERTA; ilegible = INDETERMINADA; (4) saldo final contra el ledger."""
         for c in list(self.vivas):
-            try: self.cancelar_viva(c, forzada=True)
+            try: self._cancelar_completa(c)
             except BaseException as e: self.cnt['barrido_excepciones'] += 1; self.log(f'cancelar_viva en barrido: {type(e).__name__}: {str(e)[:100]}', err=True)
             self.vivas.pop(c, None)                                    # si cancelar_viva fallo a medias la orden NO esta cerrada: la recoge el paso (2)
         for o in [o for o in self.ordenes.values() if (not o.cerrada or o.indeterminada) and o.clase_post != 'rechazo']:
@@ -602,7 +693,7 @@ class Paquete:
             if sal is None: self._ilegible('saldo_final', 'RPC sin lectura valida')
             else:
                 self.pres.actualizar(saldo=sal); gl = C.replay_estado(self.led.filas)[1]['gasto_fills_usd']; self.pres.actualizar(gasto_ledger=gl)
-                if round(self.pres.s0 - sal, 6) > round(gl + self.cfg.tol_saldo_usd, 6): self._matar(f'saldo_cae_mas_que_ledger_final {self.pres.s0 - sal:.4f} > {gl:.4f}', 'BLOCKED')
+                if self._saldo_cae_mas_que_ledger(sal, gl): self._matar(f'saldo_cae_mas_que_ledger_final {self.pres.s0 - sal:.4f} > {gl:.4f}', 'BLOCKED')
 
     def _abiertas_final(self):
         propios = {str(o.oid).lower(): o for o in self.ordenes.values() if o.oid}
@@ -627,26 +718,20 @@ class Paquete:
             self._matar('abiertas_residuales', 'BLOCKED')
 
     def _evid_filas(self):
-        out = []
-        if not self.evid: return out
-        import glob, gzip
-        for f in sorted(glob.glob(self.evid)):
-            try:
-                for ln in (gzip.open(f, 'rt') if f.endswith('.gz') else open(f)):
-                    try: out.append(json.loads(ln))
-                    except ValueError: pass
-            except OSError: pass
-        return out
+        """Eventos del canal de usuario para el informe: los de la ultima lectura del lote/final (`anclas_ev`) o, sin ella, UNA lectura tolerante (`C.leer_evid`: .gz truncado / linea rota no lanzan; los ficheros ilegibles quedan en `evid_ilegibles`)."""
+        if self.anclas_ev is not None: ev, ileg = self.anclas_ev
+        elif self.evid: ev, ileg = C.leer_evid(self.evid)
+        else: ev, ileg = [], []
+        self.evid_ilegibles = list(ileg); return ev
 
     # ---------------------------------------------------------------- informe final
     def _final(self, status, motivo, sin_pres=False):
-        if sin_pres or self.pres is None:                             # rechazo antes de operar (config distinta / preflight): NO pisa el informe_final de una ejecucion previa valida
+        if sin_pres or self.pres is None:                             # rechazo antes de operar (config distinta / preflight / resume rechazado): NO pisa el informe_final, el manifiesto ni el checkpoint de una ejecucion previa
             if status is None: status, motivo = (self.kill_status or 'FAILED'), (self.kill or 'sin_presupuesto')
             if self.ilegibles and status in ('COMPLETE', 'PARTIAL'): status = 'BLOCKED'
-            nombre = 'informe_final.json' if not os.path.exists(self.P('informe_final.json')) else 'informe_rechazo_%s.json' % dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S')
-            C.escribir_con_fallback(self.P(nombre), dict(status=status, motivo=motivo, run_id=self.run_id, lecturas_ilegibles=self.ilegibles, excepciones=self.exc, repro=self._repro()), f'{nombre[:-5]}_{self.run_id}.json'); self.log(f'FIN {status} {motivo}', err=True); self.led.cerrar(); return status
-        O, res = C.replay_estado(self.led.filas); ancl = self.anclas_fn() if self.anclas_fn else None
-        por = self.anclas_por_moneda_fn() if self.anclas_por_moneda_fn else {}; cfg = self.cfg
+            nombre = 'informe_final.json' if not os.path.exists(self.P('informe_final.json')) else 'informe_rechazo_%s_%d.json' % (dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%f'), os.getpid())
+            C.escribir_con_fallback(self.P(nombre), dict(status=status, motivo=motivo, run_id=self.run_id, rechazo_de_resume=bool(self.resume and not self.operado), kill=self.kill, alertas=self.alertas, ledger_filas=(len(self.led.filas) if self.led is not None else None), lecturas_ilegibles=self.ilegibles, excepciones=self.exc, repro=self._repro()), f'{nombre[:-5]}_{self.run_id}.json'); self.log(f'FIN {status} {motivo}', err=True); self.led.cerrar(); return status
+        O, res = C.replay_estado(self.led.filas); ancl, por = self._leer_anclas(); cfg = self.cfg; ev = self._evid_filas()                  # v7 (hallazgo 10): una lectura de anclas; sus eventos sirven para los relojes
         if status is None:
             if self.kill == 'fase_b_tope_rellenos' and ancl is not None and not C.faltan_anclas(cfg, ancl, por): status, motivo = 'COMPLETE', 'objetivo de anclas alcanzado; fase B terminada en su tope de rellenos'
             elif self.kill_status: status, motivo = self.kill_status, self.kill
@@ -657,20 +742,62 @@ class Paquete:
         # hallazgo 9: COMPLETE exige TODO verificado: sin lecturas finales ilegibles, sin abiertas residuales, sin ordenes indeterminadas, sin vivas
         if status == 'COMPLETE' and (self.ilegibles or self.abiertas_res or res['n_indeterminadas'] or self.vivas): status, motivo = 'BLOCKED', f'{motivo}; NO verificado: lecturas_ilegibles={len(self.ilegibles)} abiertas_residuales={self.abiertas_res} indeterminadas={res["n_indeterminadas"]}'
         elif status == 'PARTIAL' and (self.ilegibles or self.abiertas_res or res['n_indeterminadas']): status, motivo = 'BLOCKED', f'{motivo}; ademas NO verificado: lecturas_ilegibles={len(self.ilegibles)} abiertas_residuales={self.abiertas_res} indeterminadas={res["n_indeterminadas"]}'
+        corr = sum(int(r.get('corruptas') or 0) for r in self.led.filas if r.get('k') == 'ledger_reparado') or self.led.corruptas        # v7 (pendiente ronda 4): filas corruptas del ledger descartadas (en ESTE proceso o en uno anterior de este --out) = el registro pudo perder un evento
+        if corr:                                                                     # nunca COMPLETE silencioso: PARTIAL + alerta (las ordenes sin cierre ya se reconciliaron; para un COMPLETE limpio, otro --out)
+            if status == 'COMPLETE': status, motivo = 'PARTIAL', f'{motivo}; ledger con {corr} fila(s) corrupta(s) descartada(s): verificar a mano'
+            if not any('LEDGER con' in a for a in self.alertas): self._alerta(f'LEDGER con {corr} fila(s) corrupta(s) descartada(s) (en este o en un proceso anterior del --out)')
+        if self.evid_ilegibles: self._alerta(f'cancel_evid ilegibles/truncados (se cuenta lo legible; las anclas pueden estar subestimadas): {self.evid_ilegibles}')
         C.exigir(status in STATUS, f'status invalido: {status}')
         # cobertura
         k = lambda n: sum(1 for r in self.led.filas if r.get('k') == n)
         cob = dict(esperado_slots=cfg.plan_ordenes, intenciones=k('intencion'), posts=k('post'), saltados=k('saltado'), ack_ok=sum(1 for r in self.led.filas if r.get('k') == 'post' and r.get('clase') == 'ok'), rechazos=sum(1 for r in self.led.filas if r.get('k') == 'post' and r.get('clase') == 'rechazo'),
                    http429=sum(1 for r in self.led.filas if r.get('k') == 'post' and r.get('clase') == '429'), ambiguos=sum(1 for r in self.led.filas if r.get('k') == 'post' and r.get('clase') == 'ambiguo'), canceladas_ok=sum(1 for r in self.led.filas if r.get('k') == 'cancel' and r.get('ok')),
-                   fills=res['n_fills'], indeterminadas=res['n_indeterminadas'], duplicados_ledger=self.led.duplicadas, filas_corruptas_ledger=self.led.corruptas, anclas_directas=ancl, anclas_por_moneda=por,
+                   fills=res['n_fills'], indeterminadas=res['n_indeterminadas'], duplicados_ledger=self.led.duplicadas, filas_corruptas_ledger=corr, anclas_directas=ancl, anclas_por_moneda=por,
                    intenciones_por_moneda=dict(collections.Counter(o.coin for o in O.values())), por_dia={self.t_ini_iso[:10]: k('intencion')})
-        inf = dict(status=status, motivo=motivo, run_id=self.run_id, cobertura=cob, presupuesto=dict(saldo_inicial=self.pres.s0, saldo_final=self.pres.saldo, suelo=self.pres.suelo, gasto=self.pres.gasto, perdida_dura=cfg.perdida_dura, toco_suelo=self.pres.toca_suelo()),
-                   latencias=C.d_proc_stats(self.led.filas), relojes=dict(local='time.time_ns alineado a time.monotonic_ns desde el arranque (inmune a steps)', chrony=getattr(self, 'chrony', None), vs_exchange=C.reloj_stats(self._evid_filas())),
-                   residuales=dict(posiciones=C.residuales(self.led.filas), nota='una posicion no se elimina sin vender; acotada por cfg.fase_b_* y top_ask_max; valor final con `--liquidar-informe RUN_DIR` (desenlace oficial por gamma publico; la redencion de ganadoras es MANUAL, este codigo no firma redenciones)'), excepciones=self.exc, lecturas_ilegibles=self.ilegibles, alertas=self.alertas, signal=self.senal, senales_recibidas=self.n_senales, gtd_expira_s=cfg.gtd_expira_s, ultimo_rechazo=self.ultimo_rechazo, escrituras_fallidas=dict(ledger=self.led.fallos_escritura, otros=self.io_fallos), viva_al_final=len(self.vivas), fin_utc=dt.datetime.now(dt.timezone.utc).isoformat(), repro=self._repro())
-        C.escribir_con_fallback(self.P('informe_final.json'), inf, f'informe_final_{self.run_id}.json'); self._manifest('FINALIZADO', dict(status_final=status, fin_utc=inf['fin_utc'], cobertura=cob)); self._checkpoint(dict(status_final=status))
+        fase_b = dict(activada=cfg_b(cfg), ordenes=sum(1 for o in O.values() if o.modo == 'top'), rellenos=self.fills_b, gasto_usd=self.gasto_b, fin=(self.fase_b_fin or (self.kill if self.fase == 'B' else None)))
+        inf = dict(status=status, motivo=motivo, run_id=self.run_id, cobertura=cob, fase_b=fase_b, presupuesto=dict(saldo_inicial=self.pres.s0, saldo_final=self.pres.saldo, suelo=self.pres.suelo, gasto=self.pres.gasto, perdida_dura=cfg.perdida_dura, toco_suelo=self.pres.toca_suelo()),
+                   latencias=C.d_proc_stats(self.led.filas), relojes=dict(local='time.time_ns alineado a time.monotonic_ns desde el arranque (inmune a steps)', chrony=getattr(self, 'chrony', None), vs_exchange=C.reloj_stats(ev)), anclas_detalle=self._anclas_detalle(),
+                   residuales=dict(posiciones=C.residuales(self.led.filas), nota='una posicion no se elimina sin vender; acotada por cfg.fase_b_* y top_ask_max; valor final con `--liquidar-informe RUN_DIR` (desenlace oficial por gamma publico; la redencion de ganadoras es MANUAL, este codigo no firma redenciones)'), excepciones=self.exc, lecturas_ilegibles=self.ilegibles, alertas=self.alertas, kills_resueltos=self.kills_resueltos, evid_ilegibles=self.evid_ilegibles, signal=self.senal, senales_recibidas=self.n_senales, gtd_expira_s=cfg.gtd_expira_s, ultimo_rechazo=self.ultimo_rechazo, escrituras_fallidas=dict(ledger=self.led.fallos_escritura, otros=self.io_fallos), viva_al_final=len(self.vivas), fin_utc=dt.datetime.now(dt.timezone.utc).isoformat(), repro=self._repro())
+        ruta = self.P('informe_final.json')
+        if os.path.exists(ruta):                                                     # v7 (hallazgo 5): el informe de un proceso anterior NO se pierde (traceback/alertas): se conserva con marca de tiempo
+            try: os.replace(ruta, self.P('informe_final.previo_%s_%d.json' % (dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%f'), os.getpid())))
+            except OSError: pass
+        C.escribir_con_fallback(ruta, inf, f'informe_final_{self.run_id}.json'); self._manifest('FINALIZADO', dict(status_final=status, fin_utc=inf['fin_utc'], cobertura=cob)); self._checkpoint(dict(status_final=status))
         self.log(f'FIN status={status} motivo={motivo} cobertura={json.dumps(cob, default=str)}'); self.led.cerrar(); return status
 
-    def _repro(self): return f'python3 -I {os.path.abspath(__file__)} ' + ' '.join(f'--{k}={v}' for k, v in self.params.items() if v is not None and k != 'real')
+    def _anclas_detalle(self):
+        """Percentiles de alta/cancelacion vs envio (plan_paquete_l.analiza): SOLO en el informe final, una vez por run (el vendor relee los ficheros; un .gz truncado no lanza: queda anotado)."""
+        if not self.evid: return None
+        try: return C.cargar_vendor('plan_paquete_l').analiza(self.evid)
+        except Exception as e: return dict(error=f'{type(e).__name__}: {str(e)[:80]}')
+
+    def _repro(self): return ' '.join(['python3', '-I', shlex.quote(os.path.abspath(__file__))] + repro_args(self.params))
+
+
+def construir_parser():
+    ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    ap.add_argument('--out', default=None); ap.add_argument('--run-id', default=None); ap.add_argument('--real', action='store_true'); ap.add_argument('--confirmacion', default=None)
+    ap.add_argument('--escenario', default='base', choices=sorted(ESCENARIOS)); ap.add_argument('--objetivo', type=int, default=None); ap.add_argument('--max-ordenes', type=int, default=None)
+    ap.add_argument('--fase-b', type=int, default=0, help='N rellenos maximos de la fase B (0 = desactivada)'); ap.add_argument('--tiempo-real', action='store_true', help='dry con reloj real (no virtual)')
+    ap.add_argument('--evid-dir', default=None, help='real: directorio de cancel_evid del canal de usuario'); ap.add_argument('--liquidar-informe', default=None, metavar='RUN_DIR', help='valor final de las posiciones residuales de un run (gamma publico, solo GET; no modifica el ledger pero ESCRIBE RUN_DIR/liquidacion_residuales.json)')
+    ap.add_argument('--verificar-mercados', action='store_true', help='solo lectura (GET gamma publico): valida los mercados 5m vigentes; no envia nada')
+    ap.add_argument('--preflight-publico', action='store_true', help='SOLO LECTURA, sin credenciales: por moneda gamma + /book (tick, min size, neg_risk); no firma ni envia')
+    ap.add_argument('--preflight-real', action='store_true', help='SOLO LECTURA: ademas lee las credenciales DEDICADAS, deriva/valida API creds, saldo, open orders, reloj y firma EN LOCAL una orden de prueba (sin enviarla). Sin POST posible; no pide fichero de confirmacion')
+    return ap
+
+
+PARAM_A_OPCION = dict(run_id='--run-id', out='--out', escenario='--escenario', objetivo='--objetivo', max_ordenes='--max-ordenes', fase_b='--fase-b', confirmacion='--confirmacion', evid_dir='--evid-dir')       # v7 (hallazgo 8): nombres REALES de argparse
+PARAM_BANDERA = dict(real='--real', tiempo_real='--tiempo-real')
+
+
+def repro_args(params):
+    """Argumentos de linea de comandos (nombres reales de argparse, valores entrecomillados) que reproducen `params`. Test de ida y vuelta: `construir_parser().parse_args(...)`."""
+    out = []
+    for k, v in params.items():
+        if v is None or v is False: continue
+        if k in PARAM_BANDERA: out.append(PARAM_BANDERA[k])
+        elif k in PARAM_A_OPCION: out.append(f'{PARAM_A_OPCION[k]}={shlex.quote(str(v))}')
+    return out
 
 
 ESCENARIOS = {
@@ -686,6 +813,13 @@ ESCENARIOS = {
 
 def liquidar_informe(run_dir, get=None):
     """Valor FINAL de las posiciones residuales de un run con el desenlace OFICIAL (gamma publico, solo GET). Lee el ledger sin tocarlo, pero ESCRIBE `liquidacion_residuales.json` (atomico) en el directorio del run. Sin desenlace (mercado aun no cerrado) => valor None (missing != 0). No firma ni redime nada (las ganadoras se redimen a mano)."""
+    locks = C.tomar_locks(None, run_dir, wallet_lock=False)                                                                                     # v7 (hallazgo 3): escribe en run_dir: no mientras otro proceso lo use
+    if not locks: raise C.Invariante(f'{run_dir} en uso por otra instancia (o lock no disponible): no escribo nada')
+    try: return _liquidar(run_dir, get)
+    finally: C.liberar_locks(locks)
+
+
+def _liquidar(run_dir, get):
     filas = C.leer_ledger_solo_lectura(os.path.join(run_dir, 'ledger.jsonl')); res = C.residuales(filas); slug_de = {r['tok']: r.get('slug') for r in filas if r.get('k') == 'intencion'}; ganador = {}                   # v6 (hallazgo 7): SOLO lectura, el ledger no se abre en append ni se repara
     if get is None:
         import requests; get = lambda url, params: requests.get(url, params=params, timeout=8).json()
@@ -720,35 +854,35 @@ def preflight_cli(autenticado, out=None):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    ap.add_argument('--out', default=None); ap.add_argument('--run-id', default=None); ap.add_argument('--real', action='store_true'); ap.add_argument('--confirmacion', default=None)
-    ap.add_argument('--escenario', default='base', choices=sorted(ESCENARIOS)); ap.add_argument('--objetivo', type=int, default=None); ap.add_argument('--max-ordenes', type=int, default=None)
-    ap.add_argument('--fase-b', type=int, default=0, help='N rellenos maximos de la fase B (0 = desactivada)'); ap.add_argument('--tiempo-real', action='store_true', help='dry con reloj real (no virtual)')
-    ap.add_argument('--evid-dir', default=None, help='real: directorio de cancel_evid del canal de usuario'); ap.add_argument('--liquidar-informe', default=None, metavar='RUN_DIR', help='valor final de las posiciones residuales de un run (gamma publico, solo GET; no modifica el ledger pero ESCRIBE RUN_DIR/liquidacion_residuales.json)')
-    ap.add_argument('--verificar-mercados', action='store_true', help='solo lectura (GET gamma publico): valida los mercados 5m vigentes; no envia nada')
-    ap.add_argument('--preflight-publico', action='store_true', help='SOLO LECTURA, sin credenciales: por moneda gamma + /book (tick, min size, neg_risk); no firma ni envia')
-    ap.add_argument('--preflight-real', action='store_true', help='SOLO LECTURA: ademas lee las credenciales DEDICADAS, deriva/valida API creds, saldo, open orders, reloj y firma EN LOCAL una orden de prueba (sin enviarla). Sin POST posible; no pide fichero de confirmacion'); a = ap.parse_args()
+    ap = construir_parser(); a = ap.parse_args()
     if a.verificar_mercados: return verificar_mercados()
     if a.preflight_publico or a.preflight_real: return preflight_cli(a.preflight_real, a.out)
-    if a.liquidar_informe: print(json.dumps(liquidar_informe(a.liquidar_informe), indent=1, default=str)); return 0
+    if a.liquidar_informe:
+        try: print(json.dumps(liquidar_informe(a.liquidar_informe), indent=1, default=str)); return 0
+        except C.Invariante as e: print(f'liquidar-informe: {e}', file=sys.stderr); return 2
     kw = {}
     if a.objetivo: kw['objetivo_anclas'] = a.objetivo
     if a.max_ordenes: kw['max_ordenes'] = a.max_ordenes
     if a.fase_b: kw['fase_b_max_rellenos'] = a.fase_b
     cfg = C.Config(**kw); run_id = a.run_id or ('dry-' if not a.real else 'real-') + dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ'); out = a.out or os.path.join(C.OUT_BASE, run_id)
-    params = dict(run_id=run_id, out=out, escenario=a.escenario, objetivo=a.objetivo, max_ordenes=a.max_ordenes, fase_b=a.fase_b or None, real=a.real, confirmacion=a.confirmacion)
+    params = dict(run_id=run_id, out=out, escenario=a.escenario, objetivo=a.objetivo, max_ordenes=a.max_ordenes, fase_b=a.fase_b or None, real=a.real, tiempo_real=a.tiempo_real, evid_dir=a.evid_dir, confirmacion=a.confirmacion)
     if a.real:
         C.exigir_aislamiento()                                                              # v3 (hallazgo 1): `python3 -I` y directorio sin .py ajenos
         exigir_confirmacion(a.confirmacion, cfg, C.sha_codigo())
-        import pl_sender_real as R
-        reloj = Reloj(); sender, mercados, anclas_fn, por_fn, libro = R.construir(cfg, evid_dir=a.evid_dir or os.path.join(out, 'cancel_evid'))
-        P = Paquete(cfg, sender, mercados, out, reloj, run_id, real=True, libro=libro, anclas_fn=anclas_fn, evid_patron=os.path.join(a.evid_dir or os.path.join(out, 'cancel_evid'), 'cancel_evid_*.jsonl*'), params=params)
-        P.anclas_por_moneda_fn = lambda: por_fn(P.led.filas)
-    else:
-        reloj = Reloj() if a.tiempo_real else RelojVirtual(); sender = SenderSim(reloj, **ESCENARIOS[a.escenario]); mercados = MercadosSim(reloj)
-        P = Paquete(cfg, sender, mercados, out, reloj, run_id, real=False, anclas_fn=lambda: sum(P.anclas_ledger_por_moneda().values()), params=params)
-        P.anclas_por_moneda_fn = P.anclas_ledger_por_moneda
-    st = P.correr(); print(f'STATUS {st}  out={out}'); return 0 if st in ('COMPLETE', 'PARTIAL') else 2
+    locks = C.tomar_locks(cfg.wallet, out)                                                  # v7 (hallazgo 3): instancia unica por wallet y por --out, ANTES de construir nada (el sender real crea el directorio de evidencias y el canal de usuario)
+    if not locks: print(f'INSTANCIA UNICA: ya hay otro proceso con la wallet {cfg.wallet} o el --out {out} (o no se pudo tomar el lock): salgo sin tocar nada', file=sys.stderr); return 2
+    try:
+        if a.real:
+            import pl_sender_real as R
+            reloj = Reloj(); sender, mercados, anclas_fn, por_fn, libro = R.construir(cfg, evid_dir=a.evid_dir or os.path.join(out, 'cancel_evid'))
+            P = Paquete(cfg, sender, mercados, out, reloj, run_id, real=True, libro=libro, anclas_fn=anclas_fn, evid_patron=os.path.join(a.evid_dir or os.path.join(out, 'cancel_evid'), 'cancel_evid_*.jsonl*'), params=params, locks=locks)
+            P.anclas_por_moneda_fn = lambda: por_fn(P.led.filas); P.anclas_unico = sender.anclas
+        else:
+            reloj = Reloj() if a.tiempo_real else RelojVirtual(); sender = SenderSim(reloj, **ESCENARIOS[a.escenario]); mercados = MercadosSim(reloj)
+            P = Paquete(cfg, sender, mercados, out, reloj, run_id, real=False, anclas_fn=lambda: sum(P.anclas_ledger_por_moneda().values()), params=params, locks=locks)
+            P.anclas_por_moneda_fn = P.anclas_ledger_por_moneda
+        st = P.correr(); print(f'STATUS {st}  out={out}'); return 0 if st in ('COMPLETE', 'PARTIAL') else 2
+    finally: C.liberar_locks(locks)
 
 
 if __name__ == '__main__': sys.exit(main())
