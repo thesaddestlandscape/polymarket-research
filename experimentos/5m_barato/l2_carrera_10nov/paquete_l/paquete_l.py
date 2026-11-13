@@ -34,7 +34,7 @@ def cfg_b(cfg): return cfg.fase_b_max_rellenos > 0
 
 KILL_ORDEN = ('cancel_no_confirmada', 'estado_ilegible_tras_cancel', 'orden_indeterminada')        # v8 (hallazgos 4 y 8): UNICA fuente de los motivos de kill por orden (emision y resolucion)
 PREF_RECHAZO = 'resume_rechazado_kill_previo:'
-KILLS_DE_ARRANQUE = ('abiertas_previas_vivas', 'abiertas_previas_ilegibles')          # v12 (hallazgo 4): condiciones del MOMENTO de arranque (cada resume relee la wallet): no bloquean resumes posteriores; si siguen, el propio resume las vuelve a emitir
+KILLS_DE_ARRANQUE = ('abiertas_previas_vivas', 'abiertas_previas_ilegibles', 'ordenes_sin_verificar')          # v12 (hallazgo 4): condiciones del MOMENTO de arranque (cada resume relee la wallet): no bloquean resumes posteriores; si siguen, el propio resume las vuelve a emitir
 KILLS_TRANSITORIOS = ('saldo_ilegible_en_arranque', 'abiertas_previas_ilegibles')          # v10: lecturas de arranque que fallan SIN dejar ordenes vivas sin verificar: no cuentan como cambio de estado real (rechazo transitorio, no toca informe/manifiesto/checkpoint)
 
 
@@ -225,10 +225,11 @@ class Paquete:
             self._asentar(ref, interrumpible=False)
             m, est, _ = self._confirmar_cancelada(oid, self.cfg.cancel_intentos_barrido)
         if terminal(m, est):
-            mm = float(m); self.led.add('estado', o.clave, 1 + sum(1 for r in self.led.filas if r.get('k') == 'estado' and r.get('fuente') == 'reconciliacion' and r.get('clave') == o.clave), matched=mm, status=est, t_ns=self.r.now_ns(), fuente='reconciliacion')
-            f0 = self.led.fallos_escritura; matched_previo = o.matched                                   # v12 (hallazgo 1): lo que el ledger YA sabia ANTES de esta reconciliacion
+            mm = float(m); matched_previo = max([max(float(r.get('matched') or 0.0), float(r.get('size_matched') or 0.0)) for r in self.led.filas if r.get('clave') == o.clave and r.get('k') in ('estado', 'fill', 'push_fill') and r.get('eid') not in self.led.fallidos], default=0.0)      # v13 (hallazgo 2): lo YA persistido en el ledger para esta orden, ANTES de las filas de esta llamada y sin filas cuya escritura fallo (no `o.matched` en memoria)
+            self.led.add('estado', o.clave, 1 + sum(1 for r in self.led.filas if r.get('k') == 'estado' and r.get('fuente') == 'reconciliacion' and r.get('clave') == o.clave), matched=mm, status=est, t_ns=self.r.now_ns(), fuente='reconciliacion')
+                                              # v12 (hallazgo 1): lo que el ledger YA sabia ANTES de esta reconciliacion
             if mm > 1e-9 and o.matched < mm - 1e-9: self.cnt['fills'] += 1; o.matched = mm; self._fill_detectado(o, mm)
-            registrado = mm <= 1e-9 or matched_previo >= mm - 1e-9 or (self.led.fallos_escritura == f0 and any(r.get('k') in ('fill', 'push_fill') and r.get('clave') == o.clave and float(r.get('size_matched') or r.get('matched') or 0.0) >= mm - 1e-9 for r in self.led.filas))        # v12 (hallazgo 1): registrado = sin relleno, O conocido ANTES (matched_previo, nunca el o.matched posterior ni las filas `estado` de esta misma reconciliacion), O fila fill/push_fill >= mm sin fallo de escritura
+            registrado = mm <= 1e-9 or matched_previo >= mm - 1e-9 or (any(r.get('k') in ('fill', 'push_fill') and r.get('clave') == o.clave and r.get('eid') not in self.led.fallidos and float(r.get('size_matched') or r.get('matched') or 0.0) >= mm - 1e-9 for r in self.led.filas))        # v12 (hallazgo 1): registrado = sin relleno, O conocido ANTES (matched_previo, nunca el o.matched posterior ni las filas `estado` de esta misma reconciliacion), O fila fill/push_fill >= mm sin fallo de escritura
             o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm)
             if motivo == 'arranque' and registrado: self._resolver_kills_orden(o.clave, f'reconciliada:{est}')                  # v8 (hallazgo 4): SOLO al reanudar, con la orden en estado terminal LEGIBLE y su relleno YA REGISTRADO en el ledger (v10 hallazgo 1: conocido, o detectado/registrado justo arriba por `_fill_detectado`; el relleno en si sigue bloqueando por n_fills>0 / ledger_con_rellenos, no por el kill de la orden) (el run anterior ya acabo BLOCKED por esa orden; leerla ahora en estado terminal LEGIBLE prueba que esta cerrada). En el barrido del MISMO run el incidente de cancelacion se mantiene (T10)
             return True

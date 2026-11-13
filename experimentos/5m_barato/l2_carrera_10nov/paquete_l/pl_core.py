@@ -17,7 +17,7 @@ def exigir(cond, msg):
     if not cond: raise Invariante(msg)
 
 
-VERSION = 'paquete_l_v12'                                 # v12 (13-Nov): 10o /code-review (4 hallazgos, decisiones cerradas); invalida cualquier confirmacion escrita para v2..v11
+VERSION = 'paquete_l_v13'                                 # v13 (13-Nov): 11o /code-review (2 hallazgos, decisiones cerradas); invalida cualquier confirmacion escrita para v2..v12
 WALLET_DEDICADA = '0x659a40FF9920fEBc5a66836213040924343d297F'
 COINS = ('BTC', 'ETH', 'SOL', 'XRP')
 FALLBACK_DIR = '/tmp'                                       # v4 (hallazgo 10): si el informe final no se puede escribir en el out, se deja aqui (y en stderr)
@@ -270,7 +270,7 @@ def escribir_atomico(ruta, obj):
 class Ledger:
     """JSONL append-only con fsync por fila. Clave unica `eid` (duplicados se ignoran al escribir y al leer). Una linea final corrupta (SIGKILL a medias) se TRUNCA al abrir y se cuenta."""
     def __init__(self, ruta):
-        self.ruta = ruta; self.eids = set(); self.filas = []; self.corruptas = 0; self.duplicadas = 0; self.fallos_escritura = 0; self._abrir()
+        self.ruta = ruta; self.eids = set(); self.filas = []; self.corruptas = 0; self.duplicadas = 0; self.fallos_escritura = 0; self.fallidos = set(); self._abrir()
 
     def _abrir(self):
         buenas = []; ok_bytes = 0
@@ -306,6 +306,7 @@ class Ledger:
             self.sucio = True; self.f.write(linea); self.f.flush(); os.fsync(self.f.fileno()); self.sucio = False
         except (OSError, ValueError) as e:
             self.fallos_escritura += 1
+            self.fallidos.add(eid)                                                                       # v13 (hallazgo 2): la fila queda en memoria pero NO consta en disco: nunca cuenta como evidencia
             try: print(f'LEDGER NO ESCRIBIBLE ({type(e).__name__}); fila: {linea.strip()}', file=sys.stderr, flush=True)
             except Exception: pass
             try:

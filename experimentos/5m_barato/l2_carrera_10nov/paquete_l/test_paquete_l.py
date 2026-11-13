@@ -1704,6 +1704,30 @@ def test_r10h4_kills_de_arranque_previos_no_bloquean_el_resume_si_la_wallet_esta
     print('T106 ok [R10 h4]: un kill previo abiertas_previas_* no rechaza un resume con la wallet ya vacia; con abiertas se emite de nuevo BLOCKED')
 
 
+def test_r11h1_ordenes_sin_verificar_previo_no_bloquea_si_ahora_se_verifican():
+    P2, S, out, cl = _prep_kill_previo('r11h1', ['ordenes_sin_verificar'], None); P2.correr()                                       # pendientes ahora reconciliables (NO_EXISTE verificable)
+    assert P2.kill == 'max_ordenes' and 'resume_rechazado' not in str(P2.kills), P2.kills
+    P3, S3, out3, cl3 = _prep_kill_previo('r11h1b', ['ordenes_sin_verificar'], 'viva'); P3.correr()                               # siguen sin verificarse: vuelve a bloquear
+    assert P3.kill_status == 'BLOCKED' and 'orden_indeterminada' in str(P3.kills), P3.kills
+    print('T107 ok [R11 h1]: `ordenes_sin_verificar` previo es condicion de arranque (no bloquea si ahora se verifican; si no, BLOQUEA de nuevo)')
+
+
+def test_r11h2_matched_previo_sale_de_filas_persistidas_no_de_memoria():
+    def montar_rec(nombre, filas_extra=(), fallidas=()):
+        P, S, R, M, out = montar(nombre); P.led = C.Ledger(P.P('ledger.jsonl')); cl = f'{nombre}|s900'; P.pres = C.Presupuesto(P.cfg, 0.6)
+        for k, kw in (('intencion', dict(slot=900, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xf', t_decision_ns=R.now_ns() - int(500e9))), ('post', dict(oid='0xf', t_send_ns=R.now_ns() - int(499e9), t_ack_ns=R.now_ns() - int(499e9), clase='ambiguo')), ('kill', dict(motivo=f'cancel_no_confirmada:{cl}', status='BLOCKED'))):
+            P.led.add(k, cl if k != 'kill' else 'run', 0 if k != 'kill' else 99, **kw)
+        for i, (k, kw) in enumerate(filas_extra): P.led.add(k, cl, 50 + i, **kw)
+        for e in fallidas: P.led.fallidos.add(e)
+        P.ordenes, _ = C.replay_estado(P.led.filas); o = P.ordenes[cl]; o.matched = 5.0                                              # en MEMORIA ya figura el relleno
+        S.estado = lambda oid: ('5.0', 'MATCHED'); S.cancelar = lambda oid: True; P._fill_detectado = lambda o_, mm: None; P._asentar = lambda *a, **k: None
+        return P, o, cl
+    P, o, cl = montar_rec('r11h2a'); P.reconciliar_orden(o, 'arranque'); assert not [r for r in P.led.filas if r['k'] == 'kill_resuelto'], 'o.matched en memoria sin fila persistida levanto el kill'
+    P, o, cl = montar_rec('r11h2b', filas_extra=[('estado', dict(matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top'))]); P.reconciliar_orden(o, 'arranque'); assert [r for r in P.led.filas if r['k'] == 'kill_resuelto']
+    P, o, cl = montar_rec('r11h2c', filas_extra=[('estado', dict(matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top'))], fallidas=[f'estado|r11h2c|s900|50']); P.reconciliar_orden(o, 'arranque'); assert not [r for r in P.led.filas if r['k'] == 'kill_resuelto'], 'una fila cuya escritura fallo no es evidencia'
+    print('T108 ok [R11 h2]: matched_previo = max de filas estado/fill/push_fill PERSISTIDAS (sin las de esta llamada ni las de escritura fallida); memoria sola no levanta el kill')
+
+
 if __name__ == '__main__':
     try:
         filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)
