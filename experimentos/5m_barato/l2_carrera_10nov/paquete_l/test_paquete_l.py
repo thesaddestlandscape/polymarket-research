@@ -1047,7 +1047,7 @@ def test_r3h3_reloj_sincronizado_exige_leap_stratum_refid_dispersion():
 def test_r3h4_abiertas_sin_filtro_antes_y_despues():
     # (a) una orden ajena abierta ANTES de empezar => BLOCKED sin enviar nada (y no se toca)
     P, S, R, M, out = montar('r3h4a', sender_kw=dict(abiertas_ajenas=['0xajena'])); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
-    assert st == 'BLOCKED' and 'abiertas_previas_o_ilegibles' in inf['motivo'] and len(S.posts_enviados) == 0 and inf['alertas'] and '0xajena' in inf['alertas'][0]
+    assert st == 'BLOCKED' and 'abiertas_previas_vivas' in inf['motivo'] and len(S.posts_enviados) == 0 and inf['alertas'] and '0xajena' in inf['alertas'][0]
     # (b) la lectura previa ilegible => BLOCKED sin enviar
     reloj = RelojVirtual(); S = SenderSim(reloj); S.abiertas_todas = lambda: None; P, S, R, M, out = montar('r3h4b', sender=S, reloj=reloj, mercados=MercadosSim(reloj)); assert P.correr() == 'BLOCKED' and len(S.posts_enviados) == 0
     # (c) una orden ajena que APARECE durante el run: el barrido la ve (lectura sin filtro de asset), no la cancela y declara BLOCKED con alerta
@@ -1548,7 +1548,7 @@ def test_r7h4_kill_de_orden_con_relleno_registrado_se_levanta_y_el_relleno_bloqu
     assert [f for f in os.listdir(out) if f.startswith('informe_final.previo_')], 'un resume que detecta un RELLENO debe dejar informe real'
     # relleno CONOCIDO por el ledger (o.matched == mm): el kill tambien se levanta (antes quedaba vivo para siempre)
     P3, S3, out3, cl3 = _prep_kill_previo('r7h4b', [], ('5.0', 'MATCHED'))
-    with open(out3 + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid=f'estado|{cl3}|7', k='estado', clave=cl3, matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top')) + '\n')
+    with open(out3 + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid=f'estado|{cl3}|7', k='estado', clave=cl3, matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top')) + '\n'); f.write(json.dumps(dict(eid=f'fill|{cl3}|0', k='fill', clave=cl3, size_matched=5.0, coste=0.05, modo='lejos', t_ns=1)) + '\n')      # v11: el relleno conocido exige su fila fill
     P3.correr(); kr = rows(out3, 'kill_resuelto'); assert kr and kr[-1]['motivo'] == f'cancel_no_confirmada:{cl3}', kr
     assert not any('cancel_no_confirmada' in str(r.get('motivo')) and str(r.get('motivo')).startswith('resume_rechazado') for r in rows(out3, 'kill')), 'el kill de la orden no debe volver a rechazar el resume'
     print('T93 ok [R8 h1]: kill por orden con relleno conocido o detectado se levanta; el relleno bloquea por n_fills, no por el kill de la orden')
@@ -1612,6 +1612,53 @@ def test_r7h6_excepcion_en_matar_no_duplica_el_kill():
     P._matar = roto; P._excepcion('x', RuntimeError('b')); assert sum(1 for r in P.led.filas if r.get('k') == 'kill' and r.get('motivo') == 'excepcion:RuntimeError') == 1
     print('T95 ok [R7 h6]: el fallback de _excepcion no escribe una segunda fila kill identica')
 
+
+
+def test_r9h1_kill_no_se_levanta_si_la_fila_fill_no_se_registra():
+    P2, S, out, cl = _prep_kill_previo('r9h1', [], ('5.0', 'MATCHED')); P2._fill_detectado = lambda o, mm: None; P2.correr()                          # el fill NO llega al ledger
+    assert not rows(out, 'kill_resuelto') and not rows(out, 'fill'), (rows(out, 'kill_resuelto'), rows(out, 'fill'))
+    P3, S3, out3, cl3 = _prep_kill_previo('r9h1b', [], ('5.0', 'MATCHED')); P3.correr(); assert rows(out3, 'kill_resuelto') and rows(out3, 'fill')                # con fila registrada: se levanta (T93)
+    print('T99 ok [R9 h1]: el kill de la orden solo se levanta si la fila fill/push_fill esta registrada (si no, sigue vivo)')
+
+
+def test_r9h2_abiertas_previas_vivas_cuentan_como_cambio_e_ilegibles_no():
+    cfg = C.Config(max_ordenes=8, objetivo_anclas=1000); P1, S, R, M, out = montar('r9h2', cfg=cfg); P1.correr(); prev0 = open(out + '/informe_final.json').read(); S.abiertas_todas = lambda: ['0xajena']
+    Q = montar('r9h2b', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id='r9h2')[0]; Q.correr()
+    assert Q.kill and 'abiertas_previas_vivas' in str(Q.kills) and json.load(open(out + '/informe_final.json'))['status'] == 'BLOCKED' and json.load(open(out + '/run_manifest.json')).get('status_final') == 'BLOCKED'
+    assert [f for f in os.listdir(out) if f.startswith('informe_final.previo_')], 'no se archivo el previo'
+    P5, S5, R5, M5, out5 = montar('r9h2c', cfg=cfg); P5.correr(); snap = {f: _sha(os.path.join(out5, f)) for f in ('informe_final.json', 'run_manifest.json', 'checkpoint.json')}
+    S5.abiertas_todas = lambda: None                                                                                                       # lectura ilegible en el arranque: transitoria
+    Q5 = montar('r9h2d', cfg=cfg, sender=S5, reloj=R5, mercados=M5, dir_out=out5, run_id='r9h2c')[0]; Q5.correr()
+    assert 'abiertas_previas_ilegibles' in str(Q5.kills) and snap == {f: _sha(os.path.join(out5, f)) for f in snap}, 'una lectura ilegible reescribio informe/manifiesto/checkpoint'
+    print('T100 ok [R9 h2/h3]: abiertas ajenas vivas => informe/manifiesto BLOCKED + previo; lectura ilegible => no toca nada; abiertas_res se refleja por su kill')
+
+
+def test_r9h4_json_formato_v9_y_fallo_de_escritura_del_json():
+    cfg = C.Config(max_ordenes=8, objetivo_anclas=1000); P1, S, R, M, out = montar('r9h4', cfg=cfg); P1.correr()
+    open(out + '/ledger.jsonl', 'a').write('{basura\n'); open(out + '/ledger_reparado.json', 'w').write(json.dumps(dict(corruptas=1, duplicadas=0, escrita=True)))   # formato v9: ya escrita
+    Q = montar('r9h4b', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id='r9h4')[0]; Q.correr()
+    assert [r['corruptas'] for r in rows(out, 'ledger_reparado')] == [1] and json.load(open(out + '/ledger_reparado.json'))['corruptas'] == 2, (rows(out, 'ledger_reparado'))      # +1 nueva (la de este intento), la v9 no se duplica
+    P2, S2, R2, M2, out2 = montar('r9h4c', cfg=cfg); P2.correr(); open(out2 + '/ledger.jsonl', 'a').write('{basura\n')
+    orig = C.escribir_atomico
+    def mala(ruta, obj):
+        if ruta.endswith('ledger_reparado.json'): raise OSError('disco lleno')
+        return orig(ruta, obj)
+    C.escribir_atomico = mala
+    try: Z = montar('r9h4d', cfg=cfg, sender=S2, reloj=R2, mercados=M2, dir_out=out2, run_id='r9h4c')[0]; st = Z.correr()
+    finally: C.escribir_atomico = orig
+    inf = json.load(open(out2 + '/informe_final.json')); assert st != 'COMPLETE' and inf['status'] != 'COMPLETE' and inf['cobertura']['filas_corruptas_ledger'] == 1 and any('ledger_reparado.json' in a for a in inf['alertas']), (st, inf['alertas'])
+    print('T101 ok [R9 h4]: un json de formato v9 (escrita=True) no duplica la fila; si falla la escritura del json hay alerta, contador en memoria y nunca COMPLETE')
+
+
+def test_r9h5_poll_sin_lectura_no_escribe_fila_estado():
+    cfg = C.Config(fase_b_max_rellenos=2, fase_b_ordenes=8); reloj = RelojVirtual(); S = SenderSim(reloj, fill_a={}, sin_push=True); M = MercadosSim(reloj, down_barato=True)
+    P, S, R, M, out = montar('r9h5', cfg=cfg, sender=S, reloj=reloj, mercados=M); orig = P._estado_poll; n = {'i': 0}
+    def poll(oid):
+        n['i'] += 1
+        return (None, None, 0.0) if n['i'] % 2 == 0 else orig(oid)                                                                        # cada 2o poll: lectura fallida
+    P._estado_poll = poll; P.correr(); polls = [r for r in rows(out, 'estado') if r.get('fuente') == 'poll_top']
+    assert n['i'] >= 4 and P.cnt['poll_sin_lectura'] >= 2 and len(polls) == n['i'] - P.cnt['poll_sin_lectura'] and all(r['status'] is not None for r in polls), (n, len(polls))
+    print('T102 ok [R9 h5]: un poll sin lectura no escribe fila `estado` (ni pisa size_matched)')
 
 
 if __name__ == '__main__':
