@@ -1907,29 +1907,42 @@ def test_r15b_filesystem_de_solo_lectura_no_opera_y_sale_controlado():
 
 
 class _FakeEsc:
-    def __init__(self, d, vuelca=True): self.dir = d; self.vuelca = vuelca; self.q = []; self.errores = 0; self.cerrado = False
+    def __init__(self, d, vuelca=True, cierre_falla=False, cuelga=None): self.dir = d; self.vuelca = vuelca; self.q = []; self.errores = 0; self.cerrado = False; self.cierre_falla = cierre_falla; self.cuelga = cuelga
     def vaciar(self, timeout=5.0):
-        if self.vuelca and self.q: open(os.path.join(self.dir, 'cancel_evid_fake.jsonl'), 'a').write(json.dumps(self.q) + '\n')
-    def cerrar(self): self.cerrado = True
+        if self.cuelga: self.cuelga.wait(30)
+        if self.vuelca and self.q: open(os.path.join(self.dir, 'cancel_evid_fake.jsonl'), 'a').write(json.dumps(self.q) + '\n'); self.q = []
+    def cerrar(self):
+        if self.cierre_falla: raise RuntimeError('cierre roto')
+        self.cerrado = True
 
 
 class _FakeReg:
-    def __init__(self, esc, suscritos): self.w = esc; self.suscritos = suscritos; self.canal = None; self.resolutor = None; self.avisar = None; self.parado = False
-    def evento(self, kind, **kw): self.w.q.append(dict(k=kind, **kw))
-    def gate_envio(self, tok, env=None, espera_s=None, dormir=None, fase='', reset=True): return (tok in self.suscritos, '' if tok in self.suscritos else 'sin_suscripcion')
+    def __init__(self, esc, suscritos): self.w = esc; self.suscritos = suscritos; self.canal = None; self.resolutor = None; self.avisar = None; self._gl = threading.Lock(); self._bloq = dict(total=0, seguidos=0, ultimo_ms=None, motivo=None); self.avisos = []; self.eventos = []; self.guardados = []
+    def evento(self, kind, **kw): self.eventos.append(kind); self.w.q.append(dict(k=kind, **kw))
+    def _guardar_bloq(self, copia): self.guardados.append(copia)
+    def gate_envio(self, tok, env=None, espera_s=None, dormir=None, fase='', reset=True):
+        if tok in self.suscritos: return True, ''
+        with self._gl: self._bloq['total'] += 1; self._bloq['seguidos'] += 1; self._bloq['motivo'] = 'sin_suscripcion'                                    # como el gate real: contador, evento, aviso y fichero
+        self._guardar_bloq(dict(self._bloq)); self.evento('envio_bloqueado', tok=tok)
+        if self.avisar: self.avisar('envio bloqueado')
+        return False, 'sin_suscripcion'
 
 
 class _FakeCE:
     """Doble de cancel_evidencia para el preflight: `suscritos` = tokens cuyo mercado el canal confirma; `vuelca` = el escritor vuelca a disco."""
-    def __init__(self, suscritos=None, vuelca=True): self._s = suscritos; self._v = vuelca; self.regs = []; self._TL = threading.local()
-    def Escritor(self, d): return _FakeEsc(d, self._v)
+    def __init__(self, suscritos=None, vuelca=True, cierre_falla=False, cuelga=None, parar_falla=False): self._s = suscritos; self._v = vuelca; self.regs = []; self._TL = threading.local(); self._cf = cierre_falla; self._cu = cuelga; self._pf = parar_falla
+    def Escritor(self, d): return _FakeEsc(d, self._v, self._cf, self._cu)
     def Registro(self, esc): r = _FakeReg(esc, self._s); self.regs.append(r); return r
     def Resolutor(self, reg): return types.SimpleNamespace(pedir=lambda tok: None)
     def adjuntar_env(self, env, reg, markets=(), canal=True, resolutor=None, modo_markets=None):
-        env._cancel_evid = True; reg.canal = types.SimpleNamespace(parar=lambda: setattr(reg, 'parado', True))
+        env._cancel_evid = True
+        def parar():
+            reg.parado = True
+            if self._pf: raise RuntimeError('parar roto')
+        reg.canal = types.SimpleNamespace(parar=parar)
 
 
-def _preflight_dobles(suscribir='todos', vuelca=True, evid_dir=None):
+def _preflight_dobles(suscribir='todos', vuelca=True, evid_dir=None, **cek):
     import pl_sender_real as R2
     T0 = 1_790_000_100.0; cfg = C.Config()
     def get(url, params):
@@ -1947,7 +1960,7 @@ def _preflight_dobles(suscribir='todos', vuelca=True, evid_dir=None):
     for coin in C.COINS:
         ini = int(T0) // 300 * 300 + 300; ev = gamma_ev(coin, ini); ids = json.loads(ev['markets'][0]['clobTokenIds']) if isinstance(ev['markets'][0].get('clobTokenIds'), str) else ev['markets'][0]['clobTokenIds']; toks[coin] = str(ids[0])
     sus = set(toks.values()) if suscribir == 'todos' else {v for k, v in toks.items() if k != suscribir}
-    ce = _FakeCE(sus, vuelca); chr_ok = lambda: dict(system_time_s=0.05, last_offset_s=0.01, stratum=2, ref_id='65D8456C', leap='Normal', root_dispersion_s=0.001, root_delay_s=0.04)
+    ce = _FakeCE(sus, vuelca, **cek); chr_ok = lambda: dict(system_time_s=0.05, last_offset_s=0.01, stratum=2, ref_id='65D8456C', leap='Normal', root_dispersion_s=0.001, root_delay_s=0.04)
     return R2, cfg, get, env, ce, chr_ok, T0
 
 
@@ -2032,6 +2045,91 @@ def test_r15c_contrato_senderreal_contra_servidor_http_local():
     finally: HH._http_client = orig_client; srv.shutdown()
     assert not [x for x in LOG if x[1] not in ('/tick-size', '/neg-risk', '/version', '/order')], 'ruta inesperada'
     print('T123 ok [R15 C4]: contrato SenderReal vs http.server local: firmar=3 GET, POST /order GTD post-only con cabeceras POLY_* y cuerpo exacto, DELETE /order {orderID}, 4xx=>rechazo, 5xx/timeout=>ambiguo, alta con oid local si falla')
+
+
+def _sim_con_vivas(nombre, dir_out=None, n=2):
+    P, S, R, M, out = montar(nombre, dir_out=dir_out)
+    for k in range(n): S.enviar(S.colocar('BTC1U', 0.01, 5, f'{nombre}|{k}', neg_risk=False, expira_s=200)[1])
+    R.sleep(5.0); assert _vivas_reales(S) == n and len(S.posts_enviados) == n; return P, S, R, out
+
+
+def test_r16p1_emergencia_sin_ledger_cancela_las_vivas_del_run_anterior():
+    fb = os.path.join(TMP, 'r16fb'); os.makedirs(fb); fb0 = C.FALLBACK_DIR; C.FALLBACK_DIR = fb; Led0 = C.Ledger
+    def no_abre(*a, **k): raise OSError(30, 'Read-only file system')
+    try:
+        C.Ledger = no_abre
+        P, S, R, out = _sim_con_vivas('r16p1a'); st = P.correr()
+        assert st == 'FAILED' and _vivas_reales(S) == 0 and len(S.posts_enviados) == 2 and S.n_post == 2 and P.emergencia['canceladas'] == 2 and P.emergencia['restantes'] == 0 and P.vivas_sin_verificar is False, (st, P.emergencia)
+        inf = json.load(open(out + '/informe_final.json')); assert inf['status'] == 'FAILED' and inf['motivo'].startswith('ledger_no_abre') and 'ordenes_vivas_sin_verificar' not in inf['motivo'] and inf['ordenes_vivas_sin_verificar'] is False and 'ledger_no_abre' in P.kills
+        assert json.load(open(out + '/emergencia_r16p1a.json'))['canceladas'] == 2 and S.saldo_v is not None and S.n_saldo == 0
+        P, S, R, out = _sim_con_vivas('r16p1b'); S.abiertas_todas = lambda: (_ for _ in ()).throw(OSError('lectura caida')); st = P.correr()                       # la lectura de abiertas falla: FAILED + sin verificar, nada nuevo enviado
+        inf = json.load(open(out + '/informe_final.json')); assert st == 'FAILED' and P.vivas_sin_verificar is True and inf['ordenes_vivas_sin_verificar'] is True and 'ordenes_vivas_sin_verificar' in inf['motivo'] and S.n_post == 2 and P.emergencia['lectura_fallida'], (st, P.emergencia)
+        P, S, R, out = _sim_con_vivas('r16p1c'); S.cancelar = lambda oid: False; st = P.correr()                                                                          # no se puede cancelar: quedan abiertas => sin verificar
+        assert st == 'FAILED' and P.vivas_sin_verificar is True and P.emergencia['restantes'] == 2 and S.n_post == 2
+        with _tmpfs(2048, 0, ro=True) as d:                                                                                                                                 # EROFS real: informe de emergencia a FALLBACK_DIR
+            if d is not None:
+                P, S, R, _ = _sim_con_vivas('r16p1d', dir_out=d + '/out'); st = P.correr(); assert st == 'FAILED' and _vivas_reales(S) == 0 and S.n_post == 2 and P.emergencia['canceladas'] == 2
+                assert json.load(open(os.path.join(fb, 'paquete_l_emergencia_r16p1d.json')))['canceladas'] == 2
+    finally: C.Ledger = Led0; C.FALLBACK_DIR = fb0
+    print('T124 ok [R16 1]: ledger que no abre => cancelacion de emergencia sin ledger (2 vivas canceladas, 0 envios), FAILED motivo ledger_no_abre; lectura/cancelacion fallida => ordenes_vivas_sin_verificar; EROFS real escribe en FALLBACK_DIR')
+
+
+def test_r16p2_escritor_vuelca_compara_tamano_antes_y_despues():
+    R2, cfg, get, env, ce, chr_ok, T0 = _preflight_dobles(vuelca=False); ev = os.path.join(TMP, 'r16p2'); os.makedirs(ev); open(os.path.join(ev, 'cancel_evid_viejo.jsonl'), 'w').write('{"fichero":"viejo"}\n')
+    c = R2._verificar_canal(cfg, env, ce, [], ev, 5.0); assert c['evid_escribible'] is False and 'no nuevo' in c['error']                                               # un directorio reutilizado no se acepta
+    ev2 = os.path.join(TMP, 'r16p2b'); a = R2._tam_dir(ev2); assert a == (0, 0)
+    os.makedirs(ev2); open(os.path.join(ev2, 'cancel_evid_viejo.jsonl'), 'w').write('x' * 50)                                                                               # fichero viejo ya presente: el glob NO basta
+    assert R2._tam_dir(ev2)[0] == 50
+    # directorio nuevo + escritor roto (no vuelca) => False aunque exista un fichero cancel_evid_ creado por otro; escritor sano => True
+    class EscRoto(_FakeEsc):
+        def vaciar(self, timeout=5.0): pass
+    class CERoto(_FakeCE):
+        def Escritor(self, d): open(os.path.join(d, 'cancel_evid_ajeno.jsonl'), 'w').write('{"viejo":1}\n'); return EscRoto(d, False)
+    toks = [(c_, 'Up', 'T' + c_) for c_ in C.COINS]; ce2 = CERoto(set('T' + c_ for c_ in C.COINS)); r = R2._verificar_canal(cfg, env, ce2, toks, os.path.join(TMP, 'r16p2c'), 5.0)
+    assert r['escritor_vuelca'] is False and r['ok'] is False, r
+    ce3 = _FakeCE(set('T' + c_ for c_ in C.COINS)); r = R2._verificar_canal(cfg, env, ce3, toks, os.path.join(TMP, 'r16p2d'), 5.0); assert r['escritor_vuelca'] is True and r['ok'] is True, r
+    import paquete_l as PL2; src = inspect.getsource(PL2.preflight_cli); assert 'time.time_ns()' in src and 'cancel_evid_preflight_%d' in src
+    print('T125 ok [R16 2]: directorio nuevo exclusivo por ejecucion; escritor_vuelca = el tamano total CRECE tras la sonda (fichero viejo + escritor roto => False)')
+
+
+def test_r16p3_limite_duro_total_del_canal():
+    R2, cfg, get, env, ce, chr_ok, T0 = _preflight_dobles(); ev = threading.Event(); toks = [(c_, 'Up', 'T' + c_) for c_ in C.COINS]
+    ce_c = _FakeCE(set('T' + c_ for c_ in C.COINS), True, cuelga=ev); t0 = time.monotonic(); r = R2._verificar_canal(cfg, env, ce_c, toks, os.path.join(TMP, 'r16p3a'), 1.0); dt_ = time.monotonic() - t0
+    assert r['ok'] is False and r['error'] == 'timeout_canal' and dt_ <= 1.5, (r, dt_)                                                                                         # el escritor se cuelga: vuelve en <= timeout + 0.5 s
+    class ResColgado(_FakeCE):
+        def Resolutor(self, reg): return types.SimpleNamespace(pedir=lambda tok: ev.wait(30))
+    ce_r = ResColgado(set('T' + c_ for c_ in C.COINS)); t0 = time.monotonic(); r = R2._verificar_canal(cfg, env, ce_r, toks, os.path.join(TMP, 'r16p3b'), 1.0); dt_ = time.monotonic() - t0
+    assert r['ok'] is False and r['error'] == 'timeout_canal' and dt_ <= 1.5, (r, dt_)
+    class ArmadoColgado(_FakeCE):
+        def adjuntar_env(self, *a, **k): ev.wait(30)
+    t0 = time.monotonic(); r = R2._verificar_canal(cfg, env, ArmadoColgado(set()), toks, os.path.join(TMP, 'r16p3c'), 1.0); assert r['error'] == 'timeout_canal' and time.monotonic() - t0 <= 1.5
+    assert 'max(0.5' not in inspect.getsource(R2._verificar_canal)
+    ev.set(); print('T126 ok [R16 3]: escritor/resolutor/armado colgados => ok=False, error=timeout_canal, vuelve en <= canal_timeout_s + 0,5 s; sin espera minima por token')
+
+
+def test_r16p4_el_preflight_no_deja_rastro_del_gate_y_reporta_cierres_rotos():
+    R2, cfg, get, env, ce, chr_ok, T0 = _preflight_dobles('ETH'); ev = os.path.join(TMP, 'r16p4a'); toks = [(c_, 'Up', 'T' + c_) for c_ in C.COINS]; ce1 = _FakeCE(set(['TBTC']))
+    r = R2._verificar_canal(cfg, env, ce1, toks, ev, 5.0); reg = ce1.regs[0]
+    assert r['ok'] is False and reg._bloq == dict(total=0, seguidos=0, ultimo_ms=None, motivo=None) and 'envio_bloqueado' not in reg.eventos and reg.guardados == [] and reg.parado, (r, reg._bloq, reg.eventos)       # gate fallido: _bloq restaurado, sin evento/fichero/aviso
+    assert reg.avisar is not None and reg.avisar('x') is None
+    for kw, clave in ((dict(parar_falla=True), 'canal.parar'), (dict(cierre_falla=True), 'w.cerrar')):
+        ce2 = _FakeCE(set('T' + c_ for c_ in C.COINS), **kw); r = R2._verificar_canal(cfg, env, ce2, toks, os.path.join(TMP, 'r16p4_' + clave), 5.0)
+        assert r['ok'] is False and any(clave in x for x in r['cierre_error']), r                                                                                                 # un cierre roto se reporta y impide ok
+    R3, cfg3, get3, env3, ce3, chr3, T3 = _preflight_dobles(parar_falla=True); rr = R3.preflight(cfg3, True, get=get3, env_factory=lambda c: env3, chrony=chr3, ahora=lambda: T3, evid_dir=os.path.join(TMP, 'r16p4_pf'), ce=ce3)
+    assert rr['ok'] is False and any('canal.cierre' in e for e in rr['errores']), rr['errores']
+    print('T127 ok [R16 4]: tras un gate fallido `_bloq` queda identico, sin evento envio_bloqueado ni fichero ni aviso; canal.parar()/w.cerrar() que lanzan quedan en cierre_error/errores y ok=False')
+
+
+def test_r16p5_reconstruccion_incoherente_es_kill_duro():
+    P, o, cl = _p_fill('r16p5a', 'top'); P.led.add('fill', cl, 1, size_matched=2.0, delta=2.0, coste=0.02, modo='top', t_ns=1)
+    P.ordenes, _ = C.replay_estado(P.led.filas); P._reconstruir_contadores_b(); assert P.fills_b == 1 and abs(P.gasto_b - 0.02) < 1e-9 and 'fase_b_reconstruccion_incoherente' not in P.kills                    # coherente: sin kill
+    P2, o2, cl2 = _p_fill('r16p5b', 'top'); P2.led.add('fill', cl2, 1, size_matched=2.0, delta=2.0, modo='top', t_ns=1)                                                                    # fill SIN coste
+    P2.ordenes, _ = C.replay_estado(P2.led.filas); P2._reconstruir_contadores_b()
+    assert P2.kills.get('fase_b_reconstruccion_incoherente') == 'PARTIAL' and abs(P2.gasto_b - 0.02) < 1e-9 and any('INCOHERENTE' in a for a in P2.alertas), (P2.kills, P2.gasto_b)                       # gasto_b = max(0, replay 2*0,01)
+    P3, o3, cl3 = _p_fill('r16p5c', 'top'); P3.led.add('fill', cl3, 1, size_matched=2.0, delta=2.0, coste='n/a', modo='top', t_ns=1); P3.ordenes, _ = C.replay_estado(P3.led.filas); P3._reconstruir_contadores_b(); assert 'fase_b_reconstruccion_incoherente' in P3.kills
+    P4, o4, cl4 = _p_fill('r16p5d', 'top'); P4.led.add('fill', 'otra|clave', 1, size_matched=2.0, delta=2.0, coste=0.02, modo='top', t_ns=1); P4.ordenes, _ = C.replay_estado(P4.led.filas); P4._reconstruir_contadores_b(); assert 'fase_b_reconstruccion_incoherente' in P4.kills   # fill de orden desconocida
+    P5, o5, cl5 = _p_fill('r16p5e', 'top'); P5.led.add('fill', cl5, 1, size_matched=2.0, delta=2.0, coste=0.01, modo='top', t_ns=1); P5.ordenes, _ = C.replay_estado(P5.led.filas); P5._reconstruir_contadores_b(); assert 'fase_b_reconstruccion_incoherente' in P5.kills       # coste menor que size_matched*precio
+    print('T128 ok [R16 5]: fill sin coste / no numerico / de orden desconocida / coste < matched*precio => kill duro PARTIAL y gasto_b = max(reconstruido, replay); ledger coherente => sin kill')
 
 
 if __name__ == '__main__':

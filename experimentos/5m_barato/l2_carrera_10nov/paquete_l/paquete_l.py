@@ -265,10 +265,51 @@ class Paquete:
         if interrumpible: self._dormir(rest / 1e9); return self.r.now_ns() >= ref_ns + self._asentamiento_ns()
         self.r.sleep(rest / 1e9); return True
 
+    def _emergencia_sin_ledger(self, plazo_s=30.0):
+        """v19 (1): SOLO cancela (NUNCA envia): lista las abiertas de TODA la wallet (misma lectura que el barrido final, sin filtro de asset), las cancela con el mismo sender (3 pasadas con relectura) y cuenta en memoria. Todo en un hilo daemon con
+        limite duro `plazo_s` (s reales). `ordenes_vivas_sin_verificar` = lectura fallida, timeout o abiertas restantes. El resultado va a stderr y a `emergencia_<run>.json` (out o, si no escribe, FALLBACK_DIR); nunca lanza."""
+        R = dict(canceladas=0, restantes=None, lectura_fallida=False, timeout=False, error=None, ordenes_vivas_sin_verificar=True)
+        def leer():
+            try: self._req(); r = self.s.abiertas_todas()
+            except BaseException as e: R['error'] = f'{type(e).__name__}: {str(e)[:80]}'; return None
+            return list(r) if isinstance(r, (list, tuple, set)) else None
+        def trabajo():
+            try:
+                ab = leer(); vistas = set()
+                if ab is None: R['lectura_fallida'] = True; return
+                for paso in range(3):
+                    for oid in ab:
+                        try: self._req(); ok = self.s.cancelar(oid)
+                        except BaseException: ok = False
+                        if ok is True and oid not in vistas: vistas.add(oid); R['canceladas'] += 1
+                    self.r.sleep(1.0 + paso); nuevo = leer()
+                    if nuevo is None: R['lectura_fallida'] = True; return
+                    ab = nuevo
+                    if not ab: break
+                R['restantes'] = len(ab)
+            except BaseException as e: R['error'] = f'{type(e).__name__}: {str(e)[:80]}'
+        h = threading.Thread(target=trabajo, daemon=True, name='emergencia_sin_ledger'); h.start(); h.join(plazo_s)
+        if h.is_alive(): R['timeout'] = True
+        R['ordenes_vivas_sin_verificar'] = bool(R['timeout'] or R['lectura_fallida'] or R['restantes'] is None or R['restantes'] > 0); self.emergencia = R; self.vivas_sin_verificar = R['ordenes_vivas_sin_verificar']
+        try: self._alerta(f'EMERGENCIA SIN LEDGER: canceladas={R["canceladas"]} restantes={R["restantes"]} lectura_fallida={R["lectura_fallida"]} timeout={R["timeout"]} ordenes_vivas_sin_verificar={R["ordenes_vivas_sin_verificar"]}')
+        except BaseException: pass
+        C.escribir_con_fallback(self.P(f'emergencia_{self.run_id}.json'), dict(motivo='ledger_no_abre', run_id=self.run_id, **R), f'emergencia_{self.run_id}.json'); return R
+
     def _reconstruir_contadores_b(self):
         """v18 (A): misma fuente de verdad que `_fill_detectado` (filas `fill` persistidas, sin `Ledger.fallidos`): fills_b = ordenes DISTINTAS de modo `top` con fila fill; gasto_b = suma del `coste` (incremento) de esas filas. Sin doble conteo: `_fill_detectado` solo suma fills_b con el primer incremento (fill_reg<=0) y gasto_b con el delta nuevo."""
-        top = {c for c, o in self.ordenes.items() if o.modo == 'top'}; fl = [r for r in self.led.filas if r.get('k') == 'fill' and r.get('clave') in top and r.get('eid') not in self.led.fallidos]
-        self.fills_b = len({r['clave'] for r in fl}); self.gasto_b = round(sum(float(r.get('coste') or 0.0) for r in fl), 6)
+        top = {c for c, o in self.ordenes.items() if o.modo == 'top'}; fil = [r for r in self.led.filas if r.get('k') == 'fill' and r.get('eid') not in self.led.fallidos]; fl = [r for r in fil if r.get('clave') in top]
+        def num(v):
+            try: return float(v) if not isinstance(v, bool) and v is not None and v == v and abs(float(v)) != float('inf') else None
+            except (TypeError, ValueError): return None
+        self.fills_b = len({r['clave'] for r in fl}); self.gasto_b = round(sum(num(r.get('coste')) or 0.0 for r in fl), 6)
+        # v19 (5): validacion cruzada contra el replay (fuente independiente: matched*precio por orden). Infracuenta posible (modo no recuperado, `coste` ausente/no numerico, fill de orden desconocida) => fail-closed: gasto_b = max(.., replay) y kill duro
+        mx = {}
+        for r in fil: mx[r.get('clave')] = max(mx.get(r.get('clave'), 0.0), num(r.get('size_matched')) or 0.0)
+        gasto_replay = round(sum(m * self.ordenes[c].precio for c, m in mx.items() if c in self.ordenes), 6); gasto_filas = sum(num(r.get('coste')) or 0.0 for r in fil)      # replay = size_matched maximo de las PROPIAS filas fill x precio (un `estado` con matched y sin fila fill es un relleno aun por registrar: lo recoge `_fill_detectado`, no es infracuenta)
+        malas = [r.get('eid') for r in fil if num(r.get('coste')) is None]; sin_orden = sorted({str(r.get('clave')) for r in fil if r.get('clave') not in self.ordenes})
+        if malas or sin_orden or gasto_filas < gasto_replay - 1e-6:
+            self.gasto_b = round(max(self.gasto_b, gasto_replay), 6); self._alerta(f'RECONSTRUCCION FASE B INCOHERENTE: filas fill sin coste={malas[:3]} claves sin orden={sin_orden[:3]} gasto_filas={gasto_filas:.6f} gasto_replay={gasto_replay:.6f}')
+            self._matar('fase_b_reconstruccion_incoherente', 'PARTIAL')
 
     def _matched_push(self, clave):
         """v16: mayor relleno reportado por el canal de usuario para `clave` (filas `push_fill` y `estado` con status PUSH)."""
@@ -613,9 +654,10 @@ class Paquete:
         """v3 (hallazgo 3): cuerpo dentro de try/except BaseException; SIEMPRE, salga como salga, se ejecuta el barrido final (cancelar vivas + reconciliar toda orden sin cierre + verificar abiertas/saldo) y se escribe el informe final.
         v4 (hallazgo 10): ni el log, ni el ledger, ni el manifiesto pueden impedir el barrido ni el informe (fallback a stderr y a FALLBACK_DIR)."""
         try: self.led = C.Ledger(self.P('ledger.jsonl'))
-        except OSError as e:                                                               # v18 (B): el ledger no se puede abrir (disco de solo lectura/lleno): NO se opera, informe FAILED a stderr/FALLBACK y salida controlada (nada enviado)
-            self.led = None; self._alerta(f'LEDGER NO ABRIBLE ({type(e).__name__}): no se envia nada'); self._matar(f'ledger_no_abrible:{type(e).__name__}', 'FAILED')
-            C.escribir_con_fallback(self.P('informe_final.json'), dict(status='FAILED', motivo=f'ledger no abrible: {type(e).__name__}: {str(e)[:80]}', run_id=self.run_id, alertas=self.alertas, repro=self._repro()), f'informe_final_{self.run_id}.json'); return 'FAILED'
+        except OSError as e:                                                               # v18 (B)/v19 (1): el ledger no se puede abrir (disco de solo lectura/lleno): NO se envia nada NUEVO, pero un resume puede dejar GTD vivas del run anterior: cancelacion de EMERGENCIA sin ledger
+            self.led = None; self._alerta(f'LEDGER NO ABRIBLE ({type(e).__name__}): no se envia nada'); self._matar('ledger_no_abre', 'FAILED'); em = self._emergencia_sin_ledger()
+            inf = dict(status='FAILED', motivo=f'ledger_no_abre: {type(e).__name__}: {str(e)[:80]}' + ('; ordenes_vivas_sin_verificar' if em['ordenes_vivas_sin_verificar'] else ''), run_id=self.run_id, emergencia=em, ordenes_vivas_sin_verificar=em['ordenes_vivas_sin_verificar'], alertas=self.alertas, repro=self._repro())
+            C.escribir_con_fallback(self.P('informe_final.json'), inf, f'informe_final_{self.run_id}.json'); return 'FAILED'
         self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat(); self.fills_b = 0; self.gasto_b = 0.0
         self._persistir_corruptas()                                                        # v9 (hallazgo 3): el contador de corruptas se persiste FUERA del ledger (fichero lateral atomico) al abrir; la fila `ledger_reparado` solo se escribe si el run va a operar (`_cuerpo`)
         self.n_filas0 = len(self.led.filas)
@@ -980,7 +1022,8 @@ def preflight_cli(autenticado, out=None):
     """R1: `python3 -I paquete_l.py --preflight-publico|--preflight-real [--out DIR]`. Escribe preflight_<modo>_<ts>.json (solo booleanos/cifras publicas) y lo imprime. Exit 0 = ok, 2 = algo no valido. Jamas envia."""
     import pl_sender_real as R
     if autenticado: C.exigir_aislamiento()
-    cfg = C.Config(); res = R.preflight(cfg, autenticado=autenticado, evid_dir=os.path.join(out or os.path.join(C.OUT_BASE, 'preflight'), 'cancel_evid_preflight')); d = out or os.path.join(C.OUT_BASE, 'preflight'); os.makedirs(d, exist_ok=True)
+    d = out or os.path.join(C.OUT_BASE, 'preflight'); os.makedirs(d, exist_ok=True)
+    cfg = C.Config(); res = R.preflight(cfg, autenticado=autenticado, evid_dir=os.path.join(d, 'cancel_evid_preflight_%d' % time.time_ns()))                       # v19 (2): directorio NUEVO por ejecucion (creacion exclusiva en `_verificar_canal`)
     ruta = os.path.join(d, 'preflight_%s_%s.json' % ('real' if autenticado else 'publico', time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())))
     C.escribir_con_fallback(ruta, res, os.path.basename(ruta)); print(json.dumps(res, indent=1, default=str, sort_keys=True)); print('PREFLIGHT', 'OK' if res['ok'] else 'NO OK', ruta); return 0 if res['ok'] else 2
 
@@ -1013,7 +1056,7 @@ def main():
             reloj = Reloj() if a.tiempo_real else RelojVirtual(); sender = SenderSim(reloj, **ESCENARIOS[a.escenario]); mercados = MercadosSim(reloj)
             P = Paquete(cfg, sender, mercados, out, reloj, run_id, real=False, anclas_fn=lambda: sum(P.anclas_ledger_por_moneda().values()), params=params, locks=locks)
             P.anclas_por_moneda_fn = P.anclas_ledger_por_moneda
-        st = P.correr(); print(f'STATUS {st}  out={out}'); return 0 if st in ('COMPLETE', 'PARTIAL') else 2
+        st = P.correr(); print(f'STATUS {st}  out={out}'); return 4 if getattr(P, 'vivas_sin_verificar', False) else (0 if st in ('COMPLETE', 'PARTIAL') else 2)           # v19: 4 = ledger_no_abre con ordenes vivas sin verificar
     finally: C.liberar_locks(locks)
 
 
