@@ -123,6 +123,23 @@ import vigia_perps_consenso  # 22-Sep: carril "perps", subproceso, DRY-RUN puro 
 import sports_wallet_mirror_sniper as _swms
 
 
+def _shadow_pnl_fiel_subproceso() -> int:
+    """13-Nov (OOM): shadow_pnl_fiel corria DENTRO de este proceso y su pico
+    (1,5-2 GB), sumado al del resolver de sports, llevaba el scheduler a 3-4,5 GB
+    (OOM-kill 13-Nov 04:38Z con 3,2 GB; glibc no devuelve ese heap ni con
+    malloc_trim). En subproceso la memoria vuelve entera al SO al terminar.
+    Mismo script, mismos argumentos por defecto. Devuelve 0/1 (carril "pesado":
+    un 1 se reintenta en REINTENTO_FALLO_S)."""
+    import subprocess
+    r = subprocess.run([sys.executable, str(REPO / "shadow_pnl_fiel.py")],
+                       capture_output=True, text=True, timeout=1500, cwd=str(REPO))
+    print(r.stdout[-4000:], flush=True)
+    if r.returncode != 0:
+        print(f"ERROR shadow_pnl_fiel.py (rc={r.returncode}): {r.stderr[-2000:]}", flush=True)
+        return 1
+    return 0
+
+
 def _resolver_wallet_mirror_sniper() -> None:
     """Réplica exacta de `wallet_mirror_sniper.py --resolver` (ver
     docstring del módulo) -- monkeypatch acotado con restauración."""
@@ -192,7 +209,7 @@ TAREAS = [
     ("vigia_ballenas_bypass", vigia_ballenas_bypass.main, "vigia_ballenas_bypass.log", 900),
     ("vigia_causal_vs_fillable", vigia_causal_vs_fillable.main, "vigia_causal_fillable.log", 10800),  # 19-Oct OK Javi: 1800->10800, tardaba ~1480 s por ciclo
     ("vigia_ballenas_cobertura", vigia_ballenas_cobertura.main, "vigia_ballenas_cobertura.log", 1800),
-    ("shadow_pnl_fiel", shadow_pnl_fiel.main, "shadow_pnl_fiel.log", 1800),
+    ("shadow_pnl_fiel", _shadow_pnl_fiel_subproceso, "shadow_pnl_fiel.log", 1800),
     # 02-Sep (propuesta B2, barrido de sesión "edge sin capturar"): PnL real
     # por wallet fuente de WALLET_MIRROR (cripto+sports), ver docstring del
     # módulo -- n todavía bajo por wallet, solo informativo/revisión manual.
