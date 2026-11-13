@@ -371,7 +371,18 @@ class Par:
 # ───────────────────────────── descubrimiento de mercados ─────────────────────────────
 def mercado(mo, marco, ini):
     slug = f"{mo.lower()}-updown-{marco}-{ini}"
-    ev = requests.get(f"{GAMMA}/events", params={"slug": slug}, timeout=5).json()
+    # 13-Nov: gamma devuelve cuerpo no-JSON para TODAS las monedas en el par que cierra en las fronteras de 4 h (xx:54 de
+    # 03/07/11/15/19/23Z, 17 pares x 6 monedas perdidos 10-13 Nov). Reintento con espera (hay 60 s de margen antes de abrir).
+    for i, espera in enumerate((0, 2, 5, 10)):
+        time.sleep(espera)
+        try:
+            r = requests.get(f"{GAMMA}/events", params={"slug": slug}, timeout=5)
+            r.raise_for_status()
+            ev = r.json()
+            break
+        except (requests.RequestException, ValueError):
+            if i == 3:
+                raise
     if not ev:
         return None
     m = ev[0]["markets"][0]
