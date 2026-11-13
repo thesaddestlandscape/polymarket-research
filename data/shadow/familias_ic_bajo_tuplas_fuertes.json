@@ -1,6 +1,6 @@
 {
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.018,
+  "ic_bayes_familia": 0.0178,
   "n_tuplas_fuertes": 3,
   "pnl_fiel_combinado_eur": 82.69,
   "tuplas": [
@@ -51,7 +51,7 @@
   ]
  },
  "STREAK_FADE_15M": {
-  "ic_bayes_familia": 0.0396,
+  "ic_bayes_familia": 0.0391,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 16.6,
   "tuplas": [
@@ -63,7 +63,7 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0599,
+  "ic_bayes_familia": 0.06,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 15.29,
   "tuplas": [
