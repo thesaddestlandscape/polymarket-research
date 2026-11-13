@@ -1661,6 +1661,49 @@ def test_r9h5_poll_sin_lectura_no_escribe_fila_estado():
     print('T102 ok [R9 h5]: un poll sin lectura no escribe fila `estado` (ni pisa size_matched)')
 
 
+def test_r10h1_relleno_conocido_por_replay_de_estado_levanta_el_kill():
+    P2, S, out, cl = _prep_kill_previo('r10h1', [], ('5.0', 'MATCHED'))
+    with open(out + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid=f'estado|{cl}|7', k='estado', clave=cl, matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top')) + '\n')          # solo fila estado de un run previo (sin fila fill)
+    P2.correr(); kr = rows(out, 'kill_resuelto'); assert kr and kr[-1]['motivo'] == f'cancel_no_confirmada:{cl}', kr
+    print('T103 ok [R10 h1]: relleno conocido ANTES (matched_previo por replay de filas estado) levanta el kill; (b) T93 con fila fill; (c) T99 sin fila fill no lo levanta')
+
+
+def test_r10h2_flag_corr_json_fallo_degrada_a_partial():
+    st0, inf0, _, _ = _faseB('r10h2a', sin_push=True); assert st0 == 'COMPLETE'                                                              # base: COMPLETE sin el flag
+    orig = PL.Paquete._persistir_corruptas; PL.Paquete._persistir_corruptas = lambda self: (orig(self), setattr(self, 'corr_json_fallo', True))
+    try: st, inf, out, S = _faseB('r10h2b', sin_push=True)
+    finally: PL.Paquete._persistir_corruptas = orig
+    assert st == 'PARTIAL' and 'ledger_reparado.json NO persistido' in inf['motivo'] and any('ledger_reparado.json' in a for a in inf['alertas']) and inf['cobertura']['filas_corruptas_ledger'] == 0, (st, inf['motivo'])
+    print('T104 ok [R10 h2]: corr_json_fallo degrada COMPLETE a PARTIAL con motivo y alerta, aun con led.corruptas==0')
+
+
+def test_r10h3_barrido_que_no_puede_leer_las_pendientes_emite_ordenes_sin_verificar():
+    def montar_pend(nombre, kill_previo=None):
+        P, S, R, M, out = montar(nombre); P.led = C.Ledger(P.P('ledger.jsonl')); cl = f'{nombre}|s950'
+        for k, kw in (('intencion', dict(slot=950, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xpend', t_decision_ns=R.now_ns() - int(500e9))), ('post', dict(oid='0xpend', t_send_ns=R.now_ns() - int(499e9), t_ack_ns=R.now_ns() - int(499e9), clase='ok'))): P.led.add(k, cl, 0, **kw)
+        P.ordenes, _ = C.replay_estado(P.led.filas); P.n_filas0 = len(P.led.filas)
+        def rec(o, motivo): raise RuntimeError('no se puede leer')
+        P.reconciliar_orden = rec
+        if kill_previo: P.kills[kill_previo] = 'BLOCKED'
+        return P
+    P = montar_pend('r10h3'); P._barrido_final()
+    assert P.kills.get('ordenes_sin_verificar') == 'BLOCKED' and sum(1 for r in P.led.filas if r.get('k') == 'kill' and r['motivo'] == 'ordenes_sin_verificar') == 1 and P._cambio_real_del_run(), P.kills       # el criterio unico (filas + kills) lo ve
+    P2 = montar_pend('r10h3b', kill_previo='orden_indeterminada:x'); P2._barrido_final(); assert 'ordenes_sin_verificar' not in P2.kills                   # no duplica un kill por orden existente
+    print('T105 ok [R10 h3]: barrido con ilegibles y ordenes pendientes => kill duro `ordenes_sin_verificar` (fila kill, una vez, sin duplicar kills por orden) que _cambio_real_del_run detecta')
+
+
+def test_r10h4_kills_de_arranque_previos_no_bloquean_el_resume_si_la_wallet_esta_vacia():
+    cfg = C.Config(max_ordenes=8, objetivo_anclas=1000)
+    for nombre, mot in (('r10h4a', 'abiertas_previas_vivas'), ('r10h4b', 'abiertas_previas_ilegibles')):
+        P1, S, R, M, out = montar(nombre, cfg=cfg); P1.correr()
+        with open(out + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid='kill|run|77', k='kill', clave='run', motivo=mot, status='BLOCKED', t_ns=1)) + '\n')
+        Q = montar(nombre + 'x', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id=nombre)[0]; Q.correr(); assert Q.kill == 'max_ordenes' and 'resume_rechazado' not in str(Q.kills), (nombre, Q.kills)      # wallet vacia: procede
+    P1, S, R, M, out = montar('r10h4c', cfg=cfg); P1.correr()
+    with open(out + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid='kill|run|77', k='kill', clave='run', motivo='abiertas_previas_vivas', status='BLOCKED', t_ns=1)) + '\n')
+    S.abiertas_todas = lambda: ['0xajena']; Q = montar('r10h4cx', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id='r10h4c')[0]; Q.correr(); assert 'abiertas_previas_vivas' in Q.kills and Q.kill_status == 'BLOCKED', Q.kills     # aun con abiertas: vuelve a matar
+    print('T106 ok [R10 h4]: un kill previo abiertas_previas_* no rechaza un resume con la wallet ya vacia; con abiertas se emite de nuevo BLOCKED')
+
+
 if __name__ == '__main__':
     try:
         filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)
