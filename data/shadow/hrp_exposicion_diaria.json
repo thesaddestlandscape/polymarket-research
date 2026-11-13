@@ -1,105 +1,105 @@
 {
-  "timestamp_utc": "2026-11-12T22:10:14+00:00",
+  "timestamp_utc": "2026-11-13T00:10:14+00:00",
   "tuplas_maduras": [],
   "tuplas_inmaduras": [
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#5min#BUY_YES",
-      "dias_historial": 8,
+      "dias_historial": 9,
       "n": 1
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#5min#BUY_NO",
-      "dias_historial": 49,
+      "dias_historial": 50,
       "n": 5
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#ETH#5min#BUY_YES",
-      "dias_historial": 30,
+      "dias_historial": 31,
       "n": 2
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#ETH#5min#BUY_NO",
-      "dias_historial": 46,
+      "dias_historial": 47,
       "n": 2
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#5min#BUY_YES",
-      "dias_historial": 49,
+      "dias_historial": 50,
       "n": 5
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#5min#BUY_NO",
-      "dias_historial": 49,
+      "dias_historial": 50,
       "n": 5
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#XRP#5min#BUY_YES",
-      "dias_historial": 45,
+      "dias_historial": 46,
       "n": 3
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#XRP#5min#BUY_NO",
-      "dias_historial": 47,
+      "dias_historial": 48,
       "n": 1
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#DOGE#5min#BUY_YES",
-      "dias_historial": 49,
+      "dias_historial": 50,
       "n": 2
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#DOGE#5min#BUY_NO",
-      "dias_historial": 33,
-      "n": 1
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#BNB#5min#BUY_YES",
-      "dias_historial": 49,
-      "n": 1
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#BNB#5min#BUY_NO",
-      "dias_historial": 49,
-      "n": 2
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#15min#BUY_YES",
-      "dias_historial": 46,
-      "n": 5
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#15min#BUY_NO",
-      "dias_historial": 41,
-      "n": 7
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#ETH#15min#BUY_YES",
-      "dias_historial": 22,
-      "n": 1
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#ETH#15min#BUY_NO",
-      "dias_historial": 21,
-      "n": 1
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#15min#BUY_YES",
-      "dias_historial": 27,
-      "n": 1
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#15min#BUY_NO",
-      "dias_historial": 24,
-      "n": 4
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_PRECIERRE#XRP#15min#BUY_YES",
       "dias_historial": 34,
       "n": 1
     },
     {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#BNB#5min#BUY_YES",
+      "dias_historial": 50,
+      "n": 1
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#BNB#5min#BUY_NO",
+      "dias_historial": 50,
+      "n": 2
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#15min#BUY_YES",
+      "dias_historial": 47,
+      "n": 5
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#15min#BUY_NO",
+      "dias_historial": 42,
+      "n": 7
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#ETH#15min#BUY_YES",
+      "dias_historial": 23,
+      "n": 1
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#ETH#15min#BUY_NO",
+      "dias_historial": 22,
+      "n": 1
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#15min#BUY_YES",
+      "dias_historial": 28,
+      "n": 1
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#15min#BUY_NO",
+      "dias_historial": 25,
+      "n": 4
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_PRECIERRE#XRP#15min#BUY_YES",
+      "dias_historial": 35,
+      "n": 1
+    },
+    {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#XRP#15min#BUY_NO",
-      "dias_historial": 37,
+      "dias_historial": 38,
       "n": 2
     },
     {
