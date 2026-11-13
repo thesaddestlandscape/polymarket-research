@@ -117,7 +117,9 @@ SCREEN_RESTART = {
     # ficheros originales, solo cambia el proceso que los corre). Ver
     # project_push_roto_carga_cpu_resuelto_05ago / project_consolidacion_
     # observadores_fase0_05ago en memoria.
-    "observadores": f"cd {REPO} && nice -n 10 .venv/bin/python observadores_fase0.py >> logs/observadores_fase0.log 2>&1",
+    # 13-Nov (OK Javi, REVERSIBLE: quitar "choom -n -300 --"): el OOM del 12-Nov 21:46Z mato observadores (historico ms en memoria perdido) en vez del
+    # causante (shadow_postmortem 3,5 GB). adj -300: sin ordenes ni claves, pero su estado en RAM no se recupera. Los crons pesados van a +500 (cron_pesado.sh).
+    "observadores": f"cd {REPO} && nice -n 10 choom -n -300 -- .venv/bin/python observadores_fase0.py >> logs/observadores_fase0.log 2>&1",
     # fetchers (07-Ago): fusión de 4 fetchers de datos externos (chainlink,
     # liqs, libroambos, polyactivity -- historial de cada uno en los
     # comentarios de fetchers_fase0.py::FETCHERS) en UN SOLO proceso, cada

@@ -10,4 +10,5 @@ for i in $(seq 1 30); do
   [ "${a:-0}" -ge 3000 ] && ! pgrep -f "python.* /root/polymarket-research/shadow_postmortem.py" >/dev/null && break; sleep 20
 done
 [ "${a:-0}" -lt 3000 ] && echo "$(date -u +%FT%TZ) RAM baja (${a} MB) tras 10 min; se ejecuta igualmente: $*" >> "$LOG"
-exec "$@"
+# 13-Nov (OOM): los crons pesados son reintentables -> victima PREFERIDA del OOM-killer (adj +500, lo heredan sus hijos), para que no caigan observadores/vigiasfreq.
+exec choom -n 500 -- "$@"
