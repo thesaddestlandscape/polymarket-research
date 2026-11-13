@@ -466,7 +466,8 @@ def main():
                 try:
                     m5, m15 = mercado(mo, "5m", cie - 300), mercado(mo, "15m", cie - 900)
                 except Exception as e:
-                    log({"tipo": "par_error", "moneda": mo, "cierre": cie, "error": f"{type(e).__name__}: {e}"})
+                    hecho.discard((mo, cie))   # 13-Nov: no dar el par por perdido; la siguiente vuelta reintenta mientras siga en ventana
+                    log({"tipo": "par_error", "moneda": mo, "cierre": cie, "error": f"{type(e).__name__}: {e}", "reintenta": True})
                     continue
                 if not m5 or not m15:
                     log({"tipo": "par_sin_mercado", "moneda": mo, "cierre": cie, "m5": bool(m5), "m15": bool(m15)})
