@@ -225,11 +225,10 @@ class Paquete:
             self._asentar(ref, interrumpible=False)
             m, est, _ = self._confirmar_cancelada(oid, self.cfg.cancel_intentos_barrido)
         if terminal(m, est):
-            mm = float(m); matched_previo = max([max(float(r.get('matched') or 0.0), float(r.get('size_matched') or 0.0)) for r in self.led.filas if r.get('clave') == o.clave and r.get('k') in ('estado', 'fill', 'push_fill') and r.get('eid') not in self.led.fallidos], default=0.0)      # v13 (hallazgo 2): lo YA persistido en el ledger para esta orden, ANTES de las filas de esta llamada y sin filas cuya escritura fallo (no `o.matched` en memoria)
+            mm = float(m); fill_reg = self._fill_registrado(o.clave)                                       # v14 (hallazgo 2): el relleno se detecta contra las filas fill/push_fill PERSISTIDAS (sin las de escritura fallida), nunca contra o.matched ni filas `estado` (una muerte entre `estado` y `fill` dejaria dinero gastado sin contar)
             self.led.add('estado', o.clave, 1 + sum(1 for r in self.led.filas if r.get('k') == 'estado' and r.get('fuente') == 'reconciliacion' and r.get('clave') == o.clave), matched=mm, status=est, t_ns=self.r.now_ns(), fuente='reconciliacion')
-                                              # v12 (hallazgo 1): lo que el ledger YA sabia ANTES de esta reconciliacion
-            if mm > 1e-9 and o.matched < mm - 1e-9: self.cnt['fills'] += 1; o.matched = mm; self._fill_detectado(o, mm)
-            registrado = mm <= 1e-9 or matched_previo >= mm - 1e-9 or (any(r.get('k') in ('fill', 'push_fill') and r.get('clave') == o.clave and r.get('eid') not in self.led.fallidos and float(r.get('size_matched') or r.get('matched') or 0.0) >= mm - 1e-9 for r in self.led.filas))        # v12 (hallazgo 1): registrado = sin relleno, O conocido ANTES (matched_previo, nunca el o.matched posterior ni las filas `estado` de esta misma reconciliacion), O fila fill/push_fill >= mm sin fallo de escritura
+            if mm > fill_reg + 1e-9: self.cnt['fills'] += 1; o.matched = max(o.matched, mm); self._fill_detectado(o, mm)             # escribe la fila fill que falta (mismos contadores y kills de siempre); con fila previa >= mm NO se llama (sin doble conteo)
+            registrado = mm <= 1e-9 or self._fill_registrado(o.clave) >= mm - 1e-9
             o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm)
             if motivo == 'arranque' and registrado: self._resolver_kills_orden(o.clave, f'reconciliada:{est}')                  # v8 (hallazgo 4): SOLO al reanudar, con la orden en estado terminal LEGIBLE y su relleno YA REGISTRADO en el ledger (v10 hallazgo 1: conocido, o detectado/registrado justo arriba por `_fill_detectado`; el relleno en si sigue bloqueando por n_fills>0 / ledger_con_rellenos, no por el kill de la orden) (el run anterior ya acabo BLOCKED por esa orden; leerla ahora en estado terminal LEGIBLE prueba que esta cerrada). En el barrido del MISMO run el incidente de cancelacion se mantiene (T10)
             return True
@@ -265,6 +264,10 @@ class Paquete:
         if rest <= 0: return True
         if interrumpible: self._dormir(rest / 1e9); return self.r.now_ns() >= ref_ns + self._asentamiento_ns()
         self.r.sleep(rest / 1e9); return True
+
+    def _fill_registrado(self, clave):
+        """v14: mayor size_matched/matched de las filas `fill`/`push_fill` de `clave` PERSISTIDAS (excluye las filas cuya escritura fallo: `Ledger.fallidos`)."""
+        return max([float(r.get('size_matched') or r.get('matched') or 0.0) for r in self.led.filas if r.get('clave') == clave and r.get('k') in ('fill', 'push_fill') and r.get('eid') not in self.led.fallidos], default=0.0)
 
     def _fill_detectado(self, o, mm):
         coste = round(mm * o.precio, 6); self.log(f'FILL {o.clave} matched={mm} coste={coste} modo={o.modo}', err=True)
@@ -629,6 +632,18 @@ class Paquete:
         except BaseException as e: self._alerta(f'NO se pudo actualizar ledger_reparado.json ({type(e).__name__})'); self.corr_json_fallo = True
         self.corr_pend = 0
 
+    def _n_ilegibles_vigentes(self):
+        """v14 (hallazgo 1): una fila `ilegible` de una orden (`reconciliar:<clave|oid>`) solo cuenta mientras esa orden NO tenga un cierre legible POSTERIOR (fila `cerrada` no indeterminada, o `estado` terminal; incluida la reconciliacion de arranque, que ocurre ANTES de este calculo). LIMITACION: las ilegibles que no son de una orden (saldo_final, abiertas_todas...) siguen contando siempre."""
+        filas = self.led.filas; oid2cl = {str(o.oid).lower(): c for c, o in self.ordenes.items() if o.oid}; vig = 0
+        for i, r in enumerate(filas):
+            if r.get('k') != 'ilegible': continue
+            lect = str(r.get('clave') or '').split('|', 1)[-1]
+            if lect.startswith('reconciliar:'):
+                cl = lect[len('reconciliar:'):]; cl = oid2cl.get(cl.lower(), cl)
+                if any(q.get('clave') == cl and q.get('eid') not in self.led.fallidos and ((q.get('k') == 'cerrada' and not q.get('indeterminada')) or (q.get('k') == 'estado' and C.es_terminal(q.get('status')))) for q in filas[i + 1:]): continue
+            vig += 1
+        return vig
+
     def _cambio_real_del_run(self):
         """v10 (hallazgos 2): UNICO criterio de 'el estado REAL del run cambio respecto al previo' (decide si un resume que no llego a operar reescribe informe_final/manifiesto/checkpoint). Mira SOLO lo posterior a `n_filas0`.
         CAMBIA: fila nueva estado/cerrada/fill/push_fill/cancel/kill_resuelto (una INDETERMINADA es una `cerrada`), o un kill duro nuevo (severidad>=1) que NO sea el derivado del rechazo ni una lectura transitoria de arranque, (incluye `abiertas_previas_vivas` y `abiertas_residuales`: llegan como kill BLOCKED).
@@ -684,7 +699,7 @@ class Paquete:
         if abs((self.pres.s0 - sal0) - res['gasto_fills_usd']) > self.cfg.tol_saldo_usd + 1e-9:
             self._alerta(f'saldo on-chain {sal0} != saldo_inicial {self.pres.s0} - gasto del ledger {res["gasto_fills_usd"]}: descuadre antes de enviar'); self._matar(f'saldo_descuadrado_en_arranque {self.pres.s0 - sal0:.4f} vs ledger {res["gasto_fills_usd"]:.4f}', 'BLOCKED'); return ('normal',)
         # hallazgo 5: el bloqueo por kill duro previo NO depende solo de que exista la fila `kill` (un SIGKILL entre el relleno y esa fila la habria perdido): tambien se deduce del propio ledger (rellenos o indeterminadas)
-        n_ileg = sum(1 for r in self.led.filas if r.get('k') == 'ilegible')                 # v5 (hallazgo 5): una lectura final ilegible de un run previo (BLOCKED sin fila kill) tambien bloquea el relanzamiento: se deduce del LEDGER
+        n_ileg = self._n_ilegibles_vigentes()                 # v5 (hallazgo 5): una lectura final ilegible de un run previo (BLOCKED sin fila kill) tambien bloquea el relanzamiento: se deduce del LEDGER
         if duros or res['n_fills'] > 0 or res['n_indeterminadas'] > 0 or n_ileg:
             motivo = duros[-1]['motivo'] if duros else (f'ledger_con_rellenos={res["n_fills"]}' if res['n_fills'] > 0 else (f'ledger_con_indeterminadas={res["n_indeterminadas"]}' if res['n_indeterminadas'] > 0 else f'ledger_con_lecturas_ilegibles={n_ileg} (cuenta del ledger de ESTE --out: verificar a mano y relanzar con OTRO --out; cambiar solo el run-id NO lo desbloquea)'))
             self._matar(motivo_rechazo_resume(motivo), (duros[-1].get('status') if duros else None) or ('PARTIAL' if res['n_fills'] > 0 else 'BLOCKED')); self.log(f'RESUME RECHAZADO: {motivo}; no se envia nada', err=True)

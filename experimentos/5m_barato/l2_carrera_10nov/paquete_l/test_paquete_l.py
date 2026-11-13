@@ -1712,20 +1712,51 @@ def test_r11h1_ordenes_sin_verificar_previo_no_bloquea_si_ahora_se_verifican():
     print('T107 ok [R11 h1]: `ordenes_sin_verificar` previo es condicion de arranque (no bloquea si ahora se verifican; si no, BLOQUEA de nuevo)')
 
 
-def test_r11h2_matched_previo_sale_de_filas_persistidas_no_de_memoria():
-    def montar_rec(nombre, filas_extra=(), fallidas=()):
+def test_r11h2_relleno_se_detecta_contra_filas_fill_persistidas():
+    """v14 (hallazgo 2): la deteccion usa las filas fill/push_fill PERSISTIDAS; `estado` y o.matched en memoria no son prueba de fill."""
+    def montar_rec(nombre, filas_extra=(), fallidas=(), anular_fill=False):
         P, S, R, M, out = montar(nombre); P.led = C.Ledger(P.P('ledger.jsonl')); cl = f'{nombre}|s900'; P.pres = C.Presupuesto(P.cfg, 0.6)
         for k, kw in (('intencion', dict(slot=900, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xf', t_decision_ns=R.now_ns() - int(500e9))), ('post', dict(oid='0xf', t_send_ns=R.now_ns() - int(499e9), t_ack_ns=R.now_ns() - int(499e9), clase='ambiguo')), ('kill', dict(motivo=f'cancel_no_confirmada:{cl}', status='BLOCKED'))):
             P.led.add(k, cl if k != 'kill' else 'run', 0 if k != 'kill' else 99, **kw)
         for i, (k, kw) in enumerate(filas_extra): P.led.add(k, cl, 50 + i, **kw)
         for e in fallidas: P.led.fallidos.add(e)
         P.ordenes, _ = C.replay_estado(P.led.filas); o = P.ordenes[cl]; o.matched = 5.0                                              # en MEMORIA ya figura el relleno
-        S.estado = lambda oid: ('5.0', 'MATCHED'); S.cancelar = lambda oid: True; P._fill_detectado = lambda o_, mm: None; P._asentar = lambda *a, **k: None
-        return P, o, cl
-    P, o, cl = montar_rec('r11h2a'); P.reconciliar_orden(o, 'arranque'); assert not [r for r in P.led.filas if r['k'] == 'kill_resuelto'], 'o.matched en memoria sin fila persistida levanto el kill'
-    P, o, cl = montar_rec('r11h2b', filas_extra=[('estado', dict(matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top'))]); P.reconciliar_orden(o, 'arranque'); assert [r for r in P.led.filas if r['k'] == 'kill_resuelto']
-    P, o, cl = montar_rec('r11h2c', filas_extra=[('estado', dict(matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top'))], fallidas=[f'estado|r11h2c|s900|50']); P.reconciliar_orden(o, 'arranque'); assert not [r for r in P.led.filas if r['k'] == 'kill_resuelto'], 'una fila cuya escritura fallo no es evidencia'
-    print('T108 ok [R11 h2]: matched_previo = max de filas estado/fill/push_fill PERSISTIDAS (sin las de esta llamada ni las de escritura fallida); memoria sola no levanta el kill')
+        S.estado = lambda oid: ('5.0', 'MATCHED'); S.cancelar = lambda oid: True; P._asentar = lambda *a, **k: None; llam = []
+        if anular_fill: P._fill_detectado = lambda o_, mm: llam.append(mm)
+        else:
+            of = P._fill_detectado; P._fill_detectado = lambda o_, mm: (llam.append(mm), of(o_, mm))[1]
+        return P, o, cl, llam
+    res = lambda P: [r for r in P.led.filas if r['k'] == 'kill_resuelto']; fills = lambda P: [r for r in P.led.filas if r['k'] == 'fill']
+    est = ('estado', dict(matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top')); fil = ('fill', dict(size_matched=5.0, coste=0.05, modo='lejos', t_ns=1))
+    P, o, cl, ll = montar_rec('r12a', filas_extra=[est]); P.reconciliar_orden(o, 'arranque')                                          # (a) muerte entre estado y fill: se escribe la fila fill que falta y SOLO entonces se levanta
+    assert ll == [5.0] and len(fills(P)) == 1 and res(P) and P.cnt['fills'] == 1, (ll, fills(P), res(P))
+    P, o, cl, ll = montar_rec('r12b', filas_extra=[fil]); P.reconciliar_orden(o, 'arranque'); assert ll == [] and len(fills(P)) == 1 and res(P) and P.cnt['fills'] == 0, ll   # (b) fila fill previa: sin doble conteo
+    P, o, cl, ll = montar_rec('r12c', anular_fill=True); P.reconciliar_orden(o, 'arranque'); assert ll == [5.0] and not fills(P) and not res(P), 'sin fila fill el kill no se levanta'   # (c1) fill anulado / escritura fallida
+    P, o, cl, ll = montar_rec('r12d', filas_extra=[fil], fallidas=['fill|r12d|s900|50']); P.reconciliar_orden(o, 'arranque'); assert ll == [5.0] and len(fills(P)) == 2, (ll, fills(P))                                                                  # (c2) la fila fill de escritura fallida NO es evidencia: se vuelve a escribir la fila
+    print('T108 ok [R12 h2]: deteccion contra filas fill/push_fill persistidas: (a) solo estado => escribe fill y levanta; (b) fill previa => sin doble conteo; (c) sin fila (anulada/fallida) => no levanta')
+
+
+def test_r12h2_resume_con_estado_sin_fill_se_rechaza_por_ledger_con_rellenos():
+    P2, S, out, cl = _prep_kill_previo('r12h2', [], ('5.0', 'MATCHED'))
+    with open(out + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid=f'estado|{cl}|7', k='estado', clave=cl, matched=5.0, status='MATCHED', t_ns=1, fuente='poll_top')) + '\n')
+    n1 = len(S.posts_enviados); P2.correr(); assert rows(out, 'fill') and rows(out, 'kill_resuelto') and 'relleno_en_fase_A (corte inmediato)' in P2.kills and len(S.posts_enviados) == n1, (P2.kills,)
+    print('T109 ok [R12 h2]: muerte entre estado y fill => el resume escribe la fila fill (dinero ya gastado contado), levanta el kill de la orden y NO envia nada (kill de relleno)')
+
+
+def test_r12h1_ilegibles_vigentes_solo_si_la_orden_sigue_sin_cierre_legible():
+    def prep(nombre, estado):
+        cfg = C.Config(max_ordenes=8, objetivo_anclas=1000); P1, S, R, M, out = montar(nombre, cfg=cfg); P1.correr(); cl = f'{nombre}|s950'
+        for k, kw in (('intencion', dict(slot=950, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xp', t_decision_ns=R.now_ns() - int(500e9))), ('post', dict(oid='0xp', t_send_ns=R.now_ns() - int(499e9), t_ack_ns=R.now_ns() - int(499e9), clase='ok'))):
+            open(out + '/ledger.jsonl', 'a').write(json.dumps(dict(eid=f'{k}|{cl}|0', k=k, clave=cl, **kw)) + '\n')
+        for k, kw, n in (('ilegible', dict(detalle='excepcion:RuntimeError', t_ns=1), 1), ('kill', dict(motivo='ordenes_sin_verificar', status='BLOCKED', t_ns=2), 98)):
+            open(out + '/ledger.jsonl', 'a').write(json.dumps(dict(eid=f'{k}|{(nombre + "|reconciliar:" + cl) if k == "ilegible" else "run"}|{n}', k=k, clave=((nombre + '|reconciliar:' + cl) if k == 'ilegible' else 'run'), **kw)) + '\n')
+        if estado == 'viva': S.abiertas_todas = lambda: ['0xp']
+        elif estado: S.estado = lambda oid: estado; S.cancelar = lambda oid: True
+        return montar(nombre + 'x', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id=nombre)[0], out
+    Q, out = prep('r12h1a', ('0.0', 'CANCELED')); Q.correr(); assert Q.kill == 'max_ordenes' and not any('ilegibles' in str(k) for k in Q.kills), Q.kills             # ahora se reconcilian a terminal: procede
+    Q2, out2 = prep('r12h1b', 'viva'); Q2.correr(); assert any('resume_rechazado' in str(k) or 'orden_indeterminada' in str(k) for k in Q2.kills), Q2.kills                  # siguen sin verificar: rechazado/bloqueado
+    print('T110 ok [R12 h1]: la fila ilegible de una orden deja de contar cuando su reconciliacion de arranque la cierra con estado terminal legible; si no, rechazo')
+
 
 
 if __name__ == '__main__':

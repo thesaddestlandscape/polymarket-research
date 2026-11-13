@@ -17,7 +17,7 @@ def exigir(cond, msg):
     if not cond: raise Invariante(msg)
 
 
-VERSION = 'paquete_l_v13'                                 # v13 (13-Nov): 11o /code-review (2 hallazgos, decisiones cerradas); invalida cualquier confirmacion escrita para v2..v12
+VERSION = 'paquete_l_v14'                                 # v14 (13-Nov): 12o /code-review (2 hallazgos, reglas cerradas); invalida cualquier confirmacion escrita para v2..v13
 WALLET_DEDICADA = '0x659a40FF9920fEBc5a66836213040924343d297F'
 COINS = ('BTC', 'ETH', 'SOL', 'XRP')
 FALLBACK_DIR = '/tmp'                                       # v4 (hallazgo 10): si el informe final no se puede escribir en el out, se deja aqui (y en stderr)
