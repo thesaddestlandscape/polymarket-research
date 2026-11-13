@@ -32,6 +32,24 @@ def exigir_confirmacion(ruta, cfg, codigo_sha):
 def cfg_b(cfg): return cfg.fase_b_max_rellenos > 0
 
 
+KILL_ORDEN = ('cancel_no_confirmada', 'estado_ilegible_tras_cancel', 'orden_indeterminada')        # v8 (hallazgos 4 y 8): UNICA fuente de los motivos de kill por orden (emision y resolucion)
+PREF_RECHAZO = 'resume_rechazado_kill_previo:'
+
+
+def motivo_kill_orden(tipo, clave):
+    C.exigir(tipo in KILL_ORDEN, f'tipo de kill por orden desconocido: {tipo}'); return f'{tipo}:{clave}'
+
+
+def base_kill(motivo):
+    """Quita TODOS los prefijos de rechazo de resume (los rechazos repetidos no se anidan)."""
+    m = str(motivo)
+    while m.startswith(PREF_RECHAZO): m = m[len(PREF_RECHAZO):]
+    return m
+
+
+def motivo_rechazo_resume(motivo): return PREF_RECHAZO + base_kill(motivo)
+
+
 class Paquete:
     def __init__(self, cfg, sender, mercados, dir_out, reloj, run_id, real=False, libro=None, anclas_fn=None, evid_patron=None, params=None, stdout=True, locks=None):
         self.cfg, self.s, self.m, self.dir, self.r, self.run_id, self.real = cfg, sender, mercados, dir_out, reloj, run_id, real
@@ -42,7 +60,7 @@ class Paquete:
         self.slots = C.plan_slots(cfg, n=cfg.max_ordenes + 100); self.fase = 'A'; self.sin_mercado = 0
         self.pres = None; self.led = None; self.ordenes = {}; self.senal = None; self.post_no_antes_ns = 0; self.ilegibles = []; self.abiertas_res = False; self.fills_b = 0; self.gasto_b = 0.0; self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat()
         self.ultimo_rechazo = None; self.alertas = []; self.n_senales = 0; self.lote_n0 = 0; self.ilegible_n0 = 0; self.io_fallos = 0
-        self._locks = locks; self.resume = False; self.operado = False; self.kills = {}; self.kills_resueltos = []; self.t_lim_ns = None; self.fase_b_fin = None; self.fase_b_parar = None; self.anclas_ult = (None, {}); self.anclas_ev = None; self.evid_ilegibles = []
+        self._locks = locks; self.n_filas0 = 0; self.resume = False; self.operado = False; self.kills = {}; self.kills_resueltos = []; self.t_lim_ns = None; self.fase_b_fin = None; self.fase_b_parar = None; self.anclas_ult = (None, {}); self.anclas_ev = None; self.evid_ilegibles = []
 
     # ---------------------------------------------------------------- utilidades
     def log(self, msg, err=False):
@@ -82,15 +100,15 @@ class Paquete:
         else: self.kill = self.kill_status = None; self.kill_sev = -1
 
     @staticmethod
-    def _kills_de_orden(clave): return tuple(f'{p}:{clave}' for p in ('cancel_no_confirmada', 'estado_ilegible_tras_cancel', 'orden_indeterminada'))
+    def _kills_de_orden(clave): return tuple(motivo_kill_orden(t, clave) for t in KILL_ORDEN)
 
-    def _resolver_kills_orden(self, clave):
-        """v7 (hallazgo 2b): SOLO cuando `reconciliar_orden` PRUEBA que la orden no existio (inexistente_verificada: exchange sin ella + abiertas sin ella + saldo cuadrado contra el ledger tras el asentamiento) el kill duro por esa orden (cancelacion no confirmada / estado ilegible / indeterminada)
+    def _resolver_kills_orden(self, clave, razon='inexistente_verificada'):
+        """v7 (hallazgo 2b) y v8 (hallazgo 4): SOLO cuando `reconciliar_orden` PRUEBA que la orden no existio (inexistente_verificada: exchange sin ella + abiertas sin ella + saldo cuadrado contra el ledger tras el asentamiento) o la lee en estado TERMINAL LEGIBLE (reconciliada:<estado>; un relleno lo registra `_fill_detectado` aparte) el kill duro por esa orden (cancelacion no confirmada / estado ilegible / indeterminada)
         deja de serlo: fila `kill_resuelto` en el ledger (la fila `kill` original NO se borra: append-only) y el kill vivo en memoria se recalcula. Una orden NO verificada sigue BLOQUEANDO (fail-closed)."""
         for m in self._kills_de_orden(clave):
             if any(r.get('k') == 'kill' and r.get('motivo') == m for r in self.led.filas) and not any(r.get('k') == 'kill_resuelto' and r.get('motivo') == m for r in self.led.filas):
-                self.led.add('kill_resuelto', 'run', sum(1 for r in self.led.filas if r.get('k') == 'kill_resuelto'), t_ns=self.r.now_ns(), motivo=m, razon='inexistente_verificada')
-            if m in self.kills: del self.kills[m]; self.kills_resueltos.append(m); self.log(f'KILL RESUELTO {m}: orden inexistente verificada (exchange + abiertas + saldo vs ledger)')
+                self.led.add('kill_resuelto', 'run', sum(1 for r in self.led.filas if r.get('k') == 'kill_resuelto'), t_ns=self.r.now_ns(), motivo=m, razon=razon)
+            if m in self.kills: del self.kills[m]; self.kills_resueltos.append(m); self.log(f'KILL RESUELTO {m}: {razon}')
         self._recalcular_kill()
 
     def _saldo_cae_mas_que_ledger(self, sal, gasto_ledger=None):
@@ -198,7 +216,9 @@ class Paquete:
         if terminal(m, est):
             mm = float(m); self.led.add('estado', o.clave, 1 + sum(1 for r in self.led.filas if r.get('k') == 'estado' and r.get('fuente') == 'reconciliacion' and r.get('clave') == o.clave), matched=mm, status=est, t_ns=self.r.now_ns(), fuente='reconciliacion')
             if mm > 1e-9 and o.matched < mm - 1e-9: self.cnt['fills'] += 1; o.matched = mm; self._fill_detectado(o, mm)
-            o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm); return True
+            o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm)
+            if motivo == 'arranque': self._resolver_kills_orden(o.clave, f'reconciliada:{est}')                  # v8 (hallazgo 4): SOLO al reanudar (el run anterior ya acabo BLOCKED por esa orden; leerla ahora en estado terminal LEGIBLE prueba que esta cerrada). En el barrido del MISMO run el incidente de cancelacion se mantiene (T10)
+            return True
         ab = None
         try: self._req(); ab = self.s.abiertas_todas()
         except Exception: ab = None
@@ -207,7 +227,7 @@ class Paquete:
         if pasado and isinstance(ab, (list, tuple, set)) and str(oid).lower() not in {str(x).lower() for x in ab} and est == 'NO_EXISTE' and sal is not None and self.pres is not None and not self._saldo_cae_mas_que_ledger(sal):
             o.indeterminada = False; self._cierre(o, motivo='inexistente_verificada', size_matched=0.0); self._resolver_kills_orden(o.clave); return True
         o.indeterminada = True; self._cierre(o, motivo='INDETERMINADA', size_matched=(float(m) if m is not None else None), indeterminada=True); self.cnt['indeterminadas'] += 1
-        self._matar(f'orden_indeterminada:{o.clave}', 'BLOCKED'); return False
+        self._matar(motivo_kill_orden('orden_indeterminada', o.clave), 'BLOCKED'); return False
 
     # ---------------------------------------------------------------- asentamiento tras el POST (hallazgo 5)
     def _asentamiento_ns(self): return int((self.cfg.index_gracia_s + self.cfg.asentamiento_extra_s) * 1e9)
@@ -397,7 +417,7 @@ class Paquete:
         if not legible:                                                       # cancel_ok pero estado ilegible NO es 'matched=0': pudo casarse antes del DELETE => INDETERMINADO, corte (BLOCKED); el saldo on-chain lo cruza en el barrido final
             motivo = 'CANCEL_NO_CONFIRMADA' if not ok else 'ESTADO_ILEGIBLE_TRAS_CANCEL'
             self.led.add('cerrada', clave, 0, motivo=motivo, size_matched=(float(m) if m is not None else None), indeterminada=True, t_ns=self.r.now_ns()); o.cerrada = True; o.indeterminada = True
-            self.cnt['cancel_no_confirmada' if not ok else 'estado_ilegible_tras_cancel'] += 1; self._matar(f'{motivo.lower()}:{clave}', 'BLOCKED'); del self.vivas[clave]; return False
+            self.cnt['cancel_no_confirmada' if not ok else 'estado_ilegible_tras_cancel'] += 1; self._matar(motivo_kill_orden('cancel_no_confirmada' if not ok else 'estado_ilegible_tras_cancel', clave), 'BLOCKED'); del self.vivas[clave]; return False
         mm = max(float(m), o.matched); o.matched = mm; o.cerrada = True
         del self.vivas[clave]
         if mm > 1e-9: self.cnt['fills'] += 1; self._fill_detectado(o, mm)                    # orden de escritura (hallazgo 5): fill + kill DURABLES antes de la fila `cerrada`: un SIGKILL entre medias no deja un hueco
@@ -454,7 +474,7 @@ class Paquete:
             pol = [c for c, v in self.vivas.items() if v.get('next_poll_ns') and v['next_poll_ns'] <= now and v.get('cx') is None]
             if pol and not self.kill:                                       # fase B: seguimiento 1 Hz de size_matched (parciales) mientras la orden esta viva
                 for c in pol:
-                    v = self.vivas[c]; m, est = self._estado(v['oid']); v['next_poll_ns'] = self.r.now_ns() + int(1e9)
+                    v = self.vivas[c]; m, est = self._estado(v['oid'], prioritario=True); v['next_poll_ns'] = self.r.now_ns() + int(1e9)
                     self.led.add('estado', c, 100 + int(self.r.now_ns() // 1_000_000) % 10_000_000, matched=float(m or 0.0), status=est, t_ns=self.r.now_ns(), fuente='poll_top')
                     if m and float(m) > 1e-9: v['deadline_ns'] = min(v['deadline_ns'], self.r.now_ns())      # algo casado: se cierra la orden ya (se cancela el resto)
                 continue
@@ -523,7 +543,7 @@ class Paquete:
     def correr(self):
         """UNICO punto de entrada. v4 (hallazgo 1): los manejadores de senal se instalan ANTES de todo y se restauran SOLO al final (tras barrido e informe): una 2a senal durante el barrido solo incrementa un contador."""
         propios = self._locks is None
-        if propios: self._locks = C.tomar_locks(self.cfg.wallet, self.dir)                  # v7 (hallazgo 3): ANTES de cualquier lectura de estado, apertura de ledger o envio
+        if propios: self._locks = C.locks_de_run(self.cfg, self.dir, self.real)                  # v7 (hallazgo 3): ANTES de cualquier lectura de estado, apertura de ledger o envio
         if not self._locks:
             print(f'INSTANCIA UNICA: ya hay otro proceso con la wallet {self.cfg.wallet} o el --out {self.dir} (o no se pudo tomar el lock): no se toca nada (ni ledger, ni checkpoint, ni informe)', file=sys.stderr, flush=True)
             self._locks = None; return 'LOCKED'
@@ -541,12 +561,18 @@ class Paquete:
         except BaseException: pass
         try: self._matar(f'excepcion:{type(e).__name__}', 'FAILED')
         except BaseException:
-            self.kill, self.kill_status, self.kill_sev = f'excepcion:{type(e).__name__}', 'FAILED', 3
+            m = f'excepcion:{type(e).__name__}'; self.kills[m] = 'FAILED'; self.kill, self.kill_status, self.kill_sev = m, 'FAILED', 3                       # v8 (hallazgo 3): tambien en self.kills (un `_recalcular_kill` posterior no puede borrarlo)
+            try: self.led.add('kill', 'run', sum(1 for r in self.led.filas if r.get('k') == 'kill'), t_ns=self.r.now_ns(), motivo=m, status='FAILED')
+            except BaseException: pass
 
     def _correr(self):
         """v3 (hallazgo 3): cuerpo dentro de try/except BaseException; SIEMPRE, salga como salga, se ejecuta el barrido final (cancelar vivas + reconciliar toda orden sin cierre + verificar abiertas/saldo) y se escribe el informe final.
         v4 (hallazgo 10): ni el log, ni el ledger, ni el manifiesto pueden impedir el barrido ni el informe (fallback a stderr y a FALLBACK_DIR)."""
         self.led = C.Ledger(self.P('ledger.jsonl')); self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat(); self.fills_b = 0; self.gasto_b = 0.0
+        if self.led.corruptas:                                                             # v8 (hallazgo 6): la evidencia de la reparacion se persiste AL ABRIR, antes de cualquier retorno temprano (config distinta, preflight, ya_complete): `Ledger()` ya reescribio el fichero sin las lineas corruptas
+            self.led.add('ledger_reparado', 'run', sum(1 for r in self.led.filas if r.get('k') == 'ledger_reparado'), corruptas=self.led.corruptas, duplicadas=self.led.duplicadas, t_ns=self.r.now_ns())
+            self._alerta(f'LEDGER con {self.led.corruptas} fila(s) corrupta(s) descartada(s) al abrir (reparado; las ordenes sin cierre se reconcilian): el informe final nunca sera COMPLETE a secas')
+        self.n_filas0 = len(self.led.filas)
         self.ordenes, _ = C.replay_estado(self.led.filas)                                  # el barrido conoce TODAS las ordenes del ledger aunque el cuerpo salga al principio
         self.lote_n0 = sum(1 for r in self.led.filas if r.get('k') == 'lote'); self.ilegible_n0 = sum(1 for r in self.led.filas if r.get('k') == 'ilegible'); accion = ('normal',)      # hallazgo 6
         try: accion = self._cuerpo()
@@ -559,9 +585,13 @@ class Paquete:
             except BaseException: self.ilegibles.append(dict(lectura='barrido_final', detalle=f'excepcion:{type(e).__name__}'))
         try:
             if accion[0] == 'rechazo': return self._final(accion[1], accion[2], sin_pres=True)
-            return self._final(None, None, sin_pres=(self.resume and not self.operado))                          # v7 (hallazgo 5): un resume que NO llego a operar (rechazado) no pisa informe/manifiesto/checkpoint del run original
+            return self._final(None, None, sin_pres=(self.resume and not self.operado and not self._resume_modifico()))                          # v7 (hallazgo 5): un resume que NO llego a operar (rechazado) no pisa informe/manifiesto/checkpoint del run original
         except BaseException as e:
             self._excepcion('final', e); return self._final_emergencia(e)
+
+    def _resume_modifico(self):
+        """v8 (hallazgo 5): un resume que NO llego a operar pero SI cambio estado (kill nuevo, cierre/estado/relleno de una orden reconciliada, INDETERMINADA, abiertas residuales...) debe dejar informe_final/manifiesto/checkpoint con el estado REAL; solo el rechazo PURO (nada nuevo salvo su propio kill de rechazo / ledger_reparado) escribe unicamente informe_rechazo_*."""
+        return any(not (r.get('k') == 'ledger_reparado' or (r.get('k') == 'kill' and str(r.get('motivo')).startswith(PREF_RECHAZO))) for r in self.led.filas[self.n_filas0:])
 
     def _final_emergencia(self, e):
         """Ultimo recurso si `_final` fallo: informe minimo FAILED a disco (o fallback/stderr)."""
@@ -586,16 +616,13 @@ class Paquete:
         self.log(f'INICIO run={self.run_id} real={self.real} resume={resume} saldo_inicial={self.pres.s0} suelo={self.pres.suelo} config_sha={self.cfg.sha()[:12]} codigo_sha={C.sha_codigo()[:12]}')
         ck = self._validar_checkpoint(); self.log(f'checkpoint: {ck}'); self.ordenes, res = C.replay_estado(self.led.filas)
         if self.led.corruptas or self.led.duplicadas: self.log(f'ledger: corruptas={self.led.corruptas} duplicadas={self.led.duplicadas} (reparado)', err=True)
-        if self.led.corruptas:                                                                                          # v7 (pendiente ronda 4): la reparacion queda REGISTRADA en el ledger (un resume posterior, con el fichero ya limpio, tampoco puede dar COMPLETE a secas)
-            self.led.add('ledger_reparado', 'run', sum(1 for r in self.led.filas if r.get('k') == 'ledger_reparado'), corruptas=self.led.corruptas, duplicadas=self.led.duplicadas, t_ns=self.r.now_ns())
-            self._alerta(f'LEDGER con {self.led.corruptas} fila(s) corrupta(s) descartada(s) al abrir (reparado; las ordenes sin cierre se reconcilian): el informe final nunca sera COMPLETE a secas')
         if self.kill: return ('normal',)
         for o in [o for o in self.ordenes.values() if (not o.cerrada or o.indeterminada) and o.clase_post != 'rechazo']:            # reconciliacion de vivas/ambiguas/INDETERMINADAS de una ejecucion anterior
             if o.t_envio_ns is None and o.clase_post is None: self.cnt['intencion_sin_post'] += 1                  # intencion sin POST registrado: pudo salir: se reconcilia igual
             self.reconciliar_orden(o, 'arranque'); o.cerrada = True
             if self.kill: return ('normal',)
         resueltos = {r.get('motivo') for r in self.led.filas if r.get('k') == 'kill_resuelto'}                          # v7 (hallazgo 2b): un kill por una orden luego VERIFICADA como inexistente no impide reanudar
-        duros = [r for r in self.led.filas if r.get('k') == 'kill' and r.get('motivo') not in BENIGNOS and not str(r.get('motivo')).startswith(BENIGNOS_PREFIJO) and r.get('motivo') not in resueltos and str(r.get('motivo')).replace('resume_rechazado_kill_previo:', '', 1) not in resueltos]
+        duros = [r for r in self.led.filas if r.get('k') == 'kill' and r.get('motivo') not in BENIGNOS and not str(r.get('motivo')).startswith(BENIGNOS_PREFIJO) and base_kill(r.get('motivo')) not in resueltos]
         try: self._req(); ab = self.s.abiertas_todas()                                                          # v5 (hallazgo 4): la wallet dedicada debe tener 0 abiertas ANTES de enviar (propias ya reconciliadas, ajenas = nunca se tocan)
         except Exception: ab = None
         if not isinstance(ab, (list, tuple, set)) or ab:
@@ -611,7 +638,7 @@ class Paquete:
         n_ileg = sum(1 for r in self.led.filas if r.get('k') == 'ilegible')                 # v5 (hallazgo 5): una lectura final ilegible de un run previo (BLOCKED sin fila kill) tambien bloquea el relanzamiento: se deduce del LEDGER
         if duros or res['n_fills'] > 0 or res['n_indeterminadas'] > 0 or n_ileg:
             motivo = duros[-1]['motivo'] if duros else (f'ledger_con_rellenos={res["n_fills"]}' if res['n_fills'] > 0 else (f'ledger_con_indeterminadas={res["n_indeterminadas"]}' if res['n_indeterminadas'] > 0 else f'ledger_con_lecturas_ilegibles={n_ileg} (cuenta del ledger de ESTE --out: verificar a mano y relanzar con OTRO --out; cambiar solo el run-id NO lo desbloquea)'))
-            self._matar(f'resume_rechazado_kill_previo:{motivo}', (duros[-1].get('status') if duros else None) or ('PARTIAL' if res['n_fills'] > 0 else 'BLOCKED')); self.log(f'RESUME RECHAZADO: {motivo}; no se envia nada', err=True)
+            self._matar(motivo_rechazo_resume(motivo), (duros[-1].get('status') if duros else None) or ('PARTIAL' if res['n_fills'] > 0 else 'BLOCKED')); self.log(f'RESUME RECHAZADO: {motivo}; no se envia nada', err=True)
             return ('normal',)
         if resume: self._manifest('EN_CURSO')                                                               # v7 (hallazgo 5): ya no hay rechazo posible: el resume pasa a ser el run en curso
         self.operado = True; self.t_lim_ns = t_lim = self.t_inicio_ns + int(self.cfg.max_minutos * 60e9); idx = 0; enviadas0 = sum(1 for r in self.led.filas if r.get('k') == 'intencion'); self.cnt['enviadas_previas'] = enviadas0
@@ -786,13 +813,14 @@ def construir_parser():
     return ap
 
 
-PARAM_A_OPCION = dict(run_id='--run-id', out='--out', escenario='--escenario', objetivo='--objetivo', max_ordenes='--max-ordenes', fase_b='--fase-b', confirmacion='--confirmacion', evid_dir='--evid-dir')       # v7 (hallazgo 8): nombres REALES de argparse
-PARAM_BANDERA = dict(real='--real', tiempo_real='--tiempo-real')
+PARAM_A_OPCION = dict(run_id='--run-id', out='--out', escenario='--escenario', objetivo='--objetivo', max_ordenes='--max-ordenes', fase_b='--fase-b')       # v7 (hallazgo 8): nombres REALES de argparse
+PARAM_BANDERA = dict(tiempo_real='--tiempo-real')                       # v8 (hallazgo 1): NINGUNA bandera que habilite envio (--real/--confirmacion/--evid-dir) entra en el comando de reproduccion
 
 
 def repro_args(params):
-    """Argumentos de linea de comandos (nombres reales de argparse, valores entrecomillados) que reproducen `params`. Test de ida y vuelta: `construir_parser().parse_args(...)`."""
-    out = []
+    """Argumentos de linea de comandos (nombres reales de argparse, valores entrecomillados) que reproducen `params` como DRY-RUN (sin --real ni --confirmacion). Test de ida y vuelta: `construir_parser().parse_args(...)`."""
+    out = []; params = dict(params)
+    if params.get('real'): params['out'] = str(params.get('out') or '').rstrip('/') + '_repro_dry'            # v8 (hallazgo 1): la reproduccion de un run REAL es un DRY-RUN (SenderSim) en un --out APARTE: nunca toca el ledger del real
     for k, v in params.items():
         if v is None or v is False: continue
         if k in PARAM_BANDERA: out.append(PARAM_BANDERA[k])
@@ -869,14 +897,14 @@ def main():
     if a.real:
         C.exigir_aislamiento()                                                              # v3 (hallazgo 1): `python3 -I` y directorio sin .py ajenos
         exigir_confirmacion(a.confirmacion, cfg, C.sha_codigo())
-    locks = C.tomar_locks(cfg.wallet, out)                                                  # v7 (hallazgo 3): instancia unica por wallet y por --out, ANTES de construir nada (el sender real crea el directorio de evidencias y el canal de usuario)
+    locks = C.locks_de_run(cfg, out, a.real)                                                  # v7 (hallazgo 3): instancia unica por wallet y por --out, ANTES de construir nada (el sender real crea el directorio de evidencias y el canal de usuario)
     if not locks: print(f'INSTANCIA UNICA: ya hay otro proceso con la wallet {cfg.wallet} o el --out {out} (o no se pudo tomar el lock): salgo sin tocar nada', file=sys.stderr); return 2
     try:
         if a.real:
             import pl_sender_real as R
-            reloj = Reloj(); sender, mercados, anclas_fn, por_fn, libro = R.construir(cfg, evid_dir=a.evid_dir or os.path.join(out, 'cancel_evid'))
-            P = Paquete(cfg, sender, mercados, out, reloj, run_id, real=True, libro=libro, anclas_fn=anclas_fn, evid_patron=os.path.join(a.evid_dir or os.path.join(out, 'cancel_evid'), 'cancel_evid_*.jsonl*'), params=params, locks=locks)
-            P.anclas_por_moneda_fn = lambda: por_fn(P.led.filas); P.anclas_unico = sender.anclas
+            reloj = Reloj(); sender, mercados, libro = R.construir(cfg, evid_dir=a.evid_dir or os.path.join(out, 'cancel_evid'))
+            P = Paquete(cfg, sender, mercados, out, reloj, run_id, real=True, libro=libro, evid_patron=os.path.join(a.evid_dir or os.path.join(out, 'cancel_evid'), 'cancel_evid_*.jsonl*'), params=params, locks=locks)
+            P.anclas_unico = sender.anclas
         else:
             reloj = Reloj() if a.tiempo_real else RelojVirtual(); sender = SenderSim(reloj, **ESCENARIOS[a.escenario]); mercados = MercadosSim(reloj)
             P = Paquete(cfg, sender, mercados, out, reloj, run_id, real=False, anclas_fn=lambda: sum(P.anclas_ledger_por_moneda().values()), params=params, locks=locks)

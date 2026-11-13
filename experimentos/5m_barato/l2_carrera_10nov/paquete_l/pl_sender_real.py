@@ -117,15 +117,8 @@ class SenderReal:
         """Rellenos de nuestras ordenes que el canal de usuario ya escribio (lectura LOCAL de los JSONL del escritor; sin red). El escritor tiene un retraso de volcado de fracciones de segundo."""
         return self._tail.sondear()
 
-    def anclas_directas(self):
-        """Espera a que el hilo escritor vuelque y cuenta anclas validas (alta+PLACEMENT+CANCELLATION+cancel_try) del JSONL del canal de usuario."""
-        time.sleep(1.5)
-        try: self.reg.w.vaciar(timeout=5.0)
-        except Exception: pass
-        return C.contar_anclas(os.path.join(self.evid_dir, 'cancel_evid_*.jsonl*'))[0]
-
     def anclas(self, filas):
-        """v7 (hallazgo 10): UNA sola lectura de los cancel_evid por lote (espera/volcado como `anclas_directas`). Devuelve (total, por_moneda, eventos, ilegibles): el orquestador reutiliza los eventos en el informe final (sin releer)."""
+        """v7 (hallazgo 10): UNA sola lectura de los cancel_evid por lote (espera 1,5 s y volcado del escritor). Devuelve (total, por_moneda, eventos, ilegibles): el orquestador reutiliza los eventos en el informe final (sin releer)."""
         time.sleep(1.5)
         try: self.reg.w.vaciar(timeout=5.0)
         except Exception: pass
@@ -192,14 +185,13 @@ def cargar_env(cfg):
 
 
 def construir(cfg, evid_dir):
-    """Devuelve (sender, mercados, anclas_fn, por_moneda_fn, libro_fn). Fail-closed."""
+    """Devuelve (sender, mercados, libro_fn). Fail-closed. v8 (hallazgo 8): UNA sola via de anclas en real (`sender.anclas(filas)`); sin anclas_directas/por_fn."""
     env, CE = cargar_env(cfg); os.makedirs(evid_dir, exist_ok=True)
     reg = CE.Registro(CE.Escritor(evid_dir)); res = CE.Resolutor(reg); reg.resolutor = res; reg.avisar = aviso_a_fichero(evid_dir)
     CE.adjuntar_env(env, reg, markets=(), canal=True, resolutor=res, modo_markets='lista')           # modo explicito: no se lee SONDA1_CANCEL_EVIDENCIA_MARKETS del entorno
     if not getattr(env, '_cancel_evid', False) or reg.canal is None: sys.exit('canal de usuario NO adjuntado: NO envio')
     sender = SenderReal(env, reg, res, CE, evid_dir); mercados = MercadosReal()
-    por_fn = lambda filas: C.contar_anclas(os.path.join(evid_dir, 'cancel_evid_*.jsonl*'), filas)[1]
-    return sender, mercados, sender.anclas_directas, por_fn, mercados.libro
+    return sender, mercados, mercados.libro
 
 
 # ------------------------------------------------------------------------------------------------ PREFLIGHT (R1, 12-Nov): SOLO LECTURA, jamas un POST

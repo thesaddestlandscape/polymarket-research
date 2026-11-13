@@ -397,7 +397,7 @@ def test_adaptador_real_importable_y_paridad_de_interfaz():
     """SIN instanciar EnvioReal (eso arrancaria el cliente con credenciales): importa el vendor en un subproceso y comprueba que la interfaz del adaptador real == la del doble (lo que el orquestador usa)."""
     cod = ("import sys; sys.path.append(%r); import pl_core as C, pl_sender_real as R, pl_sender as S; p0 = list(sys.path); vm, ER, CE, plan_paquete_l = [C.cargar_vendor(n) for n in ('vendor_main', 'envio_real', 'cancel_evidencia', 'plan_paquete_l')]; assert sys.path == p0\n"
            "pub = lambda c: {n for n in dir(c) if not n.startswith('_')}\n"
-           "falta = {'tick', 'colocar', 'enviar', 'estado', 'cancelar', 'saldo', 'abiertas_todas', 'anclas_directas', 'preparar', 'fills_push', 'cerrar'} - pub(R.SenderReal); assert not falta, falta\n"
+           "falta = {'tick', 'colocar', 'enviar', 'estado', 'cancelar', 'saldo', 'abiertas_todas', 'anclas', 'preparar', 'fills_push', 'cerrar'} - pub(R.SenderReal); assert not falta, falta\n"
            "assert {'poner', 'enviar', 'estado', 'cancelar', 'saldo', 'abiertas', 'tick'} <= pub(ER.EnvioReal) and hasattr(CE, 'adjuntar_env') and hasattr(CE, 'Registro') and hasattr(CE.Registro, 'gate_envio')\n"
            "import inspect; assert list(inspect.signature(ER.EnvioReal.poner).parameters) == ['self', 'tok', 'precio', 'size', 'clave', 'neg_risk'] and ER.__file__.startswith(%r) and list(inspect.signature(R.clase_envio(ER).poner).parameters)[-2:] == ['neg_risk', 'expira_s']\n"
            "assert 'sonda1' not in sys.modules and not any('polymarket-research-dev' in (getattr(m, '__file__', '') or '') for m in sys.modules.values())\n"
@@ -1311,6 +1311,8 @@ def test_r5h3_instancia_unica_por_wallet_y_por_out():
     cfg = C.Config(); out1 = os.path.join(TMP, 'r5h3a'); out2 = os.path.join(TMP, 'r5h3b'); fds = C.tomar_locks(cfg.wallet, out1); assert fds and len(fds) == 2
     try:
         reloj = RelojVirtual(); S = SenderSim(reloj); P = PL.Paquete(cfg, S, MercadosSim(reloj), out2, reloj, 'r5h3b', stdout=False)                  # misma WALLET, otro --out
+        assert C.locks_de_run(cfg, out2, True) is None and (l2 := C.locks_de_run(cfg, out2, False)) and not C.liberar_locks(l2)            # v8 (hallazgos 2/8): misma WALLET + otro --out: el run REAL choca; un dry-run NO toma el lock de wallet (no bloquea ni es bloqueado por el real)
+        P._locks = None; P.real = True                                                                                                             # real=True solo cambia la decision de locks: sale ANTES de usar el sender
         with contextlib.redirect_stderr(io.StringIO()) as e: assert P.correr() == 'LOCKED'
         assert 'INSTANCIA UNICA' in e.getvalue() and S.n_post == 0 and S.n_saldo == 0 and S.n_colocar == 0 and not [f for f in os.listdir(out2)], os.listdir(out2)            # no toca nada: ni ledger, ni checkpoint, ni informe, ni log
         cfg2 = C.Config(wallet='0x' + '1' * 40); reloj = RelojVirtual(); S = SenderSim(reloj); P = PL.Paquete(cfg2, S, MercadosSim(reloj), out1, reloj, 'r5h3c', stdout=False)   # otra wallet, MISMO --out
@@ -1330,7 +1332,7 @@ def test_r5h3_instancia_unica_por_wallet_y_por_out():
     st4 = P4.correr(); ocupado = C.tomar_locks(cfg.wallet, out4); C.liberar_locks(pre)
     assert st4 == 'PARTIAL' and P4._locks == pre and ocupado is None, (st4, ocupado)
     # CLI: segundo proceso sobre el mismo --out (lock en /tmp: el de produccion) sale con 2 sin crear el directorio
-    out5 = os.path.join(TMP, 'r5h3cli'); fds = C.tomar_locks(cfg.wallet, out5, lock_dir='/tmp')
+    out5 = os.path.join(TMP, 'r5h3cli'); fds = C.tomar_locks('0x' + '2' * 40, out5, lock_dir='/tmp', wallet_lock=False)      # v8 (hallazgo 2): solo el lock de --out (unico del dry-run) y NUNCA la wallet real en el /tmp de produccion
     try:
         r = subprocess.run([sys.executable, '-I', H + 'paquete_l.py', '--out', out5, '--run-id', 'cli5', '--max-ordenes', '8', '--objetivo', '1000'], capture_output=True, text=True)
         assert r.returncode == 2 and 'INSTANCIA UNICA' in r.stderr and not os.path.exists(out5), (r.returncode, r.stderr[-200:])
@@ -1403,7 +1405,8 @@ def test_r5h7_un_solo_criterio_de_saldo_contra_el_ledger():
 def test_r5h8_repro_usa_los_nombres_reales_de_argparse():
     params = dict(run_id='real 1', out='/tmp/un dir/out', escenario='fill_total', objetivo=50, max_ordenes=30, fase_b=3, real=True, tiempo_real=True, evid_dir='/tmp/ev', confirmacion='/tmp/ok.txt')
     P, S, R, M, out = montar('r5h8'); P.params = params; cmd = shlex_split(P._repro()); assert cmd[:2] == ['python3', '-I'] and cmd[2].endswith('paquete_l.py')
-    a = PL.construir_parser().parse_args(cmd[3:]); assert (a.run_id, a.out, a.escenario, a.objetivo, a.max_ordenes, a.fase_b, a.real, a.tiempo_real, a.evid_dir, a.confirmacion) == ('real 1', '/tmp/un dir/out', 'fill_total', 50, 30, 3, True, True, '/tmp/ev', '/tmp/ok.txt')
+    a = PL.construir_parser().parse_args(cmd[3:]); assert (a.run_id, a.out, a.escenario, a.objetivo, a.max_ordenes, a.fase_b, a.real, a.tiempo_real, a.evid_dir, a.confirmacion) == ('real 1', '/tmp/un dir/out_repro_dry', 'fill_total', 50, 30, 3, False, True, None, None)      # v8 (hallazgo 1): la reproduccion de un run REAL es un DRY-RUN en otro --out
+    assert '--real' not in cmd and '--confirmacion' not in ' '.join(cmd) and '--evid-dir' not in ' '.join(cmd) and not any(x.startswith('--preflight') for x in cmd), cmd
     P.params = dict(run_id='x', out='/tmp/o', escenario='base', objetivo=None, max_ordenes=None, fase_b=None, real=False, tiempo_real=False, evid_dir=None, confirmacion=None); a = PL.construir_parser().parse_args(shlex_split(P._repro())[3:]); assert a.real is False and a.fase_b == 0 and a.run_id == 'x'
     out = os.path.join(TMP, 'cli8'); r = subprocess.run([sys.executable, '-I', H + 'paquete_l.py', '--out', out, '--run-id', 'cli8', '--max-ordenes', '16', '--objetivo', '1000'], capture_output=True, text=True); assert r.returncode == 0, r.stderr[-200:]
     repro = json.load(open(out + '/informe_final.json'))['repro']; r2 = subprocess.run([sys.executable] + shlex_split(repro)[1:], capture_output=True, text=True); assert r2.returncode == 0 and 'unrecognized' not in r2.stderr, (repro, r2.stderr[-200:])      # el comando de reproduccion ES ejecutable
@@ -1462,6 +1465,74 @@ def test_r5_ledger_con_filas_corruptas_no_da_complete_silencioso():
     P2, S2, R2, M2, _ = montar('r5corrb', dir_out=out, run_id='r5corr', sender=S, reloj=R, mercados=M); st2 = P2.correr(); inf2 = json.load(open(out + '/informe_final.json'))                                  # un RESUME (fichero ya limpio) tampoco da COMPLETE a secas
     assert st2 == 'PARTIAL' and inf2['cobertura']['filas_corruptas_ledger'] == 1 and any('LEDGER con 1' in a for a in inf2['alertas']), (st2, inf2['motivo'])
     print('T86 ok [R4 pendiente]: filas corruptas del ledger => PARTIAL + alerta (fichero e informe), jamas COMPLETE a secas')
+
+
+def _prep_kill_previo(nombre, kill_extra, estado):
+    """v8: run que acaba con una orden ambigua + kill; devuelve el Paquete que REANUDA. `estado`: None = NO_EXISTE verificable, ('0', 'CANCELED') = terminal legible, 'viva' = el exchange la tiene (no verificable)."""
+    cfg = C.Config(max_ordenes=8, objetivo_anclas=1000); P1, S, R, M, out = montar(nombre, cfg=cfg); P1.correr(); cl = f'{nombre}|s900'
+    for k, kw in (('intencion', dict(slot=900, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xfantasma', t_decision_ns=R.now_ns() - int(500e9))), ('post', dict(oid='0xfantasma', t_send_ns=R.now_ns() - int(499e9), t_ack_ns=R.now_ns() - int(499e9), clase='ambiguo')),
+                  ('cerrada', dict(motivo='CANCEL_NO_CONFIRMADA', size_matched=None, indeterminada=True, t_ns=R.now_ns())), ('kill', dict(motivo=f'cancel_no_confirmada:{cl}', status='BLOCKED', t_ns=R.now_ns()))):
+        with open(out + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid=f'{k}|{cl if k != "kill" else "run"}|{0 if k != "kill" else 99}', k=k, clave=(cl if k != 'kill' else 'run'), **kw)) + '\n')
+    for i, m in enumerate(kill_extra):
+        with open(out + '/ledger.jsonl', 'a') as f: f.write(json.dumps(dict(eid=f'kill|run|{90 + i}', k='kill', clave='run', motivo=m, status='BLOCKED', t_ns=R.now_ns())) + '\n')
+    if estado == 'viva': S.abiertas_todas = lambda: ['0xfantasma']
+    elif estado: S.estado = lambda oid, _e=S.estado: estado if oid == '0xfantasma' else _e(oid); S.cancelar = lambda oid, _c=S.cancelar: True if oid == '0xfantasma' else _c(oid)
+    P2 = montar(nombre + 'b', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id=nombre)[0]; return P2, S, out, cl
+
+
+def test_r6h4_h8_resume_motivos_unicos_y_terminal_legible_levanta_el_kill():
+    assert PL.base_kill('resume_rechazado_kill_previo:resume_rechazado_kill_previo:cancel_no_confirmada:x') == 'cancel_no_confirmada:x' and PL.motivo_rechazo_resume('resume_rechazado_kill_previo:a') == 'resume_rechazado_kill_previo:a'
+    cl0 = 'r6h4|s900'; P2, S, out, cl = _prep_kill_previo('r6h4', [f'resume_rechazado_kill_previo:resume_rechazado_kill_previo:cancel_no_confirmada:{cl0}'], ('0', 'CANCELED')); n1 = len(S.posts_enviados); P2.correr()
+    kr = rows(out, 'kill_resuelto'); assert kr and kr[-1]['motivo'] == f'cancel_no_confirmada:{cl}' and 'terminal' not in kr[-1]['razon'] and kr[-1]['razon'] == 'reconciliada:CANCELED', kr
+    assert 'resume_rechazado' not in str(P2.kill) and P2.kill == 'max_ordenes', (P2.kill,)                       # el kill (y el rechazo ANIDADO) se levantan y el resume continua
+    P3, S3, out3, _ = _prep_kill_previo('r6h4b', [], 'viva'); P3.correr()
+    assert not rows(out3, 'kill_resuelto') and 'orden_indeterminada' in str(P3.kill), P3.kill                                                   # no verificable: sigue bloqueando
+    k2 = [r['motivo'] for r in rows(out3, 'kill')]; assert not any(m.count('resume_rechazado_kill_previo:') > 1 for m in k2), k2             # y los rechazos NO se anidan
+    print('T87 ok [R6 h4/h8]: un unico generador de motivos de kill; un resume que lee la orden en estado terminal LEGIBLE levanta su kill (tambien con rechazos anidados); no verificable sigue bloqueando sin anidar prefijos')
+
+
+def test_r6h3_excepcion_fallback_queda_en_kills():
+    P, S, R, M, out = montar('r6h3'); P.led = C.Ledger(P.P('ledger.jsonl'))
+    def roto(*a, **k): raise OSError('disco lleno')
+    P._matar = roto; P._excepcion('x', RuntimeError('boom')); assert P.kills.get('excepcion:RuntimeError') == 'FAILED' and P.kill == 'excepcion:RuntimeError' and P.kill_sev == 3
+    P._recalcular_kill(); assert P.kill == 'excepcion:RuntimeError' and P.kill_status == 'FAILED'                                              # un recalculo posterior ya no lo borra
+    print('T88 ok [R6 h3]: el kill del fallback de _excepcion vive en self.kills (un _recalcular_kill no lo borra)')
+
+
+def test_r6h5_resume_que_modifica_estado_escribe_informe_final_real():
+    P2, S, out, cl = _prep_kill_previo('r6h5', [], 'viva'); prev0 = open(out + '/informe_final.json').read(); n1 = len(S.posts_enviados); st = P2.correr()
+    assert st == 'BLOCKED' and len(S.posts_enviados) == n1 and not [f for f in os.listdir(out) if f.startswith('informe_rechazo_')], (st, os.listdir(out))
+    inf = json.load(open(out + '/informe_final.json')); assert inf['status'] == 'BLOCKED' and inf['cobertura']['indeterminadas'] >= 1, inf['status']
+    prev = [f for f in os.listdir(out) if f.startswith('informe_final.previo_')]; assert len(prev) == 1 and open(os.path.join(out, prev[0])).read() == prev0           # el informe anterior se conserva
+    print('T89 ok [R6 h5]: un resume que no opera pero cambia estado (INDETERMINADA) deja informe_final real + previo; el rechazo puro sigue en informe_rechazo (T80)')
+
+
+def test_r6h6_ledger_reparado_se_persiste_aunque_el_resume_sea_rechazado_pronto():
+    cfg = C.Config(max_ordenes=8, objetivo_anclas=1000); P1, S, R, M, out = montar('r6h6', cfg=cfg); P1.correr()
+    with open(out + '/ledger.jsonl', 'a') as f: f.write('{basura sin cerrar\n')
+    P2 = montar('r6h6b', cfg=C.Config(max_ordenes=9, objetivo_anclas=1000), sender=S, reloj=R, mercados=M, dir_out=out, run_id='r6h6')[0]; n1 = len(S.posts_enviados); P2.correr()           # config distinta: rechazo temprano
+    rr = rows(out, 'ledger_reparado'); assert len(S.posts_enviados) == n1 and rr and rr[0]['corruptas'] == 1, rr
+    print('T90 ok [R6 h6]: la fila ledger_reparado se escribe al abrir el ledger, antes de cualquier retorno temprano')
+
+
+def test_r6h7_poll_fase_b_no_espera_al_limitador():
+    cfg = C.Config(fase_b_max_rellenos=2, fase_b_ordenes=8); reloj = RelojVirtual(); S = SenderSim(reloj, fill_a={}, sin_push=True); M = MercadosSim(reloj, down_barato=True)
+    P, S, R, M, out = montar('r6h7', cfg=cfg, sender=S, reloj=reloj, mercados=M); orig = P._estado; vistos = []
+    def estado(oid, prioritario=False):
+        import linecache; fr = sys._getframe(1)
+        if 'next_poll_ns' in linecache.getline(fr.f_code.co_filename, fr.f_lineno): vistos.append(prioritario)                       # solo las llamadas del seguimiento 1 Hz
+        return orig(oid, prioritario=prioritario)
+    P._estado = estado; P.correr(); polls = [r for r in rows(out, 'estado') if r.get('fuente') == 'poll_top']
+    assert polls and vistos and all(vistos), (len(polls), vistos[:10])                                              # TODOS los polls fase B son prioritarios (no esperan al limitador)
+    print('T91 ok [R6 h7]: el seguimiento 1 Hz de fase B llama a _estado(prioritario=True)')
+
+
+def test_r6h1_h2_repro_dry_y_lock_de_wallet_solo_en_real():
+    assert PL.repro_args(dict(real=True, out='/tmp/o', confirmacion='/tmp/c', evid_dir='/tmp/e', run_id='r', tiempo_real=True)) == ['--out=/tmp/o_repro_dry', '--run-id=r', '--tiempo-real']
+    cfg = C.Config(); a = os.path.join(TMP, 'r6h2a'); b = os.path.join(TMP, 'r6h2b'); f1 = C.locks_de_run(cfg, a, False); assert f1 and len(f1) == 1                      # dry: solo --out
+    f2 = C.locks_de_run(cfg, b, True); assert f2 and len(f2) == 2; C.liberar_locks(f2); f3 = C.locks_de_run(cfg, b, False); assert f3 and len(f3) == 1; C.liberar_locks(f3); C.liberar_locks(f1)
+    print('T92 ok [R6 h1/h2]: repro de un real = dry-run en otro --out sin banderas de envio; el lock de wallet solo se toma con envio real')
+
 
 
 if __name__ == '__main__':

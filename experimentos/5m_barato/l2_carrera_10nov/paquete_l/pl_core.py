@@ -17,7 +17,7 @@ def exigir(cond, msg):
     if not cond: raise Invariante(msg)
 
 
-VERSION = 'paquete_l_v7'                                  # v7 (13-Nov): 5o /code-review (10 hallazgos + pendiente de la ronda 4); invalida cualquier confirmacion escrita para v2..v6
+VERSION = 'paquete_l_v8'                                  # v8 (13-Nov): 6o /code-review (8 hallazgos); invalida cualquier confirmacion escrita para v2..v7
 WALLET_DEDICADA = '0x659a40FF9920fEBc5a66836213040924343d297F'
 COINS = ('BTC', 'ETH', 'SOL', 'XRP')
 FALLBACK_DIR = '/tmp'                                       # v4 (hallazgo 10): si el informe final no se puede escribir en el out, se deja aqui (y en stderr)
@@ -151,6 +151,11 @@ def tomar_locks(wallet, out, lock_dir=None, wallet_lock=True):
         except OSError: pass
         fds.append(fd)
     return fds
+
+
+def locks_de_run(cfg, out, real, lock_dir=None):
+    """v8 (hallazgos 2 y 8): UNICO punto que decide los locks de un run. --out SIEMPRE; WALLET solo con envio real (un dry-run/simulacion no puede bloquear el run real aprobado ni al reves). None = no se pudo (ya hay otra instancia)."""
+    return tomar_locks(cfg.wallet, out, lock_dir=lock_dir, wallet_lock=bool(real))
 
 
 def liberar_locks(fds):
