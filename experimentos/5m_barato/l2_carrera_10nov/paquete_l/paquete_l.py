@@ -225,11 +225,11 @@ class Paquete:
             self._asentar(ref, interrumpible=False)
             m, est, _ = self._confirmar_cancelada(oid, self.cfg.cancel_intentos_barrido)
         if terminal(m, est):
-            mm = float(m); fill_reg = self._fill_registrado(o.clave)                                       # v14 (hallazgo 2): el relleno se detecta contra las filas fill/push_fill PERSISTIDAS (sin las de escritura fallida), nunca contra o.matched ni filas `estado` (una muerte entre `estado` y `fill` dejaria dinero gastado sin contar)
+            mm = float(m); mm_ef = max(mm, self._matched_push(o.clave), o.matched); fill_reg = self._fill_registrado(o.clave)                  # v16 (hallazgo 2): relleno EFECTIVO = MAXIMO entre fuentes (exchange, push, memoria); ante contradiccion se asume el mayor (gasto conservador) y queda registrado                                       # v14 (hallazgo 2): el relleno se detecta contra las filas fill/push_fill PERSISTIDAS (sin las de escritura fallida), nunca contra o.matched ni filas `estado` (una muerte entre `estado` y `fill` dejaria dinero gastado sin contar)
             self.led.add('estado', o.clave, 1 + sum(1 for r in self.led.filas if r.get('k') == 'estado' and r.get('fuente') == 'reconciliacion' and r.get('clave') == o.clave), matched=mm, status=est, t_ns=self.r.now_ns(), fuente='reconciliacion')
-            if mm > fill_reg + 1e-9: o.matched = max(o.matched, mm); self._fill_detectado(o, mm)             # escribe la fila fill que falta (mismos contadores y kills de siempre); con fila previa >= mm NO se llama (sin doble conteo)
-            registrado = mm <= 1e-9 or self._fill_registrado(o.clave) >= mm - 1e-9
-            o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm)
+            if mm_ef > fill_reg + 1e-9: o.matched = max(o.matched, mm_ef); self._fill_detectado(o, mm_ef)             # escribe la fila fill que falta (mismos contadores y kills de siempre); con fila previa >= mm NO se llama (sin doble conteo)
+            registrado = mm_ef <= 1e-9 or self._fill_registrado(o.clave) >= mm_ef - 1e-9
+            o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm_ef)
             if motivo == 'arranque' and registrado: self._resolver_kills_orden(o.clave, f'reconciliada:{est}')                  # v8 (hallazgo 4): SOLO al reanudar, con la orden en estado terminal LEGIBLE y su relleno YA REGISTRADO en el ledger (v10 hallazgo 1: conocido, o detectado/registrado justo arriba por `_fill_detectado`; el relleno en si sigue bloqueando por n_fills>0 / ledger_con_rellenos, no por el kill de la orden) (el run anterior ya acabo BLOCKED por esa orden; leerla ahora en estado terminal LEGIBLE prueba que esta cerrada). En el barrido del MISMO run el incidente de cancelacion se mantiene (T10)
             return True
         ab = None
@@ -265,6 +265,10 @@ class Paquete:
         if interrumpible: self._dormir(rest / 1e9); return self.r.now_ns() >= ref_ns + self._asentamiento_ns()
         self.r.sleep(rest / 1e9); return True
 
+    def _matched_push(self, clave):
+        """v16: mayor relleno reportado por el canal de usuario para `clave` (filas `push_fill` y `estado` con status PUSH)."""
+        return max([float(r.get('matched') or 0.0) for r in self.led.filas if r.get('clave') == clave and (r.get('k') == 'push_fill' or (r.get('k') == 'estado' and r.get('status') == 'PUSH'))], default=0.0)
+
     def _fill_registrado(self, clave):
         """v14/v15: mayor size_matched (ACUMULADO) de las filas `fill` de `clave` PERSISTIDAS (excluye las de escritura fallida: `Ledger.fallidos`). Las `push_fill` NO cuentan (son evidencia; no aplican coste ni kills)."""
         return max([float(r.get('size_matched') or 0.0) for r in self.led.filas if r.get('clave') == clave and r.get('k') == 'fill' and r.get('eid') not in self.led.fallidos], default=0.0)
@@ -272,18 +276,23 @@ class Paquete:
     def _fill_detectado(self, o, mm):
         """v15 (hallazgos 1a/1b): el relleno se contabiliza POR INCREMENTO. delta = mm - fill_reg (filas `fill` persistidas); sin incremento (<=1e-9) no hace nada (ninguna llamada repetida suma dos veces). La fila `fill` lleva eid con SECUENCIA (n filas fill previas de la clave + 1, incluidas las fallidas) y el size_matched acumulado, de modo que un relleno que crece se registra y una escritura fallida se reescribe. fills_b/gasto_b (delta*precio) y cnt['fills'] solo se aplican si la fila se PERSISTIO; los kills se aplican siempre (fail-closed). Devuelve True si registro la fila."""
         fill_reg = self._fill_registrado(o.clave); delta = mm - fill_reg
-        if delta <= 1e-9: return False
+        if delta <= 1e-9:                                                                                    # v16 (hallazgo 3): fill ya persistido: sin fila ni contadores nuevos, pero los kills de fase se aplican IGUALMENTE (idempotentes: `_matar` no duplica la fila kill)
+            if fill_reg > 1e-9: self._kills_de_fase(o)
+            return False
         coste = round(delta * o.precio, 6); self.log(f'FILL {o.clave} matched={mm} delta={delta} coste={coste} modo={o.modo}', err=True)
         n = 1 + sum(1 for r in self.led.filas if r.get('k') == 'fill' and r.get('clave') == o.clave)
         row = self.led.add('fill', o.clave, n, size_matched=mm, delta=delta, coste=coste, modo=o.modo, t_ns=self.r.now_ns())
         ok = row is not None and row['eid'] not in self.led.fallidos
-        if ok and fill_reg <= 1e-9: self.cnt['fills'] += 1
+        if ok and fill_reg <= 1e-9: self.cnt['fills'] += 1; self.fills_b += (1 if o.modo == 'top' else 0)           # v16 (hallazgo 1): fills_b y cnt['fills'] suben SOLO con el primer incremento persistido de la orden (gasto_b suma cada delta)
         if not ok: self.log(f'FILL {o.clave}: la fila fill NO se pudo escribir; contadores sin aplicar (se reintentara)', err=True)
+        if o.modo == 'top' and ok: self.gasto_b = round(self.gasto_b + coste, 6)
+        self._kills_de_fase(o, forzar=not ok); return ok
+
+    def _kills_de_fase(self, o, forzar=False):
+        """v16: kills de un relleno (fail-closed e idempotentes): fase A => corte inmediato; fase B => tope de rellenos/gasto (o `forzar` si la fila fill no se pudo escribir)."""
         if o.modo == 'top':
-            if ok: self.fills_b += 1; self.gasto_b = round(self.gasto_b + coste, 6)
-            if self.fills_b >= self.cfg.fase_b_max_rellenos or self.gasto_b >= self.cfg.fase_b_tope_usd - 1e-9 or not ok: self._matar('fase_b_tope_rellenos', 'PARTIAL')
+            if forzar or self.fills_b >= self.cfg.fase_b_max_rellenos or self.gasto_b >= self.cfg.fase_b_tope_usd - 1e-9: self._matar('fase_b_tope_rellenos', 'PARTIAL')
         else: self._matar('relleno_en_fase_A (corte inmediato)', 'PARTIAL')
-        return ok
 
     # ---------------------------------------------------------------- POST de un slot
     def _libro_ok(self, slot, tok):

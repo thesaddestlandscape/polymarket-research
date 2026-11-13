@@ -1800,6 +1800,31 @@ def test_r13h3_ilegible_no_se_anula_con_estado_terminal_sin_fila_fill():
     print('T113 ok [R13 h3]: una ilegible de orden solo se anula con cierre legible Y (matched 0 o fila fill >= matched)')
 
 
+def test_r14h1_fills_b_solo_con_el_primer_incremento():
+    P, o, cl = _p_fill('r14a', 'top')                                                                                                  # fase_b_max_rellenos=2
+    assert P._fill_detectado(o, 2.0) and P._fill_detectado(o, 5.0)
+    assert P.fills_b == 1 and P.cnt['fills'] == 1 and abs(P.gasto_b - 0.05) < 1e-9 and 'fase_b_tope_rellenos' not in P.kills, (P.fills_b, P.cnt['fills'], P.gasto_b, P.kills)
+    print('T114 ok [R14 h1]: una orden de fase B que rellena 2 y luego 3 cuenta 1 relleno (fills_b=cnt[fills]=1), gasto 5*precio, sin disparar el tope de rellenos')
+
+
+def test_r14h2_push_vs_exchange_se_asume_el_mayor_y_la_ilegible_se_anula():
+    P, o, cl = _p_fill('r14b', 'lejos'); P.led.add('ilegible', f'r14b|reconciliar:{cl}', 1, detalle='x', t_ns=1)
+    P.led.add('push_fill', cl, 0, matched=5.0, t_ns=1, fuente='canal_usuario'); P.led.add('estado', cl, 200, matched=5.0, status='PUSH', t_ns=1, fuente='canal_usuario')
+    P.ordenes, _ = C.replay_estado(P.led.filas); o = P.ordenes[cl]; S = P.s; S.estado = lambda oid: ('0.0', 'CANCELED'); S.cancelar = lambda oid: True; P._asentar = lambda *a, **k: None; P.pres = C.Presupuesto(P.cfg, 0.6)
+    assert P._n_ilegibles_vigentes() == 1                                                                                              # antes: bloqueada
+    P.reconciliar_orden(o, 'arranque')                                                                                                 # exchange 0 vs push 5: se asume 5
+    assert P._fill_registrado(cl) == 5.0 and 'relleno_en_fase_A (corte inmediato)' in P.kills and P._n_ilegibles_vigentes() == 0, (P._fill_registrado(cl), P.kills)
+    assert C.replay_estado(P.led.filas)[1]['n_fills'] == 1
+    print('T115 ok [R14 h2]: push_fill=5 + exchange terminal 0 => fila fill 5, kill de fase, la ilegible previa deja de contar (sin bloqueo permanente)')
+
+
+def test_r14h3_kills_de_fase_se_aplican_aunque_el_fill_ya_estuviera_persistido():
+    P, o, cl = _p_fill('r14c', 'lejos'); P.led.add('fill', cl, 1, size_matched=5.0, delta=5.0, coste=0.05, modo='lejos', t_ns=1); n0 = (P.cnt['fills'], P.fills_b, P.gasto_b, len(P.led.filas))
+    assert P._fill_detectado(o, 5.0) is False and P.kills.get('relleno_en_fase_A (corte inmediato)') == 'PARTIAL'
+    assert P._fill_detectado(o, 5.0) is False and sum(1 for r in P.led.filas if r['k'] == 'kill') == 1 and sum(1 for r in P.led.filas if r['k'] == 'fill') == 1 and (P.cnt['fills'], P.fills_b, P.gasto_b) == n0[:3], 'idempotente: una sola fila kill, sin contadores ni filas fill nuevas'
+    print('T116 ok [R14 h3]: fill ya persistido + kill no registrado => se aplica el kill una vez, sin tocar contadores ni duplicar filas')
+
+
 if __name__ == '__main__':
     try:
         filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)
