@@ -6,6 +6,6 @@ for d in "$@"; do
   for xs in 0 100; do
     echo "$(date -u +%FT%TZ) inicio $d EXTRA_SHIFT_MS=$xs" >> $L
     EXTRA_SHIFT_MS=$xs python3 -I $R/dryrun/guard_rss.py --max-rss-mb 2800 --min-avail-mb 1500 --vmem-kb 3000000 --esperar-min 5 -- python3 -I $R/calma_v3/esc_dec2_v3.py $d >> $L 2>&1
-    echo "$(date -u +%FT%TZ) fin $d xs=$xs rc=$?" >> $L
+    rc=$?; echo "$(date -u +%FT%TZ) fin $d xs=$xs rc=$rc" >> $L
   done
 done
