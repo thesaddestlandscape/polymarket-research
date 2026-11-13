@@ -1759,6 +1759,47 @@ def test_r12h1_ilegibles_vigentes_solo_si_la_orden_sigue_sin_cierre_legible():
 
 
 
+def _p_fill(nombre, modo='lejos', precio=0.01):
+    P, S, R, M, out = montar(nombre, cfg=C.Config(fase_b_max_rellenos=2, fase_b_ordenes=8)); P.led = C.Ledger(P.P('ledger.jsonl')); cl = f'{nombre}|s900'
+    P.led.add('intencion', cl, 0, slot=900, coin='BTC', tok='BTC1U', precio=precio, size=5.0, oid_local='0xf', t_decision_ns=1, modo=modo)
+    P.ordenes, _ = C.replay_estado(P.led.filas); return P, P.ordenes[cl], cl
+
+
+def test_r13h1_relleno_por_incremento_con_fallo_de_escritura_y_crecimiento():
+    P, o, cl = _p_fill('r13a', 'top'); f0 = P.led.f; fallos = {'n': 1}
+    class F:
+        def write(self, x):
+            if fallos['n'] and '"k": "fill"' in x: fallos['n'] -= 1; raise OSError('disco')
+            return f0.write(x)
+        def flush(self): return f0.flush()
+        def fileno(self): return f0.fileno()
+        def close(self): return f0.close()
+    P.led.f = F()
+    assert P._fill_detectado(o, 2.0) is False and P.fills_b == 0 and P.gasto_b == 0 and P.cnt['fills'] == 0                         # la escritura falla: nada contabilizado
+    assert P._fill_detectado(o, 2.0) is True and P.fills_b == 1 and abs(P.gasto_b - 0.02) < 1e-9 and P.cnt['fills'] == 1                # reintento: se reescribe y se cuenta UNA vez
+    assert P._fill_detectado(o, 2.0) is False and P.fills_b == 1 and abs(P.gasto_b - 0.02) < 1e-9                                      # misma llamada repetida: no suma
+    assert P._fill_detectado(o, 5.0) is True and abs(P.gasto_b - 0.05) < 1e-9 and P.cnt['fills'] == 1                                  # crece 2 -> 5: delta 3 (gasto total 5*precio), sin doble contar el pedido
+    fl = [r for r in P.led.filas if r['k'] == 'fill' and r['eid'] not in P.led.fallidos]; assert [r['size_matched'] for r in fl] == [2.0, 5.0] and P._fill_registrado(cl) == 5.0 and abs(sum(r['delta'] for r in fl) - 5.0) < 1e-9
+    print('T111 ok [R13 h1]: relleno por incremento: fallo de escritura => reescribe y suma una vez; creciente 2->5 => dos filas fill (secuencia) y gasto 5*precio')
+
+
+def test_r13h1b_solo_push_fill_no_es_relleno_registrado_y_se_aplican_kills_una_vez():
+    P, o, cl = _p_fill('r13b', 'lejos'); P.led.add('push_fill', cl, 0, matched=5.0, t_ns=1, fuente='canal_usuario'); P.led.add('estado', cl, 200, matched=5.0, status='PUSH', t_ns=1, fuente='canal_usuario')
+    assert P._fill_registrado(cl) == 0.0 and C.replay_estado(P.led.filas)[1]['n_fills'] == 1                                           # push_fill no es registro; pero n_fills del resume SI lo cuenta (fail-closed)
+    P.ordenes, _ = C.replay_estado(P.led.filas); o = P.ordenes[cl]; llam = []; orig = P._fill_detectado; P._fill_detectado = lambda o_, mm: (llam.append(mm), orig(o_, mm))[1]
+    S = P.s; S.estado = lambda oid: ('5.0', 'MATCHED'); S.cancelar = lambda oid: True; P._asentar = lambda *a, **k: None; P.pres = C.Presupuesto(P.cfg, 0.6)
+    P.reconciliar_orden(o, 'arranque'); assert llam == [5.0] and 'relleno_en_fase_A (corte inmediato)' in P.kills and P._fill_registrado(cl) == 5.0, (llam, P.kills)
+    print('T112 ok [R13 h1b]: una orden con solo push_fill: reconciliar llama a _fill_detectado una vez y aplica el kill; n_fills la cuenta')
+
+
+def test_r13h3_ilegible_no_se_anula_con_estado_terminal_sin_fila_fill():
+    P, o, cl = _p_fill('r13c'); P.led.add('ilegible', f'r13c|reconciliar:{cl}', 1, detalle='x', t_ns=1); P.led.add('estado', cl, 3, matched=5.0, status='MATCHED', t_ns=2, fuente='reconciliacion')
+    assert P._n_ilegibles_vigentes() == 1                                                                                              # matched>0 sin fila fill: NO se anula
+    P.led.add('fill', cl, 1, size_matched=5.0, delta=5.0, coste=0.05, modo='lejos', t_ns=3); assert P._n_ilegibles_vigentes() == 0      # con fila fill >= matched: se anula
+    P2, o2, cl2 = _p_fill('r13d'); P2.led.add('ilegible', f'r13d|reconciliar:{cl2}', 1, detalle='x', t_ns=1); P2.led.add('estado', cl2, 3, matched=0.0, status='CANCELED', t_ns=2); assert P2._n_ilegibles_vigentes() == 0       # matched 0: se anula
+    print('T113 ok [R13 h3]: una ilegible de orden solo se anula con cierre legible Y (matched 0 o fila fill >= matched)')
+
+
 if __name__ == '__main__':
     try:
         filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)
