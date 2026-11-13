@@ -1634,5 +1634,13 @@
   "LIQUIDACIONES_5M#BNB#5min": {
     "n": 200,
     "confirmado": true
+  },
+  "GBM_LATE_60M_FADE#SOL": {
+    "n": 200,
+    "confirmado": true
+  },
+  "GBM_LATE_60M_FADE#SOL#60min": {
+    "n": 200,
+    "confirmado": true
   }
 }
