@@ -34,6 +34,7 @@ def cfg_b(cfg): return cfg.fase_b_max_rellenos > 0
 
 KILL_ORDEN = ('cancel_no_confirmada', 'estado_ilegible_tras_cancel', 'orden_indeterminada')        # v8 (hallazgos 4 y 8): UNICA fuente de los motivos de kill por orden (emision y resolucion)
 PREF_RECHAZO = 'resume_rechazado_kill_previo:'
+FILAS_CAMBIO_ESTADO = ('estado', 'cerrada', 'fill', 'push_fill', 'cancel', 'kill_resuelto')          # v9 (hallazgo 2): LISTA EXPLICITA de filas del ledger que cambian el estado REAL de ordenes/rellenos (una INDETERMINADA es una fila `cerrada` con indeterminada=True); kills, ilegibles, lote, saltado, ledger_reparado... NO
 
 
 def motivo_kill_orden(tipo, clave):
@@ -60,7 +61,7 @@ class Paquete:
         self.slots = C.plan_slots(cfg, n=cfg.max_ordenes + 100); self.fase = 'A'; self.sin_mercado = 0
         self.pres = None; self.led = None; self.ordenes = {}; self.senal = None; self.post_no_antes_ns = 0; self.ilegibles = []; self.abiertas_res = False; self.fills_b = 0; self.gasto_b = 0.0; self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat()
         self.ultimo_rechazo = None; self.alertas = []; self.n_senales = 0; self.lote_n0 = 0; self.ilegible_n0 = 0; self.io_fallos = 0
-        self._locks = locks; self.n_filas0 = 0; self.resume = False; self.operado = False; self.kills = {}; self.kills_resueltos = []; self.t_lim_ns = None; self.fase_b_fin = None; self.fase_b_parar = None; self.anclas_ult = (None, {}); self.anclas_ev = None; self.evid_ilegibles = []
+        self._locks = locks; self.n_filas0 = 0; self.corr_pend = None; self.corr_total = 0; self.resume = False; self.operado = False; self.kills = {}; self.kills_resueltos = []; self.t_lim_ns = None; self.fase_b_fin = None; self.fase_b_parar = None; self.anclas_ult = (None, {}); self.anclas_ev = None; self.evid_ilegibles = []
 
     # ---------------------------------------------------------------- utilidades
     def log(self, msg, err=False):
@@ -217,7 +218,7 @@ class Paquete:
             mm = float(m); self.led.add('estado', o.clave, 1 + sum(1 for r in self.led.filas if r.get('k') == 'estado' and r.get('fuente') == 'reconciliacion' and r.get('clave') == o.clave), matched=mm, status=est, t_ns=self.r.now_ns(), fuente='reconciliacion')
             if mm > 1e-9 and o.matched < mm - 1e-9: self.cnt['fills'] += 1; o.matched = mm; self._fill_detectado(o, mm)
             o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm)
-            if motivo == 'arranque': self._resolver_kills_orden(o.clave, f'reconciliada:{est}')                  # v8 (hallazgo 4): SOLO al reanudar (el run anterior ya acabo BLOCKED por esa orden; leerla ahora en estado terminal LEGIBLE prueba que esta cerrada). En el barrido del MISMO run el incidente de cancelacion se mantiene (T10)
+            if motivo == 'arranque' and mm <= 1e-9: self._resolver_kills_orden(o.clave, f'reconciliada:{est}')                  # v8 (hallazgo 4): SOLO al reanudar y SIN relleno (v9 hallazgo 4: con relleno lo gestiona `_fill_detectado`, el kill no se levanta) (el run anterior ya acabo BLOCKED por esa orden; leerla ahora en estado terminal LEGIBLE prueba que esta cerrada). En el barrido del MISMO run el incidente de cancelacion se mantiene (T10)
             return True
         ab = None
         try: self._req(); ab = self.s.abiertas_todas()
@@ -474,7 +475,9 @@ class Paquete:
             pol = [c for c, v in self.vivas.items() if v.get('next_poll_ns') and v['next_poll_ns'] <= now and v.get('cx') is None]
             if pol and not self.kill:                                       # fase B: seguimiento 1 Hz de size_matched (parciales) mientras la orden esta viva
                 for c in pol:
-                    v = self.vivas[c]; m, est = self._estado(v['oid'], prioritario=True); v['next_poll_ns'] = self.r.now_ns() + int(1e9)
+                    v = self.vivas[c]; esp = self.lim.espera_s()
+                    if esp > 0: v['next_poll_ns'] = self.r.now_ns() + int(esp * 1e9); continue                  # v9 (hallazgo 1): sin cupo el poll de size_matched se DIFIERE (nunca espera ni consume el cupo de las cancelaciones); `prioritario` es solo de la maquina de cancelacion
+                    m, est = self._estado(v['oid']); v['next_poll_ns'] = self.r.now_ns() + int(1e9)               # lectura normal: hay cupo, no espera
                     self.led.add('estado', c, 100 + int(self.r.now_ns() // 1_000_000) % 10_000_000, matched=float(m or 0.0), status=est, t_ns=self.r.now_ns(), fuente='poll_top')
                     if m and float(m) > 1e-9: v['deadline_ns'] = min(v['deadline_ns'], self.r.now_ns())      # algo casado: se cierra la orden ya (se cancela el resto)
                 continue
@@ -562,16 +565,16 @@ class Paquete:
         try: self._matar(f'excepcion:{type(e).__name__}', 'FAILED')
         except BaseException:
             m = f'excepcion:{type(e).__name__}'; self.kills[m] = 'FAILED'; self.kill, self.kill_status, self.kill_sev = m, 'FAILED', 3                       # v8 (hallazgo 3): tambien en self.kills (un `_recalcular_kill` posterior no puede borrarlo)
-            try: self.led.add('kill', 'run', sum(1 for r in self.led.filas if r.get('k') == 'kill'), t_ns=self.r.now_ns(), motivo=m, status='FAILED')
+            try:
+                if not any(r.get('k') == 'kill' and r.get('motivo') == m and r.get('status') == 'FAILED' for r in self.led.filas):                      # v9 (hallazgo 6): si `_matar` ya la escribio antes de fallar, no se duplica
+                    self.led.add('kill', 'run', sum(1 for r in self.led.filas if r.get('k') == 'kill'), t_ns=self.r.now_ns(), motivo=m, status='FAILED')
             except BaseException: pass
 
     def _correr(self):
         """v3 (hallazgo 3): cuerpo dentro de try/except BaseException; SIEMPRE, salga como salga, se ejecuta el barrido final (cancelar vivas + reconciliar toda orden sin cierre + verificar abiertas/saldo) y se escribe el informe final.
         v4 (hallazgo 10): ni el log, ni el ledger, ni el manifiesto pueden impedir el barrido ni el informe (fallback a stderr y a FALLBACK_DIR)."""
         self.led = C.Ledger(self.P('ledger.jsonl')); self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat(); self.fills_b = 0; self.gasto_b = 0.0
-        if self.led.corruptas:                                                             # v8 (hallazgo 6): la evidencia de la reparacion se persiste AL ABRIR, antes de cualquier retorno temprano (config distinta, preflight, ya_complete): `Ledger()` ya reescribio el fichero sin las lineas corruptas
-            self.led.add('ledger_reparado', 'run', sum(1 for r in self.led.filas if r.get('k') == 'ledger_reparado'), corruptas=self.led.corruptas, duplicadas=self.led.duplicadas, t_ns=self.r.now_ns())
-            self._alerta(f'LEDGER con {self.led.corruptas} fila(s) corrupta(s) descartada(s) al abrir (reparado; las ordenes sin cierre se reconcilian): el informe final nunca sera COMPLETE a secas')
+        self._persistir_corruptas()                                                        # v9 (hallazgo 3): el contador de corruptas se persiste FUERA del ledger (fichero lateral atomico) al abrir; la fila `ledger_reparado` solo se escribe si el run va a operar (`_cuerpo`)
         self.n_filas0 = len(self.led.filas)
         self.ordenes, _ = C.replay_estado(self.led.filas)                                  # el barrido conoce TODAS las ordenes del ledger aunque el cuerpo salga al principio
         self.lote_n0 = sum(1 for r in self.led.filas if r.get('k') == 'lote'); self.ilegible_n0 = sum(1 for r in self.led.filas if r.get('k') == 'ilegible'); accion = ('normal',)      # hallazgo 6
@@ -589,9 +592,29 @@ class Paquete:
         except BaseException as e:
             self._excepcion('final', e); return self._final_emergencia(e)
 
+    def _persistir_corruptas(self):
+        """v9 (hallazgo 3): `Ledger()` ya reescribio el fichero sin las lineas corruptas. El contador se acumula en `ledger_reparado.json` (dentro del --out, atomico) SIN tocar el ledger; queda `escrita=False` hasta que el run vaya a operar."""
+        ruta = self.P('ledger_reparado.json'); self.corr_pend = None; self.corr_total = 0
+        try: prev = json.load(open(ruta))
+        except (OSError, ValueError): prev = {}
+        try:
+            if self.led.corruptas: prev = dict(corruptas=int(prev.get('corruptas') or 0) + self.led.corruptas, duplicadas=int(prev.get('duplicadas') or 0) + self.led.duplicadas, escrita=False); C.escribir_atomico(ruta, prev)
+        except BaseException as e:
+            self._excepcion('persistir_corruptas', e); prev = dict(corruptas=self.led.corruptas, duplicadas=self.led.duplicadas, escrita=False)
+        self.corr_total = int(prev.get('corruptas') or 0); self.corr_pend = prev if self.corr_total and not prev.get('escrita') else None
+
+    def _escribir_ledger_reparado(self):
+        """v9 (hallazgo 3): la fila de evidencia entra en el ledger SOLO cuando el run va a operar (tras config distinta / preflight / ya_complete); toma el contador persistido (tambien de un intento previo)."""
+        if not self.corr_pend: return
+        self.led.add('ledger_reparado', 'run', sum(1 for r in self.led.filas if r.get('k') == 'ledger_reparado'), corruptas=self.corr_total, duplicadas=int(self.corr_pend.get('duplicadas') or 0), t_ns=self.r.now_ns())
+        self._alerta(f'LEDGER con {self.corr_total} fila(s) corrupta(s) descartada(s) al abrir (reparado; las ordenes sin cierre se reconcilian): el informe final nunca sera COMPLETE a secas')
+        try: C.escribir_atomico(self.P('ledger_reparado.json'), dict(self.corr_pend, escrita=True))
+        except BaseException as e: self._excepcion('ledger_reparado_json', e)
+        self.corr_pend = None
+
     def _resume_modifico(self):
         """v8 (hallazgo 5): un resume que NO llego a operar pero SI cambio estado (kill nuevo, cierre/estado/relleno de una orden reconciliada, INDETERMINADA, abiertas residuales...) debe dejar informe_final/manifiesto/checkpoint con el estado REAL; solo el rechazo PURO (nada nuevo salvo su propio kill de rechazo / ledger_reparado) escribe unicamente informe_rechazo_*."""
-        return any(not (r.get('k') == 'ledger_reparado' or (r.get('k') == 'kill' and str(r.get('motivo')).startswith(PREF_RECHAZO))) for r in self.led.filas[self.n_filas0:])
+        return any(r.get('k') in FILAS_CAMBIO_ESTADO for r in self.led.filas[self.n_filas0:])
 
     def _final_emergencia(self, e):
         """Ultimo recurso si `_final` fallo: informe minimo FAILED a disco (o fallback/stderr)."""
@@ -615,6 +638,7 @@ class Paquete:
         if not resume: self._manifest('EN_CURSO')                                                           # v7 (hallazgo 5): un RESUME no pisa el manifiesto del run original hasta que de verdad va a operar (si se rechaza, el manifiesto/informe/checkpoint originales quedan intactos)
         self.log(f'INICIO run={self.run_id} real={self.real} resume={resume} saldo_inicial={self.pres.s0} suelo={self.pres.suelo} config_sha={self.cfg.sha()[:12]} codigo_sha={C.sha_codigo()[:12]}')
         ck = self._validar_checkpoint(); self.log(f'checkpoint: {ck}'); self.ordenes, res = C.replay_estado(self.led.filas)
+        self._escribir_ledger_reparado()
         if self.led.corruptas or self.led.duplicadas: self.log(f'ledger: corruptas={self.led.corruptas} duplicadas={self.led.duplicadas} (reparado)', err=True)
         if self.kill: return ('normal',)
         for o in [o for o in self.ordenes.values() if (not o.cerrada or o.indeterminada) and o.clase_post != 'rechazo']:            # reconciliacion de vivas/ambiguas/INDETERMINADAS de una ejecucion anterior
@@ -769,7 +793,7 @@ class Paquete:
         # hallazgo 9: COMPLETE exige TODO verificado: sin lecturas finales ilegibles, sin abiertas residuales, sin ordenes indeterminadas, sin vivas
         if status == 'COMPLETE' and (self.ilegibles or self.abiertas_res or res['n_indeterminadas'] or self.vivas): status, motivo = 'BLOCKED', f'{motivo}; NO verificado: lecturas_ilegibles={len(self.ilegibles)} abiertas_residuales={self.abiertas_res} indeterminadas={res["n_indeterminadas"]}'
         elif status == 'PARTIAL' and (self.ilegibles or self.abiertas_res or res['n_indeterminadas']): status, motivo = 'BLOCKED', f'{motivo}; ademas NO verificado: lecturas_ilegibles={len(self.ilegibles)} abiertas_residuales={self.abiertas_res} indeterminadas={res["n_indeterminadas"]}'
-        corr = sum(int(r.get('corruptas') or 0) for r in self.led.filas if r.get('k') == 'ledger_reparado') or self.led.corruptas        # v7 (pendiente ronda 4): filas corruptas del ledger descartadas (en ESTE proceso o en uno anterior de este --out) = el registro pudo perder un evento
+        corr = sum(int(r.get('corruptas') or 0) for r in self.led.filas if r.get('k') == 'ledger_reparado') or self.corr_total or self.led.corruptas        # v7 (pendiente ronda 4): filas corruptas del ledger descartadas (en ESTE proceso o en uno anterior de este --out) = el registro pudo perder un evento
         if corr:                                                                     # nunca COMPLETE silencioso: PARTIAL + alerta (las ordenes sin cierre ya se reconciliaron; para un COMPLETE limpio, otro --out)
             if status == 'COMPLETE': status, motivo = 'PARTIAL', f'{motivo}; ledger con {corr} fila(s) corrupta(s) descartada(s): verificar a mano'
             if not any('LEDGER con' in a for a in self.alertas): self._alerta(f'LEDGER con {corr} fila(s) corrupta(s) descartada(s) (en este o en un proceso anterior del --out)')
@@ -814,13 +838,17 @@ def construir_parser():
 
 
 PARAM_A_OPCION = dict(run_id='--run-id', out='--out', escenario='--escenario', objetivo='--objetivo', max_ordenes='--max-ordenes', fase_b='--fase-b')       # v7 (hallazgo 8): nombres REALES de argparse
+_REPRO_N = 0
 PARAM_BANDERA = dict(tiempo_real='--tiempo-real')                       # v8 (hallazgo 1): NINGUNA bandera que habilite envio (--real/--confirmacion/--evid-dir) entra en el comando de reproduccion
 
 
 def repro_args(params):
     """Argumentos de linea de comandos (nombres reales de argparse, valores entrecomillados) que reproducen `params` como DRY-RUN (sin --real ni --confirmacion). Test de ida y vuelta: `construir_parser().parse_args(...)`."""
     out = []; params = dict(params)
-    if params.get('real'): params['out'] = str(params.get('out') or '').rstrip('/') + '_repro_dry'            # v8 (hallazgo 1): la reproduccion de un run REAL es un DRY-RUN (SenderSim) en un --out APARTE: nunca toca el ledger del real
+    if params.get('real'):                                                                                  # v8 (hallazgo 1): la reproduccion de un run REAL es un DRY-RUN (SenderSim) en un --out APARTE: nunca toca el ledger del real
+        global _REPRO_N; _REPRO_N += 1                                                                      # v9 (hallazgo 5): ruta ABSOLUTA derivada del out real (o de OUT_BASE/run_id si falta) + sufijo unico (hora, pid, contador): jamas relativa al cwd ni un directorio reutilizado
+        base = params.get('out') or os.path.join(C.OUT_BASE, str(params.get('run_id') or 'run'))
+        params['out'] = os.path.abspath(str(base)).rstrip('/') + '_repro_dry_%s_%d_%d' % (dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S'), os.getpid(), _REPRO_N)
     for k, v in params.items():
         if v is None or v is False: continue
         if k in PARAM_BANDERA: out.append(PARAM_BANDERA[k])

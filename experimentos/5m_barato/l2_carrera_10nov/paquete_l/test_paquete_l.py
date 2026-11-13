@@ -1405,7 +1405,7 @@ def test_r5h7_un_solo_criterio_de_saldo_contra_el_ledger():
 def test_r5h8_repro_usa_los_nombres_reales_de_argparse():
     params = dict(run_id='real 1', out='/tmp/un dir/out', escenario='fill_total', objetivo=50, max_ordenes=30, fase_b=3, real=True, tiempo_real=True, evid_dir='/tmp/ev', confirmacion='/tmp/ok.txt')
     P, S, R, M, out = montar('r5h8'); P.params = params; cmd = shlex_split(P._repro()); assert cmd[:2] == ['python3', '-I'] and cmd[2].endswith('paquete_l.py')
-    a = PL.construir_parser().parse_args(cmd[3:]); assert (a.run_id, a.out, a.escenario, a.objetivo, a.max_ordenes, a.fase_b, a.real, a.tiempo_real, a.evid_dir, a.confirmacion) == ('real 1', '/tmp/un dir/out_repro_dry', 'fill_total', 50, 30, 3, False, True, None, None)      # v8 (hallazgo 1): la reproduccion de un run REAL es un DRY-RUN en otro --out
+    a = PL.construir_parser().parse_args(cmd[3:]); assert (a.run_id, a.out, a.escenario, a.objetivo, a.max_ordenes, a.fase_b, a.real, a.tiempo_real, a.evid_dir, a.confirmacion) == ('real 1', a.out, 'fill_total', 50, 30, 3, False, True, None, None) and a.out.startswith('/tmp/un dir/out_repro_dry_')      # v8 (hallazgo 1): la reproduccion de un run REAL es un DRY-RUN en otro --out
     assert '--real' not in cmd and '--confirmacion' not in ' '.join(cmd) and '--evid-dir' not in ' '.join(cmd) and not any(x.startswith('--preflight') for x in cmd), cmd
     P.params = dict(run_id='x', out='/tmp/o', escenario='base', objetivo=None, max_ordenes=None, fase_b=None, real=False, tiempo_real=False, evid_dir=None, confirmacion=None); a = PL.construir_parser().parse_args(shlex_split(P._repro())[3:]); assert a.real is False and a.fase_b == 0 and a.run_id == 'x'
     out = os.path.join(TMP, 'cli8'); r = subprocess.run([sys.executable, '-I', H + 'paquete_l.py', '--out', out, '--run-id', 'cli8', '--max-ordenes', '16', '--objetivo', '1000'], capture_output=True, text=True); assert r.returncode == 0, r.stderr[-200:]
@@ -1508,30 +1508,72 @@ def test_r6h5_resume_que_modifica_estado_escribe_informe_final_real():
 
 
 def test_r6h6_ledger_reparado_se_persiste_aunque_el_resume_sea_rechazado_pronto():
+    """v9 (hallazgo 3): contador FUERA del ledger al abrir; la fila solo cuando el run va a operar; un COMPLETE relanzado no anade filas."""
     cfg = C.Config(max_ordenes=8, objetivo_anclas=1000); P1, S, R, M, out = montar('r6h6', cfg=cfg); P1.correr()
     with open(out + '/ledger.jsonl', 'a') as f: f.write('{basura sin cerrar\n')
     P2 = montar('r6h6b', cfg=C.Config(max_ordenes=9, objetivo_anclas=1000), sender=S, reloj=R, mercados=M, dir_out=out, run_id='r6h6')[0]; n1 = len(S.posts_enviados); P2.correr()           # config distinta: rechazo temprano
-    rr = rows(out, 'ledger_reparado'); assert len(S.posts_enviados) == n1 and rr and rr[0]['corruptas'] == 1, rr
-    print('T90 ok [R6 h6]: la fila ledger_reparado se escribe al abrir el ledger, antes de cualquier retorno temprano')
-
-
-def test_r6h7_poll_fase_b_no_espera_al_limitador():
-    cfg = C.Config(fase_b_max_rellenos=2, fase_b_ordenes=8); reloj = RelojVirtual(); S = SenderSim(reloj, fill_a={}, sin_push=True); M = MercadosSim(reloj, down_barato=True)
-    P, S, R, M, out = montar('r6h7', cfg=cfg, sender=S, reloj=reloj, mercados=M); orig = P._estado; vistos = []
-    def estado(oid, prioritario=False):
-        import linecache; fr = sys._getframe(1)
-        if 'next_poll_ns' in linecache.getline(fr.f_code.co_filename, fr.f_lineno): vistos.append(prioritario)                       # solo las llamadas del seguimiento 1 Hz
-        return orig(oid, prioritario=prioritario)
-    P._estado = estado; P.correr(); polls = [r for r in rows(out, 'estado') if r.get('fuente') == 'poll_top']
-    assert polls and vistos and all(vistos), (len(polls), vistos[:10])                                              # TODOS los polls fase B son prioritarios (no esperan al limitador)
-    print('T91 ok [R6 h7]: el seguimiento 1 Hz de fase B llama a _estado(prioritario=True)')
+    assert len(S.posts_enviados) == n1 and not rows(out, 'ledger_reparado'), rows(out, 'ledger_reparado')                                       # ledger NO tocado por la invocacion rechazada...
+    lat = json.load(open(out + '/ledger_reparado.json')); assert lat['corruptas'] == 1 and lat['escrita'] is False, lat                         # ...pero la evidencia esta persistida
+    sha = _sha(out + '/ledger.jsonl'); P3 = montar('r6h6c', cfg=cfg, sender=S, reloj=R, mercados=M, dir_out=out, run_id='r6h6')[0]; P3.correr()      # el run ya estaba COMPLETE/limite: no anade filas
+    st_ok = json.load(open(out + '/informe_final.json'))['status']
+    # run correcto (no finalizado) con corrupta persistida: fila escrita y status != COMPLETE
+    P4, S4, R4, M4, out4 = montar('r6h6d', cfg=cfg); P4.correr(); open(out4 + '/ledger.jsonl', 'a').write('{basura\n'); sin = montar('r6h6e', cfg=C.Config(max_ordenes=9, objetivo_anclas=1000), sender=S4, reloj=R4, mercados=M4, dir_out=out4, run_id='r6h6d')[0]; sin.correr()
+    assert json.load(open(out4 + '/ledger_reparado.json'))['escrita'] is False
+    ok = montar('r6h6f', cfg=cfg, sender=S4, reloj=R4, mercados=M4, dir_out=out4, run_id='r6h6d')[0]; st = ok.correr(); rr = rows(out4, 'ledger_reparado')
+    assert len(rr) == 1 and rr[0]['corruptas'] == 1 and st != 'COMPLETE' and json.load(open(out4 + '/ledger_reparado.json'))['escrita'] is True, (st, rr)
+    inf = json.load(open(out4 + '/informe_final.json')); assert inf['status'] != 'COMPLETE' and inf['cobertura']['filas_corruptas_ledger'] == 1, inf['status']
+    print('T90 ok [R7 h3]: corruptas persistidas fuera del ledger; invocacion rechazada no toca el ledger; la fila se escribe al operar; nunca COMPLETE a secas')
 
 
 def test_r6h1_h2_repro_dry_y_lock_de_wallet_solo_en_real():
-    assert PL.repro_args(dict(real=True, out='/tmp/o', confirmacion='/tmp/c', evid_dir='/tmp/e', run_id='r', tiempo_real=True)) == ['--out=/tmp/o_repro_dry', '--run-id=r', '--tiempo-real']
+    assert PL.repro_args(dict(real=True, out='/tmp/o', confirmacion='/tmp/c', evid_dir='/tmp/e', run_id='r', tiempo_real=True)) [1:] == ['--run-id=r', '--tiempo-real'] and PL.repro_args(dict(real=True, out='/tmp/o'))[0].startswith('--out=/tmp/o_repro_dry_')
     cfg = C.Config(); a = os.path.join(TMP, 'r6h2a'); b = os.path.join(TMP, 'r6h2b'); f1 = C.locks_de_run(cfg, a, False); assert f1 and len(f1) == 1                      # dry: solo --out
     f2 = C.locks_de_run(cfg, b, True); assert f2 and len(f2) == 2; C.liberar_locks(f2); f3 = C.locks_de_run(cfg, b, False); assert f3 and len(f3) == 1; C.liberar_locks(f3); C.liberar_locks(f1)
     print('T92 ok [R6 h1/h2]: repro de un real = dry-run en otro --out sin banderas de envio; el lock de wallet solo se toma con envio real')
+
+
+
+def test_r7h1_poll_fase_b_no_es_prioritario_y_cede_cupo():
+    cfg = C.Config(fase_b_max_rellenos=2, fase_b_ordenes=8); reloj = RelojVirtual(); S = SenderSim(reloj, fill_a={}, sin_push=True); M = MercadosSim(reloj, down_barato=True)
+    P, S, R, M, out = montar('r7h1', cfg=cfg, sender=S, reloj=reloj, mercados=M); orig = P._estado; vistos = []; difer = []
+    def estado(oid, prioritario=False):
+        import linecache; fr = sys._getframe(1)
+        if 'next_poll_ns' in linecache.getline(fr.f_code.co_filename, fr.f_lineno): vistos.append((prioritario, P.lim.espera_s()))
+        return orig(oid, prioritario=prioritario)
+    P._estado = estado; P.correr(); polls = [r for r in rows(out, 'estado') if r.get('fuente') == 'poll_top']
+    assert polls and vistos and all((not pr) and esp == 0 for pr, esp in vistos), vistos[:5]                                                      # lectura normal y SIEMPRE con cupo (si no, se difiere)
+    print('T91 ok [R7 h1]: el poll 1 Hz de fase B es lectura normal, solo con cupo (si no se difiere); la prioridad queda para cancelaciones (T77)')
+
+
+def test_r7h2_resume_rechazado_transitorio_no_toca_informe_y_el_que_detecta_estado_si():
+    cfg = C.Config(max_ordenes=8, objetivo_anclas=1000); P1, S1, R1, M1, out1 = montar('r7h2b', cfg=cfg); P1.correr(); snap = {f: _sha(os.path.join(out1, f)) for f in ('informe_final.json', 'run_manifest.json', 'checkpoint.json')}
+    S1.saldo = lambda: None                                                                                                                  # saldo ilegible en el arranque del resume
+    Q = montar('r7h2c', cfg=C.Config(max_ordenes=8, objetivo_anclas=1000), sender=S1, reloj=R1, mercados=M1, dir_out=out1, run_id='r7h2b')[0]; Q.correr()
+    assert snap == {f: _sha(os.path.join(out1, f)) for f in snap}, 'un resume rechazado por saldo ilegible reescribio informe/manifiesto/checkpoint'
+    assert PL.FILAS_CAMBIO_ESTADO == ('estado', 'cerrada', 'fill', 'push_fill', 'cancel', 'kill_resuelto')
+    print('T92b ok [R7 h2]: lista explicita de filas que cambian estado; el resume rechazado por saldo ilegible no toca informe/manifiesto/checkpoint')
+
+
+def test_r7h4_kill_no_se_resuelve_si_la_orden_estaba_casada():
+    P2, S, out, cl = _prep_kill_previo('r7h4', [], ('5.0', 'MATCHED')); P2.correr()
+    assert [f for f in os.listdir(out) if f.startswith('informe_final.previo_')], 'un resume que detecta un RELLENO debe dejar informe real'
+    assert not rows(out, 'kill_resuelto') and any(m.startswith('cancel_no_confirmada:') for m in [r['motivo'] for r in rows(out, 'kill')]), rows(out, 'kill_resuelto')
+    print('T93 ok [R7 h4]: cancel_no_confirmada:X con X casada NO se resuelve (lo gestiona la deteccion de relleno)')
+
+
+def test_r7h5_repro_absoluta_y_unica():
+    a1 = PL.repro_args(dict(real=True, run_id='real-1')); a2 = PL.repro_args(dict(real=True, run_id='real-1')); o1 = [x for x in a1 if x.startswith('--out=')][0][6:]; o2 = [x for x in a2 if x.startswith('--out=')][0][6:]
+    assert os.path.isabs(o1) and o1 != o2 and '_repro_dry_' in o1 and not o1.startswith(os.path.join(C.OUT_BASE, 'real-1') + '/'), (o1, o2)
+    ap = PL.construir_parser(); x = ap.parse_args(a1); assert x.real is False and x.confirmacion is None and x.run_id == 'real-1'
+    y = ap.parse_args(PL.repro_args(dict(real=False, run_id='d', out='/tmp/dd'))); assert y.out == '/tmp/dd'
+    print('T94 ok [R7 h5]: la reproduccion de un real sin/con out usa ruta ABSOLUTA con sufijo unico (nunca el out real ni uno reutilizado)')
+
+
+def test_r7h6_excepcion_en_matar_no_duplica_el_kill():
+    P, S, R, M, out = montar('r7h6'); P.led = C.Ledger(P.P('ledger.jsonl')); P.led.add('kill', 'run', 0, t_ns=1, motivo='excepcion:RuntimeError', status='FAILED')
+    def roto(*a, **k): raise OSError('despues de escribir')
+    P._matar = roto; P._excepcion('x', RuntimeError('b')); assert sum(1 for r in P.led.filas if r.get('k') == 'kill' and r.get('motivo') == 'excepcion:RuntimeError') == 1
+    print('T95 ok [R7 h6]: el fallback de _excepcion no escribe una segunda fila kill identica')
 
 
 
