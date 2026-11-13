@@ -520,10 +520,16 @@ class Paquete:
         if not isinstance(ab, (list, tuple, set)) or ab:
             self._alerta(f'ANTES DE EMPEZAR la wallet dedicada no tiene 0 ordenes abiertas legibles: {ab!r}: no se envia nada'); self._matar('abiertas_previas_o_ilegibles', 'BLOCKED'); return ('normal',)
         _, res = C.replay_estado(self.led.filas); self.pres.actualizar(gasto_ledger=res['gasto_fills_usd'])
+        self._asentar(self._ult_post_ns(), interrumpible=False)                                                  # v6 (hallazgo 2): saldo on-chain ANTES del primer lote, ya asentado el ultimo POST de un run previo, y recomputado contra el ledger
+        sal0 = self._saldo()
+        if sal0 is None: self._alerta('saldo on-chain ilegible en el arranque: no se envia nada'); self._matar('saldo_ilegible_en_arranque', 'BLOCKED'); return ('normal',)
+        self.pres.actualizar(saldo=sal0)
+        if abs((self.pres.s0 - sal0) - res['gasto_fills_usd']) > self.cfg.tol_saldo_usd + 1e-9:
+            self._alerta(f'saldo on-chain {sal0} != saldo_inicial {self.pres.s0} - gasto del ledger {res["gasto_fills_usd"]}: descuadre antes de enviar'); self._matar(f'saldo_descuadrado_en_arranque {self.pres.s0 - sal0:.4f} vs ledger {res["gasto_fills_usd"]:.4f}', 'BLOCKED'); return ('normal',)
         # hallazgo 5: el bloqueo por kill duro previo NO depende solo de que exista la fila `kill` (un SIGKILL entre el relleno y esa fila la habria perdido): tambien se deduce del propio ledger (rellenos o indeterminadas)
         n_ileg = sum(1 for r in self.led.filas if r.get('k') == 'ilegible')                 # v5 (hallazgo 5): una lectura final ilegible de un run previo (BLOCKED sin fila kill) tambien bloquea el relanzamiento: se deduce del LEDGER
         if duros or res['n_fills'] > 0 or res['n_indeterminadas'] > 0 or n_ileg:
-            motivo = duros[-1]['motivo'] if duros else (f'ledger_con_rellenos={res["n_fills"]}' if res['n_fills'] > 0 else (f'ledger_con_indeterminadas={res["n_indeterminadas"]}' if res['n_indeterminadas'] > 0 else f'ledger_con_lecturas_ilegibles={n_ileg} (verificar a mano y usar otro run-id)'))
+            motivo = duros[-1]['motivo'] if duros else (f'ledger_con_rellenos={res["n_fills"]}' if res['n_fills'] > 0 else (f'ledger_con_indeterminadas={res["n_indeterminadas"]}' if res['n_indeterminadas'] > 0 else f'ledger_con_lecturas_ilegibles={n_ileg} (cuenta del ledger de ESTE --out: verificar a mano y relanzar con OTRO --out; cambiar solo el run-id NO lo desbloquea)'))
             self._matar(f'resume_rechazado_kill_previo:{motivo}', (duros[-1].get('status') if duros else None) or ('PARTIAL' if res['n_fills'] > 0 else 'BLOCKED')); self.log(f'RESUME RECHAZADO: {motivo}; no se envia nada', err=True)
             return ('normal',)
         t_lim = self.t_inicio_ns + int(self.cfg.max_minutos * 60e9); idx = 0; enviadas0 = sum(1 for r in self.led.filas if r.get('k') == 'intencion'); self.cnt['enviadas_previas'] = enviadas0
@@ -600,15 +606,21 @@ class Paquete:
 
     def _abiertas_final(self):
         propios = {str(o.oid).lower(): o for o in self.ordenes.values() if o.oid}
-        for ronda in range(2):
-            try: self._req(); ab = self.s.abiertas_todas()
-            except Exception as e: self.log(f'abiertas_todas fallo {type(e).__name__}', err=True); ab = None
-            if not isinstance(ab, (list, tuple, set)): self._ilegible('abiertas_todas', 'None/ilegible/paginacion no garantizada'); return
-            mias = [x for x in ab if str(x).lower() in propios]
-            if not mias or ronda == 1: break
-            for x in mias:                                                                                    # cada id abierto propio se cancela con reintentos y backoff ANTES de declarar nada (y su cierre queda en el ledger)
-                try: self.reconciliar_orden(propios[str(x).lower()], 'abierta_en_el_barrido_final')
-                except BaseException as e: self._ilegible(f'reconciliar:{x}', f'excepcion:{type(e).__name__}')
+        def leer():
+            try: self._req(); r = self.s.abiertas_todas()
+            except Exception as e: self.log(f'abiertas_todas fallo {type(e).__name__}', err=True); r = None
+            return r
+        ab = leer()
+        if not isinstance(ab, (list, tuple, set)): self._ilegible('abiertas_todas', 'None/ilegible/paginacion no garantizada'); return
+        mias = [x for x in ab if str(x).lower() in propios]
+        for x in mias:                                                                                        # cada id abierto propio se cancela con reintentos y backoff ANTES de declarar nada (y su cierre queda en el ledger)
+            try: self.reconciliar_orden(propios[str(x).lower()], 'abierta_en_el_barrido_final')
+            except BaseException as e: self._ilegible(f'reconciliar:{x}', f'excepcion:{type(e).__name__}')
+        for espera in ((1.0, 2.0) if mias else ()):                                                           # v6 (hallazgo 9): tras cancelar, la lista de abiertas puede tardar en reflejarlo: se relee hasta 2 veces con backoff (reloj del barrido) antes de declarar viva
+            self.r.sleep(espera); nuevo = leer()
+            if not isinstance(nuevo, (list, tuple, set)): self._ilegible('abiertas_todas', 'relectura None/ilegible'); return
+            ab = nuevo
+            if not any(str(x).lower() in propios for x in ab): break
         if ab:
             ajenas = [x for x in ab if str(x).lower() not in propios]; self.cnt['abiertas_residuales'] += len(ab); self.abiertas_res = True
             self._alerta(f'ORDENES ABIERTAS AL FINAL en la wallet dedicada: propias vivas={[x for x in ab if str(x).lower() in propios]} ajenas al run={ajenas}')
@@ -673,7 +685,7 @@ ESCENARIOS = {
 
 
 def liquidar_informe(run_dir, get=None):
-    """Valor FINAL de las posiciones residuales de un run con el desenlace OFICIAL (gamma publico, solo GET). Sin desenlace (mercado aun no cerrado) => valor None (missing != 0). No firma ni redime nada (las ganadoras se redimen a mano)."""
+    """Valor FINAL de las posiciones residuales de un run con el desenlace OFICIAL (gamma publico, solo GET). Lee el ledger sin tocarlo, pero ESCRIBE `liquidacion_residuales.json` (atomico) en el directorio del run. Sin desenlace (mercado aun no cerrado) => valor None (missing != 0). No firma ni redime nada (las ganadoras se redimen a mano)."""
     filas = C.leer_ledger_solo_lectura(os.path.join(run_dir, 'ledger.jsonl')); res = C.residuales(filas); slug_de = {r['tok']: r.get('slug') for r in filas if r.get('k') == 'intencion'}; ganador = {}                   # v6 (hallazgo 7): SOLO lectura, el ledger no se abre en append ni se repara
     if get is None:
         import requests; get = lambda url, params: requests.get(url, params=params, timeout=8).json()
@@ -712,7 +724,7 @@ def main():
     ap.add_argument('--out', default=None); ap.add_argument('--run-id', default=None); ap.add_argument('--real', action='store_true'); ap.add_argument('--confirmacion', default=None)
     ap.add_argument('--escenario', default='base', choices=sorted(ESCENARIOS)); ap.add_argument('--objetivo', type=int, default=None); ap.add_argument('--max-ordenes', type=int, default=None)
     ap.add_argument('--fase-b', type=int, default=0, help='N rellenos maximos de la fase B (0 = desactivada)'); ap.add_argument('--tiempo-real', action='store_true', help='dry con reloj real (no virtual)')
-    ap.add_argument('--evid-dir', default=None, help='real: directorio de cancel_evid del canal de usuario'); ap.add_argument('--liquidar-informe', default=None, metavar='RUN_DIR', help='solo lectura: valor final de las posiciones residuales de un run (gamma publico)')
+    ap.add_argument('--evid-dir', default=None, help='real: directorio de cancel_evid del canal de usuario'); ap.add_argument('--liquidar-informe', default=None, metavar='RUN_DIR', help='valor final de las posiciones residuales de un run (gamma publico, solo GET; no modifica el ledger pero ESCRIBE RUN_DIR/liquidacion_residuales.json)')
     ap.add_argument('--verificar-mercados', action='store_true', help='solo lectura (GET gamma publico): valida los mercados 5m vigentes; no envia nada')
     ap.add_argument('--preflight-publico', action='store_true', help='SOLO LECTURA, sin credenciales: por moneda gamma + /book (tick, min size, neg_risk); no firma ni envia')
     ap.add_argument('--preflight-real', action='store_true', help='SOLO LECTURA: ademas lee las credenciales DEDICADAS, deriva/valida API creds, saldo, open orders, reloj y firma EN LOCAL una orden de prueba (sin enviarla). Sin POST posible; no pide fichero de confirmacion'); a = ap.parse_args()

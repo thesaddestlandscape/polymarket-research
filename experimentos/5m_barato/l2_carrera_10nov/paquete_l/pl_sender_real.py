@@ -86,6 +86,7 @@ class SenderReal:
     def colocar(self, tok, precio, size, clave, neg_risk=None, expira_s=None):
         """Firma local (NO envia). v3: el neg_risk de gamma es OBLIGATORIO (el cliente lo contrasta y se niega a firmar si difiere) y `expira_s` fija la expiracion dura GTD."""
         if neg_risk is None: raise RuntimeError('neg_risk de gamma ausente: no firmo')
+        if not isinstance(expira_s, (int, float)) or expira_s < 185: raise RuntimeError('orden sin GTD (expira_s >= 185 s obligatorio): no firmo (v6: no existe modo GTC)')
         oid, signed = self.env.poner(tok, precio, size, clave, neg_risk=neg_risk, expira_s=expira_s)
         return oid, dict(oid=oid, signed=signed, tok=tok, precio=precio, gtd=bool(expira_s))
 

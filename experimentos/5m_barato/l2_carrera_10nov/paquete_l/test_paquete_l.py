@@ -20,7 +20,7 @@ def test_config_estructural():
     c = C.Config(); assert c.max_simultaneas * c.coste_orden <= c.perdida_dura and c.perdida_dura <= c.saldo_autorizado
     for mal in (dict(max_simultaneas=13), dict(perdida_dura=0.70), dict(precio=0.05), dict(size=4.0), dict(lote=13), dict(fase_b_max_rellenos=4, fase_b_tope_usd=0.10)):
         try: C.Config(**mal); assert False, mal
-        except AssertionError as e: assert 'AssertionError' not in str(e) or True
+        except C.Invariante: pass
     print('T1 ok: 12 x 0,05 = 0,60 <= 0,61 <= saldo; configuraciones fuera de tope rechazadas')
 
 
@@ -196,7 +196,7 @@ def test_presupuesto():
     q = C.Presupuesto(cfg, 0.612681); q.actualizar(gasto_ledger=0.58); assert not q.puede_enviar(1) and q.puede_enviar(0) is False or True
     for mal in (None, 0, 5.0):
         try: C.Presupuesto(cfg, mal); assert False, mal
-        except AssertionError: pass
+        except C.Invariante: pass
     P, S, R, M, out = montar('presup', sender_kw=dict(saldo_inicial=3.0)); assert P.correr() == 'BLOCKED' and 'preflight' in json.load(open(out + '/informe_final.json'))['motivo']
     S2 = SenderSim(RelojVirtual(), saldo_ilegible_en={1}); P2, *_ = montar('presup2', sender=S2); assert P2.correr() != 'BLOCKED' and P2.cnt['saldo_lecturas_agotadas'] == 0 and S2.n_saldo >= 2     # 1 lectura fallida: el reintento la recupera
     S3 = SenderSim(RelojVirtual(), saldo_ilegible_en={1, 2, 3}); P3, *_ = montar('presup3', sender=S3); assert P3.correr() == 'BLOCKED' and len(S3.posts_enviados) == 0                       # TODAS las lecturas fallan: fail-closed, 0 ordenes
@@ -208,8 +208,11 @@ def test_saldo_cae_sin_ledger():
     reloj = RelojVirtual(); S = SenderSim(reloj); orig = S.saldo; cont = {'n': 0}
     def saldo():
         cont['n'] += 1; v = orig(); return v if cont['n'] < 3 else round(v - 0.30, 6)                    # a partir de la 3a lectura el saldo cae 0,30 sin relleno en el ledger
-    S.saldo = saldo; P, S, R, M, out = montar('sinled', sender=S, reloj=reloj); st = P.correr(); assert st == 'PARTIAL' and 'saldo_cae_mas_que_ledger' in json.load(open(out + '/informe_final.json'))['motivo']
-    print('T15 ok: caida de saldo no explicada por el ledger -> corte inmediato')
+    S.saldo = saldo; P, S, R, M, out = montar('sinled', sender=S, reloj=reloj); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
+    # v6 (hallazgo 1): motivo DURO (no benigno) siempre registrado; el barrido final lo confirma (BLOCKED > PARTIAL duro) y la reanudacion se rechaza
+    assert st == 'BLOCKED' and 'saldo_cae_mas_que_ledger' in inf['motivo'], inf['motivo']
+    ks = [(r['motivo'], r['status']) for r in P.led.filas if r['k'] == 'kill']; assert any(m.startswith('saldo_cae_mas_que_ledger ') and s == 'PARTIAL' for m, s in ks) and any('_final' in m and s == 'BLOCKED' for m, s in ks), ks
+    print('T15 ok: caida de saldo no explicada por el ledger -> corte inmediato y BLOCKED (no reanudable)')
 
 
 def test_toca_suelo():
@@ -554,9 +557,10 @@ def test_h3_excepcion_senal_y_gtd():
     reloj = RelojVirtual(); P, S, R, M, out = montar('gtd', reloj=reloj, cfg=C.Config(max_ordenes=8)); sigkill(P); P._final = lambda *a, **k: 'x'; P.correr()
     assert S.colocados and all(c['expira_s'] == 200 and c['neg_risk'] is False for c in S.colocados) and all(r['expira_s'] == 200 for r in rows(out, 'intencion'))
     S.r.sleep(150); assert sum(len(S.abiertas(p['tok'])) for p in S.posts_enviados) == 0 and all(S._estado_en(o, S.r.now_ns())[1] in ('CANCELED', 'EXPIRED') for o in S.ordenes.values())
-    assert C.Config(gtd_expira_s=0).gtd_expira_s == 0
+    try: C.Config(gtd_expira_s=0); assert False
+    except C.Invariante: pass                                                                        # v6: sin modo GTC
     try: C.Config(gtd_expira_s=30); assert False
-    except AssertionError: pass
+    except C.Invariante: pass
     print('T36 ok [hallazgo 3]: excepcion -> barrido+informe FAILED; SIGTERM real -> PARTIAL limpio (manejador restaurado, reanudable); retorno temprano tambien barre; GTD 200 s (docs: >= 3 min) en cada orden')
 
 
@@ -584,7 +588,7 @@ def test_h4_deteccion_de_relleno_fail_closed():
         P, S, R, M, out = montar('umbral%g' % (caida * 1000)); P.led = C.Ledger(out + '/ledger.jsonl'); P.pres = C.Presupuesto(P.cfg, 0.612681); P._saldo = lambda c=caida: round(0.612681 - c, 6)
         P._tras_lote(0); assert (P.kill is not None and P.kill.startswith('saldo_cae_mas_que_ledger')) == mata, (caida, P.kill)
     try: C.Config(tol_saldo_usd=0.02); assert False
-    except AssertionError: pass
+    except C.Invariante: pass
     print('T37 ok [hallazgo 4]: estado ilegible tras cancel = INDETERMINADO/BLOCKED (no matched=0); ack matched/delayed = corte en <0,5 s; saldo detecta 1 accion (0,01 $), tolerancia 0,004 < 1 share')
 
 
@@ -693,7 +697,11 @@ def test_h10_neg_risk_y_gamma_explicitos():
         except RuntimeError: pass
     assert not llamadas                                                                                         # nada se firmo
     oid, signed = e.poner('T', 0.01, 5.0, 'k', neg_risk=True, expira_s=75); assert oid == '0xhash' and llamadas[0][1].expiration >= int(time.time()) + 74 and llamadas[0][2].neg_risk is True and llamadas[0][1].side == 'BUY'
-    e.enviar(signed, gtd=True); e.enviar(signed); assert llamadas[1][1:] == ('GTD', True) and llamadas[2][1:] == ('GTC', True)     # siempre post-only
+    e.enviar(signed, gtd=True); assert llamadas[1][1:] == ('GTD', True)                                      # siempre GTD + post-only
+    for sin_gtd in (False, None):                                                                              # v6 (hallazgo 3): sin GTD NO se envia (no existe modo GTC)
+        try: e.enviar(signed) if sin_gtd is None else e.enviar(signed, gtd=sin_gtd); assert False
+        except RuntimeError: pass
+    assert len(llamadas) == 2                                                                                  # ningun POST GTC salio
     sr = R2.SenderReal(types.SimpleNamespace(poner=lambda *a, **k: (_ for _ in ()).throw(AssertionError('no debia firmar'))), None, None, None, os.path.join(TMP, 'evid_h10'))
     try: sr.colocar('T', 0.01, 5.0, 'k'); assert False
     except RuntimeError: pass
@@ -784,7 +792,7 @@ def test_r2h5_asentamiento_tras_el_post():
     # (a) orden VIVA pero aun sin indexar (get_order null, abiertas vacia, DELETE not found): v3 la daba por 'inexistente_verificada'; v4 espera index_gracia+3 s, reintenta y la CANCELA
     reloj = RelojVirtual(); S = SenderSim(reloj, index_delay_s=5.0); M = MercadosSim(reloj); P, S, R, M, out = montar('r2h5a', sender=S, reloj=reloj, mercados=M)
     P.led = C.Ledger(os.path.join(out, 'ledger.jsonl')); P.pres = C.Presupuesto(P.cfg, 0.612681); tok = M.mercados('BTC')[0][3][0]
-    oid, hd = S.colocar(tok, 0.01, 5.0, 'k'); S.enviar(hd); ack = R.now_ns(); o = C.Orden(clave='r2h5a|s0', slot=0, coin='BTC', tok=tok, precio=0.01, size=5.0, oid=oid, t_envio_ns=ack - 1, t_ack_ns=ack, clase_post='ok'); P.ordenes[o.clave] = o
+    oid, hd = S.colocar(tok, 0.01, 5.0, 'k', expira_s=200); S.enviar(hd); ack = R.now_ns(); o = C.Orden(clave='r2h5a|s0', slot=0, coin='BTC', tok=tok, precio=0.01, size=5.0, oid=oid, t_envio_ns=ack - 1, t_ack_ns=ack, clase_post='ok'); P.ordenes[o.clave] = o
     assert S.estado(oid)[1] == 'NO_EXISTE' and S.abiertas(tok) == [] and len(S.ordenes) == 1
     assert P.reconciliar_orden(o, 'prueba') is True
     cer = [r for r in P.led.filas if r['k'] == 'cerrada'][-1]
@@ -801,7 +809,7 @@ def test_r2h5_asentamiento_tras_el_post():
         return sa()
     def anclas(): ev.append('A'); return fa()
     S.saldo = saldo; P.anclas_fn = anclas; st = P.correr(); assert st in ('COMPLETE', 'PARTIAL'), st
-    assert viol == [] and ev[:3] == ['S', 'A', 'S'], (viol, ev[:5])
+    assert viol == [] and ev[:4] == ['S', 'S', 'A', 'S'], (viol, ev[:5])                         # v6 (hallazgo 2): preflight + saldo de arranque ANTES del primer lote; luego anclas; luego el saldo del lote
     print('T48 ok [R2 hallazgo 5]: sin indexar != inexistente (espera >= 7 s, reintenta y cancela); sin referencia temporal => INDETERMINADA; saldo del lote y final solo >= 7 s tras el POST y DESPUES de las anclas')
 
 
@@ -924,7 +932,7 @@ def test_r2_gtd_docs_y_sin_caida_a_gtc():
     assert C.Config().gtd_expira_s == 200
     for mal in (60, 75, 120, 184):
         try: C.Config(gtd_expira_s=mal); assert False, mal
-        except AssertionError as e: assert 'GTD' in str(e), e
+        except C.Invariante as e: assert 'GTD' in str(e), e
     P, S, R, M, out = montar('r2gtd_ok', cfg=C.Config(max_ordenes=8)); P.correr(); assert len(S.posts_enviados) == 8 and all(c['expira_s'] == 200 for c in S.colocados)
     # v5 (hallazgo 2): el CLOB rechaza GTD => BLOCKED sin gasto, SIN cambiar de modo (todas las intenciones siguen con expira_s=200), con el literal del rechazo; no existe `gtd_activo` ni `rechazo_es_de_gtd`
     P, S, R, M, out = montar('r2gtd_caida', sender_kw=dict(gtd_rechazado=True), cfg=C.Config(max_ordenes=16)); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
@@ -967,12 +975,13 @@ def test_r1_preflight_solo_lectura():
     assert 'SECRETO123' not in json.dumps(r, default=str) and 'PASS123' not in json.dumps(r, default=str) and '0xfirma' not in json.dumps(r, default=str)       # ninguna clave/secreto/firma en el informe
     # 2) cada desviacion => ok False, sin lanzar
     casos = [('importe_maker_mal', dict(get=mk_get(), env=dict(mk='50001'))), ('maker_ajeno', dict(get=mk_get(), env=dict(maker='0x0000000000000000000000000000000000000001'))), ('open_orders_ajenas', dict(get=mk_get(), env=dict(abiertas=['0xabc']))),
-             ('creds_distintas', dict(get=mk_get(), env=dict(derivadas=Cred(se='otro')))), ('saldo_cero', dict(get=mk_get(), env=dict(saldo=0.0))), ('wallet_otra', dict(get=mk_get(), env=dict(wallet='0x1'))),
+             ('creds_distintas', dict(get=mk_get(), env=dict(derivadas=Cred(se='otro')))), ('saldo_cero', dict(get=mk_get(), env=dict(saldo=0.0))), ('saldo_bajo_minimo_0_60', dict(get=mk_get(), env=dict(saldo=0.30))),    # v6 (hallazgo 8): < 12 x 0,05
+              ('wallet_otra', dict(get=mk_get(), env=dict(wallet='0x1'))),
              ('hash_corto', dict(get=mk_get(), env=dict(hash_='0x1234'))), ('tick', dict(get=mk_get(tick='0.001'), env={})), ('minsize', dict(get=mk_get(minsize='6'), env={})), ('neg_risk_distinto', dict(get=mk_get(neg=True), env={}))]
     for nombre, kw in casos:
         r = R2.preflight(cfg, True, get=kw['get'], env_factory=(lambda cfg_, k=kw['env']: fake_env(**k)), chrony=chr_ok, ahora=lambda: T0); assert r['ok'] is False and r['errores'], nombre
     assert R2.preflight(cfg, True, get=mk_get(), env_factory=fac, chrony=lambda: None, ahora=lambda: T0)['ok'] is False                                         # sin chrony
-    for extra in (dict(leap='Not synchronised'), dict(stratum=0), dict(ref_id='00000000'), dict(root_dispersion_s=3.0), dict(system_time_s=2.0)): assert R2.preflight(cfg, True, get=mk_get(), env_factory=fac, chrony=lambda e=extra: dict(chr_ok(), **e), ahora=lambda: T0)['ok'] is False, extra       # v5 (R3 h3)
+    for extra in (dict(leap='Not synchronised'), dict(stratum=0), dict(ref_id='00000000'), dict(root_dispersion_s=3.0), dict(system_time_s=2.0), dict(ref_id='7F7F0101'), dict(stratum=10)): assert R2.preflight(cfg, True, get=mk_get(), env_factory=fac, chrony=lambda e=extra: dict(chr_ok(), **e), ahora=lambda: T0)['ok'] is False, extra       # v5 (R3 h3)
     def sale_(cfg_): raise SystemExit('comparte credenciales con produccion')
     r = R2.preflight(cfg, True, get=mk_get(), env_factory=sale_, chrony=chr_ok, ahora=lambda: T0); assert r['ok'] is False and 'cliente_dedicado se nego' in r['autenticado']['error']
     # 3) publico: nunca construye el cliente
@@ -1125,3 +1134,117 @@ if __name__ == '__main__':
             if n.startswith('test_') and callable(f) and filtro in n: f()
         print('TODOS OK (paquete_l)')
     finally: shutil.rmtree(TMP, ignore_errors=True)
+
+
+# ---------------------------------------------------------------- ronda 4 (v6): 4o /code-review, hallazgos 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+import inspect
+
+
+def _p_con_ordenes(nombre, **kw):
+    """Paquete con ledger/presupuesto abiertos y UNA orden cerrada (para que el barrido final lea abiertas y saldo)."""
+    reloj = RelojVirtual(); S = SenderSim(reloj, **kw); P, S, R, M, out = montar(nombre, sender=S, reloj=reloj, mercados=MercadosSim(reloj))
+    P.led = C.Ledger(out + '/ledger.jsonl'); P.pres = C.Presupuesto(P.cfg, 0.612681); P.ordenes = {'x': C.Orden(clave='x', tok='T', oid='0x1', cerrada=True, t_ack_ns=reloj.now_ns())}; return P, S, R, out
+
+
+def test_r4h1_kill_duro_posterior_prevalece_sobre_benigno():
+    P, S, R, out = _p_con_ordenes('r4h1'); P._matar('senal_SIGTERM', 'PARTIAL'); assert P.kill == 'senal_SIGTERM'
+    P._P_saldo = P._saldo; P._saldo = lambda: round(P.pres.s0 - 0.30, 6); P._barrido_final()                       # descuadre de saldo en el barrido, DESPUES del SIGTERM
+    assert P.kill.startswith('saldo_cae_mas_que_ledger_final') and P.kill_status == 'BLOCKED', (P.kill, P.kill_status)
+    assert any(r['k'] == 'kill' and r['status'] == 'BLOCKED' for r in rows(out)) and any(r['motivo'] == 'senal_SIGTERM' for r in rows(out, 'kill'))
+    P2, *_ = _p_con_ordenes('r4h1b'); P2._matar('max_ordenes', 'PARTIAL'); P2._matar('relleno_en_fase_A (corte inmediato)', 'PARTIAL'); assert P2.kill.startswith('relleno_en_fase_A')      # PARTIAL duro > benigno
+    P2._matar('max_minutos', 'PARTIAL'); assert P2.kill.startswith('relleno_en_fase_A')                                                       # y un benigno posterior no lo desplaza
+    P2._matar('excepcion:X', 'FAILED'); P2._matar('saldo_x', 'BLOCKED'); assert P2.kill_status == 'FAILED'                                    # FAILED > BLOCKED
+    # el resume rechaza si hay un kill duro posterior a uno benigno
+    reloj = RelojVirtual(); cfg = C.Config(max_ordenes=8); out = os.path.join(TMP, 'r4h1r'); S = SenderSim(reloj); M = MercadosSim(reloj)
+    P1 = PL.Paquete(cfg, S, M, out, reloj, 'r4h1r', stdout=False); P1.anclas_fn = lambda: 0; P1.anclas_por_moneda_fn = lambda: {}; P1.correr(); n1 = len(S.posts_enviados); assert n1 == 8
+    L = C.Ledger(out + '/ledger.jsonl'); L.add('kill', 'run', 90, motivo='saldo_cae_mas_que_ledger_final 0.3 > 0', status='BLOCKED'); L.cerrar()
+    S2 = SenderSim(reloj); P2 = PL.Paquete(cfg, S2, M, out, reloj, 'r4h1r', stdout=False); P2.anclas_fn = lambda: 0; P2.anclas_por_moneda_fn = lambda: {}; assert P2.correr() == 'BLOCKED' and len(S2.posts_enviados) == 0
+
+
+def test_r4h2_resume_lee_saldo_y_lo_contrasta_antes_de_enviar():
+    reloj = RelojVirtual(); cfg = C.Config(max_ordenes=8); out = os.path.join(TMP, 'r4h2'); M = MercadosSim(reloj)
+    P1 = PL.Paquete(cfg, SenderSim(reloj), M, out, reloj, 'r4h2', stdout=False); P1.anclas_fn = lambda: 0; P1.anclas_por_moneda_fn = lambda: {}; st = P1.correr(); assert st != 'BLOCKED' and len(rows(out, 'kill')) >= 1
+    def reanuda(**kw):
+        S2 = SenderSim(reloj, **kw); P2 = PL.Paquete(cfg, S2, M, out, reloj, 'r4h2', stdout=False); P2.anclas_fn = lambda: 0; P2.anclas_por_moneda_fn = lambda: {}; return P2.correr(), S2, P2
+    st, S2, P2 = reanuda(saldo_inicial=0.612681 - 0.30); assert st == 'BLOCKED' and len(S2.posts_enviados) == 0 and 'saldo_descuadrado_en_arranque' in P2.kill, (st, P2.kill)     # saldo perdido SIN ledger: 0 envios
+    for ileg in ({1, 2, 3}, {1, 2, 3, 4, 5, 6}):
+        S3 = SenderSim(reloj, saldo_ilegible_en=ileg); S3.saldo = lambda: None; P3 = PL.Paquete(cfg, S3, M, out, reloj, 'r4h2', stdout=False); P3.anclas_fn = lambda: 0; P3.anclas_por_moneda_fn = lambda: {}
+        assert P3.correr() == 'BLOCKED' and len(S3.posts_enviados) == 0 and 'saldo_ilegible_en_arranque' in P3.kill, P3.kill                                       # ilegible: fail-closed
+        break
+
+
+def test_r4h3_no_existe_ruta_de_envio_sin_gtd():
+    import pl_sender_real as R2
+    S = SenderSim(RelojVirtual())
+    for mal in (None, 0, 60, 184): 
+        try: S.colocar('T', 0.01, 5.0, 'k', neg_risk=False, expira_s=mal); assert False, mal
+        except RuntimeError: pass
+    assert S.colocados == []
+    try: S.enviar(dict(oid='0x1', tok='T', precio=0.01, size=5.0, neg_risk=False, expira_s=None)); assert False
+    except RuntimeError: pass
+    sr = R2.SenderReal(types.SimpleNamespace(poner=lambda *a, **k: (_ for _ in ()).throw(AssertionError('no debia firmar'))), None, None, None, os.path.join(TMP, 'evid_r4h3'))
+    for mal in (None, 0, 120):
+        try: sr.colocar('T', 0.01, 5.0, 'k', neg_risk=True, expira_s=mal); assert False, mal
+        except RuntimeError as e: assert 'GTD' in str(e)
+    P, S, R, M, out = montar('r4h3', cfg=C.Config(max_ordenes=8)); P.correr(); assert S.colocados and all(c['expira_s'] >= 185 for c in S.colocados)
+
+
+def test_r4h4_invariantes_son_raise_y_no_assert():
+    import ast, subprocess
+    for f in ('paquete_l.py', 'pl_core.py', 'pl_sender.py', 'pl_sender_real.py'):
+        arbol = ast.parse(open(os.path.join(H, f)).read()); assert not [n.lineno for n in ast.walk(arbol) if isinstance(n, ast.Assert)], f          # ningun assert en el codigo de produccion
+    r = subprocess.run([sys.executable, '-O', '-I', '-c', f'import sys; sys.path.insert(0, {H!r}); import pl_core as C\n'
+                        'for mal in (dict(max_simultaneas=13), dict(perdida_dura=0.70), dict(gtd_expira_s=0)):\n'
+                        '    try: C.Config(**mal); print("NO_RAISE", mal)\n'
+                        '    except C.Invariante: pass\n'
+                        'print("OK")'], capture_output=True, text=True); assert r.stdout.strip() == 'OK', (r.stdout, r.stderr[-300:])                 # con -O los topes siguen vigentes
+    r = subprocess.run([sys.executable, '-O', '-I', '-c', f'import sys; sys.path.insert(0, {H!r}); import pl_core as C; C.exigir_aislamiento()'], capture_output=True, text=True); assert r.returncode != 0 and '-O' in (r.stderr + r.stdout)    # el envio real rechaza -O
+    P, S, R, out = _p_con_ordenes('r4h4'); P.pres = C.Presupuesto(P.cfg, 0.612681); assert all(P.pres.puede_enviar(n) == (n < 12) for n in range(0, 14)); assert not C.Presupuesto(C.Config(), 0.612681).puede_enviar(12)
+
+
+def test_r4h5_chrony_reloj_local_no_es_sincronizado():
+    cfg = C.Config(); ok = dict(system_time_s=0.01, last_offset_s=0.0, stratum=3, ref_id='65D8456C', leap='Normal', root_dispersion_s=0.001); assert C.reloj_sincronizado(ok, cfg)
+    for k, v in (('ref_id', '7F7F0101'), ('ref_id', '7f7f0101'), ('stratum', 10), ('stratum', 11)): assert not C.reloj_sincronizado(dict(ok, **{k: v}), cfg), (k, v)
+
+
+def test_r4h6_ledger_fallo_de_escritura_no_pega_filas():
+    ruta = os.path.join(TMP, 'r4h6.jsonl')
+    if os.path.exists(ruta): os.remove(ruta)
+    L = C.Ledger(ruta); L.add('a', 'x', 0); f0 = L.f
+    class Roto:                                                                                           # escribe la MITAD de la linea y falla (disco lleno)
+        def write(s, t): f0.write(t[: len(t) // 2]); f0.flush(); raise OSError('ENOSPC')
+        def flush(s): f0.flush()
+        def fileno(s): return f0.fileno()
+        def close(s): f0.close()
+    L.f = Roto(); L.add('a', 'y', 0); assert L.fallos_escritura == 1; L.f = f0; L.add('a', 'z', 0); L.add('a', 'w', 0); L.cerrar()
+    L2 = C.Ledger(ruta); eids = {r['eid'] for r in L2.filas}; assert {'a|x|0', 'a|z|0', 'a|w|0'} <= eids and L2.corruptas == 1, (eids, L2.corruptas)       # la media linea queda como ILEGIBLE (contada), z y w no se pierden
+    assert all(l == '' or json.loads(l) for l in open(ruta).read().split('\n'))                                                       # tras reparar, el fichero entero parsea
+
+
+def test_r4h7_liquidar_informe_no_modifica_el_ledger_y_dice_que_escribe():
+    out = os.path.join(TMP, 'r4h7'); os.makedirs(out, exist_ok=True); ruta = out + '/ledger.jsonl'
+    with open(ruta, 'wb') as f: f.write(b'{"eid": "intencion|a|0", "k": "intencion", "clave": "a", "slot": 0, "coin": "BTC", "tok": "T", "precio": 0.01, "size": 5.0}\n{"eid": "roto')
+    antes = open(ruta, 'rb').read(); PL.liquidar_informe(out, get=lambda u, p: (_ for _ in ()).throw(RuntimeError('sin red'))); assert open(ruta, 'rb').read() == antes and not os.path.exists(ruta + '.rep')
+    ayuda = inspect.getsource(PL.main).split("'--liquidar-informe'")[1].split('\n')[0]; assert 'liquidacion_residuales.json' in ayuda and 'no modifica el ledger' in ayuda and 'solo lectura' not in ayuda, ayuda
+    assert 'ESCRIBE' in PL.liquidar_informe.__doc__
+
+
+def test_r4h8_preflight_exige_minimo_0_60():
+    src = inspect.getsource(__import__('pl_sender_real')); assert 'cfg.max_simultaneas * cfg.coste_orden - 1e-9 <= sal' in src          # (la prueba funcional esta en test_r1_preflight_solo_lectura: caso 'saldo_bajo_minimo_0_60')
+
+
+def test_r4h9_abiertas_final_cada_ronda_releida_y_validada():
+    P, S, R, out = _p_con_ordenes('r4h9a'); P.ordenes['x'].oid = '0x1'; seq = iter([['0x1'], None]); S.abiertas_todas = lambda: next(seq); S.estado = lambda oid: (0.0, 'LIVE'); P._abiertas_final()
+    assert P.ilegibles and not P.abiertas_res, (P.ilegibles, P.abiertas_res)                                                              # la relectura None NO cuenta como 'sin abiertas'
+    P, S, R, out = _p_con_ordenes('r4h9b'); lect = {'n': 0}
+    def ab(): lect['n'] += 1; return ['0x1'] if lect['n'] == 1 else []
+    S.abiertas_todas = ab; P._abiertas_final(); assert lect['n'] >= 2 and not P.abiertas_res and not P.ilegibles                       # tras cancelar se RELEE (no se da por buena la primera)
+    P, S, R, out = _p_con_ordenes('r4h9c'); S.abiertas_todas = lambda: ['0x1']; P._abiertas_final(); assert P.abiertas_res                  # sigue viva tras las relecturas: residual
+
+
+def test_r4h10_mensaje_de_bloqueo_por_ilegibles_dice_la_verdad():
+    src = inspect.getsource(PL.Paquete._cuerpo); assert 'cuenta del ledger de ESTE --out' in src and 'cambiar solo el run-id NO lo desbloquea' in src
+    reloj = RelojVirtual(); out = os.path.join(TMP, 'r4h10'); cfg = C.Config(max_ordenes=8); M = MercadosSim(reloj)
+    P1 = PL.Paquete(cfg, SenderSim(reloj), M, out, reloj, 'r4h10a', stdout=False); P1.anclas_fn = lambda: 0; P1.anclas_por_moneda_fn = lambda: {}; P1.correr(); P1.led.add('ilegible', 'otro|x', 99, detalle='x'); P1.led.cerrar()
+    S2 = SenderSim(reloj); P2 = PL.Paquete(cfg, S2, M, out, reloj, 'r4h10b', stdout=False); P2.anclas_fn = lambda: 0; P2.anclas_por_moneda_fn = lambda: {}                  # OTRO run-id, mismo --out
+    P2.correr(); assert len(S2.posts_enviados) == 0                                                                                   # el run-id distinto NO desbloquea (el texto ya lo dice)

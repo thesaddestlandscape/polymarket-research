@@ -93,6 +93,7 @@ class SenderSim:
 
     def colocar(self, tok, precio, size, clave, neg_risk=None, expira_s=None):
         """Firma local (doble: solo calcula un id). v3: recibe el neg_risk verificado en gamma y la expiracion dura (GTD); el doble los REGISTRA para que los tests comprueben que el orquestador los pasa."""
+        if not isinstance(expira_s, (int, float)) or expira_s < 185: raise RuntimeError('orden sin GTD (expira_s >= 185): el doble tampoco firma GTC (v6)')
         self.colocados.append(dict(tok=tok, neg_risk=neg_risk, expira_s=expira_s)); self.n_colocar += 1; oid = '0x' + hashlib.sha256(f'{tok}|{precio}|{size}|{clave}|{self.n_colocar}'.encode()).hexdigest()[:40]
         return oid, dict(oid=oid, tok=tok, precio=precio, size=size, neg_risk=neg_risk, expira_s=expira_s)
 
