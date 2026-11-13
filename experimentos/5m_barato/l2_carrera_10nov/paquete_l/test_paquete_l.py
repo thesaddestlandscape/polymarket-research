@@ -2162,6 +2162,31 @@ def test_r17_cierre_de_los_4_hallazgos_del_review_17():
     import inspect as _i; assert "time.time_ns()" in _i.getsource(R2.preflight)
     print('T129 ok [review 17]: validacion solo top + modo_perdido; sonda concreta en contenido; hilo huerfano cierra al volver; dir por defecto unico')
 
+class _RelojAvanza(RelojVirtual):
+    """Como el Reloj real: CADA lectura de now_ns() avanza (el virtual normal no avanza y ocultaba el bug de `_due`)."""
+    def now_ns(self): self.t += 1000; return self.t
+
+
+def test_r21_lote_con_kill_no_gira_en_caliente_y_lecturas_de_estado_ampliadas():
+    R = _RelojAvanza(); P0, S0, _, M0, _ = montar('r21due', reloj=R); v = dict(deadline_ns=R.t + int(50e9), cx=None); P0.kill = 'x'
+    assert P0._due(v) == 0 and P0._due(v) == 0 and P0._due(dict(deadline_ns=7, cx=dict())) == 7                                    # con kill y sin cancelar: instante FIJO (YA); con cx en curso conserva su hora
+    P0.kill = None; assert P0._due(v) == v['deadline_ns']
+    # extremo a extremo con reloj que avanza: estado SIEMPRE ilegible tras cancelar (ensayo_real_B). Antes: bucle infinito; ahora termina, 0 vivas y cuenta lecturas ampliadas
+    R2 = _RelojAvanza(); P, S, _, M, out = montar('r21e2e', cfg=C.Config(max_ordenes=6), reloj=R2); llam = []
+    S.estado = lambda oid: (llam.append(oid), (None, 'LIVE'))[1]; res = {}
+    th = threading.Thread(target=lambda: res.setdefault('st', P.correr()), daemon=True); th.start(); th.join(40)
+    assert not th.is_alive(), 'el lote sigue girando con kill (bucle caliente)'
+    assert res['st'] in ('BLOCKED', 'PARTIAL', 'FAILED') and not P.vivas, (res, P.vivas)
+    primera = [r for r in rows(out, 'estado') if r.get('fuente') == 'post_cancel' and r.get('legible') is False]; assert primera, 'no hubo lectura ilegible'
+    assert P.cfg.cancel_lecturas_estado >= 8
+    R3 = _RelojAvanza(); P3, S3, _, _, _ = montar('r21e2e2', cfg=C.Config(max_ordenes=6, cancel_lecturas_estado=2), reloj=R3); llam3 = []; S3.estado = lambda oid: (llam3.append(oid), (None, 'LIVE'))[1]
+    th3 = threading.Thread(target=lambda: P3.correr(), daemon=True); th3.start(); th3.join(40); assert not th3.is_alive()
+    assert max(llam.count(o) for o in set(llam)) > max(llam3.count(o) for o in set(llam3)), (max(llam.count(o) for o in set(llam)), max(llam3.count(o) for o in set(llam3)))   # el parametro gobierna las lecturas (8 > 2); un literal 4 igualaria ambos
+    R4 = _RelojAvanza(); P4, S4, _, _, _ = montar('r21guarda', cfg=C.Config(max_ordenes=6, lote_kill_max_s=0.001), reloj=R4); S4.estado = lambda oid: (None, 'LIVE')
+    P4._due = lambda v: P4.r.now_ns() if (P4.kill and v.get('cx') is None) else v['deadline_ns']                                           # el bug ORIGINAL reinyectado: la red de seguridad (lote_kill_max_s) tiene que sacar al lote del bucle sin progreso
+    th4 = threading.Thread(target=lambda: P4.correr(), daemon=True); th4.start(); th4.join(40); assert not th4.is_alive() and not P4.vivas and P4.cnt['lote_sin_progreso'] >= 1, (P4.vivas, dict(P4.cnt))
+    print('T130 ok [v21]: _due estable (0 con kill), lote sin giro caliente con reloj que avanza y estado ilegible, 0 vivas; 8 lecturas de estado tras cancel')
+
 if __name__ == '__main__':
     try:
         filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)

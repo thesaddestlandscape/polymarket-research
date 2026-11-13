@@ -57,7 +57,7 @@ class Paquete:
         self.cfg, self.s, self.m, self.dir, self.r, self.run_id, self.real = cfg, sender, mercados, dir_out, reloj, run_id, real
         self.libro = libro or (mercados.libro if hasattr(mercados, 'libro') else None); self.anclas_fn = anclas_fn; self.evid = evid_patron; self.params = params or {}; self.stdout = stdout
         os.makedirs(dir_out, exist_ok=True); self.P = lambda n: os.path.join(dir_out, n)
-        self.lim = Limitador(reloj, cfg.req_por_s); self.kill = None; self.kill_status = None; self.kill_sev = -1; self.exc = []; self.cnt = collections.Counter(); self.seguidos_429 = 0; self.seguidos_rech = 0; self.saldo_ileg = 0
+        self.lim = Limitador(reloj, cfg.req_por_s); self._t_kill_ns = None; self.kill = None; self.kill_status = None; self.kill_sev = -1; self.exc = []; self.cnt = collections.Counter(); self.seguidos_429 = 0; self.seguidos_rech = 0; self.saldo_ileg = 0
         self.t_inicio_ns = reloj.now_ns(); self.logf = None; self.vivas = {}                      # vivas: clave -> dict(oid, tok, deadline_ns, slot, modo, hold_s)
         self.slots = C.plan_slots(cfg, n=cfg.max_ordenes + 100); self.fase = 'A'; self.sin_mercado = 0
         self.pres = None; self.led = None; self.ordenes = {}; self.senal = None; self.post_no_antes_ns = 0; self.ilegibles = []; self.abiertas_res = False; self.fills_b = 0; self.gasto_b = 0.0; self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat()
@@ -467,7 +467,7 @@ class Paquete:
 
     def _due(self, v):
         """Hora a la que una viva exige atencion: su deadline, o AHORA si hay kill y aun no se ha empezado a cancelarla (una que esta esperando un reintento conserva su hora)."""
-        return self.r.now_ns() if (self.kill and v.get('cx') is None) else v['deadline_ns']
+        return 0 if (self.kill and v.get('cx') is None) else v['deadline_ns']                # v21: 0 = YA (instante fijo). Antes devolvia un `now_ns()` NUEVO, siempre > del `now` leido antes en el bucle: `min(_due) <= now` no se cumplia nunca y con kill el lote giraba en caliente sin cancelar (ensayo_real_B, 1 h de CPU)
 
     def cancelar_viva(self, clave, forzada=False):
         """v7 (hallazgo 2a): UN PASO de la maquina de cancelacion (DELETE + lectura de estado, o una lectura de confirmacion). Las esperas (gracia de indexacion de get_order, backoffs, relecturas del estado) NO bloquean: se programan en `v['deadline_ns']` y la funcion devuelve None; el bucle del lote
@@ -493,7 +493,7 @@ class Paquete:
             if cx['fase'] == 'leer': v['deadline_ns'] = self.r.now_ns(); return None          # la lectura de confirmacion es el SIGUIENTE paso (las demas vivas vencidas pasan antes)
         cx['leidas'] += 1; m, est = self._estado(oid, prioritario=True); cx['m'], cx['est'] = m, est         # hallazgo 4 (v4): tras cancelar el estado tiene que ser LEGIBLE y terminal (size_matched conocido); hasta 4 lecturas espaciadas 0,25 s (indexacion/red) antes de rendirse
         legible = m is not None and C.es_terminal(est)
-        if not legible and cx['leidas'] < 4: return self._reprogramar(v, 0.25)
+        if not legible and cx['leidas'] < self.cfg.cancel_lecturas_estado: return self._reprogramar(v, self.cfg.cancel_lectura_espera_s)      # v21: ensayo_real_B: tras un cancel ok el estado salio ilegible (LIVE sin size) con 4 lecturas a 0,25 s => BLOCKED; ahora hasta 8 lecturas espaciadas 0,5 s (~4 s, > indexacion 1,4 s)
         ok = cx['ok']; self.led.add('estado', clave, 0, matched=(float(m) if m is not None else None), status=est, t_ns=self.r.now_ns(), fuente='post_cancel', legible=legible)
         if not legible:                                                       # cancel_ok pero estado ilegible NO es 'matched=0': pudo casarse antes del DELETE => INDETERMINADO, corte (BLOCKED); el saldo on-chain lo cruza en el barrido final
             motivo = 'CANCEL_NO_CONFIRMADA' if not ok else 'ESTADO_ILEGIBLE_TRAS_CANCEL'
@@ -537,6 +537,9 @@ class Paquete:
         if pend and not self._reloj_ok(): self.log(f'reloj no verificado: se descartan {len(pend)} slots (sin gasto)', err=True); pend = []
         while pend or self.vivas:
             self._chequear_senal()
+            if self.kill and self._t_kill_ns is None: self._t_kill_ns = self.r.now_ns()
+            if self.kill and self.vivas and self.r.now_ns() - self._t_kill_ns > int(self.cfg.lote_kill_max_s * 1e9):      # v21: red de seguridad ante CUALQUIER futuro bucle sin progreso con kill: se sale del lote y el barrido final (`_cancelar_completa`, duerme de verdad) cancela las vivas
+                self.log(f'lote sin progreso {self.cfg.lote_kill_max_s:g} s tras el kill: salgo con {len(self.vivas)} vivas al barrido final', err=True); self.cnt['lote_sin_progreso'] += 1; break
             if self.kill and pend: self.log(f'kill activo: se descartan {len(pend)} slots pendientes del lote'); pend = []
             now = self.r.now_ns()
             if self.vivas and now >= t_push: self._chequear_push(); t_push = self.r.now_ns() + int(self.cfg.push_poll_s * 1e9); now = self.r.now_ns()

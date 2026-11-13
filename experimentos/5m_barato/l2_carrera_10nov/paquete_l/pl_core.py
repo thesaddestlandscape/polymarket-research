@@ -17,7 +17,7 @@ def exigir(cond, msg):
     if not cond: raise Invariante(msg)
 
 
-VERSION = 'paquete_l_v20'                                 # v16 (13-Nov): 14o /code-review (3 hallazgos + pasada corta); invalida cualquier confirmacion escrita para v2..v15
+VERSION = 'paquete_l_v21'                                 # v16 (13-Nov): 14o /code-review (3 hallazgos + pasada corta); invalida cualquier confirmacion escrita para v2..v15
 WALLET_DEDICADA = '0x659a40FF9920fEBc5a66836213040924343d297F'
 COINS = ('BTC', 'ETH', 'SOL', 'XRP')
 FALLBACK_DIR = '/tmp'                                       # v4 (hallazgo 10): si el informe final no se puede escribir en el out, se deja aqui (y en stderr)
@@ -74,6 +74,9 @@ class Config:
     reloj_max_dispersion_s: float = 0.5         # v5 (R3): Root dispersion maxima de chrony; ademas Leap status Normal, Stratum 1-9 y Reference ID externo (reloj_sincronizado)
     cancel_intentos_barrido: int = 6            # v5 (hallazgo 1): intentos de cancelacion (con backoff, reloj del barrido) por orden antes de declararla INDETERMINADA / viva
     reloj_max_offset_s: float = 1.0             # v4 (hallazgo 4): con GTD, el reloj local debe estar a <= 1 s de NTP (chrony) antes de CADA lote; sin lectura => BLOCKED sin gasto
+    cancel_lecturas_estado: int = 8             # v21: lecturas del estado tras una cancelacion aceptada antes de declarar INDETERMINADA (antes 4 a 0,25 s)
+    cancel_lectura_espera_s: float = 0.5
+    lote_kill_max_s: float = 20.0               # v21: tope de un lote con kill activo antes de ceder al barrido final
     seed: int = 20261112
 
     def __post_init__(self):
