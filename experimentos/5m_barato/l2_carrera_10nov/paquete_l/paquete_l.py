@@ -229,7 +229,7 @@ class Paquete:
             self.led.add('estado', o.clave, 1 + sum(1 for r in self.led.filas if r.get('k') == 'estado' and r.get('fuente') == 'reconciliacion' and r.get('clave') == o.clave), matched=mm, status=est, t_ns=self.r.now_ns(), fuente='reconciliacion')
             if mm_ef > fill_reg + 1e-9: o.matched = max(o.matched, mm_ef); self._fill_detectado(o, mm_ef)             # escribe la fila fill que falta (mismos contadores y kills de siempre); con fila previa >= mm NO se llama (sin doble conteo)
             registrado = mm_ef <= 1e-9 or self._fill_registrado(o.clave) >= mm_ef - 1e-9
-            o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm_ef)
+            o.indeterminada = False; self._cierre(o, motivo=f'reconciliada:{est}', size_matched=mm_ef, mm_exchange=mm, origen_mm='push_o_memoria' if mm_ef > mm + 1e-9 else 'exchange')   # v16b (review 15): la fila estado guarda la lectura del EXCHANGE; aqui queda explicito de donde viene el relleno efectivo
             if motivo == 'arranque' and registrado: self._resolver_kills_orden(o.clave, f'reconciliada:{est}')                  # v8 (hallazgo 4): SOLO al reanudar, con la orden en estado terminal LEGIBLE y su relleno YA REGISTRADO en el ledger (v10 hallazgo 1: conocido, o detectado/registrado justo arriba por `_fill_detectado`; el relleno en si sigue bloqueando por n_fills>0 / ledger_con_rellenos, no por el kill de la orden) (el run anterior ya acabo BLOCKED por esa orden; leerla ahora en estado terminal LEGIBLE prueba que esta cerrada). En el barrido del MISMO run el incidente de cancelacion se mantiene (T10)
             return True
         ab = None
