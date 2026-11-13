@@ -17,7 +17,7 @@ def exigir(cond, msg):
     if not cond: raise Invariante(msg)
 
 
-VERSION = 'paquete_l_v17'                                 # v16 (13-Nov): 14o /code-review (3 hallazgos + pasada corta); invalida cualquier confirmacion escrita para v2..v15
+VERSION = 'paquete_l_v18'                                 # v16 (13-Nov): 14o /code-review (3 hallazgos + pasada corta); invalida cualquier confirmacion escrita para v2..v15
 WALLET_DEDICADA = '0x659a40FF9920fEBc5a66836213040924343d297F'
 COINS = ('BTC', 'ETH', 'SOL', 'XRP')
 FALLBACK_DIR = '/tmp'                                       # v4 (hallazgo 10): si el informe final no se puede escribir en el out, se deja aqui (y en stderr)
@@ -260,8 +260,13 @@ def escribir_con_fallback(ruta, obj, nombre):
 
 def escribir_atomico(ruta, obj):
     tmp = ruta + '.tmp'
-    with open(tmp, 'w') as f: json.dump(obj, f, indent=1, sort_keys=True, default=str); f.flush(); os.fsync(f.fileno())
-    os.replace(tmp, ruta)
+    try:
+        with open(tmp, 'w') as f: json.dump(obj, f, indent=1, sort_keys=True, default=str); f.flush(); os.fsync(f.fileno())
+        os.replace(tmp, ruta)
+    except BaseException:                                                    # v18 (B): fallo REAL (ENOSPC, EROFS, destino directorio...): no deja el .tmp huerfano ocupando el poco espacio que queda
+        try: os.unlink(tmp)
+        except OSError: pass
+        raise
     try:
         fd = os.open(os.path.dirname(ruta) or '.', os.O_RDONLY); os.fsync(fd); os.close(fd)
     except OSError: pass

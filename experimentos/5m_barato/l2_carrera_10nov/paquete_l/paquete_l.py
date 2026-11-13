@@ -265,6 +265,11 @@ class Paquete:
         if interrumpible: self._dormir(rest / 1e9); return self.r.now_ns() >= ref_ns + self._asentamiento_ns()
         self.r.sleep(rest / 1e9); return True
 
+    def _reconstruir_contadores_b(self):
+        """v18 (A): misma fuente de verdad que `_fill_detectado` (filas `fill` persistidas, sin `Ledger.fallidos`): fills_b = ordenes DISTINTAS de modo `top` con fila fill; gasto_b = suma del `coste` (incremento) de esas filas. Sin doble conteo: `_fill_detectado` solo suma fills_b con el primer incremento (fill_reg<=0) y gasto_b con el delta nuevo."""
+        top = {c for c, o in self.ordenes.items() if o.modo == 'top'}; fl = [r for r in self.led.filas if r.get('k') == 'fill' and r.get('clave') in top and r.get('eid') not in self.led.fallidos]
+        self.fills_b = len({r['clave'] for r in fl}); self.gasto_b = round(sum(float(r.get('coste') or 0.0) for r in fl), 6)
+
     def _matched_push(self, clave):
         """v16: mayor relleno reportado por el canal de usuario para `clave` (filas `push_fill` y `estado` con status PUSH)."""
         return max([float(r.get('matched') or 0.0) for r in self.led.filas if r.get('clave') == clave and (r.get('k') == 'push_fill' or (r.get('k') == 'estado' and r.get('status') == 'PUSH'))], default=0.0)
@@ -607,10 +612,15 @@ class Paquete:
     def _correr(self):
         """v3 (hallazgo 3): cuerpo dentro de try/except BaseException; SIEMPRE, salga como salga, se ejecuta el barrido final (cancelar vivas + reconciliar toda orden sin cierre + verificar abiertas/saldo) y se escribe el informe final.
         v4 (hallazgo 10): ni el log, ni el ledger, ni el manifiesto pueden impedir el barrido ni el informe (fallback a stderr y a FALLBACK_DIR)."""
-        self.led = C.Ledger(self.P('ledger.jsonl')); self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat(); self.fills_b = 0; self.gasto_b = 0.0
+        try: self.led = C.Ledger(self.P('ledger.jsonl'))
+        except OSError as e:                                                               # v18 (B): el ledger no se puede abrir (disco de solo lectura/lleno): NO se opera, informe FAILED a stderr/FALLBACK y salida controlada (nada enviado)
+            self.led = None; self._alerta(f'LEDGER NO ABRIBLE ({type(e).__name__}): no se envia nada'); self._matar(f'ledger_no_abrible:{type(e).__name__}', 'FAILED')
+            C.escribir_con_fallback(self.P('informe_final.json'), dict(status='FAILED', motivo=f'ledger no abrible: {type(e).__name__}: {str(e)[:80]}', run_id=self.run_id, alertas=self.alertas, repro=self._repro()), f'informe_final_{self.run_id}.json'); return 'FAILED'
+        self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat(); self.fills_b = 0; self.gasto_b = 0.0
         self._persistir_corruptas()                                                        # v9 (hallazgo 3): el contador de corruptas se persiste FUERA del ledger (fichero lateral atomico) al abrir; la fila `ledger_reparado` solo se escribe si el run va a operar (`_cuerpo`)
         self.n_filas0 = len(self.led.filas)
         self.ordenes, _ = C.replay_estado(self.led.filas)                                  # el barrido conoce TODAS las ordenes del ledger aunque el cuerpo salga al principio
+        self._reconstruir_contadores_b()                                                   # v18 (A): fills_b/gasto_b desde las filas `fill` persistidas (un resume no los pone a 0)
         self.lote_n0 = sum(1 for r in self.led.filas if r.get('k') == 'lote'); self.ilegible_n0 = sum(1 for r in self.led.filas if r.get('k') == 'ilegible'); accion = ('normal',)      # hallazgo 6
         try: accion = self._cuerpo()
         except BaseException as e: self._excepcion('cuerpo', e)
@@ -970,7 +980,7 @@ def preflight_cli(autenticado, out=None):
     """R1: `python3 -I paquete_l.py --preflight-publico|--preflight-real [--out DIR]`. Escribe preflight_<modo>_<ts>.json (solo booleanos/cifras publicas) y lo imprime. Exit 0 = ok, 2 = algo no valido. Jamas envia."""
     import pl_sender_real as R
     if autenticado: C.exigir_aislamiento()
-    cfg = C.Config(); res = R.preflight(cfg, autenticado=autenticado); d = out or os.path.join(C.OUT_BASE, 'preflight'); os.makedirs(d, exist_ok=True)
+    cfg = C.Config(); res = R.preflight(cfg, autenticado=autenticado, evid_dir=os.path.join(out or os.path.join(C.OUT_BASE, 'preflight'), 'cancel_evid_preflight')); d = out or os.path.join(C.OUT_BASE, 'preflight'); os.makedirs(d, exist_ok=True)
     ruta = os.path.join(d, 'preflight_%s_%s.json' % ('real' if autenticado else 'publico', time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())))
     C.escribir_con_fallback(ruta, res, os.path.basename(ruta)); print(json.dumps(res, indent=1, default=str, sort_keys=True)); print('PREFLIGHT', 'OK' if res['ok'] else 'NO OK', ruta); return 0 if res['ok'] else 2
 

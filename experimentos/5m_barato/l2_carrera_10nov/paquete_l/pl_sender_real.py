@@ -6,6 +6,7 @@ vendor/VENDOR_HASHES.json; `pl_core.cargar_vendor` ejecuta EXACTAMENTE los bytes
   * vendor/vendor_main.py (GENERADO): cliente de la wallet DEDICADA (ruta fija, wallet exacta), redondeo CLOB (verbatim de live_trade, como texto), saldo on-chain por RPC publico.
   * vendor/cancel_evidencia.py (copia verbatim): canal de USUARIO del CLOB, alta/cancel_try y gate_envio. Sus avisos por Telegram (subproceso que importaria shadow_digest de main) se SUSTITUYEN por un aviso a fichero/log.
 Mercados: gamma PUBLICO (solo GET), cada evento VALIDADO contra lo que el paquete supone (pl_core.verificar_mercado_gamma). NUNCA se ejecuta sin /code-review + OK final de Javi."""
+import glob
 import os, sys, json, time, types, collections, threading
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import pl_core as C
@@ -184,13 +185,23 @@ def cargar_env(cfg):
     return env, CE
 
 
-def construir(cfg, evid_dir):
-    """Devuelve (sender, mercados, libro_fn). Fail-closed. v8 (hallazgo 8): UNA sola via de anclas en real (`sender.anclas(filas)`); sin anclas_directas/por_fn."""
-    env, CE = cargar_env(cfg); os.makedirs(evid_dir, exist_ok=True)
+def armar_envio(cfg, evid_dir, env=None, ce=None):
+    """v18 (C): UNICO constructor de la ruta de envio (cliente dedicado + registro/escritor de cancel_evidencia + canal de usuario + SenderReal). Lo usan `construir` (run real) y `preflight` (misma clase y mismo constructor, sin rama distinta): el preflight pasa su `env` ya blindado contra POST. Fail-closed (sys.exit) si el canal no queda adjuntado. Devuelve (sender, env, reg)."""
+    if env is None: env, CE = cargar_env(cfg)
+    else:
+        ok, mal = C.verificar_vendor(HERE)
+        if not ok: sys.exit(f'vendor/ alterado o incompleto ({mal}): NO envio')
+        CE = ce or C.cargar_vendor('cancel_evidencia', HERE)
+    os.makedirs(evid_dir, exist_ok=True)
     reg = CE.Registro(CE.Escritor(evid_dir)); res = CE.Resolutor(reg); reg.resolutor = res; reg.avisar = aviso_a_fichero(evid_dir)
     CE.adjuntar_env(env, reg, markets=(), canal=True, resolutor=res, modo_markets='lista')           # modo explicito: no se lee SONDA1_CANCEL_EVIDENCIA_MARKETS del entorno
     if not getattr(env, '_cancel_evid', False) or reg.canal is None: sys.exit('canal de usuario NO adjuntado: NO envio')
-    sender = SenderReal(env, reg, res, CE, evid_dir); mercados = MercadosReal()
+    return SenderReal(env, reg, res, CE, evid_dir), env, reg
+
+
+def construir(cfg, evid_dir):
+    """Devuelve (sender, mercados, libro_fn). Fail-closed. v8 (hallazgo 8): UNA sola via de anclas en real (`sender.anclas(filas)`); sin anclas_directas/por_fn. v18: el armado es `armar_envio` (compartido con el preflight)."""
+    sender, _env, _reg = armar_envio(cfg, evid_dir); mercados = MercadosReal()
     return sender, mercados, mercados.libro
 
 
@@ -218,7 +229,33 @@ def comprobar_orden_firmada(signed, oid, esperado):
                 hash_formato_32_bytes=bool(re.fullmatch(r'0x[0-9a-fA-F]{64}', oid_s)))
 
 
-def preflight(cfg, autenticado=True, get=None, env_factory=None, chrony=None, ahora=time.time):
+def _verificar_canal(cfg, env, ce, toks_up, evid_dir, timeout_s):
+    """v18 (C): (2) el directorio de evidencia es escribible y el escritor del canal VUELCA (lectura local de cancel_evid_*); (1) con `armar_envio` (MISMO constructor que el run real) el canal de usuario se conecta y queda SUSCRITO a los 4 mercados 5m vigentes (`SenderReal.preparar` = gate_envio fail-closed) dentro de `timeout_s` total. Solo lectura: no firma ni envia nada (el `env` llega con el envio ya anulado por `_prohibido`). Devuelve solo booleanos/motivos."""
+    R = dict(ok=False, evid_escribible=False, escritor_vuelca=False, suscrito={}, error=None); reg = None
+    try:
+        os.makedirs(evid_dir, exist_ok=True); sonda = os.path.join(evid_dir, '.preflight_escritura'); open(sonda, 'w').write('x'); os.unlink(sonda); R['evid_escribible'] = True
+    except OSError as e: R['error'] = f'directorio de evidencia NO escribible: {type(e).__name__}'; return R
+    try:
+        sender, _env, reg = armar_envio(cfg, evid_dir, env=env, ce=ce)
+        reg.evento('preflight_sonda', n=1); reg.w.vaciar(timeout=3.0)
+        fich = glob.glob(os.path.join(evid_dir, 'cancel_evid_*.jsonl*')); R['escritor_vuelca'] = bool(fich) and any(os.path.getsize(f) > 0 for f in fich) and not getattr(reg.w, 'errores', 0)
+        fin = time.monotonic() + timeout_s
+        for coin, _lado, tok in toks_up:
+            sender.espera_gate_s = max(0.5, fin - time.monotonic()); R['suscrito'][coin] = bool(sender.preparar(tok))
+        R['ok'] = bool(R['evid_escribible'] and R['escritor_vuelca'] and len(R['suscrito']) == len(C.COINS) and all(R['suscrito'].values()))
+    except SystemExit as e: R['error'] = f'canal NO armado: {str(e)[:120]}'
+    except Exception as e: R['error'] = f'{type(e).__name__}: {str(e)[:120]}'
+    finally:
+        try:
+            if reg is not None and getattr(reg, 'canal', None) is not None: reg.canal.parar()
+        except Exception: pass
+        try:
+            if reg is not None: reg.w.cerrar()
+        except Exception: pass
+    return R
+
+
+def preflight(cfg, autenticado=True, get=None, env_factory=None, chrony=None, ahora=time.time, evid_dir=None, ce=None, canal_check=True, canal_timeout_s=8.0):
     """Comprobacion SOLO LECTURA (R1). NUNCA envia: antes de tocar nada `enviar`/`post_order` del cliente se sustituyen por una funcion que lanza.
     A) PUBLICO (sin credenciales): por moneda (BTC/ETH/SOL/XRP) el mercado 5m (el de mas vida) por gamma + las mismas validaciones del envio real, y GET /book de sus 2 tokens: tick_size 0,01, min_order_size <= 5, neg_risk == gamma, el libro (asks/bids) se
        informa como `operable_ahora` sin ser requisito.
@@ -249,8 +286,10 @@ def preflight(cfg, autenticado=True, get=None, env_factory=None, chrony=None, ah
     pub_ok = all(v.get('ok') for v in R['monedas'].values()) and len(R['monedas']) == len(C.COINS)
     if not autenticado: R['ok'] = bool(pub_ok); return R
     A = R['autenticado'] = dict(ok=False); ch = (chrony or leer_chrony)(); A['reloj_chrony'] = ch if isinstance(ch, dict) else None; A['reloj_ok'] = C.reloj_sincronizado(ch, cfg)       # v5 (R3): sincronizado de verdad, no solo offset 0
+    ce_box = []
+    def _fac_real(c): e_, ce_ = cargar_env(c); ce_box.append(ce_); return e_
     try:
-        env = (env_factory or (lambda c: cargar_env(c)[0]))(cfg)
+        env = (env_factory or _fac_real)(cfg)
     except SystemExit as e: A['error'] = f'cliente_dedicado se nego a arrancar: {str(e)[:160]}'; fallos.append(A['error']); return R
     except Exception as e: A['error'] = f'cliente: {type(e).__name__}: {str(e)[:120]}'; fallos.append(A['error']); return R
     env.enviar = _prohibido                                                                       # ANTES de cualquier otra cosa: imposible hacer un POST desde aqui
@@ -272,7 +311,9 @@ def preflight(cfg, autenticado=True, get=None, env_factory=None, chrony=None, ah
             A['orden_firmada_local'] = comprobar_orden_firmada(signed, oid, _esperado_orden(cfg.precio, cfg.size, tok, cfg.wallet, cfg.gtd_expira_s, t0))
         except Exception as e: A['orden_firmada_local'] = dict(error=f'{type(e).__name__}: {str(e)[:120]}')
     f = A.get('orden_firmada_local') or {}
-    A['ok'] = bool(A['wallet_es_la_dedicada'] and A.get('api_creds_derivadas_coinciden') and A.get('saldo_dentro_de_lo_autorizado') and A['open_orders_legibles_y_vacias'] and A['reloj_ok'] and f and all(v is True for v in f.values()))
+    if canal_check:                                                                               # v18 (C): canal de usuario REAL suscrito, directorio de evidencia escribible y escritor que vuelca (SOLO LECTURA, sin POST)
+        A['canal'] = _verificar_canal(cfg, env, ce or (ce_box[0] if ce_box else None), [t for t in tokens if t[1] == 'Up'], evid_dir or os.path.join(C.OUT_BASE, 'preflight', 'cancel_evid_' + time.strftime('%Y%m%dT%H%M%SZ', time.gmtime(ahora()))), canal_timeout_s)
+    A['ok'] = bool(A['wallet_es_la_dedicada'] and A.get('api_creds_derivadas_coinciden') and A.get('saldo_dentro_de_lo_autorizado') and A['open_orders_legibles_y_vacias'] and A['reloj_ok'] and f and all(v is True for v in f.values()) and (not canal_check or (A.get('canal') or {}).get('ok') is True))
     for k, v in list(A.items()):
         if v is False: fallos.append(f'autenticado.{k} = False')
     R['ok'] = bool(pub_ok and A['ok']); return R

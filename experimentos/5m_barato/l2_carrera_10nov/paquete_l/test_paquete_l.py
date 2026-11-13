@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Tests del paquete de medicion de `l` (12-Nov). TODO con SenderSim + reloj virtual: 0 red, 0 ordenes. Ejecutar:  python3 -I test_paquete_l.py"""
-import os, sys, json, shutil, tempfile, subprocess, re, types
+import os, sys, json, shutil, tempfile, subprocess, re, types, threading
 H = os.path.dirname(os.path.abspath(__file__)) + '/'; sys.path.insert(0, H)
 import pl_core as C, paquete_l as PL
 from pl_sender import RelojVirtual, SenderSim, MercadosSim, ErrHTTP
@@ -976,7 +976,7 @@ def test_r1_preflight_solo_lectura():
     # 1) todo correcto: ok, 4 monedas x 2 tokens, 0 POST posibles
     env_ref = []
     def fac(cfg_): e = fake_env(); env_ref.append(e); return e
-    r = R2.preflight(cfg, True, get=mk_get(), env_factory=fac, chrony=chr_ok, ahora=lambda: T0); e = env_ref[0]
+    r = R2.preflight(cfg, True, canal_check=False, get=mk_get(), env_factory=fac, chrony=chr_ok, ahora=lambda: T0); e = env_ref[0]
     assert r['ok'] is True and sorted(r['monedas']) == sorted(C.COINS) and all(len(v['tokens']) == 2 and v['ok'] for v in r['monedas'].values()), r['errores']
     assert r['autenticado']['orden_firmada_local'] and all(v is True for v in r['autenticado']['orden_firmada_local'].values()) and r['autenticado']['open_orders_legibles_y_vacias'] and r['autenticado']['api_creds_derivadas_coinciden']
     assert e.enviar is R2._prohibido and e.cli.post_order is R2._prohibido and e.cli.post_orders is R2._prohibido and e.llamadas == []            # el envio quedo anulado ANTES de cualquier lectura
@@ -989,11 +989,11 @@ def test_r1_preflight_solo_lectura():
               ('wallet_otra', dict(get=mk_get(), env=dict(wallet='0x1'))),
              ('hash_corto', dict(get=mk_get(), env=dict(hash_='0x1234'))), ('tick', dict(get=mk_get(tick='0.001'), env={})), ('minsize', dict(get=mk_get(minsize='6'), env={})), ('neg_risk_distinto', dict(get=mk_get(neg=True), env={}))]
     for nombre, kw in casos:
-        r = R2.preflight(cfg, True, get=kw['get'], env_factory=(lambda cfg_, k=kw['env']: fake_env(**k)), chrony=chr_ok, ahora=lambda: T0); assert r['ok'] is False and r['errores'], nombre
-    assert R2.preflight(cfg, True, get=mk_get(), env_factory=fac, chrony=lambda: None, ahora=lambda: T0)['ok'] is False                                         # sin chrony
-    for extra in (dict(leap='Not synchronised'), dict(stratum=0), dict(ref_id='00000000'), dict(root_dispersion_s=3.0), dict(system_time_s=2.0), dict(ref_id='7F7F0101'), dict(stratum=10)): assert R2.preflight(cfg, True, get=mk_get(), env_factory=fac, chrony=lambda e=extra: dict(chr_ok(), **e), ahora=lambda: T0)['ok'] is False, extra       # v5 (R3 h3)
+        r = R2.preflight(cfg, True, canal_check=False, get=kw['get'], env_factory=(lambda cfg_, k=kw['env']: fake_env(**k)), chrony=chr_ok, ahora=lambda: T0); assert r['ok'] is False and r['errores'], nombre
+    assert R2.preflight(cfg, True, canal_check=False, get=mk_get(), env_factory=fac, chrony=lambda: None, ahora=lambda: T0)['ok'] is False                                         # sin chrony
+    for extra in (dict(leap='Not synchronised'), dict(stratum=0), dict(ref_id='00000000'), dict(root_dispersion_s=3.0), dict(system_time_s=2.0), dict(ref_id='7F7F0101'), dict(stratum=10)): assert R2.preflight(cfg, True, canal_check=False, get=mk_get(), env_factory=fac, chrony=lambda e=extra: dict(chr_ok(), **e), ahora=lambda: T0)['ok'] is False, extra       # v5 (R3 h3)
     def sale_(cfg_): raise SystemExit('comparte credenciales con produccion')
-    r = R2.preflight(cfg, True, get=mk_get(), env_factory=sale_, chrony=chr_ok, ahora=lambda: T0); assert r['ok'] is False and 'cliente_dedicado se nego' in r['autenticado']['error']
+    r = R2.preflight(cfg, True, canal_check=False, get=mk_get(), env_factory=sale_, chrony=chr_ok, ahora=lambda: T0); assert r['ok'] is False and 'cliente_dedicado se nego' in r['autenticado']['error']
     # 3) publico: nunca construye el cliente
     n = {'c': 0}
     def nunca(cfg_): n['c'] += 1; return fake_env()
@@ -1112,7 +1112,7 @@ def test_r3h8_hash_sin_comprobacion_enganosa():
 
 def test_r3h9_un_solo_cargar_env():
     import pl_sender_real as R2, inspect
-    assert not hasattr(R2, '_env_real') and 'cargar_env(cfg)' in inspect.getsource(R2.construir) and 'cargar_env' in inspect.getsource(R2.preflight)
+    assert not hasattr(R2, '_env_real') and 'armar_envio(cfg' in inspect.getsource(R2.construir) and 'cargar_env(cfg)' in inspect.getsource(R2.armar_envio) and 'cargar_env' in inspect.getsource(R2.preflight)
     llamadas = []; orig = R2.cargar_env
     def centinela(cfg): llamadas.append(1); raise SystemExit('CENTINELA_CARGAR_ENV')
     R2.cargar_env = centinela
@@ -1823,6 +1823,215 @@ def test_r14h3_kills_de_fase_se_aplican_aunque_el_fill_ya_estuviera_persistido()
     assert P._fill_detectado(o, 5.0) is False and P.kills.get('relleno_en_fase_A (corte inmediato)') == 'PARTIAL'
     assert P._fill_detectado(o, 5.0) is False and sum(1 for r in P.led.filas if r['k'] == 'kill') == 1 and sum(1 for r in P.led.filas if r['k'] == 'fill') == 1 and (P.cnt['fills'], P.fills_b, P.gasto_b) == n0[:3], 'idempotente: una sola fila kill, sin contadores ni filas fill nuevas'
     print('T116 ok [R14 h3]: fill ya persistido + kill no registrado => se aplica el kill una vez, sin tocar contadores ni duplicar filas')
+
+
+def test_r15a_resume_reconstruye_fills_b_y_gasto_b_desde_el_ledger():
+    P, o, cl = _p_fill('r15a', 'top'); P.led.add('fill', cl, 1, size_matched=2.0, delta=2.0, coste=0.02, modo='top', t_ns=1)
+    cl2 = 'r15a|s901'; P.led.add('intencion', cl2, 0, slot=901, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xg', t_decision_ns=1, modo='top'); P.led.add('fill', cl2, 1, size_matched=3.0, delta=3.0, coste=0.03, modo='top', t_ns=1)
+    cl3 = 'r15a|s902'; P.led.add('intencion', cl3, 0, slot=902, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xh', t_decision_ns=1, modo='lejos'); P.led.add('fill', cl3, 1, size_matched=5.0, delta=5.0, coste=0.05, modo='lejos', t_ns=1)    # fase A: no cuenta en fase B
+    P.led.add('fill', cl, 2, size_matched=5.0, delta=3.0, coste=0.03, modo='top', t_ns=2)                                               # la 1a orden crecio: sigue siendo UNA orden
+    P.led.add('fill', cl2, 2, size_matched=3.0, delta=0.0, coste=9.99, modo='top', t_ns=3); P.led.fallidos.add('fill|r15a|s901|2')       # fila de escritura fallida: no cuenta
+    P.ordenes, _ = C.replay_estado(P.led.filas); P._reconstruir_contadores_b()
+    assert P.fills_b == 2 and abs(P.gasto_b - 0.08) < 1e-9, (P.fills_b, P.gasto_b)
+    assert P.cfg.fase_b_max_rellenos - P.fills_b == 0                                                                                    # el tope (2) ya esta cubierto por lo previo
+    P._fill_detectado(P.ordenes[cl], 5.0); assert P.fills_b == 2 and abs(P.gasto_b - 0.08) < 1e-9 and 'fase_b_tope_rellenos' in P.kills      # sin doble conteo con _fill_detectado; el tope se respeta
+    # extremo a extremo: un run NUEVO sobre el mismo directorio (resume) reconstruye los contadores ANTES de operar (mutacion: sin la llamada en _correr, fills_b arranca en 0)
+    Q, oq, clq = _p_fill('r15a_seed', 'top'); Q.led.add('fill', clq, 1, size_matched=2.0, delta=2.0, coste=0.02, modo='top', t_ns=1); cq2 = 'r15a_seed|s901'
+    Q.led.add('intencion', cq2, 0, slot=901, coin='BTC', tok='BTC1U', precio=0.01, size=5.0, oid_local='0xg', t_decision_ns=1, modo='top'); Q.led.add('fill', cq2, 1, size_matched=3.0, delta=3.0, coste=0.03, modo='top', t_ns=1)
+    Q.led.f.close(); out = os.path.dirname(Q.P('ledger.jsonl')); P2, S2, R2_, M2, _ = montar('r15a_resume', cfg=C.Config(fase_b_max_rellenos=2, fase_b_ordenes=8), dir_out=out); vistos = []; orig = P2._reconstruir_contadores_b
+    P2._reconstruir_contadores_b = lambda: (orig(), vistos.append((P2.fills_b, round(P2.gasto_b, 6))))[0]; P2.correr()
+    assert vistos and vistos[0] == (2, 0.05), vistos
+    print('T117 ok [R15 A]: un resume reconstruye fills_b (ordenes top distintas con fila fill) y gasto_b (suma de coste) desde el ledger; sin doble conteo; el tope suma lo previo')
+
+
+@contextlib.contextmanager
+def _tmpfs(size_kb, relleno_kb=0, ro=False):
+    """v18 (B): tmpfs REAL pequeno (mount como root) para provocar ENOSPC/EROFS reales del kernel. Si el entorno no permite `mount`, el test se OMITE con aviso (no se simula)."""
+    d = os.path.join(TMP, f'mnt{size_kb}_{relleno_kb}_{int(ro)}'); os.makedirs(d, exist_ok=True)
+    r = subprocess.run(['mount', '-t', 'tmpfs', '-o', f'size={size_kb}k', 'tmpfs', d], capture_output=True, text=True)
+    if r.returncode != 0: print(f'OMITIDO (no hay mount tmpfs): {r.stderr.strip()[:80]}'); yield None; return
+    try:
+        if relleno_kb: open(d + '/relleno.bin', 'wb').write(b'x' * relleno_kb * 1024)
+        if ro: os.makedirs(d + '/out'); subprocess.run(['mount', '-o', 'remount,ro', d], check=True)
+        yield d
+    finally: subprocess.run(['umount', '-l', d], capture_output=True)
+
+
+def _filas_disco(ruta):
+    out = []
+    for l in open(ruta):
+        l = l.strip()
+        if l.startswith('{') and l.endswith('}'):
+            try: out.append(json.loads(l))
+            except ValueError: pass
+    return out
+
+
+def test_r15b_enospc_real_en_ledger_y_json_fase_b_con_rellenos():
+    hubo = False
+    for relleno in (20, 35, 60):
+        with _tmpfs(200, relleno) as d:
+            if d is None: return
+            hubo = True; cfg = C.Config(fase_b_max_rellenos=2, fase_b_ordenes=8); reloj = RelojVirtual(); S = SenderSim(reloj, fill_a={}, sin_push=True); M = MercadosSim(reloj, down_barato=True)
+            P = PL.Paquete(cfg, S, M, d + '/out', reloj, f'enospc{relleno}', stdout=False); P.anclas_fn = lambda: sum(P.anclas_ledger_por_moneda().values()); P.anclas_por_moneda_fn = P.anclas_ledger_por_moneda; orig = S.enviar
+            def enviar(h, orig=orig, S=S):
+                r = orig(h)
+                if h['tok'].endswith('D'): o = S.ordenes[h['oid']]; o['fill'] = (2.0, o['t_alta_ns'] + int(2.0 * 1e9))
+                return r
+            S.enviar = enviar; st = P.correr()
+            assert st != 'COMPLETE' and (P.led.fallos_escritura + P.io_fallos) > 0, (relleno, st)                                         # fallo REAL del kernel: nunca COMPLETE
+            assert _vivas_reales(S) == 0, 'queda una orden viva sin cancelar'                                                              # las cancelaciones siguieron funcionando
+            fl = [r for r in _filas_disco(d + '/out/ledger.jsonl') if r.get('k') == 'fill']
+            assert P.fills_b == len({r['clave'] for r in fl}) and abs(P.gasto_b - sum(r['coste'] for r in fl)) < 1e-9, (relleno, P.fills_b, len(fl), P.gasto_b)      # ningun contador sin fila PERSISTIDA
+            assert not [f for f in os.listdir(d + '/out') if f.endswith('.tmp')], os.listdir(d + '/out')                                  # sin .tmp huerfanos
+    assert hubo
+    print('T118 ok [R15 B1]: ENOSPC real (tmpfs diminuto): nunca COMPLETE, 0 ordenes vivas, fills_b/gasto_b == filas fill realmente en disco, sin .tmp huerfanos')
+
+
+def test_r15b_escritura_atomica_con_oserror_real_de_os_replace():
+    out = os.path.join(TMP, 'r15b2'); os.makedirs(out + '/parcial_resumen.json')                                                         # destino = directorio: open/os.replace fallan con OSError REAL (IsADirectoryError)
+    P, S, R, M, _ = montar('r15b2', dir_out=out); st = P.correr()
+    assert st == 'BLOCKED' and P.io_fallos > 0 and _vivas_reales(S) == 0 and not [f for f in os.listdir(out) if f.endswith('.tmp')], (st, P.io_fallos, os.listdir(out))
+    inf = json.load(open(out + '/informe_final.json')); assert inf['status'] == 'BLOCKED' and 'escrituras fallidas' in inf['motivo']
+    out2 = os.path.join(TMP, 'r15b2b'); os.makedirs(out2 + '/checkpoint.json')                                                           # el checkpoint ilegible/imposible tampoco da COMPLETE
+    P2, S2, R2, M2, _ = montar('r15b2b', dir_out=out2); st2 = P2.correr(); assert st2 in ('FAILED', 'BLOCKED') and _vivas_reales(S2) == 0, st2
+    print('T119 ok [R15 B2]: os.replace/open con OSError real => BLOCKED con alerta, 0 vivas, sin .tmp huerfanos; checkpoint imposible => FAILED/BLOCKED')
+
+
+def test_r15b_filesystem_de_solo_lectura_no_opera_y_sale_controlado():
+    with _tmpfs(2048, 0, ro=True) as d:
+        if d is None: return
+        P, S, R, M, _ = montar('r15b3', dir_out=d + '/out'); st = P.correr()
+        assert st == 'FAILED' and len(S.posts_enviados) == 0 and S.n_saldo == 0 and any('LEDGER NO ABRIBLE' in a for a in P.alertas), (st, P.alertas)
+    print('T120 ok [R15 B3]: EROFS real al abrir el ledger => FAILED controlado (sin traceback), 0 ordenes, alerta')
+
+
+class _FakeEsc:
+    def __init__(self, d, vuelca=True): self.dir = d; self.vuelca = vuelca; self.q = []; self.errores = 0; self.cerrado = False
+    def vaciar(self, timeout=5.0):
+        if self.vuelca and self.q: open(os.path.join(self.dir, 'cancel_evid_fake.jsonl'), 'a').write(json.dumps(self.q) + '\n')
+    def cerrar(self): self.cerrado = True
+
+
+class _FakeReg:
+    def __init__(self, esc, suscritos): self.w = esc; self.suscritos = suscritos; self.canal = None; self.resolutor = None; self.avisar = None; self.parado = False
+    def evento(self, kind, **kw): self.w.q.append(dict(k=kind, **kw))
+    def gate_envio(self, tok, env=None, espera_s=None, dormir=None, fase='', reset=True): return (tok in self.suscritos, '' if tok in self.suscritos else 'sin_suscripcion')
+
+
+class _FakeCE:
+    """Doble de cancel_evidencia para el preflight: `suscritos` = tokens cuyo mercado el canal confirma; `vuelca` = el escritor vuelca a disco."""
+    def __init__(self, suscritos=None, vuelca=True): self._s = suscritos; self._v = vuelca; self.regs = []; self._TL = threading.local()
+    def Escritor(self, d): return _FakeEsc(d, self._v)
+    def Registro(self, esc): r = _FakeReg(esc, self._s); self.regs.append(r); return r
+    def Resolutor(self, reg): return types.SimpleNamespace(pedir=lambda tok: None)
+    def adjuntar_env(self, env, reg, markets=(), canal=True, resolutor=None, modo_markets=None):
+        env._cancel_evid = True; reg.canal = types.SimpleNamespace(parar=lambda: setattr(reg, 'parado', True))
+
+
+def _preflight_dobles(suscribir='todos', vuelca=True, evid_dir=None):
+    import pl_sender_real as R2
+    T0 = 1_790_000_100.0; cfg = C.Config()
+    def get(url, params):
+        if 'events' in url: slug = params['slug']; coin = slug.split('-')[0].upper(); ini = int(slug.rsplit('-', 1)[1]); return [gamma_ev(coin, ini)]
+        return dict(version='v2', bids=[dict(price='0.40', size='10')], asks=[dict(price='0.45', size='20')], min_order_size='5', tick_size='0.01', neg_risk=False)
+    class Firmada:
+        def __init__(s, tok): s.makerAmount, s.takerAmount, s.tokenId, s.maker, s.side, s.signatureType, s.signature, s.expiration = '50000', '5000000', tok, cfg.wallet, 'BUY', 3, '0xf', str(int(T0) + cfg.gtd_expira_s)
+    class Cred:
+        api_key = 'K'; api_secret = 'S'; api_passphrase = 'P'
+    env = types.SimpleNamespace(llamadas=[], wallet=cfg.wallet, M=types.SimpleNamespace(hash_orden=lambda signed, nr: '0x' + 'ab' * 32)); c = Cred()
+    env.cli = types.SimpleNamespace(creds=c, derive_api_key=lambda: c, post_order=lambda *a, **k: env.llamadas.append('post_order'), post_orders=None, create_and_post_order=None, create_and_post_market_order=None)
+    env.enviar = lambda *a, **k: env.llamadas.append('enviar'); env.saldo = lambda: 0.612681; env.abiertas_todas = lambda: []
+    env.poner = lambda tok, precio, size, clave, neg_risk=None, expira_s=None: ('0x' + 'ab' * 32, Firmada(tok))
+    toks = {}
+    for coin in C.COINS:
+        ini = int(T0) // 300 * 300 + 300; ev = gamma_ev(coin, ini); ids = json.loads(ev['markets'][0]['clobTokenIds']) if isinstance(ev['markets'][0].get('clobTokenIds'), str) else ev['markets'][0]['clobTokenIds']; toks[coin] = str(ids[0])
+    sus = set(toks.values()) if suscribir == 'todos' else {v for k, v in toks.items() if k != suscribir}
+    ce = _FakeCE(sus, vuelca); chr_ok = lambda: dict(system_time_s=0.05, last_offset_s=0.01, stratum=2, ref_id='65D8456C', leap='Normal', root_dispersion_s=0.001, root_delay_s=0.04)
+    return R2, cfg, get, env, ce, chr_ok, T0
+
+
+def test_r15c_preflight_canal_de_usuario_evidencia_y_cero_post():
+    R2, cfg, get, env, ce, chr_ok, T0 = _preflight_dobles(); ev = os.path.join(TMP, 'r15c_ev'); enviar_orig = R2.SenderReal.enviar
+    R2.SenderReal.enviar = lambda *a, **k: (_ for _ in ()).throw(AssertionError('PREFLIGHT llamo a SenderReal.enviar'))                       # NINGUN camino puede llegar al POST
+    try:
+        r = R2.preflight(cfg, True, get=get, env_factory=lambda c: env, chrony=chr_ok, ahora=lambda: T0, evid_dir=ev, ce=ce)
+        assert r['ok'] is True and r['autenticado']['canal']['ok'] and r['autenticado']['canal']['evid_escribible'] and r['autenticado']['canal']['escritor_vuelca'] and sorted(r['autenticado']['canal']['suscrito']) == sorted(C.COINS) and ce.regs[0].parado, r['errores']
+        r2 = R2.preflight(cfg, True, get=get, env_factory=lambda c: _preflight_dobles('ETH')[3], chrony=chr_ok, ahora=lambda: T0, evid_dir=ev + '2', ce=_preflight_dobles('ETH')[4])
+        assert r2['ok'] is False and r2['autenticado']['canal']['suscrito']['ETH'] is False and r2['autenticado']['canal']['ok'] is False                  # canal NO suscrito a un mercado => fail-closed
+        R3, cfg3, get3, env3, ce3, chr3, T3 = _preflight_dobles(vuelca=False); r3 = R3.preflight(cfg3, True, get=get3, env_factory=lambda c: env3, chrony=chr3, ahora=lambda: T3, evid_dir=ev + '3', ce=ce3)
+        assert r3['ok'] is False and r3['autenticado']['canal']['escritor_vuelca'] is False                                                              # el escritor no vuelca
+        open(os.path.join(TMP, 'r15c_fichero'), 'w').write('x'); R4, cfg4, get4, env4, ce4, chr4, T4 = _preflight_dobles(); r4 = R4.preflight(cfg4, True, get=get4, env_factory=lambda c: env4, chrony=chr4, ahora=lambda: T4, evid_dir=os.path.join(TMP, 'r15c_fichero', 'ev'), ce=ce4)
+        assert r4['ok'] is False and r4['autenticado']['canal']['evid_escribible'] is False and not ce4.regs, r4['autenticado']['canal']                    # directorio no escribible: ni siquiera se arma el canal
+        for e_ in (env, env3, env4): assert e_.llamadas == [] and e_.enviar is R2._prohibido
+    finally: R2.SenderReal.enviar = enviar_orig
+    print('T121 ok [R15 C1/C2]: preflight falla si el canal no se suscribe, si el escritor no vuelca o si el directorio no es escribible; nunca llama a un metodo de envio')
+
+
+def test_r15c_preflight_y_run_real_usan_el_mismo_constructor():
+    R2, cfg, get, env, ce, chr_ok, T0 = _preflight_dobles(); llam = []; orig = R2.armar_envio
+    R2.armar_envio = lambda *a, **k: (llam.append((k.get('env') is not None)), orig(*a, **k))[1]; oc = R2.cargar_env; R2.cargar_env = lambda cfg_: (env, ce)
+    try:
+        R2.preflight(cfg, True, get=get, env_factory=lambda c: env, chrony=chr_ok, ahora=lambda: T0, evid_dir=os.path.join(TMP, 'r15c2_ev'), ce=ce)
+        s1, m1, l1 = R2.construir(cfg, os.path.join(TMP, 'r15c2_run')); assert isinstance(s1, R2.SenderReal)
+    finally: R2.armar_envio = orig; R2.cargar_env = oc
+    assert llam == [True, False], llam                                                                                                                  # los DOS caminos pasan por armar_envio (preflight con su env blindado; el real con cargar_env)
+    print('T122 ok [R15 C3]: preflight y construir (run real) usan el MISMO constructor `armar_envio` y producen un SenderReal')
+
+
+def test_r15c_contrato_senderreal_contra_servidor_http_local():
+    """CONTRATO de SenderReal.colocar/enviar/cancelar contra un http.server local en un hilo: cliente py_clob_client_v2 REAL (firma local con una clave desechable generada al vuelo; ningun secreto del proyecto, sin red externa)."""
+    import http.server, base64, importlib, pl_sender_real as R2
+    from py_clob_client_v2 import ClobClient, ApiCreds
+    from py_clob_client_v2.http_helpers import helpers as HH
+    import httpx
+    from eth_account import Account
+    LOG = []; MODO = dict(post=200, delete=200, dormir=0.0); OID = '0x' + 'ab' * 32
+    class H(http.server.BaseHTTPRequestHandler):
+        def log_message(self, *a): pass
+        def _r(self, code, body):
+            d = json.dumps(body).encode(); self.send_response(code); self.send_header('Content-Type', 'application/json'); self.send_header('Content-Length', str(len(d))); self.end_headers(); self.wfile.write(d)
+        def _any(self):
+            n = int(self.headers.get('Content-Length') or 0); raw = self.rfile.read(n) if n else b''; p = self.path.split('?')[0]; LOG.append((self.command, p, dict(self.headers), raw))
+            if p == '/tick-size': return self._r(200, {'minimum_tick_size': 0.01})
+            if p == '/neg-risk': return self._r(200, {'neg_risk': False})
+            if p == '/version': return self._r(200, {'version': 2})
+            if p == '/order':
+                if MODO['dormir']: time.sleep(MODO['dormir'])
+                if self.command == 'POST': return self._r(MODO['post'], {'success': True, 'orderID': OID, 'status': 'live'} if MODO['post'] == 200 else {'error': 'mal'})
+                if self.command == 'DELETE': return self._r(MODO['delete'], {'canceled': [OID], 'not_canceled': {}} if MODO['delete'] == 200 else {'error': 'mal'})
+            return self._r(404, {'error': 'x'})
+        do_GET = do_POST = do_DELETE = _any
+    srv = http.server.ThreadingHTTPServer(('127.0.0.1', 0), H); threading.Thread(target=srv.serve_forever, daemon=True).start()
+    cli = ClobClient(host=f'http://127.0.0.1:{srv.server_address[1]}', chain_id=137, key=Account.create().key.hex(), creds=ApiCreds(api_key='00000000-0000-0000-0000-000000000001', api_secret=base64.urlsafe_b64encode(b'secreto' * 4).decode(), api_passphrase='pp'))
+    C.cargar_vendor('vendor_main'); ER = C.cargar_vendor('envio_real')
+    env = R2.clase_envio(ER).__new__(R2.clase_envio(ER)); env.M = ER.V; env.cli = cli; env.wallet = C.Config().wallet; env._cache_lock = threading.Lock()
+    altas = []; TLns = threading.local()
+    reg = types.SimpleNamespace(alta=lambda p: altas.append(p), avisar=None); ce = types.SimpleNamespace(_TL=TLns); sender = R2.SenderReal(env, reg, types.SimpleNamespace(pedir=lambda tok: None), ce, os.path.join(TMP, 'r15c_contrato'))
+    sender.env.enviar_orig = None
+    orig_client = HH._http_client
+    try:
+        h = sender.colocar('123456', 0.01, 5, 'k', neg_risk=False, expira_s=200); oid, hd = h
+        assert oid.startswith('0x') and len(oid) == 66 and sorted(x[1] for x in LOG) == ['/neg-risk', '/tick-size', '/version'] and all(x[0] == 'GET' for x in LOG), LOG          # firmar = SOLO lecturas, ningun POST
+        resp = sender.enviar(hd); post = [x for x in LOG if x[0] == 'POST'][0]; b = json.loads(post[3])
+        assert post[1] == '/order' and resp['status'] == 'live' and b['orderType'] == 'GTD' and b['postOnly'] is True and b['order']['tokenId'] == '123456' and b['order']['makerAmount'] == '50000' and b['order']['takerAmount'] == '5000000' and b['order']['side'] == 'BUY' and int(b['order']['expiration']) > time.time() + 150, b
+        assert all(k in post[2] for k in ('POLY_ADDRESS', 'POLY_API_KEY', 'POLY_PASSPHRASE', 'POLY_SIGNATURE', 'POLY_TIMESTAMP')) and post[2]['POLY_API_KEY'] == '00000000-0000-0000-0000-000000000001' and b['owner'] == '00000000-0000-0000-0000-000000000001'
+        assert len(altas) == 1 and altas[0].oid == OID and altas[0].tok == '123456' and C.clasificar_post(resp) == 'ok'
+        assert sender.cancelar(OID) is True; d = [x for x in LOG if x[0] == 'DELETE'][0]; assert d[1] == '/order' and json.loads(d[3]) == {'orderID': OID} and 'POLY_SIGNATURE' in d[2]
+        for cod, esperado in ((400, 'rechazo'), (503, 'ambiguo')):                                                                   # 4xx => rechazo (no salio); 5xx => ambiguo (pudo quedar viva)
+            MODO['post'] = cod; sender2 = sender
+            try: sender2.enviar(hd); assert False, cod
+            except Exception as e: assert getattr(e, 'status_code', None) == cod and C.clasificar_excepcion_post(e) == esperado, (cod, type(e), e)
+        assert len(altas) == 3 and all(a.oid == oid for a in altas[1:])                                                              # un POST fallido (incluso 4xx) se da de alta con el oid LOCAL (diseno: puede estar viva; la reconciliacion decide)
+        MODO['post'] = 200; MODO['dormir'] = 1.0; HH._http_client = httpx.Client(timeout=0.3)                                         # timeout: excepcion sin status => ambigua (la orden pudo llegar)
+        try: sender.enviar(hd); assert False
+        except Exception as e: assert getattr(e, 'status_code', None) is None and C.clasificar_excepcion_post(e) == 'ambiguo', (type(e), e)
+        MODO['dormir'] = 0.0; MODO['delete'] = 400
+        try: assert sender.cancelar(OID) is False
+        except Exception as e: assert getattr(e, 'status_code', None) == 400                                                        # 4xx en cancelar: o False o excepcion con status: nunca un exito falso
+    finally: HH._http_client = orig_client; srv.shutdown()
+    assert not [x for x in LOG if x[1] not in ('/tick-size', '/neg-risk', '/version', '/order')], 'ruta inesperada'
+    print('T123 ok [R15 C4]: contrato SenderReal vs http.server local: firmar=3 GET, POST /order GTD post-only con cabeceras POLY_* y cuerpo exacto, DELETE /order {orderID}, 4xx=>rechazo, 5xx/timeout=>ambiguo, alta con oid local si falla')
 
 
 if __name__ == '__main__':
