@@ -1,20 +1,24 @@
 {
- "generado_utc": "2026-11-12T08:54:02+00:00",
+ "generado_utc": "2026-11-13T08:54:01+00:00",
  "modo": "lectura (no consumido por evaluar())",
  "forward_dias": 7,
- "cutoff": "2026-11-05T00:00:00",
+ "cutoff": "2026-11-06T00:00:00",
  "n_forward_min": 15,
  "piso_eur": 0.1,
  "n_tuplas_evaluadas": 273,
- "n_filas_total": 492285,
+ "n_filas_total": 497307,
  "n_zonas_operables": 3,
- "n_zonas_en_observacion": 136,
+ "n_zonas_en_observacion": 139,
  "cobertura": {
-  "total_combos_con_datos": 777,
+  "total_combos_con_datos": 778,
   "evaluadas": 273,
   "descartadas_n_train_insuficiente": [
    [
     "chi2-ganador#SEGUIR",
+    79
+   ],
+   [
+    "ven1-otros#SEGUIR",
     79
    ],
    [
@@ -38,11 +42,11 @@
     76
    ],
    [
-    "ven1-otros#SEGUIR",
+    "bkjpn-otros#SEGUIR",
     76
    ],
    [
-    "bkjpn-otros#SEGUIR",
+    "par1-otros#SEGUIR",
     76
    ],
    [
@@ -58,6 +62,10 @@
     74
    ],
    [
+    "bel1-ganador#FADE",
+    74
+   ],
+   [
     "Soccer-arg#SEGUIR",
     73
    ],
@@ -66,8 +74,20 @@
     73
    ],
    [
+    "fpd-otros#FADE",
+    73
+   ],
+   [
+    "euroleague-otros#SEGUIR",
+    73
+   ],
+   [
     "mex2-otros#FADE",
     73
+   ],
+   [
+    "acl2-ganador#FADE",
+    72
    ],
    [
     "egy1-otros#FADE",
@@ -86,19 +106,15 @@
     71
    ],
    [
+    "isp-otros#SEGUIR",
+    70
+   ],
+   [
     "ahl-otros#SEGUIR",
     70
    ],
    [
-    "euroleague-otros#SEGUIR",
-    69
-   ],
-   [
     "mar1-ganador#FADE",
-    69
-   ],
-   [
-    "bel1-ganador#FADE",
     69
    ],
    [
@@ -110,6 +126,10 @@
     67
    ],
    [
+    "per1-otros#SEGUIR",
+    67
+   ],
+   [
     "ere-ganador#SEGUIR",
     66
    ],
@@ -118,11 +138,7 @@
     66
    ],
    [
-    "per1-otros#SEGUIR",
-    66
-   ],
-   [
-    "fpd-otros#FADE",
+    "khl-otros#FADE",
     65
    ],
    [
@@ -131,10 +147,6 @@
    ],
    [
     "Soccer-spl#FADE",
-    64
-   ],
-   [
-    "khl-otros#FADE",
     64
    ],
    [
@@ -170,7 +182,7 @@
     60
    ],
    [
-    "isp-otros#SEGUIR",
+    "isp-otros#FADE",
     60
    ],
    [
@@ -242,10 +254,6 @@
     56
    ],
    [
-    "acl2-ganador#FADE",
-    56
-   ],
-   [
     "hr1-otros#FADE",
     55
    ],
@@ -274,6 +282,14 @@
     54
    ],
    [
+    "aze2-otros#SEGUIR",
+    54
+   ],
+   [
+    "aze2-otros#FADE",
+    53
+   ],
+   [
     "bel1-otros#SEGUIR",
     53
    ],
@@ -299,10 +315,6 @@
    ],
    [
     "bl3-otros#SEGUIR",
-    52
-   ],
-   [
-    "par1-otros#SEGUIR",
     52
    ],
    [
@@ -446,6 +458,10 @@
     42
    ],
    [
+    "bel1-ganador#SEGUIR",
+    42
+   ],
+   [
     "el1-otros#FADE",
     42
    ],
@@ -459,10 +475,6 @@
    ],
    [
     "ukr1-ganador#SEGUIR",
-    41
-   ],
-   [
-    "bel1-ganador#SEGUIR",
     41
    ],
    [
@@ -482,7 +494,7 @@
     40
    ],
    [
-    "isp-otros#FADE",
+    "fpd-otros#SEGUIR",
     40
    ],
    [
@@ -519,14 +531,6 @@
    ],
    [
     "bkbbl-otros#FADE",
-    38
-   ],
-   [
-    "aze2-otros#SEGUIR",
-    38
-   ],
-   [
-    "fpd-otros#SEGUIR",
     38
    ],
    [
@@ -722,15 +726,15 @@
     28
    ],
    [
-    "aze2-otros#FADE",
-    28
-   ],
-   [
     "Boxing#FADE",
     28
    ],
    [
     "hun-otros#SEGUIR",
+    28
+   ],
+   [
+    "col-ganador#SEGUIR",
     28
    ],
    [
@@ -774,6 +778,14 @@
     26
    ],
    [
+    "par1-ganador#SEGUIR",
+    26
+   ],
+   [
+    "mex2-ganador#SEGUIR",
+    26
+   ],
+   [
     "argcopa-otros#FADE",
     25
    ],
@@ -786,6 +798,10 @@
     25
    ],
    [
+    "acl2-ganador#SEGUIR",
+    25
+   ],
+   [
     "Soccer-ecu1#SEGUIR",
     24
    ],
@@ -795,14 +811,6 @@
    ],
    [
     "clf-otros#FADE",
-    24
-   ],
-   [
-    "par1-ganador#SEGUIR",
-    24
-   ],
-   [
-    "mex2-ganador#SEGUIR",
     24
    ],
    [
@@ -938,7 +946,15 @@
     18
    ],
    [
+    "ven1-ganador#SEGUIR",
+    18
+   ],
+   [
     "scop-ganador#SEGUIR",
+    18
+   ],
+   [
+    "aze2-ganador#SEGUIR",
     18
    ],
    [
@@ -962,19 +978,11 @@
     18
    ],
    [
-    "ven1-ganador#SEGUIR",
-    17
-   ],
-   [
     "tha1-ganador#FADE",
     17
    ],
    [
     "cehl-otros#FADE",
-    17
-   ],
-   [
-    "aze2-ganador#SEGUIR",
     17
    ],
    [
@@ -1186,6 +1194,10 @@
     12
    ],
    [
+    "uzb1-otros#SEGUIR",
+    12
+   ],
+   [
     "tur2-ganador#FADE",
     12
    ],
@@ -1242,10 +1254,6 @@
     11
    ],
    [
-    "uzb1-otros#SEGUIR",
-    11
-   ],
-   [
     "uae1-otros#FADE",
     11
    ],
@@ -1295,6 +1303,10 @@
    ],
    [
     "grc-ganador#FADE",
+    10
+   ],
+   [
+    "cricwbbl-otros#SEGUIR",
     10
    ],
    [
@@ -1378,10 +1390,6 @@
     8
    ],
    [
-    "acl2-ganador#SEGUIR",
-    8
-   ],
-   [
     "nln-otros#SEGUIR",
     8
    ],
@@ -1426,15 +1434,15 @@
     7
    ],
    [
-    "col-ganador#SEGUIR",
-    7
-   ],
-   [
     "pt2-ganador#FADE",
     7
    ],
    [
     "nls-otros#SEGUIR",
+    7
+   ],
+   [
+    "cricwbbl-otros#FADE",
     7
    ],
    [
@@ -1559,10 +1567,6 @@
    ],
    [
     "dfb-otros#FADE",
-    5
-   ],
-   [
-    "cricwbbl-otros#SEGUIR",
     5
    ],
    [
@@ -1830,11 +1834,11 @@
     2
    ],
    [
-    "cricwbbl-otros#FADE",
+    "cbb-otros#SEGUIR",
     2
    ],
    [
-    "cbb-otros#SEGUIR",
+    "cricnpl-otros#FADE",
     2
    ],
    [
@@ -1962,15 +1966,11 @@
     1
    ],
    [
-    "cricnpl-otros#FADE",
-    0
+    "bklkl-otros#FADE",
+    1
    ],
    [
     "nor2-ganador#FADE",
-    0
-   ],
-   [
-    "bklkl-otros#FADE",
     0
    ],
    [
@@ -2028,6 +2028,10 @@
    [
     "cricadt10-otros#SEGUIR",
     0
+   ],
+   [
+    "uwec-otros#SEGUIR",
+    0
    ]
   ]
  },
@@ -2062,48 +2066,48 @@
    "categoria": "cfb-otros",
    "tipo": "SEGUIR",
    "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.58,
+   "hi": 0.59,
+   "n_train": 176,
+   "pnl_train": 0.2386,
+   "n_dias_train": 25,
+   "pnl_sin_2_mejores_dias": 0.1899,
+   "wallets": 42,
+   "top1_wallet": 0.335,
+   "p_max_train": 0.668,
+   "n_forward": 16,
+   "pnl_forward": 0.2774,
+   "hit_forward": 0.75,
+   "forward_ok": true,
+   "forward_ic90": [
+    -0.042,
+    0.4902
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "cfb-otros#SEGUIR",
+   "categoria": "cfb-otros",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
    "ancho": 0.03,
    "lo": 0.58,
    "hi": 0.61,
-   "n_train": 402,
-   "pnl_train": 0.1298,
-   "n_dias_train": 27,
-   "pnl_sin_2_mejores_dias": 0.1058,
+   "n_train": 404,
+   "pnl_train": 0.1325,
+   "n_dias_train": 28,
+   "pnl_sin_2_mejores_dias": 0.1094,
    "wallets": 57,
-   "top1_wallet": 0.286,
-   "p_max_train": 0.462,
-   "n_forward": 35,
-   "pnl_forward": 0.2465,
-   "hit_forward": 0.743,
+   "top1_wallet": 0.285,
+   "p_max_train": 0.492,
+   "n_forward": 39,
+   "pnl_forward": 0.2032,
+   "hit_forward": 0.718,
    "forward_ok": true,
    "forward_ic90": [
-    0.0518,
-    0.4412
-   ],
-   "forward_ok_estricto": true
-  },
-  {
-   "tupla": "LoL#SEGUIR",
-   "categoria": "LoL",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.02,
-   "lo": 0.27,
-   "hi": 0.29,
-   "n_train": 723,
-   "pnl_train": 0.2706,
-   "n_dias_train": 51,
-   "pnl_sin_2_mejores_dias": 0.1373,
-   "wallets": 321,
-   "top1_wallet": 0.019,
-   "p_max_train": 0.0,
-   "n_forward": 36,
-   "pnl_forward": 0.2078,
-   "hit_forward": 0.333,
-   "forward_ok": true,
-   "forward_ic90": [
-    -0.2943,
-    0.7098
+    -0.0123,
+    0.3822
    ],
    "forward_ok_estricto": false
   }
@@ -2374,28 +2378,6 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "cfb-otros#SEGUIR",
-   "categoria": "cfb-otros",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.01,
-   "lo": 0.58,
-   "hi": 0.59,
-   "n_train": 176,
-   "pnl_train": 0.2386,
-   "n_dias_train": 25,
-   "pnl_sin_2_mejores_dias": 0.1899,
-   "wallets": 42,
-   "top1_wallet": 0.335,
-   "p_max_train": 0.558,
-   "n_forward": 13,
-   "pnl_forward": 0.4411,
-   "hit_forward": 0.846,
-   "forward_ok": false,
-   "forward_ic90": null,
-   "forward_ok_estricto": false
-  },
-  {
    "tupla": "epl-ganador#SEGUIR",
    "categoria": "epl-ganador",
    "tipo": "SEGUIR",
@@ -2550,6 +2532,28 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "NFL#SEGUIR",
+   "categoria": "NFL",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.05,
+   "lo": 0.08,
+   "hi": 0.13,
+   "n_train": 59,
+   "pnl_train": 0.6355,
+   "n_dias_train": 18,
+   "pnl_sin_2_mejores_dias": 0.1416,
+   "wallets": 25,
+   "top1_wallet": 0.169,
+   "p_max_train": 0.01,
+   "n_forward": 9,
+   "pnl_forward": 0.2295,
+   "hit_forward": 0.111,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "lal-otros#FADE",
    "categoria": "lal-otros",
    "tipo": "FADE",
@@ -2607,7 +2611,7 @@
    "pnl_sin_2_mejores_dias": 0.5088,
    "wallets": 26,
    "top1_wallet": 0.093,
-   "p_max_train": 0.012,
+   "p_max_train": 0.006,
    "n_forward": 2,
    "pnl_forward": 0.1224,
    "hit_forward": 0.5,
@@ -2657,6 +2661,31 @@
    "hit_forward": 0.692,
    "forward_ok": false,
    "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Dota#SEGUIR",
+   "categoria": "Dota",
+   "tipo": "SEGUIR",
+   "estado_config": "LIVE",
+   "ancho": 0.01,
+   "lo": 0.5,
+   "hi": 0.51,
+   "n_train": 191,
+   "pnl_train": 0.1373,
+   "n_dias_train": 43,
+   "pnl_sin_2_mejores_dias": 0.1088,
+   "wallets": 109,
+   "top1_wallet": 0.042,
+   "p_max_train": 0.838,
+   "n_forward": 48,
+   "pnl_forward": 0.0286,
+   "hit_forward": 0.521,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.2182,
+    0.2344
+   ],
    "forward_ok_estricto": false
   },
   {
@@ -2732,6 +2761,56 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "LoL#SEGUIR",
+   "categoria": "LoL",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.27,
+   "hi": 0.28,
+   "n_train": 252,
+   "pnl_train": 0.4405,
+   "n_dias_train": 38,
+   "pnl_sin_2_mejores_dias": 0.1419,
+   "wallets": 170,
+   "top1_wallet": 0.02,
+   "p_max_train": 0.02,
+   "n_forward": 29,
+   "pnl_forward": 0.0116,
+   "hit_forward": 0.276,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.4942,
+    0.5175
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "LoL#SEGUIR",
+   "categoria": "LoL",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.02,
+   "lo": 0.27,
+   "hi": 0.29,
+   "n_train": 723,
+   "pnl_train": 0.2706,
+   "n_dias_train": 51,
+   "pnl_sin_2_mejores_dias": 0.1373,
+   "wallets": 321,
+   "top1_wallet": 0.019,
+   "p_max_train": 0.024,
+   "n_forward": 43,
+   "pnl_forward": 0.0111,
+   "hit_forward": 0.279,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.4091,
+    0.4345
+   ],
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "fl1-otros#SEGUIR",
    "categoria": "fl1-otros",
    "tipo": "SEGUIR",
@@ -2773,6 +2852,31 @@
    "hit_forward": 0.6,
    "forward_ok": false,
    "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Dota#SEGUIR",
+   "categoria": "Dota",
+   "tipo": "SEGUIR",
+   "estado_config": "LIVE",
+   "ancho": 0.02,
+   "lo": 0.49,
+   "hi": 0.51,
+   "n_train": 385,
+   "pnl_train": 0.1348,
+   "n_dias_train": 46,
+   "pnl_sin_2_mejores_dias": 0.1314,
+   "wallets": 170,
+   "top1_wallet": 0.039,
+   "p_max_train": 0.914,
+   "n_forward": 86,
+   "pnl_forward": -0.0041,
+   "hit_forward": 0.5,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.1883,
+    0.1806
+   ],
    "forward_ok_estricto": false
   },
   {
@@ -2942,56 +3046,6 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "Dota#SEGUIR",
-   "categoria": "Dota",
-   "tipo": "SEGUIR",
-   "estado_config": "LIVE",
-   "ancho": 0.01,
-   "lo": 0.5,
-   "hi": 0.51,
-   "n_train": 188,
-   "pnl_train": 0.1449,
-   "n_dias_train": 42,
-   "pnl_sin_2_mejores_dias": 0.1194,
-   "wallets": 107,
-   "top1_wallet": 0.043,
-   "p_max_train": 0.936,
-   "n_forward": 47,
-   "pnl_forward": -0.0755,
-   "hit_forward": 0.468,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.2856,
-    0.1766
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "Dota#SEGUIR",
-   "categoria": "Dota",
-   "tipo": "SEGUIR",
-   "estado_config": "LIVE",
-   "ancho": 0.02,
-   "lo": 0.49,
-   "hi": 0.51,
-   "n_train": 380,
-   "pnl_train": 0.1339,
-   "n_dias_train": 45,
-   "pnl_sin_2_mejores_dias": 0.1301,
-   "wallets": 167,
-   "top1_wallet": 0.039,
-   "p_max_train": 0.938,
-   "n_forward": 80,
-   "pnl_forward": -0.079,
-   "hit_forward": 0.463,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.2558,
-    0.1185
-   ],
-   "forward_ok_estricto": false
-  },
-  {
    "tupla": "lal-ganador#SEGUIR",
    "categoria": "lal-ganador",
    "tipo": "SEGUIR",
@@ -3011,31 +3065,6 @@
    "hit_forward": 0.429,
    "forward_ok": false,
    "forward_ic90": null,
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "cfb-otros#SEGUIR",
-   "categoria": "cfb-otros",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.02,
-   "lo": 0.63,
-   "hi": 0.65,
-   "n_train": 133,
-   "pnl_train": 0.1718,
-   "n_dias_train": 23,
-   "pnl_sin_2_mejores_dias": 0.1393,
-   "wallets": 38,
-   "top1_wallet": 0.12,
-   "p_max_train": 0.648,
-   "n_forward": 17,
-   "pnl_forward": -0.0858,
-   "hit_forward": 0.588,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.3626,
-    0.1897
-   ],
    "forward_ok_estricto": false
   },
   {
@@ -3060,31 +3089,6 @@
    "forward_ic90": [
     -0.564,
     0.3244
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "NBA#FADE",
-   "categoria": "NBA",
-   "tipo": "FADE",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.05,
-   "lo": 0.34,
-   "hi": 0.39,
-   "n_train": 509,
-   "pnl_train": 0.2184,
-   "n_dias_train": 26,
-   "pnl_sin_2_mejores_dias": 0.1159,
-   "wallets": 122,
-   "top1_wallet": 0.185,
-   "p_max_train": 0.0,
-   "n_forward": 311,
-   "pnl_forward": -0.1343,
-   "hit_forward": 0.315,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.2538,
-    -0.0137
    ],
    "forward_ok_estricto": false
   },
@@ -3136,50 +3140,75 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "NBA#FADE",
-   "categoria": "NBA",
+   "tupla": "NHL#FADE",
+   "categoria": "NHL",
    "tipo": "FADE",
    "estado_config": "candidata/dormida",
    "ancho": 0.01,
-   "lo": 0.35,
-   "hi": 0.36,
-   "n_train": 95,
-   "pnl_train": 0.338,
-   "n_dias_train": 20,
-   "pnl_sin_2_mejores_dias": 0.1034,
-   "wallets": 42,
-   "top1_wallet": 0.242,
-   "p_max_train": 0.246,
-   "n_forward": 60,
-   "pnl_forward": -0.1526,
-   "hit_forward": 0.3,
+   "lo": 0.63,
+   "hi": 0.64,
+   "n_train": 77,
+   "pnl_train": 0.1817,
+   "n_dias_train": 28,
+   "pnl_sin_2_mejores_dias": 0.1009,
+   "wallets": 43,
+   "top1_wallet": 0.104,
+   "p_max_train": 0.52,
+   "n_forward": 11,
+   "pnl_forward": -0.1443,
+   "hit_forward": 0.545,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "cfb-otros#SEGUIR",
+   "categoria": "cfb-otros",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.02,
+   "lo": 0.63,
+   "hi": 0.65,
+   "n_train": 135,
+   "pnl_train": 0.1775,
+   "n_dias_train": 24,
+   "pnl_sin_2_mejores_dias": 0.1469,
+   "wallets": 38,
+   "top1_wallet": 0.119,
+   "p_max_train": 0.73,
+   "n_forward": 15,
+   "pnl_forward": -0.1714,
+   "hit_forward": 0.533,
    "forward_ok": false,
    "forward_ic90": [
-    -0.4351,
-    0.1299
+    -0.4835,
+    0.1407
    ],
    "forward_ok_estricto": false
   },
   {
-   "tupla": "bra-otros#SEGUIR",
-   "categoria": "bra-otros",
-   "tipo": "SEGUIR",
+   "tupla": "NBA#FADE",
+   "categoria": "NBA",
+   "tipo": "FADE",
    "estado_config": "candidata/dormida",
-   "ancho": 0.03,
-   "lo": 0.58,
-   "hi": 0.61,
-   "n_train": 40,
-   "pnl_train": 0.2142,
-   "n_dias_train": 15,
-   "pnl_sin_2_mejores_dias": 0.1187,
-   "wallets": 17,
-   "top1_wallet": 0.15,
-   "p_max_train": 0.562,
-   "n_forward": 4,
-   "pnl_forward": -0.1556,
-   "hit_forward": 0.5,
+   "ancho": 0.05,
+   "lo": 0.34,
+   "hi": 0.39,
+   "n_train": 560,
+   "pnl_train": 0.2068,
+   "n_dias_train": 27,
+   "pnl_sin_2_mejores_dias": 0.1129,
+   "wallets": 126,
+   "top1_wallet": 0.195,
+   "p_max_train": 0.004,
+   "n_forward": 277,
+   "pnl_forward": -0.1794,
+   "hit_forward": 0.3,
    "forward_ok": false,
-   "forward_ic90": null,
+   "forward_ic90": [
+    -0.3027,
+    -0.0491
+   ],
    "forward_ok_estricto": false
   },
   {
@@ -3274,31 +3303,6 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "NBA#FADE",
-   "categoria": "NBA",
-   "tipo": "FADE",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.02,
-   "lo": 0.37,
-   "hi": 0.39,
-   "n_train": 212,
-   "pnl_train": 0.2056,
-   "n_dias_train": 26,
-   "pnl_sin_2_mejores_dias": 0.1251,
-   "wallets": 73,
-   "top1_wallet": 0.17,
-   "p_max_train": 0.248,
-   "n_forward": 143,
-   "pnl_forward": -0.2037,
-   "hit_forward": 0.301,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.3713,
-    -0.0366
-   ],
-   "forward_ok_estricto": false
-  },
-  {
    "tupla": "lal-otros#SEGUIR",
    "categoria": "lal-otros",
    "tipo": "SEGUIR",
@@ -3321,25 +3325,28 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "bra-otros#SEGUIR",
-   "categoria": "bra-otros",
-   "tipo": "SEGUIR",
+   "tupla": "NBA#FADE",
+   "categoria": "NBA",
+   "tipo": "FADE",
    "estado_config": "candidata/dormida",
-   "ancho": 0.05,
-   "lo": 0.55,
-   "hi": 0.6,
-   "n_train": 68,
-   "pnl_train": 0.2095,
-   "n_dias_train": 18,
-   "pnl_sin_2_mejores_dias": 0.1136,
-   "wallets": 24,
-   "top1_wallet": 0.147,
-   "p_max_train": 0.528,
-   "n_forward": 9,
-   "pnl_forward": -0.2292,
-   "hit_forward": 0.444,
+   "ancho": 0.01,
+   "lo": 0.34,
+   "hi": 0.35,
+   "n_train": 210,
+   "pnl_train": 0.3369,
+   "n_dias_train": 21,
+   "pnl_sin_2_mejores_dias": 0.1693,
+   "wallets": 71,
+   "top1_wallet": 0.238,
+   "p_max_train": 0.27,
+   "n_forward": 52,
+   "pnl_forward": -0.217,
+   "hit_forward": 0.269,
    "forward_ok": false,
-   "forward_ic90": null,
+   "forward_ic90": [
+    -0.4967,
+    0.0626
+   ],
    "forward_ok_estricto": false
   },
   {
@@ -3347,23 +3354,23 @@
    "categoria": "NBA",
    "tipo": "FADE",
    "estado_config": "candidata/dormida",
-   "ancho": 0.03,
-   "lo": 0.37,
-   "hi": 0.4,
-   "n_train": 366,
-   "pnl_train": 0.1828,
-   "n_dias_train": 26,
-   "pnl_sin_2_mejores_dias": 0.1054,
-   "wallets": 101,
-   "top1_wallet": 0.158,
-   "p_max_train": 0.006,
-   "n_forward": 222,
-   "pnl_forward": -0.236,
-   "hit_forward": 0.293,
+   "ancho": 0.02,
+   "lo": 0.34,
+   "hi": 0.36,
+   "n_train": 326,
+   "pnl_train": 0.2402,
+   "n_dias_train": 23,
+   "pnl_sin_2_mejores_dias": 0.1014,
+   "wallets": 99,
+   "top1_wallet": 0.202,
+   "p_max_train": 0.048,
+   "n_forward": 105,
+   "pnl_forward": -0.2356,
+   "hit_forward": 0.267,
    "forward_ok": false,
    "forward_ic90": [
-    -0.3649,
-    -0.1082
+    -0.4279,
+    -0.0164
    ],
    "forward_ok_estricto": false
   },
@@ -3387,31 +3394,6 @@
    "hit_forward": 0.5,
    "forward_ok": false,
    "forward_ic90": null,
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "NBA#SEGUIR",
-   "categoria": "NBA",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.01,
-   "lo": 0.21,
-   "hi": 0.22,
-   "n_train": 62,
-   "pnl_train": 0.4472,
-   "n_dias_train": 19,
-   "pnl_sin_2_mejores_dias": 0.2213,
-   "wallets": 35,
-   "top1_wallet": 0.129,
-   "p_max_train": 0.006,
-   "n_forward": 57,
-   "pnl_forward": -0.2544,
-   "hit_forward": 0.158,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.5858,
-    0.1599
-   ],
    "forward_ok_estricto": false
   },
   {
@@ -3556,6 +3538,56 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "NFL#FADE",
+   "categoria": "NFL",
+   "tipo": "FADE",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.39,
+   "hi": 0.4,
+   "n_train": 220,
+   "pnl_train": 0.2436,
+   "n_dias_train": 24,
+   "pnl_sin_2_mejores_dias": 0.1358,
+   "wallets": 77,
+   "top1_wallet": 0.1,
+   "p_max_train": 0.404,
+   "n_forward": 28,
+   "pnl_forward": -0.2761,
+   "hit_forward": 0.286,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.6381,
+    0.0858
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "NBA#SEGUIR",
+   "categoria": "NBA",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.21,
+   "hi": 0.22,
+   "n_train": 68,
+   "pnl_train": 0.3195,
+   "n_dias_train": 20,
+   "pnl_sin_2_mejores_dias": 0.1068,
+   "wallets": 37,
+   "top1_wallet": 0.132,
+   "p_max_train": 0.096,
+   "n_forward": 59,
+   "pnl_forward": -0.2796,
+   "hit_forward": 0.153,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.5998,
+    0.1206
+   ],
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "mls-otros#FADE",
    "categoria": "mls-otros",
    "tipo": "FADE",
@@ -3575,53 +3607,6 @@
    "hit_forward": 0.333,
    "forward_ok": false,
    "forward_ic90": null,
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "NHL#FADE",
-   "categoria": "NHL",
-   "tipo": "FADE",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.01,
-   "lo": 0.63,
-   "hi": 0.64,
-   "n_train": 77,
-   "pnl_train": 0.1817,
-   "n_dias_train": 28,
-   "pnl_sin_2_mejores_dias": 0.1009,
-   "wallets": 43,
-   "top1_wallet": 0.104,
-   "p_max_train": 0.514,
-   "n_forward": 9,
-   "pnl_forward": -0.3028,
-   "hit_forward": 0.444,
-   "forward_ok": false,
-   "forward_ic90": null,
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "NFL#FADE",
-   "categoria": "NFL",
-   "tipo": "FADE",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.01,
-   "lo": 0.39,
-   "hi": 0.4,
-   "n_train": 220,
-   "pnl_train": 0.2436,
-   "n_dias_train": 24,
-   "pnl_sin_2_mejores_dias": 0.1358,
-   "wallets": 77,
-   "top1_wallet": 0.1,
-   "p_max_train": 0.404,
-   "n_forward": 26,
-   "pnl_forward": -0.3179,
-   "hit_forward": 0.269,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.7077,
-    0.0719
-   ],
    "forward_ok_estricto": false
   },
   {
@@ -3714,28 +3699,6 @@
    "n_forward": 13,
    "pnl_forward": -0.4512,
    "hit_forward": 0.385,
-   "forward_ok": false,
-   "forward_ic90": null,
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "bra-otros#FADE",
-   "categoria": "bra-otros",
-   "tipo": "FADE",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.03,
-   "lo": 0.56,
-   "hi": 0.59,
-   "n_train": 51,
-   "pnl_train": 0.2148,
-   "n_dias_train": 13,
-   "pnl_sin_2_mejores_dias": 0.1314,
-   "wallets": 28,
-   "top1_wallet": 0.118,
-   "p_max_train": 0.698,
-   "n_forward": 10,
-   "pnl_forward": -0.4861,
-   "hit_forward": 0.3,
    "forward_ok": false,
    "forward_ic90": null,
    "forward_ok_estricto": false
@@ -3942,31 +3905,6 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "LoL#SEGUIR",
-   "categoria": "LoL",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.01,
-   "lo": 0.18,
-   "hi": 0.19,
-   "n_train": 52,
-   "pnl_train": 0.5862,
-   "n_dias_train": 23,
-   "pnl_sin_2_mejores_dias": 0.2588,
-   "wallets": 46,
-   "top1_wallet": 0.038,
-   "p_max_train": 0.002,
-   "n_forward": 25,
-   "pnl_forward": -0.7794,
-   "hit_forward": 0.04,
-   "forward_ok": false,
-   "forward_ic90": [
-    -1.0,
-    -0.3383
-   ],
-   "forward_ok_estricto": false
-  },
-  {
    "tupla": "sea-ganador#FADE",
    "categoria": "sea-ganador",
    "tipo": "FADE",
@@ -3996,14 +3934,14 @@
    "ancho": 0.01,
    "lo": 0.11,
    "hi": 0.12,
-   "n_train": 48,
-   "pnl_train": 1.0731,
-   "n_dias_train": 27,
-   "pnl_sin_2_mejores_dias": 0.2623,
+   "n_train": 49,
+   "pnl_train": 1.0308,
+   "n_dias_train": 28,
+   "pnl_sin_2_mejores_dias": 0.2336,
    "wallets": 41,
-   "top1_wallet": 0.062,
-   "p_max_train": 0.002,
-   "n_forward": 4,
+   "top1_wallet": 0.061,
+   "p_max_train": 0.004,
+   "n_forward": 3,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
    "forward_ok": false,
@@ -4018,14 +3956,14 @@
    "ancho": 0.02,
    "lo": 0.11,
    "hi": 0.13,
-   "n_train": 86,
-   "pnl_train": 0.6337,
-   "n_dias_train": 35,
-   "pnl_sin_2_mejores_dias": 0.1908,
+   "n_train": 88,
+   "pnl_train": 0.5966,
+   "n_dias_train": 36,
+   "pnl_sin_2_mejores_dias": 0.1618,
    "wallets": 62,
-   "top1_wallet": 0.058,
-   "p_max_train": 0.006,
-   "n_forward": 8,
+   "top1_wallet": 0.057,
+   "p_max_train": 0.004,
+   "n_forward": 6,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
    "forward_ok": false,
@@ -4128,13 +4066,13 @@
    "ancho": 0.02,
    "lo": 0.06,
    "hi": 0.08,
-   "n_train": 46,
-   "pnl_train": 1.6748,
-   "n_dias_train": 19,
-   "pnl_sin_2_mejores_dias": 0.6815,
-   "wallets": 34,
-   "top1_wallet": 0.087,
-   "p_max_train": 0.008,
+   "n_train": 47,
+   "pnl_train": 1.6178,
+   "n_dias_train": 20,
+   "pnl_sin_2_mejores_dias": 0.6235,
+   "wallets": 35,
+   "top1_wallet": 0.085,
+   "p_max_train": 0.002,
    "n_forward": 3,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
@@ -4150,36 +4088,14 @@
    "ancho": 0.03,
    "lo": 0.05,
    "hi": 0.08,
-   "n_train": 63,
-   "pnl_train": 0.953,
-   "n_dias_train": 25,
-   "pnl_sin_2_mejores_dias": 0.1483,
-   "wallets": 45,
-   "top1_wallet": 0.079,
-   "p_max_train": 0.008,
+   "n_train": 64,
+   "pnl_train": 0.9225,
+   "n_dias_train": 26,
+   "pnl_sin_2_mejores_dias": 0.121,
+   "wallets": 46,
+   "top1_wallet": 0.078,
+   "p_max_train": 0.004,
    "n_forward": 6,
-   "pnl_forward": -1.0,
-   "hit_forward": 0.0,
-   "forward_ok": false,
-   "forward_ic90": null,
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "NFL#SEGUIR",
-   "categoria": "NFL",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.05,
-   "lo": 0.08,
-   "hi": 0.13,
-   "n_train": 59,
-   "pnl_train": 0.6355,
-   "n_dias_train": 18,
-   "pnl_sin_2_mejores_dias": 0.1416,
-   "wallets": 25,
-   "top1_wallet": 0.169,
-   "p_max_train": 0.01,
-   "n_forward": 5,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
    "forward_ok": false,
@@ -4244,7 +4160,7 @@
    "pnl_sin_2_mejores_dias": 0.2068,
    "wallets": 18,
    "top1_wallet": 0.225,
-   "p_max_train": 0.88,
+   "p_max_train": 0.892,
    "n_forward": 1,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
@@ -4266,7 +4182,7 @@
    "pnl_sin_2_mejores_dias": 0.2059,
    "wallets": 14,
    "top1_wallet": 0.327,
-   "p_max_train": 0.348,
+   "p_max_train": 0.312,
    "n_forward": 2,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
@@ -4288,7 +4204,7 @@
    "pnl_sin_2_mejores_dias": 0.2173,
    "wallets": 21,
    "top1_wallet": 0.322,
-   "p_max_train": 0.196,
+   "p_max_train": 0.206,
    "n_forward": 2,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
@@ -4420,7 +4336,7 @@
    "pnl_sin_2_mejores_dias": 0.3908,
    "wallets": 25,
    "top1_wallet": 0.136,
-   "p_max_train": 0.082,
+   "p_max_train": 0.106,
    "n_forward": 9,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
@@ -4442,7 +4358,7 @@
    "pnl_sin_2_mejores_dias": 0.601,
    "wallets": 27,
    "top1_wallet": 0.158,
-   "p_max_train": 0.002,
+   "p_max_train": 0.006,
    "n_forward": 9,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
@@ -4473,6 +4389,50 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "bra-otros#FADE",
+   "categoria": "bra-otros",
+   "tipo": "FADE",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.02,
+   "lo": 0.56,
+   "hi": 0.58,
+   "n_train": 41,
+   "pnl_train": 0.3097,
+   "n_dias_train": 12,
+   "pnl_sin_2_mejores_dias": 0.208,
+   "wallets": 24,
+   "top1_wallet": 0.098,
+   "p_max_train": 0.222,
+   "n_forward": 6,
+   "pnl_forward": -1.0,
+   "hit_forward": 0.0,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "bra-otros#FADE",
+   "categoria": "bra-otros",
+   "tipo": "FADE",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.03,
+   "lo": 0.56,
+   "hi": 0.59,
+   "n_train": 56,
+   "pnl_train": 0.1981,
+   "n_dias_train": 14,
+   "pnl_sin_2_mejores_dias": 0.1184,
+   "wallets": 30,
+   "top1_wallet": 0.107,
+   "p_max_train": 0.814,
+   "n_forward": 6,
+   "pnl_forward": -1.0,
+   "hit_forward": 0.0,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "mls-otros#FADE",
    "categoria": "mls-otros",
    "tipo": "FADE",
@@ -4495,6 +4455,50 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "bra-otros#SEGUIR",
+   "categoria": "bra-otros",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.03,
+   "lo": 0.58,
+   "hi": 0.61,
+   "n_train": 42,
+   "pnl_train": 0.2368,
+   "n_dias_train": 16,
+   "pnl_sin_2_mejores_dias": 0.158,
+   "wallets": 17,
+   "top1_wallet": 0.143,
+   "p_max_train": 0.456,
+   "n_forward": 2,
+   "pnl_forward": -1.0,
+   "hit_forward": 0.0,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "bra-otros#SEGUIR",
+   "categoria": "bra-otros",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.05,
+   "lo": 0.55,
+   "hi": 0.6,
+   "n_train": 73,
+   "pnl_train": 0.2217,
+   "n_dias_train": 19,
+   "pnl_sin_2_mejores_dias": 0.138,
+   "wallets": 26,
+   "top1_wallet": 0.137,
+   "p_max_train": 0.464,
+   "n_forward": 4,
+   "pnl_forward": -1.0,
+   "hit_forward": 0.0,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "bra-ganador#FADE",
    "categoria": "bra-ganador",
    "tipo": "FADE",
@@ -4502,14 +4506,14 @@
    "ancho": 0.05,
    "lo": 0.43,
    "hi": 0.48,
-   "n_train": 52,
-   "pnl_train": 0.4779,
-   "n_dias_train": 15,
-   "pnl_sin_2_mejores_dias": 0.308,
-   "wallets": 27,
-   "top1_wallet": 0.096,
-   "p_max_train": 0.0,
-   "n_forward": 10,
+   "n_train": 59,
+   "pnl_train": 0.3025,
+   "n_dias_train": 16,
+   "pnl_sin_2_mejores_dias": 0.1211,
+   "wallets": 28,
+   "top1_wallet": 0.102,
+   "p_max_train": 0.132,
+   "n_forward": 3,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
    "forward_ok": false,
@@ -4524,14 +4528,14 @@
    "ancho": 0.05,
    "lo": 0.45,
    "hi": 0.5,
-   "n_train": 42,
-   "pnl_train": 0.2964,
-   "n_dias_train": 16,
-   "pnl_sin_2_mejores_dias": 0.1518,
+   "n_train": 43,
+   "pnl_train": 0.2662,
+   "n_dias_train": 17,
+   "pnl_sin_2_mejores_dias": 0.1158,
    "wallets": 24,
-   "top1_wallet": 0.095,
-   "p_max_train": 0.182,
-   "n_forward": 2,
+   "top1_wallet": 0.093,
+   "p_max_train": 0.314,
+   "n_forward": 1,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
    "forward_ok": false,
@@ -4706,7 +4710,7 @@
    "pnl_sin_2_mejores_dias": 0.1033,
    "wallets": 18,
    "top1_wallet": 0.28,
-   "p_max_train": 0.824,
+   "p_max_train": 0.834,
    "n_forward": 0,
    "pnl_forward": null,
    "hit_forward": null,
@@ -4728,7 +4732,7 @@
    "pnl_sin_2_mejores_dias": 0.1273,
    "wallets": 20,
    "top1_wallet": 0.159,
-   "p_max_train": 0.374,
+   "p_max_train": 0.416,
    "n_forward": 0,
    "pnl_forward": null,
    "hit_forward": null,
@@ -5175,8 +5179,74 @@
    "forward_ok": false,
    "forward_ic90": null,
    "forward_ok_estricto": false
+  },
+  {
+   "tupla": "ucl-otros#SEGUIR",
+   "categoria": "ucl-otros",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.53,
+   "hi": 0.54,
+   "n_train": 40,
+   "pnl_train": 0.3509,
+   "n_dias_train": 7,
+   "pnl_sin_2_mejores_dias": 0.281,
+   "wallets": 20,
+   "top1_wallet": 0.15,
+   "p_max_train": 0.798,
+   "n_forward": 0,
+   "pnl_forward": null,
+   "hit_forward": null,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "ucl-otros#SEGUIR",
+   "categoria": "ucl-otros",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.02,
+   "lo": 0.52,
+   "hi": 0.54,
+   "n_train": 82,
+   "pnl_train": 0.2611,
+   "n_dias_train": 7,
+   "pnl_sin_2_mejores_dias": 0.2551,
+   "wallets": 26,
+   "top1_wallet": 0.159,
+   "p_max_train": 0.318,
+   "n_forward": 0,
+   "pnl_forward": null,
+   "hit_forward": null,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "ucl-otros#SEGUIR",
+   "categoria": "ucl-otros",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.03,
+   "lo": 0.52,
+   "hi": 0.55,
+   "n_train": 126,
+   "pnl_train": 0.2271,
+   "n_dias_train": 7,
+   "pnl_sin_2_mejores_dias": 0.1871,
+   "wallets": 34,
+   "top1_wallet": 0.151,
+   "p_max_train": 0.008,
+   "n_forward": 0,
+   "pnl_forward": null,
+   "hit_forward": null,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
   }
  ],
- "n_zonas_operables_estrictas": 2,
- "ultimo_snapshot_historial": "2026-11-12T08:54:02+00:00"
+ "n_zonas_operables_estrictas": 1,
+ "ultimo_snapshot_historial": "2026-11-13T08:54:01+00:00"
 }
