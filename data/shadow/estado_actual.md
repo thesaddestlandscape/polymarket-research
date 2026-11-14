@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-14 23:49 UTC
+# Estado del bot — 2026-11-14 23:55 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +196966.81 $ (ficción Kelly: +774241% s/ operativo) |
 | P&L sim hoy (2026-11-14) | 🟢 +3005.72 $ |
 | Operaciones resueltas | 1448398 (828542 WIN / 619856 LOSS) — 57.2% |
-| Señales abiertas | 290666 |
+| Señales abiertas | 291173 |
 
 ## Estrategias (visión global)
 
@@ -91,14 +91,14 @@
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-11-14T23:50 UTC | rechazos 1h: 7 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-11-14T23:54 UTC | rechazos 1h: 6 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $63,588.39 | 0.1min |  |
-| ✅ ETH | $1,749.31 | 0.1min |  |
-| ✅ SOL | $69.96 | 0.1min |  |
-| ✅ XRP | $0.91 | 0.1min |  |
+| ✅ BTC | $64,011.00 | 0.2min |  |
+| ✅ ETH | $1,765.53 | 0.2min |  |
+| ✅ SOL | $70.25 | 0.2min |  |
+| ✅ XRP | $0.91 | 0.2min |  |
 
 **Cross-source** (coinbase, kraken):
 
@@ -110,7 +110,7 @@
 | XRP | $0.91 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:7 (rango=0, spike=0)
+- ⚠ rechazos_1h:6 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
