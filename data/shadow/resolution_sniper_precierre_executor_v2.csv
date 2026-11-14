@@ -200068,3 +200068,5 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-11-14T11:45:00.091+00:00,1794656700,5min,False,XRP,Up,,0,,,,,7012708,False,no_fillable_ask=None_ratio=0.0,0.0,,,57.2,,,,,,,,RESOLUTION_SNIPER_NAIVE,,9.04755064370763
 2026-11-14T11:45:00.091+00:00,1794656700,5min,False,ETH,Up,,0,,,,,7012703,False,no_fillable_ask=None_ratio=0.0,0.0,,,47.7,,,,,,,,RESOLUTION_SNIPER_NAIVE,,7.659823637498748
 2026-11-14T11:45:00.091+00:00,1794656700,5min,False,BTC,Up,,0,,,,,7012707,False,no_fillable_ask=None_ratio=0.0,0.0,,,75.7,,,,,,,,RESOLUTION_SNIPER_NAIVE,,10.420169583169116
+2026-11-14T11:59:48.135+00:00,1794657600,60min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
+2026-11-14T11:59:48.324+00:00,1794657600,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
