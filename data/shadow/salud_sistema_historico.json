@@ -1,53 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-25T07:08:02+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 287,
-      "resolve_postmortem_p50_s": 12.0,
-      "resolve_postmortem_p95_s": 22.0,
-      "resolve_postmortem_max_s": 48.0,
-      "n_ciclos_live_trade": 3401,
-      "hueco_live_trade_max_s": 109.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 13,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 85.0,
-      "gb_libres": 11.09,
-      "git_gb": 0.0,
-      "data_gb": 29.18,
-      "datalogs_gb": 8.23
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 1.4,
-      "ram_pct_libre": 37.8
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 448,
-      "n_results_total": 255807
-    },
-    "carga_sistema": {
-      "load1": 9.22,
-      "load5": 11.08,
-      "load15": 12.16,
-      "nproc": 2,
-      "ratio5": 5.54,
-      "n_procesos_total": 210
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [
-      "🔥 CPU sobresuscrita: load5=11.08 en 2 cores (ratio=5.54x, umbral 3.0x) -- 210 procesos vivos"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-26T07:08:02+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 488,
@@ -16479,6 +16431,208 @@
     "anomalias": [
       "⚠️ screens STALE (código en disco != código cargado): ejeclive",
       "💀 5 OOM-kill(s) del kernel en 24h: python3(pid 1001135, 2851.3MB), systemd(pid 841114, 1.0MB), (sd-pam)(pid 841116, 0.8MB), python(pid 851773, 1419.0MB), python(pid 954751, 3112.7MB)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-14T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 133,
+      "resolve_postmortem_p50_s": 117.1,
+      "resolve_postmortem_p95_s": 221.2,
+      "resolve_postmortem_max_s": 732.2,
+      "resolve_postmortem_duraciones_s": [
+        120.3,
+        115.9,
+        91.9,
+        562.3,
+        93.7,
+        99.9,
+        95.1,
+        97.1,
+        107.7,
+        221.2,
+        146.8,
+        100.3,
+        101.4,
+        101.8,
+        115.8,
+        116.8,
+        622.0,
+        119.1,
+        100.3,
+        99.6,
+        113.1,
+        178.3,
+        732.2,
+        78.1,
+        95.6,
+        105.6,
+        106.2,
+        104.9,
+        175.6,
+        170.0,
+        113.6,
+        122.9,
+        107.7,
+        104.3,
+        212.0,
+        154.6,
+        103.0,
+        136.7,
+        125.3,
+        115.1,
+        194.3,
+        231.1,
+        115.7,
+        334.2,
+        129.4,
+        107.2,
+        210.9,
+        189.9,
+        138.9,
+        143.7,
+        113.3,
+        110.0,
+        189.5,
+        150.7,
+        132.0,
+        119.0,
+        103.6,
+        119.5,
+        208.2,
+        159.4,
+        117.1,
+        133.5,
+        103.3,
+        109.9,
+        192.6,
+        269.7,
+        120.6,
+        109.1,
+        114.1,
+        128.7,
+        198.5,
+        186.8,
+        129.5,
+        109.6,
+        98.7,
+        102.2,
+        201.2,
+        169.6,
+        113.5,
+        103.8,
+        108.8,
+        116.0,
+        201.6,
+        151.4,
+        117.2,
+        110.9,
+        182.7,
+        197.3,
+        186.9,
+        147.8,
+        105.1,
+        87.0,
+        126.9,
+        133.8,
+        170.0,
+        145.4,
+        100.6,
+        88.3,
+        88.3,
+        94.7,
+        162.6,
+        141.9,
+        91.4,
+        91.7,
+        89.4,
+        96.1,
+        164.0,
+        142.2,
+        91.6,
+        97.6,
+        106.7,
+        95.2,
+        183.0,
+        136.5,
+        95.3,
+        96.9,
+        92.9,
+        90.4,
+        171.1,
+        138.7,
+        98.8,
+        98.0,
+        98.5,
+        94.6,
+        169.4,
+        167.3,
+        108.0,
+        121.2,
+        113.0,
+        125.2,
+        193.4,
+        168.1,
+        207.5
+      ],
+      "n_ciclos_live_trade": 4564,
+      "hueco_live_trade_max_s": 66.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 25,
+      "stale": [
+        "ejeclive"
+      ]
+    },
+    "disco": {
+      "pct_usado": 84.0,
+      "gb_libres": 11.7,
+      "git_gb": 0.0,
+      "data_gb": 18.88,
+      "datalogs_gb": 7.07
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 7.69,
+      "ram_pct_libre": 50.5
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 781,
+      "n_results_total": 1437644
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 4.19,
+      "load5": 5.85,
+      "load15": 7.45,
+      "nproc": 8,
+      "ratio5": 0.73,
+      "n_procesos_total": 388
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 0,
+      "eventos": []
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 732s (umbral 400s)",
+      "⚠️ screens STALE (código en disco != código cargado): ejeclive"
     ],
     "estado": "ANOMALIA"
   }
