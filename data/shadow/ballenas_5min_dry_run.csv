@@ -50607,3 +50607,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-11-15T01:10:10+00:00,SOL,7028651,0x5f390c67c24ac6fcf579dcf991da0d4c08f01a1640fbe5393aedc3ef094bf0f7,2026-11-15T01:15:00Z,0.44,-0.0571,1.0,4,290.1,,,,6,False,fuera_de_bandas_significativas
 2026-11-15T01:11:04+00:00,DOGE,7028646,0x51910206fce421b3f2c16d35a02df97dd19823a1bfb46ca61c2c3d157bcf8716,2026-11-15T01:15:00Z,0.27,-0.0569,1.0,4,236.5,,,,5,False,fuera_de_bandas_significativas
 2026-11-15T01:11:57+00:00,ETH,7028647,0xa6a3bee629fded4df03fb1b2373f298784f3e6e1393e01c3ad56121908d9b6df,2026-11-15T01:15:00Z,0.76,0.0295,1.0,4,183.1,,,,64,False,banda_ok py=0.760 rest_lo=1.58 rest_hi=3.93
+2026-11-15T01:17:17+00:00,SOL,7028667,0x18c936db34ad873c3606631c13eab8204e9af0ea7b8ff543408d60c1800fb3fa,2026-11-15T01:20:00Z,0.3,0.0829,1.0,3,162.9,,,,8,False,fuera_de_bandas_significativas
