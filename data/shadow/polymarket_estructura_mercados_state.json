@@ -29,7 +29,7 @@
       "enableOrderBook": true
     },
     "BTC#60min": {
-      "description": "This market will resolve to \"Up\" if the close price is greater than or equal to the open price for the BTC/USDT 1 hour candle that begins on the time and date specified in the title. Otherwise, this market will resolve to \"Down\".\n\nThe resolution source for this market is information from Binance, specifically the BTC/USDT pair (https://www.binance.com/en/trade/BTC_USDT). The close « C » and open « O » displayed at the top of the graph for the relevant \"1H\" candle will be used once the data for that candle is finalized.\n\nPlease note that this market is about the price according to Binance BTC/USDT, not according to other exchanges or trading pairs.",
+      "description": "This market will resolve to \"Up\" if the \"Close\" price for the Binance 1 minute candle for BTC/USDT Nov 17 '26 12:00 in the ET timezone (noon) is lower than the final \"Close\" price for the Nov 18 '26 12:00 ET candle.\n\nThis market will resolve to \"Down\" if the \"Close\" price for the Binance 1 minute candle for BTC/USDT Nov 17 '26 12:00 in the ET timezone (noon) is higher than the final \"Close\" price for the Nov 18 '26 12:00 ET candle.\n\nIf the final \"Close\" price for both of these candles is exactly equal on Binance, this market will resolve 50-50.\n\nThe resolution source for this market is Binance, specifically the BTC/USDT \"Close\" prices currently available at https://www.binance.com/en/trade/BTC_USDT with \"1m\" and \"Candles\" selected on the top bar.\n\nPlease note that this market is about the price according to Binance BTC/USDT, not according to other exchanges or trading pairs.",
       "resolutionSource": "https://www.binance.com/en/trade/BTC_USDT",
       "feeSchedule": {
         "exponent": 1,
@@ -71,7 +71,7 @@
       "enableOrderBook": true
     },
     "ETH#60min": {
-      "description": "This market will resolve to \"Up\" if the close price is greater than or equal to the open price for the ETH/USDT 1 hour candle that begins on the time and date specified in the title. Otherwise, this market will resolve to \"Down\".\n\nThe resolution source for this market is information from Binance, specifically the ETH/USDT pair (https://www.binance.com/en/trade/ETH_USDT). The close « C » and open « O » displayed at the top of the graph for the relevant \"1H\" candle will be used once the data for that candle is finalized.\n\nPlease note that this market is about the price according to Binance ETH/USDT, not according to other exchanges or trading pairs.",
+      "description": "This market will resolve to \"Up\" if the \"Close\" price for the Binance 1 minute candle for ETH/USDT Nov 17 '26 12:00 in the ET timezone (noon) is lower than the final \"Close\" price for the Nov 18 '26 12:00 ET candle.\n\nThis market will resolve to \"Down\" if the \"Close\" price for the Binance 1 minute candle for ETH/USDT Nov 17 '26 12:00 in the ET timezone (noon) is higher than the final \"Close\" price for the Nov 18 '26 12:00 ET candle.\n\nIf the final \"Close\" price for both of these candles is exactly equal on Binance, this market will resolve 50-50.\n\nThe resolution source for this market is Binance, specifically the ETH/USDT \"Close\" prices currently available at https://www.binance.com/en/trade/ETH_USDT with \"1m\" and \"Candles\" selected on the top bar.\n\nPlease note that this market is about the price according to Binance ETH/USDT, not according to other exchanges or trading pairs.",
       "resolutionSource": "https://www.binance.com/en/trade/ETH_USDT",
       "feeSchedule": {
         "exponent": 1,
@@ -85,5 +85,5 @@
       "enableOrderBook": true
     }
   },
-  "actualizado": "2026-11-15T06:42:03+00:00"
+  "actualizado": "2026-11-16T06:42:02+00:00"
 }
