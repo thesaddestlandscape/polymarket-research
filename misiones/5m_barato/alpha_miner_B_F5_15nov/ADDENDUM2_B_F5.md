@@ -1,0 +1,28 @@
+# ADDENDUM2 al PREREG_B_F5 / ADDENDUM1 — EXP-1: cierre de E2agg/E5/E6 (dias C3), unidad mercado-lado y placebo por unidad
+Fecha de escritura: 2026-11-16 ~08:10Z (la hora real del sha queda en `exp1/MANIFEST_ADD2.txt`). Escrito ANTES de calcular ninguna cifra nueva: solo se leyeron STATUS.json, run_exp1.log, supervisor.log, out_E2_*.txt (estados), las salidas ya publicadas de ADD1 (E2_poblacion/E5/E6) y el codigo. `ADDENDUM1_B_F5.md` (sha 6fc7dba5...) y `PREREG_B_F5.md` NO se editan. measurement_id: BF5-EXP1-ADD2. Autor: quantum-alpha-miner (no autocertifica; validan statistical-validator y red-team).
+
+## 0. Hechos verificados (16-Nov 07:50Z)
+- E2 por dia: 35/37 COMPLETE. El 23-Oct (matado por el OOM-killer a las 18:24Z, rc 137) se rehizo a las 18:45Z: COMPLETE, cobertura 1,0, 12.584 prints, suelo R1 36 ms (`exp1/out_E2_2026-10-23.txt`). Lo que deja E2agg/E5/E6 en PARTIAL son DOS dias FAILED por el assert C3: 16-Oct (etiqueta R0, suelo p5 mediano 40,0 ms en 144 ventanas frente a la constante 19,5) y 24-Oct (etiqueta R1, suelo 20,0 ms frente a 39,5). Repetirlos sin cambios vuelve a fallar (determinista).
+- Lectura: las constantes de epoca por timestamp de ADD1 no describen esos dos dias (el suelo rx-ex cambio fuera de las fronteras declaradas). No es un fallo de desenlace ni de causalidad: la cobertura de desenlace (>= 0,995) y C7 se comprueban antes que C3 y pasaron; C5 se comprueba despues y se mantiene.
+
+## 1. Regla primaria intacta
+Las celdas decisivas de ADD1 (K_pop = 4: p35/p60 x R1/R2) se quedan con los 35 dias. 16-Oct y 24-Oct quedan FUERA de ellas para siempre (FAILED-C3, declarado). Ninguna cifra decisiva de ADD1 cambia; K no cambia.
+
+## 2. Sensibilidad para esos 2 dias (NO decide)
+Re-extraccion identica a `e2_dia.py` salvo C3: epoca por SUELO MEDIDO en cada ventana de 10 min (p5 de rx-ex con >= 200 filas q, el mismo histograma de ADD1): clase `lo` si |p5 - 19,25| <= 5 ms, `hi` si |p5 - 39,5| <= 5 ms, `indet` en otro caso o ventana sin datos. Etiqueta del print = epoca de calendario si su clase coincide (R0/R2 con lo, R1 con hi); si no, `R0hi`, `R1lo` o `R2hi`; `indet` se excluye y se cuenta. Si mas del 20 % de los prints del dia quedan `indet`, el dia queda FAILED tambien en ADD2. Resto de asserts (C2, C5, C7, cobertura >= 0,995) identicos. Salidas aparte (`cache/pob_add2_D.json`, `cache/D_pob_add2.pkl.gz`, `cache/add2_bn_D.csv`, `cache/add2_k_D.csv`); la cache de ADD1 no se toca.
+Uso: (a) tabla «celdas por clase de suelo» (hi = R1 + R0hi + R2hi; lo = R2 + R1lo) a l_ef 35/60, descriptiva, con su propio placebo por unidad; (b) gradiente propio de cada uno de los 2 dias; (c) E5 y E6 se recalculan con 37/37 dias como versiones `_add2` (E5 no usa la epoca; E6 compara B solo con la poblacion de los dias de B, 20-23 Oct, y su tabla por epoca no incluye las etiquetas anomalas) y se comparan con las de 35 dias. Ninguna de estas tablas cambia etiquetas.
+
+## 3. Unidad mercado-lado (peticion del chief 16-Nov; convencion del proyecto, trampas 07-Oct y 14-Oct)
+Unidad = (mercado `mid`, lado `lado_m`, tercil de F5, segmento dia-epoca). En cada celda decisiva (35 dias): n prints, n unidades, n mercado-lado distintos, dias, cierres; EV ponderado por EUR (Σpnl/Σcoste; identico al de prints) y EV medio por unidad (media de Σpnl_u/Σcoste_u), por tercil y «todo»; inversion = tercil alto (EV y diferencia frente a «todo»). Gradiente diario ponderado por EUR (= ADD1; sirve de regresion) y gradiente diario por unidad (media de EV_u del tercil bajo menos la del alto en cada segmento), ambos con IC90 por dias (t unilateral, como ADD1), dias positivos y media sin los 2 mejores segmentos (misma convencion que `e2_agrega.py`). Placebo por unidad: permutacion de la etiqueta de tercil entre UNIDADES dentro de dia x moneda x hora (B = 1000, semilla 20261116); estadistico = media diaria del gradiente ponderado por EUR (el decisivo); p de celda y max-statistic sobre las 4 celdas. Se reporta tambien el placebo por unidad del gradiente por unidad (descriptivo).
+
+## 4. Regla de etiqueta (solo puede endurecer, nunca subir)
+Una celda VALIDADA por ADD1 sigue VALIDADA solo si ademas (i) el placebo por unidad max-statistic da p <= 0,0125 y (ii) la media diaria del gradiente por unidad es > 0. Si falla (i) o (ii) pasa a EXPLORATORIA («sensible a la unidad mercado-lado»). Si (ii) es > 0 pero su IC90 por dias cruza 0, se mantiene y se anota. Las celdas EXPLORATORIA de ADD1 no suben con ADD2.
+
+## 5. Regresion obligatoria (C10)
+Antes de cualquier tabla nueva, `e2_agrega_add2.py` reproduce la serie diaria ponderada por EUR y el n de prints de las 4 celdas decisivas de `exp1/E2_poblacion.json` (|diferencia| <= 0,0006 por segmento con la serie redondeada a 3 decimales; n identico). Si no reproduce, aborta sin escribir resultados.
+
+## 6. Estado
+STATUS.json conserva E2agg/E5/E6 = PARTIAL (ADD1 estricto: 35/37 por construccion) y anade `E2agg_add2`, `E5_add2` y `E6_add2`, que solo pueden ser COMPLETE si cargan 37/37 dias (35 de ADD1 + 2 de ADD2) y pasa la regresion.
+
+## 7. Recursos
+Un job `exp1/run_add2.sh` lanzado con nohup. Espera en shell a que sean >= 09:20Z, MemAvailable >= 3.500 MB y load1 <= 8 antes de CADA fase; cada fase pasa por `scripts/cron_pesado.sh` con nice 19, ionice -c3, ulimit -v 2,2 GB y oom_score_adj +500; no arranca fases fuera de 09:20-22:00Z (nunca entre 06:00 y 09:15Z). Un dia matado por OOM (rc 137) se reintenta UNA sola vez al final, tras >= 10 min y calma; un assert no se reintenta; una fase omitida por la cola pesada se reintenta mientras quede ventana. Sin red, sin ordenes; no toca v3/, el dry-run, dev, produccion ni data/.
