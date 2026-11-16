@@ -392,6 +392,7 @@
   "PRICE_TARGET_GBM|filtro|sigma_h|gt|BUY_NO",
   "PRICE_TARGET_GBM|filtro|sigma_h|lt|BUY_YES",
   "PRICE_TARGET_GBM|patron|sigma_h|lt|BUY_NO",
+  "RESOLUTION_SNIPER#BTC#sniper|patron|sigma_h|lt|BUY_NO",
   "RESOLUTION_SNIPER#SOL#sniper|patron|sigma_h|gt|BUY_NO",
   "RESOLUTION_SNIPER#SOL#sniper|patron|sigma_h|lt|BUY_NO",
   "RESOLUTION_SNIPER|patron|sigma_h|gt|BUY_NO",
