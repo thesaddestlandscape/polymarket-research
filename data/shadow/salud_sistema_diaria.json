@@ -1,147 +1,51 @@
 {
-  "timestamp_utc": "2026-11-15T07:57:01+00:00",
+  "timestamp_utc": "2026-11-16T07:57:01+00:00",
   "pipeline": {
-    "n_ciclos_resolve_postmortem": 133,
-    "resolve_postmortem_p50_s": 147.0,
-    "resolve_postmortem_p95_s": 254.7,
-    "resolve_postmortem_max_s": 642.8,
+    "n_ciclos_resolve_postmortem": 37,
+    "resolve_postmortem_p50_s": 145.7,
+    "resolve_postmortem_p95_s": 291.3,
+    "resolve_postmortem_max_s": 649.8,
     "resolve_postmortem_duraciones_s": [
-      140.0,
-      112.1,
-      116.1,
-      104.2,
-      596.5,
-      120.6,
-      123.2,
-      120.9,
-      128.6,
-      129.0,
-      210.3,
-      169.1,
-      128.9,
-      125.0,
-      127.5,
-      121.9,
-      198.5,
-      193.2,
-      112.1,
-      180.7,
-      138.4,
-      214.4,
-      227.6,
-      184.8,
-      134.5,
-      139.5,
-      131.4,
-      157.1,
-      208.6,
-      184.7,
-      117.4,
-      138.5,
-      141.9,
-      159.7,
-      254.7,
-      233.1,
-      150.8,
-      142.4,
-      137.5,
-      144.4,
-      218.7,
-      211.6,
-      141.9,
-      339.2,
-      208.0,
-      147.8,
-      238.0,
-      215.6,
-      160.2,
-      153.7,
-      145.8,
-      150.7,
-      212.9,
-      199.8,
-      145.0,
-      149.7,
-      147.5,
-      154.0,
-      216.1,
-      186.6,
-      133.9,
-      147.0,
-      141.5,
-      151.3,
-      226.8,
-      185.9,
-      151.6,
-      160.2,
-      161.2,
-      144.8,
-      240.1,
-      206.4,
-      153.3,
-      140.4,
-      146.2,
-      147.9,
-      227.1,
-      196.8,
-      161.0,
-      146.6,
-      149.1,
-      142.8,
-      128.4,
-      601.7,
-      118.9,
-      125.3,
-      154.4,
-      155.8,
-      194.1,
-      642.8,
-      77.7,
-      107.1,
-      114.5,
-      142.7,
-      121.5,
-      232.3,
-      149.5,
-      107.3,
-      116.4,
-      124.0,
-      128.8,
-      207.7,
-      174.5,
-      132.7,
-      126.7,
-      130.5,
-      141.2,
-      137.1,
-      577.7,
-      130.1,
-      140.3,
-      149.1,
-      138.2,
-      136.8,
-      221.4,
-      200.2,
-      121.3,
-      128.8,
-      117.3,
-      133.8,
-      225.1,
-      193.1,
-      133.0,
-      133.8,
-      146.0,
+      188.9,
       139.1,
-      209.1,
-      182.4,
-      157.7,
+      233.4,
+      126.6,
       138.9,
-      140.5,
-      146.7,
-      293.0
+      208.5,
+      181.5,
+      128.8,
+      137.2,
+      146.6,
+      137.8,
+      184.6,
+      143.0,
+      104.9,
+      125.8,
+      113.8,
+      130.4,
+      215.3,
+      256.8,
+      140.4,
+      130.1,
+      110.4,
+      142.2,
+      212.4,
+      173.2,
+      147.2,
+      147.4,
+      125.7,
+      130.1,
+      154.9,
+      649.8,
+      145.7,
+      149.8,
+      146.4,
+      137.6,
+      168.1,
+      291.3
     ],
-    "n_ciclos_live_trade": 4459,
-    "hueco_live_trade_max_s": 65.0
+    "n_ciclos_live_trade": 1384,
+    "hueco_live_trade_max_s": 61.0
   },
   "procesos_colgados": [],
   "deploy": {
@@ -151,83 +55,161 @@
     ]
   },
   "disco": {
-    "pct_usado": 84.0,
-    "gb_libres": 11.48,
+    "pct_usado": 85.0,
+    "gb_libres": 11.09,
     "git_gb": 0.0,
-    "data_gb": 17.79,
-    "datalogs_gb": 8.21
+    "data_gb": 17.82,
+    "datalogs_gb": 8.0
   },
   "ram": {
     "ram_total_gb": 15.24,
-    "ram_disponible_gb": 4.07,
-    "ram_pct_libre": 26.7
+    "ram_disponible_gb": 5.81,
+    "ram_pct_libre": 38.1
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
-    "n_trades_total": 781,
-    "n_results_total": 1453024
+    "n_trades_total": 783,
+    "n_results_total": 1468138
   },
   "integridad_datos_sports": {
     "trades_abiertos_atascados": [],
     "n_trades_total": 56
   },
   "carga_sistema": {
-    "load1": 3.31,
-    "load5": 5.46,
-    "load15": 7.21,
+    "load1": 5.72,
+    "load5": 6.01,
+    "load15": 7.12,
     "nproc": 8,
-    "ratio5": 0.68,
-    "n_procesos_total": 338
+    "ratio5": 0.75,
+    "n_procesos_total": 363
   },
   "oom_kills": {
-    "n_oom_kills_24h": 7,
+    "n_oom_kills_24h": 20,
     "eventos": [
       {
-        "ts": "Nov 14 16:25:29",
-        "pid": "1294066",
+        "ts": "Nov 15 08:30:43",
+        "pid": "2782521",
+        "nombre": "python",
+        "rss_mb": 2798.3
+      },
+      {
+        "ts": "Nov 15 09:57:53",
+        "pid": "3022072",
+        "nombre": "python",
+        "rss_mb": 2444.4
+      },
+      {
+        "ts": "Nov 15 12:19:02",
+        "pid": "3542197",
+        "nombre": "python3",
+        "rss_mb": 881.1
+      },
+      {
+        "ts": "Nov 15 14:14:27",
+        "pid": "220937",
+        "nombre": "python3",
+        "rss_mb": 2951.2
+      },
+      {
+        "ts": "Nov 15 16:25:42",
+        "pid": "3035315",
+        "nombre": "python",
+        "rss_mb": 3484.6
+      },
+      {
+        "ts": "Nov 15 16:27:20",
+        "pid": "2626012",
         "nombre": "systemd",
+        "rss_mb": 1.0
+      },
+      {
+        "ts": "Nov 15 16:27:20",
+        "pid": "2626014",
+        "nombre": "(sd-pam)",
+        "rss_mb": 0.2
+      },
+      {
+        "ts": "Nov 15 16:27:20",
+        "pid": "547115",
+        "nombre": "python",
+        "rss_mb": 1840.5
+      },
+      {
+        "ts": "Nov 15 16:28:50",
+        "pid": "549450",
+        "nombre": "python",
+        "rss_mb": 1647.3
+      },
+      {
+        "ts": "Nov 15 18:24:17",
+        "pid": "685257",
+        "nombre": "python3",
+        "rss_mb": 717.4
+      },
+      {
+        "ts": "Nov 15 18:24:43",
+        "pid": "687488",
+        "nombre": "python3",
+        "rss_mb": 93.6
+      },
+      {
+        "ts": "Nov 15 18:24:43",
+        "pid": "687523",
+        "nombre": "awk",
+        "rss_mb": 10.3
+      },
+      {
+        "ts": "Nov 15 18:24:43",
+        "pid": "687525",
+        "nombre": "gzip",
         "rss_mb": 0.6
       },
       {
-        "ts": "Nov 14 16:25:29",
-        "pid": "593491",
-        "nombre": "python",
-        "rss_mb": 1522.0
+        "ts": "Nov 15 18:24:43",
+        "pid": "687522",
+        "nombre": "gzip",
+        "rss_mb": 0.4
       },
       {
-        "ts": "Nov 14 21:49:55",
-        "pid": "1631969",
-        "nombre": "python",
-        "rss_mb": 1385.6
+        "ts": "Nov 15 18:24:43",
+        "pid": "633879",
+        "nombre": "bash",
+        "rss_mb": 0.2
       },
       {
-        "ts": "Nov 14 22:26:53",
-        "pid": "1885982",
-        "nombre": "python",
-        "rss_mb": 1381.8
+        "ts": "Nov 15 18:24:43",
+        "pid": "687521",
+        "nombre": "bash",
+        "rss_mb": 0.3
       },
       {
-        "ts": "Nov 14 22:29:30",
-        "pid": "1909559",
-        "nombre": "python3",
-        "rss_mb": 2037.2
+        "ts": "Nov 15 18:24:43",
+        "pid": "687524",
+        "nombre": "sh",
+        "rss_mb": 0.1
       },
       {
-        "ts": "Nov 14 22:30:45",
-        "pid": "1253454",
+        "ts": "Nov 15 18:24:43",
+        "pid": "686877",
         "nombre": "python",
-        "rss_mb": 403.2
+        "rss_mb": 1396.5
       },
       {
-        "ts": "Nov 15 04:35:52",
-        "pid": "851959",
+        "ts": "Nov 15 20:49:09",
+        "pid": "552060",
         "nombre": "python",
-        "rss_mb": 1018.5
+        "rss_mb": 2806.7
+      },
+      {
+        "ts": "Nov 16 06:57:04",
+        "pid": "1320044",
+        "nombre": "python",
+        "rss_mb": 3007.0
       }
     ]
   },
   "git_push": {
-    "commits_sin_pushear": 0
+    "commits_sin_pushear": 1
   },
   "vigias_rotos": {
     "n_vigias_rotos": 0,
@@ -238,9 +220,9 @@
     "gates": []
   },
   "anomalias": [
-    "⏱️ ciclo resolve+postmortem tardó 643s (umbral 400s)",
+    "⏱️ ciclo resolve+postmortem tardó 650s (umbral 400s)",
     "⚠️ screens STALE (código en disco != código cargado): ejeclive",
-    "💀 7 OOM-kill(s) del kernel en 24h: systemd(pid 1294066, 0.6MB), python(pid 593491, 1522.0MB), python(pid 1631969, 1385.6MB), python(pid 1885982, 1381.8MB), python3(pid 1909559, 2037.2MB), python(pid 1253454, 403.2MB), python(pid 851959, 1018.5MB)"
+    "💀 20 OOM-kill(s) del kernel en 24h: python(pid 2782521, 2798.3MB), python(pid 3022072, 2444.4MB), python3(pid 3542197, 881.1MB), python3(pid 220937, 2951.2MB), python(pid 3035315, 3484.6MB), systemd(pid 2626012, 1.0MB), (sd-pam)(pid 2626014, 0.2MB), python(pid 547115, 1840.5MB), python(pid 549450, 1647.3MB), python3(pid 685257, 717.4MB), python3(pid 687488, 93.6MB), awk(pid 687523, 10.3MB), gzip(pid 687525, 0.6MB), gzip(pid 687522, 0.4MB), bash(pid 633879, 0.2MB), bash(pid 687521, 0.3MB), sh(pid 687524, 0.1MB), python(pid 686877, 1396.5MB), python(pid 552060, 2806.7MB), python(pid 1320044, 3007.0MB)"
   ],
   "estado": "ANOMALIA"
 }

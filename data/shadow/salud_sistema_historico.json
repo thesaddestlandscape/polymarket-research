@@ -1,53 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-27T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 399,
-      "resolve_postmortem_p50_s": 12.0,
-      "resolve_postmortem_p95_s": 23.0,
-      "resolve_postmortem_max_s": 51.0,
-      "n_ciclos_live_trade": 5130,
-      "hueco_live_trade_max_s": 87.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 13,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 84.0,
-      "gb_libres": 11.98,
-      "git_gb": 0.0,
-      "data_gb": 30.41,
-      "datalogs_gb": 8.12
-    },
-    "ram": {
-      "ram_total_gb": 3.72,
-      "ram_disponible_gb": 0.88,
-      "ram_pct_libre": 23.7
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 451,
-      "n_results_total": 279618
-    },
-    "carga_sistema": {
-      "load1": 8.45,
-      "load5": 9.97,
-      "load15": 10.44,
-      "nproc": 2,
-      "ratio5": 4.99,
-      "n_procesos_total": 222
-    },
-    "git_push": {
-      "commits_sin_pushear": 1
-    },
-    "anomalias": [
-      "🔥 CPU sobresuscrita: load5=9.97 en 2 cores (ratio=4.99x, umbral 3.0x) -- 222 procesos vivos"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-08-27T15:32:36+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 529,
@@ -16831,6 +16783,234 @@
       "⏱️ ciclo resolve+postmortem tardó 643s (umbral 400s)",
       "⚠️ screens STALE (código en disco != código cargado): ejeclive",
       "💀 7 OOM-kill(s) del kernel en 24h: systemd(pid 1294066, 0.6MB), python(pid 593491, 1522.0MB), python(pid 1631969, 1385.6MB), python(pid 1885982, 1381.8MB), python3(pid 1909559, 2037.2MB), python(pid 1253454, 403.2MB), python(pid 851959, 1018.5MB)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-16T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 37,
+      "resolve_postmortem_p50_s": 145.7,
+      "resolve_postmortem_p95_s": 291.3,
+      "resolve_postmortem_max_s": 649.8,
+      "resolve_postmortem_duraciones_s": [
+        188.9,
+        139.1,
+        233.4,
+        126.6,
+        138.9,
+        208.5,
+        181.5,
+        128.8,
+        137.2,
+        146.6,
+        137.8,
+        184.6,
+        143.0,
+        104.9,
+        125.8,
+        113.8,
+        130.4,
+        215.3,
+        256.8,
+        140.4,
+        130.1,
+        110.4,
+        142.2,
+        212.4,
+        173.2,
+        147.2,
+        147.4,
+        125.7,
+        130.1,
+        154.9,
+        649.8,
+        145.7,
+        149.8,
+        146.4,
+        137.6,
+        168.1,
+        291.3
+      ],
+      "n_ciclos_live_trade": 1384,
+      "hueco_live_trade_max_s": 61.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 25,
+      "stale": [
+        "ejeclive"
+      ]
+    },
+    "disco": {
+      "pct_usado": 85.0,
+      "gb_libres": 11.09,
+      "git_gb": 0.0,
+      "data_gb": 17.82,
+      "datalogs_gb": 8.0
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 5.81,
+      "ram_pct_libre": 38.1
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 783,
+      "n_results_total": 1468138
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 5.72,
+      "load5": 6.01,
+      "load15": 7.12,
+      "nproc": 8,
+      "ratio5": 0.75,
+      "n_procesos_total": 363
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 20,
+      "eventos": [
+        {
+          "ts": "Nov 15 08:30:43",
+          "pid": "2782521",
+          "nombre": "python",
+          "rss_mb": 2798.3
+        },
+        {
+          "ts": "Nov 15 09:57:53",
+          "pid": "3022072",
+          "nombre": "python",
+          "rss_mb": 2444.4
+        },
+        {
+          "ts": "Nov 15 12:19:02",
+          "pid": "3542197",
+          "nombre": "python3",
+          "rss_mb": 881.1
+        },
+        {
+          "ts": "Nov 15 14:14:27",
+          "pid": "220937",
+          "nombre": "python3",
+          "rss_mb": 2951.2
+        },
+        {
+          "ts": "Nov 15 16:25:42",
+          "pid": "3035315",
+          "nombre": "python",
+          "rss_mb": 3484.6
+        },
+        {
+          "ts": "Nov 15 16:27:20",
+          "pid": "2626012",
+          "nombre": "systemd",
+          "rss_mb": 1.0
+        },
+        {
+          "ts": "Nov 15 16:27:20",
+          "pid": "2626014",
+          "nombre": "(sd-pam)",
+          "rss_mb": 0.2
+        },
+        {
+          "ts": "Nov 15 16:27:20",
+          "pid": "547115",
+          "nombre": "python",
+          "rss_mb": 1840.5
+        },
+        {
+          "ts": "Nov 15 16:28:50",
+          "pid": "549450",
+          "nombre": "python",
+          "rss_mb": 1647.3
+        },
+        {
+          "ts": "Nov 15 18:24:17",
+          "pid": "685257",
+          "nombre": "python3",
+          "rss_mb": 717.4
+        },
+        {
+          "ts": "Nov 15 18:24:43",
+          "pid": "687488",
+          "nombre": "python3",
+          "rss_mb": 93.6
+        },
+        {
+          "ts": "Nov 15 18:24:43",
+          "pid": "687523",
+          "nombre": "awk",
+          "rss_mb": 10.3
+        },
+        {
+          "ts": "Nov 15 18:24:43",
+          "pid": "687525",
+          "nombre": "gzip",
+          "rss_mb": 0.6
+        },
+        {
+          "ts": "Nov 15 18:24:43",
+          "pid": "687522",
+          "nombre": "gzip",
+          "rss_mb": 0.4
+        },
+        {
+          "ts": "Nov 15 18:24:43",
+          "pid": "633879",
+          "nombre": "bash",
+          "rss_mb": 0.2
+        },
+        {
+          "ts": "Nov 15 18:24:43",
+          "pid": "687521",
+          "nombre": "bash",
+          "rss_mb": 0.3
+        },
+        {
+          "ts": "Nov 15 18:24:43",
+          "pid": "687524",
+          "nombre": "sh",
+          "rss_mb": 0.1
+        },
+        {
+          "ts": "Nov 15 18:24:43",
+          "pid": "686877",
+          "nombre": "python",
+          "rss_mb": 1396.5
+        },
+        {
+          "ts": "Nov 15 20:49:09",
+          "pid": "552060",
+          "nombre": "python",
+          "rss_mb": 2806.7
+        },
+        {
+          "ts": "Nov 16 06:57:04",
+          "pid": "1320044",
+          "nombre": "python",
+          "rss_mb": 3007.0
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 1
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 650s (umbral 400s)",
+      "⚠️ screens STALE (código en disco != código cargado): ejeclive",
+      "💀 20 OOM-kill(s) del kernel en 24h: python(pid 2782521, 2798.3MB), python(pid 3022072, 2444.4MB), python3(pid 3542197, 881.1MB), python3(pid 220937, 2951.2MB), python(pid 3035315, 3484.6MB), systemd(pid 2626012, 1.0MB), (sd-pam)(pid 2626014, 0.2MB), python(pid 547115, 1840.5MB), python(pid 549450, 1647.3MB), python3(pid 685257, 717.4MB), python3(pid 687488, 93.6MB), awk(pid 687523, 10.3MB), gzip(pid 687525, 0.6MB), gzip(pid 687522, 0.4MB), bash(pid 633879, 0.2MB), bash(pid 687521, 0.3MB), sh(pid 687524, 0.1MB), python(pid 686877, 1396.5MB), python(pid 552060, 2806.7MB), python(pid 1320044, 3007.0MB)"
     ],
     "estado": "ANOMALIA"
   }
