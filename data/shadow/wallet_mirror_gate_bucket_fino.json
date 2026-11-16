@@ -28,11 +28,11 @@
     "hi": 0.05,
     "n": 91,
     "pnl_medio": -0.7426,
-    "diff_vs_resto": -0.6697,
-    "p_valor": 0.0005,
+    "diff_vs_resto": -0.6693,
+    "p_valor": 0.0,
     "split_half_diff": [
-      -0.4065,
-      -0.9271
+      -0.4061,
+      -0.9267
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -50,6 +50,15 @@
     "fecha_historial": "2026-11-16",
     "veredicto": "malo_confirmado"
   },
+  "SEGUIR#BTC#60min#1": {
+    "veredicto": "sin_concluir",
+    "historial_crudo": [
+      "bueno_confirmado",
+      "bueno_confirmado",
+      "bueno_confirmado"
+    ],
+    "fecha_historial": null
+  },
   "SEGUIR#SOL#15min#0": {
     "veredicto": "sin_concluir",
     "historial_crudo": [
@@ -59,24 +68,24 @@
   },
   "SEGUIR#BTC#15min#0": {
     "n_dias": 71,
-    "pnl_sin_mejores_dias": -0.4666,
+    "pnl_sin_mejores_dias": -0.4677,
     "robusto_dias": false,
     "lo": 0.01,
     "hi": 0.06,
-    "n": 2034,
-    "pnl_medio": -0.3741,
-    "diff_vs_resto": -0.3385,
+    "n": 2038,
+    "pnl_medio": -0.3753,
+    "diff_vs_resto": -0.3396,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.2411,
-      -0.4359
+      -0.2424,
+      -0.4368
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.3968,
+    "pnl_medio_loo": -0.398,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.5106,
-      -0.2179
+      -0.5186,
+      -0.2255
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -160,24 +169,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 77,
-    "pnl_sin_mejores_dias": -0.3516,
+    "pnl_sin_mejores_dias": -0.3518,
     "robusto_dias": false,
     "lo": 0.01,
     "hi": 0.06,
-    "n": 5317,
-    "pnl_medio": -0.2982,
-    "diff_vs_resto": -0.2603,
+    "n": 5319,
+    "pnl_medio": -0.2985,
+    "diff_vs_resto": -0.2607,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.3284,
-      -0.1924
+      -0.3287,
+      -0.1928
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.3156,
+    "pnl_medio_loo": -0.3159,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.4113,
-      -0.1744
+      -0.4151,
+      -0.1757
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -196,11 +205,11 @@
     "hi": 0.14,
     "n": 495,
     "pnl_medio": -0.3636,
-    "diff_vs_resto": -0.3417,
-    "p_valor": 0.0005,
+    "diff_vs_resto": -0.342,
+    "p_valor": 0.0,
     "split_half_diff": [
-      -0.3144,
-      -0.3689
+      -0.3147,
+      -0.3692
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.3835,
@@ -226,11 +235,11 @@
     "hi": 0.06,
     "n": 714,
     "pnl_medio": -0.3611,
-    "diff_vs_resto": -0.3232,
-    "p_valor": 0.0,
+    "diff_vs_resto": -0.323,
+    "p_valor": 0.001,
     "split_half_diff": [
-      -0.481,
-      -0.1654
+      -0.4809,
+      -0.1652
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4913,
@@ -272,28 +281,28 @@
     "fecha_historial": null
   },
   "SEGUIR#XRP#5min#0": {
-    "n_dias": 24,
-    "pnl_sin_mejores_dias": 0.6644,
+    "n_dias": 25,
+    "pnl_sin_mejores_dias": 0.6182,
     "robusto_dias": true,
     "lo": 0.19,
     "hi": 0.24,
-    "n": 42,
-    "pnl_medio": 0.9944,
-    "diff_vs_resto": 1.1006,
+    "n": 43,
+    "pnl_medio": 0.948,
+    "diff_vs_resto": 1.0576,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.7691,
-      1.4321
+      0.7725,
+      1.3297
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 0.9215,
+    "pnl_medio_loo": 0.8758,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.452,
-      1.547
+      0.4166,
+      1.5322
     ],
     "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 87,
+    "n_posiciones_buscadas": 89,
     "veredicto_crudo_hoy": "bueno_confirmado",
     "historial_crudo": [
       "bueno_confirmado",
@@ -311,14 +320,6 @@
       "bueno_confirmado"
     ],
     "fecha_historial": null
-  },
-  "SEGUIR#BTC#60min#1": {
-    "veredicto": "sin_concluir",
-    "historial_crudo": [
-      "bueno_confirmado",
-      "bueno_confirmado",
-      "bueno_confirmado"
-    ]
   },
   "SEGUIR#BTC#15min#1": {
     "veredicto": "sin_concluir",
