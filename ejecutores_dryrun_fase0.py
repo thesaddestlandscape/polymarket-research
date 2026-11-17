@@ -98,7 +98,7 @@ EJECUTORES = [
     (favorito_confirmado_60min_executor, "favorito_confirmado_60min_executor.log", "log", False),
     (gbm_late_15min_executor, "gbm_late_15min_executor.log", "log", False),
     (updown_gbm_15min_tardio_btc_executor, "updown_gbm_15min_tardio_btc_executor.log", "log", False),
-    (wallet_mirror_sniper, "wallet_mirror_sniper.log", "_log", True),
+    # (wallet_mirror_sniper, "wallet_mirror_sniper.log", "_log", True),  # PAUSADO 17-Nov (Javi, liberar RAM/CPU): descomentar para reactivar
     (wallet_first_buy_longshot_executor_dryrun, "wallet_first_buy_longshot_executor_dryrun.log", "_log", False),
 ]
 

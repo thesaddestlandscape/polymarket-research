@@ -505,6 +505,18 @@ def ejecutar(tareas: list, parar: threading.Event = None) -> None:
     _bucle_carril("principal", carriles["principal"], ultima, parar)
 
 
+# 17-Nov (Javi, pausa voluntaria para liberar RAM/CPU): wallet mirror cripto y sports parados. Reactivar = vaciar este set.
+TAREAS_PAUSADAS_17NOV = {
+    "wallet_mirror_sniper_resolver", "wallet_mirror_executor_resolver", "vigia_wallet_mirror_postfix",
+    "wallet_mirror_pnl_tracker", "vigia_micro_bucket_kill_switch_wallet_mirror", "vigia_reabrir_overrides_wallet_mirror",
+    "vigia_gate_bucket_wallet_mirror", "vigia_gate_bucket_wallet_mirror_fino",
+    "vigia_sports_micro_bucket_kill_switch_wallet_mirror", "vigia_sports_reabrir_overrides_wallet_mirror",
+    "sports_wallet_mirror_sniper_resolver",
+}
+_faltan = TAREAS_PAUSADAS_17NOV - {t[0] for t in TAREAS}
+assert not _faltan, f"TAREAS_PAUSADAS_17NOV con nombres inexistentes: {_faltan}"
+TAREAS = [t for t in TAREAS if t[0] not in TAREAS_PAUSADAS_17NOV]
+
 def main() -> int:
     LOGS.mkdir(parents=True, exist_ok=True)
     print(f"[vigias_frecuentes_fase0] arrancando scheduler con {len(TAREAS)} tareas "
