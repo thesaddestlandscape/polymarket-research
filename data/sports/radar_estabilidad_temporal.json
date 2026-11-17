@@ -1,24 +1,11 @@
 {
- "actualizado_utc": "2026-11-16T08:10:11+00:00",
+ "actualizado_utc": "2026-11-17T08:10:12+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
   "TOP_MAX": 0.3
  },
  "radar": {
-  "CS#SEGUIR#0.85": {
-   "n": 271,
-   "dias": 76,
-   "frac_dias_pos": 0.75,
-   "top_wallet": 0.103,
-   "n_wallets": 85,
-   "pnl_medio": 0.0242,
-   "medias_tramos": [
-    0.0053,
-    0.0615,
-    0.0059
-   ]
-  },
   "LoL#SEGUIR#0.85": {
    "n": 112,
    "dias": 44,
@@ -58,19 +45,6 @@
     0.0739
    ]
   },
-  "Tennis#FADE#0.75": {
-   "n": 858,
-   "dias": 77,
-   "frac_dias_pos": 0.61,
-   "top_wallet": 0.142,
-   "n_wallets": 132,
-   "pnl_medio": 0.0145,
-   "medias_tramos": [
-    0.0007,
-    0.0043,
-    0.0385
-   ]
-  },
   "LoL#FADE#0.70": {
    "n": 210,
    "dias": 63,
@@ -84,43 +58,17 @@
     0.0036
    ]
   },
-  "Dota#SEGUIR#0.85": {
-   "n": 104,
-   "dias": 45,
-   "frac_dias_pos": 0.8,
-   "top_wallet": 0.077,
-   "n_wallets": 55,
-   "pnl_medio": 0.0131,
-   "medias_tramos": [
-    0.0098,
-    0.0111,
-    0.018
-   ]
-  },
   "Dota#SEGUIR#0.70": {
-   "n": 186,
-   "dias": 56,
-   "frac_dias_pos": 0.625,
-   "top_wallet": 0.14,
-   "n_wallets": 78,
-   "pnl_medio": 0.0813,
+   "n": 192,
+   "dias": 57,
+   "frac_dias_pos": 0.614,
+   "top_wallet": 0.135,
+   "n_wallets": 80,
+   "pnl_medio": 0.0694,
    "medias_tramos": [
-    0.0413,
-    0.0465,
-    0.156
-   ]
-  },
-  "NFL#SEGUIR#0.75": {
-   "n": 200,
-   "dias": 48,
-   "frac_dias_pos": 0.604,
-   "top_wallet": 0.12,
-   "n_wallets": 55,
-   "pnl_medio": 0.0469,
-   "medias_tramos": [
-    0.0388,
-    0.0967,
-    0.0065
+    0.0524,
+    0.0132,
+    0.1425
    ]
   },
   "lal-otros#FADE#0.55": {
@@ -175,30 +123,30 @@
     0.2645
    ]
   },
-  "conl-otros#SEGUIR#0.75": {
-   "n": 71,
-   "dias": 16,
-   "frac_dias_pos": 0.688,
-   "top_wallet": 0.197,
-   "n_wallets": 16,
-   "pnl_medio": 0.0156,
+  "NHL#FADE#0.45": {
+   "n": 338,
+   "dias": 55,
+   "frac_dias_pos": 0.6,
+   "top_wallet": 0.13,
+   "n_wallets": 71,
+   "pnl_medio": 0.0518,
    "medias_tramos": [
-    0.0163,
-    0.0013,
-    0.0281
+    0.052,
+    0.0704,
+    0.0334
    ]
   },
   "unl-otros#FADE#0.50": {
-   "n": 186,
-   "dias": 15,
-   "frac_dias_pos": 0.667,
-   "top_wallet": 0.156,
-   "n_wallets": 40,
-   "pnl_medio": 0.0723,
+   "n": 193,
+   "dias": 16,
+   "frac_dias_pos": 0.625,
+   "top_wallet": 0.15,
+   "n_wallets": 42,
+   "pnl_medio": 0.0823,
    "medias_tramos": [
-    0.1072,
-    0.0727,
-    0.037
+    0.1017,
+    0.0711,
+    0.0741
    ]
   },
   "ucl-otros#SEGUIR#0.50": {
