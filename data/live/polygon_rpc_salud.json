@@ -47,14 +47,14 @@
    "ultimo_aviso": 1794900184.7016528
   },
   "archivo": {
-   "ok": false,
-   "detalle": "RechazoPolitica: HTTP 403",
-   "desde": 1794911016.691669,
-   "ultimo_aviso": 1794911016.691669
+   "ok": true,
+   "detalle": "",
+   "desde": 1794914588.2782207,
+   "ultimo_aviso": 1794914588.2782207
   },
   "latest": {
    "ok": false,
-   "detalle": "ReadTimeout: HTTPSConnectionPool(host='1rpc.io', port=443): Read timed out. (read timeout=15)",
+   "detalle": "RechazoPolitica: HTTP 403",
    "desde": 1794911016.691669,
    "ultimo_aviso": 1794911016.691669
   }
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-17T10:23:36+00:00"
+ "_actualizado_utc": "2026-11-17T11:23:08+00:00"
 }
