@@ -1642,5 +1642,13 @@
   "GBM_LATE_60M_FADE#SOL#60min": {
     "n": 200,
     "confirmado": true
+  },
+  "LIQUIDACIONES_15M#XRP": {
+    "n": 252,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_15M#XRP#15min": {
+    "n": 252,
+    "confirmado": true
   }
 }
