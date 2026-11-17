@@ -21,16 +21,16 @@
  },
  "https://polygon.drpc.org": {
   "cabeza": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1793193800.3324585,
-   "ultimo_aviso": 1793193800.3324585
+   "ok": false,
+   "detalle": "LimiteTemporal: HTTP 429",
+   "desde": 1794950587.9209516,
+   "ultimo_aviso": 1794950587.9209516
   },
   "archivo": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1791813561.3136537,
-   "ultimo_aviso": 0
+   "ok": false,
+   "detalle": "RuntimeError: sin cabeza",
+   "desde": 1794950587.9209516,
+   "ultimo_aviso": 1794950587.9209516
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-17T20:23:04+00:00"
+ "_actualizado_utc": "2026-11-17T21:23:07+00:00"
 }
