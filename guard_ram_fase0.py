@@ -59,6 +59,27 @@ def main():
     print(f"[guard_ram] {ts} disponible={disp:.0f}MB swap_libre={swap_libre:.0f}MB observadores={rss:.0f}MB")
     if disp >= UMBRAL_DISPONIBLE_MB or rss <= UMBRAL_RSS_OBS_MB:
         return 0
+    # 17-Nov: antes de reiniciar observadores (pierde histórico ms), matar los jobs pesados de pesados.slice
+    # (cron_pesado.sh los mete ahí; son reintentables/idempotentes). Solo si eso no libera RAM se sigue al reinicio.
+    pes = Path("/sys/fs/cgroup/pesados.slice")
+    try:
+        pes_mb = int((pes / "memory.current").read_text()) / 1048576
+    except (OSError, ValueError):
+        pes_mb = 0
+    if pes_mb > 300:
+        try:
+            (pes / "cgroup.kill").write_text("1")
+            time.sleep(5)
+            disp2 = meminfo_mb().get("MemAvailable", 0)
+            print(f"[guard_ram] matados jobs pesados ({pes_mb:.0f} MB) -> disponible {disp:.0f} -> {disp2:.0f} MB")
+            sys.path.insert(0, str(REPO))
+            from shadow_digest import enviar_telegram
+            enviar_telegram(f"🧯 GUARDIA RAM: matados jobs pesados de la cola ({pes_mb:.0f} MB, reintentables)"
+                            f"\n  RAM disponible {disp:.0f} → {disp2:.0f} MB; observadores intacto si basta. Ver logs/cron_pesado.log")
+            if disp2 >= UMBRAL_DISPONIBLE_MB:
+                return 0
+        except OSError as e:
+            print(f"[guard_ram] no pude matar pesados.slice: {e}")
     if ahora - est.get("ultimo_reinicio_epoch", 0) < ENFRIAMIENTO_S:
         print(f"[guard_ram] bajo umbral pero en enfriamiento (último reinicio {est.get('ultimo_reinicio')})")
         return 0

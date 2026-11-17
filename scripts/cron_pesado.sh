@@ -11,4 +11,13 @@ for i in $(seq 1 30); do
 done
 [ "${a:-0}" -lt 3000 ] && echo "$(date -u +%FT%TZ) RAM baja (${a} MB) tras 10 min; se ejecuta igualmente: $*" >> "$LOG"
 # 13-Nov (OOM): los crons pesados son reintentables -> victima PREFERIDA del OOM-killer (adj +500, lo heredan sus hijos), para que no caigan observadores/vigiasfreq.
+# 17-Nov (45 OOM-kills/24 h, swap 8 GB lleno): cada job pesado corre en su propio cgroup dentro de pesados.slice con
+# MemoryMax dinamico = MemAvailable al arrancar - 1200 MB de reserva (rango 2500..5500 MB). Si se pasa, el OOM del CGROUP mata
+# solo a ese job (reintentable) en vez de agotar la RAM global, tirar de swap (ciclo postmortem 629 s) o matar sesiones/systemd.
+# MemorySwapMax=0: el swap ya esta lleno con procesos de larga vida. Fallback sin cgroup si systemd-run falla.
+a=$(awk '/MemAvailable/{print int($2/1024)}' /proc/meminfo); cap=$(( ${a:-0} - 1200 )); [ $cap -lt 2500 ] && cap=2500; [ $cap -gt 5500 ] && cap=5500
+echo "$(date -u +%FT%TZ) INICIO cap=${cap}MB disp=${a}MB: $*" >> "$LOG"
+if command -v systemd-run >/dev/null && systemd-run --scope --quiet --slice=pesados.slice -p MemoryMax=1G true 2>/dev/null; then
+  exec choom -n 500 -- systemd-run --scope --quiet --slice=pesados.slice -p MemoryMax=${cap}M -p MemoryHigh=$((cap*9/10))M -p MemorySwapMax=0 -- "$@"
+fi
 exec choom -n 500 -- "$@"
