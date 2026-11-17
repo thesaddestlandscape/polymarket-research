@@ -1,5 +1,5 @@
 # CLAUDE.md — Polymarket Research Bot
-**Versión corta desde 2026-09-30** (OK Javi). La narrativa histórica íntegra (hallazgos con fecha, cifras, citas textuales) está en la memoria nativa `reference_claude_md_completo_30sep` — **"archivo"** en este documento — y en `git log -- CLAUDE.md`. Aquí solo quedan reglas y una línea por pieza. **Regla de mantenimiento: al añadir algo nuevo, aquí va la regla + una línea (script, fichero, gate); el relato va a una memoria enlazada. Este fichero no debe pasar de 100k caracteres.**
+**Versión corta desde 2026-09-30** (OK Javi). La narrativa histórica íntegra (hallazgos con fecha, cifras, citas textuales) está en la memoria nativa `reference_claude_md_completo_30sep` — **"archivo"** en este documento — y en `git log -- CLAUDE.md`. Aquí solo quedan reglas y una línea por pieza. **Regla de mantenimiento: al añadir algo nuevo, aquí va la regla + una línea (script, fichero, gate); el relato va a una memoria enlazada. No pasar de 100k caracteres.**
 
 ## Reglas de comportamiento
 - **Fail Loud**: "completado"/"verificado" es INCORRECTO si algo se asumió sin confirmar explícitamente. Surfacear incertidumbre siempre.
