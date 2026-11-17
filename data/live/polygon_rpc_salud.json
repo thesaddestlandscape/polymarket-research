@@ -41,10 +41,10 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": false,
-   "detalle": "retrasado 51 bloques",
-   "desde": 1794875057.1683154,
-   "ultimo_aviso": 1794875057.1683154
+   "ok": true,
+   "detalle": "",
+   "desde": 1794878588.8362527,
+   "ultimo_aviso": 1794878588.8362527
   },
   "archivo": {
    "ok": true,
@@ -53,10 +53,10 @@
    "ultimo_aviso": 1794813786.6159017
   },
   "latest": {
-   "ok": false,
-   "detalle": "ReadTimeout: HTTPSConnectionPool(host='1rpc.io', port=443): Read timed out. (read timeout=15)",
-   "desde": 1794875057.1683154,
-   "ultimo_aviso": 1794875057.1683154
+   "ok": true,
+   "detalle": "",
+   "desde": 1794878588.8362527,
+   "ultimo_aviso": 1794878588.8362527
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-17T00:24:17+00:00"
+ "_actualizado_utc": "2026-11-17T01:23:08+00:00"
 }
