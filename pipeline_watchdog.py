@@ -397,8 +397,9 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
-                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws", "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow", "logl2", "bnreg", "cxb60dry"]}
+                for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "vigiasfreq", "precierre",  # walletmirror pausado 17-Nov (Javi): no se reinicia; reponer aqui para reactivar
+                              # sportsfase0/dash-weather/weather-mirror/weather-ws pausados 17-Nov (Javi): reponer para reactivar
+                              "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow", "logl2", "bnreg", "cxb60dry"]}
     except Exception:
         return {}
 
