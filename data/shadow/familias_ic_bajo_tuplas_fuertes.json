@@ -17,14 +17,14 @@
   ]
  },
  "PRICE_TARGET_GBM": {
-  "ic_bayes_familia": -0.0462,
+  "ic_bayes_familia": -0.0437,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 38.99,
+  "pnl_fiel_combinado_eur": 40.09,
   "tuplas": [
    {
     "k": "PRICE_TARGET_GBM#ETH#atexpiry#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 23.782,
-    "n_ejecutado": 111
+    "pnl_fiel_eur_sin_suelo": 24.8861,
+    "n_ejecutado": 112
    },
    {
     "k": "PRICE_TARGET_GBM#SOL#reach#BUY_YES",
