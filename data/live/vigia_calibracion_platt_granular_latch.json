@@ -1650,5 +1650,13 @@
   "LIQUIDACIONES_15M#XRP#15min": {
     "n": 252,
     "confirmado": true
+  },
+  "BALLENAS_CONFIRMADAS_15M_BUYNO_DEPTH_FASE0#SOL": {
+    "n": 200,
+    "confirmado": false
+  },
+  "BALLENAS_CONFIRMADAS_15M_BUYNO_DEPTH_FASE0#SOL#15min": {
+    "n": 200,
+    "confirmado": false
   }
 }
