@@ -1,3 +1,10 @@
+## ESTADO 18-Nov ~21:30Z (más reciente)
+- ADENDA_06 (contrato confirmatorio, 25 checks H, sha b797b7f5…) · ADENDA_07 (5 decisiones Javi; bins p5 dt 555/1.839, vida 354/997) · ADENDA_08 (desviaciones de implementación, ~12: validador debe revisarlas) · código v8 congelado.
+- Día DISEÑO 12-Nov completo (out/p1_btc_2026-11-12_DISENO.pkl, 36.164 ev): balance E FALLA (E3 small propio-vs-vecino 0,23; E1 normal dist_ticks 0,166; E2 KS 0,125). Sin tasas vistas.
+- EN CURSO (Javi OK): execution-engineer ADENDA_09 = rango EXACTO desde el top (bins 0,1,2,3,4-5,6-8,9-12,>12), vecinos solo mismo rango, small solo nivel propio si E3>0,10; revertir NaN-excluidos y restaurar cláusula NO SOPORTADA; balance en 12 y 16-Nov completos; checks H; hashes v9.
+- Si se corta: comprobar si existe ADENDA_09_18nov.md/.sha256 y out/p1_btc_2026-11-16_DISENO.pkl; relanzar engineer desde ahí (no rehacer 12-Nov).
+- Después: statistical-validator (ADENDA_06..09 + desviaciones 08 + 25 checks) → run_p1 días 13,14,15,17 (+18,19 cuando completos) → p3 → veredicto ~20-Nov → rediseño R1 (predictive-alpha-engine) → red-team → wallet-intel/event-causality → juez Calma v4.
+
 ## ESTADO 18-Nov ~18:30Z (sesión de tarde) — LEER ESTO PRIMERO
 Commit 74795f57028. ⚠ CORRECCIÓN (validador 18-Nov): SÍ existían tasas evento−placebo previas: out/obsoletos_preD1/p3_btc_act.json (12:56, regla pre-D-1, 12 y 16-Nov: V1 +0,181, V4 +0,200, V5 +0,048) + FV1 de emparejados/sin pareja leído en 02-b. 12 y 16-Nov = SOLO DISEÑO; veredicto con 13,14,15,17,18,19-Nov (ADENDA_06). run_p1 NO relanzado (pkl 12/16-Nov obsoletos en out/obsoletos_preD1/).
 Adendas firmadas (todas antes de mirar tasas): ADENDA_01 (D-1 + 7 menores) · 02 (placebo mismo mercado+nivel, p5 v2, own wallet probada 40/40) · 03 (IPW+EB, covariables PRE-ventana) · 04 (estratos de cola z0/small/normal, recorte de pesos tras EB, Mahalanobis) · 05 (p7_ipw_balance.py: simple 1:1 Mahalanobis mismo token+estrato, tope 2 % masa/control, soporte por token).

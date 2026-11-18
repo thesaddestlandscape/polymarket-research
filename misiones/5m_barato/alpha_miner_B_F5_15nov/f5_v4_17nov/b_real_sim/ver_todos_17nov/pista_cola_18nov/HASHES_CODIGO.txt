@@ -39,3 +39,23 @@ c15c37a48aa7a279ca3a318f551a4d116ed423d4ea1755fb715fb076f5784150  p6_ipw_balance
 # v7 ADENDA_05 18-Nov (p7: estratos por token en z0/small, tope masa 2 %, simple Mahalanobis 1:1 token con calibre adaptativo, CEM auxiliar)
 9ffb31b6f7ba7b099c0dae506ff2bb478df17927032af11ad39ead34827e51c6  p7_ipw_balance.py
 8f2cf28d77a6aaf5d1051328b176656760186a32d6b14b28956028d2bdc160e3  ADENDA_05_18nov.md
+# v8 ADENDA_06/07/08 18-Nov (implementacion MECANISMO: campos D, EB por clase de suelo con dist_ticks, p3 ponderado con inferencia C y gating, p5 v3 bins fijos, run_p1.sh solo dias de veredicto). Versiones previas en out/obsoletos_preD1/. Sin procesar dias de veredicto.
+f6ab6a464404729e842aea8a0ccb76fe68ed57503d4b40ef141abed0cae0549e  p1_dia.py
+1bbac277d8b3b0b46d4c57ff53fe2cbff54e36a61cac69084fe58af245c0eb8b  p3_agrega.py
+a35c4a2ce175181ed40ee211bd0020db62d4d9052eae85048f3275e02a143966  p7_ipw_balance.py
+25be0c238a99125091d742d98828bf6ab14b049d29149adbb50fc1dd0e3e386d  p5_control_sin_relleno.py
+ca76dc11b6b8cb79433557f2a5d384b55a956f78648bfe59a7dac0bb2669e765  run_p1.sh
+003e99b398e82e3a11e640227557bf1a88a8e79888d124102656c1aafda1b403  prio_pista.sh
+ce049b5d19b383a1d8b692b318d0f3ee7354ff0c3e1037e0fe17cde8c0ef34b9  ADENDA_07_18nov.md
+c2ddc0e33c4d33866bf3cbb53798f4ef2ddbfea80e8f3d44e9a36912cc8f8c37  ADENDA_08_18nov.md
+# v9 ADENDA_09 18-Nov (p7 v9: igualdad exacta de rango, escalera R1-R4, EB por celda de rango, small solo-propio si E3>0,10, estrato nand fuera del test; p3: solo REQ con ADENDA_09 y version p7w_v9; p1, p5, run_p1.sh SIN cambios). Versiones previas en out/obsoletos_preD1/. Sin procesar dias de veredicto.
+f6ab6a464404729e842aea8a0ccb76fe68ed57503d4b40ef141abed0cae0549e  p1_dia.py
+5e803380c7564f239534ef0633f6ff4c5075f64faff93f409f74e7d7a58e141f  p3_agrega.py
+bd15af3fb6d7e04fe5a9961842c45ef2a88f43c669d3a170297ac28a043a67dc  p7_ipw_balance.py
+25be0c238a99125091d742d98828bf6ab14b049d29149adbb50fc1dd0e3e386d  p5_control_sin_relleno.py
+ca76dc11b6b8cb79433557f2a5d384b55a956f78648bfe59a7dac0bb2669e765  run_p1.sh
+003e99b398e82e3a11e640227557bf1a88a8e79888d124102656c1aafda1b403  prio_pista.sh
+b797b7f54d2a6d49d5175046edc38ff6083eac2b2913538e2a4e256ac5bb14a3  ADENDA_06_18nov.md
+ce049b5d19b383a1d8b692b318d0f3ee7354ff0c3e1037e0fe17cde8c0ef34b9  ADENDA_07_18nov.md
+c2ddc0e33c4d33866bf3cbb53798f4ef2ddbfea80e8f3d44e9a36912cc8f8c37  ADENDA_08_18nov.md
+92bd430962fc8a1ba720252ba984a4697e8fc9922032e36c4161d9f90ec79fa6  ADENDA_09_18nov.md
