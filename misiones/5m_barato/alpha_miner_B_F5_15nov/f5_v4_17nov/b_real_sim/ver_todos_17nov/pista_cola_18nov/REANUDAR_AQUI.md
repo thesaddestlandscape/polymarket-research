@@ -1,5 +1,5 @@
 ## ESTADO 18-Nov ~18:30Z (sesión de tarde) — LEER ESTO PRIMERO
-Commit 74795f57028. NO se ha visto ninguna tasa evento−placebo. run_p1 NO relanzado (pkl 12/16-Nov obsoletos en out/obsoletos_preD1/).
+Commit 74795f57028. ⚠ CORRECCIÓN (validador 18-Nov): SÍ existían tasas evento−placebo previas: out/obsoletos_preD1/p3_btc_act.json (12:56, regla pre-D-1, 12 y 16-Nov: V1 +0,181, V4 +0,200, V5 +0,048) + FV1 de emparejados/sin pareja leído en 02-b. 12 y 16-Nov = SOLO DISEÑO; veredicto con 13,14,15,17,18,19-Nov (ADENDA_06). run_p1 NO relanzado (pkl 12/16-Nov obsoletos en out/obsoletos_preD1/).
 Adendas firmadas (todas antes de mirar tasas): ADENDA_01 (D-1 + 7 menores) · 02 (placebo mismo mercado+nivel, p5 v2, own wallet probada 40/40) · 03 (IPW+EB, covariables PRE-ventana) · 04 (estratos de cola z0/small/normal, recorte de pesos tras EB, Mahalanobis) · 05 (p7_ipw_balance.py: simple 1:1 Mahalanobis mismo token+estrato, tope 2 % masa/control, soporte por token).
 Resultado de balance fxK3h (12-Nov 03:40-06:40Z, 4.929 eventos): simple 14,75 % sin pareja, SMD máx 0,110 (small/normal 0,147 justo); primario SMD ≤0,025, n_eff pooled 1.027 (small 77,5), masa máx 1,73 %, exclusión 5,0 %.
 HECHOS ACEPTADOS POR JAVI (valen para todo): ≥80 % de la masa caída del nivel en (t−1000,t−50) = retiradas reales, no fills. No hay L2 BTC 20-23 Oct (B no operó BTC).
