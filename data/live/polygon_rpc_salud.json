@@ -41,16 +41,16 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": false,
-   "detalle": "ReadTimeout: HTTPSConnectionPool(host='1rpc.io', port=443): Read timed out. (read timeout=15)",
-   "desde": 1795011838.1839433,
-   "ultimo_aviso": 1795011838.1839433
+   "ok": true,
+   "detalle": "",
+   "desde": 1795015390.7606223,
+   "ultimo_aviso": 1795015390.7606223
   },
   "archivo": {
-   "ok": false,
-   "detalle": "RuntimeError: sin cabeza",
-   "desde": 1795011838.1839433,
-   "ultimo_aviso": 1795011838.1839433
+   "ok": true,
+   "detalle": "",
+   "desde": 1795015390.7606223,
+   "ultimo_aviso": 1795015390.7606223
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-18T14:23:58+00:00"
+ "_actualizado_utc": "2026-11-18T15:23:10+00:00"
 }
