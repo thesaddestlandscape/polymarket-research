@@ -17,3 +17,6 @@ Pendiente (en orden):
 3. Veredicto del prereg (R1, M1/M2/M3, latencia p50/p90 paquete_l): SOPORTADA / NO SOPORTADA / INSUFFICIENT (nunca «cerrada»).
 4. Huecos de Javi: (a) unión on-chain↔libro 49 % → mejorar y medir falsos emparejamientos; (b) quién cancela → huella de makers, grupos y medida en días distintos; (c) llegada del tomador → cota casado − taker delay + señales previas ≤t. Para cada uno: cuánto se resolvió y qué especialista sigue.
 5. Expediente docs/reverse-engineering/casos/RE-B-COLA-CANCELA + ledgers.
+
+## ACTUALIZACIÓN 18-Nov ~15:20Z (cheap5m-execution-engineer): ADENDA_01 aplicada
+Ver ADENDA_01_18nov.md (+.sha256), VERIFICACION_ADENDA01.md y HASHES_CODIGO.txt (v3). pkl 12/16-Nov invalidados en out/obsoletos_preD1/. p1_dia.py v2 (D-1, semilla, sg estructural, placebos uniformes, wallet propia), p3 v2 (NaN excluidos, sens a/b/c y e250), p2 renombrado + control, p5_control_sin_relleno.py nuevo. Pendiente: ./run_p1.sh (6 días, ahora ~25-40 min/día) y luego p3.

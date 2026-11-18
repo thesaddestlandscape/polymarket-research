@@ -1,0 +1,80 @@
+{
+ "fuente": "out/verif_adenda03/p1_btc_2026-11-12_fxF.pkl",
+ "universo": {
+  "prim_n_mk1_C1_sin_own": 350,
+  "excl_covariable_faltante": 56,
+  "n_en_universo": 294
+ },
+ "soporte": {
+  "n_con_soporte": 218,
+  "frac_sin_soporte": 0.2585,
+  "e_hi_p99_controles": 0.95,
+  "sin_soporte_por_e": 0,
+  "sin_soporte_fuera_de_rango_cov": 57,
+  "sin_soporte_por_nivel_sin_control": 29
+ },
+ "n_controles_full": 738,
+ "n_eff_controles": 132.1,
+ "peso_max_rel": 31.58,
+ "SMD_pool_uniforme_sin_ponderar": {
+  "act2": 1.46,
+  "log_WA_q": -0.197,
+  "WA_q_raw": -0.337,
+  "ttc_min": -0.681,
+  "absr5_bp": 0.128
+ },
+ "SMD_IPW_solo": {
+  "act2": -0.075,
+  "log_WA_q": -0.263,
+  "WA_q_raw": -0.211,
+  "ttc_min": 0.013,
+  "absr5_bp": -0.209
+ },
+ "n_eff_IPW_solo": 179.6,
+ "SMD_IPW_primario": {
+  "act2": 0.0,
+  "log_WA_q": 0.0,
+  "WA_q_raw": 0.0,
+  "ttc_min": 0.0,
+  "absr5_bp": -0.0
+ },
+ "EB_convergio": true,
+ "SMD_IPW_primario_nota": "primario = IPW(odds/pi, renorm por nivel) + calibracion EB",
+ "n_nivel_con_eventos": 85,
+ "SMD_IPW_todos_leq_015": true,
+ "simple": {
+  "n_con_pareja": 205,
+  "frac_sin_pareja": 0.3027,
+  "SMD": {
+   "act2": 0.269,
+   "log_WA_q": -0.099,
+   "WA_q_raw": -0.073,
+   "ttc_min": -0.024,
+   "absr5_bp": 0.076
+  },
+  "SMD_todos_leq_015": false
+ },
+ "sin_soporte_vs_con_soporte_medianas": {
+  "act2": {
+   "sin": 22.0,
+   "con": 27.0
+  },
+  "log_WA_q": {
+   "sin": 3.693,
+   "con": 5.938
+  },
+  "WA_q_raw": {
+   "sin": 40.165,
+   "con": 379.22
+  },
+  "ttc_min": {
+   "sin": 2.069,
+   "con": 2.797
+  },
+  "absr5_bp": {
+   "sin": 0.272,
+   "con": 0.271
+  }
+ },
+ "por_nivel_eventos_con_soporte_max": 11
+}

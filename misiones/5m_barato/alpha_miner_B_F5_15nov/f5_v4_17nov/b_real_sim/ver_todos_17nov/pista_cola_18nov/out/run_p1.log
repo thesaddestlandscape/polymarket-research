@@ -1,0 +1,37 @@
+2026-11-18T12:08:22Z inicio 2026-11-12 load=7.00
+[     10s] tokens 1664
+[     26s] binance 2548287
+[     54s] onchain agregados 84757 filas bid 117566
+[     54s] fichero libro5_ms_2026-11-12_629469.csv.gz
+[    141s] eventos 5245 placebo 15934 lineas_malas {}
+[    141s] fichero libro5_ms_2026-11-12_769915.csv.gz
+[    280s] eventos 6253 placebo 18741 lineas_malas {}
+[    280s] fichero libro5_ms_2026-11-12_847237.csv.gz
+[    280s] eventos 6 placebo 8 lineas_malas {}
+[    280s] fichero libro5_ms_2026-11-12_847623.csv.gz
+[    287s] eventos 310 placebo 913 lineas_malas {}
+[    287s] fichero libro5_ms_2026-11-12_852243.csv.gz
+[    860s] eventos 21150 placebo 62494 lineas_malas {'linea_corta_o_token': 1}
+[    861s] fichero libro5_ms_2026-11-12_1124981.csv.gz
+[    939s] eventos 3190 placebo 9651 lineas_malas {'linea_corta_o_token': 1}
+[    939s] FIN /root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/out/p1_btc_2026-11-12.pkl 36154 107741 {'T1_tot': 36154, 'T1_None': 9868, 'T1_unico': 21713, 'T1_falso_-60000': 207, 'T1_falso_60000': 233, 'Trow_tot': 92903, 'Trow_ok': 72543, 'T1_agg_bid': 23269, 'T1_agg_bid_ask': 2866, 'T1_fila': 151, 'ev_sin_estado': 10} {'linea_corta_o_token': 1}
+2026-11-18T13:05:22Z inicio 2026-11-16 load=8.77
+[     10s] tokens 1668
+[     28s] binance 2415372
+[     56s] onchain agregados 93019 filas bid 134450
+[     56s] fichero libro5_ms_2026-11-16_3035871.csv.gz
+[    191s] eventos 5604 placebo 16712 lineas_malas {}
+[    191s] fichero libro5_ms_2026-11-16_1324947.csv.gz
+[    226s] eventos 1278 placebo 3745 lineas_malas {}
+[    226s] fichero libro5_ms_2026-11-16_1390096.csv.gz
+[   1153s] eventos 30217 placebo 89003 lineas_malas {}
+[   1154s] fichero libro5_ms_2026-11-16_2668831.csv.gz
+[   1231s] eventos 2853 placebo 8467 lineas_malas {}
+[   1231s] FIN /root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/out/p1_btc_2026-11-16.pkl 39952 117927 {'T1_tot': 39952, 'T1_None': 10361, 'T1_unico': 25321, 'T1_falso_-60000': 218, 'T1_falso_60000': 223, 'Trow_tot': 100570, 'Trow_ok': 78525, 'T1_agg_bid': 26502, 'T1_agg_bid_ask': 2938, 'T1_fila': 151, 'ev_sin_estado': 1} {}
+2026-11-18T13:35:55Z inicio 2026-11-14 load=5.67
+[      9s] tokens 1672
+[     24s] binance 4245366
+[     54s] onchain agregados 82107 filas bid 113396
+[     54s] fichero libro5_ms_2026-11-14_1688931.csv.gz
+[    144s] eventos 4864 placebo 15158 lineas_malas {}
+[    144s] fichero libro5_ms_2026-11-14_1781318.csv.gz

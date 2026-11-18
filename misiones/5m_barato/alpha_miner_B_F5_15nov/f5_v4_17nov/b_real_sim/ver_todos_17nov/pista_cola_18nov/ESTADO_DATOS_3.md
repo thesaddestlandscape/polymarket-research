@@ -1,0 +1,4 @@
+# ESTADO_DATOS_3 (18-Nov, 3ª pasada). ADENDA_03_18nov.md(+.sha256), HASHES_CODIGO.txt v5/v5b.
+0 HECHO diag_punto1/ (c1.py, c2.py, README; cmp OK).
+2 HECHO diseño primario IPW+EB (p1 bloque ADENDA_03, p6_ipw_balance.py) + sensibilidad emparejado simple; fixture 12-Nov: 132/350 no analizables (56 covariable faltante + 76 sin soporte), n_eff 132, SMD 0,00 tras EB (IPW solo NO cumple); simple 30,3 % sin pareja, SMD act2 +0,27. Tasas evento-placebo NO calculadas. p3 por adaptar.
+3 HECHO p5 v2.1 (out/p5_control_sin_relleno.json, p5b_check.py): balance dt/vida NO cumple (SMD ldt 1,07, lvida 0,71) -> lectura post-estratificada (coin x tercil vida). F50 rellenos 0,705 vs no 0,495 (LR 1,42; global 1,29 IC90 dias 1,19-1,43); F90 0,563 vs 0,444 (LR 1,27). Base rate de R1 en no rellenos ~50 %: no discrimina fuerte (M2 pide >=3). SOL F90 LR 0,97; cola=0: LR 0,77. M3 sigue PROVISIONAL.

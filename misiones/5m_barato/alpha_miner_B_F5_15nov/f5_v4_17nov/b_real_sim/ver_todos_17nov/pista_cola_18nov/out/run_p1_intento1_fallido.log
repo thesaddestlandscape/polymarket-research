@@ -1,0 +1,140 @@
+2026-11-18T10:40:18Z inicio 2026-11-12 load=6.48
+[     10s] tokens 1664
+[     27s] binance 2548287
+[     57s] onchain agregados 170092 filas bid 232957
+[     57s] fichero libro5_ms_2026-11-12_629469.csv.gz
+[    163s] eventos 5245 placebo 34564
+[    163s] fichero libro5_ms_2026-11-12_769915.csv.gz
+[    326s] eventos 11498 placebo 74480
+[    326s] fichero libro5_ms_2026-11-12_847237.csv.gz
+[    326s] eventos 11504 placebo 74497
+[    326s] fichero libro5_ms_2026-11-12_847623.csv.gz
+[    336s] eventos 11814 placebo 76411
+[    336s] fichero libro5_ms_2026-11-12_852243.csv.gz
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 311, in <module>
+    log('fichero', os.path.basename(fn)); run_file(fn); log('eventos', len(EV), 'placebo', len(PL))
+                                          ~~~~~~~~^^^^
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 303, in run_file
+    if pair: proc_pair(pair, tk2)
+             ~~~~~~~~~^^^^^^^^^^^
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 137, in proc_pair
+    chg = sorted(stX.chg); chr_ = [x[0] for x in chg]
+                                   ~^^^
+MemoryError
+Error in sys.excepthook:
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/apport_python_hook.py", line 238, in partial_apport_excepthook
+    return apport_excepthook(binary, exc_type, exc_obj, exc_tb)
+  File "/usr/lib/python3/dist-packages/apport_python_hook.py", line 72, in apport_excepthook
+    import apport.report
+  File "/usr/lib/python3/dist-packages/apport/report.py", line 39, in <module>
+    import urllib.request
+  File "/usr/lib/python3.14/urllib/request.py", line 89, in <module>
+    import http.client
+  File "/usr/lib/python3.14/http/__init__.py", line 6, in <module>
+    @_simple_enum(IntEnum)
+     ~~~~~~~~~~~~^^^^^^^^^
+  File "/usr/lib/python3.14/enum.py", line 1896, in convert_class
+    setattr(enum_class, name, member)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/enum.py", line 822, in __setattr__
+    super().__setattr__(name, value)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+MemoryError: Out of memory interning an attribute name
+
+Original exception was:
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 311, in <module>
+    log('fichero', os.path.basename(fn)); run_file(fn); log('eventos', len(EV), 'placebo', len(PL))
+                                          ~~~~~~~~^^^^
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 303, in run_file
+    if pair: proc_pair(pair, tk2)
+             ~~~~~~~~~^^^^^^^^^^^
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 137, in proc_pair
+    chg = sorted(stX.chg); chr_ = [x[0] for x in chg]
+                                   ~^^^
+MemoryError
+2026-11-18T10:59:52Z inicio 2026-11-16 load=5.70
+[     10s] tokens 1668
+[     29s] binance 2415372
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 59, in <module>
+    oc['X'] = [t if sd == 0 else comp[t] for t, sd in zip(oc.token_id, oc.side)]           # nivel bid de X equivalente
+    ~~^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/frame.py", line 4672, in __setitem__
+    self._set_item(key, value)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/frame.py", line 4872, in _set_item
+    value, refs = self._sanitize_column(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/frame.py", line 5755, in _sanitize_column
+    return sanitize_array(value, self.index, copy=True, allow_2d=True), None
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/construction.py", line 668, in sanitize_array
+    subarr = maybe_convert_platform(data)
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/dtypes/cast.py", line 142, in maybe_convert_platform
+    arr = lib.maybe_convert_objects(arr)
+  File "pandas/_libs/lib.pyx", line 2632, in pandas._libs.lib.maybe_convert_objects
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 13.1 MiB for an array with shape (1718106,) and data type uint64
+2026-11-18T11:10:51Z inicio 2026-11-14 load=6.61
+[     10s] tokens 1672
+[     24s] binance 4245366
+[     57s] onchain agregados 157534 filas bid 219857
+[     57s] fichero libro5_ms_2026-11-14_1688931.csv.gz
+[    162s] eventos 4864 placebo 32285
+[    162s] fichero libro5_ms_2026-11-14_1781318.csv.gz
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 311, in <module>
+    log('fichero', os.path.basename(fn)); run_file(fn); log('eventos', len(EV), 'placebo', len(PL))
+                                          ~~~~~~~~^^^^
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 272, in run_file
+    try: r = int(p[6])
+             ~~~^^^^^^
+MemoryError
+Error in sys.excepthook:
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/apport_python_hook.py", line 238, in partial_apport_excepthook
+    return apport_excepthook(binary, exc_type, exc_obj, exc_tb)
+  File "/usr/lib/python3/dist-packages/apport_python_hook.py", line 72, in apport_excepthook
+    import apport.report
+  File "/usr/lib/python3/dist-packages/apport/report.py", line 39, in <module>
+    import urllib.request
+  File "/usr/lib/python3.14/urllib/request.py", line 89, in <module>
+    import http.client
+  File "/usr/lib/python3.14/http/__init__.py", line 6, in <module>
+    @_simple_enum(IntEnum)
+     ~~~~~~~~~~~~^^^^^^^^^
+  File "/usr/lib/python3.14/enum.py", line 1896, in convert_class
+    setattr(enum_class, name, member)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/enum.py", line 822, in __setattr__
+    super().__setattr__(name, value)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+MemoryError: Out of memory interning an attribute name
+
+Original exception was:
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 311, in <module>
+    log('fichero', os.path.basename(fn)); run_file(fn); log('eventos', len(EV), 'placebo', len(PL))
+                                          ~~~~~~~~^^^^
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 272, in run_file
+    try: r = int(p[6])
+             ~~~^^^^^^
+MemoryError
+2026-11-18T11:28:51Z inicio 2026-11-17 load=7.25
+[      6s] tokens 1108
+[     15s] binance 1256865
+[     36s] onchain agregados 76645 filas bid 111540
+[     36s] fichero libro5_ms_2026-11-17_2668831.csv.gz
+[    220s] eventos 6482 placebo 43720
+[    220s] fichero libro5_ms_2026-11-17_3094008.csv.gz
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 311, in <module>
+    log('fichero', os.path.basename(fn)); run_file(fn); log('eventos', len(EV), 'placebo', len(PL))
+                                          ~~~~~~~~^^^^
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 272, in run_file
+    try: r = int(p[6])
+                 ~^^^
+IndexError: list index out of range
+2026-11-18T11:46:41Z inicio 2026-11-13 load=8.38

@@ -1,0 +1,133 @@
+{
+ "cobertura": {
+  "pujas": 3796,
+  "rellenos": 202,
+  "rellenos_con_tm3": 202,
+  "sin_L2_token": 601,
+  "ficheros_leidos": 322,
+  "filas_ancla": 15243
+ },
+ "global": {
+  "n_fill": 183,
+  "n_nofill_pujas": 3012,
+  "n_nofill_anclas": 15060,
+  "F50": {
+   "fill": 0.7049,
+   "nofill": 0.5479,
+   "LR": 1.29
+  },
+  "F90": {
+   "fill": 0.5628,
+   "nofill": 0.4869,
+   "LR": 1.16
+  },
+  "LR_F50_ic90_dias": [
+   1.19,
+   1.43
+  ]
+ },
+ "por_coin": {
+  "eth": {
+   "n_fill": 74,
+   "n_nofill_pujas": 1121,
+   "n_nofill_anclas": 5605,
+   "F50": {
+    "fill": 0.7703,
+    "nofill": 0.5367,
+    "LR": 1.44
+   },
+   "F90": {
+    "fill": 0.6216,
+    "nofill": 0.4733,
+    "LR": 1.31
+   },
+   "LR_F50_ic90_dias": [
+    1.12,
+    1.75
+   ]
+  },
+  "sol": {
+   "n_fill": 59,
+   "n_nofill_pujas": 988,
+   "n_nofill_anclas": 4940,
+   "F50": {
+    "fill": 0.6949,
+    "nofill": 0.6051,
+    "LR": 1.15
+   },
+   "F90": {
+    "fill": 0.5254,
+    "nofill": 0.5409,
+    "LR": 0.97
+   },
+   "LR_F50_ic90_dias": [
+    1.06,
+    1.32
+   ]
+  },
+  "xrp": {
+   "n_fill": 50,
+   "n_nofill_pujas": 903,
+   "n_nofill_anclas": 4515,
+   "F50": {
+    "fill": 0.62,
+    "nofill": 0.4992,
+    "LR": 1.24
+   },
+   "F90": {
+    "fill": 0.52,
+    "nofill": 0.4447,
+    "LR": 1.17
+   },
+   "LR_F50_ic90_dias": [
+    1.1,
+    1.46
+   ]
+  }
+ },
+ "por_cola": {
+  "False": {
+   "n_fill": 31,
+   "n_nofill_pujas": 370,
+   "n_nofill_anclas": 1850,
+   "F50": {
+    "fill": 0.5484,
+    "nofill": 0.7135,
+    "LR": 0.77
+   },
+   "F90": {
+    "fill": 0.4516,
+    "nofill": 0.6519,
+    "LR": 0.69
+   },
+   "LR_F50_ic90_dias": [
+    0.71,
+    0.9
+   ]
+  },
+  "True": {
+   "n_fill": 152,
+   "n_nofill_pujas": 2642,
+   "n_nofill_anclas": 13210,
+   "F50": {
+    "fill": 0.7368,
+    "nofill": 0.5247,
+    "LR": 1.4
+   },
+   "F90": {
+    "fill": 0.5855,
+    "nofill": 0.4638,
+    "LR": 1.26
+   },
+   "LR_F50_ic90_dias": [
+    1.31,
+    1.54
+   ]
+  }
+ },
+ "balance_dt_ms_mediana": {
+  "fill": 971.0,
+  "nofill": 233.363037109375
+ },
+ "nota": "Ventanas identicas, ancla relativa a la colocacion y vida condicionada. LR~F(fill)/F(nofill): si ~1 la regla R1 no discrimina rellenos de no rellenos. MECANISMO, no EV. tc de relleno = real_tm3 (casado observado)."
+}

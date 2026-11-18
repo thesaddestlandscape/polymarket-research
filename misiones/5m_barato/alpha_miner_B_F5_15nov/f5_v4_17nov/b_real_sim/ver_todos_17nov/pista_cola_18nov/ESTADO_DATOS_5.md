@@ -1,0 +1,1 @@
+# ESTADO_DATOS_5 (18-Nov, 5ª pasada): ADENDA_05_18nov.md(+.sha256), p7_ipw_balance.py, HASHES v7; out/verif_adenda05/. fxK3h 3 h: sin pareja 14,75 %, SMD simple<=0,147, small n_eff 77,5, masa max 1,73 %, excl 5,0 %. p3/tasas NO ejecutados.

@@ -1,3 +1,41 @@
 c582d95064bba772ae8a3c32ef57ccb9933aa03e62748cd453ad0319d53bdb86  p1_dia.py
 1334d739b490ee64f8d755dcd2897d4b5e4e0c53d4aefd7de82e876f573037d8  run_p1.sh
 # v2 18-Nov ~12:05Z tras fallo intento1 (MemoryError/IndexError): historia solo en vida activa, NPL=4, lineas malas contadas
+
+# v3 18-Nov ADENDA_01 (D-1, fixes 2-9). Historico anterior arriba, sin borrar; copia previa en out/obsoletos_preD1/
+9a3d17c31cb3e4bc395fbf0ca9125fa189125f5cff44761b375bd09f76fe17b8  p1_dia.py
+26b898b76185425b424c7c29f9d65b4e008311fe41de09530e6d2cea68673dc3  p2_b98.py
+263005238bbf5b3cd24f77357ea5266fc85a8824abcf373ac6b948e839665521  p3_agrega.py
+37bf50b337d9dd2fcb27e9e89b2cb17d04efaec8995e10edc95f65dab16d68df  p4_m3_b.py
+feea625918a2882123db148ef16f1239cea31728b9d6e217f1127612f7c15a40  p5_control_sin_relleno.py
+1334d739b490ee64f8d755dcd2897d4b5e4e0c53d4aefd7de82e876f573037d8  run_p1.sh
+003e99b398e82e3a11e640227557bf1a88a8e79888d124102656c1aafda1b403  prio_pista.sh
+9b4092e8fd32296e34695e1d838e2add049098968fd87ff3264ace11ae4ad910  ADENDA_01_18nov.md
+# v4 ADENDA_02 18-Nov
+c74089183f703ea6392f1397719d9b6c3168b93b84d11c5b9f5f9f4a8fac2d59  p1_dia.py
+26b898b76185425b424c7c29f9d65b4e008311fe41de09530e6d2cea68673dc3  p2_b98.py
+1b8d38e9abfa135d370d3f5221acd835ffd904f4d7c9304591c2bcbe468a581c  p3_agrega.py
+37bf50b337d9dd2fcb27e9e89b2cb17d04efaec8995e10edc95f65dab16d68df  p4_m3_b.py
+71f30c72a04bc9575d9735e12f94680bba516997e7c7b252540aab01a598de7c  p5_control_sin_relleno.py
+1334d739b490ee64f8d755dcd2897d4b5e4e0c53d4aefd7de82e876f573037d8  run_p1.sh
+003e99b398e82e3a11e640227557bf1a88a8e79888d124102656c1aafda1b403  prio_pista.sh
+# v4b enmienda 02-b
+33cef789820ec7b52063bcb48f0c5b3852ddde5bc707294806cbcb4d3ab84c7c  p1_dia.py
+f31668b9d81f9ba133e7f5cd83cc6587be77c3b6f784b38211fe42241bcba570  p3_agrega.py
+71f30c72a04bc9575d9735e12f94680bba516997e7c7b252540aab01a598de7c  p5_control_sin_relleno.py
+# v5 ADENDA_03 18-Nov (p1 bloque IPW pool, p6, p5b nuevos; ADENDA_03 sha en su .sha256)
+d7a90cbe8c89826218406ab1dd12e1c48e71e0794559fd11f23a93087a05f22d  p1_dia.py
+f31668b9d81f9ba133e7f5cd83cc6587be77c3b6f784b38211fe42241bcba570  p3_agrega.py
+71f30c72a04bc9575d9735e12f94680bba516997e7c7b252540aab01a598de7c  p5_control_sin_relleno.py
+c15c37a48aa7a279ca3a318f551a4d116ed423d4ea1755fb715fb076f5784150  p6_ipw_balance.py
+56289955cf8efe70eb976716b1745899af7d9d06d2f39b1e095ecd6574a84ce8  p5b_check.py
+# v5b p5 v2.1 (nanmin vida) + ADENDA_03 final
+76b030e62605d0883f0ec52b9ed9e1f34d3e702315f4a0612f2eb30cb277b879  p5_control_sin_relleno.py
+2bcca57a0bce8b8cb485426f93107c0e6ae2793c698fbc9d3482f0d4ec74e3a7  ADENDA_03_18nov.md
+# v6 ADENDA_04 18-Nov (p1 pools z0/small/vecinos, p6 estratos+recorte iterado+matching 1:3, adenda)
+749f1bcdfc45d0a34edf0b0bb051c50de4463a6e0f3536157d83260413069ad0  p1_dia.py
+50f1ebc4f6330c825e2f614b9e5b8bb2087efd2003fee892b61abbdf73ee38b8  p6_ipw_balance.py
+114a3dbf7c0abedcd7b6cee3473e2d4da92673dec2bdf28237aad721a44f6b08  ADENDA_04_18nov.md
+# v7 ADENDA_05 18-Nov (p7: estratos por token en z0/small, tope masa 2 %, simple Mahalanobis 1:1 token con calibre adaptativo, CEM auxiliar)
+9ffb31b6f7ba7b099c0dae506ff2bb478df17927032af11ad39ead34827e51c6  p7_ipw_balance.py
+8f2cf28d77a6aaf5d1051328b176656760186a32d6b14b28956028d2bdc160e3  ADENDA_05_18nov.md
