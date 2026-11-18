@@ -51729,3 +51729,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-11-18T15:38:12+00:00,ETH,7120848,0xa06accafab7d52cbd75bb426f906b955983f7be6b4a32fefebeb69db4b6aad19,2026-11-18T15:40:00Z,0.09,-0.0326,1.0,10,107.9,,,,42,True,banda_prematura py=0.090 restante=1.80>1.58
 2026-11-18T15:46:40+00:00,SOL,7120929,0x540f82ad2d4ab4b3d56b8936c27ed509fb383ce201ed9ca90212bfb574cacb7b,2026-11-18T15:50:00Z,0.28,-0.131,1.0,6,200.0,,,,10,False,fuera_de_bandas_significativas
 2026-11-18T15:48:18+00:00,ETH,7120919,0x99b4d0ae1a05711a77cb0e46c66a172f104f42080ae957708e8a34fdc18bdbc7,2026-11-18T15:50:00Z,0.05,0.0074,1.0,8,102.2,,,,66,True,banda_prematura py=0.050 restante=1.70>1.58
+2026-11-18T16:08:17+00:00,ETH,7121067,0x4013144d8ecd07ae82cf99b399beb502baec1594ad81ec7f4dc9c5db01df3743,2026-11-18T16:10:00Z,0.75,0.0459,1.0,11,103.4,,,,56,False,fuera_de_bandas_significativas
