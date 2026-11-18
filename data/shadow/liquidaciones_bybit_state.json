@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-18T18:01:59+00:00",
+ "generado_utc": "2026-11-18T18:09:11+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -42,15 +42,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 10114.46,
-   "n": 4,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 368315.74,
-   "usd_short": 161294.75,
-   "n": 77,
-   "imbalance": -0.3909
+   "usd_long": 296041.25,
+   "usd_short": 160167.69,
+   "n": 70,
+   "imbalance": -0.2978
   }
  },
  "DOGE": {
@@ -68,15 +68,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 213.17,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 12375.29,
+   "usd_long": 11984.0,
    "usd_short": 213.17,
-   "n": 5,
-   "imbalance": -0.9661
+   "n": 3,
+   "imbalance": -0.965
   }
  },
  "ETH": {
@@ -94,15 +94,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 2060.53,
-   "n": 4,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 272434.81,
+   "usd_long": 271009.3,
    "usd_short": 107676.94,
-   "n": 40,
-   "imbalance": -0.4334
+   "n": 37,
+   "imbalance": -0.4313
   }
  },
  "SOL": {
@@ -120,15 +120,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 1111.45,
-   "n": 2,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 52534.62,
+   "usd_long": 51063.87,
    "usd_short": 50339.97,
-   "n": 31,
-   "imbalance": -0.0213
+   "n": 29,
+   "imbalance": -0.0071
   }
  },
  "XRP": {
@@ -146,15 +146,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 2230.17,
-   "n": 4,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 22514.1,
+   "usd_long": 22140.21,
    "usd_short": 4846.42,
-   "n": 16,
-   "imbalance": -0.6457
+   "n": 15,
+   "imbalance": -0.6408
   }
  },
  "lag_bybit_ws": {
