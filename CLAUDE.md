@@ -94,7 +94,6 @@ Petición explícita de Javi (17-Jul, reforzada muchas veces). En cada conexión
     - **`wallets_nuevas_fase0.py`** + `vigia_wallets_nuevas_diario.py` (09:10) → `wallets_nuevas_fase0*.csv`, `wallets_nuevas_conocidas.json`; `analisis_wallets_nuevas_fase0.py`.
     - **Sniper macro**: `macro_release_fast_fase0.py <evento.json>` (eventos en datalogs `macro_fast/eventos/`, salida `macro_fast/<nombre>_{fuente.jsonl,libro.csv}`; un cron de un solo uso por evento) mide a qué ms tenemos el dato en la web del organismo frente al repreciado del libro. Trucos por organismo (bea/bls/ISM) en la memoria. `macro_release_ms_fase0.py` (StatCan WDS, +38,9 s) queda como referencia lenta. `project_sniper_macro_fuente_rapida_30sep`.
     - **CXB multivariante dry-run forward (D_dep 12-Nov; 1er día contable 13-Nov)**: screen `cxb60dry`, prerreg `experimentos/5m_barato/l2_carrera_10nov/PREREG_CXB_MULTIVARIANTE_FORWARD.md` (+`.sha256`; no editar `dryrun/HASHES_CONGELADOS.json`), diario 10:55 + vigía */5 → Telegram; `dryrun/forward/forward_gates.py --mirada N` (mirada 1 desde 22-Nov, plazo 17-Dic). Revisar: heartbeat, días válidos, cobertura, gmap D-1, G3 (vs GEO1); BTC solo si H1=PASS. `project_cola_priorizada_12nov_cxb60_salud`.
-    - **Maker con cancelación rápida (PRECIERRE) — CERRADO 07-Oct** (negativo en todas las celdas, 9 días).
     - **`vigia_sports_wallet_seleccion_ab.py`** (07:47, Telegram sports → `data/sports/wallet_mirror_seleccion_ab.json`): gemelo de sports del A/B de WM, al ask real con fee de sports y unidad por (wallet, mercado, lado). Día 1 (36 días): el pool de hoy −2,5 % por € (5/36 días +), la ventana móvil −2,1 %, sin diferencia. En weather (medido a mano, sin tocar su repo) el pool da −1,4 % bruto; la ventana móvil no tiene claves con n≥15.
     - **`sports_seleccion_wallets_persistentes.py`** (30-Sep): universo DIARIO de wallets de sports con neto de comisión >0 y días positivos, forward propio; caché gz en datalogs `sports_tomadores_cache/` (retención 45 d) + desenlaces oficiales → `data/sports/wallets_persistentes_{universo,informe}.json`. Medir copiarlas a NUESTRO ask exige tocar `sports_wallet_mirror_sniper.py` (/code-review + OK).
     - **Sports CS [0,65-0,70)**: re-correr `s3.py` (datalogs `analisis_persistente_30sep/alpha_mining_30sep/`) y reportar el tramo ≥24-Sep de `CS#FADE` y los trades reales. **Fee de sports: 5 %×(1−p) solo en ganadoras.** `project_sports_cs_banda_065_y_kill_30sep`.
@@ -235,6 +234,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - Media de cocientes por unidad infla el EV cuando el dinero no se reparte igual: el vigía H5M «CONFIRMADO» +0,142 promediaba Σpnl/Σcoste por mercado-lado, y los makers meten más € en los mercados que pierden (promedian a la baja): ponderado por € es ≈+0,064 y las primeras 5 acciones ≈+0,007 (17-Oct, experimentos/5m_barato/auditoria_17oct/metrica.py). Todo EV de una población o de un gate se reporta ponderado por € (Σpnl/Σcoste) además de por unidad.
 - Un resultado espectacular es, primero, un bug: `shadow_pnl_fiel` +13.148 $ era un estado absorbente (real −2.637,94 €).
 - **«B virtual» = G0 del motor ≠ B (17-Nov)**: G0 es escalera fija L 0,10-0,19 sin repegado; B real es DEEP_PEG top−k con repegado, una cara (solo 15 % de sus rellenos en niveles G0); «tipo B» es ex post (bid ≥ q+0,01 antes del print), evaluarlo al colocar lo vuelve G0. Simular SIEMPRE la política real del ejecutor y su unidad (1.er relleno mercado-lado).
+- **Cinta on-chain = nuestro relleno (18-Nov)**: usar `takerFillAmount`, no el tamaño de orden; excluir txs con relleno propio (el placebo ±30 s no lo controla). Firma ≠ llegada. `CONTRATO_VALIDACION_18nov.md`.
 - **Dos fugas en el hazard BTC 5m (29-Oct, R8-R10)**: (1) clave k15 `(cie-300)//900*900` = 15m PREVIO resuelto (correcta floor(s5/900)*900+900); (2) rasgos del complementario (`cbb`,`dcbb1`,`dcbb5`,`comp_acc5`) NaN si no hay NINGÚN print en la ventana = futuro (NaN ⇒ y=0 en 28.845 filas; con L1 en t: +1,04 → −0,08 tomador/−0,11 maker). Regla: rasgo NaN-si-no-hay-datos = fuga; solo datos ≤t y comprobar que el NaN no predice el desenlace. `project_checkpoint_29oct_R10_clave_k15`.
 
 **Fill-ability y selección adversa**
@@ -302,11 +302,10 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - **Print de `libro5_tx` ≠ momento del casado** (corregido 11-Nov, `l2_carrera_10nov/CAUSALIDAD_187MS_11nov.md`): el «retraso 128 ms» era artefacto del emparejado de L1; con on-chain por hash de tx (n=765.315) el print sale ~20 ms tras el casado (p5/p50/p95 16/20/76 ms, estable). Todo simulador que fechaba el relleno con la caída de L1 emparejada: recalcular con `passT_v3`; uno que cancela por libro y fecha con libro5_tx anula rellenos ya ocurridos (U: 11 vs 234). Reloj siempre explícito. [[reference_claude_md_trampas_detalle_16nov]], `project_surf_barridos_precursores_rechazado_03nov`.
 - Registro ms (`maker_ms_*`): fila x = T, símbolo, precio, cantidad, m, E, RECEPCIÓN (c[7]); usar c[6] (E de Binance) mezcla relojes (~138 ms de look-ahead). Filas b solo cuando cambia el precio del top (escasas). Ordenar tuplas del libro con un lado vacío (None) revienta: ordenar con key=hora. Nunca cachear por id() de una lista (Python reutiliza ids).
 - Libro CRUZADO (bid > ask) en el registro ms (~2.700 filas/día; además ~9.000 bloqueadas bid = ask, transitorias): un bid de una pata cruzada no es real y fabrica señales de valor relativo — el evento BTC del 05-Oct que daba +17,75 €/€ salía de un 15m con bid 0,11 > ask 0,10 (06-Oct). Toda regla que use el bid de otro mercado descarta libros cruzados.
-- - `pkill`/`pgrep -f` con el patrón en su propia línea se encuentran a sí mismos: un bucle "esperar a que acabe X" escrito en un heredoc y lanzado con `bash -c` lleva el nombre de X en su línea de comandos y se espera a sí mismo (14-Oct). Escribir el script a un fichero y lanzarlo por su ruta.
+- `pkill`/`pgrep -f` con el patrón en su propia línea se encuentran a sí mismos: un bucle "esperar a que acabe X" escrito en un heredoc y lanzado con `bash -c` lleva el nombre de X en su línea de comandos y se espera a sí mismo (14-Oct). Escribir el script a un fichero y lanzarlo por su ruta.
 - `m5_registro`/`m15_registro` del volumen NO son cronológicos (tramos unidos): reiniciar ventanas en saltos >60 s (A_BN de cosechar v1 activa 94-100 %, 16-Oct). Rasgos de Binance hasta la hora de BLOQUE (~2,4 s tras el casado) miran el futuro del relleno.
 - Placebo/control de valor relativo 5m/15m calculado sobre los DOS lados del 5m: la relación bid15(s) ≥ P(s en 5m) solo vale para el lado s que implican las referencias TWAP (ref15 > ref5 → Up); sin esa restricción salen 236 k "señales" en un día (14-Oct). Filtrar siempre por el lado s, como v4.
-- Recalcular a mano algo que un proceso ya mantiene en vivo (`ballenas_observer.py`): mirar el inventario antes.
-- Proponer como "nuevo" algo que ya está en el pipeline; declarar muerta una idea sin agotar el toolkit; refutar con la fuente de fill-ability equivocada.
+- Recalcular a mano o proponer como "nuevo" algo que ya está en el pipeline (`ballenas_observer.py`): mirar el inventario antes; declarar muerta una idea sin agotar el toolkit; refutar con la fuente de fill-ability equivocada.
 - Perps: los fills no son unidades independientes (363 cierres por apertura); la API da 429 con 360 consultas/hora.
 - Kill-switch por pérdida fija sin mirar la varianza del pago: `CS#FADE#0.65` (acierto 77 % a 0,67, gana +0,52 y pierde −1,05) tenía kill a −3 € y salta por azar el 28 % de las veces en 60 trades aunque el edge sea real. Dimensionar todo kill simulando su tasa de falso disparo con el acierto y el precio medidos.
 - Mercados "ya decididos": un solo fallo es −100 %; hace falta acierto ≥99 % medido, no supuesto.
@@ -370,7 +369,7 @@ screen ejeclive     → ejecutores con envío real      screen ejecdryrun → ej
 screen precierre / curvacierre → resolution_sniper_precierre_executor.py (PRECIERRE + NAIVE camino rápido)
 screen walletmirror, sportsfase0, freezeestado, dryrunmc, nestedarb, mantenimiento, watchdog, dash
 cron */5       → watchdog_fast.sh (checks, restart screens, alerta disco)
-cron diarios   → vigías y análisis (horas UTC verificadas contra crontab el 30-Sep); `crontab -l` es la fuente de verdad
+cron diarios   → vigías y análisis; `crontab -l` es la fuente de verdad
 ```
 La lista real de screens y su frescura la da `python3 verify_deploy.py`; el mapa completo de scripts, `python3 inventario_sistema.py`. Qué hace cada fetcher/observador histórico: archivo (sección "Arquitectura").
 
@@ -411,7 +410,7 @@ La lista real de screens y su frescura la da `python3 verify_deploy.py`; el mapa
 ```bash
 bash live_switch.sh on/off/status   # o Telegram: /on /off /status
 ```
-**Ventanas (hora Madrid)** — fuente de verdad `config_live.json::ventanas_lunes_viernes`/`ventanas_fin_de_semana` (verificado 30-Sep). **Desde el 14-Oct (Javi) hay una ventana `24h_javi_14oct` 00:00-23:59 en ambas listas: el live opera las 24 h** (pensada para WALLET_MIRROR#BTC#15min [0.35,0.40); cualquier bucket que se confirme en cualquier tupla de la whitelist operará también 24 h). L-V: 08:30-09:30 | 10:30-11:30 | 15:00-23:00 | 01:00-02:00 | 02:00-06:00 (madrugada, abierta para FAVORITO#BTC#60min) | 06:00-07:00. Fin de semana: 15-16 | 17-18 | 19-20 | 21-22 | 23:00-23:59 | 01-02 | 06-07. `live_guard.py` no maneja cruce de medianoche (por eso 23:59). `RESOLUTION_SNIPER_PRECIERRE` opera sin ventanas.
+**Ventanas (hora Madrid)** — fuente de verdad `config_live.json::ventanas_lunes_viernes`/`ventanas_fin_de_semana`. **Desde el 14-Oct (Javi) hay una ventana `24h_javi_14oct` 00:00-23:59 en ambas listas: el live opera las 24 h** (pensada para WALLET_MIRROR#BTC#15min [0.35,0.40); cualquier bucket que se confirme en cualquier tupla de la whitelist operará también 24 h). L-V: 08:30-09:30 | 10:30-11:30 | 15:00-23:00 | 01:00-02:00 | 02:00-06:00 (madrugada, abierta para FAVORITO#BTC#60min) | 06:00-07:00. Fin de semana: 15-16 | 17-18 | 19-20 | 21-22 | 23:00-23:59 | 01-02 | 06-07. `live_guard.py` no maneja cruce de medianoche (por eso 23:59). `RESOLUTION_SNIPER_PRECIERRE` opera sin ventanas.
 **Stake**: `min(IC × bankroll × 0.5, bankroll × 10%, max_stake)` — valores reales en `config_live.json::riesgo`.
 **Circuit breakers**: bankroll bajo el mínimo → OFF | caída diaria → para el día | caída de ventana → para la ventana (umbrales en `config_live.json`).
 **Credenciales**: `data/live/.env` (gitignored).
@@ -496,7 +495,7 @@ UMBRAL_DESACTIVAR=(-0.20, 15)  # subido de 8 a 15 el 01-Sep
 ```
 ### live_stake.py / data/live/config_live.json
 ```python
-max_pct_bankroll_por_trade | min_stake_eur=1.05 | max_stake_eur=2.0 (verificado 30-Sep en config; leer `_max_stake_nota` antes de tocarlo)
+max_pct_bankroll_por_trade | min_stake_eur=1.05 | max_stake_eur=2.0 (leer `_max_stake_nota` antes de tocarlo)
 freno_ventana=0.20 | freno_diario → ver config (0.40 desde 22/24-Sep) | bankroll_min=1.00 | racha=4
 Z_MIN_TWAP=1.8 (precierre, global)
 # SELECCIÓN ADVERSA TAKER: los fills live aciertan mucho menos que las señales vetadas por profundidad.
