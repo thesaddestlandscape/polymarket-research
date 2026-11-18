@@ -1,0 +1,49 @@
+{
+ "clusters": 647,
+ "sin_estado": 0,
+ "tipos": {
+  "mint": 591,
+  "dir": 56
+ },
+ "pre150_gt0": 0.9335394126738794,
+ "pre_mayor_que_impreso": 0.8423493044822257,
+ "n_placebo": 6332,
+ "W50": {
+  "evento_frac_con_cancel": 0.7418856259659969,
+  "evento_mediana_frac_cancel": 0.07341275125713062,
+  "n_ev": 647,
+  "placebo_frac_con_cancel": 0.06782083862770012,
+  "placebo_mediana_frac_cancel": 0.0
+ },
+ "W150": {
+  "evento_frac_con_cancel": 0.38176197836166925,
+  "evento_mediana_frac_cancel": 0.0,
+  "n_ev": 647,
+  "placebo_frac_con_cancel": 0.08930557762593358,
+  "placebo_mediana_frac_cancel": 0.0
+ },
+ "W300": {
+  "evento_frac_con_cancel": 0.5046439628482973,
+  "evento_mediana_frac_cancel": 0.0660845448737879,
+  "n_ev": 646,
+  "placebo_frac_con_cancel": 0.13426662424435254,
+  "placebo_mediana_frac_cancel": 0.0
+ },
+ "W1000": {
+  "evento_frac_con_cancel": 0.5882352941176471,
+  "evento_mediana_frac_cancel": 0.40885875308207115,
+  "n_ev": 646,
+  "placebo_frac_con_cancel": 0.20149968091895343,
+  "placebo_mediana_frac_cancel": 0.0
+ },
+ "offset_d_decrece_vs_primer_T_ms_pcts_1_10_25_50_75_90_99": [
+  -392.0,
+  -314.0,
+  -206.0,
+  -20.0,
+  150.0,
+  294.0,
+  389.0
+ ],
+ "n_decrementos_d_pm400ms": 11845
+}

@@ -1,0 +1,58 @@
+{
+ "dia": "2026-11-12",
+ "onchain_filas": 3846855,
+ "onchain_tipos": {
+  "F": 2832468,
+  "M": 1014387
+ },
+ "F_tokens_sonda": 1074490,
+ "prints": 114743,
+ "filas_maker": 708838,
+ "filas_tomador_contrato": 365652,
+ "btc5m_bid_band_por_activo": {
+  "btc": 114758,
+  "eth": 9760,
+  "sol": 3157,
+  "xrp": 1495
+ },
+ "tx_tokenlado_bid_banda": 87083,
+ "n_mk_dist": {
+  "1": 66654,
+  "2": 13126,
+  "3": 3550,
+  "4": 1483,
+  "5": 2270
+ },
+ "frac_solo_un_maker": 0.7654077144792899,
+ "tx_banda_con_print": 0.10438317467243893,
+ "prints_banda5m_tx_en_onchain": 0.9998487575432176,
+ "suelo_rx_menos_ex_p1_por_hora": {
+  "0": 19,
+  "1": 19,
+  "2": 21,
+  "3": 21,
+  "4": 21,
+  "5": 21,
+  "6": 21,
+  "7": 20,
+  "8": 21,
+  "9": 19,
+  "10": 17,
+  "11": 18,
+  "12": 18,
+  "13": 18,
+  "14": 18,
+  "15": 17,
+  "16": 18,
+  "17": 18,
+  "18": 18,
+  "19": 18,
+  "20": 18,
+  "21": 18,
+  "22": 18,
+  "23": 18
+ },
+ "makers_distintos_banda": 993,
+ "makers_con_ge5_tx": 732,
+ "top10_makers_frac_filas": 0.20399473561972595
+}

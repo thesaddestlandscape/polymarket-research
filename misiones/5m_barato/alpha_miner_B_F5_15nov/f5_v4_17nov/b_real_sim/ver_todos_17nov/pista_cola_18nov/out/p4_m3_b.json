@@ -1,0 +1,121 @@
+{
+ "cobertura": {
+  "ok": 147,
+  "sin_casado_o_nivel": 36,
+  "sin_l2": 19
+ },
+ "todos": {
+  "n": 147,
+  "dias": {
+   "2026-10-22": 62,
+   "2026-10-21": 57,
+   "2026-10-20": 28
+  },
+  "F50": {
+   "n_disp": 122,
+   "frac": 0.83,
+   "pnl_evitados": -3.78,
+   "coste_evitados": 138.17,
+   "dPnL_total": 3.78,
+   "buenos_perdidos": 106.77,
+   "malos_evitados": 110.55,
+   "n_buenos_perdidos": 24,
+   "por_dia": {
+    "2026-10-20": -4.71,
+    "2026-10-21": 9.37,
+    "2026-10-22": -8.44
+   }
+  },
+  "F90": {
+   "n_disp": 93,
+   "frac": 0.633,
+   "pnl_evitados": -12.1,
+   "coste_evitados": 105.49,
+   "dPnL_total": 12.1,
+   "buenos_perdidos": 74.06,
+   "malos_evitados": 86.15,
+   "n_buenos_perdidos": 17,
+   "por_dia": {
+    "2026-10-20": -9.66,
+    "2026-10-21": 4.82,
+    "2026-10-22": -7.26
+   }
+  }
+ },
+ "clase1": {
+  "n": 70,
+  "dias": {
+   "2026-10-22": 34,
+   "2026-10-21": 22,
+   "2026-10-20": 14
+  },
+  "F50": {
+   "n_disp": 56,
+   "frac": 0.8,
+   "pnl_evitados": -9.6,
+   "coste_evitados": 61.66,
+   "dPnL_total": 9.6,
+   "buenos_perdidos": 42.23,
+   "malos_evitados": 51.83,
+   "n_buenos_perdidos": 9,
+   "por_dia": {
+    "2026-10-20": -6.59,
+    "2026-10-21": -0.13,
+    "2026-10-22": -2.87
+   }
+  },
+  "F90": {
+   "n_disp": 46,
+   "frac": 0.657,
+   "pnl_evitados": -9.49,
+   "coste_evitados": 51.55,
+   "dPnL_total": 9.49,
+   "buenos_perdidos": 33.33,
+   "malos_evitados": 42.82,
+   "n_buenos_perdidos": 8,
+   "por_dia": {
+    "2026-10-20": -4.22,
+    "2026-10-21": -6.73,
+    "2026-10-22": 1.47
+   }
+  }
+ },
+ "resto": {
+  "n": 77,
+  "dias": {
+   "2026-10-21": 35,
+   "2026-10-22": 28,
+   "2026-10-20": 14
+  },
+  "F50": {
+   "n_disp": 66,
+   "frac": 0.857,
+   "pnl_evitados": 5.82,
+   "coste_evitados": 76.51,
+   "dPnL_total": -5.82,
+   "buenos_perdidos": 64.54,
+   "malos_evitados": 58.72,
+   "n_buenos_perdidos": 15,
+   "por_dia": {
+    "2026-10-20": 1.88,
+    "2026-10-21": 9.5,
+    "2026-10-22": -5.56
+   }
+  },
+  "F90": {
+   "n_disp": 47,
+   "frac": 0.61,
+   "pnl_evitados": -2.61,
+   "coste_evitados": 53.95,
+   "dPnL_total": 2.61,
+   "buenos_perdidos": 40.73,
+   "malos_evitados": 43.33,
+   "n_buenos_perdidos": 9,
+   "por_dia": {
+    "2026-10-20": -5.44,
+    "2026-10-21": 11.56,
+    "2026-10-22": -8.72
+   }
+  }
+ }
+}

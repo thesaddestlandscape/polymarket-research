@@ -1,0 +1,4 @@
+{"estado": "COMPLETADO", "t": "2026-11-18T10:00Z", "prereg": "PREREG_VER_TODOS_v2_18nov.md sha b3374be38c2f12ce", "dias": ["2026-10-20","2026-10-21","2026-10-22","2026-10-23"],
+ "configs_latencia": ["35/33","147/33","35/74","35/111","147/111"], "salidas": "out_v2/V2_*.pkl, out_v2/HZ_*.pkl, v10_resumen_v2.json, v11_hazard.json",
+ "incidencias": ["HZ 22-Oct config 35/33 rehecho: bookTicker con ts NaN (dropna); copia vieja en out_v2/hz_bn_nan_22/"],
+ "proxima_accion": "validador independiente (contrato v3) + decidir medida de recall con ventana exogena"}

@@ -1,0 +1,376 @@
+{
+ "v3d_BASE": {
+  "sim": 88,
+  "TP": 84,
+  "FP": 4,
+  "FN": 118,
+  "prec": 0.955,
+  "rec": 0.416,
+  "dTP": 0,
+  "dFP": 0,
+  "TP_50ms": 45,
+  "nuevos_TP_por_clase": {},
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 16,
+   "2026-10-21": 39,
+   "2026-10-22": 27,
+   "2026-10-23": 2
+  },
+  "EV_TP_motor": -0.1265,
+  "EV_TP_real": -0.1107,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": -0.0408,
+  "pnl_FP": -4.8,
+  "EV_sim_total": -0.1673,
+  "EV_real_total": -0.0724
+ },
+ "DEMr": {
+  "sim": 91,
+  "TP": 87,
+  "FP": 4,
+  "FN": 115,
+  "prec": 0.956,
+  "rec": 0.431,
+  "dTP": 3,
+  "dFP": 0,
+  "TP_50ms": 49,
+  "nuevos_TP_por_clase": {
+   "8_cola_no_agotada": 2,
+   "1_propio_solo": 1
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 18,
+   "2026-10-21": 40,
+   "2026-10-22": 27,
+   "2026-10-23": 2
+  },
+  "EV_TP_motor": -0.0874,
+  "EV_TP_real": 0.0082,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": -0.1432,
+  "pnl_FP": -4.8,
+  "EV_sim_total": -0.1289,
+  "EV_real_total": -0.0724
+ },
+ "DEMe": {
+  "sim": 88,
+  "TP": 84,
+  "FP": 4,
+  "FN": 118,
+  "prec": 0.955,
+  "rec": 0.416,
+  "dTP": 0,
+  "dFP": 0,
+  "TP_50ms": 45,
+  "nuevos_TP_por_clase": {},
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 16,
+   "2026-10-21": 39,
+   "2026-10-22": 27,
+   "2026-10-23": 2
+  },
+  "EV_TP_motor": -0.1265,
+  "EV_TP_real": -0.1107,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": -0.0408,
+  "pnl_FP": -4.8,
+  "EV_sim_total": -0.1673,
+  "EV_real_total": -0.0724
+ },
+ "DEMall": {
+  "sim": 134,
+  "TP": 130,
+  "FP": 4,
+  "FN": 72,
+  "prec": 0.97,
+  "rec": 0.644,
+  "dTP": 46,
+  "dFP": 0,
+  "TP_50ms": 110,
+  "nuevos_TP_por_clase": {
+   "1_propio_solo": 44,
+   "8_cola_no_agotada": 2
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 26,
+   "2026-10-21": 52,
+   "2026-10-22": 45,
+   "2026-10-23": 7
+  },
+  "EV_TP_motor": -0.1969,
+  "EV_TP_real": -0.1548,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": 0.122,
+  "pnl_FP": -4.8,
+  "EV_sim_total": -0.2222,
+  "EV_real_total": -0.0724
+ },
+ "DEMr_p30": {
+  "sim": 91,
+  "TP": 86,
+  "FP": 5,
+  "FN": 116,
+  "prec": 0.945,
+  "rec": 0.426,
+  "dTP": 2,
+  "dFP": 1,
+  "TP_50ms": 45,
+  "nuevos_TP_por_clase": {
+   "1_propio_solo": 2
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 16,
+   "2026-10-21": 41,
+   "2026-10-22": 27,
+   "2026-10-23": 2
+  },
+  "EV_TP_motor": -0.0619,
+  "EV_TP_real": -0.0325,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": -0.1067,
+  "pnl_FP": -5.82,
+  "EV_sim_total": -0.1137,
+  "EV_real_total": -0.0724
+ },
+ "DEMr_m30": {
+  "sim": 93,
+  "TP": 86,
+  "FP": 7,
+  "FN": 116,
+  "prec": 0.925,
+  "rec": 0.426,
+  "dTP": 2,
+  "dFP": 3,
+  "TP_50ms": 44,
+  "nuevos_TP_por_clase": {
+   "1_propio_solo": 1,
+   "8_cola_no_agotada": 1
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 17,
+   "2026-10-21": 40,
+   "2026-10-22": 27,
+   "2026-10-23": 2
+  },
+  "EV_TP_motor": -0.1482,
+  "EV_TP_real": -0.13,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": -0.0229,
+  "pnl_FP": -7.69,
+  "EV_sim_total": -0.2089,
+  "EV_real_total": -0.0724
+ },
+ "C150": {
+  "sim": 112,
+  "TP": 90,
+  "FP": 22,
+  "FN": 112,
+  "prec": 0.804,
+  "rec": 0.446,
+  "dTP": 6,
+  "dFP": 18,
+  "TP_50ms": 50,
+  "nuevos_TP_por_clase": {
+   "4_relleno_real_tras_cancel_sim": 4,
+   "1_propio_solo": 1,
+   "6_sin_prints_en_ventana": 1
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 17,
+   "2026-10-21": 41,
+   "2026-10-22": 29,
+   "2026-10-23": 3
+  },
+  "EV_TP_motor": -0.1436,
+  "EV_TP_real": -0.1024,
+  "EV_FP_motor": -0.4115,
+  "EV_FN_real": -0.0444,
+  "pnl_FP": -10.49,
+  "EV_sim_total": -0.1963,
+  "EV_real_total": -0.0724
+ },
+ "COLA": {
+  "sim": 91,
+  "TP": 87,
+  "FP": 4,
+  "FN": 115,
+  "prec": 0.956,
+  "rec": 0.431,
+  "dTP": 3,
+  "dFP": 0,
+  "TP_50ms": 49,
+  "nuevos_TP_por_clase": {
+   "8_cola_no_agotada": 3
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 17,
+   "2026-10-21": 40,
+   "2026-10-22": 28,
+   "2026-10-23": 2
+  },
+  "EV_TP_motor": -0.0506,
+  "EV_TP_real": 0.0109,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": -0.1452,
+  "pnl_FP": -4.8,
+  "EV_sim_total": -0.0935,
+  "EV_real_total": -0.0724
+ },
+ "COLA_C150": {
+  "sim": 120,
+  "TP": 93,
+  "FP": 27,
+  "FN": 109,
+  "prec": 0.775,
+  "rec": 0.46,
+  "dTP": 9,
+  "dFP": 23,
+  "TP_50ms": 54,
+  "nuevos_TP_por_clase": {
+   "4_relleno_real_tras_cancel_sim": 4,
+   "8_cola_no_agotada": 3,
+   "1_propio_solo": 1,
+   "6_sin_prints_en_ventana": 1
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 18,
+   "2026-10-21": 42,
+   "2026-10-22": 30,
+   "2026-10-23": 3
+  },
+  "EV_TP_motor": -0.0461,
+  "EV_TP_real": 0.0114,
+  "EV_FP_motor": -0.5186,
+  "EV_FN_real": -0.1554,
+  "pnl_FP": -16.16,
+  "EV_sim_total": -0.1518,
+  "EV_real_total": -0.0724
+ },
+ "DEMr_COLA_C150": {
+  "sim": 135,
+  "TP": 107,
+  "FP": 28,
+  "FN": 95,
+  "prec": 0.793,
+  "rec": 0.53,
+  "dTP": 23,
+  "dFP": 24,
+  "TP_50ms": 69,
+  "nuevos_TP_por_clase": {
+   "1_propio_solo": 11,
+   "8_cola_no_agotada": 7,
+   "4_relleno_real_tras_cancel_sim": 4,
+   "6_sin_prints_en_ventana": 1
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 20,
+   "2026-10-21": 46,
+   "2026-10-22": 37,
+   "2026-10-23": 4
+  },
+  "EV_TP_motor": 0.0956,
+  "EV_TP_real": 0.0641,
+  "EV_FP_motor": -0.5347,
+  "EV_FN_real": -0.2445,
+  "pnl_FP": -17.24,
+  "EV_sim_total": -0.0376,
+  "EV_real_total": -0.0724
+ },
+ "DEMr_COLA": {
+  "sim": 104,
+  "TP": 100,
+  "FP": 4,
+  "FN": 102,
+  "prec": 0.962,
+  "rec": 0.495,
+  "dTP": 16,
+  "dFP": 0,
+  "TP_50ms": 63,
+  "nuevos_TP_por_clase": {
+   "1_propio_solo": 9,
+   "8_cola_no_agotada": 7
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 19,
+   "2026-10-21": 44,
+   "2026-10-22": 34,
+   "2026-10-23": 3
+  },
+  "EV_TP_motor": 0.1021,
+  "EV_TP_real": 0.0764,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": -0.2349,
+  "pnl_FP": -4.8,
+  "EV_sim_total": 0.0573,
+  "EV_real_total": -0.0724
+ },
+ "DEMr_COLA_p30": {
+  "sim": 98,
+  "TP": 89,
+  "FP": 9,
+  "FN": 113,
+  "prec": 0.908,
+  "rec": 0.441,
+  "dTP": 5,
+  "dFP": 5,
+  "TP_50ms": 49,
+  "nuevos_TP_por_clase": {
+   "8_cola_no_agotada": 3,
+   "1_propio_solo": 2
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 17,
+   "2026-10-21": 42,
+   "2026-10-22": 28,
+   "2026-10-23": 2
+  },
+  "EV_TP_motor": 0.0253,
+  "EV_TP_real": 0.0842,
+  "EV_FP_motor": -1.0,
+  "EV_FN_real": -0.2149,
+  "pnl_FP": -9.1,
+  "EV_sim_total": -0.0574,
+  "EV_real_total": -0.0724
+ },
+ "DEMr_COLA_m30": {
+  "sim": 104,
+  "TP": 90,
+  "FP": 14,
+  "FN": 112,
+  "prec": 0.865,
+  "rec": 0.446,
+  "dTP": 6,
+  "dFP": 10,
+  "TP_50ms": 47,
+  "nuevos_TP_por_clase": {
+   "8_cola_no_agotada": 4,
+   "1_propio_solo": 2
+  },
+  "TP_perdidos": 0,
+  "TP_por_dia": {
+   "2026-10-20": 18,
+   "2026-10-21": 42,
+   "2026-10-22": 28,
+   "2026-10-23": 2
+  },
+  "EV_TP_motor": -0.084,
+  "EV_TP_real": -0.0215,
+  "EV_FP_motor": -0.1105,
+  "EV_FN_real": -0.1197,
+  "pnl_FP": -1.62,
+  "EV_sim_total": -0.0872,
+  "EV_real_total": -0.0724
+ }
+}

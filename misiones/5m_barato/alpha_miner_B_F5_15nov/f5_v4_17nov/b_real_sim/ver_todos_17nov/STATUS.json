@@ -1,0 +1,16 @@
+{
+ "estado": "COMPLETADO",
+ "t": "2026-11-17T22:05Z",
+ "dias": [
+  "2026-10-20",
+  "2026-10-21",
+  "2026-10-22",
+  "2026-10-23"
+ ],
+ "n_ordenes": 3796,
+ "n_rellenos": 202,
+ "calldata_tx": 8481,
+ "salidas": "out/V5_DEM_*",
+ "pasada2_v1": "out/pasada2_v1 (sin variantes post hoc)",
+ "proxima_accion": "validacion independiente + L2 por nivel para cola"
+}

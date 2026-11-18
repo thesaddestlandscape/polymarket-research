@@ -1,0 +1,8742 @@
+{
+ "V2_r3_call00a147_intc111_v3d": {
+  "n_ordenes": 3796,
+  "n_real": 202,
+  "EV_real_todos": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "EV_real_1er": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "var": {
+   "BASE": {
+    "sim": 100,
+    "TP": 82,
+    "TP_parcial": 2,
+    "FP": 16,
+    "FN": 120,
+    "prec": 0.82,
+    "rec": 0.406,
+    "rec_q": 0.436,
+    "TP_50ms": 46,
+    "nuevos_dt0": 0,
+    "dTP": -3,
+    "dFP": -3,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 15,
+      "FP": 3,
+      "dTP": -1,
+      "dFP": -1,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 6,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 3,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": -2,
+      "neto": 2
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 1,
+     "2026-10-22": 1,
+     "2026-10-23": -2
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.1825,
+     "ev_unit": -0.1833,
+     "pnl": -17.64,
+     "coste": 96.64
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.1872,
+     "ev_unit": -0.1833,
+     "pnl": -18.2,
+     "coste": 97.19
+    },
+    "EV_FP_motor": {
+     "n": 15,
+     "ev_eur": -0.1269,
+     "ev_unit": -0.0159,
+     "pnl": -2.18,
+     "coste": 17.18
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": 0.0175,
+     "ev_unit": 0.096,
+     "pnl": 2.17,
+     "coste": 124.11
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLA": {
+    "sim": 107,
+    "TP": 85,
+    "TP_parcial": 3,
+    "FP": 19,
+    "FN": 117,
+    "prec": 0.794,
+    "rec": 0.421,
+    "rec_q": 0.456,
+    "TP_50ms": 49,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.1051,
+     "ev_unit": -0.0991,
+     "pnl": -10.57,
+     "coste": 100.57
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.1105,
+     "ev_unit": -0.0991,
+     "pnl": -11.1,
+     "coste": 100.44
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0407,
+     "ev_unit": 0.042,
+     "pnl": -4.92,
+     "coste": 120.86
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv": {
+    "sim": 107,
+    "TP": 85,
+    "TP_parcial": 3,
+    "FP": 19,
+    "FN": 117,
+    "prec": 0.794,
+    "rec": 0.421,
+    "rec_q": 0.456,
+    "TP_50ms": 49,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.1051,
+     "ev_unit": -0.0991,
+     "pnl": -10.57,
+     "coste": 100.57
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.1105,
+     "ev_unit": -0.0991,
+     "pnl": -11.1,
+     "coste": 100.44
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0407,
+     "ev_unit": 0.042,
+     "pnl": -4.92,
+     "coste": 120.86
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMe_COLAv": {
+    "sim": 108,
+    "TP": 85,
+    "TP_parcial": 3,
+    "FP": 20,
+    "FN": 117,
+    "prec": 0.787,
+    "rec": 0.421,
+    "rec_q": 0.456,
+    "TP_50ms": 49,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 1,
+    "neto": -1,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 7,
+      "dTP": 0,
+      "dFP": 1,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -1,
+     "2026-10-21": 0,
+     "2026-10-22": -1,
+     "2026-10-23": -1
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.1051,
+     "ev_unit": -0.0991,
+     "pnl": -10.57,
+     "coste": 100.57
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.1105,
+     "ev_unit": -0.0991,
+     "pnl": -11.1,
+     "coste": 100.44
+    },
+    "EV_FP_motor": {
+     "n": 19,
+     "ev_eur": -0.3129,
+     "ev_unit": -0.2231,
+     "pnl": -6.83,
+     "coste": 21.83
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0407,
+     "ev_unit": 0.042,
+     "pnl": -4.92,
+     "coste": 120.86
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv": {
+    "sim": 107,
+    "TP": 85,
+    "TP_parcial": 3,
+    "FP": 19,
+    "FN": 117,
+    "prec": 0.794,
+    "rec": 0.421,
+    "rec_q": 0.456,
+    "TP_50ms": 49,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.1051,
+     "ev_unit": -0.0991,
+     "pnl": -10.57,
+     "coste": 100.57
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.1105,
+     "ev_unit": -0.0991,
+     "pnl": -11.1,
+     "coste": 100.44
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0407,
+     "ev_unit": 0.042,
+     "pnl": -4.92,
+     "coste": 120.86
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_p30": {
+    "sim": 107,
+    "TP": 85,
+    "TP_parcial": 3,
+    "FP": 19,
+    "FN": 117,
+    "prec": 0.794,
+    "rec": 0.421,
+    "rec_q": 0.456,
+    "TP_50ms": 49,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.1051,
+     "ev_unit": -0.0991,
+     "pnl": -10.57,
+     "coste": 100.57
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.1105,
+     "ev_unit": -0.0991,
+     "pnl": -11.1,
+     "coste": 100.44
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0407,
+     "ev_unit": 0.042,
+     "pnl": -4.92,
+     "coste": 120.86
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_m30": {
+    "sim": 107,
+    "TP": 85,
+    "TP_parcial": 3,
+    "FP": 19,
+    "FN": 117,
+    "prec": 0.794,
+    "rec": 0.421,
+    "rec_q": 0.456,
+    "TP_50ms": 49,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.1051,
+     "ev_unit": -0.0991,
+     "pnl": -10.57,
+     "coste": 100.57
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.1105,
+     "ev_unit": -0.0991,
+     "pnl": -11.1,
+     "coste": 100.44
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0407,
+     "ev_unit": 0.042,
+     "pnl": -4.92,
+     "coste": 120.86
+    },
+    "nuevos_por_clase": {}
+   },
+   "L2Q": {
+    "sim": 108,
+    "TP": 88,
+    "TP_parcial": 1,
+    "FP": 19,
+    "FN": 114,
+    "prec": 0.815,
+    "rec": 0.436,
+    "rec_q": 0.47,
+    "TP_50ms": 53,
+    "nuevos_dt0": 3,
+    "dTP": 3,
+    "dFP": 0,
+    "neto": 3,
+    "TP_ganados": 4,
+    "TP_perdidos": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 43,
+      "FP": 6,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 3,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 3,
+     "2026-10-21": 1,
+     "2026-10-22": 2,
+     "2026-10-23": 3
+    },
+    "EV_TP_motor": {
+     "n": 88,
+     "ev_eur": -0.1258,
+     "ev_unit": -0.1186,
+     "pnl": -13.1,
+     "coste": 104.1
+    },
+    "EV_TP_real": {
+     "n": 88,
+     "ev_eur": -0.1258,
+     "ev_unit": -0.1186,
+     "pnl": -13.1,
+     "coste": 104.09
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 114,
+     "ev_eur": -0.025,
+     "ev_unit": 0.0607,
+     "pnl": -2.93,
+     "coste": 117.21
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2,
+     "TP": 1,
+     "4_relleno_real_tras_cancel_sim": 1
+    }
+   },
+   "L2Q20": {
+    "sim": 108,
+    "TP": 88,
+    "TP_parcial": 1,
+    "FP": 19,
+    "FN": 114,
+    "prec": 0.815,
+    "rec": 0.436,
+    "rec_q": 0.47,
+    "TP_50ms": 53,
+    "nuevos_dt0": 3,
+    "dTP": 3,
+    "dFP": 0,
+    "neto": 3,
+    "TP_ganados": 4,
+    "TP_perdidos": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 43,
+      "FP": 6,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 3,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 3,
+     "2026-10-21": 1,
+     "2026-10-22": 2,
+     "2026-10-23": 3
+    },
+    "EV_TP_motor": {
+     "n": 88,
+     "ev_eur": -0.1258,
+     "ev_unit": -0.1186,
+     "pnl": -13.1,
+     "coste": 104.1
+    },
+    "EV_TP_real": {
+     "n": 88,
+     "ev_eur": -0.1258,
+     "ev_unit": -0.1186,
+     "pnl": -13.1,
+     "coste": 104.09
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 114,
+     "ev_eur": -0.025,
+     "ev_unit": 0.0607,
+     "pnl": -2.93,
+     "coste": 117.21
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2,
+     "TP": 1,
+     "4_relleno_real_tras_cancel_sim": 1
+    }
+   },
+   "L2Q_opt": {
+    "sim": 117,
+    "TP": 91,
+    "TP_parcial": 1,
+    "FP": 25,
+    "FN": 111,
+    "prec": 0.778,
+    "rec": 0.45,
+    "rec_q": 0.485,
+    "TP_50ms": 55,
+    "nuevos_dt0": 5,
+    "dTP": 6,
+    "dFP": 6,
+    "neto": 0,
+    "TP_ganados": 7,
+    "TP_perdidos": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 4,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 9,
+      "dTP": 3,
+      "dFP": 3,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 6,
+      "dTP": 2,
+      "dFP": 3,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -1,
+     "2026-10-21": 0,
+     "2026-10-22": 1,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 91,
+     "ev_eur": -0.1505,
+     "ev_unit": -0.1476,
+     "pnl": -16.12,
+     "coste": 107.12
+    },
+    "EV_TP_real": {
+     "n": 91,
+     "ev_eur": -0.1538,
+     "ev_unit": -0.1476,
+     "pnl": -16.54,
+     "coste": 107.53
+    },
+    "EV_FP_motor": {
+     "n": 24,
+     "ev_eur": -0.285,
+     "ev_unit": -0.1071,
+     "pnl": -6.92,
+     "coste": 24.27
+    },
+    "EV_FN_real": {
+     "n": 111,
+     "ev_eur": 0.0045,
+     "ev_unit": 0.0894,
+     "pnl": 0.51,
+     "coste": 113.77
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5,
+     "TP": 1,
+     "4_relleno_real_tras_cancel_sim": 1
+    }
+   },
+   "L2Q_p30": {
+    "sim": 108,
+    "TP": 85,
+    "TP_parcial": 0,
+    "FP": 23,
+    "FN": 117,
+    "prec": 0.787,
+    "rec": 0.421,
+    "rec_q": 0.447,
+    "TP_50ms": 44,
+    "nuevos_dt0": 2,
+    "dTP": 0,
+    "dFP": 4,
+    "neto": -4,
+    "TP_ganados": 3,
+    "TP_perdidos": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 4,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 8,
+      "dTP": 1,
+      "dFP": 2,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 25,
+      "FP": 5,
+      "dTP": -2,
+      "dFP": 2,
+      "neto": -4
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -5,
+     "2026-10-21": -3,
+     "2026-10-22": 0,
+     "2026-10-23": -4
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.1682,
+     "ev_unit": -0.161,
+     "pnl": -16.98,
+     "coste": 100.98
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.1658,
+     "ev_unit": -0.161,
+     "pnl": -16.7,
+     "coste": 100.69
+    },
+    "EV_FP_motor": {
+     "n": 21,
+     "ev_eur": -0.2917,
+     "ev_unit": -0.0703,
+     "pnl": -6.7,
+     "coste": 22.97
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": 0.0056,
+     "ev_unit": 0.0869,
+     "pnl": 0.67,
+     "coste": 120.61
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    }
+   },
+   "L2Q_m30": {
+    "sim": 119,
+    "TP": 89,
+    "TP_parcial": 1,
+    "FP": 29,
+    "FN": 113,
+    "prec": 0.748,
+    "rec": 0.441,
+    "rec_q": 0.469,
+    "TP_50ms": 50,
+    "nuevos_dt0": 6,
+    "dTP": 4,
+    "dFP": 10,
+    "neto": -6,
+    "TP_ganados": 6,
+    "TP_perdidos": 2,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 10,
+      "dTP": 3,
+      "dFP": 4,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 9,
+      "dTP": 1,
+      "dFP": 6,
+      "neto": -5
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -6,
+     "2026-10-21": -5,
+     "2026-10-22": -1,
+     "2026-10-23": -6
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.2026,
+     "ev_unit": -0.1987,
+     "pnl": -21.34,
+     "coste": 105.34
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.194,
+     "ev_unit": -0.1987,
+     "pnl": -20.21,
+     "coste": 104.21
+    },
+    "EV_FP_motor": {
+     "n": 28,
+     "ev_eur": -0.2459,
+     "ev_unit": 0.0629,
+     "pnl": -7.0,
+     "coste": 28.44
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": 0.0358,
+     "ev_unit": 0.1254,
+     "pnl": 4.19,
+     "coste": 117.09
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    }
+   },
+   "BASE_cap605": {
+    "sim": 28,
+    "TP": 20,
+    "TP_parcial": 2,
+    "FP": 6,
+    "FN": 182,
+    "prec": 0.714,
+    "rec": 0.099,
+    "rec_q": 0.12,
+    "TP_50ms": 16,
+    "nuevos_dt0": 0,
+    "dTP": -65,
+    "dFP": -13,
+    "neto": -52,
+    "TP_ganados": 0,
+    "TP_perdidos": 65,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -4,
+      "neto": -11
+     },
+     "2026-10-21": {
+      "TP": 11,
+      "FP": 3,
+      "dTP": -30,
+      "dFP": -3,
+      "neto": -27
+     },
+     "2026-10-22": {
+      "TP": 8,
+      "FP": 1,
+      "dTP": -19,
+      "dFP": -2,
+      "neto": -17
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": -4,
+      "neto": 3
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -41,
+     "2026-10-21": -25,
+     "2026-10-22": -35,
+     "2026-10-23": -55
+    },
+    "EV_TP_motor": {
+     "n": 20,
+     "ev_eur": 0.0403,
+     "ev_unit": 0.0692,
+     "pnl": 0.93,
+     "coste": 23.07
+    },
+    "EV_TP_real": {
+     "n": 20,
+     "ev_eur": 0.0402,
+     "ev_unit": 0.0692,
+     "pnl": 0.93,
+     "coste": 23.07
+    },
+    "EV_FP_motor": {
+     "n": 6,
+     "ev_eur": 0.5361,
+     "ev_unit": 0.6667,
+     "pnl": 3.49,
+     "coste": 6.51
+    },
+    "EV_FN_real": {
+     "n": 182,
+     "ev_eur": -0.0855,
+     "ev_unit": -0.0269,
+     "pnl": -16.95,
+     "coste": 198.23
+    },
+    "nuevos_por_clase": {}
+   },
+   "BASE_cap2675": {
+    "sim": 61,
+    "TP": 45,
+    "TP_parcial": 2,
+    "FP": 14,
+    "FN": 157,
+    "prec": 0.738,
+    "rec": 0.223,
+    "rec_q": 0.248,
+    "TP_50ms": 32,
+    "nuevos_dt0": 0,
+    "dTP": -40,
+    "dFP": -5,
+    "neto": -35,
+    "TP_ganados": 0,
+    "TP_perdidos": 40,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 3,
+      "dTP": -10,
+      "dFP": -1,
+      "neto": -9
+     },
+     "2026-10-21": {
+      "TP": 22,
+      "FP": 6,
+      "dTP": -19,
+      "dFP": 0,
+      "neto": -19
+     },
+     "2026-10-22": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": -11,
+      "dFP": -1,
+      "neto": -10
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": -3,
+      "neto": 3
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -26,
+     "2026-10-21": -16,
+     "2026-10-22": -25,
+     "2026-10-23": -38
+    },
+    "EV_TP_motor": {
+     "n": 45,
+     "ev_eur": -0.1485,
+     "ev_unit": -0.166,
+     "pnl": -7.85,
+     "coste": 52.85
+    },
+    "EV_TP_real": {
+     "n": 45,
+     "ev_eur": -0.1575,
+     "ev_unit": -0.166,
+     "pnl": -8.41,
+     "coste": 53.4
+    },
+    "EV_FP_motor": {
+     "n": 13,
+     "ev_eur": 0.0027,
+     "ev_unit": 0.1355,
+     "pnl": 0.04,
+     "coste": 14.96
+    },
+    "EV_FN_real": {
+     "n": 157,
+     "ev_eur": -0.0453,
+     "ev_unit": 0.0252,
+     "pnl": -7.61,
+     "coste": 167.9
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap605": {
+    "sim": 33,
+    "TP": 23,
+    "TP_parcial": 2,
+    "FP": 8,
+    "FN": 179,
+    "prec": 0.697,
+    "rec": 0.114,
+    "rec_q": 0.137,
+    "TP_50ms": 19,
+    "nuevos_dt0": 0,
+    "dTP": -62,
+    "dFP": -11,
+    "neto": -51,
+    "TP_ganados": 0,
+    "TP_perdidos": 62,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -4,
+      "neto": -11
+     },
+     "2026-10-21": {
+      "TP": 12,
+      "FP": 3,
+      "dTP": -29,
+      "dFP": -3,
+      "neto": -26
+     },
+     "2026-10-22": {
+      "TP": 10,
+      "FP": 1,
+      "dTP": -17,
+      "dFP": -2,
+      "neto": -15
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 4,
+      "dTP": -1,
+      "dFP": -2,
+      "neto": 1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -40,
+     "2026-10-21": -25,
+     "2026-10-22": -36,
+     "2026-10-23": -52
+    },
+    "EV_TP_motor": {
+     "n": 23,
+     "ev_eur": 0.1346,
+     "ev_unit": 0.1586,
+     "pnl": 3.56,
+     "coste": 26.44
+    },
+    "EV_TP_real": {
+     "n": 23,
+     "ev_eur": 0.1149,
+     "ev_unit": 0.1586,
+     "pnl": 3.02,
+     "coste": 26.31
+    },
+    "EV_FP_motor": {
+     "n": 8,
+     "ev_eur": 0.1161,
+     "ev_unit": 0.25,
+     "pnl": 1.04,
+     "coste": 8.96
+    },
+    "EV_FN_real": {
+     "n": 179,
+     "ev_eur": -0.0977,
+     "ev_unit": -0.04,
+     "pnl": -19.05,
+     "coste": 194.99
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap2675": {
+    "sim": 67,
+    "TP": 49,
+    "TP_parcial": 2,
+    "FP": 16,
+    "FN": 153,
+    "prec": 0.731,
+    "rec": 0.243,
+    "rec_q": 0.274,
+    "TP_50ms": 36,
+    "nuevos_dt0": 0,
+    "dTP": -36,
+    "dFP": -3,
+    "neto": -33,
+    "TP_ganados": 0,
+    "TP_perdidos": 36,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 3,
+      "dTP": -10,
+      "dFP": -1,
+      "neto": -9
+     },
+     "2026-10-21": {
+      "TP": 24,
+      "FP": 6,
+      "dTP": -17,
+      "dFP": 0,
+      "neto": -17
+     },
+     "2026-10-22": {
+      "TP": 18,
+      "FP": 2,
+      "dTP": -9,
+      "dFP": -1,
+      "neto": -8
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": -1,
+      "neto": 1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -24,
+     "2026-10-21": -16,
+     "2026-10-22": -25,
+     "2026-10-23": -34
+    },
+    "EV_TP_motor": {
+     "n": 49,
+     "ev_eur": -0.1196,
+     "ev_unit": -0.1266,
+     "pnl": -6.93,
+     "coste": 57.93
+    },
+    "EV_TP_real": {
+     "n": 49,
+     "ev_eur": -0.1291,
+     "ev_unit": -0.1266,
+     "pnl": -7.46,
+     "coste": 57.8
+    },
+    "EV_FP_motor": {
+     "n": 15,
+     "ev_eur": -0.1384,
+     "ev_unit": -0.0159,
+     "pnl": -2.41,
+     "coste": 17.41
+    },
+    "EV_FN_real": {
+     "n": 153,
+     "ev_eur": -0.0523,
+     "ev_unit": 0.0176,
+     "pnl": -8.56,
+     "coste": 163.5
+    },
+    "nuevos_por_clase": {}
+   }
+  },
+  "DEMt_rnd": {
+   "dTP_max": 0,
+   "dTP_p95": 0.0,
+   "neto_max": 0,
+   "neto_p95": 0.0
+  },
+  "nsint": {
+   "DEMe_COLAv": 176,
+   "DEMt_COLAv": 0,
+   "DEMt_COLAv_p30": 0,
+   "DEMt_COLAv_m30": 0
+  },
+  "COLA_vs_COLAv": {
+   "COLA_no_COLAv": 0,
+   "COLA_no_COLAv_dt0": 0,
+   "COLAv_no_BASE": 3,
+   "BASE_no_COLAv": 0
+  },
+  "L2_cob": {
+   "ordenes": 3195,
+   "reales": 183,
+   "alta_hallada": 0.37531725888324874,
+   "ahead0_p50": 45.0,
+   "filas_p50": 4.0
+  },
+  "L2_sub": {
+   "L2Q": {
+    "TP": 86,
+    "FP": 13,
+    "dTP": 3,
+    "dFP": 0,
+    "neto": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 43,
+      "FP": 6,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2,
+     "TP": 1,
+     "4_relleno_real_tras_cancel_sim": 1
+    },
+    "TP_perdidos": 1,
+    "TP_ganados": 4
+   },
+   "L2Q20": {
+    "TP": 86,
+    "FP": 13,
+    "dTP": 3,
+    "dFP": 0,
+    "neto": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 43,
+      "FP": 6,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2,
+     "TP": 1,
+     "4_relleno_real_tras_cancel_sim": 1
+    },
+    "TP_perdidos": 1,
+    "TP_ganados": 4
+   },
+   "L2Q_opt": {
+    "TP": 89,
+    "FP": 19,
+    "dTP": 6,
+    "dFP": 6,
+    "neto": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 4,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 9,
+      "dTP": 3,
+      "dFP": 3,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 6,
+      "dTP": 2,
+      "dFP": 3,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5,
+     "TP": 1,
+     "4_relleno_real_tras_cancel_sim": 1
+    },
+    "TP_perdidos": 1,
+    "TP_ganados": 7
+   },
+   "L2Q_p30": {
+    "TP": 83,
+    "FP": 17,
+    "dTP": 0,
+    "dFP": 4,
+    "neto": -4,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 4,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 8,
+      "dTP": 1,
+      "dFP": 2,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 24,
+      "FP": 5,
+      "dTP": -2,
+      "dFP": 2,
+      "neto": -4
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    },
+    "TP_perdidos": 3,
+    "TP_ganados": 3
+   },
+   "L2Q_m30": {
+    "TP": 87,
+    "FP": 23,
+    "dTP": 4,
+    "dFP": 10,
+    "neto": -6,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 10,
+      "dTP": 3,
+      "dFP": 4,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 9,
+      "dTP": 1,
+      "dFP": 6,
+      "neto": -5
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    },
+    "TP_perdidos": 2,
+    "TP_ganados": 6
+   }
+  },
+  "FN_por_clase": {
+   "BASE": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 6,
+     "ev_eur": 0.7167,
+     "ev_unit": 0.7361,
+     "pnl": 5.01,
+     "coste": 6.99
+    },
+    "8_cola_no_agotada": {
+     "n": 11,
+     "ev_eur": 0.956,
+     "ev_unit": 0.8731,
+     "pnl": 10.92,
+     "coste": 11.42
+    },
+    "TP": {
+     "n": 5,
+     "ev_eur": 0.6051,
+     "ev_unit": 0.7029,
+     "pnl": 3.77,
+     "coste": 6.23
+    },
+    "TODOS": {
+     "n": 120,
+     "ev_eur": 0.0175,
+     "ev_unit": 0.096,
+     "pnl": 2.17,
+     "coste": 124.11
+    },
+    "TODOS_por_orden": {
+     "n": 120,
+     "ev_eur": 0.0175,
+     "ev_unit": 0.096,
+     "pnl": 2.17,
+     "coste": 124.11
+    }
+   },
+   "COLAv": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 6,
+     "ev_eur": 0.7167,
+     "ev_unit": 0.7361,
+     "pnl": 5.01,
+     "coste": 6.99
+    },
+    "8_cola_no_agotada": {
+     "n": 10,
+     "ev_eur": 0.6336,
+     "ev_unit": 0.5341,
+     "pnl": 6.59,
+     "coste": 10.41
+    },
+    "TP": {
+     "n": 3,
+     "ev_eur": 0.25,
+     "ev_unit": 0.3889,
+     "pnl": 1.0,
+     "coste": 4.0
+    },
+    "TODOS": {
+     "n": 117,
+     "ev_eur": -0.0407,
+     "ev_unit": 0.042,
+     "pnl": -4.92,
+     "coste": 120.86
+    },
+    "TODOS_por_orden": {
+     "n": 117,
+     "ev_eur": -0.0407,
+     "ev_unit": 0.042,
+     "pnl": -4.92,
+     "coste": 120.86
+    }
+   }
+  },
+  "C7": {
+   "n": 3641,
+   "reales": 112,
+   "var": {
+    "BASE": {
+     "TP": 28,
+     "FP": 10,
+     "rec": 0.25,
+     "prec": 0.718,
+     "dTP": -2,
+     "dFP": -3,
+     "neto": 1
+    },
+    "COLAv": {
+     "TP": 30,
+     "FP": 13,
+     "rec": 0.268,
+     "prec": 0.652,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    },
+    "L2Q": {
+     "TP": 32,
+     "FP": 13,
+     "rec": 0.286,
+     "prec": 0.696,
+     "dTP": 2,
+     "dFP": 0,
+     "neto": 2
+    },
+    "DEMt_COLAv": {
+     "TP": 30,
+     "FP": 13,
+     "rec": 0.268,
+     "prec": 0.652,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    }
+   }
+  },
+  "VEREDICTO_DEMt": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": false,
+    "plac_tp": true,
+    "plac_neto": true,
+    "dt0": true,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 0,
+   "placebo_max_neto": 0,
+   "dias_neto_pos": 0
+  },
+  "VEREDICTO_L2Q": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": true,
+    "plac_tp": false,
+    "plac_neto": true,
+    "dt0": false,
+    "dias": true,
+    "lodo": true
+   },
+   "placebo_max_dTP": 4,
+   "placebo_max_neto": -4,
+   "dias_neto_pos": 2
+  }
+ },
+ "V2_r3_call00a147_intc33_v3d": {
+  "n_ordenes": 3796,
+  "n_real": 202,
+  "EV_real_todos": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "EV_real_1er": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "var": {
+   "BASE": {
+    "sim": 85,
+    "TP": 79,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 123,
+    "prec": 0.929,
+    "rec": 0.391,
+    "rec_q": 0.417,
+    "TP_50ms": 43,
+    "nuevos_dt0": 0,
+    "dTP": -3,
+    "dFP": 0,
+    "neto": -3,
+    "TP_ganados": 0,
+    "TP_perdidos": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 15,
+      "FP": 1,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-21": {
+      "TP": 38,
+      "FP": 0,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 25,
+      "FP": 1,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -2,
+     "2026-10-21": -2,
+     "2026-10-22": -2,
+     "2026-10-23": -3
+    },
+    "EV_TP_motor": {
+     "n": 79,
+     "ev_eur": -0.1532,
+     "ev_unit": -0.1523,
+     "pnl": -14.29,
+     "coste": 93.29
+    },
+    "EV_TP_real": {
+     "n": 79,
+     "ev_eur": -0.1582,
+     "ev_unit": -0.1523,
+     "pnl": -14.85,
+     "coste": 93.84
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 123,
+     "ev_eur": -0.0092,
+     "ev_unit": 0.0693,
+     "pnl": -1.17,
+     "coste": 127.46
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLA": {
+    "sim": 88,
+    "TP": 82,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 120,
+    "prec": 0.932,
+    "rec": 0.406,
+    "rec_q": 0.437,
+    "TP_50ms": 46,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 39,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.0743,
+     "ev_unit": -0.0661,
+     "pnl": -7.22,
+     "coste": 97.22
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.0799,
+     "ev_unit": -0.0661,
+     "pnl": -7.75,
+     "coste": 97.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": -0.0666,
+     "ev_unit": 0.0159,
+     "pnl": -8.27,
+     "coste": 124.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv": {
+    "sim": 88,
+    "TP": 82,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 120,
+    "prec": 0.932,
+    "rec": 0.406,
+    "rec_q": 0.437,
+    "TP_50ms": 46,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 39,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.0743,
+     "ev_unit": -0.0661,
+     "pnl": -7.22,
+     "coste": 97.22
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.0799,
+     "ev_unit": -0.0661,
+     "pnl": -7.75,
+     "coste": 97.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": -0.0666,
+     "ev_unit": 0.0159,
+     "pnl": -8.27,
+     "coste": 124.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMe_COLAv": {
+    "sim": 88,
+    "TP": 82,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 120,
+    "prec": 0.932,
+    "rec": 0.406,
+    "rec_q": 0.437,
+    "TP_50ms": 46,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 39,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.0743,
+     "ev_unit": -0.0661,
+     "pnl": -7.22,
+     "coste": 97.22
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.0799,
+     "ev_unit": -0.0661,
+     "pnl": -7.75,
+     "coste": 97.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": -0.0666,
+     "ev_unit": 0.0159,
+     "pnl": -8.27,
+     "coste": 124.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv": {
+    "sim": 88,
+    "TP": 82,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 120,
+    "prec": 0.932,
+    "rec": 0.406,
+    "rec_q": 0.437,
+    "TP_50ms": 46,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 39,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.0743,
+     "ev_unit": -0.0661,
+     "pnl": -7.22,
+     "coste": 97.22
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.0799,
+     "ev_unit": -0.0661,
+     "pnl": -7.75,
+     "coste": 97.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": -0.0666,
+     "ev_unit": 0.0159,
+     "pnl": -8.27,
+     "coste": 124.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_p30": {
+    "sim": 88,
+    "TP": 82,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 120,
+    "prec": 0.932,
+    "rec": 0.406,
+    "rec_q": 0.437,
+    "TP_50ms": 46,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 39,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.0743,
+     "ev_unit": -0.0661,
+     "pnl": -7.22,
+     "coste": 97.22
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.0799,
+     "ev_unit": -0.0661,
+     "pnl": -7.75,
+     "coste": 97.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": -0.0666,
+     "ev_unit": 0.0159,
+     "pnl": -8.27,
+     "coste": 124.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_m30": {
+    "sim": 88,
+    "TP": 82,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 120,
+    "prec": 0.932,
+    "rec": 0.406,
+    "rec_q": 0.437,
+    "TP_50ms": 46,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 39,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.0743,
+     "ev_unit": -0.0661,
+     "pnl": -7.22,
+     "coste": 97.22
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.0799,
+     "ev_unit": -0.0661,
+     "pnl": -7.75,
+     "coste": 97.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": -0.0666,
+     "ev_unit": 0.0159,
+     "pnl": -8.27,
+     "coste": 124.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "L2Q": {
+    "sim": 89,
+    "TP": 84,
+    "TP_parcial": 1,
+    "FP": 4,
+    "FN": 118,
+    "prec": 0.944,
+    "rec": 0.416,
+    "rec_q": 0.445,
+    "TP_50ms": 49,
+    "nuevos_dt0": 2,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "TP_ganados": 3,
+    "TP_perdidos": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 0,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 2,
+     "2026-10-21": 0,
+     "2026-10-22": 2,
+     "2026-10-23": 2
+    },
+    "EV_TP_motor": {
+     "n": 84,
+     "ev_eur": -0.1569,
+     "ev_unit": -0.151,
+     "pnl": -15.63,
+     "coste": 99.63
+    },
+    "EV_TP_real": {
+     "n": 84,
+     "ev_eur": -0.1569,
+     "ev_unit": -0.151,
+     "pnl": -15.63,
+     "coste": 99.62
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 118,
+     "ev_eur": -0.0032,
+     "ev_unit": 0.0777,
+     "pnl": -0.39,
+     "coste": 121.68
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2,
+     "TP": 1
+    }
+   },
+   "L2Q20": {
+    "sim": 89,
+    "TP": 84,
+    "TP_parcial": 1,
+    "FP": 4,
+    "FN": 118,
+    "prec": 0.944,
+    "rec": 0.416,
+    "rec_q": 0.445,
+    "TP_50ms": 49,
+    "nuevos_dt0": 2,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "TP_ganados": 3,
+    "TP_perdidos": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 0,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 2,
+     "2026-10-21": 0,
+     "2026-10-22": 2,
+     "2026-10-23": 2
+    },
+    "EV_TP_motor": {
+     "n": 84,
+     "ev_eur": -0.1569,
+     "ev_unit": -0.151,
+     "pnl": -15.63,
+     "coste": 99.63
+    },
+    "EV_TP_real": {
+     "n": 84,
+     "ev_eur": -0.1569,
+     "ev_unit": -0.151,
+     "pnl": -15.63,
+     "coste": 99.62
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 118,
+     "ev_eur": -0.0032,
+     "ev_unit": 0.0777,
+     "pnl": -0.39,
+     "coste": 121.68
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2,
+     "TP": 1
+    }
+   },
+   "L2Q_opt": {
+    "sim": 96,
+    "TP": 87,
+    "TP_parcial": 1,
+    "FP": 8,
+    "FN": 115,
+    "prec": 0.906,
+    "rec": 0.431,
+    "rec_q": 0.46,
+    "TP_50ms": 51,
+    "nuevos_dt0": 4,
+    "dTP": 5,
+    "dFP": 4,
+    "neto": 1,
+    "TP_ganados": 6,
+    "TP_perdidos": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 1,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 1,
+      "dTP": 3,
+      "dFP": 1,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 1,
+      "dFP": 2,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 1,
+     "2026-10-21": -1,
+     "2026-10-22": 2,
+     "2026-10-23": 1
+    },
+    "EV_TP_motor": {
+     "n": 87,
+     "ev_eur": -0.1817,
+     "ev_unit": -0.1803,
+     "pnl": -18.65,
+     "coste": 102.65
+    },
+    "EV_TP_real": {
+     "n": 87,
+     "ev_eur": -0.185,
+     "ev_unit": -0.1803,
+     "pnl": -19.07,
+     "coste": 103.06
+    },
+    "EV_FP_motor": {
+     "n": 8,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -8.21,
+     "coste": 8.21
+    },
+    "EV_FN_real": {
+     "n": 115,
+     "ev_eur": 0.0258,
+     "ev_unit": 0.1058,
+     "pnl": 3.05,
+     "coste": 118.24
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5,
+     "TP": 1
+    }
+   },
+   "L2Q_p30": {
+    "sim": 89,
+    "TP": 82,
+    "TP_parcial": 0,
+    "FP": 7,
+    "FN": 120,
+    "prec": 0.921,
+    "rec": 0.406,
+    "rec_q": 0.428,
+    "TP_50ms": 41,
+    "nuevos_dt0": 2,
+    "dTP": 0,
+    "dFP": 3,
+    "neto": -3,
+    "TP_ganados": 3,
+    "TP_perdidos": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 1,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 2,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 24,
+      "FP": 2,
+      "dTP": -2,
+      "dFP": 1,
+      "neto": -3
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -4,
+     "2026-10-21": -2,
+     "2026-10-22": 0,
+     "2026-10-23": -3
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.1396,
+     "ev_unit": -0.1303,
+     "pnl": -13.63,
+     "coste": 97.63
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.1371,
+     "ev_unit": -0.1303,
+     "pnl": -13.35,
+     "coste": 97.34
+    },
+    "EV_FP_motor": {
+     "n": 7,
+     "ev_eur": -0.6739,
+     "ev_unit": 0.0989,
+     "pnl": -4.75,
+     "coste": 7.05
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": -0.0216,
+     "ev_unit": 0.0598,
+     "pnl": -2.67,
+     "coste": 123.96
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    }
+   },
+   "L2Q_m30": {
+    "sim": 101,
+    "TP": 86,
+    "TP_parcial": 1,
+    "FP": 14,
+    "FN": 116,
+    "prec": 0.851,
+    "rec": 0.426,
+    "rec_q": 0.45,
+    "TP_50ms": 47,
+    "nuevos_dt0": 6,
+    "dTP": 4,
+    "dFP": 10,
+    "neto": -6,
+    "TP_ganados": 6,
+    "TP_perdidos": 2,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 1,
+      "neto": -1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 3,
+      "dFP": 4,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 6,
+      "dTP": 1,
+      "dFP": 5,
+      "neto": -4
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -5,
+     "2026-10-21": -5,
+     "2026-10-22": -2,
+     "2026-10-23": -6
+    },
+    "EV_TP_motor": {
+     "n": 86,
+     "ev_eur": -0.1764,
+     "ev_unit": -0.1707,
+     "pnl": -17.99,
+     "coste": 101.99
+    },
+    "EV_TP_real": {
+     "n": 86,
+     "ev_eur": -0.1672,
+     "ev_unit": -0.1707,
+     "pnl": -16.87,
+     "coste": 100.86
+    },
+    "EV_FP_motor": {
+     "n": 14,
+     "ev_eur": -0.7004,
+     "ev_unit": -0.4048,
+     "pnl": -9.58,
+     "coste": 13.67
+    },
+    "EV_FN_real": {
+     "n": 116,
+     "ev_eur": 0.007,
+     "ev_unit": 0.0963,
+     "pnl": 0.84,
+     "coste": 120.44
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    }
+   },
+   "BASE_cap605": {
+    "sim": 23,
+    "TP": 18,
+    "TP_parcial": 2,
+    "FP": 3,
+    "FN": 184,
+    "prec": 0.783,
+    "rec": 0.089,
+    "rec_q": 0.106,
+    "TP_50ms": 14,
+    "nuevos_dt0": 0,
+    "dTP": -64,
+    "dFP": -1,
+    "neto": -63,
+    "TP_ganados": 0,
+    "TP_perdidos": 64,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -1,
+      "neto": -14
+     },
+     "2026-10-21": {
+      "TP": 10,
+      "FP": 0,
+      "dTP": -29,
+      "dFP": 0,
+      "neto": -29
+     },
+     "2026-10-22": {
+      "TP": 7,
+      "FP": 1,
+      "dTP": -19,
+      "dFP": 0,
+      "neto": -19
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -49,
+     "2026-10-21": -34,
+     "2026-10-22": -44,
+     "2026-10-23": -62
+    },
+    "EV_TP_motor": {
+     "n": 18,
+     "ev_eur": 0.1555,
+     "ev_unit": 0.188,
+     "pnl": 3.23,
+     "coste": 20.77
+    },
+    "EV_TP_real": {
+     "n": 18,
+     "ev_eur": 0.1553,
+     "ev_unit": 0.188,
+     "pnl": 3.23,
+     "coste": 20.77
+    },
+    "EV_FP_motor": {
+     "n": 3,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -3.35,
+     "coste": 3.35
+    },
+    "EV_FN_real": {
+     "n": 184,
+     "ev_eur": -0.096,
+     "ev_unit": -0.0375,
+     "pnl": -19.25,
+     "coste": 200.53
+    },
+    "nuevos_por_clase": {}
+   },
+   "BASE_cap2675": {
+    "sim": 49,
+    "TP": 43,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 159,
+    "prec": 0.878,
+    "rec": 0.213,
+    "rec_q": 0.234,
+    "TP_50ms": 30,
+    "nuevos_dt0": 0,
+    "dTP": -39,
+    "dFP": 0,
+    "neto": -39,
+    "TP_ganados": 0,
+    "TP_perdidos": 39,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 1,
+      "dTP": -10,
+      "dFP": 0,
+      "neto": -10
+     },
+     "2026-10-21": {
+      "TP": 21,
+      "FP": 0,
+      "dTP": -18,
+      "dFP": 0,
+      "neto": -18
+     },
+     "2026-10-22": {
+      "TP": 15,
+      "FP": 1,
+      "dTP": -11,
+      "dFP": 0,
+      "neto": -11
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -29,
+     "2026-10-21": -21,
+     "2026-10-22": -28,
+     "2026-10-23": -39
+    },
+    "EV_TP_motor": {
+     "n": 43,
+     "ev_eur": -0.1098,
+     "ev_unit": -0.1272,
+     "pnl": -5.55,
+     "coste": 50.55
+    },
+    "EV_TP_real": {
+     "n": 43,
+     "ev_eur": -0.1196,
+     "ev_unit": -0.1272,
+     "pnl": -6.11,
+     "coste": 51.11
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 159,
+     "ev_eur": -0.0582,
+     "ev_unit": 0.0123,
+     "pnl": -9.91,
+     "coste": 170.19
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap605": {
+    "sim": 25,
+    "TP": 21,
+    "TP_parcial": 1,
+    "FP": 3,
+    "FN": 181,
+    "prec": 0.84,
+    "rec": 0.104,
+    "rec_q": 0.123,
+    "TP_50ms": 17,
+    "nuevos_dt0": 0,
+    "dTP": -61,
+    "dFP": -1,
+    "neto": -60,
+    "TP_ganados": 0,
+    "TP_perdidos": 61,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -1,
+      "neto": -14
+     },
+     "2026-10-21": {
+      "TP": 11,
+      "FP": 0,
+      "dTP": -28,
+      "dFP": 0,
+      "neto": -28
+     },
+     "2026-10-22": {
+      "TP": 9,
+      "FP": 1,
+      "dTP": -17,
+      "dFP": 0,
+      "neto": -17
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -46,
+     "2026-10-21": -32,
+     "2026-10-22": -43,
+     "2026-10-23": -59
+    },
+    "EV_TP_motor": {
+     "n": 21,
+     "ev_eur": 0.2428,
+     "ev_unit": 0.269,
+     "pnl": 5.86,
+     "coste": 24.14
+    },
+    "EV_TP_real": {
+     "n": 21,
+     "ev_eur": 0.2216,
+     "ev_unit": 0.269,
+     "pnl": 5.32,
+     "coste": 24.01
+    },
+    "EV_FP_motor": {
+     "n": 3,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -3.35,
+     "coste": 3.35
+    },
+    "EV_FN_real": {
+     "n": 181,
+     "ev_eur": -0.1082,
+     "ev_unit": -0.0506,
+     "pnl": -21.34,
+     "coste": 197.29
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap2675": {
+    "sim": 52,
+    "TP": 47,
+    "TP_parcial": 1,
+    "FP": 4,
+    "FN": 155,
+    "prec": 0.904,
+    "rec": 0.233,
+    "rec_q": 0.259,
+    "TP_50ms": 34,
+    "nuevos_dt0": 0,
+    "dTP": -35,
+    "dFP": 0,
+    "neto": -35,
+    "TP_ganados": 0,
+    "TP_perdidos": 35,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 1,
+      "dTP": -10,
+      "dFP": 0,
+      "neto": -10
+     },
+     "2026-10-21": {
+      "TP": 23,
+      "FP": 0,
+      "dTP": -16,
+      "dFP": 0,
+      "neto": -16
+     },
+     "2026-10-22": {
+      "TP": 17,
+      "FP": 1,
+      "dTP": -9,
+      "dFP": 0,
+      "neto": -9
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -25,
+     "2026-10-21": -19,
+     "2026-10-22": -26,
+     "2026-10-23": -35
+    },
+    "EV_TP_motor": {
+     "n": 47,
+     "ev_eur": -0.0832,
+     "ev_unit": -0.0895,
+     "pnl": -4.63,
+     "coste": 55.63
+    },
+    "EV_TP_real": {
+     "n": 47,
+     "ev_eur": -0.0931,
+     "ev_unit": -0.0895,
+     "pnl": -5.17,
+     "coste": 55.5
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 155,
+     "ev_eur": -0.0655,
+     "ev_unit": 0.0045,
+     "pnl": -10.86,
+     "coste": 165.8
+    },
+    "nuevos_por_clase": {}
+   }
+  },
+  "DEMt_rnd": {
+   "dTP_max": 0,
+   "dTP_p95": 0.0,
+   "neto_max": 0,
+   "neto_p95": 0.0
+  },
+  "nsint": {
+   "DEMe_COLAv": 165,
+   "DEMt_COLAv": 0,
+   "DEMt_COLAv_p30": 0,
+   "DEMt_COLAv_m30": 0
+  },
+  "COLA_vs_COLAv": {
+   "COLA_no_COLAv": 0,
+   "COLA_no_COLAv_dt0": 0,
+   "COLAv_no_BASE": 3,
+   "BASE_no_COLAv": 0
+  },
+  "L2_cob": {
+   "ordenes": 3195,
+   "reales": 183,
+   "alta_hallada": 0.37531725888324874,
+   "ahead0_p50": 45.0,
+   "filas_p50": 3.0
+  },
+  "L2_sub": {
+   "L2Q": {
+    "TP": 82,
+    "FP": 2,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 0,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 25,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2,
+     "TP": 1
+    },
+    "TP_perdidos": 1,
+    "TP_ganados": 3
+   },
+   "L2Q20": {
+    "TP": 82,
+    "FP": 2,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 0,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 25,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2,
+     "TP": 1
+    },
+    "TP_perdidos": 1,
+    "TP_ganados": 3
+   },
+   "L2Q_opt": {
+    "TP": 85,
+    "FP": 6,
+    "dTP": 5,
+    "dFP": 4,
+    "neto": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 1,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 1,
+      "dTP": 3,
+      "dFP": 1,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 3,
+      "dTP": 1,
+      "dFP": 2,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5,
+     "TP": 1
+    },
+    "TP_perdidos": 1,
+    "TP_ganados": 6
+   },
+   "L2Q_p30": {
+    "TP": 80,
+    "FP": 5,
+    "dTP": 0,
+    "dFP": 3,
+    "neto": -3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 1,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 2,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 23,
+      "FP": 2,
+      "dTP": -2,
+      "dFP": 1,
+      "neto": -3
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    },
+    "TP_perdidos": 3,
+    "TP_ganados": 3
+   },
+   "L2Q_m30": {
+    "TP": 84,
+    "FP": 12,
+    "dTP": 4,
+    "dFP": 10,
+    "neto": -6,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 1,
+      "neto": -1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 3,
+      "dFP": 4,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 6,
+      "dTP": 1,
+      "dFP": 5,
+      "neto": -4
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    },
+    "TP_perdidos": 2,
+    "TP_ganados": 6
+   }
+  },
+  "FN_por_clase": {
+   "BASE": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 8,
+     "ev_eur": 0.3129,
+     "ev_unit": 0.3021,
+     "pnl": 2.86,
+     "coste": 9.14
+    },
+    "6_sin_prints_en_ventana": {
+     "n": 1,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -1.2,
+     "coste": 1.2
+    },
+    "8_cola_no_agotada": {
+     "n": 11,
+     "ev_eur": 0.956,
+     "ev_unit": 0.8731,
+     "pnl": 10.92,
+     "coste": 11.42
+    },
+    "TP": {
+     "n": 5,
+     "ev_eur": 0.6051,
+     "ev_unit": 0.7029,
+     "pnl": 3.77,
+     "coste": 6.23
+    },
+    "TODOS": {
+     "n": 123,
+     "ev_eur": -0.0092,
+     "ev_unit": 0.0693,
+     "pnl": -1.17,
+     "coste": 127.46
+    },
+    "TODOS_por_orden": {
+     "n": 123,
+     "ev_eur": -0.0092,
+     "ev_unit": 0.0693,
+     "pnl": -1.17,
+     "coste": 127.46
+    }
+   },
+   "COLAv": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 8,
+     "ev_eur": 0.3129,
+     "ev_unit": 0.3021,
+     "pnl": 2.86,
+     "coste": 9.14
+    },
+    "6_sin_prints_en_ventana": {
+     "n": 1,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -1.2,
+     "coste": 1.2
+    },
+    "8_cola_no_agotada": {
+     "n": 10,
+     "ev_eur": 0.6336,
+     "ev_unit": 0.5341,
+     "pnl": 6.59,
+     "coste": 10.41
+    },
+    "TP": {
+     "n": 3,
+     "ev_eur": 0.25,
+     "ev_unit": 0.3889,
+     "pnl": 1.0,
+     "coste": 4.0
+    },
+    "TODOS": {
+     "n": 120,
+     "ev_eur": -0.0666,
+     "ev_unit": 0.0159,
+     "pnl": -8.27,
+     "coste": 124.21
+    },
+    "TODOS_por_orden": {
+     "n": 120,
+     "ev_eur": -0.0666,
+     "ev_unit": 0.0159,
+     "pnl": -8.27,
+     "coste": 124.21
+    }
+   }
+  },
+  "C7": {
+   "n": 3651,
+   "reales": 112,
+   "var": {
+    "BASE": {
+     "TP": 25,
+     "FP": 1,
+     "rec": 0.223,
+     "prec": 0.926,
+     "dTP": -2,
+     "dFP": 0,
+     "neto": -2
+    },
+    "COLAv": {
+     "TP": 27,
+     "FP": 1,
+     "rec": 0.241,
+     "prec": 0.9,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    },
+    "L2Q": {
+     "TP": 28,
+     "FP": 1,
+     "rec": 0.25,
+     "prec": 0.933,
+     "dTP": 1,
+     "dFP": 0,
+     "neto": 1
+    },
+    "DEMt_COLAv": {
+     "TP": 27,
+     "FP": 1,
+     "rec": 0.241,
+     "prec": 0.9,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    }
+   }
+  },
+  "VEREDICTO_DEMt": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": false,
+    "plac_tp": true,
+    "plac_neto": true,
+    "dt0": true,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 0,
+   "placebo_max_neto": 0,
+   "dias_neto_pos": 0
+  },
+  "VEREDICTO_L2Q": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": true,
+    "plac_tp": false,
+    "plac_neto": true,
+    "dt0": false,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 4,
+   "placebo_max_neto": -3,
+   "dias_neto_pos": 1
+  }
+ },
+ "V2_r3_call00a35_intc111_v3d": {
+  "n_ordenes": 3796,
+  "n_real": 202,
+  "EV_real_todos": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "EV_real_1er": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "var": {
+   "BASE": {
+    "sim": 104,
+    "TP": 86,
+    "TP_parcial": 2,
+    "FP": 16,
+    "FN": 116,
+    "prec": 0.827,
+    "rec": 0.426,
+    "rec_q": 0.453,
+    "TP_50ms": 48,
+    "nuevos_dt0": 0,
+    "dTP": -3,
+    "dFP": -3,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 15,
+      "FP": 3,
+      "dTP": -1,
+      "dFP": -1,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 6,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 3,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": -2,
+      "neto": 2
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 1,
+     "2026-10-22": 1,
+     "2026-10-23": -2
+    },
+    "EV_TP_motor": {
+     "n": 86,
+     "ev_eur": -0.1331,
+     "ev_unit": -0.1002,
+     "pnl": -13.48,
+     "coste": 101.24
+    },
+    "EV_TP_real": {
+     "n": 86,
+     "ev_eur": -0.1106,
+     "ev_unit": -0.1002,
+     "pnl": -11.32,
+     "coste": 102.31
+    },
+    "EV_FP_motor": {
+     "n": 15,
+     "ev_eur": -0.1269,
+     "ev_unit": -0.0159,
+     "pnl": -2.18,
+     "coste": 17.18
+    },
+    "EV_FN_real": {
+     "n": 116,
+     "ev_eur": -0.0395,
+     "ev_unit": 0.044,
+     "pnl": -4.71,
+     "coste": 118.99
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLA": {
+    "sim": 110,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 19,
+    "FN": 113,
+    "prec": 0.809,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv": {
+    "sim": 110,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 19,
+    "FN": 113,
+    "prec": 0.809,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMe_COLAv": {
+    "sim": 111,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 20,
+    "FN": 113,
+    "prec": 0.802,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 1,
+    "neto": -1,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 7,
+      "dTP": 0,
+      "dFP": 1,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -1,
+     "2026-10-21": 0,
+     "2026-10-22": -1,
+     "2026-10-23": -1
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 19,
+     "ev_eur": -0.3129,
+     "ev_unit": -0.2231,
+     "pnl": -6.83,
+     "coste": 21.83
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv": {
+    "sim": 110,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 19,
+    "FN": 113,
+    "prec": 0.809,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_p30": {
+    "sim": 110,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 19,
+    "FN": 113,
+    "prec": 0.809,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_m30": {
+    "sim": 110,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 19,
+    "FN": 113,
+    "prec": 0.809,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "L2Q": {
+    "sim": 111,
+    "TP": 91,
+    "TP_parcial": 1,
+    "FP": 19,
+    "FN": 111,
+    "prec": 0.82,
+    "rec": 0.45,
+    "rec_q": 0.484,
+    "TP_50ms": 54,
+    "nuevos_dt0": 2,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "TP_ganados": 2,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 6,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 2,
+     "2026-10-21": 0,
+     "2026-10-22": 2,
+     "2026-10-23": 2
+    },
+    "EV_TP_motor": {
+     "n": 91,
+     "ev_eur": -0.0542,
+     "ev_unit": -0.044,
+     "pnl": -5.84,
+     "coste": 107.84
+    },
+    "EV_TP_real": {
+     "n": 91,
+     "ev_eur": -0.0592,
+     "ev_unit": -0.044,
+     "pnl": -6.37,
+     "coste": 107.71
+    },
+    "EV_FP_motor": {
+     "n": 18,
+     "ev_eur": -0.2771,
+     "ev_unit": -0.1799,
+     "pnl": -5.75,
+     "coste": 20.75
+    },
+    "EV_FN_real": {
+     "n": 111,
+     "ev_eur": -0.085,
+     "ev_unit": 0.0044,
+     "pnl": -9.65,
+     "coste": 113.59
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    }
+   },
+   "L2Q20": {
+    "sim": 112,
+    "TP": 91,
+    "TP_parcial": 1,
+    "FP": 20,
+    "FN": 111,
+    "prec": 0.812,
+    "rec": 0.45,
+    "rec_q": 0.484,
+    "TP_50ms": 54,
+    "nuevos_dt0": 2,
+    "dTP": 2,
+    "dFP": 1,
+    "neto": 1,
+    "TP_ganados": 2,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 7,
+      "dTP": 2,
+      "dFP": 1,
+      "neto": 1
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 1,
+     "2026-10-21": 0,
+     "2026-10-22": 1,
+     "2026-10-23": 1
+    },
+    "EV_TP_motor": {
+     "n": 91,
+     "ev_eur": -0.0542,
+     "ev_unit": -0.044,
+     "pnl": -5.84,
+     "coste": 107.84
+    },
+    "EV_TP_real": {
+     "n": 91,
+     "ev_eur": -0.0592,
+     "ev_unit": -0.044,
+     "pnl": -6.37,
+     "coste": 107.71
+    },
+    "EV_FP_motor": {
+     "n": 19,
+     "ev_eur": -0.0354,
+     "ev_unit": 0.0865,
+     "pnl": -0.77,
+     "coste": 21.77
+    },
+    "EV_FN_real": {
+     "n": 111,
+     "ev_eur": -0.085,
+     "ev_unit": 0.0044,
+     "pnl": -9.65,
+     "coste": 113.59
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    }
+   },
+   "L2Q_opt": {
+    "sim": 121,
+    "TP": 94,
+    "TP_parcial": 1,
+    "FP": 26,
+    "FN": 108,
+    "prec": 0.777,
+    "rec": 0.465,
+    "rec_q": 0.502,
+    "TP_50ms": 56,
+    "nuevos_dt0": 4,
+    "dTP": 5,
+    "dFP": 7,
+    "neto": -2,
+    "TP_ganados": 5,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 4,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 45,
+      "FP": 9,
+      "dTP": 3,
+      "dFP": 3,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 30,
+      "FP": 7,
+      "dTP": 1,
+      "dFP": 4,
+      "neto": -3
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -3,
+     "2026-10-21": -2,
+     "2026-10-22": 1,
+     "2026-10-23": -2
+    },
+    "EV_TP_motor": {
+     "n": 94,
+     "ev_eur": -0.0834,
+     "ev_unit": -0.0745,
+     "pnl": -9.28,
+     "coste": 111.28
+    },
+    "EV_TP_real": {
+     "n": 94,
+     "ev_eur": -0.0883,
+     "ev_unit": -0.0745,
+     "pnl": -9.81,
+     "coste": 111.15
+    },
+    "EV_FP_motor": {
+     "n": 25,
+     "ev_eur": -0.2411,
+     "ev_unit": 0.0476,
+     "pnl": -5.92,
+     "coste": 24.53
+    },
+    "EV_FN_real": {
+     "n": 108,
+     "ev_eur": -0.0564,
+     "ev_unit": 0.0323,
+     "pnl": -6.21,
+     "coste": 110.15
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5
+    }
+   },
+   "L2Q_p30": {
+    "sim": 110,
+    "TP": 87,
+    "TP_parcial": 0,
+    "FP": 23,
+    "FN": 115,
+    "prec": 0.791,
+    "rec": 0.431,
+    "rec_q": 0.456,
+    "TP_50ms": 44,
+    "nuevos_dt0": 2,
+    "dTP": -2,
+    "dFP": 4,
+    "neto": -6,
+    "TP_ganados": 3,
+    "TP_perdidos": 5,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 4,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 8,
+      "dTP": 0,
+      "dFP": 2,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 5,
+      "dTP": -3,
+      "dFP": 2,
+      "neto": -5
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -7,
+     "2026-10-21": -4,
+     "2026-10-22": -1,
+     "2026-10-23": -6
+    },
+    "EV_TP_motor": {
+     "n": 87,
+     "ev_eur": -0.1408,
+     "ev_unit": -0.1324,
+     "pnl": -14.58,
+     "coste": 103.58
+    },
+    "EV_TP_real": {
+     "n": 87,
+     "ev_eur": -0.1384,
+     "ev_unit": -0.1324,
+     "pnl": -14.3,
+     "coste": 103.29
+    },
+    "EV_FP_motor": {
+     "n": 21,
+     "ev_eur": -0.2917,
+     "ev_unit": -0.0703,
+     "pnl": -6.7,
+     "coste": 22.97
+    },
+    "EV_FN_real": {
+     "n": 115,
+     "ev_eur": -0.0146,
+     "ev_unit": 0.0696,
+     "pnl": -1.73,
+     "coste": 118.01
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    }
+   },
+   "L2Q_m30": {
+    "sim": 121,
+    "TP": 91,
+    "TP_parcial": 1,
+    "FP": 29,
+    "FN": 111,
+    "prec": 0.752,
+    "rec": 0.45,
+    "rec_q": 0.478,
+    "TP_50ms": 50,
+    "nuevos_dt0": 6,
+    "dTP": 2,
+    "dFP": 10,
+    "neto": -8,
+    "TP_ganados": 6,
+    "TP_perdidos": 4,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 10,
+      "dTP": 2,
+      "dFP": 4,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 9,
+      "dTP": 0,
+      "dFP": 6,
+      "neto": -6
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -8,
+     "2026-10-21": -6,
+     "2026-10-22": -2,
+     "2026-10-23": -8
+    },
+    "EV_TP_motor": {
+     "n": 91,
+     "ev_eur": -0.1755,
+     "ev_unit": -0.1705,
+     "pnl": -18.94,
+     "coste": 107.94
+    },
+    "EV_TP_real": {
+     "n": 91,
+     "ev_eur": -0.1668,
+     "ev_unit": -0.1705,
+     "pnl": -17.81,
+     "coste": 106.81
+    },
+    "EV_FP_motor": {
+     "n": 28,
+     "ev_eur": -0.2459,
+     "ev_unit": 0.0629,
+     "pnl": -7.0,
+     "coste": 28.44
+    },
+    "EV_FN_real": {
+     "n": 111,
+     "ev_eur": 0.0156,
+     "ev_unit": 0.1082,
+     "pnl": 1.79,
+     "coste": 114.49
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    }
+   },
+   "BASE_cap605": {
+    "sim": 27,
+    "TP": 20,
+    "TP_parcial": 2,
+    "FP": 5,
+    "FN": 182,
+    "prec": 0.741,
+    "rec": 0.099,
+    "rec_q": 0.114,
+    "TP_50ms": 16,
+    "nuevos_dt0": 0,
+    "dTP": -69,
+    "dFP": -14,
+    "neto": -55,
+    "TP_ganados": 0,
+    "TP_perdidos": 69,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -4,
+      "neto": -11
+     },
+     "2026-10-21": {
+      "TP": 10,
+      "FP": 2,
+      "dTP": -32,
+      "dFP": -4,
+      "neto": -28
+     },
+     "2026-10-22": {
+      "TP": 8,
+      "FP": 1,
+      "dTP": -21,
+      "dFP": -2,
+      "neto": -19
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": -4,
+      "neto": 3
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -44,
+     "2026-10-21": -27,
+     "2026-10-22": -36,
+     "2026-10-23": -58
+    },
+    "EV_TP_motor": {
+     "n": 20,
+     "ev_eur": -0.4022,
+     "ev_unit": -0.2201,
+     "pnl": -9.26,
+     "coste": 23.02
+    },
+    "EV_TP_real": {
+     "n": 20,
+     "ev_eur": -0.278,
+     "ev_unit": -0.2201,
+     "pnl": -6.54,
+     "coste": 23.54
+    },
+    "EV_FP_motor": {
+     "n": 5,
+     "ev_eur": 0.8416,
+     "ev_unit": 1.0,
+     "pnl": 4.57,
+     "coste": 5.43
+    },
+    "EV_FN_real": {
+     "n": 182,
+     "ev_eur": -0.0479,
+     "ev_unit": 0.0049,
+     "pnl": -9.48,
+     "coste": 197.76
+    },
+    "nuevos_por_clase": {}
+   },
+   "BASE_cap2675": {
+    "sim": 63,
+    "TP": 47,
+    "TP_parcial": 2,
+    "FP": 14,
+    "FN": 155,
+    "prec": 0.746,
+    "rec": 0.233,
+    "rec_q": 0.256,
+    "TP_50ms": 34,
+    "nuevos_dt0": 0,
+    "dTP": -42,
+    "dFP": -5,
+    "neto": -37,
+    "TP_ganados": 0,
+    "TP_perdidos": 42,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 3,
+      "dTP": -10,
+      "dFP": -1,
+      "neto": -9
+     },
+     "2026-10-21": {
+      "TP": 23,
+      "FP": 6,
+      "dTP": -19,
+      "dFP": 0,
+      "neto": -19
+     },
+     "2026-10-22": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": -13,
+      "dFP": -1,
+      "neto": -12
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": -3,
+      "neto": 3
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -28,
+     "2026-10-21": -18,
+     "2026-10-22": -25,
+     "2026-10-23": -40
+    },
+    "EV_TP_motor": {
+     "n": 47,
+     "ev_eur": -0.1167,
+     "ev_unit": -0.0685,
+     "pnl": -6.44,
+     "coste": 55.2
+    },
+    "EV_TP_real": {
+     "n": 47,
+     "ev_eur": -0.0761,
+     "ev_unit": -0.0685,
+     "pnl": -4.28,
+     "coste": 56.27
+    },
+    "EV_FP_motor": {
+     "n": 13,
+     "ev_eur": 0.0027,
+     "ev_unit": 0.1355,
+     "pnl": 0.04,
+     "coste": 14.96
+    },
+    "EV_FN_real": {
+     "n": 155,
+     "ev_eur": -0.0712,
+     "ev_unit": -0.0019,
+     "pnl": -11.74,
+     "coste": 165.03
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap605": {
+    "sim": 31,
+    "TP": 23,
+    "TP_parcial": 1,
+    "FP": 7,
+    "FN": 179,
+    "prec": 0.742,
+    "rec": 0.114,
+    "rec_q": 0.134,
+    "TP_50ms": 19,
+    "nuevos_dt0": 0,
+    "dTP": -66,
+    "dFP": -12,
+    "neto": -54,
+    "TP_ganados": 0,
+    "TP_perdidos": 66,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -4,
+      "neto": -11
+     },
+     "2026-10-21": {
+      "TP": 11,
+      "FP": 2,
+      "dTP": -31,
+      "dFP": -4,
+      "neto": -27
+     },
+     "2026-10-22": {
+      "TP": 10,
+      "FP": 1,
+      "dTP": -19,
+      "dFP": -2,
+      "neto": -17
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 4,
+      "dTP": -1,
+      "dFP": -2,
+      "neto": 1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -43,
+     "2026-10-21": -27,
+     "2026-10-22": -37,
+     "2026-10-23": -55
+    },
+    "EV_TP_motor": {
+     "n": 23,
+     "ev_eur": -0.1453,
+     "ev_unit": -0.093,
+     "pnl": -3.91,
+     "coste": 26.91
+    },
+    "EV_TP_real": {
+     "n": 23,
+     "ev_eur": -0.166,
+     "ev_unit": -0.093,
+     "pnl": -4.45,
+     "coste": 26.78
+    },
+    "EV_FP_motor": {
+     "n": 7,
+     "ev_eur": 0.269,
+     "ev_unit": 0.4286,
+     "pnl": 2.12,
+     "coste": 7.88
+    },
+    "EV_FN_real": {
+     "n": 179,
+     "ev_eur": -0.0595,
+     "ev_unit": -0.0077,
+     "pnl": -11.58,
+     "coste": 194.52
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap2675": {
+    "sim": 68,
+    "TP": 51,
+    "TP_parcial": 1,
+    "FP": 16,
+    "FN": 151,
+    "prec": 0.75,
+    "rec": 0.252,
+    "rec_q": 0.284,
+    "TP_50ms": 38,
+    "nuevos_dt0": 0,
+    "dTP": -38,
+    "dFP": -3,
+    "neto": -35,
+    "TP_ganados": 0,
+    "TP_perdidos": 38,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 3,
+      "dTP": -10,
+      "dFP": -1,
+      "neto": -9
+     },
+     "2026-10-21": {
+      "TP": 25,
+      "FP": 6,
+      "dTP": -17,
+      "dFP": 0,
+      "neto": -17
+     },
+     "2026-10-22": {
+      "TP": 18,
+      "FP": 2,
+      "dTP": -11,
+      "dFP": -1,
+      "neto": -10
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": -1,
+      "neto": 1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -26,
+     "2026-10-21": -18,
+     "2026-10-22": -25,
+     "2026-10-23": -36
+    },
+    "EV_TP_motor": {
+     "n": 51,
+     "ev_eur": -0.0461,
+     "ev_unit": -0.0383,
+     "pnl": -2.8,
+     "coste": 60.8
+    },
+    "EV_TP_real": {
+     "n": 51,
+     "ev_eur": -0.055,
+     "ev_unit": -0.0383,
+     "pnl": -3.33,
+     "coste": 60.67
+    },
+    "EV_FP_motor": {
+     "n": 15,
+     "ev_eur": -0.1384,
+     "ev_unit": -0.0159,
+     "pnl": -2.41,
+     "coste": 17.41
+    },
+    "EV_FN_real": {
+     "n": 151,
+     "ev_eur": -0.079,
+     "ev_unit": -0.0103,
+     "pnl": -12.69,
+     "coste": 160.63
+    },
+    "nuevos_por_clase": {}
+   }
+  },
+  "DEMt_rnd": {
+   "dTP_max": 0,
+   "dTP_p95": 0.0,
+   "neto_max": 0,
+   "neto_p95": 0.0
+  },
+  "nsint": {
+   "DEMe_COLAv": 177,
+   "DEMt_COLAv": 0,
+   "DEMt_COLAv_p30": 0,
+   "DEMt_COLAv_m30": 0
+  },
+  "COLA_vs_COLAv": {
+   "COLA_no_COLAv": 0,
+   "COLA_no_COLAv_dt0": 0,
+   "COLAv_no_BASE": 3,
+   "BASE_no_COLAv": 0
+  },
+  "L2_cob": {
+   "ordenes": 3195,
+   "reales": 183,
+   "alta_hallada": 0.9314720812182741,
+   "ahead0_p50": 41.0,
+   "filas_p50": 6.0
+  },
+  "L2_sub": {
+   "L2Q": {
+    "TP": 88,
+    "FP": 13,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 6,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 2
+   },
+   "L2Q20": {
+    "TP": 88,
+    "FP": 14,
+    "dTP": 2,
+    "dFP": 1,
+    "neto": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 7,
+      "dTP": 2,
+      "dFP": 1,
+      "neto": 1
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 2
+   },
+   "L2Q_opt": {
+    "TP": 91,
+    "FP": 20,
+    "dTP": 5,
+    "dFP": 7,
+    "neto": -2,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 4,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 45,
+      "FP": 9,
+      "dTP": 3,
+      "dFP": 3,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 7,
+      "dTP": 1,
+      "dFP": 4,
+      "neto": -3
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 5
+   },
+   "L2Q_p30": {
+    "TP": 84,
+    "FP": 17,
+    "dTP": -2,
+    "dFP": 4,
+    "neto": -6,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 4,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 8,
+      "dTP": 0,
+      "dFP": 2,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 25,
+      "FP": 5,
+      "dTP": -3,
+      "dFP": 2,
+      "neto": -5
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    },
+    "TP_perdidos": 5,
+    "TP_ganados": 3
+   },
+   "L2Q_m30": {
+    "TP": 88,
+    "FP": 23,
+    "dTP": 2,
+    "dFP": 10,
+    "neto": -8,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 10,
+      "dTP": 2,
+      "dFP": 4,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 9,
+      "dTP": 0,
+      "dFP": 6,
+      "neto": -6
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    },
+    "TP_perdidos": 4,
+    "TP_ganados": 6
+   }
+  },
+  "FN_por_clase": {
+   "BASE": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 5,
+     "ev_eur": -0.1482,
+     "ev_unit": -0.1667,
+     "pnl": -0.87,
+     "coste": 5.87
+    },
+    "8_cola_no_agotada": {
+     "n": 11,
+     "ev_eur": 0.956,
+     "ev_unit": 0.8731,
+     "pnl": 10.92,
+     "coste": 11.42
+    },
+    "TP": {
+     "n": 2,
+     "ev_eur": 1.2422,
+     "ev_unit": 1.1739,
+     "pnl": 2.77,
+     "coste": 2.23
+    },
+    "TODOS": {
+     "n": 116,
+     "ev_eur": -0.0395,
+     "ev_unit": 0.044,
+     "pnl": -4.71,
+     "coste": 118.99
+    },
+    "TODOS_por_orden": {
+     "n": 116,
+     "ev_eur": -0.0395,
+     "ev_unit": 0.044,
+     "pnl": -4.71,
+     "coste": 118.99
+    }
+   },
+   "COLAv": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 5,
+     "ev_eur": -0.1482,
+     "ev_unit": -0.1667,
+     "pnl": -0.87,
+     "coste": 5.87
+    },
+    "8_cola_no_agotada": {
+     "n": 10,
+     "ev_eur": 0.6336,
+     "ev_unit": 0.5341,
+     "pnl": 6.59,
+     "coste": 10.41
+    },
+    "TODOS": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "TODOS_por_orden": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    }
+   }
+  },
+  "C7": {
+   "n": 3632,
+   "reales": 110,
+   "var": {
+    "BASE": {
+     "TP": 29,
+     "FP": 10,
+     "rec": 0.264,
+     "prec": 0.725,
+     "dTP": -2,
+     "dFP": -3,
+     "neto": 1
+    },
+    "COLAv": {
+     "TP": 31,
+     "FP": 13,
+     "rec": 0.282,
+     "prec": 0.674,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    },
+    "L2Q": {
+     "TP": 33,
+     "FP": 13,
+     "rec": 0.3,
+     "prec": 0.702,
+     "dTP": 2,
+     "dFP": 0,
+     "neto": 2
+    },
+    "DEMt_COLAv": {
+     "TP": 31,
+     "FP": 13,
+     "rec": 0.282,
+     "prec": 0.674,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    }
+   }
+  },
+  "VEREDICTO_DEMt": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": false,
+    "plac_tp": true,
+    "plac_neto": true,
+    "dt0": true,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 0,
+   "placebo_max_neto": 0,
+   "dias_neto_pos": 0
+  },
+  "VEREDICTO_L2Q": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": true,
+    "plac_tp": false,
+    "plac_neto": true,
+    "dt0": false,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 2,
+   "placebo_max_neto": -6,
+   "dias_neto_pos": 1
+  }
+ },
+ "V2_r3_call00a35_intc33_v3d": {
+  "n_ordenes": 3796,
+  "n_real": 202,
+  "EV_real_todos": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "EV_real_1er": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "var": {
+   "BASE": {
+    "sim": 88,
+    "TP": 82,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 120,
+    "prec": 0.932,
+    "rec": 0.406,
+    "rec_q": 0.431,
+    "TP_50ms": 44,
+    "nuevos_dt0": 0,
+    "dTP": -3,
+    "dFP": 0,
+    "neto": -3,
+    "TP_ganados": 0,
+    "TP_perdidos": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 15,
+      "FP": 1,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-21": {
+      "TP": 39,
+      "FP": 0,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -2,
+     "2026-10-21": -2,
+     "2026-10-22": -2,
+     "2026-10-23": -3
+    },
+    "EV_TP_motor": {
+     "n": 82,
+     "ev_eur": -0.1366,
+     "ev_unit": -0.1325,
+     "pnl": -13.29,
+     "coste": 97.29
+    },
+    "EV_TP_real": {
+     "n": 82,
+     "ev_eur": -0.1415,
+     "ev_unit": -0.1325,
+     "pnl": -13.85,
+     "coste": 97.84
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 120,
+     "ev_eur": -0.0176,
+     "ev_unit": 0.0613,
+     "pnl": -2.17,
+     "coste": 123.46
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLA": {
+    "sim": 91,
+    "TP": 85,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 117,
+    "prec": 0.934,
+    "rec": 0.421,
+    "rec_q": 0.451,
+    "TP_50ms": 47,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.0615,
+     "ev_unit": -0.0501,
+     "pnl": -6.22,
+     "coste": 101.22
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.0668,
+     "ev_unit": -0.0501,
+     "pnl": -6.75,
+     "coste": 101.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0771,
+     "ev_unit": 0.0063,
+     "pnl": -9.27,
+     "coste": 120.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv": {
+    "sim": 91,
+    "TP": 85,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 117,
+    "prec": 0.934,
+    "rec": 0.421,
+    "rec_q": 0.451,
+    "TP_50ms": 47,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.0615,
+     "ev_unit": -0.0501,
+     "pnl": -6.22,
+     "coste": 101.22
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.0668,
+     "ev_unit": -0.0501,
+     "pnl": -6.75,
+     "coste": 101.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0771,
+     "ev_unit": 0.0063,
+     "pnl": -9.27,
+     "coste": 120.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMe_COLAv": {
+    "sim": 91,
+    "TP": 85,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 117,
+    "prec": 0.934,
+    "rec": 0.421,
+    "rec_q": 0.451,
+    "TP_50ms": 47,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.0615,
+     "ev_unit": -0.0501,
+     "pnl": -6.22,
+     "coste": 101.22
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.0668,
+     "ev_unit": -0.0501,
+     "pnl": -6.75,
+     "coste": 101.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0771,
+     "ev_unit": 0.0063,
+     "pnl": -9.27,
+     "coste": 120.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv": {
+    "sim": 91,
+    "TP": 85,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 117,
+    "prec": 0.934,
+    "rec": 0.421,
+    "rec_q": 0.451,
+    "TP_50ms": 47,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.0615,
+     "ev_unit": -0.0501,
+     "pnl": -6.22,
+     "coste": 101.22
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.0668,
+     "ev_unit": -0.0501,
+     "pnl": -6.75,
+     "coste": 101.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0771,
+     "ev_unit": 0.0063,
+     "pnl": -9.27,
+     "coste": 120.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_p30": {
+    "sim": 91,
+    "TP": 85,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 117,
+    "prec": 0.934,
+    "rec": 0.421,
+    "rec_q": 0.451,
+    "TP_50ms": 47,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.0615,
+     "ev_unit": -0.0501,
+     "pnl": -6.22,
+     "coste": 101.22
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.0668,
+     "ev_unit": -0.0501,
+     "pnl": -6.75,
+     "coste": 101.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0771,
+     "ev_unit": 0.0063,
+     "pnl": -9.27,
+     "coste": 120.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_m30": {
+    "sim": 91,
+    "TP": 85,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 117,
+    "prec": 0.934,
+    "rec": 0.421,
+    "rec_q": 0.451,
+    "TP_50ms": 47,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 85,
+     "ev_eur": -0.0615,
+     "ev_unit": -0.0501,
+     "pnl": -6.22,
+     "coste": 101.22
+    },
+    "EV_TP_real": {
+     "n": 85,
+     "ev_eur": -0.0668,
+     "ev_unit": -0.0501,
+     "pnl": -6.75,
+     "coste": 101.09
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 117,
+     "ev_eur": -0.0771,
+     "ev_unit": 0.0063,
+     "pnl": -9.27,
+     "coste": 120.21
+    },
+    "nuevos_por_clase": {}
+   },
+   "L2Q": {
+    "sim": 92,
+    "TP": 87,
+    "TP_parcial": 1,
+    "FP": 4,
+    "FN": 115,
+    "prec": 0.946,
+    "rec": 0.431,
+    "rec_q": 0.459,
+    "TP_50ms": 50,
+    "nuevos_dt0": 2,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "TP_ganados": 2,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 0,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 2,
+     "2026-10-21": 0,
+     "2026-10-22": 2,
+     "2026-10-23": 2
+    },
+    "EV_TP_motor": {
+     "n": 87,
+     "ev_eur": -0.081,
+     "ev_unit": -0.0719,
+     "pnl": -8.37,
+     "coste": 103.37
+    },
+    "EV_TP_real": {
+     "n": 87,
+     "ev_eur": -0.0862,
+     "ev_unit": -0.0719,
+     "pnl": -8.9,
+     "coste": 103.24
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 115,
+     "ev_eur": -0.0603,
+     "ev_unit": 0.0238,
+     "pnl": -7.12,
+     "coste": 118.06
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    }
+   },
+   "L2Q20": {
+    "sim": 93,
+    "TP": 87,
+    "TP_parcial": 1,
+    "FP": 5,
+    "FN": 115,
+    "prec": 0.935,
+    "rec": 0.431,
+    "rec_q": 0.459,
+    "TP_50ms": 50,
+    "nuevos_dt0": 2,
+    "dTP": 2,
+    "dFP": 1,
+    "neto": 1,
+    "TP_ganados": 2,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 1,
+      "dTP": 2,
+      "dFP": 1,
+      "neto": 1
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 1,
+     "2026-10-21": 0,
+     "2026-10-22": 1,
+     "2026-10-23": 1
+    },
+    "EV_TP_motor": {
+     "n": 87,
+     "ev_eur": -0.081,
+     "ev_unit": -0.0719,
+     "pnl": -8.37,
+     "coste": 103.37
+    },
+    "EV_TP_real": {
+     "n": 87,
+     "ev_eur": -0.0862,
+     "ev_unit": -0.0719,
+     "pnl": -8.9,
+     "coste": 103.24
+    },
+    "EV_FP_motor": {
+     "n": 5,
+     "ev_eur": 0.0309,
+     "ev_unit": 0.1765,
+     "pnl": 0.18,
+     "coste": 5.82
+    },
+    "EV_FN_real": {
+     "n": 115,
+     "ev_eur": -0.0603,
+     "ev_unit": 0.0238,
+     "pnl": -7.12,
+     "coste": 118.06
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    }
+   },
+   "L2Q_opt": {
+    "sim": 99,
+    "TP": 90,
+    "TP_parcial": 1,
+    "FP": 8,
+    "FN": 112,
+    "prec": 0.909,
+    "rec": 0.446,
+    "rec_q": 0.477,
+    "TP_50ms": 52,
+    "nuevos_dt0": 4,
+    "dTP": 5,
+    "dFP": 4,
+    "neto": 1,
+    "TP_ganados": 5,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 1,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 43,
+      "FP": 1,
+      "dTP": 3,
+      "dFP": 1,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 3,
+      "dTP": 1,
+      "dFP": 2,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 1,
+     "2026-10-21": -1,
+     "2026-10-22": 2,
+     "2026-10-23": 1
+    },
+    "EV_TP_motor": {
+     "n": 90,
+     "ev_eur": -0.1106,
+     "ev_unit": -0.1028,
+     "pnl": -11.81,
+     "coste": 106.81
+    },
+    "EV_TP_real": {
+     "n": 90,
+     "ev_eur": -0.1157,
+     "ev_unit": -0.1028,
+     "pnl": -12.34,
+     "coste": 106.68
+    },
+    "EV_FP_motor": {
+     "n": 8,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -8.21,
+     "coste": 8.21
+    },
+    "EV_FN_real": {
+     "n": 112,
+     "ev_eur": -0.0321,
+     "ev_unit": 0.0513,
+     "pnl": -3.68,
+     "coste": 114.62
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5
+    }
+   },
+   "L2Q_p30": {
+    "sim": 91,
+    "TP": 84,
+    "TP_parcial": 0,
+    "FP": 7,
+    "FN": 118,
+    "prec": 0.923,
+    "rec": 0.416,
+    "rec_q": 0.437,
+    "TP_50ms": 41,
+    "nuevos_dt0": 2,
+    "dTP": -1,
+    "dFP": 3,
+    "neto": -4,
+    "TP_ganados": 3,
+    "TP_perdidos": 4,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 1,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 2,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 25,
+      "FP": 2,
+      "dTP": -2,
+      "dFP": 1,
+      "neto": -3
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -5,
+     "2026-10-21": -2,
+     "2026-10-22": -1,
+     "2026-10-23": -4
+    },
+    "EV_TP_motor": {
+     "n": 84,
+     "ev_eur": -0.112,
+     "ev_unit": -0.1014,
+     "pnl": -11.23,
+     "coste": 100.23
+    },
+    "EV_TP_real": {
+     "n": 84,
+     "ev_eur": -0.1096,
+     "ev_unit": -0.1014,
+     "pnl": -10.95,
+     "coste": 99.94
+    },
+    "EV_FP_motor": {
+     "n": 7,
+     "ev_eur": -0.6739,
+     "ev_unit": 0.0989,
+     "pnl": -4.75,
+     "coste": 7.05
+    },
+    "EV_FN_real": {
+     "n": 118,
+     "ev_eur": -0.0418,
+     "ev_unit": 0.0424,
+     "pnl": -5.07,
+     "coste": 121.36
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    }
+   },
+   "L2Q_m30": {
+    "sim": 103,
+    "TP": 88,
+    "TP_parcial": 1,
+    "FP": 14,
+    "FN": 114,
+    "prec": 0.854,
+    "rec": 0.436,
+    "rec_q": 0.46,
+    "TP_50ms": 47,
+    "nuevos_dt0": 6,
+    "dTP": 3,
+    "dFP": 10,
+    "neto": -7,
+    "TP_ganados": 6,
+    "TP_perdidos": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 1,
+      "neto": -1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 2,
+      "dFP": 4,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 6,
+      "dTP": 1,
+      "dFP": 5,
+      "neto": -4
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -6,
+     "2026-10-21": -5,
+     "2026-10-22": -3,
+     "2026-10-23": -7
+    },
+    "EV_TP_motor": {
+     "n": 88,
+     "ev_eur": -0.1491,
+     "ev_unit": -0.1422,
+     "pnl": -15.59,
+     "coste": 104.59
+    },
+    "EV_TP_real": {
+     "n": 88,
+     "ev_eur": -0.1398,
+     "ev_unit": -0.1422,
+     "pnl": -14.47,
+     "coste": 103.46
+    },
+    "EV_FP_motor": {
+     "n": 14,
+     "ev_eur": -0.7004,
+     "ev_unit": -0.4048,
+     "pnl": -9.58,
+     "coste": 13.67
+    },
+    "EV_FN_real": {
+     "n": 114,
+     "ev_eur": -0.0132,
+     "ev_unit": 0.079,
+     "pnl": -1.56,
+     "coste": 117.84
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    }
+   },
+   "BASE_cap605": {
+    "sim": 22,
+    "TP": 17,
+    "TP_parcial": 2,
+    "FP": 3,
+    "FN": 185,
+    "prec": 0.773,
+    "rec": 0.084,
+    "rec_q": 0.096,
+    "TP_50ms": 13,
+    "nuevos_dt0": 0,
+    "dTP": -68,
+    "dFP": -1,
+    "neto": -67,
+    "TP_ganados": 0,
+    "TP_perdidos": 68,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -1,
+      "neto": -14
+     },
+     "2026-10-21": {
+      "TP": 9,
+      "FP": 0,
+      "dTP": -31,
+      "dFP": 0,
+      "neto": -31
+     },
+     "2026-10-22": {
+      "TP": 6,
+      "FP": 1,
+      "dTP": -21,
+      "dFP": 0,
+      "neto": -21
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -53,
+     "2026-10-21": -36,
+     "2026-10-22": -46,
+     "2026-10-23": -66
+    },
+    "EV_TP_motor": {
+     "n": 17,
+     "ev_eur": -0.503,
+     "ev_unit": -0.4501,
+     "pnl": -10.12,
+     "coste": 20.12
+    },
+    "EV_TP_real": {
+     "n": 17,
+     "ev_eur": -0.5032,
+     "ev_unit": -0.4501,
+     "pnl": -10.12,
+     "coste": 20.12
+    },
+    "EV_FP_motor": {
+     "n": 3,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -3.35,
+     "coste": 3.35
+    },
+    "EV_FN_real": {
+     "n": 185,
+     "ev_eur": -0.0293,
+     "ev_unit": 0.0224,
+     "pnl": -5.9,
+     "coste": 201.18
+    },
+    "nuevos_por_clase": {}
+   },
+   "BASE_cap2675": {
+    "sim": 50,
+    "TP": 44,
+    "TP_parcial": 2,
+    "FP": 4,
+    "FN": 158,
+    "prec": 0.88,
+    "rec": 0.218,
+    "rec_q": 0.238,
+    "TP_50ms": 31,
+    "nuevos_dt0": 0,
+    "dTP": -41,
+    "dFP": 0,
+    "neto": -41,
+    "TP_ganados": 0,
+    "TP_perdidos": 41,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 1,
+      "dTP": -10,
+      "dFP": 0,
+      "neto": -10
+     },
+     "2026-10-21": {
+      "TP": 22,
+      "FP": 0,
+      "dTP": -18,
+      "dFP": 0,
+      "neto": -18
+     },
+     "2026-10-22": {
+      "TP": 14,
+      "FP": 1,
+      "dTP": -13,
+      "dFP": 0,
+      "neto": -13
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -31,
+     "2026-10-21": -23,
+     "2026-10-22": -28,
+     "2026-10-23": -41
+    },
+    "EV_TP_motor": {
+     "n": 44,
+     "ev_eur": -0.1396,
+     "ev_unit": -0.147,
+     "pnl": -7.3,
+     "coste": 52.3
+    },
+    "EV_TP_real": {
+     "n": 44,
+     "ev_eur": -0.1487,
+     "ev_unit": -0.147,
+     "pnl": -7.86,
+     "coste": 52.86
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 158,
+     "ev_eur": -0.0485,
+     "ev_unit": 0.0187,
+     "pnl": -8.16,
+     "coste": 168.44
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap605": {
+    "sim": 24,
+    "TP": 20,
+    "TP_parcial": 1,
+    "FP": 3,
+    "FN": 182,
+    "prec": 0.833,
+    "rec": 0.099,
+    "rec_q": 0.113,
+    "TP_50ms": 16,
+    "nuevos_dt0": 0,
+    "dTP": -65,
+    "dFP": -1,
+    "neto": -64,
+    "TP_ganados": 0,
+    "TP_perdidos": 65,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -1,
+      "neto": -14
+     },
+     "2026-10-21": {
+      "TP": 10,
+      "FP": 0,
+      "dTP": -30,
+      "dFP": 0,
+      "neto": -30
+     },
+     "2026-10-22": {
+      "TP": 8,
+      "FP": 1,
+      "dTP": -19,
+      "dFP": 0,
+      "neto": -19
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -50,
+     "2026-10-21": -34,
+     "2026-10-22": -45,
+     "2026-10-23": -63
+    },
+    "EV_TP_motor": {
+     "n": 20,
+     "ev_eur": -0.3189,
+     "ev_unit": -0.2695,
+     "pnl": -7.49,
+     "coste": 23.49
+    },
+    "EV_TP_real": {
+     "n": 20,
+     "ev_eur": -0.3436,
+     "ev_unit": -0.2695,
+     "pnl": -8.03,
+     "coste": 23.36
+    },
+    "EV_FP_motor": {
+     "n": 3,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -3.35,
+     "coste": 3.35
+    },
+    "EV_FN_real": {
+     "n": 182,
+     "ev_eur": -0.0404,
+     "ev_unit": 0.0103,
+     "pnl": -7.99,
+     "coste": 197.94
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap2675": {
+    "sim": 53,
+    "TP": 48,
+    "TP_parcial": 1,
+    "FP": 4,
+    "FN": 154,
+    "prec": 0.906,
+    "rec": 0.238,
+    "rec_q": 0.264,
+    "TP_50ms": 35,
+    "nuevos_dt0": 0,
+    "dTP": -37,
+    "dFP": 0,
+    "neto": -37,
+    "TP_ganados": 0,
+    "TP_perdidos": 37,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 1,
+      "dTP": -10,
+      "dFP": 0,
+      "neto": -10
+     },
+     "2026-10-21": {
+      "TP": 24,
+      "FP": 0,
+      "dTP": -16,
+      "dFP": 0,
+      "neto": -16
+     },
+     "2026-10-22": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": -11,
+      "dFP": 0,
+      "neto": -11
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -27,
+     "2026-10-21": -21,
+     "2026-10-22": -26,
+     "2026-10-23": -37
+    },
+    "EV_TP_motor": {
+     "n": 48,
+     "ev_eur": -0.1112,
+     "ev_unit": -0.1084,
+     "pnl": -6.38,
+     "coste": 57.38
+    },
+    "EV_TP_real": {
+     "n": 48,
+     "ev_eur": -0.1208,
+     "ev_unit": -0.1084,
+     "pnl": -6.92,
+     "coste": 57.25
+    },
+    "EV_FP_motor": {
+     "n": 4,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -4.8,
+     "coste": 4.8
+    },
+    "EV_FN_real": {
+     "n": 154,
+     "ev_eur": -0.0555,
+     "ev_unit": 0.011,
+     "pnl": -9.11,
+     "coste": 164.05
+    },
+    "nuevos_por_clase": {}
+   }
+  },
+  "DEMt_rnd": {
+   "dTP_max": 0,
+   "dTP_p95": 0.0,
+   "neto_max": 0,
+   "neto_p95": 0.0
+  },
+  "nsint": {
+   "DEMe_COLAv": 166,
+   "DEMt_COLAv": 0,
+   "DEMt_COLAv_p30": 0,
+   "DEMt_COLAv_m30": 0
+  },
+  "COLA_vs_COLAv": {
+   "COLA_no_COLAv": 0,
+   "COLA_no_COLAv_dt0": 0,
+   "COLAv_no_BASE": 3,
+   "BASE_no_COLAv": 0
+  },
+  "L2_cob": {
+   "ordenes": 3195,
+   "reales": 183,
+   "alta_hallada": 0.9314720812182741,
+   "ahead0_p50": 41.0,
+   "filas_p50": 5.0
+  },
+  "L2_sub": {
+   "L2Q": {
+    "TP": 84,
+    "FP": 2,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 0,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 2
+   },
+   "L2Q20": {
+    "TP": 84,
+    "FP": 3,
+    "dTP": 2,
+    "dFP": 1,
+    "neto": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 1,
+      "dTP": 2,
+      "dFP": 1,
+      "neto": 1
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 1,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 2
+   },
+   "L2Q_opt": {
+    "TP": 87,
+    "FP": 6,
+    "dTP": 5,
+    "dFP": 4,
+    "neto": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 1,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 43,
+      "FP": 1,
+      "dTP": 3,
+      "dFP": 1,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 3,
+      "dTP": 1,
+      "dFP": 2,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 5
+   },
+   "L2Q_p30": {
+    "TP": 81,
+    "FP": 5,
+    "dTP": -1,
+    "dFP": 3,
+    "neto": -4,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 1,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 40,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 2,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 24,
+      "FP": 2,
+      "dTP": -2,
+      "dFP": 1,
+      "neto": -3
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    },
+    "TP_perdidos": 4,
+    "TP_ganados": 3
+   },
+   "L2Q_m30": {
+    "TP": 85,
+    "FP": 12,
+    "dTP": 3,
+    "dFP": 10,
+    "neto": -7,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 1,
+      "neto": -1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 2,
+      "dFP": 4,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 27,
+      "FP": 6,
+      "dTP": 1,
+      "dFP": 5,
+      "neto": -4
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    },
+    "TP_perdidos": 3,
+    "TP_ganados": 6
+   }
+  },
+  "FN_por_clase": {
+   "BASE": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 8,
+     "ev_eur": 0.3129,
+     "ev_unit": 0.3021,
+     "pnl": 2.86,
+     "coste": 9.14
+    },
+    "6_sin_prints_en_ventana": {
+     "n": 1,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -1.2,
+     "coste": 1.2
+    },
+    "8_cola_no_agotada": {
+     "n": 11,
+     "ev_eur": 0.956,
+     "ev_unit": 0.8731,
+     "pnl": 10.92,
+     "coste": 11.42
+    },
+    "TP": {
+     "n": 2,
+     "ev_eur": 1.2422,
+     "ev_unit": 1.1739,
+     "pnl": 2.77,
+     "coste": 2.23
+    },
+    "TODOS": {
+     "n": 120,
+     "ev_eur": -0.0176,
+     "ev_unit": 0.0613,
+     "pnl": -2.17,
+     "coste": 123.46
+    },
+    "TODOS_por_orden": {
+     "n": 120,
+     "ev_eur": -0.0176,
+     "ev_unit": 0.0613,
+     "pnl": -2.17,
+     "coste": 123.46
+    }
+   },
+   "COLAv": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 8,
+     "ev_eur": 0.3129,
+     "ev_unit": 0.3021,
+     "pnl": 2.86,
+     "coste": 9.14
+    },
+    "6_sin_prints_en_ventana": {
+     "n": 1,
+     "ev_eur": -1.0,
+     "ev_unit": -1.0,
+     "pnl": -1.2,
+     "coste": 1.2
+    },
+    "8_cola_no_agotada": {
+     "n": 10,
+     "ev_eur": 0.6336,
+     "ev_unit": 0.5341,
+     "pnl": 6.59,
+     "coste": 10.41
+    },
+    "TODOS": {
+     "n": 117,
+     "ev_eur": -0.0771,
+     "ev_unit": 0.0063,
+     "pnl": -9.27,
+     "coste": 120.21
+    },
+    "TODOS_por_orden": {
+     "n": 117,
+     "ev_eur": -0.0771,
+     "ev_unit": 0.0063,
+     "pnl": -9.27,
+     "coste": 120.21
+    }
+   }
+  },
+  "C7": {
+   "n": 3642,
+   "reales": 110,
+   "var": {
+    "BASE": {
+     "TP": 25,
+     "FP": 1,
+     "rec": 0.227,
+     "prec": 0.926,
+     "dTP": -2,
+     "dFP": 0,
+     "neto": -2
+    },
+    "COLAv": {
+     "TP": 27,
+     "FP": 1,
+     "rec": 0.245,
+     "prec": 0.9,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    },
+    "L2Q": {
+     "TP": 29,
+     "FP": 1,
+     "rec": 0.264,
+     "prec": 0.935,
+     "dTP": 2,
+     "dFP": 0,
+     "neto": 2
+    },
+    "DEMt_COLAv": {
+     "TP": 27,
+     "FP": 1,
+     "rec": 0.245,
+     "prec": 0.9,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    }
+   }
+  },
+  "VEREDICTO_DEMt": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": false,
+    "plac_tp": true,
+    "plac_neto": true,
+    "dt0": true,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 0,
+   "placebo_max_neto": 0,
+   "dias_neto_pos": 0
+  },
+  "VEREDICTO_L2Q": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": true,
+    "plac_tp": false,
+    "plac_neto": true,
+    "dt0": false,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 3,
+   "placebo_max_neto": -4,
+   "dias_neto_pos": 1
+  }
+ },
+ "V2_r3_call00a35_intc74_v3d": {
+  "n_ordenes": 3796,
+  "n_real": 202,
+  "EV_real_todos": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "EV_real_1er": {
+   "n": 202,
+   "ev_eur": -0.0724,
+   "ev_unit": -0.0174,
+   "pnl": -16.02,
+   "coste": 221.3
+  },
+  "var": {
+   "BASE": {
+    "sim": 99,
+    "TP": 86,
+    "TP_parcial": 2,
+    "FP": 11,
+    "FN": 116,
+    "prec": 0.869,
+    "rec": 0.426,
+    "rec_q": 0.453,
+    "TP_50ms": 48,
+    "nuevos_dt0": 0,
+    "dTP": -3,
+    "dFP": -2,
+    "neto": -1,
+    "TP_ganados": 0,
+    "TP_perdidos": 3,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 15,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-21": {
+      "TP": 41,
+      "FP": 4,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": 0,
+      "neto": -1
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 3,
+      "dTP": 0,
+      "dFP": -2,
+      "neto": 2
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": -3
+    },
+    "EV_TP_motor": {
+     "n": 86,
+     "ev_eur": -0.1331,
+     "ev_unit": -0.1002,
+     "pnl": -13.48,
+     "coste": 101.24
+    },
+    "EV_TP_real": {
+     "n": 86,
+     "ev_eur": -0.1106,
+     "ev_unit": -0.1002,
+     "pnl": -11.32,
+     "coste": 102.31
+    },
+    "EV_FP_motor": {
+     "n": 11,
+     "ev_eur": 0.1858,
+     "ev_unit": 0.342,
+     "pnl": 2.35,
+     "coste": 12.65
+    },
+    "EV_FN_real": {
+     "n": 116,
+     "ev_eur": -0.0395,
+     "ev_unit": 0.044,
+     "pnl": -4.71,
+     "coste": 118.99
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLA": {
+    "sim": 104,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 13,
+    "FN": 113,
+    "prec": 0.856,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 13,
+     "ev_eur": -0.0066,
+     "ev_unit": 0.1355,
+     "pnl": -0.1,
+     "coste": 15.1
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv": {
+    "sim": 104,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 13,
+    "FN": 113,
+    "prec": 0.856,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 13,
+     "ev_eur": -0.0066,
+     "ev_unit": 0.1355,
+     "pnl": -0.1,
+     "coste": 15.1
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMe_COLAv": {
+    "sim": 106,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 15,
+    "FN": 113,
+    "prec": 0.84,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 2,
+    "neto": -2,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 2,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -2,
+     "2026-10-21": 0,
+     "2026-10-22": -2,
+     "2026-10-23": -2
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 15,
+     "ev_eur": -0.1329,
+     "ev_unit": -0.0159,
+     "pnl": -2.3,
+     "coste": 17.3
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv": {
+    "sim": 104,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 13,
+    "FN": 113,
+    "prec": 0.856,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 13,
+     "ev_eur": -0.0066,
+     "ev_unit": 0.1355,
+     "pnl": -0.1,
+     "coste": 15.1
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_p30": {
+    "sim": 104,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 13,
+    "FN": 113,
+    "prec": 0.856,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 13,
+     "ev_eur": -0.0066,
+     "ev_unit": 0.1355,
+     "pnl": -0.1,
+     "coste": 15.1
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "DEMt_COLAv_m30": {
+    "sim": 104,
+    "TP": 89,
+    "TP_parcial": 2,
+    "FP": 13,
+    "FN": 113,
+    "prec": 0.856,
+    "rec": 0.441,
+    "rec_q": 0.476,
+    "TP_50ms": 51,
+    "nuevos_dt0": 0,
+    "dTP": 0,
+    "dFP": 0,
+    "neto": 0,
+    "TP_ganados": 0,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 0,
+     "2026-10-21": 0,
+     "2026-10-22": 0,
+     "2026-10-23": 0
+    },
+    "EV_TP_motor": {
+     "n": 89,
+     "ev_eur": -0.0349,
+     "ev_unit": -0.0225,
+     "pnl": -3.69,
+     "coste": 105.69
+    },
+    "EV_TP_real": {
+     "n": 89,
+     "ev_eur": -0.04,
+     "ev_unit": -0.0225,
+     "pnl": -4.22,
+     "coste": 105.56
+    },
+    "EV_FP_motor": {
+     "n": 13,
+     "ev_eur": -0.0066,
+     "ev_unit": 0.1355,
+     "pnl": -0.1,
+     "coste": 15.1
+    },
+    "EV_FN_real": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "nuevos_por_clase": {}
+   },
+   "L2Q": {
+    "sim": 105,
+    "TP": 91,
+    "TP_parcial": 1,
+    "FP": 13,
+    "FN": 111,
+    "prec": 0.867,
+    "rec": 0.45,
+    "rec_q": 0.484,
+    "TP_50ms": 54,
+    "nuevos_dt0": 2,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "TP_ganados": 2,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 4,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 2,
+     "2026-10-21": 0,
+     "2026-10-22": 2,
+     "2026-10-23": 2
+    },
+    "EV_TP_motor": {
+     "n": 91,
+     "ev_eur": -0.0542,
+     "ev_unit": -0.044,
+     "pnl": -5.84,
+     "coste": 107.84
+    },
+    "EV_TP_real": {
+     "n": 91,
+     "ev_eur": -0.0592,
+     "ev_unit": -0.044,
+     "pnl": -6.37,
+     "coste": 107.71
+    },
+    "EV_FP_motor": {
+     "n": 13,
+     "ev_eur": -0.0066,
+     "ev_unit": 0.1355,
+     "pnl": -0.1,
+     "coste": 15.1
+    },
+    "EV_FN_real": {
+     "n": 111,
+     "ev_eur": -0.085,
+     "ev_unit": 0.0044,
+     "pnl": -9.65,
+     "coste": 113.59
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    }
+   },
+   "L2Q20": {
+    "sim": 106,
+    "TP": 91,
+    "TP_parcial": 1,
+    "FP": 14,
+    "FN": 111,
+    "prec": 0.858,
+    "rec": 0.45,
+    "rec_q": 0.484,
+    "TP_50ms": 54,
+    "nuevos_dt0": 2,
+    "dTP": 2,
+    "dFP": 1,
+    "neto": 1,
+    "TP_ganados": 2,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 5,
+      "dTP": 2,
+      "dFP": 1,
+      "neto": 1
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": 1,
+     "2026-10-21": 0,
+     "2026-10-22": 1,
+     "2026-10-23": 1
+    },
+    "EV_TP_motor": {
+     "n": 91,
+     "ev_eur": -0.0542,
+     "ev_unit": -0.044,
+     "pnl": -5.84,
+     "coste": 107.84
+    },
+    "EV_TP_real": {
+     "n": 91,
+     "ev_eur": -0.0592,
+     "ev_unit": -0.044,
+     "pnl": -6.37,
+     "coste": 107.71
+    },
+    "EV_FP_motor": {
+     "n": 14,
+     "ev_eur": 0.3027,
+     "ev_unit": 0.4746,
+     "pnl": 4.88,
+     "coste": 16.12
+    },
+    "EV_FN_real": {
+     "n": 111,
+     "ev_eur": -0.085,
+     "ev_unit": 0.0044,
+     "pnl": -9.65,
+     "coste": 113.59
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    }
+   },
+   "L2Q_opt": {
+    "sim": 114,
+    "TP": 94,
+    "TP_parcial": 1,
+    "FP": 19,
+    "FN": 108,
+    "prec": 0.825,
+    "rec": 0.465,
+    "rec_q": 0.502,
+    "TP_50ms": 56,
+    "nuevos_dt0": 4,
+    "dTP": 5,
+    "dFP": 6,
+    "neto": -1,
+    "TP_ganados": 5,
+    "TP_perdidos": 0,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 45,
+      "FP": 7,
+      "dTP": 3,
+      "dFP": 3,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 30,
+      "FP": 5,
+      "dTP": 1,
+      "dFP": 3,
+      "neto": -2
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -2,
+     "2026-10-21": -1,
+     "2026-10-22": 1,
+     "2026-10-23": -1
+    },
+    "EV_TP_motor": {
+     "n": 94,
+     "ev_eur": -0.0834,
+     "ev_unit": -0.0745,
+     "pnl": -9.28,
+     "coste": 111.28
+    },
+    "EV_TP_real": {
+     "n": 94,
+     "ev_eur": -0.0883,
+     "ev_unit": -0.0745,
+     "pnl": -9.81,
+     "coste": 111.15
+    },
+    "EV_FP_motor": {
+     "n": 19,
+     "ev_eur": -0.068,
+     "ev_unit": 0.1278,
+     "pnl": -1.27,
+     "coste": 18.62
+    },
+    "EV_FN_real": {
+     "n": 108,
+     "ev_eur": -0.0564,
+     "ev_unit": 0.0323,
+     "pnl": -6.21,
+     "coste": 110.15
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5
+    }
+   },
+   "L2Q_p30": {
+    "sim": 103,
+    "TP": 87,
+    "TP_parcial": 0,
+    "FP": 16,
+    "FN": 115,
+    "prec": 0.845,
+    "rec": 0.431,
+    "rec_q": 0.456,
+    "TP_50ms": 44,
+    "nuevos_dt0": 2,
+    "dTP": -2,
+    "dFP": 3,
+    "neto": -5,
+    "TP_ganados": 3,
+    "TP_perdidos": 5,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 2,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 26,
+      "FP": 3,
+      "dTP": -3,
+      "dFP": 1,
+      "neto": -4
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -6,
+     "2026-10-21": -3,
+     "2026-10-22": -1,
+     "2026-10-23": -5
+    },
+    "EV_TP_motor": {
+     "n": 87,
+     "ev_eur": -0.1408,
+     "ev_unit": -0.1324,
+     "pnl": -14.58,
+     "coste": 103.58
+    },
+    "EV_TP_real": {
+     "n": 87,
+     "ev_eur": -0.1384,
+     "ev_unit": -0.1324,
+     "pnl": -14.3,
+     "coste": 103.29
+    },
+    "EV_FP_motor": {
+     "n": 15,
+     "ev_eur": -0.1202,
+     "ev_unit": -0.0159,
+     "pnl": -2.05,
+     "coste": 17.05
+    },
+    "EV_FN_real": {
+     "n": 115,
+     "ev_eur": -0.0146,
+     "ev_unit": 0.0696,
+     "pnl": -1.73,
+     "coste": 118.01
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    }
+   },
+   "L2Q_m30": {
+    "sim": 116,
+    "TP": 91,
+    "TP_parcial": 1,
+    "FP": 24,
+    "FN": 111,
+    "prec": 0.784,
+    "rec": 0.45,
+    "rec_q": 0.478,
+    "TP_50ms": 50,
+    "nuevos_dt0": 6,
+    "dTP": 2,
+    "dFP": 11,
+    "neto": -9,
+    "TP_ganados": 6,
+    "TP_perdidos": 4,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 9,
+      "dTP": 2,
+      "dFP": 5,
+      "neto": -3
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 8,
+      "dTP": 0,
+      "dFP": 6,
+      "neto": -6
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 5,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -9,
+     "2026-10-21": -6,
+     "2026-10-22": -3,
+     "2026-10-23": -9
+    },
+    "EV_TP_motor": {
+     "n": 91,
+     "ev_eur": -0.1755,
+     "ev_unit": -0.1705,
+     "pnl": -18.94,
+     "coste": 107.94
+    },
+    "EV_TP_real": {
+     "n": 91,
+     "ev_eur": -0.1668,
+     "ev_unit": -0.1705,
+     "pnl": -17.81,
+     "coste": 106.81
+    },
+    "EV_FP_motor": {
+     "n": 24,
+     "ev_eur": -0.1016,
+     "ev_unit": 0.2401,
+     "pnl": -2.43,
+     "coste": 23.87
+    },
+    "EV_FN_real": {
+     "n": 111,
+     "ev_eur": 0.0156,
+     "ev_unit": 0.1082,
+     "pnl": 1.79,
+     "coste": 114.49
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    }
+   },
+   "BASE_cap605": {
+    "sim": 27,
+    "TP": 20,
+    "TP_parcial": 2,
+    "FP": 5,
+    "FN": 182,
+    "prec": 0.741,
+    "rec": 0.099,
+    "rec_q": 0.114,
+    "TP_50ms": 16,
+    "nuevos_dt0": 0,
+    "dTP": -69,
+    "dFP": -8,
+    "neto": -61,
+    "TP_ganados": 0,
+    "TP_perdidos": 69,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -2,
+      "neto": -13
+     },
+     "2026-10-21": {
+      "TP": 10,
+      "FP": 2,
+      "dTP": -32,
+      "dFP": -2,
+      "neto": -30
+     },
+     "2026-10-22": {
+      "TP": 8,
+      "FP": 1,
+      "dTP": -21,
+      "dFP": -1,
+      "neto": -20
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 2,
+      "dTP": -1,
+      "dFP": -3,
+      "neto": 2
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -48,
+     "2026-10-21": -31,
+     "2026-10-22": -41,
+     "2026-10-23": -63
+    },
+    "EV_TP_motor": {
+     "n": 20,
+     "ev_eur": -0.4022,
+     "ev_unit": -0.2201,
+     "pnl": -9.26,
+     "coste": 23.02
+    },
+    "EV_TP_real": {
+     "n": 20,
+     "ev_eur": -0.278,
+     "ev_unit": -0.2201,
+     "pnl": -6.54,
+     "coste": 23.54
+    },
+    "EV_FP_motor": {
+     "n": 5,
+     "ev_eur": 0.8416,
+     "ev_unit": 1.0,
+     "pnl": 4.57,
+     "coste": 5.43
+    },
+    "EV_FN_real": {
+     "n": 182,
+     "ev_eur": -0.0479,
+     "ev_unit": 0.0049,
+     "pnl": -9.48,
+     "coste": 197.76
+    },
+    "nuevos_por_clase": {}
+   },
+   "BASE_cap2675": {
+    "sim": 58,
+    "TP": 47,
+    "TP_parcial": 2,
+    "FP": 9,
+    "FN": 155,
+    "prec": 0.81,
+    "rec": 0.233,
+    "rec_q": 0.256,
+    "TP_50ms": 34,
+    "nuevos_dt0": 0,
+    "dTP": -42,
+    "dFP": -4,
+    "neto": -38,
+    "TP_ganados": 0,
+    "TP_perdidos": 42,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 2,
+      "dTP": -10,
+      "dFP": 0,
+      "neto": -10
+     },
+     "2026-10-21": {
+      "TP": 23,
+      "FP": 4,
+      "dTP": -19,
+      "dFP": 0,
+      "neto": -19
+     },
+     "2026-10-22": {
+      "TP": 16,
+      "FP": 1,
+      "dTP": -13,
+      "dFP": -1,
+      "neto": -12
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": -3,
+      "neto": 3
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -28,
+     "2026-10-21": -19,
+     "2026-10-22": -26,
+     "2026-10-23": -41
+    },
+    "EV_TP_motor": {
+     "n": 47,
+     "ev_eur": -0.1167,
+     "ev_unit": -0.0685,
+     "pnl": -6.44,
+     "coste": 55.2
+    },
+    "EV_TP_real": {
+     "n": 47,
+     "ev_eur": -0.0761,
+     "ev_unit": -0.0685,
+     "pnl": -4.28,
+     "coste": 56.27
+    },
+    "EV_FP_motor": {
+     "n": 9,
+     "ev_eur": 0.4382,
+     "ev_unit": 0.6402,
+     "pnl": 4.57,
+     "coste": 10.43
+    },
+    "EV_FN_real": {
+     "n": 155,
+     "ev_eur": -0.0712,
+     "ev_unit": -0.0019,
+     "pnl": -11.74,
+     "coste": 165.03
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap605": {
+    "sim": 31,
+    "TP": 23,
+    "TP_parcial": 1,
+    "FP": 7,
+    "FN": 179,
+    "prec": 0.742,
+    "rec": 0.114,
+    "rec_q": 0.134,
+    "TP_50ms": 19,
+    "nuevos_dt0": 0,
+    "dTP": -66,
+    "dFP": -6,
+    "neto": -60,
+    "TP_ganados": 0,
+    "TP_perdidos": 66,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 1,
+      "FP": 0,
+      "dTP": -15,
+      "dFP": -2,
+      "neto": -13
+     },
+     "2026-10-21": {
+      "TP": 11,
+      "FP": 2,
+      "dTP": -31,
+      "dFP": -2,
+      "neto": -29
+     },
+     "2026-10-22": {
+      "TP": 10,
+      "FP": 1,
+      "dTP": -19,
+      "dFP": -1,
+      "neto": -18
+     },
+     "2026-10-23": {
+      "TP": 1,
+      "FP": 4,
+      "dTP": -1,
+      "dFP": -1,
+      "neto": 0
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -47,
+     "2026-10-21": -31,
+     "2026-10-22": -42,
+     "2026-10-23": -60
+    },
+    "EV_TP_motor": {
+     "n": 23,
+     "ev_eur": -0.1453,
+     "ev_unit": -0.093,
+     "pnl": -3.91,
+     "coste": 26.91
+    },
+    "EV_TP_real": {
+     "n": 23,
+     "ev_eur": -0.166,
+     "ev_unit": -0.093,
+     "pnl": -4.45,
+     "coste": 26.78
+    },
+    "EV_FP_motor": {
+     "n": 7,
+     "ev_eur": 0.269,
+     "ev_unit": 0.4286,
+     "pnl": 2.12,
+     "coste": 7.88
+    },
+    "EV_FN_real": {
+     "n": 179,
+     "ev_eur": -0.0595,
+     "ev_unit": -0.0077,
+     "pnl": -11.58,
+     "coste": 194.52
+    },
+    "nuevos_por_clase": {}
+   },
+   "COLAv_cap2675": {
+    "sim": 63,
+    "TP": 51,
+    "TP_parcial": 1,
+    "FP": 11,
+    "FN": 151,
+    "prec": 0.81,
+    "rec": 0.252,
+    "rec_q": 0.284,
+    "TP_50ms": 38,
+    "nuevos_dt0": 0,
+    "dTP": -38,
+    "dFP": -2,
+    "neto": -36,
+    "TP_ganados": 0,
+    "TP_perdidos": 38,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 6,
+      "FP": 2,
+      "dTP": -10,
+      "dFP": 0,
+      "neto": -10
+     },
+     "2026-10-21": {
+      "TP": 25,
+      "FP": 4,
+      "dTP": -17,
+      "dFP": 0,
+      "neto": -17
+     },
+     "2026-10-22": {
+      "TP": 18,
+      "FP": 1,
+      "dTP": -11,
+      "dFP": -1,
+      "neto": -10
+     },
+     "2026-10-23": {
+      "TP": 2,
+      "FP": 4,
+      "dTP": 0,
+      "dFP": -1,
+      "neto": 1
+     }
+    },
+    "lodo_neto": {
+     "2026-10-20": -26,
+     "2026-10-21": -19,
+     "2026-10-22": -26,
+     "2026-10-23": -37
+    },
+    "EV_TP_motor": {
+     "n": 51,
+     "ev_eur": -0.0461,
+     "ev_unit": -0.0383,
+     "pnl": -2.8,
+     "coste": 60.8
+    },
+    "EV_TP_real": {
+     "n": 51,
+     "ev_eur": -0.055,
+     "ev_unit": -0.0383,
+     "pnl": -3.33,
+     "coste": 60.67
+    },
+    "EV_FP_motor": {
+     "n": 11,
+     "ev_eur": 0.1646,
+     "ev_unit": 0.342,
+     "pnl": 2.12,
+     "coste": 12.88
+    },
+    "EV_FN_real": {
+     "n": 151,
+     "ev_eur": -0.079,
+     "ev_unit": -0.0103,
+     "pnl": -12.69,
+     "coste": 160.63
+    },
+    "nuevos_por_clase": {}
+   }
+  },
+  "DEMt_rnd": {
+   "dTP_max": 0,
+   "dTP_p95": 0.0,
+   "neto_max": 0,
+   "neto_p95": 0.0
+  },
+  "nsint": {
+   "DEMe_COLAv": 173,
+   "DEMt_COLAv": 0,
+   "DEMt_COLAv_p30": 0,
+   "DEMt_COLAv_m30": 0
+  },
+  "COLA_vs_COLAv": {
+   "COLA_no_COLAv": 0,
+   "COLA_no_COLAv_dt0": 0,
+   "COLAv_no_BASE": 3,
+   "BASE_no_COLAv": 0
+  },
+  "L2_cob": {
+   "ordenes": 3195,
+   "reales": 183,
+   "alta_hallada": 0.9314720812182741,
+   "ahead0_p50": 41.0,
+   "filas_p50": 6.0
+  },
+  "L2_sub": {
+   "L2Q": {
+    "TP": 88,
+    "FP": 8,
+    "dTP": 2,
+    "dFP": 0,
+    "neto": 2,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 4,
+      "dTP": 2,
+      "dFP": 0,
+      "neto": 2
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 2
+   },
+   "L2Q20": {
+    "TP": 88,
+    "FP": 9,
+    "dTP": 2,
+    "dFP": 1,
+    "neto": 1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 5,
+      "dTP": 2,
+      "dFP": 1,
+      "neto": 1
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 2
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 2
+   },
+   "L2Q_opt": {
+    "TP": 91,
+    "FP": 14,
+    "dTP": 5,
+    "dFP": 6,
+    "neto": -1,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 45,
+      "FP": 7,
+      "dTP": 3,
+      "dFP": 3,
+      "neto": 0
+     },
+     "2026-10-22": {
+      "TP": 29,
+      "FP": 5,
+      "dTP": 1,
+      "dFP": 3,
+      "neto": -2
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 5
+    },
+    "TP_perdidos": 0,
+    "TP_ganados": 5
+   },
+   "L2Q_p30": {
+    "TP": 84,
+    "FP": 11,
+    "dTP": -2,
+    "dFP": 3,
+    "neto": -5,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 17,
+      "FP": 2,
+      "dTP": 1,
+      "dFP": 0,
+      "neto": 1
+     },
+     "2026-10-21": {
+      "TP": 42,
+      "FP": 6,
+      "dTP": 0,
+      "dFP": 2,
+      "neto": -2
+     },
+     "2026-10-22": {
+      "TP": 25,
+      "FP": 3,
+      "dTP": -3,
+      "dFP": 1,
+      "neto": -4
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 3
+    },
+    "TP_perdidos": 5,
+    "TP_ganados": 3
+   },
+   "L2Q_m30": {
+    "TP": 88,
+    "FP": 19,
+    "dTP": 2,
+    "dFP": 11,
+    "neto": -9,
+    "por_dia": {
+     "2026-10-20": {
+      "TP": 16,
+      "FP": 2,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     },
+     "2026-10-21": {
+      "TP": 44,
+      "FP": 9,
+      "dTP": 2,
+      "dFP": 5,
+      "neto": -3
+     },
+     "2026-10-22": {
+      "TP": 28,
+      "FP": 8,
+      "dTP": 0,
+      "dFP": 6,
+      "neto": -6
+     },
+     "2026-10-23": {
+      "TP": 0,
+      "FP": 0,
+      "dTP": 0,
+      "dFP": 0,
+      "neto": 0
+     }
+    },
+    "nuevos_por_clase": {
+     "8_cola_no_agotada": 6
+    },
+    "TP_perdidos": 4,
+    "TP_ganados": 6
+   }
+  },
+  "FN_por_clase": {
+   "BASE": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 5,
+     "ev_eur": -0.1482,
+     "ev_unit": -0.1667,
+     "pnl": -0.87,
+     "coste": 5.87
+    },
+    "8_cola_no_agotada": {
+     "n": 11,
+     "ev_eur": 0.956,
+     "ev_unit": 0.8731,
+     "pnl": 10.92,
+     "coste": 11.42
+    },
+    "TP": {
+     "n": 2,
+     "ev_eur": 1.2422,
+     "ev_unit": 1.1739,
+     "pnl": 2.77,
+     "coste": 2.23
+    },
+    "TODOS": {
+     "n": 116,
+     "ev_eur": -0.0395,
+     "ev_unit": 0.044,
+     "pnl": -4.71,
+     "coste": 118.99
+    },
+    "TODOS_por_orden": {
+     "n": 116,
+     "ev_eur": -0.0395,
+     "ev_unit": 0.044,
+     "pnl": -4.71,
+     "coste": 118.99
+    }
+   },
+   "COLAv": {
+    "1_propio_solo": {
+     "n": 98,
+     "ev_eur": -0.1762,
+     "ev_unit": -0.0614,
+     "pnl": -17.52,
+     "coste": 99.47
+    },
+    "4_relleno_real_tras_cancel_sim": {
+     "n": 5,
+     "ev_eur": -0.1482,
+     "ev_unit": -0.1667,
+     "pnl": -0.87,
+     "coste": 5.87
+    },
+    "8_cola_no_agotada": {
+     "n": 10,
+     "ev_eur": 0.6336,
+     "ev_unit": 0.5341,
+     "pnl": 6.59,
+     "coste": 10.41
+    },
+    "TODOS": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    },
+    "TODOS_por_orden": {
+     "n": 113,
+     "ev_eur": -0.102,
+     "ev_unit": -0.0133,
+     "pnl": -11.8,
+     "coste": 115.74
+    }
+   }
+  },
+  "C7": {
+   "n": 3635,
+   "reales": 110,
+   "var": {
+    "BASE": {
+     "TP": 29,
+     "FP": 5,
+     "rec": 0.264,
+     "prec": 0.829,
+     "dTP": -2,
+     "dFP": -2,
+     "neto": 0
+    },
+    "COLAv": {
+     "TP": 31,
+     "FP": 7,
+     "rec": 0.282,
+     "prec": 0.775,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    },
+    "L2Q": {
+     "TP": 33,
+     "FP": 7,
+     "rec": 0.3,
+     "prec": 0.805,
+     "dTP": 2,
+     "dFP": 0,
+     "neto": 2
+    },
+    "DEMt_COLAv": {
+     "TP": 31,
+     "FP": 7,
+     "rec": 0.282,
+     "prec": 0.775,
+     "dTP": 0,
+     "dFP": 0,
+     "neto": 0
+    }
+   }
+  },
+  "VEREDICTO_DEMt": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": false,
+    "plac_tp": true,
+    "plac_neto": true,
+    "dt0": true,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 0,
+   "placebo_max_neto": 0,
+   "dias_neto_pos": 0
+  },
+  "VEREDICTO_L2Q": {
+   "estado": "REFUTA",
+   "criterios": {
+    "dTP_ge5": false,
+    "dFP_le_tercio": true,
+    "neto_pos": true,
+    "plac_tp": false,
+    "plac_neto": true,
+    "dt0": false,
+    "dias": false,
+    "lodo": false
+   },
+   "placebo_max_dTP": 2,
+   "placebo_max_neto": -5,
+   "dias_neto_pos": 1
+  }
+ }
+}

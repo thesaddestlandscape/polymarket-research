@@ -1,0 +1,148 @@
+{
+ "1_propio_solo": {
+  "n": 98,
+  "dec_ok": 98,
+  "tipos": {
+   "compra_comp": 90,
+   "vende_propio": 8
+  },
+  "estructura": {
+   "SOLO": 72,
+   "SOLO_ARRIBA": 24,
+   "DEBAJO": 2
+  },
+  "mas_alla": 49,
+  "en_L": 49,
+  "rem_gt1pct": 60,
+  "sz_igual": 18,
+  "n_mk_otros_gt0": 26,
+  "dts_own_p10_50_90": [
+   -214224.7,
+   -1010.0,
+   2558.5999999999995
+  ],
+  "dts_fill_p10_50_90": [
+   -216558.6,
+   -2143.5,
+   -174.7
+  ],
+  "pnl": -17.523686810000004,
+  "coste": 99.46656181000002
+ },
+ "4_relleno_real_tras_cancel_sim": {
+  "n": 8,
+  "dec_ok": 8,
+  "tipos": {
+   "compra_comp": 7,
+   "vende_propio": 1
+  },
+  "estructura": {
+   "DEBAJO": 4,
+   "MISMO_NIVEL": 3,
+   "SOLO": 1
+  },
+  "mas_alla": 6,
+  "en_L": 2,
+  "rem_gt1pct": 0,
+  "sz_igual": 3,
+  "n_mk_otros_gt0": 7,
+  "dts_own_p10_50_90": [
+   -121029.0,
+   -4007.0,
+   1477.099999999999
+  ],
+  "dts_fill_p10_50_90": [
+   -123379.0,
+   -5041.0,
+   -893.7
+  ],
+  "pnl": 2.8599999999999985,
+  "coste": 9.14
+ },
+ "6_sin_prints_en_ventana": {
+  "n": 1,
+  "dec_ok": 1,
+  "tipos": {
+   "vende_propio": 1
+  },
+  "estructura": {
+   "DEBAJO": 1
+  },
+  "mas_alla": 1,
+  "en_L": 0,
+  "rem_gt1pct": 0,
+  "sz_igual": 0,
+  "n_mk_otros_gt0": 1,
+  "dts_own_p10_50_90": [
+   122.0,
+   122.0,
+   122.0
+  ],
+  "dts_fill_p10_50_90": [
+   -168.0,
+   -168.0,
+   -168.0
+  ],
+  "pnl": -1.19835792,
+  "coste": 1.19835792
+ },
+ "8_cola_no_agotada": {
+  "n": 11,
+  "dec_ok": 11,
+  "tipos": {
+   "compra_comp": 10,
+   "vende_propio": 1
+  },
+  "estructura": {
+   "MISMO_NIVEL": 11
+  },
+  "mas_alla": 6,
+  "en_L": 5,
+  "rem_gt1pct": 0,
+  "sz_igual": 1,
+  "n_mk_otros_gt0": 11,
+  "dts_own_p10_50_90": [
+   -39214.0,
+   182.0,
+   1794.0
+  ],
+  "dts_fill_p10_50_90": [
+   -40375.0,
+   -1974.0,
+   -181.0
+  ],
+  "pnl": 10.91864318,
+  "coste": 11.42135682
+ },
+ "TP": {
+  "n": 84,
+  "dec_ok": 84,
+  "tipos": {
+   "compra_comp": 82,
+   "vende_propio": 2
+  },
+  "estructura": {
+   "SOLO": 41,
+   "DEBAJO": 30,
+   "MISMO_NIVEL": 9,
+   "SOLO_ARRIBA": 4
+  },
+  "mas_alla": 50,
+  "en_L": 34,
+  "rem_gt1pct": 51,
+  "sz_igual": 11,
+  "n_mk_otros_gt0": 43,
+  "dts_own_p10_50_90": [
+   -159841.9,
+   103.5,
+   5273.3
+  ],
+  "dts_fill_p10_50_90": [
+   -160021.4,
+   -610.5,
+   -170.3
+  ],
+  "pnl": -11.079528700000006,
+  "coste": 100.07452870000002
+ }
+}

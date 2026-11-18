@@ -1,0 +1,132 @@
+{
+ "n": 202,
+ "unidos": 202,
+ "clase1": {
+  "n": 98,
+  "cola_gt0": 73,
+  "lo": {
+   "frac_canc_gt0": 1.0,
+   "frac_canc_ge50": 1.0,
+   "mediana_frac": 1.0,
+   "mediana_cola": 51.0,
+   "mediana_prev": 0.0
+  },
+  "hi": {
+   "frac_canc_gt0": 1.0,
+   "frac_canc_ge50": 1.0,
+   "mediana_frac": 1.0,
+   "mediana_cola": 51.0,
+   "mediana_prev": 0.0
+  }
+ },
+ "resto": {
+  "n": 104,
+  "cola_gt0": 92,
+  "lo": {
+   "frac_canc_gt0": 0.967,
+   "frac_canc_ge50": 0.946,
+   "mediana_frac": 1.0,
+   "mediana_cola": 41.0,
+   "mediana_prev": 0.0
+  },
+  "hi": {
+   "frac_canc_gt0": 0.978,
+   "frac_canc_ge50": 0.978,
+   "mediana_frac": 1.0,
+   "mediana_cola": 41.0,
+   "mediana_prev": 0.0
+  }
+ },
+ "n_mk1": {
+  "n": 114,
+  "cola_gt0": 89,
+  "lo": {
+   "frac_canc_gt0": 1.0,
+   "frac_canc_ge50": 1.0,
+   "mediana_frac": 1.0,
+   "mediana_cola": 54.0,
+   "mediana_prev": 0.0
+  },
+  "hi": {
+   "frac_canc_gt0": 1.0,
+   "frac_canc_ge50": 1.0,
+   "mediana_frac": 1.0,
+   "mediana_cola": 54.0,
+   "mediana_prev": 0.0
+  }
+ },
+ "n_mk2+": {
+  "n": 88,
+  "cola_gt0": 76,
+  "lo": {
+   "frac_canc_gt0": 0.961,
+   "frac_canc_ge50": 0.934,
+   "mediana_frac": 1.0,
+   "mediana_cola": 40.0,
+   "mediana_prev": 0.0
+  },
+  "hi": {
+   "frac_canc_gt0": 0.974,
+   "frac_canc_ge50": 0.974,
+   "mediana_frac": 1.0,
+   "mediana_cola": 40.0,
+   "mediana_prev": 0.0
+  }
+ },
+ "proxyM3_lo": {
+  "n_marcados": 160,
+  "pnl_marcados": -14.91,
+  "coste_marcados": 178.59,
+  "ev_eur_marcados": -0.083,
+  "n_resto": 5,
+  "ev_eur_resto": -0.162,
+  "buenos_perdidos_eur": 132.14,
+  "malos_evitados_eur": 147.05,
+  "por_dia": {
+   "2026-10-20": [
+    32,
+    4.11
+   ],
+   "2026-10-21": [
+    57,
+    14.69
+   ],
+   "2026-10-22": [
+    59,
+    -26.72
+   ],
+   "2026-10-23": [
+    12,
+    -6.99
+   ]
+  }
+ },
+ "proxyM3_hi": {
+  "n_marcados": 163,
+  "pnl_marcados": -18.56,
+  "coste_marcados": 182.24,
+  "ev_eur_marcados": -0.102,
+  "n_resto": 2,
+  "ev_eur_resto": 1.155,
+  "buenos_perdidos_eur": 132.14,
+  "malos_evitados_eur": 150.7,
+  "por_dia": {
+   "2026-10-20": [
+    33,
+    2.86
+   ],
+   "2026-10-21": [
+    58,
+    13.59
+   ],
+   "2026-10-22": [
+    60,
+    -28.02
+   ],
+   "2026-10-23": [
+    12,
+    -6.99
+   ]
+  }
+ }
+}
