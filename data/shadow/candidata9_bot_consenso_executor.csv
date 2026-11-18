@@ -92614,3 +92614,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-11-18T00:16:24+00:00,0xff5404b4225e583e63ad74e3b1429b581a7dbe2217479c3b03145e8231e91023,btc-updown-15m-1794960900,BTC,15min,Down,2,0.3,146.1,0.31,116.6,0.31,0.0,1,0,0,0,fuera_de_zona_confirmada
 2026-11-18T00:20:00+00:00,0x1befb82aa40b735c73b85d09eb17ec362e07ac7cc7912aa535c8ab255b4396c0,btc-updown-5m-1794961200,BTC,5min,Up,2,0.51,0.0,0.57,0.0,0.57,0.0,0,0,0,0,fuera_de_zona_confirmada
 2026-11-18T00:22:30+00:00,0x85d2805435ebd0ccb6d08f69b48b5fd94a65677ac8f1ef6bce84be30ef2ece6d,eth-updown-5m-1794961200,ETH,5min,Up,2,0.23,3.4,0.24,97.0,0.15,-37.5,1,0,0,0,fuera_de_zona_confirmada
+2026-11-18T00:28:42+00:00,0x1da18ab19de361104fbc7622dff6ab11c96f4d707941ef914e260769ee2ca1bb,xrp-updown-15m-1794960900,XRP,15min,Up,2,0.64,0.0,,0.0,,,0,0,0,0,fuera_de_zona_confirmada
+2026-11-18T00:29:11+00:00,0x052f7fe743144e4b73ed962662c821286c0c3c91776af0232ca8c3fdbeba4071,eth-updown-5m-1794961500,ETH,5min,Up,2,0.39,248.0,0.01,316.8,0.01,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-18T00:29:24+00:00,0x063224338d2fececcdddd9168dac1ec3bf003baacc315b2f69e9d1ffc802795b,xrp-updown-5m-1794961500,XRP,5min,Up,2,0.6,0.0,0.99,0.0,0.99,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-11-18T00:30:33+00:00,0x2bf937f517483f1ab9439e1062c7b2a7e66b04c110c6b62138e903a4d64adc8b,btc-updown-15m-1794961800,BTC,15min,Up,2,0.55,0.0,0.8,0.0,0.8,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-11-18T00:30:41+00:00,0x6cc35d80cd8e997d9a1ff52d1c9a76ae20772ca529d2cc06f4a9ed82a3554474,btc-updown-5m-1794961800,BTC,5min,Down,2,0.47,3612.0,0.09,3643.4,0.09,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-11-18T00:33:16+00:00,0x4335db0a82a566c6bbf62b2ca1568eaf4244400cdac7cb895a4a14cb2d9ba2ac,eth-updown-5m-1794961800,ETH,5min,Down,4,0.09,21.6,0.081,24.0,0.076,-6.17,1,0,0,0,fuera_de_zona_confirmada
+2026-11-18T00:35:26+00:00,0xad5f698a2945f5c4e3ae0cb90c5f90a18177356927bb3ce8e9150ef5d88ce464,btc-updown-5m-1794962100,BTC,5min,Up,5,0.5,0.0,0.61,0.0,0.72,18.03,0,0,0,0,fuera_de_zona_confirmada
