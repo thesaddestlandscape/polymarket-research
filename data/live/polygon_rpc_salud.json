@@ -47,10 +47,10 @@
    "ultimo_aviso": 1795015390.7606223
   },
   "archivo": {
-   "ok": false,
-   "detalle": "ReadTimeout: HTTPSConnectionPool(host='1rpc.io', port=443): Read timed out. (read timeout=30)",
-   "desde": 1795051445.495766,
-   "ultimo_aviso": 1795051445.495766
+   "ok": true,
+   "detalle": "",
+   "desde": 1795054983.270901,
+   "ultimo_aviso": 1795054983.270901
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-19T01:24:05+00:00"
+ "_actualizado_utc": "2026-11-19T02:23:03+00:00"
 }
