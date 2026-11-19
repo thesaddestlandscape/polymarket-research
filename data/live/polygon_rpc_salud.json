@@ -53,10 +53,10 @@
    "ultimo_aviso": 1795069384.2470078
   },
   "latest": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1795098185.010345,
-   "ultimo_aviso": 1795098185.010345
+   "ok": false,
+   "detalle": "HTTPError: 410 Client Error: Gone for url: https://1rpc.io/matic",
+   "desde": 1795101791.0947394,
+   "ultimo_aviso": 1795101791.0947394
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-19T14:23:05+00:00"
+ "_actualizado_utc": "2026-11-19T15:23:11+00:00"
 }
