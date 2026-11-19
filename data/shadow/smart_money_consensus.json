@@ -1,45 +1,45 @@
 {
-  "BTC": {
-    "smart_money_consensus": 0.0194,
-    "n_trades_smart": 412,
-    "n_wallets_smart": 6,
-    "smart_money_consensus_ponderado": 0.0977,
-    "n_wallets_smart_ponderado": 6
-  },
   "ETH": {
-    "smart_money_consensus": 0.375,
-    "n_trades_smart": 48,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": -0.0827,
-    "n_wallets_smart_ponderado": 4
+    "smart_money_consensus": 0.3164,
+    "n_trades_smart": 354,
+    "n_wallets_smart": 5,
+    "smart_money_consensus_ponderado": 0.2106,
+    "n_wallets_smart_ponderado": 5
+  },
+  "BTC": {
+    "smart_money_consensus": 0.0976,
+    "n_trades_smart": 461,
+    "n_wallets_smart": 9,
+    "smart_money_consensus_ponderado": -0.0825,
+    "n_wallets_smart_ponderado": 9
   },
   "BNB": {
-    "smart_money_consensus": 0.8,
-    "n_trades_smart": 10,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.9883,
-    "n_wallets_smart_ponderado": 1
-  },
-  "SOL": {
-    "smart_money_consensus": 0.25,
-    "n_trades_smart": 16,
+    "smart_money_consensus": 0.0588,
+    "n_trades_smart": 17,
     "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.5008,
+    "smart_money_consensus_ponderado": 0.2277,
     "n_wallets_smart_ponderado": 2
   },
+  "SOL": {
+    "smart_money_consensus": 0.4783,
+    "n_trades_smart": 23,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.4659,
+    "n_wallets_smart_ponderado": 3
+  },
   "XRP": {
-    "smart_money_consensus": 0.0,
-    "n_trades_smart": 10,
+    "smart_money_consensus": 0.1667,
+    "n_trades_smart": 12,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.0938,
+    "smart_money_consensus_ponderado": 0.4931,
     "n_wallets_smart_ponderado": 1
   },
   "DOGE": {
-    "smart_money_consensus": 1.0,
-    "n_trades_smart": 2,
+    "smart_money_consensus": -0.5,
+    "n_trades_smart": 12,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 1.0,
+    "smart_money_consensus_ponderado": -0.6745,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-11-19T16:48:17+00:00"
+  "_actualizado": "2026-11-19T17:11:39+00:00"
 }
