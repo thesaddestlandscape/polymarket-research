@@ -1658,5 +1658,9 @@
   "BALLENAS_CONFIRMADAS_15M_BUYNO_DEPTH_FASE0#SOL#15min": {
     "n": 200,
     "confirmado": false
+  },
+  "PRICE_TARGET_GBM#SOL#atexpiry": {
+    "n": 200,
+    "confirmado": false
   }
 }
