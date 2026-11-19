@@ -53,10 +53,10 @@
    "ultimo_aviso": 1795069384.2470078
   },
   "latest": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1794943384.4602838,
-   "ultimo_aviso": 1794943384.4602838
+   "ok": false,
+   "detalle": "HTTPError: 502 Server Error: Bad Gateway for url: https://1rpc.io/matic",
+   "desde": 1795094610.3590188,
+   "ultimo_aviso": 1795094610.3590188
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-19T12:23:03+00:00"
+ "_actualizado_utc": "2026-11-19T13:23:30+00:00"
 }
