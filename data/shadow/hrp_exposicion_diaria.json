@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-11-20T04:10:20+00:00",
+  "timestamp_utc": "2026-11-20T06:10:16+00:00",
   "tuplas_maduras": [],
   "tuplas_inmaduras": [
     {
@@ -10,7 +10,7 @@
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#5min#BUY_NO",
       "dias_historial": 57,
-      "n": 5
+      "n": 6
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#ETH#5min#BUY_YES",
@@ -30,7 +30,7 @@
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#5min#BUY_NO",
       "dias_historial": 57,
-      "n": 5
+      "n": 6
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#XRP#5min#BUY_YES",
