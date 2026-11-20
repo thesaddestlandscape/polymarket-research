@@ -1,0 +1,2 @@
+timestamp_utc,slug,market_id,condition_id,activo,ventana_min,end_date,restante_s,strike,strike_src,spot,spot_src,dist_pct,lado_rezagado,best_ask,ask_usd_le2c,ask_usd_le3c,ask_usd_le5c,best_bid,py_yes_evento,outcome_real,rezagado_gano
+2026-11-20T00:04:48+00:00,doge-updown-5m-1795132800,7161501,0x34efab16b79b0623314d9d3fdcdf8852ffd2c3abe7d29372b2ff696bef547eea,DOGE,5,2026-11-20T00:05:00+00:00,11.6,0.05822,kline_open,0.05828,binance_ticker,0.10306,Down,0.001,44.19,44.63,51.9,,0.98,,
