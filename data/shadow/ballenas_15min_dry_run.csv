@@ -20542,3 +20542,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-11-20T22:50:10+00:00,XRP,7182890,0xfe56225bcc4bd5eb72aa14f0f90cfbe5cf8a4f7e3b6d8d5be7e9aca1f46f3a87,2026-11-20T23:00:00Z,0.05,0.1709,1.0,3,590.1,,,,9,True,banda_prematura py=0.050 restante=9.84>7.48
 2026-11-20T22:50:14+00:00,ETH,7182886,0xff797cd10bda4814a9ad1dda3b302dec82dc064bfcd22890f1a981da8343981d,2026-11-20T23:00:00Z,0.05,0.024,1.0,6,585.3,,,,37,False,banda_ok py=0.050 rest_lo=2.03 rest_hi=10.07
 2026-11-20T23:00:06+00:00,ETH,7183357,0x14c63e8cdd5a6feaf347ddfc3447383a249fd8ac5826efcaf0aca2001c0b0f98,2026-11-20T23:15:00Z,0.45,0.0318,1.0,3,893.2,,,,4,True,banda_prematura py=0.450 restante=14.89>14.87
+2026-11-20T23:03:53+00:00,BNB,7183358,0x35de8293c5d3176d54aad1fb0f4664af7acb95ea9272e75f90ced29c8b725f5e,2026-11-20T23:15:00Z,0.76,0.0488,1.0,3,667.0,,,,4,False,banda_ok py=0.760 rest_lo=3.42 rest_hi=11.77
