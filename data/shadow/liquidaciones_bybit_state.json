@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-20T21:19:29+00:00",
+ "generado_utc": "2026-11-20T21:25:20+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -35,22 +35,22 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
-   "usd_short": 57.99,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_long": 33325.59,
+   "usd_short": 0.0,
+   "n": 14,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
-   "usd_short": 522.87,
-   "n": 2,
-   "imbalance": 1.0
+   "usd_long": 33325.59,
+   "usd_short": 57.99,
+   "n": 15,
+   "imbalance": -0.9965
   },
   "60min": {
-   "usd_long": 183634.03,
+   "usd_long": 216548.12,
    "usd_short": 357305.35,
-   "n": 105,
-   "imbalance": 0.3211
+   "n": 118,
+   "imbalance": 0.2453
   }
  },
  "DOGE": {
@@ -68,9 +68,9 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 1600.82,
-   "n": 6,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 49.78,
@@ -87,22 +87,22 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
-   "usd_short": 238.46,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_long": 71563.89,
+   "usd_short": 0.0,
+   "n": 11,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
-   "usd_short": 8548.18,
-   "n": 6,
-   "imbalance": 1.0
+   "usd_long": 71563.89,
+   "usd_short": 2643.1,
+   "n": 15,
+   "imbalance": -0.9288
   },
   "60min": {
-   "usd_long": 200321.77,
+   "usd_long": 271739.79,
    "usd_short": 275050.03,
-   "n": 94,
-   "imbalance": 0.1572
+   "n": 104,
+   "imbalance": 0.0061
   }
  },
  "SOL": {
@@ -113,22 +113,22 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
+   "usd_long": 2214.15,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 2,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
-   "usd_short": 16673.81,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_long": 2214.15,
+   "usd_short": 0.0,
+   "n": 2,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 11064.59,
+   "usd_long": 12300.65,
    "usd_short": 392983.66,
-   "n": 133,
-   "imbalance": 0.9452
+   "n": 134,
+   "imbalance": 0.9393
   }
  },
  "XRP": {
@@ -139,30 +139,30 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 5.37,
+   "usd_long": 424.09,
    "usd_short": 0.0,
-   "n": 1,
+   "n": 2,
    "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 5.37,
-   "usd_short": 113.26,
-   "n": 4,
-   "imbalance": 0.9095
+   "usd_long": 429.46,
+   "usd_short": 0.0,
+   "n": 3,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 4926.9,
+   "usd_long": 5350.99,
    "usd_short": 418562.89,
-   "n": 160,
-   "imbalance": 0.9767
+   "n": 162,
+   "imbalance": 0.9748
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 3,
-  "ultimo_lag_s": 0.35,
-  "max_lag_s": 0.39,
-  "media_lag_s": 0.36,
+  "n_muestras": 29,
+  "ultimo_lag_s": 0.53,
+  "max_lag_s": 0.63,
+  "media_lag_s": 0.4,
   "umbral_alerta_s": 5.0
  }
 }
