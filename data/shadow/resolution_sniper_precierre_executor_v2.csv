@@ -223366,3 +223366,15 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-11-20T13:05:00.085+00:00,1795179900,5min,False,ETH,Down,,0,,,,,7172410,False,no_fillable_ask=None_ratio=0.0,0.0,,,62.5,,,,,,,,RESOLUTION_SNIPER_NAIVE,,0.5871167393537742
 2026-11-20T13:05:00.085+00:00,1795179900,5min,False,DOGE,Down,,0,,,,,7172407,False,no_fillable_ask=None_ratio=0.0,0.0,,,60.3,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.5372642831227623
 2026-11-20T13:05:00.085+00:00,1795179900,5min,False,SOL,Down,,0,,,,,7172435,False,no_fillable_ask=None_ratio=0.0,0.0,,,58.3,,,,,,,,RESOLUTION_SNIPER_NAIVE,,4.04648755828306
+2026-11-20T13:09:17.495+00:00,1795180200,5min,False,BNB,Up,0.99,0,True,False,False,sin_datos_para_offset_-45s,7172883,False,fuera_banda_ask=0.99,0.0,0.99,,2477.2,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,1.87777778453557
+2026-11-20T13:09:17.496+00:00,1795180200,5min,False,DOGE,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-20T13:09:17.497+00:00,1795180200,5min,False,BTC,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-20T13:09:17.497+00:00,1795180200,5min,False,ETH,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-20T13:09:17.499+00:00,1795180200,5min,False,XRP,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-20T13:09:17.499+00:00,1795180200,5min,False,SOL,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-11-20T13:10:00.095+00:00,1795180200,5min,False,BNB,Up,,0,,,,,7172883,False,no_fillable_ask=None_ratio=0.0,0.0,,,60.5,,,,,,,,RESOLUTION_SNIPER_NAIVE,,0.538280579332463
+2026-11-20T13:10:00.095+00:00,1795180200,5min,False,DOGE,Down,,0,,,,,7172888,False,no_fillable_ask=None_ratio=0.0,0.0,,,50.8,,,,,,,,RESOLUTION_SNIPER_NAIVE,,2.3397120378914824
+2026-11-20T13:10:00.095+00:00,1795180200,5min,False,ETH,Down,,0,,,,,7172885,False,no_fillable_ask=None_ratio=0.0,0.0,,,48.1,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.7199254056174402
+2026-11-20T13:10:00.095+00:00,1795180200,5min,False,SOL,Down,,0,,,,,7172886,False,no_fillable_ask=None_ratio=0.0,0.0,,,76.4,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.2674070677684535
+2026-11-20T13:10:00.095+00:00,1795180200,5min,False,BTC,Up,,0,,,,,7172887,False,no_fillable_ask=None_ratio=0.0,0.0,,,43.6,,,,,,,,RESOLUTION_SNIPER_NAIVE,,0.28924488335626364
+2026-11-20T13:10:00.095+00:00,1795180200,5min,False,XRP,Down,,0,,,,,7172881,False,no_fillable_ask=None_ratio=0.0,0.0,,,60.5,,,,,,,,RESOLUTION_SNIPER_NAIVE,,0.14887783795282955

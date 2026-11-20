@@ -34,13 +34,13 @@
   ]
  },
  "MOMENTUM_IBS_15M_FADE": {
-  "ic_bayes_familia": -0.0529,
+  "ic_bayes_familia": -0.0531,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 31.77,
+  "pnl_fiel_combinado_eur": 30.73,
   "tuplas": [
    {
     "k": "MOMENTUM_IBS_15M_FADE#SOL#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 31.7685,
+    "pnl_fiel_eur_sin_suelo": 30.7315,
     "n_ejecutado": 321
    }
   ]
