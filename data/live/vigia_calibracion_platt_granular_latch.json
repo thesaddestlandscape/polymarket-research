@@ -1662,5 +1662,13 @@
   "PRICE_TARGET_GBM#SOL#atexpiry": {
     "n": 200,
     "confirmado": false
+  },
+  "LIQUIDACIONES_15M#BNB": {
+    "n": 207,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_15M#BNB#15min": {
+    "n": 207,
+    "confirmado": true
   }
 }
