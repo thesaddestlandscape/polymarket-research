@@ -1,56 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-08-31T07:08:02+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 352,
-      "resolve_postmortem_p50_s": 19.0,
-      "resolve_postmortem_p95_s": 23.0,
-      "resolve_postmortem_max_s": 39.0,
-      "n_ciclos_live_trade": 5100,
-      "hueco_live_trade_max_s": 32.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 13,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 89.0,
-      "gb_libres": 8.45,
-      "git_gb": 0.0,
-      "data_gb": 33.85,
-      "datalogs_gb": 8.21
-    },
-    "ram": {
-      "ram_total_gb": 7.56,
-      "ram_disponible_gb": 5.4,
-      "ram_pct_libre": 71.4
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 460,
-      "n_results_total": 332031
-    },
-    "integridad_datos_sports": {
-      "trades_csv_error": "no existe (sin trades reales todavía)",
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 0
-    },
-    "carga_sistema": {
-      "load1": 4.75,
-      "load5": 6.73,
-      "load15": 7.28,
-      "nproc": 4,
-      "ratio5": 1.68,
-      "n_procesos_total": 211
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [],
-    "estado": "OK"
-  },
-  {
     "timestamp_utc": "2026-09-01T07:08:02+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 288,
@@ -17858,6 +17807,222 @@
       "💀 1 OOM-kill(s) del kernel en 24h: python3(pid 2771401, 1467.7MB)",
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket.json 65.5h (máx 2.25h)",
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket_fino.json 65.3h (máx 2.25h)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-21T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 132,
+      "resolve_postmortem_p50_s": 148.8,
+      "resolve_postmortem_p95_s": 253.3,
+      "resolve_postmortem_max_s": 334.9,
+      "resolve_postmortem_duraciones_s": [
+        128.9,
+        118.2,
+        127.3,
+        205.6,
+        162.6,
+        124.6,
+        133.0,
+        121.1,
+        150.0,
+        236.6,
+        182.6,
+        137.6,
+        139.9,
+        119.4,
+        103.0,
+        215.0,
+        162.3,
+        140.5,
+        110.7,
+        120.7,
+        132.8,
+        282.5,
+        290.1,
+        127.9,
+        146.2,
+        148.9,
+        152.7,
+        233.7,
+        183.7,
+        131.5,
+        143.9,
+        126.3,
+        122.6,
+        249.7,
+        229.4,
+        141.6,
+        168.3,
+        164.1,
+        165.0,
+        224.8,
+        193.3,
+        137.7,
+        131.3,
+        148.8,
+        334.9,
+        249.4,
+        191.9,
+        137.4,
+        141.7,
+        145.6,
+        138.5,
+        260.6,
+        202.0,
+        133.9,
+        213.6,
+        129.6,
+        133.5,
+        241.4,
+        195.4,
+        144.5,
+        145.6,
+        156.1,
+        186.0,
+        256.8,
+        200.5,
+        249.8,
+        241.8,
+        152.8,
+        147.6,
+        245.5,
+        214.7,
+        170.5,
+        162.7,
+        161.0,
+        157.4,
+        253.3,
+        210.3,
+        176.1,
+        169.2,
+        127.2,
+        128.2,
+        224.7,
+        181.8,
+        131.0,
+        136.9,
+        150.0,
+        137.3,
+        324.7,
+        230.1,
+        149.7,
+        132.1,
+        117.0,
+        125.1,
+        223.8,
+        182.9,
+        118.9,
+        113.1,
+        119.2,
+        128.7,
+        206.4,
+        179.6,
+        132.9,
+        134.2,
+        125.8,
+        131.3,
+        228.9,
+        233.5,
+        110.6,
+        138.0,
+        115.1,
+        138.9,
+        230.9,
+        165.4,
+        128.4,
+        138.3,
+        138.8,
+        126.5,
+        215.2,
+        190.7,
+        130.0,
+        114.0,
+        118.3,
+        121.6,
+        188.3,
+        178.4,
+        142.2,
+        120.0,
+        125.3,
+        147.2,
+        208.5,
+        182.4,
+        126.4
+      ],
+      "n_ciclos_live_trade": 4198,
+      "hueco_live_trade_max_s": 72.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 25,
+      "stale": [
+        "ejeclive",
+        "walletmirror",
+        "sportsfase0"
+      ]
+    },
+    "disco": {
+      "pct_usado": 92.0,
+      "gb_libres": 5.99,
+      "git_gb": 0.0,
+      "data_gb": 17.83,
+      "datalogs_gb": 9.1
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 6.2,
+      "ram_pct_libre": 40.7
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 788,
+      "n_results_total": 1541805
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 4.16,
+      "load5": 4.91,
+      "load15": 6.16,
+      "nproc": 8,
+      "ratio5": 0.61,
+      "n_procesos_total": 332
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 0,
+      "eventos": []
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 2,
+      "gates": [
+        {
+          "gate": "wallet_mirror_gate_bucket.json",
+          "antiguedad_h": 89.5,
+          "maximo_h": 2.25
+        },
+        {
+          "gate": "wallet_mirror_gate_bucket_fino.json",
+          "antiguedad_h": 89.3,
+          "maximo_h": 2.25
+        }
+      ]
+    },
+    "anomalias": [
+      "⚠️ screens STALE (código en disco != código cargado): ejeclive, walletmirror, sportsfase0",
+      "💾 disco al 92% (5.99GB libres)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket.json 89.5h (máx 2.25h)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket_fino.json 89.3h (máx 2.25h)"
     ],
     "estado": "ANOMALIA"
   }
