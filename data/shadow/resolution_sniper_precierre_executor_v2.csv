@@ -230257,3 +230257,5 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-11-22T07:45:00.118+00:00,1795333500,5min,False,BNB,Up,,0,,,,,7220275,False,no_fillable_ask=None_ratio=0.0,0.0,,,46.7,,,,,,,,RESOLUTION_SNIPER_NAIVE,,4.2897298679745735
 2026-11-22T07:45:00.118+00:00,1795333500,5min,False,DOGE,Up,,0,,,,,7220272,False,no_fillable_ask=None_ratio=0.0,0.0,,,60.2,,,,,,,,RESOLUTION_SNIPER_NAIVE,,7.551565713036731
 2026-11-22T07:45:00.118+00:00,1795333500,5min,False,SOL,Up,,0,,,,,7220271,False,no_fillable_ask=None_ratio=0.0,0.0,,,72.3,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.3811835382110387
+2026-11-22T07:59:48.138+00:00,1795334400,60min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
+2026-11-22T07:59:48.388+00:00,1795334400,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
