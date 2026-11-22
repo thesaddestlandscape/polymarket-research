@@ -1,7 +1,7 @@
 {
-  "generado_utc": "2026-11-21T23:43:00+00:00",
+  "generado_utc": "2026-11-22T00:14:29+00:00",
   "bankroll_inicial_por_tupla": 25.44,
-  "n_snapshots_libro_indexados": 1283705,
+  "n_snapshots_libro_indexados": 1283875,
   "limitaciones": [
     "IC usado para Kelly es el ACTUAL de strategy_params.json, no histórico punto-en-el-tiempo",
     "Overrides puntuales con fecha de circuit_breaker se ignoran (se usa siempre el valor base)",
@@ -1026,7 +1026,7 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1261,
-      "n_total": 1427,
+      "n_total": 1428,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 61,
@@ -1037,14 +1037,14 @@
       "n_precio_invalido": 2,
       "n_precio_sospechoso": 209,
       "n_ejecutado": 85,
-      "n_ejecutado_post_quiebra": 536,
-      "pnl_post_quiebra_eur": -22.1543,
+      "n_ejecutado_post_quiebra": 537,
+      "pnl_post_quiebra_eur": -21.2137,
       "fill_rate": 0.1118,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.5337,
       "pnl_fiel_eur": -24.9063,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -47.0606,
+      "pnl_fiel_eur_sin_suelo": -46.12,
       "equity_curve": [
         {
           "ts": "2026-07-20T13:32:00+00:00",
@@ -3652,11 +3652,11 @@
       "subtype": "ETH#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0412,
-      "n_total": 1077,
+      "n_total": 1078,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 1077,
+      "n_sin_dato_libro": 1078,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -6037,25 +6037,25 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.0922,
-      "n_total": 3655,
+      "n_total": 3657,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 3,
       "n_bloqueado_freno": 625,
-      "n_sin_dato_libro": 98,
+      "n_sin_dato_libro": 99,
       "n_vetado_profundidad": 798,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 23,
       "n_precio_sospechoso": 119,
       "n_ejecutado": 788,
-      "n_ejecutado_post_quiebra": 1320,
-      "pnl_post_quiebra_eur": -75.6298,
+      "n_ejecutado_post_quiebra": 1321,
+      "pnl_post_quiebra_eur": -76.6798,
       "fill_rate": 0.4968,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.0455,
       "pnl_fiel_eur": -25.3945,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -101.0243,
+      "pnl_fiel_eur_sin_suelo": -102.0743,
       "equity_curve": [
         {
           "ts": "2026-08-12T01:01:38+00:00",
@@ -9591,11 +9591,11 @@
       "subtype": "ETH#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.0459,
-      "n_total": 15198,
+      "n_total": 15199,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 3,
       "n_bloqueado_freno": 977,
-      "n_sin_dato_libro": 3647,
+      "n_sin_dato_libro": 3648,
       "n_vetado_profundidad": 4198,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -9923,7 +9923,7 @@
       "subtype": "SOL#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.1207,
-      "n_total": 15279,
+      "n_total": 15280,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 877,
@@ -9931,7 +9931,7 @@
       "n_vetado_profundidad": 4352,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
-      "n_precio_invalido": 698,
+      "n_precio_invalido": 699,
       "n_precio_sospechoso": 1005,
       "n_ejecutado": 47,
       "n_ejecutado_post_quiebra": 5659,
@@ -10185,7 +10185,7 @@
       "subtype": "XRP#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.1377,
-      "n_total": 10341,
+      "n_total": 10342,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 5,
       "n_bloqueado_freno": 1096,
@@ -10193,7 +10193,7 @@
       "n_vetado_profundidad": 2640,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
-      "n_precio_invalido": 378,
+      "n_precio_invalido": 379,
       "n_precio_sospechoso": 644,
       "n_ejecutado": 197,
       "n_ejecutado_post_quiebra": 3305,
@@ -11197,11 +11197,11 @@
       "subtype": "BTC#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.017,
-      "n_total": 6987,
+      "n_total": 6989,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 14,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 6973,
+      "n_sin_dato_libro": 6975,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -11223,11 +11223,11 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": -0.0096,
-      "n_total": 7325,
+      "n_total": 7326,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 7321,
+      "n_sin_dato_libro": 7322,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -11249,11 +11249,11 @@
       "subtype": "BTC#5min",
       "decision": "BUY_NO",
       "ic_usado": -0.0148,
-      "n_total": 20396,
+      "n_total": 20398,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 24,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 20372,
+      "n_sin_dato_libro": 20374,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -11275,11 +11275,11 @@
       "subtype": "BTC#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.0192,
-      "n_total": 20852,
+      "n_total": 20855,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 20,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 20832,
+      "n_sin_dato_libro": 20835,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -14398,11 +14398,11 @@
       "subtype": "BNB#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0812,
-      "n_total": 20428,
+      "n_total": 20432,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 20428,
+      "n_sin_dato_libro": 20432,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -15528,7 +15528,7 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1755,
-      "n_total": 3707,
+      "n_total": 3708,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 407,
@@ -15539,14 +15539,14 @@
       "n_precio_invalido": 5,
       "n_precio_sospechoso": 429,
       "n_ejecutado": 485,
-      "n_ejecutado_post_quiebra": 1219,
-      "pnl_post_quiebra_eur": -123.6461,
+      "n_ejecutado_post_quiebra": 1220,
+      "pnl_post_quiebra_eur": -124.6961,
       "fill_rate": 0.2543,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.0041,
       "pnl_fiel_eur": -25.4359,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -149.082,
+      "pnl_fiel_eur_sin_suelo": -150.132,
       "equity_curve": [
         {
           "ts": "2026-07-10T16:19:58+00:00",
@@ -19506,25 +19506,25 @@
       "subtype": "BTC#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.114,
-      "n_total": 16743,
+      "n_total": 16746,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 6689,
       "n_sin_dato_libro": 49,
-      "n_vetado_profundidad": 4038,
+      "n_vetado_profundidad": 4039,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 8,
       "n_precio_sospechoso": 1126,
       "n_ejecutado": 1770,
-      "n_ejecutado_post_quiebra": 4188,
-      "pnl_post_quiebra_eur": -222.7404,
-      "fill_rate": 0.3048,
+      "n_ejecutado_post_quiebra": 4190,
+      "pnl_post_quiebra_eur": -224.8404,
+      "fill_rate": 0.3047,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.3618,
       "pnl_fiel_eur": -25.0782,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -247.8185,
+      "pnl_fiel_eur_sin_suelo": -249.9185,
       "equity_curve": [
         {
           "ts": "2026-09-12T21:29:54+00:00",
@@ -22033,12 +22033,12 @@
       "subtype": "BTC#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.0886,
-      "n_total": 2300,
+      "n_total": 2301,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 87,
       "n_sin_dato_libro": 27,
-      "n_vetado_profundidad": 678,
+      "n_vetado_profundidad": 679,
       "n_sin_ic": 0,
       "n_no_viable_stake": 1017,
       "n_precio_invalido": 0,
@@ -22046,7 +22046,7 @@
       "n_ejecutado": 491,
       "n_ejecutado_post_quiebra": 0,
       "pnl_post_quiebra_eur": 0.0,
-      "fill_rate": 0.42,
+      "fill_rate": 0.4197,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 1.0273,
       "pnl_fiel_eur": -24.4127,
@@ -24515,12 +24515,12 @@
       "subtype": "BTC#60min",
       "decision": "BUY_YES",
       "ic_usado": 0.0751,
-      "n_total": 2488,
+      "n_total": 2489,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 186,
       "n_sin_dato_libro": 18,
-      "n_vetado_profundidad": 527,
+      "n_vetado_profundidad": 528,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
@@ -24528,7 +24528,7 @@
       "n_ejecutado": 774,
       "n_ejecutado_post_quiebra": 982,
       "pnl_post_quiebra_eur": -101.1556,
-      "fill_rate": 0.5949,
+      "fill_rate": 0.5945,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6635,
       "pnl_fiel_eur": -24.7765,
@@ -27388,7 +27388,7 @@
       "subtype": "DOGE#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.1306,
-      "n_total": 12614,
+      "n_total": 12615,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 1173,
@@ -27399,14 +27399,14 @@
       "n_precio_invalido": 8,
       "n_precio_sospechoso": 943,
       "n_ejecutado": 443,
-      "n_ejecutado_post_quiebra": 4510,
-      "pnl_post_quiebra_eur": -220.0637,
+      "n_ejecutado_post_quiebra": 4511,
+      "pnl_post_quiebra_eur": -219.6034,
       "fill_rate": 0.0648,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6935,
       "pnl_fiel_eur": -24.7465,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -244.8102,
+      "pnl_fiel_eur_sin_suelo": -244.3499,
       "equity_curve": [
         {
           "ts": "2026-07-30T14:20:49+00:00",
@@ -29630,25 +29630,25 @@
       "subtype": "DOGE#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0793,
-      "n_total": 20001,
+      "n_total": 20005,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 1997,
       "n_sin_dato_libro": 60,
-      "n_vetado_profundidad": 5676,
+      "n_vetado_profundidad": 5678,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 15,
       "n_precio_sospechoso": 3464,
       "n_ejecutado": 172,
-      "n_ejecutado_post_quiebra": 12081,
-      "pnl_post_quiebra_eur": -1067.5008,
+      "n_ejecutado_post_quiebra": 12083,
+      "pnl_post_quiebra_eur": -1066.0745,
       "fill_rate": 0.0294,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9643,
       "pnl_fiel_eur": -24.4757,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -1091.9765,
+      "pnl_fiel_eur_sin_suelo": -1090.5501,
       "equity_curve": [
         {
           "ts": "2026-07-25T00:11:19+00:00",
@@ -33070,25 +33070,25 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1684,
-      "n_total": 8305,
+      "n_total": 8307,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 287,
-      "n_sin_dato_libro": 184,
+      "n_sin_dato_libro": 185,
       "n_vetado_profundidad": 2287,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 112,
       "n_precio_sospechoso": 593,
       "n_ejecutado": 196,
-      "n_ejecutado_post_quiebra": 5238,
-      "pnl_post_quiebra_eur": -222.7841,
+      "n_ejecutado_post_quiebra": 5239,
+      "pnl_post_quiebra_eur": -221.8436,
       "fill_rate": 0.0789,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.3412,
       "pnl_fiel_eur": -25.0988,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -247.8829,
+      "pnl_fiel_eur_sin_suelo": -246.9424,
       "equity_curve": [
         {
           "ts": "2026-07-10T21:16:21+00:00",
@@ -37068,14 +37068,14 @@
       "subtype": "ETH#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0998,
-      "n_total": 17261,
+      "n_total": 17264,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 215,
       "n_sin_dato_libro": 218,
-      "n_vetado_profundidad": 6846,
+      "n_vetado_profundidad": 6847,
       "n_sin_ic": 0,
-      "n_no_viable_stake": 9911,
+      "n_no_viable_stake": 9913,
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 22,
       "n_ejecutado": 70,
@@ -37445,12 +37445,12 @@
       "subtype": "ETH#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.0765,
-      "n_total": 2539,
+      "n_total": 2540,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 128,
       "n_sin_dato_libro": 24,
-      "n_vetado_profundidad": 920,
+      "n_vetado_profundidad": 921,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -37458,7 +37458,7 @@
       "n_ejecutado": 308,
       "n_ejecutado_post_quiebra": 1159,
       "pnl_post_quiebra_eur": -42.3902,
-      "fill_rate": 0.2508,
+      "fill_rate": 0.2506,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7048,
       "pnl_fiel_eur": -24.7352,
@@ -39012,12 +39012,12 @@
       "subtype": "ETH#60min",
       "decision": "BUY_YES",
       "ic_usado": 0.1377,
-      "n_total": 1900,
+      "n_total": 1901,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 79,
       "n_sin_dato_libro": 11,
-      "n_vetado_profundidad": 758,
+      "n_vetado_profundidad": 759,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -39025,7 +39025,7 @@
       "n_ejecutado": 283,
       "n_ejecutado_post_quiebra": 769,
       "pnl_post_quiebra_eur": -33.2583,
-      "fill_rate": 0.2719,
+      "fill_rate": 0.2716,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9997,
       "pnl_fiel_eur": -24.4403,
@@ -46279,25 +46279,25 @@
       "subtype": "SOL#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0875,
-      "n_total": 17639,
+      "n_total": 17642,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 2450,
       "n_sin_dato_libro": 103,
-      "n_vetado_profundidad": 5742,
+      "n_vetado_profundidad": 5744,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 17,
-      "n_precio_sospechoso": 1791,
+      "n_precio_sospechoso": 1792,
       "n_ejecutado": 284,
-      "n_ejecutado_post_quiebra": 9043,
-      "pnl_post_quiebra_eur": -769.1342,
+      "n_ejecutado_post_quiebra": 9044,
+      "pnl_post_quiebra_eur": -770.1842,
       "fill_rate": 0.0471,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.837,
       "pnl_fiel_eur": -24.603,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -793.7373,
+      "pnl_fiel_eur_sin_suelo": -794.7873,
       "equity_curve": [
         {
           "ts": "2026-07-14T12:11:01+00:00",
@@ -47726,7 +47726,7 @@
       "subtype": "SOL#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.1259,
-      "n_total": 1909,
+      "n_total": 1910,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 50,
@@ -47737,14 +47737,14 @@
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 104,
       "n_ejecutado": 157,
-      "n_ejecutado_post_quiebra": 808,
-      "pnl_post_quiebra_eur": -60.9818,
+      "n_ejecutado_post_quiebra": 809,
+      "pnl_post_quiebra_eur": -62.0318,
       "fill_rate": 0.1514,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.4999,
       "pnl_fiel_eur": -24.9401,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -85.9219,
+      "pnl_fiel_eur_sin_suelo": -86.9719,
       "equity_curve": [
         {
           "ts": "2026-07-11T12:07:39+00:00",
@@ -51098,25 +51098,25 @@
       "subtype": "XRP#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0921,
-      "n_total": 17945,
+      "n_total": 17948,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 2661,
       "n_sin_dato_libro": 75,
-      "n_vetado_profundidad": 5379,
+      "n_vetado_profundidad": 5381,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 14,
       "n_precio_sospechoso": 2042,
       "n_ejecutado": 253,
-      "n_ejecutado_post_quiebra": 9563,
-      "pnl_post_quiebra_eur": -741.7114,
+      "n_ejecutado_post_quiebra": 9564,
+      "pnl_post_quiebra_eur": -742.7614,
       "fill_rate": 0.0449,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.1647,
       "pnl_fiel_eur": -25.2753,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -766.9868,
+      "pnl_fiel_eur_sin_suelo": -768.0368,
       "equity_curve": [
         {
           "ts": "2026-07-30T14:07:08+00:00",
@@ -52468,11 +52468,11 @@
       "subtype": "BNB#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1621,
-      "n_total": 7882,
+      "n_total": 7883,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 330,
-      "n_sin_dato_libro": 90,
+      "n_sin_dato_libro": 91,
       "n_vetado_profundidad": 1866,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -53056,25 +53056,25 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2046,
-      "n_total": 5384,
+      "n_total": 5386,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 497,
-      "n_sin_dato_libro": 94,
+      "n_sin_dato_libro": 95,
       "n_vetado_profundidad": 1482,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 3,
       "n_precio_sospechoso": 263,
       "n_ejecutado": 406,
-      "n_ejecutado_post_quiebra": 2902,
-      "pnl_post_quiebra_eur": -150.1949,
+      "n_ejecutado_post_quiebra": 2903,
+      "pnl_post_quiebra_eur": -151.2449,
       "fill_rate": 0.215,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9861,
       "pnl_fiel_eur": -24.4539,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -174.6488,
+      "pnl_fiel_eur_sin_suelo": -175.6988,
       "equity_curve": [
         {
           "ts": "2026-07-28T10:41:36+00:00",
@@ -55139,25 +55139,25 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1729,
-      "n_total": 7713,
+      "n_total": 7715,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 742,
-      "n_sin_dato_libro": 76,
+      "n_sin_dato_libro": 77,
       "n_vetado_profundidad": 1907,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 23,
-      "n_precio_sospechoso": 508,
+      "n_precio_sospechoso": 509,
       "n_ejecutado": 244,
-      "n_ejecutado_post_quiebra": 4719,
-      "pnl_post_quiebra_eur": -301.1079,
+      "n_ejecutado_post_quiebra": 4720,
+      "pnl_post_quiebra_eur": -300.2741,
       "fill_rate": 0.1134,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7381,
       "pnl_fiel_eur": -24.7019,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -325.8097,
+      "pnl_fiel_eur_sin_suelo": -324.9759,
       "equity_curve": [
         {
           "ts": "2026-07-29T00:21:07+00:00",
@@ -56412,25 +56412,25 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2515,
-      "n_total": 6693,
+      "n_total": 6695,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 398,
-      "n_sin_dato_libro": 104,
+      "n_sin_dato_libro": 105,
       "n_vetado_profundidad": 1687,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 9,
       "n_precio_sospechoso": 379,
       "n_ejecutado": 229,
-      "n_ejecutado_post_quiebra": 4265,
-      "pnl_post_quiebra_eur": -135.4987,
+      "n_ejecutado_post_quiebra": 4266,
+      "pnl_post_quiebra_eur": -134.9241,
       "fill_rate": 0.1195,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9314,
       "pnl_fiel_eur": -24.5086,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -160.0073,
+      "pnl_fiel_eur_sin_suelo": -159.4327,
       "equity_curve": [
         {
           "ts": "2026-07-28T10:37:48+00:00",
@@ -57908,25 +57908,25 @@
       "subtype": "XRP#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1852,
-      "n_total": 7552,
+      "n_total": 7554,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 712,
-      "n_sin_dato_libro": 88,
+      "n_sin_dato_libro": 89,
       "n_vetado_profundidad": 1904,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 6,
       "n_precio_sospechoso": 375,
       "n_ejecutado": 244,
-      "n_ejecutado_post_quiebra": 4597,
-      "pnl_post_quiebra_eur": -316.423,
+      "n_ejecutado_post_quiebra": 4598,
+      "pnl_post_quiebra_eur": -316.0613,
       "fill_rate": 0.1136,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7801,
       "pnl_fiel_eur": -24.6599,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -341.0829,
+      "pnl_fiel_eur_sin_suelo": -340.7212,
       "equity_curve": [
         {
           "ts": "2026-07-31T00:25:16+00:00",
@@ -64063,25 +64063,25 @@
       "subtype": "BNB#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.1758,
-      "n_total": 23922,
+      "n_total": 23924,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 8,
       "n_bloqueado_freno": 3278,
       "n_sin_dato_libro": 264,
-      "n_vetado_profundidad": 6766,
+      "n_vetado_profundidad": 6767,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 75,
-      "n_precio_sospechoso": 3539,
+      "n_precio_sospechoso": 3540,
       "n_ejecutado": 525,
-      "n_ejecutado_post_quiebra": 13006,
-      "pnl_post_quiebra_eur": -1099.8945,
+      "n_ejecutado_post_quiebra": 13007,
+      "pnl_post_quiebra_eur": -1099.2422,
       "fill_rate": 0.072,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.5338,
       "pnl_fiel_eur": -24.9062,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -1124.8007,
+      "pnl_fiel_eur_sin_suelo": -1124.1484,
       "equity_curve": [
         {
           "ts": "2026-07-31T04:04:53+00:00",
@@ -66589,26 +66589,26 @@
       "strategy": "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION",
       "subtype": "BTC#5min",
       "decision": "BUY_YES",
-      "ic_usado": 0.2234,
-      "n_total": 22067,
+      "ic_usado": 0.2233,
+      "n_total": 22069,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 3,
       "n_bloqueado_freno": 2243,
       "n_sin_dato_libro": 369,
-      "n_vetado_profundidad": 7793,
+      "n_vetado_profundidad": 7794,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 53,
       "n_precio_sospechoso": 2040,
       "n_ejecutado": 344,
-      "n_ejecutado_post_quiebra": 11262,
-      "pnl_post_quiebra_eur": -508.1407,
+      "n_ejecutado_post_quiebra": 11263,
+      "pnl_post_quiebra_eur": -509.1907,
       "fill_rate": 0.0423,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.5293,
       "pnl_fiel_eur": -24.9107,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -533.0514,
+      "pnl_fiel_eur_sin_suelo": -534.1014,
       "equity_curve": [
         {
           "ts": "2026-07-30T13:41:24+00:00",
@@ -68362,26 +68362,26 @@
       "strategy": "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION",
       "subtype": "DOGE#5min",
       "decision": "BUY_YES",
-      "ic_usado": 0.1812,
-      "n_total": 23534,
+      "ic_usado": 0.1813,
+      "n_total": 23538,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 1547,
       "n_sin_dato_libro": 312,
-      "n_vetado_profundidad": 7788,
+      "n_vetado_profundidad": 7789,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 76,
       "n_precio_sospechoso": 3496,
       "n_ejecutado": 150,
-      "n_ejecutado_post_quiebra": 13659,
-      "pnl_post_quiebra_eur": -1056.5486,
+      "n_ejecutado_post_quiebra": 13662,
+      "pnl_post_quiebra_eur": -1055.2507,
       "fill_rate": 0.0189,
       "bankroll_inicial": 25.44,
-      "bankroll_nocional_final": 0.432,
-      "pnl_fiel_eur": -25.008,
+      "bankroll_nocional_final": 0.4269,
+      "pnl_fiel_eur": -25.0131,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -1081.5567,
+      "pnl_fiel_eur_sin_suelo": -1080.2638,
       "equity_curve": [
         {
           "ts": "2026-07-30T13:51:12+00:00",
@@ -68470,667 +68470,667 @@
         },
         {
           "ts": "2026-07-30T23:29:49+00:00",
-          "bankroll": 22.8733,
-          "pnl": 1.0805
+          "bankroll": 22.8739,
+          "pnl": 1.0811
         },
         {
           "ts": "2026-07-30T23:39:30+00:00",
-          "bankroll": 20.8733,
+          "bankroll": 20.8739,
           "pnl": -2.0
         },
         {
           "ts": "2026-07-30T23:47:31+00:00",
-          "bankroll": 18.9822,
-          "pnl": -1.8911
+          "bankroll": 18.9817,
+          "pnl": -1.8922
         },
         {
           "ts": "2026-07-30T23:58:45+00:00",
-          "bankroll": 17.2624,
-          "pnl": -1.7198
+          "bankroll": 17.261,
+          "pnl": -1.7207
         },
         {
           "ts": "2026-07-31T00:31:15+00:00",
-          "bankroll": 18.1942,
-          "pnl": 0.9318
+          "bankroll": 18.1932,
+          "pnl": 0.9322
         },
         {
           "ts": "2026-07-31T00:49:13+00:00",
-          "bankroll": 18.8213,
-          "pnl": 0.6271
+          "bankroll": 18.8206,
+          "pnl": 0.6274
         },
         {
           "ts": "2026-07-31T00:55:31+00:00",
-          "bankroll": 19.5688,
-          "pnl": 0.7475
+          "bankroll": 19.5685,
+          "pnl": 0.7479
         },
         {
           "ts": "2026-07-31T01:15:30+00:00",
           "bankroll": 20.0619,
-          "pnl": 0.4931
+          "pnl": 0.4934
         },
         {
           "ts": "2026-07-31T01:22:41+00:00",
-          "bankroll": 20.9737,
-          "pnl": 0.9118
+          "bankroll": 20.9742,
+          "pnl": 0.9123
         },
         {
           "ts": "2026-07-31T01:28:50+00:00",
-          "bankroll": 19.0735,
-          "pnl": -1.9002
+          "bankroll": 19.0729,
+          "pnl": -1.9013
         },
         {
           "ts": "2026-07-31T01:35:22+00:00",
-          "bankroll": 19.6687,
-          "pnl": 0.5952
+          "bankroll": 19.6685,
+          "pnl": 0.5955
         },
         {
           "ts": "2026-07-31T02:00:38+00:00",
-          "bankroll": 17.8867,
-          "pnl": -1.782
+          "bankroll": 17.8855,
+          "pnl": -1.7829
         },
         {
           "ts": "2026-07-31T02:55:36+00:00",
-          "bankroll": 16.2662,
-          "pnl": -1.6205
+          "bankroll": 16.2642,
+          "pnl": -1.6213
         },
         {
           "ts": "2026-07-31T03:43:49+00:00",
-          "bankroll": 14.7925,
-          "pnl": -1.4737
+          "bankroll": 14.7898,
+          "pnl": -1.4743
         },
         {
           "ts": "2026-07-31T22:31:03+00:00",
-          "bankroll": 15.4074,
-          "pnl": 0.6149
+          "bankroll": 15.405,
+          "pnl": 0.6152
         },
         {
           "ts": "2026-07-31T22:39:50+00:00",
-          "bankroll": 15.9916,
-          "pnl": 0.5842
+          "bankroll": 15.9894,
+          "pnl": 0.5844
         },
         {
           "ts": "2026-07-31T23:31:14+00:00",
-          "bankroll": 14.5428,
-          "pnl": -1.4488
+          "bankroll": 14.54,
+          "pnl": -1.4494
         },
         {
           "ts": "2026-07-31T23:54:35+00:00",
-          "bankroll": 14.9966,
-          "pnl": 0.4538
+          "bankroll": 14.994,
+          "pnl": 0.454
         },
         {
           "ts": "2026-07-31T23:54:35+00:00",
-          "bankroll": 13.6379,
-          "pnl": -1.3587
+          "bankroll": 13.6348,
+          "pnl": -1.3592
         },
         {
           "ts": "2026-08-01T00:02:51+00:00",
-          "bankroll": 12.4023,
-          "pnl": -1.2356
+          "bankroll": 12.3988,
+          "pnl": -1.236
         },
         {
           "ts": "2026-08-01T00:18:20+00:00",
-          "bankroll": 12.6974,
-          "pnl": 0.2951
+          "bankroll": 12.6939,
+          "pnl": 0.2952
         },
         {
           "ts": "2026-08-01T00:31:39+00:00",
-          "bankroll": 13.1141,
-          "pnl": 0.4167
+          "bankroll": 13.1107,
+          "pnl": 0.4168
         },
         {
           "ts": "2026-08-01T00:52:21+00:00",
-          "bankroll": 13.6113,
-          "pnl": 0.4972
+          "bankroll": 13.6081,
+          "pnl": 0.4974
         },
         {
           "ts": "2026-08-01T01:30:15+00:00",
-          "bankroll": 14.0148,
-          "pnl": 0.4035
+          "bankroll": 14.0117,
+          "pnl": 0.4036
         },
         {
           "ts": "2026-08-01T01:44:50+00:00",
-          "bankroll": 20.7346,
-          "pnl": 6.7198
+          "bankroll": 20.7338,
+          "pnl": 6.722
         },
         {
           "ts": "2026-08-01T02:06:08+00:00",
-          "bankroll": 18.856,
-          "pnl": -1.8786
+          "bankroll": 18.8542,
+          "pnl": -1.8795
         },
         {
           "ts": "2026-08-01T02:14:56+00:00",
-          "bankroll": 20.5817,
-          "pnl": 1.7257
+          "bankroll": 20.5807,
+          "pnl": 1.7265
         },
         {
           "ts": "2026-08-01T02:45:58+00:00",
-          "bankroll": 18.717,
-          "pnl": -1.8647
+          "bankroll": 18.7151,
+          "pnl": -1.8656
         },
         {
           "ts": "2026-08-01T03:00:25+00:00",
-          "bankroll": 17.0213,
-          "pnl": -1.6958
+          "bankroll": 17.0186,
+          "pnl": -1.6965
         },
         {
           "ts": "2026-08-01T03:27:39+00:00",
-          "bankroll": 15.4792,
-          "pnl": -1.5421
+          "bankroll": 15.4758,
+          "pnl": -1.5427
         },
         {
           "ts": "2026-08-01T04:46:47+00:00",
-          "bankroll": 14.0767,
-          "pnl": -1.4024
+          "bankroll": 14.073,
+          "pnl": -1.4029
         },
         {
           "ts": "2026-08-01T22:20:15+00:00",
-          "bankroll": 12.8014,
-          "pnl": -1.2754
+          "bankroll": 12.7972,
+          "pnl": -1.2757
         },
         {
           "ts": "2026-08-01T22:32:05+00:00",
-          "bankroll": 11.6416,
-          "pnl": -1.1598
+          "bankroll": 11.6372,
+          "pnl": -1.1601
         },
         {
           "ts": "2026-08-01T22:40:31+00:00",
-          "bankroll": 12.3247,
-          "pnl": 0.6831
+          "bankroll": 12.3204,
+          "pnl": 0.6832
         },
         {
           "ts": "2026-08-02T00:20:15+00:00",
-          "bankroll": 13.2856,
-          "pnl": 0.9609
+          "bankroll": 13.2815,
+          "pnl": 0.9611
         },
         {
           "ts": "2026-08-02T00:27:37+00:00",
-          "bankroll": 12.0819,
-          "pnl": -1.2037
+          "bankroll": 12.0775,
+          "pnl": -1.204
         },
         {
           "ts": "2026-08-02T00:50:08+00:00",
-          "bankroll": 10.9873,
-          "pnl": -1.0946
+          "bankroll": 10.9827,
+          "pnl": -1.0948
         },
         {
           "ts": "2026-08-02T00:50:08+00:00",
-          "bankroll": 11.3867,
+          "bankroll": 11.3821,
           "pnl": 0.3994
         },
         {
           "ts": "2026-08-02T01:14:59+00:00",
-          "bankroll": 11.616,
+          "bankroll": 11.6114,
           "pnl": 0.2293
         },
         {
           "ts": "2026-08-02T01:39:38+00:00",
-          "bankroll": 11.9427,
+          "bankroll": 11.9381,
           "pnl": 0.3267
         },
         {
           "ts": "2026-08-02T02:37:45+00:00",
-          "bankroll": 10.8607,
-          "pnl": -1.082
+          "bankroll": 10.8559,
+          "pnl": -1.0822
         },
         {
           "ts": "2026-08-02T03:31:00+00:00",
-          "bankroll": 9.8107,
+          "bankroll": 9.8059,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-02T22:50:49+00:00",
-          "bankroll": 8.7607,
+          "bankroll": 8.7559,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-02T22:59:47+00:00",
-          "bankroll": 9.2646,
+          "bankroll": 9.2599,
           "pnl": 0.5039
         },
         {
           "ts": "2026-08-02T23:47:19+00:00",
-          "bankroll": 9.5566,
+          "bankroll": 9.5519,
           "pnl": 0.292
         },
         {
           "ts": "2026-08-02T23:47:19+00:00",
-          "bankroll": 9.8825,
+          "bankroll": 9.8778,
           "pnl": 0.3259
         },
         {
           "ts": "2026-08-03T00:35:06+00:00",
-          "bankroll": 8.8325,
+          "bankroll": 8.8278,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-03T00:50:10+00:00",
-          "bankroll": 9.6333,
+          "bankroll": 9.6286,
           "pnl": 0.8008
         },
         {
           "ts": "2026-08-03T01:24:43+00:00",
-          "bankroll": 9.8479,
+          "bankroll": 9.8432,
           "pnl": 0.2146
         },
         {
           "ts": "2026-08-03T01:55:31+00:00",
-          "bankroll": 8.7979,
+          "bankroll": 8.7932,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-03T01:55:31+00:00",
-          "bankroll": 7.7479,
+          "bankroll": 7.7432,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-03T04:53:32+00:00",
-          "bankroll": 8.2297,
+          "bankroll": 8.2249,
           "pnl": 0.4818
         },
         {
           "ts": "2026-08-03T05:24:18+00:00",
-          "bankroll": 8.6488,
+          "bankroll": 8.6441,
           "pnl": 0.4191
         },
         {
           "ts": "2026-08-03T05:49:58+00:00",
-          "bankroll": 7.5988,
+          "bankroll": 7.5941,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-03T06:22:48+00:00",
-          "bankroll": 7.9983,
+          "bankroll": 7.9935,
           "pnl": 0.3994
         },
         {
           "ts": "2026-08-03T06:39:32+00:00",
-          "bankroll": 6.9483,
+          "bankroll": 6.9435,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-03T06:48:21+00:00",
-          "bankroll": 5.8983,
+          "bankroll": 5.8935,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-03T23:06:59+00:00",
-          "bankroll": 4.8483,
+          "bankroll": 4.8435,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-03T23:44:59+00:00",
-          "bankroll": 5.4738,
+          "bankroll": 5.4691,
           "pnl": 0.6256
         },
         {
           "ts": "2026-08-04T00:04:19+00:00",
-          "bankroll": 6.8263,
+          "bankroll": 6.8216,
           "pnl": 1.3525
         },
         {
           "ts": "2026-08-04T00:43:22+00:00",
-          "bankroll": 5.7763,
+          "bankroll": 5.7716,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T01:01:03+00:00",
-          "bankroll": 6.1566,
+          "bankroll": 6.1519,
           "pnl": 0.3803
         },
         {
           "ts": "2026-08-04T01:29:07+00:00",
-          "bankroll": 6.5369,
+          "bankroll": 6.5322,
           "pnl": 0.3803
         },
         {
           "ts": "2026-08-04T01:37:41+00:00",
-          "bankroll": 12.0938,
+          "bankroll": 12.0891,
           "pnl": 5.5569
         },
         {
           "ts": "2026-08-04T01:55:09+00:00",
-          "bankroll": 10.9981,
-          "pnl": -1.0957
+          "bankroll": 10.9932,
+          "pnl": -1.0959
         },
         {
           "ts": "2026-08-04T02:12:15+00:00",
-          "bankroll": 11.6781,
+          "bankroll": 11.6732,
           "pnl": 0.68
         },
         {
           "ts": "2026-08-04T02:23:56+00:00",
-          "bankroll": 10.6201,
-          "pnl": -1.058
+          "bankroll": 10.615,
+          "pnl": -1.0582
         },
         {
           "ts": "2026-08-04T02:40:58+00:00",
-          "bankroll": 11.3287,
+          "bankroll": 11.3237,
           "pnl": 0.7086
         },
         {
           "ts": "2026-08-04T03:06:50+00:00",
-          "bankroll": 10.2787,
+          "bankroll": 10.2737,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T03:31:01+00:00",
-          "bankroll": 9.2287,
+          "bankroll": 9.2237,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T03:40:17+00:00",
-          "bankroll": 8.1787,
+          "bankroll": 8.1737,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T03:56:59+00:00",
-          "bankroll": 8.7784,
+          "bankroll": 8.7733,
           "pnl": 0.5997
         },
         {
           "ts": "2026-08-04T04:17:48+00:00",
-          "bankroll": 7.7284,
+          "bankroll": 7.7233,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T04:27:37+00:00",
-          "bankroll": 6.6784,
+          "bankroll": 6.6733,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T04:36:09+00:00",
-          "bankroll": 7.2051,
+          "bankroll": 7.2001,
           "pnl": 0.5268
         },
         {
           "ts": "2026-08-04T04:36:09+00:00",
-          "bankroll": 7.8575,
+          "bankroll": 7.8524,
           "pnl": 0.6523
         },
         {
           "ts": "2026-08-04T05:25:22+00:00",
-          "bankroll": 6.8075,
+          "bankroll": 6.8024,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T06:00:25+00:00",
-          "bankroll": 7.0832,
+          "bankroll": 7.0782,
           "pnl": 0.2757
         },
         {
           "ts": "2026-08-04T08:24:23+00:00",
-          "bankroll": 7.4826,
+          "bankroll": 7.4776,
           "pnl": 0.3994
         },
         {
           "ts": "2026-08-04T08:24:23+00:00",
-          "bankroll": 6.4326,
+          "bankroll": 6.4276,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T08:50:48+00:00",
-          "bankroll": 6.7247,
+          "bankroll": 6.7196,
           "pnl": 0.292
         },
         {
           "ts": "2026-08-04T08:50:48+00:00",
-          "bankroll": 7.3502,
+          "bankroll": 7.3452,
           "pnl": 0.6256
         },
         {
           "ts": "2026-08-04T09:03:28+00:00",
-          "bankroll": 8.0026,
+          "bankroll": 7.9975,
           "pnl": 0.6523
         },
         {
           "ts": "2026-08-04T09:33:51+00:00",
-          "bankroll": 6.9526,
+          "bankroll": 6.9475,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T09:47:15+00:00",
-          "bankroll": 7.2961,
+          "bankroll": 7.2911,
           "pnl": 0.3436
         },
         {
           "ts": "2026-08-04T09:53:35+00:00",
-          "bankroll": 7.7564,
+          "bankroll": 7.7514,
           "pnl": 0.4603
         },
         {
           "ts": "2026-08-04T10:00:39+00:00",
-          "bankroll": 6.7064,
+          "bankroll": 6.7014,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T10:06:41+00:00",
-          "bankroll": 5.6564,
+          "bankroll": 5.6514,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T10:06:41+00:00",
-          "bankroll": 6.1832,
+          "bankroll": 6.1781,
           "pnl": 0.5268
         },
         {
           "ts": "2026-08-04T10:19:42+00:00",
-          "bankroll": 6.5635,
+          "bankroll": 6.5584,
           "pnl": 0.3803
         },
         {
           "ts": "2026-08-04T10:39:26+00:00",
-          "bankroll": 5.5135,
+          "bankroll": 5.5084,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T13:24:36+00:00",
-          "bankroll": 4.4635,
+          "bankroll": 4.4584,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T13:40:12+00:00",
-          "bankroll": 3.4135,
+          "bankroll": 3.4084,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T22:23:09+00:00",
-          "bankroll": 3.9174,
+          "bankroll": 3.9124,
           "pnl": 0.5039
         },
         {
           "ts": "2026-08-04T22:29:23+00:00",
-          "bankroll": 4.2977,
+          "bankroll": 4.2927,
           "pnl": 0.3803
         },
         {
           "ts": "2026-08-04T22:35:19+00:00",
-          "bankroll": 4.5897,
+          "bankroll": 4.5847,
           "pnl": 0.292
         },
         {
           "ts": "2026-08-04T22:46:49+00:00",
-          "bankroll": 6.4092,
+          "bankroll": 6.4041,
           "pnl": 1.8194
         },
         {
           "ts": "2026-08-04T22:57:51+00:00",
-          "bankroll": 5.3592,
+          "bankroll": 5.3541,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-04T23:06:33+00:00",
-          "bankroll": 5.6851,
+          "bankroll": 5.6801,
           "pnl": 0.3259
         },
         {
           "ts": "2026-08-04T23:28:58+00:00",
-          "bankroll": 6.0654,
+          "bankroll": 6.0603,
           "pnl": 0.3803
         },
         {
           "ts": "2026-08-04T23:33:44+00:00",
-          "bankroll": 6.64,
+          "bankroll": 6.6349,
           "pnl": 0.5746
         },
         {
           "ts": "2026-08-05T00:53:03+00:00",
-          "bankroll": 7.32,
+          "bankroll": 7.3149,
           "pnl": 0.68
         },
         {
           "ts": "2026-08-05T00:58:53+00:00",
-          "bankroll": 6.27,
+          "bankroll": 6.2649,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T01:04:49+00:00",
-          "bankroll": 5.22,
+          "bankroll": 5.2149,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T04:33:02+00:00",
-          "bankroll": 5.7946,
+          "bankroll": 5.7895,
           "pnl": 0.5746
         },
         {
           "ts": "2026-08-05T04:40:04+00:00",
-          "bankroll": 4.7446,
+          "bankroll": 4.7395,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T04:46:54+00:00",
-          "bankroll": 5.2949,
+          "bankroll": 5.2898,
           "pnl": 0.5503
         },
         {
           "ts": "2026-08-05T04:52:54+00:00",
-          "bankroll": 7.377,
+          "bankroll": 7.372,
           "pnl": 2.0822
         },
         {
           "ts": "2026-08-05T05:22:42+00:00",
-          "bankroll": 7.8588,
+          "bankroll": 7.8538,
           "pnl": 0.4818
         },
         {
           "ts": "2026-08-05T05:22:42+00:00",
-          "bankroll": 6.8088,
+          "bankroll": 6.8038,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T05:48:21+00:00",
-          "bankroll": 7.1891,
+          "bankroll": 7.1841,
           "pnl": 0.3803
         },
         {
           "ts": "2026-08-05T06:02:19+00:00",
-          "bankroll": 6.1391,
+          "bankroll": 6.1341,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T06:48:45+00:00",
-          "bankroll": 6.7915,
+          "bankroll": 6.7864,
           "pnl": 0.6523
         },
         {
           "ts": "2026-08-05T07:18:39+00:00",
-          "bankroll": 7.8104,
+          "bankroll": 7.8054,
           "pnl": 1.019
         },
         {
           "ts": "2026-08-05T07:46:54+00:00",
-          "bankroll": 6.7604,
+          "bankroll": 6.7554,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T09:04:18+00:00",
-          "bankroll": 5.7104,
+          "bankroll": 5.7054,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T09:04:18+00:00",
-          "bankroll": 6.1922,
+          "bankroll": 6.1872,
           "pnl": 0.4818
         },
         {
           "ts": "2026-08-05T09:21:29+00:00",
-          "bankroll": 6.6525,
+          "bankroll": 6.6475,
           "pnl": 0.4603
         },
         {
           "ts": "2026-08-05T13:57:33+00:00",
-          "bankroll": 5.6025,
+          "bankroll": 5.5975,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T14:28:44+00:00",
-          "bankroll": 6.0217,
+          "bankroll": 6.0166,
           "pnl": 0.4191
         },
         {
           "ts": "2026-08-05T14:46:26+00:00",
-          "bankroll": 4.9717,
+          "bankroll": 4.9666,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T22:26:01+00:00",
-          "bankroll": 3.9217,
+          "bankroll": 3.9166,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-05T23:37:06+00:00",
-          "bankroll": 2.8717,
+          "bankroll": 2.8666,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-06T22:46:57+00:00",
-          "bankroll": 3.4463,
+          "bankroll": 3.4412,
           "pnl": 0.5746
         },
         {
           "ts": "2026-08-06T22:59:40+00:00",
-          "bankroll": 2.3963,
+          "bankroll": 2.3912,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-06T23:04:59+00:00",
-          "bankroll": 3.2998,
+          "bankroll": 3.2948,
           "pnl": 0.9036
         },
         {
           "ts": "2026-08-06T23:19:52+00:00",
-          "bankroll": 3.7816,
+          "bankroll": 3.7766,
           "pnl": 0.4818
         },
         {
           "ts": "2026-08-06T23:29:05+00:00",
-          "bankroll": 2.7316,
+          "bankroll": 2.7266,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-07T00:21:11+00:00",
-          "bankroll": 1.6816,
+          "bankroll": 1.6766,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-07T22:19:13+00:00",
-          "bankroll": 2.2562,
+          "bankroll": 2.2512,
           "pnl": 0.5746
         },
         {
           "ts": "2026-08-07T22:38:19+00:00",
-          "bankroll": 1.2062,
+          "bankroll": 1.2012,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-07T23:19:46+00:00",
-          "bankroll": 1.482,
+          "bankroll": 1.4769,
           "pnl": 0.2757
         },
         {
           "ts": "2026-08-07T23:53:47+00:00",
-          "bankroll": 0.432,
+          "bankroll": 0.4269,
           "pnl": -1.05
         }
       ]
@@ -69166,25 +69166,25 @@
       "subtype": "ETH#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.218,
-      "n_total": 22250,
+      "n_total": 22252,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 5,
       "n_bloqueado_freno": 1321,
-      "n_sin_dato_libro": 419,
+      "n_sin_dato_libro": 420,
       "n_vetado_profundidad": 8462,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 67,
       "n_precio_sospechoso": 2347,
       "n_ejecutado": 167,
-      "n_ejecutado_post_quiebra": 11809,
-      "pnl_post_quiebra_eur": -683.6926,
+      "n_ejecutado_post_quiebra": 11810,
+      "pnl_post_quiebra_eur": -682.9839,
       "fill_rate": 0.0194,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6332,
       "pnl_fiel_eur": -24.8068,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -708.4994,
+      "pnl_fiel_eur_sin_suelo": -707.7908,
       "equity_curve": [
         {
           "ts": "2026-07-30T13:32:17+00:00",
@@ -70053,8 +70053,8 @@
       "strategy": "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION",
       "subtype": "SOL#5min",
       "decision": "BUY_YES",
-      "ic_usado": 0.206,
-      "n_total": 22534,
+      "ic_usado": 0.2061,
+      "n_total": 22537,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 5,
       "n_bloqueado_freno": 1325,
@@ -70063,16 +70063,16 @@
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 78,
-      "n_precio_sospechoso": 2416,
+      "n_precio_sospechoso": 2417,
       "n_ejecutado": 163,
-      "n_ejecutado_post_quiebra": 12068,
-      "pnl_post_quiebra_eur": -814.5108,
+      "n_ejecutado_post_quiebra": 12071,
+      "pnl_post_quiebra_eur": -814.8369,
       "fill_rate": 0.0189,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7483,
       "pnl_fiel_eur": -24.6917,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -839.2025,
+      "pnl_fiel_eur_sin_suelo": -839.5286,
       "equity_curve": [
         {
           "ts": "2026-07-30T13:59:14+00:00",
@@ -70896,25 +70896,25 @@
       "subtype": "XRP#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.1977,
-      "n_total": 22804,
+      "n_total": 22806,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 1284,
       "n_sin_dato_libro": 458,
-      "n_vetado_profundidad": 8469,
+      "n_vetado_profundidad": 8470,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 79,
       "n_precio_sospechoso": 2847,
       "n_ejecutado": 148,
-      "n_ejecutado_post_quiebra": 12362,
-      "pnl_post_quiebra_eur": -934.6009,
+      "n_ejecutado_post_quiebra": 12363,
+      "pnl_post_quiebra_eur": -934.3566,
       "fill_rate": 0.0172,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.1654,
       "pnl_fiel_eur": -25.2746,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -959.8756,
+      "pnl_fiel_eur_sin_suelo": -959.6312,
       "equity_curve": [
         {
           "ts": "2026-07-30T13:32:17+00:00",
@@ -71663,14 +71663,14 @@
       "subtype": "DOGE#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.1169,
-      "n_total": 24645,
+      "n_total": 24648,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 3,
       "n_bloqueado_freno": 2854,
       "n_sin_dato_libro": 285,
-      "n_vetado_profundidad": 12241,
+      "n_vetado_profundidad": 12242,
       "n_sin_ic": 0,
-      "n_no_viable_stake": 9058,
+      "n_no_viable_stake": 9060,
       "n_precio_invalido": 3,
       "n_precio_sospechoso": 95,
       "n_ejecutado": 201,
@@ -72695,25 +72695,25 @@
       "subtype": "XRP#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.1155,
-      "n_total": 24858,
+      "n_total": 24860,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 3888,
       "n_sin_dato_libro": 292,
-      "n_vetado_profundidad": 10677,
+      "n_vetado_profundidad": 10678,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 18,
       "n_precio_sospechoso": 1916,
       "n_ejecutado": 339,
-      "n_ejecutado_post_quiebra": 9640,
-      "pnl_post_quiebra_eur": -435.2401,
+      "n_ejecutado_post_quiebra": 9641,
+      "pnl_post_quiebra_eur": -435.1194,
       "fill_rate": 0.0308,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.4114,
       "pnl_fiel_eur": -25.0286,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -460.2688,
+      "pnl_fiel_eur_sin_suelo": -460.148,
       "equity_curve": [
         {
           "ts": "2026-08-08T10:04:26+00:00",
@@ -84149,11 +84149,11 @@
       "subtype": "BTC#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0974,
-      "n_total": 7686,
+      "n_total": 7688,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 7685,
+      "n_sin_dato_libro": 7687,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -84175,11 +84175,11 @@
       "subtype": "BTC#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.116,
-      "n_total": 21863,
+      "n_total": 21866,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 21862,
+      "n_sin_dato_libro": 21865,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -84201,11 +84201,11 @@
       "subtype": "BTC#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0975,
-      "n_total": 22201,
+      "n_total": 22205,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 22200,
+      "n_sin_dato_libro": 22204,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -84226,12 +84226,12 @@
       "strategy": "FAVORITO_CONFIRMADO_DEPTH_FASE0",
       "subtype": "ETH#5min",
       "decision": "BUY_NO",
-      "ic_usado": 0.1104,
-      "n_total": 20348,
+      "ic_usado": 0.1103,
+      "n_total": 20351,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 20347,
+      "n_sin_dato_libro": 20350,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -84253,11 +84253,11 @@
       "subtype": "SOL#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0829,
-      "n_total": 22690,
+      "n_total": 22694,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 22690,
+      "n_sin_dato_libro": 22694,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -85237,12 +85237,12 @@
       "subtype": "BNB#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.2402,
-      "n_total": 5278,
+      "n_total": 5279,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 142,
       "n_sin_dato_libro": 169,
-      "n_vetado_profundidad": 4784,
+      "n_vetado_profundidad": 4785,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -85250,7 +85250,7 @@
       "n_ejecutado": 82,
       "n_ejecutado_post_quiebra": 101,
       "pnl_post_quiebra_eur": -9.3613,
-      "fill_rate": 0.0169,
+      "fill_rate": 0.0168,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6256,
       "pnl_fiel_eur": -24.8144,
@@ -85674,11 +85674,11 @@
       "subtype": "BNB#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2101,
-      "n_total": 6217,
+      "n_total": 6218,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 695,
-      "n_sin_dato_libro": 514,
+      "n_sin_dato_libro": 515,
       "n_vetado_profundidad": 4641,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -87316,12 +87316,12 @@
       "subtype": "BTC#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.1353,
-      "n_total": 6719,
+      "n_total": 6720,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 315,
       "n_sin_dato_libro": 538,
-      "n_vetado_profundidad": 4610,
+      "n_vetado_profundidad": 4611,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 10,
@@ -87678,12 +87678,12 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2216,
-      "n_total": 5892,
+      "n_total": 5894,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 177,
-      "n_sin_dato_libro": 588,
-      "n_vetado_profundidad": 4680,
+      "n_sin_dato_libro": 589,
+      "n_vetado_profundidad": 4681,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -88502,12 +88502,12 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1928,
-      "n_total": 6525,
+      "n_total": 6527,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 247,
-      "n_sin_dato_libro": 69,
-      "n_vetado_profundidad": 5723,
+      "n_sin_dato_libro": 70,
+      "n_vetado_profundidad": 5724,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -88809,7 +88809,7 @@
       "subtype": "ETH#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0595,
-      "n_total": 7223,
+      "n_total": 7224,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 551,
@@ -88820,14 +88820,14 @@
       "n_precio_invalido": 11,
       "n_precio_sospechoso": 128,
       "n_ejecutado": 175,
-      "n_ejecutado_post_quiebra": 1657,
-      "pnl_post_quiebra_eur": -186.8235,
+      "n_ejecutado_post_quiebra": 1658,
+      "pnl_post_quiebra_eur": -187.8735,
       "fill_rate": 0.0399,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.2507,
       "pnl_fiel_eur": -25.1893,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -212.0128,
+      "pnl_fiel_eur_sin_suelo": -213.0628,
       "equity_curve": [
         {
           "ts": "2026-07-12T09:35:40+00:00",
@@ -90293,12 +90293,12 @@
       "subtype": "SOL#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.032,
-      "n_total": 9467,
+      "n_total": 9469,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 2083,
-      "n_sin_dato_libro": 695,
-      "n_vetado_profundidad": 4293,
+      "n_sin_dato_libro": 696,
+      "n_vetado_profundidad": 4294,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 2,
@@ -92820,12 +92820,12 @@
       "subtype": "SOL#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.0189,
-      "n_total": 2201,
+      "n_total": 2203,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 344,
-      "n_sin_dato_libro": 264,
-      "n_vetado_profundidad": 1016,
+      "n_sin_dato_libro": 265,
+      "n_vetado_profundidad": 1017,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -92833,7 +92833,7 @@
       "n_ejecutado": 151,
       "n_ejecutado_post_quiebra": 426,
       "pnl_post_quiebra_eur": -99.136,
-      "fill_rate": 0.1294,
+      "fill_rate": 0.1293,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.8721,
       "pnl_fiel_eur": -24.5679,
@@ -93602,25 +93602,25 @@
       "subtype": "XRP#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0065,
-      "n_total": 10170,
+      "n_total": 10172,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 510,
-      "n_sin_dato_libro": 713,
+      "n_sin_dato_libro": 714,
       "n_vetado_profundidad": 6582,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 133,
       "n_ejecutado": 108,
-      "n_ejecutado_post_quiebra": 2256,
-      "pnl_post_quiebra_eur": -209.9317,
+      "n_ejecutado_post_quiebra": 2257,
+      "pnl_post_quiebra_eur": -210.9817,
       "fill_rate": 0.0161,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.2294,
       "pnl_fiel_eur": -25.2106,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -235.1423,
+      "pnl_fiel_eur_sin_suelo": -236.1923,
       "equity_curve": [
         {
           "ts": "2026-07-06T07:16:25+00:00",
@@ -94169,12 +94169,12 @@
       "subtype": "XRP#15min",
       "decision": "BUY_YES",
       "ic_usado": -0.0556,
-      "n_total": 7687,
+      "n_total": 7689,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 597,
-      "n_sin_dato_libro": 486,
-      "n_vetado_profundidad": 3793,
+      "n_sin_dato_libro": 487,
+      "n_vetado_profundidad": 3794,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -95946,11 +95946,11 @@
       "subtype": "BNB#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0141,
-      "n_total": 6440,
+      "n_total": 6441,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 538,
-      "n_sin_dato_libro": 169,
+      "n_sin_dato_libro": 170,
       "n_vetado_profundidad": 4593,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -96833,25 +96833,25 @@
       "subtype": "BNB#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.0095,
-      "n_total": 7485,
+      "n_total": 7487,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 568,
-      "n_sin_dato_libro": 500,
+      "n_sin_dato_libro": 501,
       "n_vetado_profundidad": 4297,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 3,
       "n_precio_sospechoso": 204,
       "n_ejecutado": 347,
-      "n_ejecutado_post_quiebra": 1770,
-      "pnl_post_quiebra_eur": -217.7673,
+      "n_ejecutado_post_quiebra": 1771,
+      "pnl_post_quiebra_eur": -218.8173,
       "fill_rate": 0.0747,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.8328,
       "pnl_fiel_eur": -24.6072,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -242.3745,
+      "pnl_fiel_eur_sin_suelo": -243.4245,
       "equity_curve": [
         {
           "ts": "2026-08-04T17:59:15+00:00",
@@ -98595,11 +98595,11 @@
       "subtype": "BTC#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0045,
-      "n_total": 8597,
+      "n_total": 8598,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 160,
-      "n_sin_dato_libro": 625,
+      "n_sin_dato_libro": 626,
       "n_vetado_profundidad": 4545,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -98887,11 +98887,11 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.01,
-      "n_total": 8265,
+      "n_total": 8266,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 1255,
-      "n_sin_dato_libro": 277,
+      "n_sin_dato_libro": 278,
       "n_vetado_profundidad": 4103,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -101821,12 +101821,12 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.284,
-      "n_total": 5257,
+      "n_total": 5259,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 254,
-      "n_sin_dato_libro": 472,
-      "n_vetado_profundidad": 4348,
+      "n_sin_dato_libro": 473,
+      "n_vetado_profundidad": 4349,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -102358,11 +102358,11 @@
       "subtype": "ETH#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0121,
-      "n_total": 7648,
+      "n_total": 7649,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 358,
-      "n_sin_dato_libro": 646,
+      "n_sin_dato_libro": 647,
       "n_vetado_profundidad": 4153,
       "n_sin_ic": 0,
       "n_no_viable_stake": 2345,
@@ -103110,11 +103110,11 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.0239,
-      "n_total": 7464,
+      "n_total": 7465,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 173,
-      "n_sin_dato_libro": 256,
+      "n_sin_dato_libro": 257,
       "n_vetado_profundidad": 4401,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -105773,12 +105773,12 @@
       "subtype": "XRP#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.3135,
-      "n_total": 4743,
+      "n_total": 4745,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 378,
-      "n_sin_dato_libro": 406,
-      "n_vetado_profundidad": 3688,
+      "n_sin_dato_libro": 407,
+      "n_vetado_profundidad": 3689,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
@@ -106495,12 +106495,12 @@
       "subtype": "BNB#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.2534,
-      "n_total": 3534,
+      "n_total": 3535,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 95,
       "n_sin_dato_libro": 71,
-      "n_vetado_profundidad": 3253,
+      "n_vetado_profundidad": 3254,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -106777,11 +106777,11 @@
       "subtype": "BNB#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2279,
-      "n_total": 4187,
+      "n_total": 4188,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 354,
-      "n_sin_dato_libro": 84,
+      "n_sin_dato_libro": 85,
       "n_vetado_profundidad": 3503,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -107926,11 +107926,11 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.127,
-      "n_total": 3893,
+      "n_total": 3894,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 148,
-      "n_sin_dato_libro": 43,
+      "n_sin_dato_libro": 44,
       "n_vetado_profundidad": 3036,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -109235,12 +109235,12 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.209,
-      "n_total": 4317,
+      "n_total": 4319,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 297,
-      "n_sin_dato_libro": 75,
-      "n_vetado_profundidad": 3727,
+      "n_sin_dato_libro": 76,
+      "n_vetado_profundidad": 3728,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -110079,12 +110079,12 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1258,
-      "n_total": 4199,
+      "n_total": 4201,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 151,
-      "n_sin_dato_libro": 82,
-      "n_vetado_profundidad": 3227,
+      "n_sin_dato_libro": 83,
+      "n_vetado_profundidad": 3228,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 5,
@@ -110092,7 +110092,7 @@
       "n_ejecutado": 62,
       "n_ejecutado_post_quiebra": 672,
       "pnl_post_quiebra_eur": -68.3051,
-      "fill_rate": 0.0189,
+      "fill_rate": 0.0188,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.5024,
       "pnl_fiel_eur": -24.9376,
@@ -110416,7 +110416,7 @@
       "subtype": "SOL#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.1248,
-      "n_total": 4955,
+      "n_total": 4956,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 222,
@@ -110427,14 +110427,14 @@
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 87,
       "n_ejecutado": 165,
-      "n_ejecutado_post_quiebra": 679,
-      "pnl_post_quiebra_eur": -67.1085,
+      "n_ejecutado_post_quiebra": 680,
+      "pnl_post_quiebra_eur": -68.1585,
       "fill_rate": 0.0411,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9815,
       "pnl_fiel_eur": -24.4585,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -91.567,
+      "pnl_fiel_eur_sin_suelo": -92.617,
       "equity_curve": [
         {
           "ts": "2026-08-06T00:38:50+00:00",
@@ -111268,11 +111268,11 @@
       "subtype": "SOL#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1213,
-      "n_total": 4680,
+      "n_total": 4681,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 551,
-      "n_sin_dato_libro": 143,
+      "n_sin_dato_libro": 144,
       "n_vetado_profundidad": 3404,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -113377,12 +113377,12 @@
       "subtype": "XRP#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.226,
-      "n_total": 4205,
+      "n_total": 4207,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 536,
-      "n_sin_dato_libro": 43,
-      "n_vetado_profundidad": 3400,
+      "n_sin_dato_libro": 44,
+      "n_vetado_profundidad": 3401,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
@@ -113390,7 +113390,7 @@
       "n_ejecutado": 189,
       "n_ejecutado_post_quiebra": 36,
       "pnl_post_quiebra_eur": -12.1999,
-      "fill_rate": 0.0527,
+      "fill_rate": 0.0526,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9241,
       "pnl_fiel_eur": -24.5159,
@@ -117891,7 +117891,7 @@
       "subtype": "SOL#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0924,
-      "n_total": 2028,
+      "n_total": 2029,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 130,
@@ -117902,14 +117902,14 @@
       "n_precio_invalido": 2,
       "n_precio_sospechoso": 23,
       "n_ejecutado": 75,
-      "n_ejecutado_post_quiebra": 270,
-      "pnl_post_quiebra_eur": -55.5961,
+      "n_ejecutado_post_quiebra": 271,
+      "pnl_post_quiebra_eur": -56.6461,
       "fill_rate": 0.0468,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6194,
       "pnl_fiel_eur": -24.8206,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -80.4167,
+      "pnl_fiel_eur_sin_suelo": -81.4667,
       "equity_curve": [
         {
           "ts": "2026-07-15T04:01:18+00:00",
@@ -119204,12 +119204,12 @@
       "subtype": "BNB#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.2659,
-      "n_total": 5063,
+      "n_total": 5064,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 144,
       "n_sin_dato_libro": 163,
-      "n_vetado_profundidad": 4578,
+      "n_vetado_profundidad": 4579,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -119746,11 +119746,11 @@
       "subtype": "BNB#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2342,
-      "n_total": 5894,
+      "n_total": 5895,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 711,
-      "n_sin_dato_libro": 538,
+      "n_sin_dato_libro": 539,
       "n_vetado_profundidad": 4373,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -120798,12 +120798,12 @@
       "subtype": "BTC#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.1457,
-      "n_total": 5916,
+      "n_total": 5917,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 176,
       "n_sin_dato_libro": 581,
-      "n_vetado_profundidad": 4005,
+      "n_vetado_profundidad": 4006,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 14,
@@ -121110,12 +121110,12 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1392,
-      "n_total": 6330,
+      "n_total": 6332,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 117,
-      "n_sin_dato_libro": 455,
-      "n_vetado_profundidad": 4633,
+      "n_sin_dato_libro": 456,
+      "n_vetado_profundidad": 4634,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 3,
@@ -121729,12 +121729,12 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2235,
-      "n_total": 6097,
+      "n_total": 6099,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 170,
-      "n_sin_dato_libro": 513,
-      "n_vetado_profundidad": 5090,
+      "n_sin_dato_libro": 514,
+      "n_vetado_profundidad": 5091,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
@@ -122263,12 +122263,12 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1389,
-      "n_total": 6715,
+      "n_total": 6717,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 287,
-      "n_sin_dato_libro": 360,
-      "n_vetado_profundidad": 4924,
+      "n_sin_dato_libro": 361,
+      "n_vetado_profundidad": 4925,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 8,
@@ -122790,7 +122790,7 @@
       "subtype": "SOL#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.1375,
-      "n_total": 6502,
+      "n_total": 6503,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 192,
@@ -122801,14 +122801,14 @@
       "n_precio_invalido": 7,
       "n_precio_sospechoso": 115,
       "n_ejecutado": 70,
-      "n_ejecutado_post_quiebra": 1042,
-      "pnl_post_quiebra_eur": -84.035,
+      "n_ejecutado_post_quiebra": 1043,
+      "pnl_post_quiebra_eur": -85.085,
       "fill_rate": 0.0148,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.5819,
       "pnl_fiel_eur": -24.8581,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -108.8932,
+      "pnl_fiel_eur_sin_suelo": -109.9432,
       "equity_curve": [
         {
           "ts": "2026-07-14T18:30:59+00:00",
@@ -123167,12 +123167,12 @@
       "subtype": "SOL#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.12,
-      "n_total": 6875,
+      "n_total": 6877,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 203,
-      "n_sin_dato_libro": 394,
-      "n_vetado_profundidad": 5222,
+      "n_sin_dato_libro": 395,
+      "n_vetado_profundidad": 5223,
       "n_sin_ic": 0,
       "n_no_viable_stake": 1012,
       "n_precio_invalido": 0,
@@ -123414,11 +123414,11 @@
       "subtype": "XRP#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.2437,
-      "n_total": 6812,
+      "n_total": 6813,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 235,
-      "n_sin_dato_libro": 674,
+      "n_sin_dato_libro": 675,
       "n_vetado_profundidad": 5316,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -123861,12 +123861,12 @@
       "subtype": "XRP#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2372,
-      "n_total": 6554,
+      "n_total": 6556,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 235,
-      "n_sin_dato_libro": 481,
-      "n_vetado_profundidad": 5244,
+      "n_sin_dato_libro": 482,
+      "n_vetado_profundidad": 5245,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
@@ -124219,11 +124219,11 @@
       "subtype": "BNB#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.2404,
-      "n_total": 1431,
+      "n_total": 1432,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 1431,
+      "n_sin_dato_libro": 1432,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -125263,12 +125263,12 @@
       "subtype": "ETH#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.2076,
-      "n_total": 2170,
+      "n_total": 2171,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 144,
       "n_sin_dato_libro": 13,
-      "n_vetado_profundidad": 1633,
+      "n_vetado_profundidad": 1634,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 11,
@@ -125520,11 +125520,11 @@
       "subtype": "ETH#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.2108,
-      "n_total": 2677,
+      "n_total": 2678,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 18,
-      "n_sin_dato_libro": 22,
+      "n_sin_dato_libro": 23,
       "n_vetado_profundidad": 2138,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -128266,11 +128266,11 @@
       "subtype": "BNB#60min",
       "decision": "BUY_YES",
       "ic_usado": 0.1842,
-      "n_total": 55,
+      "n_total": 56,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 55,
+      "n_sin_dato_libro": 56,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -128292,12 +128292,12 @@
       "subtype": "BTC#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.0523,
-      "n_total": 954,
+      "n_total": 955,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 48,
       "n_sin_dato_libro": 62,
-      "n_vetado_profundidad": 505,
+      "n_vetado_profundidad": 506,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 6,
@@ -128305,7 +128305,7 @@
       "n_ejecutado": 115,
       "n_ejecutado_post_quiebra": 218,
       "pnl_post_quiebra_eur": -29.0662,
-      "fill_rate": 0.1855,
+      "fill_rate": 0.1852,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7583,
       "pnl_fiel_eur": -24.6817,
@@ -130112,11 +130112,11 @@
       "subtype": "DOGE#60min",
       "decision": "BUY_YES",
       "ic_usado": 0.26,
-      "n_total": 48,
+      "n_total": 49,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 48,
+      "n_sin_dato_libro": 49,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -130138,7 +130138,7 @@
       "subtype": "ETH#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.0405,
-      "n_total": 775,
+      "n_total": 776,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 13,
@@ -130149,14 +130149,14 @@
       "n_precio_invalido": 3,
       "n_precio_sospechoso": 34,
       "n_ejecutado": 47,
-      "n_ejecutado_post_quiebra": 230,
-      "pnl_post_quiebra_eur": -74.9134,
+      "n_ejecutado_post_quiebra": 231,
+      "pnl_post_quiebra_eur": -75.9634,
       "fill_rate": 0.1004,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7866,
       "pnl_fiel_eur": -24.6534,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -99.5668,
+      "pnl_fiel_eur_sin_suelo": -100.6168,
       "equity_curve": [
         {
           "ts": "2026-08-13T03:13:58+00:00",
@@ -130400,11 +130400,11 @@
       "subtype": "ETH#60min",
       "decision": "BUY_YES",
       "ic_usado": 0.0643,
-      "n_total": 1086,
+      "n_total": 1087,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 71,
-      "n_sin_dato_libro": 73,
+      "n_sin_dato_libro": 74,
       "n_vetado_profundidad": 621,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -131727,12 +131727,12 @@
       "subtype": "SOL#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.1003,
-      "n_total": 771,
+      "n_total": 772,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 20,
       "n_sin_dato_libro": 77,
-      "n_vetado_profundidad": 496,
+      "n_vetado_profundidad": 497,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 16,
@@ -131740,7 +131740,7 @@
       "n_ejecutado": 41,
       "n_ejecutado_post_quiebra": 121,
       "pnl_post_quiebra_eur": -26.0375,
-      "fill_rate": 0.0764,
+      "fill_rate": 0.0762,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.1403,
       "pnl_fiel_eur": -25.2997,
@@ -131959,12 +131959,12 @@
       "subtype": "SOL#60min",
       "decision": "BUY_YES",
       "ic_usado": 0.0328,
-      "n_total": 1218,
+      "n_total": 1219,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 52,
       "n_sin_dato_libro": 59,
-      "n_vetado_profundidad": 858,
+      "n_vetado_profundidad": 859,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 18,
@@ -131972,7 +131972,7 @@
       "n_ejecutado": 82,
       "n_ejecutado_post_quiebra": 149,
       "pnl_post_quiebra_eur": -33.6437,
-      "fill_rate": 0.0872,
+      "fill_rate": 0.0871,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.583,
       "pnl_fiel_eur": -24.857,
@@ -132422,11 +132422,11 @@
       "subtype": "XRP#60min",
       "decision": "BUY_YES",
       "ic_usado": 0.3,
-      "n_total": 48,
+      "n_total": 49,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 48,
+      "n_sin_dato_libro": 49,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -133713,7 +133713,7 @@
       "subtype": "BTC#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.0744,
-      "n_total": 576,
+      "n_total": 577,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 9,
@@ -133723,15 +133723,15 @@
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 14,
-      "n_ejecutado": 211,
+      "n_ejecutado": 212,
       "n_ejecutado_post_quiebra": 0,
       "pnl_post_quiebra_eur": 0.0,
-      "fill_rate": 0.3735,
+      "fill_rate": 0.3746,
       "bankroll_inicial": 25.44,
-      "bankroll_nocional_final": 9.4303,
-      "pnl_fiel_eur": -16.0097,
+      "bankroll_nocional_final": 8.3803,
+      "pnl_fiel_eur": -17.0597,
       "suelo_disparado_final": false,
-      "pnl_fiel_eur_sin_suelo": -16.0097,
+      "pnl_fiel_eur_sin_suelo": -17.0597,
       "equity_curve": [
         {
           "ts": "2026-07-14T22:01:41+00:00",
@@ -134787,6 +134787,11 @@
           "ts": "2026-11-20T06:02:27+00:00",
           "bankroll": 9.4303,
           "pnl": -1.05
+        },
+        {
+          "ts": "2026-11-22T00:04:04+00:00",
+          "bankroll": 8.3803,
+          "pnl": -1.05
         }
       ]
     },
@@ -135214,7 +135219,7 @@
       "subtype": "ETH#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.0033,
-      "n_total": 455,
+      "n_total": 456,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 44,
@@ -135225,14 +135230,14 @@
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 9,
       "n_ejecutado": 96,
-      "n_ejecutado_post_quiebra": 8,
-      "pnl_post_quiebra_eur": -4.4095,
+      "n_ejecutado_post_quiebra": 9,
+      "pnl_post_quiebra_eur": -5.4595,
       "fill_rate": 0.2546,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.1493,
       "pnl_fiel_eur": -25.2907,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -29.7002,
+      "pnl_fiel_eur_sin_suelo": -30.7502,
       "equity_curve": [
         {
           "ts": "2026-08-18T16:09:02+00:00",
@@ -136178,12 +136183,12 @@
       "subtype": "SOL#60min",
       "decision": "BUY_NO",
       "ic_usado": -0.0619,
-      "n_total": 224,
+      "n_total": 225,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
       "n_sin_dato_libro": 3,
-      "n_vetado_profundidad": 183,
+      "n_vetado_profundidad": 184,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -136191,7 +136196,7 @@
       "n_ejecutado": 38,
       "n_ejecutado_post_quiebra": 0,
       "pnl_post_quiebra_eur": 0.0,
-      "fill_rate": 0.1719,
+      "fill_rate": 0.1712,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 7.0295,
       "pnl_fiel_eur": -18.4105,
@@ -136395,12 +136400,12 @@
       "subtype": "SOL#60min",
       "decision": "BUY_YES",
       "ic_usado": 0.2658,
-      "n_total": 425,
+      "n_total": 426,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
       "n_sin_dato_libro": 6,
-      "n_vetado_profundidad": 342,
+      "n_vetado_profundidad": 343,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -136408,7 +136413,7 @@
       "n_ejecutado": 77,
       "n_ejecutado_post_quiebra": 0,
       "pnl_post_quiebra_eur": 0.0,
-      "fill_rate": 0.1838,
+      "fill_rate": 0.1833,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 44.1359,
       "pnl_fiel_eur": 18.6959,
@@ -136806,6 +136811,32 @@
       "strategy": "GBM_LATE_60M_PYCONFIRMADO",
       "subtype": "XRP#60min",
       "decision": "BUY_NO",
+      "ic_usado": 0.0083,
+      "n_total": 1,
+      "n_fuera_rango_validacion": 0,
+      "n_fuera_ventana": 0,
+      "n_bloqueado_freno": 0,
+      "n_sin_dato_libro": 1,
+      "n_vetado_profundidad": 0,
+      "n_sin_ic": 0,
+      "n_no_viable_stake": 0,
+      "n_precio_invalido": 0,
+      "n_precio_sospechoso": 0,
+      "n_ejecutado": 0,
+      "n_ejecutado_post_quiebra": 0,
+      "pnl_post_quiebra_eur": 0.0,
+      "fill_rate": null,
+      "bankroll_inicial": 25.44,
+      "bankroll_nocional_final": 25.44,
+      "pnl_fiel_eur": 0.0,
+      "suelo_disparado_final": false,
+      "pnl_fiel_eur_sin_suelo": 0.0,
+      "equity_curve": []
+    },
+    "GBM_LATE_60M_PYCONFIRMADO#XRP#60min#BUY_YES": {
+      "strategy": "GBM_LATE_60M_PYCONFIRMADO",
+      "subtype": "XRP#60min",
+      "decision": "BUY_YES",
       "ic_usado": 0.0083,
       "n_total": 1,
       "n_fuera_rango_validacion": 0,
@@ -164869,12 +164900,12 @@
       "subtype": "BNB#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0156,
-      "n_total": 6878,
+      "n_total": 6879,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 1205,
       "n_sin_dato_libro": 49,
-      "n_vetado_profundidad": 3822,
+      "n_vetado_profundidad": 3823,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
@@ -166686,25 +166717,25 @@
       "subtype": "BNB#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.0387,
-      "n_total": 6987,
+      "n_total": 6989,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 948,
-      "n_sin_dato_libro": 63,
+      "n_sin_dato_libro": 64,
       "n_vetado_profundidad": 3662,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 145,
       "n_ejecutado": 391,
-      "n_ejecutado_post_quiebra": 1921,
-      "pnl_post_quiebra_eur": -200.6636,
+      "n_ejecutado_post_quiebra": 1922,
+      "pnl_post_quiebra_eur": -201.7136,
       "fill_rate": 0.0965,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7605,
       "pnl_fiel_eur": -24.6795,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -225.3431,
+      "pnl_fiel_eur_sin_suelo": -226.3931,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:25:34+00:00",
@@ -168668,25 +168699,25 @@
       "subtype": "BTC#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0278,
-      "n_total": 5426,
+      "n_total": 5428,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 1618,
-      "n_sin_dato_libro": 24,
+      "n_sin_dato_libro": 25,
       "n_vetado_profundidad": 1232,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 2,
       "n_precio_sospechoso": 93,
       "n_ejecutado": 749,
-      "n_ejecutado_post_quiebra": 1799,
-      "pnl_post_quiebra_eur": -74.5243,
+      "n_ejecutado_post_quiebra": 1800,
+      "pnl_post_quiebra_eur": -73.1149,
       "fill_rate": 0.3781,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6839,
       "pnl_fiel_eur": -24.7561,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -99.2804,
+      "pnl_fiel_eur_sin_suelo": -97.871,
       "equity_curve": [
         {
           "ts": "2026-08-31T00:05:10+00:00",
@@ -171195,7 +171226,7 @@
       "subtype": "BTC#15min",
       "decision": "BUY_YES",
       "ic_usado": -0.0494,
-      "n_total": 5129,
+      "n_total": 5130,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 819,
@@ -171206,14 +171237,14 @@
       "n_precio_invalido": 2,
       "n_precio_sospechoso": 124,
       "n_ejecutado": 287,
-      "n_ejecutado_post_quiebra": 2907,
-      "pnl_post_quiebra_eur": -234.6117,
+      "n_ejecutado_post_quiebra": 2908,
+      "pnl_post_quiebra_eur": -235.6617,
       "fill_rate": 0.2077,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.2588,
       "pnl_fiel_eur": -25.1812,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -259.7929,
+      "pnl_fiel_eur_sin_suelo": -260.8429,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:36:39+00:00",
@@ -172657,11 +172688,11 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0197,
-      "n_total": 7058,
+      "n_total": 7059,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 6,
       "n_bloqueado_freno": 820,
-      "n_sin_dato_libro": 38,
+      "n_sin_dato_libro": 39,
       "n_vetado_profundidad": 3696,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -174669,25 +174700,25 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.0319,
-      "n_total": 6962,
+      "n_total": 6964,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 601,
       "n_sin_dato_libro": 60,
-      "n_vetado_profundidad": 3381,
+      "n_vetado_profundidad": 3382,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 108,
       "n_ejecutado": 131,
-      "n_ejecutado_post_quiebra": 2784,
-      "pnl_post_quiebra_eur": -362.7819,
+      "n_ejecutado_post_quiebra": 2785,
+      "pnl_post_quiebra_eur": -361.8783,
       "fill_rate": 0.0373,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.5459,
       "pnl_fiel_eur": -24.8941,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -387.676,
+      "pnl_fiel_eur_sin_suelo": -386.7724,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:50:47+00:00",
@@ -175351,12 +175382,12 @@
       "subtype": "ETH#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0481,
-      "n_total": 5530,
+      "n_total": 5531,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 1003,
       "n_sin_dato_libro": 15,
-      "n_vetado_profundidad": 1522,
+      "n_vetado_profundidad": 1523,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 2,
@@ -175364,7 +175395,7 @@
       "n_ejecutado": 415,
       "n_ejecutado_post_quiebra": 2572,
       "pnl_post_quiebra_eur": -205.1293,
-      "fill_rate": 0.2142,
+      "fill_rate": 0.2141,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6002,
       "pnl_fiel_eur": -24.8398,
@@ -177453,12 +177484,12 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": -0.06,
-      "n_total": 5021,
+      "n_total": 5022,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 509,
       "n_sin_dato_libro": 17,
-      "n_vetado_profundidad": 1281,
+      "n_vetado_profundidad": 1282,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 2,
@@ -177466,7 +177497,7 @@
       "n_ejecutado": 226,
       "n_ejecutado_post_quiebra": 2985,
       "pnl_post_quiebra_eur": -315.5797,
-      "fill_rate": 0.15,
+      "fill_rate": 0.1499,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9888,
       "pnl_fiel_eur": -24.4512,
@@ -178610,7 +178641,7 @@
       "subtype": "SOL#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0052,
-      "n_total": 6633,
+      "n_total": 6635,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 663,
@@ -178619,16 +178650,16 @@
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 3,
-      "n_precio_sospechoso": 87,
+      "n_precio_sospechoso": 88,
       "n_ejecutado": 342,
-      "n_ejecutado_post_quiebra": 3426,
-      "pnl_post_quiebra_eur": -269.4753,
+      "n_ejecutado_post_quiebra": 3428,
+      "pnl_post_quiebra_eur": -268.7058,
       "fill_rate": 0.1363,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9781,
       "pnl_fiel_eur": -24.4619,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -293.9371,
+      "pnl_fiel_eur_sin_suelo": -293.1677,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:08:59+00:00",
@@ -180347,25 +180378,25 @@
       "subtype": "SOL#15min",
       "decision": "BUY_YES",
       "ic_usado": -0.0031,
-      "n_total": 6365,
+      "n_total": 6367,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 782,
       "n_sin_dato_libro": 27,
-      "n_vetado_profundidad": 1720,
+      "n_vetado_profundidad": 1721,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 3,
       "n_precio_sospechoso": 95,
       "n_ejecutado": 349,
-      "n_ejecutado_post_quiebra": 3480,
-      "pnl_post_quiebra_eur": -284.6357,
-      "fill_rate": 0.1687,
+      "n_ejecutado_post_quiebra": 3481,
+      "pnl_post_quiebra_eur": -285.6857,
+      "fill_rate": 0.1686,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6971,
       "pnl_fiel_eur": -24.7429,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -309.3786,
+      "pnl_fiel_eur_sin_suelo": -310.4286,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:22:11+00:00",
@@ -182119,25 +182150,25 @@
       "subtype": "XRP#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0161,
-      "n_total": 7248,
+      "n_total": 7250,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 6,
       "n_bloqueado_freno": 503,
-      "n_sin_dato_libro": 35,
+      "n_sin_dato_libro": 36,
       "n_vetado_profundidad": 3375,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 3,
       "n_precio_sospechoso": 141,
       "n_ejecutado": 179,
-      "n_ejecutado_post_quiebra": 3147,
-      "pnl_post_quiebra_eur": -227.7031,
+      "n_ejecutado_post_quiebra": 3148,
+      "pnl_post_quiebra_eur": -228.7531,
       "fill_rate": 0.0504,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7666,
       "pnl_fiel_eur": -24.6734,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -252.3765,
+      "pnl_fiel_eur_sin_suelo": -253.4265,
       "equity_curve": [
         {
           "ts": "2026-08-17T16:38:24+00:00",
@@ -183041,12 +183072,12 @@
       "subtype": "XRP#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.0225,
-      "n_total": 7006,
+      "n_total": 7008,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 626,
       "n_sin_dato_libro": 37,
-      "n_vetado_profundidad": 2790,
+      "n_vetado_profundidad": 2792,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 2,
@@ -183054,7 +183085,7 @@
       "n_ejecutado": 209,
       "n_ejecutado_post_quiebra": 3338,
       "pnl_post_quiebra_eur": -360.177,
-      "fill_rate": 0.0697,
+      "fill_rate": 0.0696,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.8625,
       "pnl_fiel_eur": -24.5775,
@@ -186677,7 +186708,7 @@
       "subtype": "BTC#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0417,
-      "n_total": 1534,
+      "n_total": 1535,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 178,
@@ -186688,14 +186719,14 @@
       "n_precio_invalido": 4,
       "n_precio_sospechoso": 148,
       "n_ejecutado": 56,
-      "n_ejecutado_post_quiebra": 947,
-      "pnl_post_quiebra_eur": -52.7844,
+      "n_ejecutado_post_quiebra": 948,
+      "pnl_post_quiebra_eur": -51.375,
       "fill_rate": 0.1393,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.5883,
       "pnl_fiel_eur": -24.8517,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -77.6361,
+      "pnl_fiel_eur_sin_suelo": -76.2267,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:05:30+00:00",
@@ -195674,25 +195705,25 @@
       "subtype": "BNB#5min",
       "decision": "BUY_NO",
       "ic_usado": -0.0647,
-      "n_total": 17987,
+      "n_total": 17992,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 9,
       "n_bloqueado_freno": 1282,
-      "n_sin_dato_libro": 76,
-      "n_vetado_profundidad": 11018,
+      "n_sin_dato_libro": 77,
+      "n_vetado_profundidad": 11021,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 46,
       "n_precio_sospechoso": 1078,
       "n_ejecutado": 45,
-      "n_ejecutado_post_quiebra": 5511,
-      "pnl_post_quiebra_eur": -687.7818,
+      "n_ejecutado_post_quiebra": 5512,
+      "pnl_post_quiebra_eur": -686.2498,
       "fill_rate": 0.0041,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6531,
       "pnl_fiel_eur": -24.7869,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -712.5688,
+      "pnl_fiel_eur_sin_suelo": -711.0367,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:28:21+00:00",
@@ -195926,25 +195957,25 @@
       "subtype": "BNB#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.0894,
-      "n_total": 14960,
+      "n_total": 14962,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 5,
       "n_bloqueado_freno": 1683,
-      "n_sin_dato_libro": 127,
+      "n_sin_dato_libro": 128,
       "n_vetado_profundidad": 6784,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 124,
-      "n_precio_sospechoso": 1291,
+      "n_precio_sospechoso": 1292,
       "n_ejecutado": 124,
-      "n_ejecutado_post_quiebra": 6113,
-      "pnl_post_quiebra_eur": -845.0124,
+      "n_ejecutado_post_quiebra": 6114,
+      "pnl_post_quiebra_eur": -846.0624,
       "fill_rate": 0.018,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9365,
       "pnl_fiel_eur": -24.5035,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -869.5159,
+      "pnl_fiel_eur_sin_suelo": -870.5659,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:22:11+00:00",
@@ -196572,545 +196603,545 @@
       "strategy": "MOMENTUM_IBS_5M_BALLENA",
       "subtype": "BTC#5min",
       "decision": "BUY_NO",
-      "ic_usado": -0.0938,
-      "n_total": 14014,
+      "ic_usado": -0.0937,
+      "n_total": 14017,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 1852,
-      "n_sin_dato_libro": 20,
-      "n_vetado_profundidad": 5181,
+      "n_sin_dato_libro": 21,
+      "n_vetado_profundidad": 5182,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 55,
       "n_precio_sospechoso": 1164,
       "n_ejecutado": 104,
-      "n_ejecutado_post_quiebra": 6802,
-      "pnl_post_quiebra_eur": -786.1841,
+      "n_ejecutado_post_quiebra": 6803,
+      "pnl_post_quiebra_eur": -784.2822,
       "fill_rate": 0.0197,
       "bankroll_inicial": 25.44,
-      "bankroll_nocional_final": 0.0085,
-      "pnl_fiel_eur": -25.4315,
+      "bankroll_nocional_final": 0.0146,
+      "pnl_fiel_eur": -25.4254,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -811.6156,
+      "pnl_fiel_eur_sin_suelo": -809.7077,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:31:13+00:00",
-          "bankroll": 24.2469,
-          "pnl": -1.1931
+          "bankroll": 24.2481,
+          "pnl": -1.1919
         },
         {
           "ts": "2026-08-17T15:34:12+00:00",
-          "bankroll": 23.1097,
-          "pnl": -1.1372
+          "bankroll": 23.1121,
+          "pnl": -1.136
         },
         {
           "ts": "2026-08-17T15:42:23+00:00",
-          "bankroll": 24.1202,
-          "pnl": 1.0105
+          "bankroll": 24.1217,
+          "pnl": 1.0096
         },
         {
           "ts": "2026-08-17T15:47:57+00:00",
-          "bankroll": 22.989,
-          "pnl": -1.1312
+          "bankroll": 22.9916,
+          "pnl": -1.1301
         },
         {
           "ts": "2026-08-17T16:24:33+00:00",
-          "bankroll": 21.9108,
-          "pnl": -1.0782
+          "bankroll": 21.9144,
+          "pnl": -1.0772
         },
         {
           "ts": "2026-08-17T16:36:04+00:00",
-          "bankroll": 22.8898,
+          "bankroll": 22.8934,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-17T16:43:48+00:00",
-          "bankroll": 21.8163,
-          "pnl": -1.0735
+          "bankroll": 21.8209,
+          "pnl": -1.0726
         },
         {
           "ts": "2026-08-17T16:49:17+00:00",
-          "bankroll": 22.7952,
+          "bankroll": 22.7998,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-17T17:06:08+00:00",
-          "bankroll": 23.792,
-          "pnl": 0.9968
+          "bankroll": 23.7958,
+          "pnl": 0.9959
         },
         {
           "ts": "2026-08-17T17:06:08+00:00",
-          "bankroll": 22.6762,
-          "pnl": -1.1158
+          "bankroll": 22.6809,
+          "pnl": -1.1148
         },
         {
           "ts": "2026-08-17T22:25:41+00:00",
-          "bankroll": 23.6288,
-          "pnl": 0.9527
+          "bankroll": 23.6328,
+          "pnl": 0.9518
         },
         {
           "ts": "2026-08-17T22:46:48+00:00",
-          "bankroll": 22.5206,
-          "pnl": -1.1082
+          "bankroll": 22.5256,
+          "pnl": -1.1072
         },
         {
           "ts": "2026-08-17T23:05:32+00:00",
-          "bankroll": 23.4296,
-          "pnl": 0.9089
+          "bankroll": 23.4337,
+          "pnl": 0.9082
         },
         {
           "ts": "2026-08-17T23:05:32+00:00",
-          "bankroll": 25.3337,
-          "pnl": 1.9041
+          "bankroll": 25.3361,
+          "pnl": 1.9024
         },
         {
           "ts": "2026-08-17T23:57:16+00:00",
-          "bankroll": 24.1455,
-          "pnl": -1.1881
+          "bankroll": 24.1491,
+          "pnl": -1.187
         },
         {
           "ts": "2026-08-18T00:02:12+00:00",
-          "bankroll": 23.0131,
-          "pnl": -1.1324
+          "bankroll": 23.0178,
+          "pnl": -1.1314
         },
         {
           "ts": "2026-08-17T23:25:40+00:00",
-          "bankroll": 21.9338,
-          "pnl": -1.0793
+          "bankroll": 21.9394,
+          "pnl": -1.0784
         },
         {
           "ts": "2026-08-17T23:22:47+00:00",
-          "bankroll": 20.8838,
+          "bankroll": 20.8894,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-18T22:37:22+00:00",
-          "bankroll": 19.8338,
+          "bankroll": 19.8394,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-18T22:15:39+00:00",
-          "bankroll": 20.8128,
+          "bankroll": 20.8184,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-18T22:28:23+00:00",
-          "bankroll": 21.7918,
+          "bankroll": 21.7973,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-18T22:40:37+00:00",
-          "bankroll": 20.7418,
+          "bankroll": 20.7473,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-18T22:37:22+00:00",
-          "bankroll": 21.7207,
+          "bankroll": 21.7263,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-18T22:54:20+00:00",
-          "bankroll": 22.6997,
+          "bankroll": 22.7053,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-18T23:03:22+00:00",
-          "bankroll": 23.6923,
-          "pnl": 0.9926
+          "bankroll": 23.6971,
+          "pnl": 0.9918
         },
         {
           "ts": "2026-08-18T22:56:46+00:00",
-          "bankroll": 24.7284,
-          "pnl": 1.036
+          "bankroll": 24.7322,
+          "pnl": 1.0351
         },
         {
           "ts": "2026-08-18T23:07:06+00:00",
-          "bankroll": 23.5686,
-          "pnl": -1.1598
+          "bankroll": 23.5735,
+          "pnl": -1.1587
         },
         {
           "ts": "2026-08-18T23:10:13+00:00",
-          "bankroll": 22.4632,
-          "pnl": -1.1054
+          "bankroll": 22.4691,
+          "pnl": -1.1044
         },
         {
           "ts": "2026-08-18T23:17:46+00:00",
-          "bankroll": 23.4455,
-          "pnl": 0.9823
+          "bankroll": 23.4506,
+          "pnl": 0.9815
         },
         {
           "ts": "2026-08-18T23:17:46+00:00",
-          "bankroll": 22.3459,
-          "pnl": -1.0996
+          "bankroll": 22.3519,
+          "pnl": -1.0987
         },
         {
           "ts": "2026-08-18T23:25:35+00:00",
-          "bankroll": 21.2959,
+          "bankroll": 21.3019,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-18T23:29:12+00:00",
-          "bankroll": 20.2459,
+          "bankroll": 20.2519,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-18T23:41:59+00:00",
-          "bankroll": 19.1959,
+          "bankroll": 19.2019,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-19T22:53:13+00:00",
-          "bankroll": 18.1459,
+          "bankroll": 18.1519,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-19T22:55:58+00:00",
-          "bankroll": 19.1249,
+          "bankroll": 19.1309,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-19T23:09:56+00:00",
-          "bankroll": 18.0749,
+          "bankroll": 18.0809,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-19T23:09:56+00:00",
-          "bankroll": 17.0249,
+          "bankroll": 17.0309,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-19T23:22:56+00:00",
-          "bankroll": 15.9749,
+          "bankroll": 15.9809,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-19T23:22:56+00:00",
-          "bankroll": 14.9249,
+          "bankroll": 14.9309,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-20T23:00:33+00:00",
-          "bankroll": 13.8749,
+          "bankroll": 13.8809,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-20T23:19:53+00:00",
-          "bankroll": 12.8249,
+          "bankroll": 12.8309,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-20T23:24:00+00:00",
-          "bankroll": 11.7749,
+          "bankroll": 11.7809,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-20T23:47:35+00:00",
-          "bankroll": 12.7539,
+          "bankroll": 12.7599,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-21T00:13:07+00:00",
-          "bankroll": 13.7329,
+          "bankroll": 13.7389,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-21T00:33:04+00:00",
-          "bankroll": 12.6829,
+          "bankroll": 12.6889,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-21T00:33:04+00:00",
-          "bankroll": 11.6329,
+          "bankroll": 11.6389,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-21T00:33:04+00:00",
-          "bankroll": 10.5829,
+          "bankroll": 10.5889,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-21T04:40:00+00:00",
-          "bankroll": 9.5329,
+          "bankroll": 9.5389,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-21T22:19:52+00:00",
-          "bankroll": 8.4829,
+          "bankroll": 8.4889,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-21T23:21:52+00:00",
-          "bankroll": 7.4329,
+          "bankroll": 7.4389,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-22T00:06:55+00:00",
-          "bankroll": 6.3829,
+          "bankroll": 6.3889,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-22T22:21:17+00:00",
-          "bankroll": 7.3619,
+          "bankroll": 7.3679,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-22T22:39:58+00:00",
-          "bankroll": 8.3408,
+          "bankroll": 8.3469,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-22T22:41:54+00:00",
-          "bankroll": 12.2624,
+          "bankroll": 12.2685,
           "pnl": 3.9216
         },
         {
           "ts": "2026-08-22T22:53:58+00:00",
-          "bankroll": 13.2414,
+          "bankroll": 13.2474,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-22T22:46:42+00:00",
-          "bankroll": 12.1914,
+          "bankroll": 12.1974,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-22T23:24:32+00:00",
-          "bankroll": 11.1414,
+          "bankroll": 11.1474,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-22T23:32:18+00:00",
-          "bankroll": 12.1204,
+          "bankroll": 12.1264,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-22T23:44:11+00:00",
-          "bankroll": 13.6525,
+          "bankroll": 13.6585,
           "pnl": 1.5321
         },
         {
           "ts": "2026-08-22T23:53:54+00:00",
-          "bankroll": 12.6025,
+          "bankroll": 12.6085,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-22T23:57:17+00:00",
-          "bankroll": 11.5525,
+          "bankroll": 11.5585,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-23T00:17:03+00:00",
-          "bankroll": 10.5025,
+          "bankroll": 10.5085,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-23T00:29:57+00:00",
-          "bankroll": 9.4525,
+          "bankroll": 9.4585,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-23T22:42:07+00:00",
-          "bankroll": 10.4314,
+          "bankroll": 10.4375,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-23T22:42:07+00:00",
-          "bankroll": 9.3814,
+          "bankroll": 9.3875,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-23T22:51:49+00:00",
-          "bankroll": 10.3604,
+          "bankroll": 10.3664,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-23T23:18:32+00:00",
-          "bankroll": 9.3104,
+          "bankroll": 9.3164,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-23T23:09:15+00:00",
-          "bankroll": 10.2894,
+          "bankroll": 10.2954,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-23T23:23:12+00:00",
-          "bankroll": 11.23,
+          "bankroll": 11.236,
           "pnl": 0.9405
         },
         {
           "ts": "2026-08-23T23:25:02+00:00",
-          "bankroll": 10.18,
+          "bankroll": 10.186,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-23T23:29:20+00:00",
-          "bankroll": 11.1589,
+          "bankroll": 11.165,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-23T23:38:51+00:00",
-          "bankroll": 10.1089,
+          "bankroll": 10.115,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-23T23:43:05+00:00",
-          "bankroll": 9.0589,
+          "bankroll": 9.065,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T00:09:16+00:00",
-          "bankroll": 8.0089,
+          "bankroll": 8.015,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T00:54:48+00:00",
-          "bankroll": 6.9589,
+          "bankroll": 6.965,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T22:18:52+00:00",
-          "bankroll": 5.9089,
+          "bankroll": 5.915,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T22:32:06+00:00",
-          "bankroll": 4.8589,
+          "bankroll": 4.865,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T22:14:54+00:00",
-          "bankroll": 3.8089,
+          "bankroll": 3.815,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T23:20:12+00:00",
-          "bankroll": 6.2082,
+          "bankroll": 6.2142,
           "pnl": 2.3993
         },
         {
           "ts": "2026-08-25T23:26:49+00:00",
-          "bankroll": 7.4546,
+          "bankroll": 7.4606,
           "pnl": 1.2463
         },
         {
           "ts": "2026-08-26T00:11:24+00:00",
-          "bankroll": 6.4046,
+          "bankroll": 6.4106,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T00:11:24+00:00",
-          "bankroll": 5.3546,
+          "bankroll": 5.3606,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T00:23:42+00:00",
-          "bankroll": 7.174,
+          "bankroll": 7.18,
           "pnl": 1.8194
         },
         {
           "ts": "2026-08-26T00:28:56+00:00",
-          "bankroll": 6.124,
+          "bankroll": 6.13,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T00:38:26+00:00",
-          "bankroll": 5.074,
+          "bankroll": 5.08,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T00:58:38+00:00",
-          "bankroll": 4.024,
+          "bankroll": 4.03,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T08:43:09+00:00",
-          "bankroll": 5.043,
+          "bankroll": 5.049,
           "pnl": 1.019
         },
         {
           "ts": "2026-08-26T08:51:32+00:00",
-          "bankroll": 3.993,
+          "bankroll": 3.999,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T09:14:33+00:00",
-          "bankroll": 2.943,
+          "bankroll": 2.949,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T22:24:22+00:00",
-          "bankroll": 5.124,
+          "bankroll": 5.13,
           "pnl": 2.181
         },
         {
           "ts": "2026-08-26T22:27:16+00:00",
-          "bankroll": 4.074,
+          "bankroll": 4.08,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T22:39:44+00:00",
-          "bankroll": 5.2235,
+          "bankroll": 5.2295,
           "pnl": 1.1495
         },
         {
           "ts": "2026-08-26T22:50:39+00:00",
-          "bankroll": 4.1735,
+          "bankroll": 4.1795,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T23:12:07+00:00",
-          "bankroll": 3.1235,
+          "bankroll": 3.1295,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T23:26:04+00:00",
-          "bankroll": 2.0735,
+          "bankroll": 2.0795,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T00:32:50+00:00",
-          "bankroll": 5.1775,
+          "bankroll": 5.1835,
           "pnl": 3.104
         },
         {
           "ts": "2026-08-27T00:53:59+00:00",
-          "bankroll": 4.1275,
+          "bankroll": 4.1335,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T00:58:12+00:00",
-          "bankroll": 6.3085,
+          "bankroll": 6.3146,
           "pnl": 2.181
         },
         {
           "ts": "2026-08-27T01:17:45+00:00",
-          "bankroll": 5.2585,
+          "bankroll": 5.2646,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T01:31:29+00:00",
-          "bankroll": 4.2085,
+          "bankroll": 4.2146,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T02:04:24+00:00",
-          "bankroll": 3.1585,
+          "bankroll": 3.1646,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T02:13:16+00:00",
-          "bankroll": 2.1085,
+          "bankroll": 2.1146,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T22:24:15+00:00",
-          "bankroll": 1.0585,
+          "bankroll": 1.0646,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-28T22:12:28+00:00",
-          "bankroll": 0.0085,
+          "bankroll": 0.0146,
           "pnl": -1.05
         }
       ]
@@ -197120,7 +197151,7 @@
       "subtype": "BTC#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.1097,
-      "n_total": 13691,
+      "n_total": 13692,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 1798,
@@ -197131,14 +197162,14 @@
       "n_precio_invalido": 112,
       "n_precio_sospechoso": 1201,
       "n_ejecutado": 151,
-      "n_ejecutado_post_quiebra": 7131,
-      "pnl_post_quiebra_eur": -1068.0295,
+      "n_ejecutado_post_quiebra": 7132,
+      "pnl_post_quiebra_eur": -1064.7477,
       "fill_rate": 0.0326,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.9012,
       "pnl_fiel_eur": -24.5388,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -1092.5683,
+      "pnl_fiel_eur_sin_suelo": -1089.2865,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:22:11+00:00",
@@ -197901,13 +197932,13 @@
       "strategy": "MOMENTUM_IBS_5M_BALLENA",
       "subtype": "DOGE#5min",
       "decision": "BUY_NO",
-      "ic_usado": -0.0441,
-      "n_total": 19020,
+      "ic_usado": -0.0442,
+      "n_total": 19026,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 1388,
-      "n_sin_dato_libro": 94,
-      "n_vetado_profundidad": 10937,
+      "n_sin_dato_libro": 95,
+      "n_vetado_profundidad": 10942,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 28,
@@ -198448,740 +198479,740 @@
       "strategy": "MOMENTUM_IBS_5M_BALLENA",
       "subtype": "DOGE#5min",
       "decision": "BUY_YES",
-      "ic_usado": -0.0984,
-      "n_total": 14337,
+      "ic_usado": -0.0983,
+      "n_total": 14343,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 1604,
-      "n_sin_dato_libro": 134,
-      "n_vetado_profundidad": 6011,
+      "n_sin_dato_libro": 136,
+      "n_vetado_profundidad": 6014,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 112,
       "n_precio_sospechoso": 1091,
       "n_ejecutado": 143,
-      "n_ejecutado_post_quiebra": 6331,
-      "pnl_post_quiebra_eur": -827.9367,
+      "n_ejecutado_post_quiebra": 6332,
+      "pnl_post_quiebra_eur": -828.9867,
       "fill_rate": 0.0232,
       "bankroll_inicial": 25.44,
-      "bankroll_nocional_final": 0.1207,
-      "pnl_fiel_eur": -25.3193,
+      "bankroll_nocional_final": 0.1231,
+      "pnl_fiel_eur": -25.3169,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -853.256,
+      "pnl_fiel_eur_sin_suelo": -854.3036,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:08:59+00:00",
-          "bankroll": 26.8667,
-          "pnl": 1.4267
+          "bankroll": 26.8652,
+          "pnl": 1.4252
         },
         {
           "ts": "2026-08-17T15:39:26+00:00",
           "bankroll": 25.5448,
-          "pnl": -1.3218
+          "pnl": -1.3204
         },
         {
           "ts": "2026-08-17T15:47:57+00:00",
-          "bankroll": 27.2318,
-          "pnl": 1.687
+          "bankroll": 27.2301,
+          "pnl": 1.6853
         },
         {
           "ts": "2026-08-17T15:53:25+00:00",
-          "bankroll": 29.1867,
-          "pnl": 1.9549
+          "bankroll": 29.1829,
+          "pnl": 1.9528
         },
         {
           "ts": "2026-08-17T16:49:17+00:00",
-          "bankroll": 32.6332,
-          "pnl": 3.4465
+          "bankroll": 32.6254,
+          "pnl": 3.4425
         },
         {
           "ts": "2026-08-17T17:06:08+00:00",
-          "bankroll": 31.0277,
-          "pnl": -1.6056
+          "bankroll": 31.0218,
+          "pnl": -1.6035
         },
         {
           "ts": "2026-08-17T19:40:12+00:00",
-          "bankroll": 32.915,
-          "pnl": 1.8874
+          "bankroll": 32.9069,
+          "pnl": 1.8851
         },
         {
           "ts": "2026-08-17T19:43:25+00:00",
-          "bankroll": 31.2956,
-          "pnl": -1.6194
+          "bankroll": 31.2896,
+          "pnl": -1.6174
         },
         {
           "ts": "2026-08-17T20:20:40+00:00",
-          "bankroll": 29.7559,
-          "pnl": -1.5397
+          "bankroll": 29.7517,
+          "pnl": -1.5379
         },
         {
           "ts": "2026-08-17T20:40:10+00:00",
-          "bankroll": 28.2919,
-          "pnl": -1.464
+          "bankroll": 28.2894,
+          "pnl": -1.4623
         },
         {
           "ts": "2026-08-17T20:57:08+00:00",
-          "bankroll": 26.8999,
-          "pnl": -1.392
+          "bankroll": 26.899,
+          "pnl": -1.3904
         },
         {
           "ts": "2026-08-17T22:37:53+00:00",
-          "bankroll": 25.5764,
-          "pnl": -1.3235
+          "bankroll": 25.5769,
+          "pnl": -1.3221
         },
         {
           "ts": "2026-08-17T23:33:38+00:00",
-          "bankroll": 26.6593,
-          "pnl": 1.0829
+          "bankroll": 26.6587,
+          "pnl": 1.0818
         },
         {
           "ts": "2026-08-17T23:44:13+00:00",
-          "bankroll": 25.3477,
-          "pnl": -1.3116
+          "bankroll": 25.3484,
+          "pnl": -1.3103
         },
         {
           "ts": "2026-08-18T00:34:24+00:00",
-          "bankroll": 24.1006,
-          "pnl": -1.2471
+          "bankroll": 24.1025,
+          "pnl": -1.2459
         },
         {
           "ts": "2026-08-18T00:39:03+00:00",
-          "bankroll": 22.9148,
-          "pnl": -1.1857
+          "bankroll": 22.9179,
+          "pnl": -1.1846
         },
         {
           "ts": "2026-08-18T00:55:10+00:00",
-          "bankroll": 25.491,
-          "pnl": 2.5761
+          "bankroll": 25.4918,
+          "pnl": 2.5739
         },
         {
           "ts": "2026-08-18T01:04:47+00:00",
-          "bankroll": 26.6144,
-          "pnl": 1.1234
+          "bankroll": 26.6141,
+          "pnl": 1.1223
         },
         {
           "ts": "2026-08-18T01:14:21+00:00",
-          "bankroll": 28.7863,
-          "pnl": 2.1719
+          "bankroll": 28.7838,
+          "pnl": 2.1697
         },
         {
           "ts": "2026-08-18T01:26:13+00:00",
-          "bankroll": 27.37,
-          "pnl": -1.4163
+          "bankroll": 27.369,
+          "pnl": -1.4147
         },
         {
           "ts": "2026-08-18T01:37:45+00:00",
-          "bankroll": 26.0234,
-          "pnl": -1.3466
+          "bankroll": 26.0239,
+          "pnl": -1.3452
         },
         {
           "ts": "2026-08-18T01:47:41+00:00",
-          "bankroll": 24.7431,
-          "pnl": -1.2804
+          "bankroll": 24.7448,
+          "pnl": -1.2791
         },
         {
           "ts": "2026-08-18T01:47:41+00:00",
-          "bankroll": 23.5257,
-          "pnl": -1.2174
+          "bankroll": 23.5286,
+          "pnl": -1.2162
         },
         {
           "ts": "2026-08-18T22:13:30+00:00",
-          "bankroll": 22.3682,
-          "pnl": -1.1575
+          "bankroll": 22.3721,
+          "pnl": -1.1564
         },
         {
           "ts": "2026-08-18T22:19:53+00:00",
-          "bankroll": 24.7648,
-          "pnl": 2.3965
+          "bankroll": 24.7667,
+          "pnl": 2.3945
         },
         {
           "ts": "2026-08-18T22:40:37+00:00",
-          "bankroll": 25.772,
-          "pnl": 1.0073
+          "bankroll": 25.773,
+          "pnl": 1.0063
         },
         {
           "ts": "2026-08-18T23:07:06+00:00",
-          "bankroll": 31.166,
-          "pnl": 5.394
+          "bankroll": 31.1617,
+          "pnl": 5.3887
         },
         {
           "ts": "2026-08-18T23:29:12+00:00",
-          "bankroll": 32.289,
-          "pnl": 1.123
+          "bankroll": 32.2833,
+          "pnl": 1.1217
         },
         {
           "ts": "2026-08-18T23:41:59+00:00",
-          "bankroll": 35.5888,
-          "pnl": 3.2998
+          "bankroll": 35.5792,
+          "pnl": 3.2959
         },
         {
           "ts": "2026-08-18T23:48:16+00:00",
-          "bankroll": 36.9792,
-          "pnl": 1.3904
+          "bankroll": 36.9679,
+          "pnl": 1.3886
         },
         {
           "ts": "2026-08-19T00:02:35+00:00",
-          "bankroll": 38.2585,
-          "pnl": 1.2792
+          "bankroll": 38.2454,
+          "pnl": 1.2776
         },
         {
           "ts": "2026-08-19T00:04:43+00:00",
-          "bankroll": 36.3762,
-          "pnl": -1.8823
+          "bankroll": 36.3657,
+          "pnl": -1.8798
         },
         {
           "ts": "2026-08-19T00:19:02+00:00",
-          "bankroll": 34.5865,
-          "pnl": -1.7897
+          "bankroll": 34.5783,
+          "pnl": -1.7874
         },
         {
           "ts": "2026-08-19T00:34:27+00:00",
-          "bankroll": 32.8848,
-          "pnl": -1.7017
+          "bankroll": 32.8788,
+          "pnl": -1.6995
         },
         {
           "ts": "2026-08-19T00:48:43+00:00",
-          "bankroll": 35.8154,
-          "pnl": 2.9306
+          "bankroll": 35.8058,
+          "pnl": 2.927
         },
         {
           "ts": "2026-08-19T00:55:07+00:00",
-          "bankroll": 40.4968,
-          "pnl": 4.6815
+          "bankroll": 40.4813,
+          "pnl": 4.6755
         },
         {
           "ts": "2026-08-19T01:01:34+00:00",
-          "bankroll": 49.5811,
-          "pnl": 9.0843
+          "bankroll": 49.5528,
+          "pnl": 9.0715
         },
         {
           "ts": "2026-08-19T01:22:10+00:00",
-          "bankroll": 47.5811,
+          "bankroll": 47.5528,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T01:25:32+00:00",
-          "bankroll": 45.5811,
+          "bankroll": 45.5528,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T02:01:00+00:00",
-          "bankroll": 46.9309,
+          "bankroll": 46.9026,
           "pnl": 1.3498
         },
         {
           "ts": "2026-08-19T02:31:22+00:00",
-          "bankroll": 50.8969,
+          "bankroll": 50.8686,
           "pnl": 3.966
         },
         {
           "ts": "2026-08-19T02:34:52+00:00",
-          "bankroll": 55.697,
+          "bankroll": 55.6688,
           "pnl": 4.8001
         },
         {
           "ts": "2026-08-19T02:39:46+00:00",
-          "bankroll": 53.697,
+          "bankroll": 53.6688,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T03:12:55+00:00",
-          "bankroll": 55.2223,
+          "bankroll": 55.1941,
           "pnl": 1.5253
         },
         {
           "ts": "2026-08-19T03:17:34+00:00",
-          "bankroll": 53.2223,
+          "bankroll": 53.1941,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T03:49:39+00:00",
-          "bankroll": 51.2223,
+          "bankroll": 51.1941,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T03:52:11+00:00",
-          "bankroll": 52.9435,
+          "bankroll": 52.9152,
           "pnl": 1.7211
         },
         {
           "ts": "2026-08-19T04:03:10+00:00",
-          "bankroll": 58.8559,
+          "bankroll": 58.8276,
           "pnl": 5.9124
         },
         {
           "ts": "2026-08-19T04:13:47+00:00",
-          "bankroll": 56.8559,
+          "bankroll": 56.8276,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T06:35:00+00:00",
-          "bankroll": 54.8559,
+          "bankroll": 54.8276,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T07:02:26+00:00",
-          "bankroll": 52.8559,
+          "bankroll": 52.8276,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T08:18:28+00:00",
-          "bankroll": 50.8559,
+          "bankroll": 50.8276,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T22:14:51+00:00",
-          "bankroll": 48.8559,
+          "bankroll": 48.8276,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T22:23:56+00:00",
-          "bankroll": 46.8559,
+          "bankroll": 46.8276,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T22:49:15+00:00",
-          "bankroll": 48.7206,
+          "bankroll": 48.6923,
           "pnl": 1.8647
         },
         {
           "ts": "2026-08-19T22:38:16+00:00",
-          "bankroll": 46.7206,
+          "bankroll": 46.6923,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T23:25:52+00:00",
-          "bankroll": 44.7206,
+          "bankroll": 44.6923,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T23:25:52+00:00",
-          "bankroll": 42.7206,
+          "bankroll": 42.6923,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-19T23:37:24+00:00",
-          "bankroll": 46.0379,
+          "bankroll": 46.0097,
           "pnl": 3.3173
         },
         {
           "ts": "2026-08-20T00:01:47+00:00",
-          "bankroll": 44.0379,
+          "bankroll": 44.0097,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-20T00:15:47+00:00",
-          "bankroll": 42.0379,
+          "bankroll": 42.0097,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-20T00:43:19+00:00",
-          "bankroll": 40.0379,
+          "bankroll": 40.0097,
           "pnl": -2.0
         },
         {
           "ts": "2026-08-20T00:48:42+00:00",
-          "bankroll": 38.0681,
-          "pnl": -1.9699
+          "bankroll": 38.0432,
+          "pnl": -1.9665
         },
         {
           "ts": "2026-08-20T23:19:53+00:00",
-          "bankroll": 36.1951,
-          "pnl": -1.8729
+          "bankroll": 36.1734,
+          "pnl": -1.8698
         },
         {
           "ts": "2026-08-20T23:47:35+00:00",
-          "bankroll": 37.7903,
-          "pnl": 1.5952
+          "bankroll": 37.766,
+          "pnl": 1.5926
         },
         {
           "ts": "2026-08-20T23:47:35+00:00",
-          "bankroll": 35.931,
-          "pnl": -1.8593
+          "bankroll": 35.9098,
+          "pnl": -1.8562
         },
         {
           "ts": "2026-08-21T00:33:04+00:00",
-          "bankroll": 34.1632,
-          "pnl": -1.7678
+          "bankroll": 34.1448,
+          "pnl": -1.765
         },
         {
           "ts": "2026-08-21T00:43:03+00:00",
-          "bankroll": 32.4824,
-          "pnl": -1.6808
+          "bankroll": 32.4666,
+          "pnl": -1.6782
         },
         {
           "ts": "2026-08-21T00:51:42+00:00",
-          "bankroll": 38.8441,
-          "pnl": 6.3618
+          "bankroll": 38.8188,
+          "pnl": 6.3522
         },
         {
           "ts": "2026-08-21T01:50:24+00:00",
-          "bankroll": 36.933,
-          "pnl": -1.9111
+          "bankroll": 36.9108,
+          "pnl": -1.9079
         },
         {
           "ts": "2026-08-21T03:25:25+00:00",
-          "bankroll": 35.1159,
-          "pnl": -1.8171
+          "bankroll": 35.0967,
+          "pnl": -1.8142
         },
         {
           "ts": "2026-08-21T06:06:04+00:00",
-          "bankroll": 33.3882,
-          "pnl": -1.7277
+          "bankroll": 33.3717,
+          "pnl": -1.725
         },
         {
           "ts": "2026-08-21T06:10:27+00:00",
-          "bankroll": 35.1156,
-          "pnl": 1.7274
+          "bankroll": 35.0964,
+          "pnl": 1.7248
         },
         {
           "ts": "2026-08-21T06:50:36+00:00",
-          "bankroll": 33.3879,
-          "pnl": -1.7277
+          "bankroll": 33.3715,
+          "pnl": -1.725
         },
         {
           "ts": "2026-08-21T06:56:09+00:00",
-          "bankroll": 31.7452,
-          "pnl": -1.6427
+          "bankroll": 31.7312,
+          "pnl": -1.6402
         },
         {
           "ts": "2026-08-21T07:09:13+00:00",
-          "bankroll": 30.1833,
-          "pnl": -1.5619
+          "bankroll": 30.1717,
+          "pnl": -1.5596
         },
         {
           "ts": "2026-08-21T07:14:10+00:00",
-          "bankroll": 28.6983,
-          "pnl": -1.485
+          "bankroll": 28.6887,
+          "pnl": -1.4829
         },
         {
           "ts": "2026-08-21T22:51:45+00:00",
-          "bankroll": 27.2864,
-          "pnl": -1.412
+          "bankroll": 27.2787,
+          "pnl": -1.4101
         },
         {
           "ts": "2026-08-21T22:59:42+00:00",
-          "bankroll": 25.9439,
-          "pnl": -1.3425
+          "bankroll": 25.9379,
+          "pnl": -1.3407
         },
         {
           "ts": "2026-08-21T23:24:04+00:00",
-          "bankroll": 24.6674,
-          "pnl": -1.2764
+          "bankroll": 24.6631,
+          "pnl": -1.2748
         },
         {
           "ts": "2026-08-21T23:36:32+00:00",
-          "bankroll": 23.4538,
-          "pnl": -1.2136
+          "bankroll": 23.4509,
+          "pnl": -1.2122
         },
         {
           "ts": "2026-08-22T22:21:17+00:00",
-          "bankroll": 26.6853,
-          "pnl": 3.2315
+          "bankroll": 26.6787,
+          "pnl": 3.2279
         },
         {
           "ts": "2026-08-22T22:39:58+00:00",
-          "bankroll": 25.3724,
-          "pnl": -1.3129
+          "bankroll": 25.3675,
+          "pnl": -1.3113
         },
         {
           "ts": "2026-08-22T22:52:11+00:00",
-          "bankroll": 24.1241,
-          "pnl": -1.2483
+          "bankroll": 24.1207,
+          "pnl": -1.2468
         },
         {
           "ts": "2026-08-22T23:08:02+00:00",
-          "bankroll": 22.9372,
-          "pnl": -1.1869
+          "bankroll": 22.9351,
+          "pnl": -1.1855
         },
         {
           "ts": "2026-08-22T23:08:02+00:00",
-          "bankroll": 21.8087,
-          "pnl": -1.1285
+          "bankroll": 21.8079,
+          "pnl": -1.1273
         },
         {
           "ts": "2026-08-23T22:40:13+00:00",
-          "bankroll": 20.7357,
-          "pnl": -1.073
+          "bankroll": 20.736,
+          "pnl": -1.0719
         },
         {
           "ts": "2026-08-23T23:09:15+00:00",
-          "bankroll": 21.6393,
+          "bankroll": 21.6396,
           "pnl": 0.9036
         },
         {
           "ts": "2026-08-23T23:09:15+00:00",
-          "bankroll": 20.5746,
-          "pnl": -1.0647
+          "bankroll": 20.576,
+          "pnl": -1.0636
         },
         {
           "ts": "2026-08-23T23:41:08+00:00",
-          "bankroll": 21.5536,
+          "bankroll": 21.555,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-23T23:32:07+00:00",
-          "bankroll": 20.4932,
-          "pnl": -1.0604
+          "bankroll": 20.4956,
+          "pnl": -1.0594
         },
         {
           "ts": "2026-08-23T23:55:32+00:00",
-          "bankroll": 19.4432,
+          "bankroll": 19.4456,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-23T23:59:39+00:00",
-          "bankroll": 20.4222,
+          "bankroll": 20.4246,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-23T23:44:51+00:00",
-          "bankroll": 19.3722,
+          "bankroll": 19.3746,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T00:16:39+00:00",
-          "bankroll": 18.3222,
+          "bankroll": 18.3246,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T00:16:39+00:00",
-          "bankroll": 19.3011,
+          "bankroll": 19.3035,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-24T00:25:06+00:00",
-          "bankroll": 18.2511,
+          "bankroll": 18.2535,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T00:36:23+00:00",
-          "bankroll": 17.2011,
+          "bankroll": 17.2035,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T01:10:35+00:00",
-          "bankroll": 16.1511,
+          "bankroll": 16.1535,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T01:26:12+00:00",
-          "bankroll": 15.1011,
+          "bankroll": 15.1035,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T22:50:49+00:00",
-          "bankroll": 14.0511,
+          "bankroll": 14.0535,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T23:11:17+00:00",
-          "bankroll": 13.0011,
+          "bankroll": 13.0035,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-24T23:11:17+00:00",
-          "bankroll": 11.9511,
+          "bankroll": 11.9535,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T00:19:10+00:00",
-          "bankroll": 14.601,
+          "bankroll": 14.6034,
           "pnl": 2.6498
         },
         {
           "ts": "2026-08-25T00:27:03+00:00",
-          "bankroll": 15.9534,
+          "bankroll": 15.9558,
           "pnl": 1.3525
         },
         {
           "ts": "2026-08-25T00:27:03+00:00",
-          "bankroll": 14.9034,
+          "bankroll": 14.9058,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T00:36:56+00:00",
-          "bankroll": 13.8534,
+          "bankroll": 13.8558,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T00:52:46+00:00",
-          "bankroll": 14.794,
+          "bankroll": 14.7964,
           "pnl": 0.9405
         },
         {
           "ts": "2026-08-25T01:05:13+00:00",
-          "bankroll": 17.7345,
+          "bankroll": 17.7369,
           "pnl": 2.9405
         },
         {
           "ts": "2026-08-25T01:13:00+00:00",
-          "bankroll": 16.6845,
+          "bankroll": 16.6869,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T01:23:01+00:00",
-          "bankroll": 15.6345,
+          "bankroll": 15.6369,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T01:58:13+00:00",
-          "bankroll": 14.5845,
+          "bankroll": 14.5869,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T02:12:33+00:00",
-          "bankroll": 13.5345,
+          "bankroll": 13.5369,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T22:32:46+00:00",
-          "bankroll": 12.4845,
+          "bankroll": 12.4869,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T23:09:53+00:00",
-          "bankroll": 11.4345,
+          "bankroll": 11.4369,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T23:34:45+00:00",
-          "bankroll": 10.3845,
+          "bankroll": 10.3869,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-25T23:44:23+00:00",
-          "bankroll": 9.3345,
+          "bankroll": 9.3369,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T22:21:33+00:00",
-          "bankroll": 8.2845,
+          "bankroll": 8.2869,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T22:39:44+00:00",
-          "bankroll": 7.2345,
+          "bankroll": 7.2369,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T23:14:56+00:00",
-          "bankroll": 6.1845,
+          "bankroll": 6.1869,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T22:11:12+00:00",
-          "bankroll": 7.0881,
+          "bankroll": 7.0905,
           "pnl": 0.9036
         },
         {
           "ts": "2026-08-27T22:31:11+00:00",
-          "bankroll": 6.0381,
+          "bankroll": 6.0405,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T22:52:07+00:00",
-          "bankroll": 7.5073,
+          "bankroll": 7.5097,
           "pnl": 1.4692
         },
         {
           "ts": "2026-08-27T22:56:39+00:00",
-          "bankroll": 6.4573,
+          "bankroll": 6.4597,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T23:04:13+00:00",
-          "bankroll": 7.4763,
+          "bankroll": 7.4787,
           "pnl": 1.019
         },
         {
           "ts": "2026-08-27T23:21:12+00:00",
-          "bankroll": 6.4263,
+          "bankroll": 6.4287,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T23:33:09+00:00",
-          "bankroll": 7.3668,
+          "bankroll": 7.3692,
           "pnl": 0.9405
         },
         {
           "ts": "2026-08-27T23:51:09+00:00",
-          "bankroll": 6.3168,
+          "bankroll": 6.3192,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-28T00:03:27+00:00",
-          "bankroll": 5.2668,
+          "bankroll": 5.2692,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-28T00:29:17+00:00",
-          "bankroll": 4.2168,
+          "bankroll": 4.2192,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-28T22:20:43+00:00",
-          "bankroll": 5.0848,
+          "bankroll": 5.0872,
           "pnl": 0.868
         },
         {
           "ts": "2026-08-28T23:11:04+00:00",
-          "bankroll": 4.0348,
+          "bankroll": 4.0372,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-29T00:20:37+00:00",
-          "bankroll": 5.2317,
+          "bankroll": 5.2341,
           "pnl": 1.1968
         },
         {
           "ts": "2026-08-29T00:34:12+00:00",
-          "bankroll": 6.0006,
+          "bankroll": 6.003,
           "pnl": 0.769
         },
         {
           "ts": "2026-08-29T00:53:46+00:00",
-          "bankroll": 4.9506,
+          "bankroll": 4.953,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-29T01:09:07+00:00",
-          "bankroll": 3.9006,
+          "bankroll": 3.903,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-29T01:13:34+00:00",
-          "bankroll": 2.8506,
+          "bankroll": 2.853,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-29T22:12:25+00:00",
-          "bankroll": 1.8006,
+          "bankroll": 1.803,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-30T22:10:30+00:00",
-          "bankroll": 4.3207,
+          "bankroll": 4.3231,
           "pnl": 2.5201
         },
         {
           "ts": "2026-08-30T22:20:33+00:00",
-          "bankroll": 3.2707,
+          "bankroll": 3.2731,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-30T22:57:15+00:00",
-          "bankroll": 2.2207,
+          "bankroll": 2.2231,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-30T23:09:56+00:00",
-          "bankroll": 1.1707,
+          "bankroll": 1.1731,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-31T22:11:31+00:00",
-          "bankroll": 0.1207,
+          "bankroll": 0.1231,
           "pnl": -1.05
         }
       ]
@@ -199191,25 +199222,25 @@
       "subtype": "ETH#5min",
       "decision": "BUY_NO",
       "ic_usado": -0.0911,
-      "n_total": 13884,
+      "n_total": 13887,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 956,
-      "n_sin_dato_libro": 22,
-      "n_vetado_profundidad": 5880,
+      "n_sin_dato_libro": 23,
+      "n_vetado_profundidad": 5881,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 55,
       "n_precio_sospechoso": 1168,
       "n_ejecutado": 68,
-      "n_ejecutado_post_quiebra": 6902,
-      "pnl_post_quiebra_eur": -715.2032,
+      "n_ejecutado_post_quiebra": 6903,
+      "pnl_post_quiebra_eur": -716.2532,
       "fill_rate": 0.0114,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.4789,
       "pnl_fiel_eur": -24.9611,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -740.1644,
+      "pnl_fiel_eur_sin_suelo": -741.2144,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:05:30+00:00",
@@ -199558,7 +199589,7 @@
       "subtype": "ETH#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.1098,
-      "n_total": 13372,
+      "n_total": 13373,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 1287,
@@ -199569,14 +199600,14 @@
       "n_precio_invalido": 109,
       "n_precio_sospechoso": 1247,
       "n_ejecutado": 94,
-      "n_ejecutado_post_quiebra": 7011,
-      "pnl_post_quiebra_eur": -971.761,
+      "n_ejecutado_post_quiebra": 7012,
+      "pnl_post_quiebra_eur": -966.6129,
       "fill_rate": 0.019,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.0178,
       "pnl_fiel_eur": -25.4222,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -997.1832,
+      "pnl_fiel_eur_sin_suelo": -992.0351,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:28:21+00:00",
@@ -200055,25 +200086,25 @@
       "subtype": "SOL#5min",
       "decision": "BUY_NO",
       "ic_usado": -0.0228,
-      "n_total": 20101,
+      "n_total": 20105,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 9,
       "n_bloqueado_freno": 2263,
-      "n_sin_dato_libro": 117,
+      "n_sin_dato_libro": 118,
       "n_vetado_profundidad": 7074,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 39,
-      "n_precio_sospechoso": 770,
+      "n_precio_sospechoso": 771,
       "n_ejecutado": 171,
-      "n_ejecutado_post_quiebra": 10428,
-      "pnl_post_quiebra_eur": -390.3697,
+      "n_ejecutado_post_quiebra": 10431,
+      "pnl_post_quiebra_eur": -393.5197,
       "fill_rate": 0.0236,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.1771,
       "pnl_fiel_eur": -25.2629,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -415.6326,
+      "pnl_fiel_eur_sin_suelo": -418.7826,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:22:11+00:00",
@@ -200937,7 +200968,7 @@
       "subtype": "SOL#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.115,
-      "n_total": 13202,
+      "n_total": 13204,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 3,
       "n_bloqueado_freno": 2129,
@@ -200946,16 +200977,16 @@
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 129,
-      "n_precio_sospechoso": 1034,
+      "n_precio_sospechoso": 1035,
       "n_ejecutado": 158,
-      "n_ejecutado_post_quiebra": 6543,
-      "pnl_post_quiebra_eur": -589.6715,
+      "n_ejecutado_post_quiebra": 6545,
+      "pnl_post_quiebra_eur": -587.4398,
       "fill_rate": 0.0363,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.929,
       "pnl_fiel_eur": -24.511,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -614.1826,
+      "pnl_fiel_eur_sin_suelo": -611.9508,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:14:29+00:00",
@@ -201753,26 +201784,26 @@
       "strategy": "MOMENTUM_IBS_5M_BALLENA",
       "subtype": "XRP#5min",
       "decision": "BUY_NO",
-      "ic_usado": -0.0328,
-      "n_total": 18829,
+      "ic_usado": -0.0329,
+      "n_total": 18834,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 7,
       "n_bloqueado_freno": 1701,
-      "n_sin_dato_libro": 98,
-      "n_vetado_profundidad": 9368,
+      "n_sin_dato_libro": 99,
+      "n_vetado_profundidad": 9370,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 46,
       "n_precio_sospechoso": 1064,
       "n_ejecutado": 98,
-      "n_ejecutado_post_quiebra": 7511,
-      "pnl_post_quiebra_eur": -452.6184,
+      "n_ejecutado_post_quiebra": 7513,
+      "pnl_post_quiebra_eur": -454.7184,
       "fill_rate": 0.0104,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7283,
       "pnl_fiel_eur": -24.7117,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -477.3301,
+      "pnl_fiel_eur_sin_suelo": -479.4301,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:22:11+00:00",
@@ -202271,25 +202302,25 @@
       "subtype": "XRP#5min",
       "decision": "BUY_YES",
       "ic_usado": -0.1186,
-      "n_total": 13410,
+      "n_total": 13414,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 1465,
-      "n_sin_dato_libro": 50,
-      "n_vetado_profundidad": 4814,
+      "n_sin_dato_libro": 51,
+      "n_vetado_profundidad": 4816,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 103,
       "n_precio_sospechoso": 1152,
       "n_ejecutado": 145,
-      "n_ejecutado_post_quiebra": 6829,
-      "pnl_post_quiebra_eur": -805.2737,
+      "n_ejecutado_post_quiebra": 6830,
+      "pnl_post_quiebra_eur": -806.3237,
       "fill_rate": 0.0292,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.954,
       "pnl_fiel_eur": -24.486,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -829.7597,
+      "pnl_fiel_eur_sin_suelo": -830.8097,
       "equity_curve": [
         {
           "ts": "2026-08-17T15:22:11+00:00",
@@ -227850,11 +227881,11 @@
       "subtype": "SOL#60min",
       "decision": "BUY_YES",
       "ic_usado": -0.1087,
-      "n_total": 21,
+      "n_total": 22,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 21,
+      "n_sin_dato_libro": 22,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -234550,7 +234581,7 @@
       "subtype": "ETH#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0219,
-      "n_total": 4796,
+      "n_total": 4798,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 1171,
@@ -234561,14 +234592,14 @@
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 77,
       "n_ejecutado": 917,
-      "n_ejecutado_post_quiebra": 2425,
-      "pnl_post_quiebra_eur": -31.8699,
+      "n_ejecutado_post_quiebra": 2427,
+      "pnl_post_quiebra_eur": -33.9699,
       "fill_rate": 0.7706,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.8175,
       "pnl_fiel_eur": -24.6225,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -56.4924,
+      "pnl_fiel_eur_sin_suelo": -58.5924,
       "equity_curve": [
         {
           "ts": "2026-08-20T18:10:43+00:00",
@@ -237103,7 +237134,7 @@
       "subtype": "SOL#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0153,
-      "n_total": 3339,
+      "n_total": 3340,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 564,
@@ -237114,14 +237145,14 @@
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 106,
       "n_ejecutado": 505,
-      "n_ejecutado_post_quiebra": 1933,
-      "pnl_post_quiebra_eur": -28.085,
+      "n_ejecutado_post_quiebra": 1934,
+      "pnl_post_quiebra_eur": -29.135,
       "fill_rate": 0.607,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.8404,
       "pnl_fiel_eur": -24.5996,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -52.6847,
+      "pnl_fiel_eur_sin_suelo": -53.7347,
       "equity_curve": [
         {
           "ts": "2026-08-06T11:54:15+00:00",
@@ -239629,7 +239660,7 @@
       "strategy": "UPDOWN_GBM",
       "subtype": "",
       "decision": "BUY_YES",
-      "ic_usado": 0.0691,
+      "ic_usado": 0.0692,
       "n_total": 2,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
@@ -239656,12 +239687,12 @@
       "subtype": "BNB#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.1289,
-      "n_total": 1701,
+      "n_total": 1702,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 113,
       "n_sin_dato_libro": 48,
-      "n_vetado_profundidad": 1302,
+      "n_vetado_profundidad": 1303,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -240292,11 +240323,11 @@
       "subtype": "BNB#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.0881,
-      "n_total": 4486,
+      "n_total": 4488,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 2,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 4484,
+      "n_sin_dato_libro": 4486,
       "n_vetado_profundidad": 0,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
@@ -244227,25 +244258,25 @@
       "subtype": "BTC#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.0664,
-      "n_total": 10136,
+      "n_total": 10139,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 11,
       "n_bloqueado_freno": 2623,
-      "n_sin_dato_libro": 134,
-      "n_vetado_profundidad": 3872,
+      "n_sin_dato_libro": 135,
+      "n_vetado_profundidad": 3873,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 161,
       "n_ejecutado": 962,
-      "n_ejecutado_post_quiebra": 2534,
-      "pnl_post_quiebra_eur": -150.8553,
+      "n_ejecutado_post_quiebra": 2535,
+      "pnl_post_quiebra_eur": -149.7059,
       "fill_rate": 0.199,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6492,
       "pnl_fiel_eur": -24.7908,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -175.6461,
+      "pnl_fiel_eur_sin_suelo": -174.4967,
       "equity_curve": [
         {
           "ts": "2026-09-11T02:16:52+00:00",
@@ -246754,25 +246785,25 @@
       "subtype": "BTC#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0658,
-      "n_total": 9132,
+      "n_total": 9136,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 9,
       "n_bloqueado_freno": 851,
-      "n_sin_dato_libro": 120,
-      "n_vetado_profundidad": 4061,
+      "n_sin_dato_libro": 121,
+      "n_vetado_profundidad": 4063,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 192,
       "n_ejecutado": 249,
-      "n_ejecutado_post_quiebra": 3842,
-      "pnl_post_quiebra_eur": -292.2615,
-      "fill_rate": 0.0578,
+      "n_ejecutado_post_quiebra": 3843,
+      "pnl_post_quiebra_eur": -293.3115,
+      "fill_rate": 0.0577,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.0411,
       "pnl_fiel_eur": -25.3989,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -317.6605,
+      "pnl_fiel_eur_sin_suelo": -318.7105,
       "equity_curve": [
         {
           "ts": "2026-08-11T11:37:14+00:00",
@@ -248026,7 +248057,7 @@
       "subtype": "BTC#60min",
       "decision": "BUY_NO",
       "ic_usado": 0.0047,
-      "n_total": 1369,
+      "n_total": 1370,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 56,
@@ -248036,21 +248067,16 @@
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 0,
-      "n_ejecutado": 540,
+      "n_ejecutado": 541,
       "n_ejecutado_post_quiebra": 0,
       "pnl_post_quiebra_eur": 0.0,
-      "fill_rate": 0.4138,
+      "fill_rate": 0.4142,
       "bankroll_inicial": 25.44,
-      "bankroll_nocional_final": 31.6365,
-      "pnl_fiel_eur": 6.1965,
+      "bankroll_nocional_final": 30.5865,
+      "pnl_fiel_eur": 5.1465,
       "suelo_disparado_final": false,
-      "pnl_fiel_eur_sin_suelo": 6.1965,
+      "pnl_fiel_eur_sin_suelo": 5.1465,
       "equity_curve": [
-        {
-          "ts": "2026-09-05T16:15:11+00:00",
-          "bankroll": 24.5806,
-          "pnl": -1.05
-        },
         {
           "ts": "2026-09-05T21:12:33+00:00",
           "bankroll": 25.2606,
@@ -250545,6 +250571,11 @@
           "ts": "2026-11-21T14:03:48+00:00",
           "bankroll": 31.6365,
           "pnl": -1.05
+        },
+        {
+          "ts": "2026-11-22T00:06:04+00:00",
+          "bankroll": 30.5865,
+          "pnl": -1.05
         }
       ]
     },
@@ -250553,7 +250584,7 @@
       "subtype": "BTC#60min",
       "decision": "BUY_YES",
       "ic_usado": -0.0104,
-      "n_total": 1914,
+      "n_total": 1915,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 372,
@@ -250564,14 +250595,14 @@
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 5,
       "n_ejecutado": 834,
-      "n_ejecutado_post_quiebra": 366,
-      "pnl_post_quiebra_eur": -44.8147,
+      "n_ejecutado_post_quiebra": 367,
+      "pnl_post_quiebra_eur": -43.8741,
       "fill_rate": 0.7322,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.698,
       "pnl_fiel_eur": -24.742,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -69.5567,
+      "pnl_fiel_eur_sin_suelo": -68.6162,
       "equity_curve": [
         {
           "ts": "2026-09-20T06:15:21+00:00",
@@ -254131,12 +254162,12 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2419,
-      "n_total": 595,
+      "n_total": 596,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 7,
       "n_sin_dato_libro": 7,
-      "n_vetado_profundidad": 536,
+      "n_vetado_profundidad": 537,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -254144,7 +254175,7 @@
       "n_ejecutado": 45,
       "n_ejecutado_post_quiebra": 0,
       "pnl_post_quiebra_eur": 0.0,
-      "fill_rate": 0.0775,
+      "fill_rate": 0.0773,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 10.9905,
       "pnl_fiel_eur": -14.4495,
@@ -254435,12 +254466,12 @@
       "subtype": "DOGE#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.0616,
-      "n_total": 5956,
+      "n_total": 5959,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 7,
       "n_bloqueado_freno": 399,
-      "n_sin_dato_libro": 93,
-      "n_vetado_profundidad": 3355,
+      "n_sin_dato_libro": 95,
+      "n_vetado_profundidad": 3356,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
@@ -255267,25 +255298,25 @@
       "subtype": "DOGE#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0593,
-      "n_total": 5764,
+      "n_total": 5766,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 5,
       "n_bloqueado_freno": 368,
-      "n_sin_dato_libro": 98,
+      "n_sin_dato_libro": 99,
       "n_vetado_profundidad": 3219,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 157,
       "n_ejecutado": 172,
-      "n_ejecutado_post_quiebra": 1902,
-      "pnl_post_quiebra_eur": -102.5054,
+      "n_ejecutado_post_quiebra": 1903,
+      "pnl_post_quiebra_eur": -103.5554,
       "fill_rate": 0.0507,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.7603,
       "pnl_fiel_eur": -24.6797,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -127.1851,
+      "pnl_fiel_eur_sin_suelo": -128.2351,
       "equity_curve": [
         {
           "ts": "2026-08-11T21:41:57+00:00",
@@ -256576,12 +256607,12 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1322,
-      "n_total": 2078,
+      "n_total": 2080,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 56,
-      "n_sin_dato_libro": 356,
-      "n_vetado_profundidad": 1269,
+      "n_sin_dato_libro": 357,
+      "n_vetado_profundidad": 1270,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -256589,7 +256620,7 @@
       "n_ejecutado": 254,
       "n_ejecutado_post_quiebra": 143,
       "pnl_post_quiebra_eur": -7.4527,
-      "fill_rate": 0.1668,
+      "fill_rate": 0.1667,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.444,
       "pnl_fiel_eur": -24.996,
@@ -260867,12 +260898,12 @@
       "subtype": "ETH#5min",
       "decision": "BUY_NO",
       "ic_usado": 0.0522,
-      "n_total": 9557,
+      "n_total": 9559,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 14,
       "n_bloqueado_freno": 266,
-      "n_sin_dato_libro": 117,
-      "n_vetado_profundidad": 4756,
+      "n_sin_dato_libro": 118,
+      "n_vetado_profundidad": 4757,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -262163,26 +262194,26 @@
       "strategy": "UPDOWN_GBM",
       "subtype": "ETH#5min",
       "decision": "BUY_YES",
-      "ic_usado": 0.0511,
-      "n_total": 8351,
+      "ic_usado": 0.0512,
+      "n_total": 8356,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 8,
       "n_bloqueado_freno": 1455,
-      "n_sin_dato_libro": 109,
-      "n_vetado_profundidad": 3322,
+      "n_sin_dato_libro": 112,
+      "n_vetado_profundidad": 3323,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 167,
       "n_ejecutado": 425,
-      "n_ejecutado_post_quiebra": 3032,
-      "pnl_post_quiebra_eur": -186.6927,
+      "n_ejecutado_post_quiebra": 3033,
+      "pnl_post_quiebra_eur": -187.7427,
       "fill_rate": 0.1134,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.347,
       "pnl_fiel_eur": -25.093,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -211.7857,
+      "pnl_fiel_eur_sin_suelo": -212.8357,
       "equity_curve": [
         {
           "ts": "2026-08-11T07:56:03+00:00",
@@ -265093,7 +265124,7 @@
       "subtype": "ETH#60min",
       "decision": "BUY_YES",
       "ic_usado": -0.0078,
-      "n_total": 1932,
+      "n_total": 1933,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 5,
       "n_bloqueado_freno": 199,
@@ -265104,14 +265135,14 @@
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 4,
       "n_ejecutado": 450,
-      "n_ejecutado_post_quiebra": 917,
-      "pnl_post_quiebra_eur": -65.3653,
+      "n_ejecutado_post_quiebra": 918,
+      "pnl_post_quiebra_eur": -64.4617,
       "fill_rate": 0.5829,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.012,
       "pnl_fiel_eur": -25.428,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -90.7933,
+      "pnl_fiel_eur_sin_suelo": -89.8897,
       "equity_curve": [
         {
           "ts": "2026-08-10T17:24:09+00:00",
@@ -267744,25 +267775,25 @@
       "subtype": "SOL#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0269,
-      "n_total": 6058,
+      "n_total": 6060,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 1,
       "n_bloqueado_freno": 415,
       "n_sin_dato_libro": 78,
-      "n_vetado_profundidad": 1532,
+      "n_vetado_profundidad": 1533,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 22,
       "n_ejecutado": 460,
-      "n_ejecutado_post_quiebra": 3571,
-      "pnl_post_quiebra_eur": -203.7109,
-      "fill_rate": 0.2309,
+      "n_ejecutado_post_quiebra": 3572,
+      "pnl_post_quiebra_eur": -204.7609,
+      "fill_rate": 0.2308,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.4337,
       "pnl_fiel_eur": -25.0063,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -228.7172,
+      "pnl_fiel_eur_sin_suelo": -229.7672,
       "equity_curve": [
         {
           "ts": "2026-07-17T22:54:22+00:00",
@@ -270071,25 +270102,25 @@
       "subtype": "SOL#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.0463,
-      "n_total": 2644,
+      "n_total": 2646,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 193,
-      "n_sin_dato_libro": 77,
+      "n_sin_dato_libro": 78,
       "n_vetado_profundidad": 888,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 62,
       "n_ejecutado": 76,
-      "n_ejecutado_post_quiebra": 1410,
-      "pnl_post_quiebra_eur": -157.8051,
+      "n_ejecutado_post_quiebra": 1411,
+      "pnl_post_quiebra_eur": -156.9015,
       "fill_rate": 0.0788,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.8356,
       "pnl_fiel_eur": -24.6044,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -182.4095,
+      "pnl_fiel_eur_sin_suelo": -181.506,
       "equity_curve": [
         {
           "ts": "2026-07-18T00:49:08+00:00",
@@ -272522,13 +272553,13 @@
       "strategy": "UPDOWN_GBM",
       "subtype": "SOL#5min",
       "decision": "BUY_YES",
-      "ic_usado": 0.0865,
-      "n_total": 4873,
+      "ic_usado": 0.0866,
+      "n_total": 4876,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 5,
       "n_bloqueado_freno": 57,
       "n_sin_dato_libro": 71,
-      "n_vetado_profundidad": 3334,
+      "n_vetado_profundidad": 3337,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -272538,309 +272569,309 @@
       "pnl_post_quiebra_eur": -104.2208,
       "fill_rate": 0.0177,
       "bankroll_inicial": 25.44,
-      "bankroll_nocional_final": 0.8793,
-      "pnl_fiel_eur": -24.5607,
+      "bankroll_nocional_final": 0.8764,
+      "pnl_fiel_eur": -24.5636,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -128.7816,
+      "pnl_fiel_eur_sin_suelo": -128.7845,
       "equity_curve": [
         {
           "ts": "2026-08-11T12:22:51+00:00",
-          "bankroll": 24.3397,
-          "pnl": -1.1003
+          "bankroll": 24.3384,
+          "pnl": -1.1016
         },
         {
           "ts": "2026-08-11T20:42:50+00:00",
-          "bankroll": 23.287,
-          "pnl": -1.0527
+          "bankroll": 23.2846,
+          "pnl": -1.0539
         },
         {
           "ts": "2026-08-11T20:54:08+00:00",
-          "bankroll": 24.306,
+          "bankroll": 24.3036,
           "pnl": 1.019
         },
         {
           "ts": "2026-08-11T21:18:29+00:00",
-          "bankroll": 27.7857,
-          "pnl": 3.4797
+          "bankroll": 27.787,
+          "pnl": 3.4834
         },
         {
           "ts": "2026-08-11T21:41:57+00:00",
-          "bankroll": 28.9062,
-          "pnl": 1.1205
+          "bankroll": 28.9088,
+          "pnl": 1.1218
         },
         {
           "ts": "2026-08-11T21:59:38+00:00",
-          "bankroll": 27.656,
-          "pnl": -1.2502
+          "bankroll": 27.657,
+          "pnl": -1.2518
         },
         {
           "ts": "2026-08-11T22:33:18+00:00",
-          "bankroll": 26.4599,
-          "pnl": -1.1961
+          "bankroll": 26.4595,
+          "pnl": -1.1975
         },
         {
           "ts": "2026-08-11T23:09:56+00:00",
-          "bankroll": 25.3155,
-          "pnl": -1.1444
+          "bankroll": 25.3138,
+          "pnl": -1.1457
         },
         {
           "ts": "2026-08-12T00:00:04+00:00",
-          "bankroll": 24.2206,
-          "pnl": -1.0949
+          "bankroll": 24.2177,
+          "pnl": -1.0961
         },
         {
           "ts": "2026-08-12T01:17:03+00:00",
-          "bankroll": 23.1706,
+          "bankroll": 23.1677,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-13T04:20:31+00:00",
-          "bankroll": 22.1206,
+          "bankroll": 22.1177,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-13T04:20:31+00:00",
-          "bankroll": 21.0706,
+          "bankroll": 21.0677,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-13T04:28:32+00:00",
-          "bankroll": 22.0896,
+          "bankroll": 22.0867,
           "pnl": 1.019
         },
         {
           "ts": "2026-08-13T05:48:38+00:00",
-          "bankroll": 21.0396,
+          "bankroll": 21.0367,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-13T08:29:24+00:00",
-          "bankroll": 19.9896,
+          "bankroll": 19.9867,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-13T08:29:24+00:00",
-          "bankroll": 18.9396,
+          "bankroll": 18.9367,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-13T13:42:28+00:00",
-          "bankroll": 17.8896,
+          "bankroll": 17.8867,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-14T12:03:55+00:00",
-          "bankroll": 16.8396,
+          "bankroll": 16.8367,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-14T14:35:34+00:00",
-          "bankroll": 15.7896,
+          "bankroll": 15.7867,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-14T16:18:46+00:00",
-          "bankroll": 14.7396,
+          "bankroll": 14.7367,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-14T16:50:32+00:00",
-          "bankroll": 13.6896,
+          "bankroll": 13.6867,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-14T23:49:30+00:00",
-          "bankroll": 14.6686,
+          "bankroll": 14.6657,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-15T00:04:58+00:00",
-          "bankroll": 15.6476,
+          "bankroll": 15.6447,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-15T01:05:02+00:00",
-          "bankroll": 16.5881,
+          "bankroll": 16.5852,
           "pnl": 0.9405
         },
         {
           "ts": "2026-08-15T01:22:17+00:00",
-          "bankroll": 15.5381,
+          "bankroll": 15.5352,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-15T02:34:22+00:00",
-          "bankroll": 14.4881,
+          "bankroll": 14.4852,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-15T03:34:30+00:00",
-          "bankroll": 13.4381,
+          "bankroll": 13.4352,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-15T03:44:39+00:00",
-          "bankroll": 12.3881,
+          "bankroll": 12.3852,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-15T23:29:49+00:00",
-          "bankroll": 11.3381,
+          "bankroll": 11.3352,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-15T23:48:49+00:00",
-          "bankroll": 10.2881,
+          "bankroll": 10.2852,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-15T23:48:49+00:00",
-          "bankroll": 9.2381,
+          "bankroll": 9.2352,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-16T03:27:34+00:00",
-          "bankroll": 10.2171,
+          "bankroll": 10.2142,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-16T04:26:37+00:00",
-          "bankroll": 9.1671,
+          "bankroll": 9.1642,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-16T04:59:09+00:00",
-          "bankroll": 8.1171,
+          "bankroll": 8.1142,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-17T02:38:54+00:00",
-          "bankroll": 9.0207,
+          "bankroll": 9.0178,
           "pnl": 0.9036
         },
         {
           "ts": "2026-08-20T07:12:09+00:00",
-          "bankroll": 7.9707,
+          "bankroll": 7.9678,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-20T07:13:55+00:00",
-          "bankroll": 8.9497,
+          "bankroll": 8.9468,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-23T14:06:59+00:00",
-          "bankroll": 9.8902,
+          "bankroll": 9.8873,
           "pnl": 0.9405
         },
         {
           "ts": "2026-08-25T01:29:01+00:00",
-          "bankroll": 8.8402,
+          "bankroll": 8.8373,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T11:28:20+00:00",
-          "bankroll": 7.7902,
+          "bankroll": 7.7873,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T15:59:20+00:00",
-          "bankroll": 8.6938,
+          "bankroll": 8.6909,
           "pnl": 0.9036
         },
         {
           "ts": "2026-08-26T17:44:07+00:00",
-          "bankroll": 9.6728,
+          "bankroll": 9.6699,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-26T17:52:01+00:00",
-          "bankroll": 10.6518,
+          "bankroll": 10.6489,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-26T17:59:31+00:00",
-          "bankroll": 9.6018,
+          "bankroll": 9.5989,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T18:09:02+00:00",
-          "bankroll": 8.5518,
+          "bankroll": 8.5489,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T18:13:34+00:00",
-          "bankroll": 7.5018,
+          "bankroll": 7.4989,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T21:42:05+00:00",
-          "bankroll": 6.4518,
+          "bankroll": 6.4489,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-26T22:21:33+00:00",
-          "bankroll": 7.3923,
+          "bankroll": 7.3894,
           "pnl": 0.9405
         },
         {
           "ts": "2026-08-26T22:24:22+00:00",
-          "bankroll": 8.3713,
+          "bankroll": 8.3684,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-26T22:45:45+00:00",
-          "bankroll": 9.3503,
+          "bankroll": 9.3474,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-26T22:57:25+00:00",
-          "bankroll": 8.3003,
+          "bankroll": 8.2974,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T02:22:02+00:00",
-          "bankroll": 7.2503,
+          "bankroll": 7.2474,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T09:03:14+00:00",
-          "bankroll": 6.2003,
+          "bankroll": 6.1974,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T09:05:37+00:00",
-          "bankroll": 7.1793,
+          "bankroll": 7.1764,
           "pnl": 0.979
         },
         {
           "ts": "2026-08-27T09:09:26+00:00",
-          "bankroll": 6.1293,
+          "bankroll": 6.1264,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T17:07:13+00:00",
-          "bankroll": 5.0793,
+          "bankroll": 5.0764,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T19:43:16+00:00",
-          "bankroll": 4.0293,
+          "bankroll": 4.0264,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-27T22:56:39+00:00",
-          "bankroll": 2.9793,
+          "bankroll": 2.9764,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-28T03:58:48+00:00",
-          "bankroll": 1.9293,
+          "bankroll": 1.9264,
           "pnl": -1.05
         },
         {
           "ts": "2026-08-28T22:29:03+00:00",
-          "bankroll": 0.8793,
+          "bankroll": 0.8764,
           "pnl": -1.05
         }
       ]
@@ -275083,7 +275114,7 @@
       "subtype": "XRP#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.0673,
-      "n_total": 5420,
+      "n_total": 5422,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 4,
       "n_bloqueado_freno": 220,
@@ -275094,14 +275125,14 @@
       "n_precio_invalido": 0,
       "n_precio_sospechoso": 39,
       "n_ejecutado": 305,
-      "n_ejecutado_post_quiebra": 2778,
-      "pnl_post_quiebra_eur": -257.5314,
+      "n_ejecutado_post_quiebra": 2780,
+      "pnl_post_quiebra_eur": -257.6778,
       "fill_rate": 0.1309,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.098,
       "pnl_fiel_eur": -25.342,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -282.8735,
+      "pnl_fiel_eur_sin_suelo": -283.0199,
       "equity_curve": [
         {
           "ts": "2026-07-13T18:17:35+00:00",
@@ -278371,12 +278402,12 @@
       "subtype": "XRP#5min",
       "decision": "BUY_YES",
       "ic_usado": 0.0806,
-      "n_total": 3132,
+      "n_total": 3134,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 5,
       "n_bloqueado_freno": 161,
       "n_sin_dato_libro": 51,
-      "n_vetado_profundidad": 2148,
+      "n_vetado_profundidad": 2150,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -278384,7 +278415,7 @@
       "n_ejecutado": 188,
       "n_ejecutado_post_quiebra": 579,
       "pnl_post_quiebra_eur": -41.0317,
-      "fill_rate": 0.0805,
+      "fill_rate": 0.0804,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.4189,
       "pnl_fiel_eur": -25.0211,
@@ -280277,12 +280308,12 @@
       "subtype": "BNB#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0077,
-      "n_total": 2006,
+      "n_total": 2007,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 365,
       "n_sin_dato_libro": 71,
-      "n_vetado_profundidad": 1151,
+      "n_vetado_profundidad": 1152,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
@@ -280290,7 +280321,7 @@
       "n_ejecutado": 220,
       "n_ejecutado_post_quiebra": 199,
       "pnl_post_quiebra_eur": -25.1866,
-      "fill_rate": 0.1605,
+      "fill_rate": 0.1603,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.6832,
       "pnl_fiel_eur": -24.7568,
@@ -281404,12 +281435,12 @@
       "subtype": "BNB#15min",
       "decision": "BUY_YES",
       "ic_usado": -0.2,
-      "n_total": 640,
+      "n_total": 641,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 29,
       "n_sin_dato_libro": 72,
-      "n_vetado_profundidad": 313,
+      "n_vetado_profundidad": 314,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 3,
@@ -281417,7 +281448,7 @@
       "n_ejecutado": 59,
       "n_ejecutado_post_quiebra": 164,
       "pnl_post_quiebra_eur": -42.4456,
-      "fill_rate": 0.1586,
+      "fill_rate": 0.1582,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.0581,
       "pnl_fiel_eur": -25.3819,
@@ -281726,12 +281757,12 @@
       "subtype": "BTC#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.1819,
-      "n_total": 4045,
+      "n_total": 4047,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 155,
-      "n_sin_dato_libro": 89,
-      "n_vetado_profundidad": 1835,
+      "n_sin_dato_libro": 90,
+      "n_vetado_profundidad": 1836,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 39,
@@ -281739,7 +281770,7 @@
       "n_ejecutado": 46,
       "n_ejecutado_post_quiebra": 1881,
       "pnl_post_quiebra_eur": -38.9634,
-      "fill_rate": 0.0245,
+      "fill_rate": 0.0244,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.8598,
       "pnl_fiel_eur": -24.5802,
@@ -282460,7 +282491,7 @@
       "subtype": "DOGE#15min",
       "decision": "BUY_NO",
       "ic_usado": 0.2292,
-      "n_total": 1403,
+      "n_total": 1404,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 4,
@@ -282469,16 +282500,16 @@
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 0,
-      "n_precio_sospechoso": 14,
-      "n_ejecutado": 120,
+      "n_precio_sospechoso": 15,
+      "n_ejecutado": 121,
       "n_ejecutado_post_quiebra": 0,
       "pnl_post_quiebra_eur": 0.0,
-      "fill_rate": 0.0906,
+      "fill_rate": 0.0913,
       "bankroll_inicial": 25.44,
-      "bankroll_nocional_final": 8.3357,
-      "pnl_fiel_eur": -17.1043,
+      "bankroll_nocional_final": 7.2857,
+      "pnl_fiel_eur": -18.1543,
       "suelo_disparado_final": false,
-      "pnl_fiel_eur_sin_suelo": -17.1043,
+      "pnl_fiel_eur_sin_suelo": -18.1543,
       "equity_curve": [
         {
           "ts": "2026-07-23T13:48:22+00:00",
@@ -283078,6 +283109,11 @@
         {
           "ts": "2026-11-21T21:18:41+00:00",
           "bankroll": 8.3357,
+          "pnl": -1.05
+        },
+        {
+          "ts": "2026-11-22T00:04:04+00:00",
+          "bankroll": 7.2857,
           "pnl": -1.05
         }
       ]
@@ -284441,12 +284477,12 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.1474,
-      "n_total": 1213,
+      "n_total": 1215,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 38,
-      "n_sin_dato_libro": 151,
-      "n_vetado_profundidad": 809,
+      "n_sin_dato_libro": 152,
+      "n_vetado_profundidad": 810,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 2,
@@ -284454,7 +284490,7 @@
       "n_ejecutado": 213,
       "n_ejecutado_post_quiebra": 0,
       "pnl_post_quiebra_eur": 0.0,
-      "fill_rate": 0.2084,
+      "fill_rate": 0.2082,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 20.0118,
       "pnl_fiel_eur": -5.4282,
@@ -285533,25 +285569,25 @@
       "subtype": "SOL#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0258,
-      "n_total": 7195,
+      "n_total": 7197,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 1064,
-      "n_sin_dato_libro": 273,
+      "n_sin_dato_libro": 274,
       "n_vetado_profundidad": 3697,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 2,
       "n_precio_sospechoso": 73,
       "n_ejecutado": 408,
-      "n_ejecutado_post_quiebra": 1751,
-      "pnl_post_quiebra_eur": -55.2574,
+      "n_ejecutado_post_quiebra": 1752,
+      "pnl_post_quiebra_eur": -56.3074,
       "fill_rate": 0.0994,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.0232,
       "pnl_fiel_eur": -25.4168,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -80.6742,
+      "pnl_fiel_eur_sin_suelo": -81.7242,
       "equity_curve": [
         {
           "ts": "2026-07-22T14:48:52+00:00",
@@ -287727,25 +287763,25 @@
       "subtype": "XRP#15min",
       "decision": "BUY_NO",
       "ic_usado": -0.0089,
-      "n_total": 7030,
+      "n_total": 7032,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 1577,
-      "n_sin_dato_libro": 240,
+      "n_sin_dato_libro": 241,
       "n_vetado_profundidad": 3632,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
       "n_precio_invalido": 1,
       "n_precio_sospechoso": 78,
       "n_ejecutado": 729,
-      "n_ejecutado_post_quiebra": 851,
-      "pnl_post_quiebra_eur": -36.26,
+      "n_ejecutado_post_quiebra": 852,
+      "pnl_post_quiebra_eur": -37.31,
       "fill_rate": 0.1672,
       "bankroll_inicial": 25.44,
       "bankroll_nocional_final": 0.8946,
       "pnl_fiel_eur": -24.5454,
       "suelo_disparado_final": true,
-      "pnl_fiel_eur_sin_suelo": -60.8054,
+      "pnl_fiel_eur_sin_suelo": -61.8554,
       "equity_curve": [
         {
           "ts": "2026-08-21T11:24:37+00:00",
@@ -293257,11 +293293,11 @@
       "subtype": "ETH#15min",
       "decision": "BUY_YES",
       "ic_usado": 0.2899,
-      "n_total": 978,
+      "n_total": 979,
       "n_fuera_rango_validacion": 0,
       "n_fuera_ventana": 0,
       "n_bloqueado_freno": 0,
-      "n_sin_dato_libro": 10,
+      "n_sin_dato_libro": 11,
       "n_vetado_profundidad": 915,
       "n_sin_ic": 0,
       "n_no_viable_stake": 0,
