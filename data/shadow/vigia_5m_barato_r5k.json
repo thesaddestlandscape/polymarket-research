@@ -1,48 +1,24 @@
 {
- "actualizado_utc": "2026-11-21T09:31:18+00:00",
+ "actualizado_utc": "2026-11-22T09:31:08+00:00",
  "regla": "H43 R5K congelada 17-Oct",
- "n_unidades": 3331,
- "dias": 31,
- "coste_usd": 30392.23,
- "pnl_usd": 1044.94,
- "ev_eur_ponderado": 0.0344,
- "ev_por_unidad": 0.0568,
+ "n_unidades": 2874,
+ "dias": 26,
+ "coste_usd": 26214.9,
+ "pnl_usd": 329.37,
+ "ev_eur_ponderado": 0.0126,
+ "ev_por_unidad": 0.0247,
  "ic90_cierre": [
-  -0.025,
-  0.093
+  -0.054,
+  0.077
  ],
  "ic90_dias": [
-  -0.024,
-  0.099
+  -0.048,
+  0.077
  ],
- "ev_sin_2_mejores_dias": 0.0072,
- "ev_sin_top20_unidades": 0.0051,
+ "ev_sin_2_mejores_dias": -0.0179,
+ "ev_sin_top20_unidades": -0.0215,
  "precio_medio": 0.184,
  "por_dia": {
-  "2026-10-21": {
-   "coste": 941.75,
-   "ev": 0.2742
-  },
-  "2026-10-22": {
-   "coste": 897.07,
-   "ev": -0.1609
-  },
-  "2026-10-23": {
-   "coste": 892.03,
-   "ev": -0.1032
-  },
-  "2026-10-24": {
-   "coste": 790.9,
-   "ev": 0.2644
-  },
-  "2026-10-25": {
-   "coste": 728.57,
-   "ev": -0.0392
-  },
-  "2026-10-26": {
-   "coste": 865.61,
-   "ev": 0.5018
-  },
   "2026-10-27": {
    "coste": 1093.57,
    "ev": -0.2227
@@ -142,45 +118,13 @@
   "2026-11-20": {
    "coste": 1314.62,
    "ev": -0.0492
+  },
+  "2026-11-21": {
+   "coste": 938.6,
+   "ev": -0.0839
   }
  },
  "cobertura": {
-  "2026-10-21": {
-   "mercados": 288,
-   "con_desenlace": 288,
-   "unidades": 107,
-   "unidades_sin_desenlace": 0
-  },
-  "2026-10-22": {
-   "mercados": 287,
-   "con_desenlace": 287,
-   "unidades": 96,
-   "unidades_sin_desenlace": 0
-  },
-  "2026-10-23": {
-   "mercados": 288,
-   "con_desenlace": 288,
-   "unidades": 100,
-   "unidades_sin_desenlace": 0
-  },
-  "2026-10-24": {
-   "mercados": 288,
-   "con_desenlace": 288,
-   "unidades": 82,
-   "unidades_sin_desenlace": 0
-  },
-  "2026-10-25": {
-   "mercados": 287,
-   "con_desenlace": 287,
-   "unidades": 81,
-   "unidades_sin_desenlace": 0
-  },
-  "2026-10-26": {
-   "mercados": 288,
-   "con_desenlace": 288,
-   "unidades": 95,
-   "unidades_sin_desenlace": 0
-  },
   "2026-10-27": {
    "mercados": 288,
    "con_desenlace": 288,
@@ -330,8 +274,14 @@
    "con_desenlace": 288,
    "unidades": 151,
    "unidades_sin_desenlace": 0
+  },
+  "2026-11-21": {
+   "mercados": 288,
+   "con_desenlace": 288,
+   "unidades": 104,
+   "unidades_sin_desenlace": 0
   }
  },
  "errores": [],
- "veredicto": "REFUTADA (EV<+0,05, IC90 cierre cruza 0)"
+ "veredicto": "REFUTADA (EV<+0,05, IC90 cierre cruza 0, sin top-20 <= 0)"
 }
