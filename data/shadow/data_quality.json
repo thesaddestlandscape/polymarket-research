@@ -1,15 +1,14 @@
 {
-  "timestamp_utc": "2026-11-22T10:55:23+00:00",
-  "estado_global": "DEGRADED",
+  "timestamp_utc": "2026-11-22T11:00:46+00:00",
+  "estado_global": "OK",
   "alertas": [
-    "rechazos_1h:3 (rango=0, spike=0)",
-    "BTC:divergencia_0.51%"
+    "rechazos_1h:3 (rango=0, spike=0)"
   ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
     "total": 3,
-    "cambio_fuente": 64,
+    "cambio_fuente": 68,
     "por_sym": {
       "BTC": 2,
       "SOL": 1
@@ -18,63 +17,51 @@
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 3199,
-      "age_seconds": 8.6,
-      "ultimo_precio": 60778.765,
+      "n": 3208,
+      "age_seconds": 8.1,
+      "ultimo_precio": 60746.025,
       "gaps": [],
       "alertas": []
     },
     "ETH": {
       "estado": "OK",
-      "n": 3199,
-      "age_seconds": 8.6,
-      "ultimo_precio": 1707.66,
+      "n": 3208,
+      "age_seconds": 8.1,
+      "ultimo_precio": 1706.395,
       "gaps": [],
       "alertas": []
     },
     "SOL": {
       "estado": "OK",
-      "n": 3199,
-      "age_seconds": 8.6,
-      "ultimo_precio": 70.66,
+      "n": 3208,
+      "age_seconds": 8.1,
+      "ultimo_precio": 70.59,
       "gaps": [],
       "alertas": []
     },
     "XRP": {
       "estado": "OK",
-      "n": 3199,
-      "age_seconds": 8.6,
-      "ultimo_precio": 0.9315,
+      "n": 3208,
+      "age_seconds": 8.1,
+      "ultimo_precio": 0.93111,
       "gaps": [],
       "alertas": []
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-11-22T10:55:19+00:00",
+    "timestamp_utc": "2026-11-22T11:00:43+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 60974.5,
-      "ETH": 1710.28,
-      "SOL": 70.66,
-      "XRP": 0.9315
+      "BTC": 60762.1,
+      "ETH": 1707.21,
+      "SOL": 70.59,
+      "XRP": 0.93111
     },
-    "alertas": [
-      {
-        "sym": "BTC",
-        "max_div_pct": 0.505,
-        "fuentes": {
-          "binance": 61085.95,
-          "coinbase": 60778.765,
-          "kraken": 60974.5
-        },
-        "consenso": 60974.5,
-        "accion": "ALERTA"
-      }
-    ],
+    "alertas": [],
     "bloqueados": []
   }
 }
