@@ -14,3 +14,27 @@ Javi: D2 primaria=twap60 oficial PolyBolt rx<=t, aproximación fallback; umbrale
 
 # 23-Nov ~19:30Z: PREREG_RF5_ENTRADA firmado (OK Javi: validador + firma; familia F1/F2/F3/U13 y combinada K1-K5)
 16be06b6194f8bbaf9225ba17fda56fe44a6faf5d4a0a790dfcd5340f82fac5e  re_f5_23nov/PREREG_RF5_ENTRADA_23nov.md
+
+## Firmas chief 2026-11-23T20:13Z — RF5 ronda validador (Javi 23-Nov: OK a C1-C9 y reserva de α para K6)
+8eb21d895d23b173ec3301d626d1ecfeed7f1eb7f7880a666cc8288ff88c7a01  ADENDA_RF5_CRITERIOS_v2_23nov.md
+98e2d3565a9f1abf98ca4761c4d0d54b3b4319bc5cff4de25ec80ccb6c21033e  ADENDA_RF5_K6_CALMA_v2_23nov.md
+c4d4e8ce78fadf3757073f6188b17182ea0d48bd56d538961207eda6ef08656d  CONTRATO_CALMA_T1_PASST_V4_v2_23nov.md
+02768fdf74905b15819b4cbce34d7e59585ce7b2fca6a3383fa13892b6e2dc97  ESPEC_ENGINEER_RF5_23nov.md
+1e239bdf20572799fd00260a193c2def39e2b6437d8ad2f1682c2e0fe7b63a34  DICTAMEN_VALIDADOR_23nov.md
+5e9707674000697dcb233571f7c2899d3f77a16ec2dec6b15f22569e38246eab  PRECINTO_CIEGOS_18nov.txt
+bddb28cc3db19eadb507ed315061ebcb116edae2e985630eca619edff4ae3a72  CONTRATO_CXB60_REEVAL_PASST_V4_v2_23nov.md
+b72d49faa846f270460bc8a4eb9fe82850ec58f1c335fc00c3ae1b9090300919  tabla_suelo_sucesora_18_22nov.csv
+t_proc = 1 ms PROVISIONAL (rf5_t_proc_ms.txt; 4355a46b19d348dc); definitivo tras cronometrado (ESPEC P1).
+FWER reserva α: grafo Bretz (K1-K4 α 0,04 max-stat; K6 α 0,01; rechazo de K1 transfiere 0,04 → K6 0,05) ⇒ FWER ≤0,05. Verificado por el chief.
+v1 de criterios/K6/Calma/CXB60 quedan SUPERADOS por v2. Pendiente engineer: tabla_suelo_sucesora en rf5_cortes.json + rehash HASHES_rf5.
+Precinto log CXB60 (Javi 23-Nov): /mnt/HC_Volume_106538179/precintos_ciegos_23nov/PRECINTO.sha256
+
+## Firmas chief 2026-11-23T20:48Z (Javi 23-Nov OK)
+t_proc = 1 ms DEFINITIVO (techo conservador; cronometrado 17-Nov CPU p99 0,080 ms, n=138.316; red en L aparte). rf5_t_proc_ms.txt sha 4355a46b19d348dc.
+16-Nov INCOMPLETE por C1 (23h de 15-Nov mala) ACEPTADO; no se cambia la regla (día no ciego).
+Nulo: Besag-Clifford secuencial h=20 (p=h/L si para; si no, (1+#)/(K+1) con K máx 1000) + aceleración del simulador; nulo exacto por tabla SOLO si rf5_acople_real demuestra acople nulo en 17-Nov.
+Reeval CXB60: 19-22 Nov INCOMPLETE (passT_v4 lee libro5_tx como fallback; cob 19-Nov 0,719).
+
+## Firma chief 2026-11-23T20:49Z: ESPEC_HOOK_CALMA_V4
+1b8f18930cc136d162af49c0127504b771c2a19c74baac73b0f46d941138d173  ESPEC_HOOK_CALMA_V4_23nov.md
+Decisión tq=t−300 FIRMADA (convención del motor vigente passT_v4, igual que V5/V6; regla «motor vigente en todo»); sensibilidad tq=t obligatoria y publicada.

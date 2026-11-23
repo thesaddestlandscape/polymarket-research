@@ -1,2 +1,3 @@
 811b35dbd4c7305b7d169cedafaea44ab5dd7d29e43eab8de697ee6e0700907d  hbgap.py
-a1a75f62226e64e754491596b6fe1c940a8902ea1d753f9396f943a2f887e868  run_hbgap.sh
+a944bd1e00d6ac43f84046e411aab83316db3675108197a77bd65df26f8e1e55  run_hbgap.sh
+# 23-Nov chief: run_hbgap.sh rehash tras arreglo puerta de carga (load5 absoluto -> por núcleo); copia previa hbgap.sha256.pre_fix_carga
