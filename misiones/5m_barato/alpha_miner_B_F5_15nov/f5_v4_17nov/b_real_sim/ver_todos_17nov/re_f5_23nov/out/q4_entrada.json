@@ -1,0 +1,139 @@
+{
+ "cortes_p80_por_moneda_03_14": {
+  "eth": 4.7427379882081135,
+  "sol": 4.110873864173311,
+  "xrp": 3.384729196710925
+ },
+ "bloq0_C_05_14": {
+  "n_lados": 6431,
+  "n_q4": 1345,
+  "diff": 0.2578,
+  "ic90": [
+   0.0014,
+   0.4893
+  ],
+  "dias_pos": "8/10",
+  "placebo_p": 0.052,
+  "pnl_sin_filtro": -147.17,
+  "pnl_con_filtro": -83.94,
+  "ev_q4": -0.3946,
+  "ev_resto": -0.1368,
+  "por_moneda": {
+   "eth": {
+    "n_q4": 430,
+    "ev_q4": -0.41,
+    "ev_resto": -0.14
+   },
+   "sol": {
+    "n_q4": 463,
+    "ev_q4": -0.422,
+    "ev_resto": -0.067
+   },
+   "xrp": {
+    "n_q4": 452,
+    "ev_q4": -0.334,
+    "ev_resto": -0.224
+   }
+  },
+  "sin_2_mejores_dias": 0.2451
+ },
+ "bloq0_posthoc_03_04": {
+  "n_lados": 906,
+  "n_q4": 152,
+  "diff": 0.2176,
+  "ic90": [
+   0.2176,
+   0.3043
+  ],
+  "dias_pos": "2/2",
+  "placebo_p": 0.377,
+  "pnl_sin_filtro": -10.56,
+  "pnl_con_filtro": -3.71,
+  "ev_q4": -0.2551,
+  "ev_resto": -0.0375,
+  "por_moneda": {
+   "eth": {
+    "n_q4": 60,
+    "ev_q4": -0.522,
+    "ev_resto": -0.042
+   },
+   "sol": {
+    "n_q4": 56,
+    "ev_q4": -0.469,
+    "ev_resto": -0.075
+   },
+   "xrp": {
+    "n_q4": 36,
+    "ev_q4": 4.247,
+    "ev_resto": 0.017
+   }
+  },
+  "sin_2_mejores_dias": NaN
+ },
+ "bloq1_C_05_14": {
+  "n_lados": 6431,
+  "n_q4": 1348,
+  "diff": 0.1012,
+  "ic90": [
+   -0.0472,
+   0.2609
+  ],
+  "dias_pos": "5/10",
+  "placebo_p": 0.035,
+  "pnl_sin_filtro": -227.42,
+  "pnl_con_filtro": -78.89,
+  "ev_q4": -0.1185,
+  "ev_resto": -0.0173,
+  "por_moneda": {
+   "eth": {
+    "n_q4": 430,
+    "ev_q4": -0.206,
+    "ev_resto": -0.055
+   },
+   "sol": {
+    "n_q4": 460,
+    "ev_q4": -0.033,
+    "ev_resto": -0.039
+   },
+   "xrp": {
+    "n_q4": 458,
+    "ev_q4": -0.147,
+    "ev_resto": 0.036
+   }
+  },
+  "sin_2_mejores_dias": 0.1437
+ },
+ "bloq1_posthoc_03_04": {
+  "n_lados": 906,
+  "n_q4": 150,
+  "diff": 0.2811,
+  "ic90": [
+   0.2636,
+   0.2988
+  ],
+  "dias_pos": "2/2",
+  "placebo_p": 0.072,
+  "pnl_sin_filtro": -82.9,
+  "pnl_con_filtro": -37.75,
+  "ev_q4": -0.3366,
+  "ev_resto": -0.0554,
+  "por_moneda": {
+   "eth": {
+    "n_q4": 61,
+    "ev_q4": -0.456,
+    "ev_resto": -0.1
+   },
+   "sol": {
+    "n_q4": 56,
+    "ev_q4": -0.367,
+    "ev_resto": -0.134
+   },
+   "xrp": {
+    "n_q4": 33,
+    "ev_q4": -0.041,
+    "ev_resto": 0.072
+   }
+  },
+  "sin_2_mejores_dias": NaN
+ }
+}

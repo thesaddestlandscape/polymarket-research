@@ -1,0 +1,596 @@
+{
+ "bloq0": {
+  "n_ordenes": 144829,
+  "n_rellenos": 670,
+  "dup_mercado_lado": 0,
+  "ev_total": -0.1901,
+  "cortes_q5": [
+   2.398,
+   2.944,
+   3.505,
+   4.19
+  ],
+  "frac_ordenes_tercil": {
+   "bajo": 0.604,
+   "medio": 0.314,
+   "alto": 0.081
+  },
+  "p_relleno_tercil": {
+   "alto": 0.0084,
+   "bajo": 0.0037,
+   "medio": 0.0055
+  },
+  "diff_bm_alto": {
+   "diff": -0.141,
+   "lo": -0.5252,
+   "hi": 0.166,
+   "dias": 10,
+   "dias_pos": 5
+  },
+  "diff_bajo_alto": {
+   "diff": -0.2175,
+   "lo": -0.6306,
+   "hi": 0.0963,
+   "dias": 10,
+   "dias_pos": 6
+  },
+  "diff_q5_0_vs_4": {
+   "diff": -0.0872,
+   "lo": -0.3638,
+   "hi": 0.1812,
+   "dias": 10,
+   "dias_pos": 5
+  },
+  "diff_bm_alto_reloj_exchange": {
+   "diff": -0.1201,
+   "lo": -0.4204,
+   "hi": 0.1635,
+   "dias": 10,
+   "dias_pos": 4
+  },
+  "por_coin": {
+   "eth": {
+    "diff": -0.2936,
+    "lo": -0.7117,
+    "hi": 0.0422,
+    "dias": 10,
+    "dias_pos": 4
+   },
+   "sol": {
+    "diff": 0.0804,
+    "lo": -0.5829,
+    "hi": 0.6483,
+    "dias": 10,
+    "dias_pos": 6
+   }
+  },
+  "por_nrep": {
+   "1-2": {
+    "diff": 0.043,
+    "lo": -0.5503,
+    "hi": 0.6389,
+    "dias": 10,
+    "dias_pos": 4
+   },
+   "10+": {
+    "diff": 0.1221,
+    "lo": -0.3856,
+    "hi": 0.689,
+    "dias": 10,
+    "dias_pos": 7
+   },
+   "3-9": {
+    "diff": -0.4727,
+    "lo": -1.3694,
+    "hi": 0.1151,
+    "dias": 10,
+    "dias_pos": 6
+   },
+   "0": {
+    "diff": -0.115,
+    "lo": -0.9337,
+    "hi": 1.0403,
+    "dias": 10,
+    "dias_pos": 2
+   }
+  },
+  "por_prof": {
+   "2": {
+    "diff": -0.2936,
+    "lo": -0.6785,
+    "hi": 0.0455,
+    "dias": 10,
+    "dias_pos": 4
+   },
+   "1": {
+    "diff": 0.1448,
+    "lo": -0.5383,
+    "hi": 0.6734,
+    "dias": 10,
+    "dias_pos": 6
+   }
+  },
+  "por_Tb": {
+   "120-200": {
+    "diff": 0.0314,
+    "lo": -0.4014,
+    "hi": 0.6014,
+    "dias": 10,
+    "dias_pos": 6
+   },
+   "60-120": {
+    "diff": 0.2005,
+    "lo": -0.8183,
+    "hi": 1.0647,
+    "dias": 10,
+    "dias_pos": 3
+   },
+   ">200": {
+    "diff": -0.31,
+    "lo": -0.8361,
+    "hi": 0.0313,
+    "dias": 10,
+    "dias_pos": 3
+   }
+  },
+  "por_edad": {
+   "0,5-2s": {
+    "diff": -0.2614,
+    "lo": -0.9178,
+    "hi": 0.2918,
+    "dias": 10,
+    "dias_pos": 3
+   },
+   "<0,5s": {
+    "diff": -0.3154,
+    "lo": -0.7404,
+    "hi": 0.0396,
+    "dias": 10,
+    "dias_pos": 3
+   },
+   "2-10s": {
+    "diff": 0.3846,
+    "lo": -0.1108,
+    "hi": 0.771,
+    "dias": 10,
+    "dias_pos": 5
+   }
+  },
+  "por_Lb": {
+   "0,20-0,30": {
+    "diff": -0.2154,
+    "lo": -0.6192,
+    "hi": 0.1472,
+    "dias": 10,
+    "dias_pos": 5
+   },
+   "0,10-0,20": {
+    "diff": -0.1433,
+    "lo": -0.7025,
+    "hi": 0.3289,
+    "dias": 10,
+    "dias_pos": 3
+   }
+  },
+  "por_lado": {
+   "NO": {
+    "diff": -0.0798,
+    "lo": -0.4786,
+    "hi": 0.3085,
+    "dias": 10,
+    "dias_pos": 5
+   },
+   "YES": {
+    "diff": -0.2009,
+    "lo": -0.6627,
+    "hi": 0.2376,
+    "dias": 10,
+    "dias_pos": 4
+   }
+  },
+  "por_mitad": {
+   "A": {
+    "diff": -0.2845,
+    "lo": -0.7662,
+    "hi": 0.0899,
+    "dias": 5,
+    "dias_pos": 2
+   },
+   "B": {
+    "diff": 0.0498,
+    "lo": -0.568,
+    "hi": 0.4717,
+    "dias": 5,
+    "dias_pos": 3
+   }
+  },
+  "transicion_t0_vs_trelleno": {
+   "alto": {
+    "alto": 19,
+    "bajo": 37,
+    "medio": 43
+   },
+   "bajo": {
+    "alto": 19,
+    "bajo": 224,
+    "medio": 79
+   },
+   "medio": {
+    "alto": 33,
+    "bajo": 132,
+    "medio": 84
+   }
+  },
+  "colocacion_mercado_lado": {
+   "n_lados": 6431,
+   "por_t0": [
+    {
+     "t0": "alto",
+     "nf": 562,
+     "cost": 82.6,
+     "pnl": -32.56,
+     "nd": 10,
+     "EV": -0.3944
+    },
+    {
+     "t0": "bajo",
+     "nf": 3930,
+     "cost": 454.3,
+     "pnl": -55.46,
+     "nd": 10,
+     "EV": -0.1221
+    },
+    {
+     "t0": "medio",
+     "nf": 1939,
+     "cost": 237.1,
+     "pnl": -59.14,
+     "nd": 10,
+     "EV": -0.2494
+    }
+   ],
+   "diff_bm_alto": {
+    "diff": 0.2286,
+    "lo": -0.0599,
+    "hi": 0.4707,
+    "dias": 10,
+    "dias_pos": 7
+   },
+   "pnl_total": -147.17,
+   "pnl_si_filtra_alto": -114.61,
+   "pnl_si_filtra_bajo": -91.7
+  },
+  "p_gana_ordenes": {
+   "bajo_rell": 0.1584,
+   "bajo_norell": 0.2259,
+   "medio_rell": 0.1767,
+   "medio_norell": 0.2122,
+   "alto_rell": 0.1919,
+   "alto_norell": 0.2025
+  },
+  "L_medio_rellenos_tercil": {
+   "alto": 0.2024,
+   "bajo": 0.2139,
+   "medio": 0.1984
+  }
+ },
+ "bloq1": {
+  "n_ordenes": 62855,
+  "n_rellenos": 4735,
+  "dup_mercado_lado": 0,
+  "ev_total": -0.0392,
+  "cortes_q5": [
+   2.398,
+   3.045,
+   3.61,
+   4.271
+  ],
+  "frac_ordenes_tercil": {
+   "bajo": 0.577,
+   "medio": 0.323,
+   "alto": 0.1
+  },
+  "p_relleno_tercil": {
+   "alto": 0.0806,
+   "bajo": 0.0729,
+   "medio": 0.0781
+  },
+  "diff_bm_alto": {
+   "diff": -0.0438,
+   "lo": -0.2129,
+   "hi": 0.1303,
+   "dias": 10,
+   "dias_pos": 6
+  },
+  "diff_bajo_alto": {
+   "diff": -0.0292,
+   "lo": -0.2167,
+   "hi": 0.1569,
+   "dias": 10,
+   "dias_pos": 6
+  },
+  "diff_q5_0_vs_4": {
+   "diff": 0.0314,
+   "lo": -0.1387,
+   "hi": 0.2005,
+   "dias": 10,
+   "dias_pos": 4
+  },
+  "diff_bm_alto_reloj_exchange": {
+   "diff": 0.0887,
+   "lo": -0.0475,
+   "hi": 0.2367,
+   "dias": 10,
+   "dias_pos": 6
+  },
+  "por_coin": {
+   "xrp": {
+    "diff": -0.6924,
+    "lo": -1.8683,
+    "hi": 0.4925,
+    "dias": 10,
+    "dias_pos": 4
+   },
+   "sol": {
+    "diff": -0.1277,
+    "lo": -0.5406,
+    "hi": 0.3182,
+    "dias": 10,
+    "dias_pos": 7
+   },
+   "eth": {
+    "diff": -0.0488,
+    "lo": -0.2291,
+    "hi": 0.1316,
+    "dias": 10,
+    "dias_pos": 5
+   }
+  },
+  "por_nrep": {
+   "1-2": {
+    "diff": -0.1551,
+    "lo": -0.503,
+    "hi": 0.1758,
+    "dias": 10,
+    "dias_pos": 5
+   },
+   "3-9": {
+    "diff": -0.0769,
+    "lo": -0.3707,
+    "hi": 0.2127,
+    "dias": 10,
+    "dias_pos": 5
+   },
+   "10+": {
+    "diff": 0.04,
+    "lo": -0.2592,
+    "hi": 0.3865,
+    "dias": 10,
+    "dias_pos": 5
+   },
+   "0": {
+    "diff": 0.053,
+    "lo": -0.3489,
+    "hi": 0.4124,
+    "dias": 10,
+    "dias_pos": 8
+   }
+  },
+  "por_prof": {
+   "1": {
+    "diff": -0.1551,
+    "lo": -0.5376,
+    "hi": 0.2634,
+    "dias": 10,
+    "dias_pos": 6
+   },
+   "2": {
+    "diff": -0.0488,
+    "lo": -0.2312,
+    "hi": 0.1306,
+    "dias": 10,
+    "dias_pos": 5
+   }
+  },
+  "por_Tb": {
+   ">200": {
+    "diff": -0.0705,
+    "lo": -0.2059,
+    "hi": 0.0789,
+    "dias": 10,
+    "dias_pos": 5
+   },
+   "120-200": {
+    "diff": 0.0849,
+    "lo": -0.2555,
+    "hi": 0.4485,
+    "dias": 10,
+    "dias_pos": 7
+   },
+   "60-120": {
+    "diff": -0.2291,
+    "lo": -0.8884,
+    "hi": 0.4598,
+    "dias": 10,
+    "dias_pos": 5
+   }
+  },
+  "por_edad": {
+   "0,5-2s": {
+    "diff": -0.2979,
+    "lo": -0.5118,
+    "hi": -0.057,
+    "dias": 10,
+    "dias_pos": 3
+   },
+   "<0,5s": {
+    "diff": 0.147,
+    "lo": -0.0455,
+    "hi": 0.3443,
+    "dias": 10,
+    "dias_pos": 7
+   },
+   "2-10s": {
+    "diff": 0.0242,
+    "lo": -0.3938,
+    "hi": 0.3114,
+    "dias": 10,
+    "dias_pos": 6
+   },
+   ">10s": {
+    "diff": -0.8083,
+    "lo": -1.5991,
+    "hi": 0.4388,
+    "dias": 9,
+    "dias_pos": 2
+   }
+  },
+  "por_Lb": {
+   "0,20-0,30": {
+    "diff": -0.0337,
+    "lo": -0.2085,
+    "hi": 0.13,
+    "dias": 10,
+    "dias_pos": 6
+   },
+   "0,10-0,20": {
+    "diff": -0.0469,
+    "lo": -0.2932,
+    "hi": 0.2498,
+    "dias": 10,
+    "dias_pos": 4
+   },
+   "<0,10": {
+    "diff": -0.0667,
+    "lo": -4.1667,
+    "hi": 2.6394,
+    "dias": 10,
+    "dias_pos": 1
+   }
+  },
+  "por_lado": {
+   "NO": {
+    "diff": 0.1426,
+    "lo": -0.0256,
+    "hi": 0.2806,
+    "dias": 10,
+    "dias_pos": 8
+   },
+   "YES": {
+    "diff": -0.2015,
+    "lo": -0.3889,
+    "hi": 0.0086,
+    "dias": 10,
+    "dias_pos": 4
+   }
+  },
+  "por_mitad": {
+   "A": {
+    "diff": 0.0129,
+    "lo": -0.2238,
+    "hi": 0.2135,
+    "dias": 5,
+    "dias_pos": 4
+   },
+   "B": {
+    "diff": -0.0969,
+    "lo": -0.3509,
+    "hi": 0.1631,
+    "dias": 5,
+    "dias_pos": 2
+   }
+  },
+  "por_canal": {
+   "bloqueo": {
+    "diff": -0.0178,
+    "lo": -0.1948,
+    "hi": 0.1573,
+    "dias": 10,
+    "dias_pos": 6
+   },
+   "TT": {
+    "diff": -0.4184,
+    "lo": -1.4263,
+    "hi": 0.2227,
+    "dias": 10,
+    "dias_pos": 4
+   },
+   "print_nivel": {
+    "diff": -0.6636,
+    "lo": -2.2919,
+    "hi": 0.8399,
+    "dias": 9,
+    "dias_pos": 2
+   }
+  },
+  "transicion_t0_vs_trelleno": {
+   "alto": {
+    "alto": 144,
+    "bajo": 199,
+    "medio": 166
+   },
+   "bajo": {
+    "alto": 105,
+    "bajo": 1965,
+    "medio": 571
+   },
+   "medio": {
+    "alto": 126,
+    "bajo": 785,
+    "medio": 674
+   }
+  },
+  "colocacion_mercado_lado": {
+   "n_lados": 6431,
+   "por_t0": [
+    {
+     "t0": "alto",
+     "nf": 560,
+     "cost": 452.6,
+     "pnl": -54.63,
+     "nd": 10,
+     "EV": -0.1207
+    },
+    {
+     "t0": "bajo",
+     "nf": 3925,
+     "cost": 3628.4,
+     "pnl": -11.27,
+     "nd": 10,
+     "EV": -0.0031
+    },
+    {
+     "t0": "medio",
+     "nf": 1946,
+     "cost": 1725.9,
+     "pnl": -161.52,
+     "nd": 10,
+     "EV": -0.0936
+    }
+   ],
+   "diff_bm_alto": {
+    "diff": 0.0884,
+    "lo": -0.0566,
+    "hi": 0.2315,
+    "dias": 10,
+    "dias_pos": 8
+   },
+   "pnl_total": -227.42,
+   "pnl_si_filtra_alto": -172.79,
+   "pnl_si_filtra_bajo": -216.16
+  },
+  "p_gana_ordenes": {
+   "bajo_rell": 0.2291,
+   "bajo_norell": 0.2512,
+   "medio_rell": 0.2189,
+   "medio_norell": 0.2367,
+   "alto_rell": 0.22,
+   "alto_norell": 0.2211
+  },
+  "L_medio_rellenos_tercil": {
+   "alto": 0.2234,
+   "bajo": 0.2383,
+   "medio": 0.2339
+  }
+ }
+}

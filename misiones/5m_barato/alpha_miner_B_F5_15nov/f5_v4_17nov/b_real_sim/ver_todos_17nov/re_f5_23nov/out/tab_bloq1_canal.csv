@@ -1,0 +1,10 @@
+canal,tercil,nf,cost,pnl,nd,EV
+TT,alto,32,37.3,11.71,10,0.314
+TT,bajo,120,144.8,-16.76,10,-0.1158
+TT,medio,83,97.5,-8.53,10,-0.0875
+bloqueo,alto,470,560.2,-11.7,10,-0.0209
+bloqueo,bajo,2510,3111.9,-67.95,10,-0.0218
+bloqueo,medio,1497,1834.1,-123.59,10,-0.0674
+print_nivel,alto,7,5.0,0.05,6,0.01
+print_nivel,bajo,11,11.1,-10.5,6,-0.9417
+print_nivel,medio,5,5.2,-0.16,5,-0.0312
