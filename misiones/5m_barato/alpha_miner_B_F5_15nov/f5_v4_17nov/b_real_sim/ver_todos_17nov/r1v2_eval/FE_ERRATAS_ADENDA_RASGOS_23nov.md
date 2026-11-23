@@ -1,0 +1,2 @@
+# Fe de erratas a ADENDA_CONTRATO_RASGOS_23nov §2.3b(iv) (chief, 23-Nov)
+Donde dice «10-16 Nov en curso»: medido (hb_all.txt, conexión coin#5min, huecos q >15 s). Dos regímenes: hasta 15-Nov ETH 25-30/día, SOL 26-35, XRP 44-58 (máx 240-360 s); desde 16-Nov ETH 6-11, SOL 10-16, XRP 17-26 (máx 44-107 s). Causas (19 y 22-Nov): restart_ram 10:20/22:20Z = desconexión probada; XRP descubrimiento tardío de mercado (~115 s, hipótesis); resto sin discriminar hasta el latido de ESPEC_GRABADOR_CONEXION_23nov. No cambia criterios: los huecos siguen fail-closed por mercado.
