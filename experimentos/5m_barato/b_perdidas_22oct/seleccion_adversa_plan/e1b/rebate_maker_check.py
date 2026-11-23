@@ -7,6 +7,7 @@ Reglas del programa (docs): pago diario en pUSD, minimo $1 de rebate ACUMULADO p
 Salida: stdout + datalogs/e1b/rebate_check.json. Telegram solo si aparece el primer cobro (latch)."""
 import sys, os, json, time, datetime
 import pandas as pd, requests
+sys.path.insert(0, '/root/polymarket-research'); import data_api
 
 WALLET = '0x659a40FF9920fEBc5a66836213040924343d297F'
 CONT = '/root/polymarket-research/experimentos/5m_barato/contabilidad_wallet_dedicada/movimientos.csv'
@@ -29,7 +30,7 @@ def main():
     cobros = []
     for t in ('MAKER_REBATE', 'REWARD'):
         try:
-            r = requests.get('https://data-api.polymarket.com/activity', params={'user': WALLET, 'type': t, 'limit': 50}, timeout=25).json()
+            r = data_api.get('activity', {'user': WALLET, 'type': t, 'limit': 500}, timeout=25, paginas=5)   # 23-Nov: v1 retirada (410) -> data_api v2
             cobros += [{'tipo': t, 'ts': x.get('timestamp'), 'usdc': x.get('usdcSize')} for x in r]
         except Exception as e: err.append((t, repr(e)[:80]))
     tot_acc = sum(v['rebate_usdc'] for v in acc.values()); tot_esp = sum(esp.values())
@@ -43,7 +44,7 @@ def main():
     if '--telegram' in sys.argv and res['cobrado_usdc'] > 0 and not os.path.exists(OUT + 'rebate_cobrado_latch'):
         sys.path.insert(0, '/root/polymarket-research'); from shadow_digest import enviar_telegram
         enviar_telegram(f"💧 Maker rebate de B: PRIMER COBRO detectado {res['cobrado_usdc']} pUSD (acumulado API {tot_acc:.3f}). Ver {OUT}rebate_check.json"); open(OUT + 'rebate_cobrado_latch', 'w').write(res['consultado'])
-    return 0
+    return 1 if err else 0   # 23-Nov: errores de API -> rc 1 -> aviso del cron (antes fallaba en silencio desde el 10-Nov)
 
 
 if __name__ == '__main__': sys.exit(main())

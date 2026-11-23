@@ -12,7 +12,12 @@ echo "=== $(date -u +%FT%TZ)" >> "$LOG"
 # 1) unidades de B (posiciones liquidadas + hora de deteccion) para A3 y el descriptivo de B real: solo lectura del ledger/posiciones.csv
 nice -n 19 ionice -c3 /usr/bin/python3 -I unidades_b_e1b.py >> "$LOG" 2>&1 || aviso "⚠️ E1b: unidades_b_e1b FALLÓ (A3/B real usan el CSV anterior). Ver $LOG"
 # 2) extraccion + simulacion de los dias forward cerrados que falten (rc 1 = FAILED, 3 = firma nueva de PARTIAL/BLOCKED, 4 = preregistro cambiado)
-nice -n 19 ionice -c3 /usr/bin/python3 -I e1b_diario.py run --fwd0 "$FWD0" >> "$LOG" 2>&1; rc=$?
+# 23-Nov: solo dias NO congelados (e1b_dias_pendientes.py); antes re-extraia cada dia todos los COMPLETE sin npz -> OOM, y degradaba a BLOCKED los de fuentes rotadas
+PEND=$(/usr/bin/python3 -I e1b_dias_pendientes.py --fwd0 "$FWD0" 2>> "$LOG"); prc=$?
+echo "$(date -u +%FT%TZ) dias a procesar: ${PEND:-ninguno} (selector rc=$prc)" >> "$LOG"
+if [ $prc -ne 0 ]; then rc=1
+elif [ -z "$PEND" ]; then rc=0
+else nice -n 19 ionice -c3 /usr/bin/python3 -I e1b_diario.py run --fwd0 "$FWD0" --dias $PEND >> "$LOG" 2>&1; rc=$?; fi
 case $rc in
   0) ;;
   3) aviso "⚠️ E1b forward: algun dia forward NO esta COMPLETE (PARTIAL/BLOCKED: cobertura <80 % o fuentes ausentes/corruptas; el registro rota). Ver $LOG y $D/dias/*.json" ;;
