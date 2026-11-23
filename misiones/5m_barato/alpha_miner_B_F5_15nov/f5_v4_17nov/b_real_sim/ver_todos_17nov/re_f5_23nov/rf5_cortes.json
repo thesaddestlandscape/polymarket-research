@@ -1,0 +1,39 @@
+{
+ "C1": 4.717426776885986,
+ "F2_p20": {
+  "eth": 2.936143028880315,
+  "sol": 2.3978952727983707,
+  "xrp": 2.302585092994046
+ },
+ "F3_p80": {
+  "eth": 4.7427379882081135,
+  "sol": 4.110873864173311,
+  "xrp": 3.384729196710925
+ },
+ "K_perm": 2000,
+ "L_cancel_primaria": 74,
+ "L_cancel_sens": [
+  111,
+  147
+ ],
+ "btc": {
+  "F2b_p20": null,
+  "F3b_p80": null,
+  "nota": "sin adenda firmada con cortes BTC => DATA_BLOCKED_BTC (solo F1 correria si hubiera BTC)"
+ },
+ "measurement_id": "RF5E-COMB-23NOV-v1",
+ "min_dias_mirada1": 10,
+ "mirada2": 20,
+ "nota_tabla": "(iii) del prereg: hasta que el chief firme la tabla de suelo sucesora (ruta+sha aqui, ANTES de abrir el dia) el dia no puede ser VALIDO; el runner lo marca suelo_pendiente.",
+ "origen": "prereg sec.1; reproducidos 23-Nov desde out_p0/p0_ordenes_2026-11-03..14.pkl (bloq0, 1.a orden por dia/mid/lado, f5t): n=7337 lados, p20/p80 por moneda coinciden a 1e-15 con el prereg. Este fichero se LEE, nunca se recalcula.",
+ "prereg": "PREREG_RF5_ENTRADA_23nov.md sha 16be06b6194f8bbaf9225ba17fda56fe44a6faf5d4a0a790dfcd5340f82fac5e",
+ "reglas": {
+  "F1": "veto si F5_0 >= C1",
+  "F2": "entrar SOLO si F5_0 < p20[moneda]",
+  "F3": "veto si F5_0 >= p80[moneda]",
+  "U13": "F1 o F3",
+  "invalido": "F5_0 invalido (None/NaN/antiguedad>30 s) => NO entrar (todas las reglas F5)"
+ },
+ "semilla": 20261124,
+ "tabla_suelo_sucesora": null
+}

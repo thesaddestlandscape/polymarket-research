@@ -1,0 +1,10 @@
+# HASHES_rf5 (sha256, 2026-11-23T18:54:21Z) -- codigo de RF5E-COMB-23NOV-v1 registrado ANTES del 1.er dia ciego. Cambiar cualquiera = version nueva (prereg sec.8). Formato sha256sum.
+4181c31c460a43aefade305b6c08e653c71da9d98266054d32341329891d4de2  rf5_core.py
+05ddec894d8c70e3f5567aef997f6e0b5aa252bb8add4dc4cc6f8c92d8644cc5  rf5_run.py
+688b4395f9cdc4c3a4ad2d89c31cda3e215970fa89b26355173beb21ada48f6d  rf5_eval.py
+d00fa7cca19af7bb720e0c6982bc5615bbabf6cfba3aa55d9b883e1ca23edec9  rf5_cortes.json
+611d7a5175c5dd05df19f12902a47931c280efdee2d751430459811d2c38fb28  prep_tapes_rf5.sh
+040783de6ea8ac2413c10fd77646bc3b739eb4073b9fc0fc388656f72e0a1669  run_rf5.sh
+03a724506561f8ceef9f127698df9dd17d130609d5ba4747b7cf133e5eb065c7  vigia_rf5.py
+716a48e4939d137655a192fd0041b56a85e0682782f02243741aaea8e235aa28  test_rf5.py
+16be06b6194f8bbaf9225ba17fda56fe44a6faf5d4a0a790dfcd5340f82fac5e  PREREG_RF5_ENTRADA_23nov.md
