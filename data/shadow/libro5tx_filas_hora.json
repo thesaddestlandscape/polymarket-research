@@ -4,7 +4,7 @@
  "mediana_base": 1614.5,
  "base_horas": 10,
  "frac": 0.35,
- "ts": 1795442702,
+ "ts": 1795443581,
  "ultimas_24h": {
   "22-14": 0,
   "22-15": 0,
@@ -32,5 +32,7 @@
   "23-13": 11762
  },
  "degradado": false,
- "avisado_hora": "2026-11-22T10"
+ "avisado_hora": "2026-11-22T10",
+ "hc_libre_gb": 71.3,
+ "avisado_disco_hora": null
 }
