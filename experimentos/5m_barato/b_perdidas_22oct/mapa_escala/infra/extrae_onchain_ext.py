@@ -11,7 +11,7 @@ sys.path.insert(0, '/root/polymarket-research')
 from pathlib import Path
 import infra_lib as L, tokmap as T
 MARCOS = ['5min', '15min', '60min', '240min', '24h']
-ESPERADO = {'5min': 6500, '15min': 2200}   # tokens/dia observados 6.986-7.022 y 2.348-2.364 (18..21-Oct)
+ESPERADO = {'5min': 6500, '15min': 2200, '24h': 48}   # tokens/dia observados 6.986-7.022 y 2.348-2.364 (18..21-Oct)  # 24h: 6 monedas x 2 tokens x 4 dias (k=-1..2); <48 = slug de gamma roto (17..22-Nov-2026 pasó en silencio)
 FRAC_TRUNC = 0.6        # fichero 5m/15m < 60 % de la mediana de los 7 dias previos = truncado
 def carpeta(m): return L.VOL / f'{L.PREF[m]}_onchain' if m in ('5min', '15min') else L.AGENT / 'mapa_infra' / f'{L.PREF[m]}_onchain'   # 5m/15m: carpetas existentes del volumen
 def destino(m, d): return carpeta(m) / f'{L.PREF[m]}_onchain_{d}.csv.gz'

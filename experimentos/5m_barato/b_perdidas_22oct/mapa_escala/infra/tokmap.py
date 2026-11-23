@@ -99,11 +99,19 @@ def gamma_dia(dia, session=None):
                 if isinstance(j, list) and j and int(dt.datetime.fromisoformat(j[0]['endDate'].replace('Z', '+00:00')).timestamp()) == te:
                     _parse_gamma(j[0], C, '240min', out); ok = True; break
             vacios += (not ok)
+    from zoneinfo import ZoneInfo
+    c4_de = {v: k for k, v in COIN4.items()}
     for k in (-1, 0, 1, 2):
         d = d0.date() + dt.timedelta(days=k)
+        # cierre oficial = 12:00 ET del dia d; se exige endDate EXACTO (el slug sin anio devuelve el mercado de 2025)
+        fin = int(dt.datetime(d.year, d.month, d.day, 12, tzinfo=ZoneInfo('America/New_York')).timestamp())
         for n, C in NOM.items():
-            j, nn = _slug(S, f'{n}-up-or-down-on-{MES[d.month - 1]}-{d.day}-{d.year}'); n_req += nn
-            if isinstance(j, list) and j: _parse_gamma(j[0], C, '24h', out)
-            else: vacios += 1
+            ok = False
+            # desde ~19-Nov-2026: '{coin}-updown-1d-{cierre-24h}'; antes: '{nombre}-up-or-down-on-{mes}-{dia}-{anio}'
+            for s in (f'{c4_de[C]}-updown-1d-{fin - 86400}', f'{n}-up-or-down-on-{MES[d.month - 1]}-{d.day}-{d.year}'):
+                j, nn = _slug(S, s); n_req += nn
+                if isinstance(j, list) and j and int(dt.datetime.fromisoformat(j[0]['endDate'].replace('Z', '+00:00')).timestamp()) == fin:
+                    _parse_gamma(j[0], C, '24h', out); ok = True; break
+            vacios += (not ok)
     meta = dict(completo=True, n_req=n_req, slugs_vacios=vacios, n_tokens=len(out), generado=L.now(), tokens=out)
     L.atomic_json(f, meta); return out, meta
