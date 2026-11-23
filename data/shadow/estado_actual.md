@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-23 23:51 UTC
+# Estado del bot — 2026-11-23 23:58 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +219692.06 $ (ficción Kelly: +863569% s/ operativo) |
 | P&L sim hoy (2026-11-23) | 🟢 +2182.63 $ |
 | Operaciones resueltas | 1580316 (904162 WIN / 676154 LOSS) — 57.2% |
-| Señales abiertas | 287320 |
+| Señales abiertas | 287943 |
 
 ## Estrategias (visión global)
 
@@ -77,7 +77,7 @@
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 36234 | 69.0% | +0.190 | ➡️ estable (últ. 1000) | -2713.59$ | 1.89$ | ✅ activa |
 | BALLENAS_TARDIAS | 56587 | 41.7% | -0.083 | 📈 madura (+0.20) (últ. 1000) | -7424.48$ | 0.50$ | ⚠️ IC negativo |
 | FAVORITO_CONFIRMADO | 243757 | 61.2% | +0.112 | 📉 agota (-0.07) (últ. 1000) | -9800.19$ | 1.12$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 139528 | 69.9% | +0.199 | 📉 agota (-0.12) (últ. 1000) | -10291.27$ | 2.00$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 139528 | 69.9% | +0.199 | 📉 agota (-0.12) (últ. 1000) | -10291.27$ | 1.99$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
@@ -91,22 +91,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-11-23T23:50 UTC
+✅ **OK** — última verificación 2026-11-23T23:57 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $61,131.31 | 0.2min |  |
-| ✅ ETH | $1,705.56 | 0.2min |  |
-| ✅ SOL | $71.97 | 0.2min |  |
-| ✅ XRP | $0.94 | 0.2min |  |
+| ✅ BTC | $61,188.11 | 0.1min |  |
+| ✅ ETH | $1,707.98 | 0.1min |  |
+| ✅ SOL | $72.00 | 0.1min |  |
+| ✅ XRP | $0.94 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $61,137.10 | consenso |  |
-| ETH | $1,706.92 | consenso |  |
-| SOL | $71.73 | consenso |  |
+| BTC | $61,215.80 | consenso |  |
+| ETH | $1,708.83 | consenso |  |
+| SOL | $72.00 | consenso |  |
 | XRP | $0.94 | consenso |  |
 
 ---
