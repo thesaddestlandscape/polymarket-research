@@ -204,19 +204,29 @@ def s8_9():
 
 
 def s10():
+    # v1 = regla vela 1m Binance (hasta 18-Nov); v2 añade `regla` (desde 19-Nov: TWAP60 Chainlink). Nunca mezclar regímenes.
+    out = {}
+    for regla in ("binance_1m", "twap60_chainlink"):
+        out[regla] = _s10_regla(regla)
+    return out
+
+
+def _s10_regla(regla):
     filas = []
-    p = REPO / "data" / "shadow" / "updown_diario_fase0.csv"
-    if not p.exists():
-        return {"error": "sin datos"}
-    with open(p, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            try:
-                if r.get("error") or float(r["min_restantes"]) > 10:
+    for p in (REPO / "data" / "shadow" / "updown_diario_fase0.csv", REPO / "data" / "shadow" / "updown_diario_fase0_v2.csv"):
+        if not p.exists():
+            continue
+        with open(p, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                try:
+                    if (r.get("regla") or "binance_1m") != regla or r.get("error") or float(r["min_restantes"]) > 10:
+                        continue
+                    pu, au, ad = float(r["prob_justa_up"]), float(r["ask_up"] or 9), float(r["ask_down"] or 9)
+                except ValueError:
                     continue
-                pu, au, ad = float(r["prob_justa_up"]), float(r["ask_up"] or 9), float(r["ask_down"] or 9)
-            except ValueError:
-                continue
-            filas.append((r, pu, au, ad))
+                filas.append((r, pu, au, ad))
+    if not filas:
+        return {"error": "sin datos"}
     visto, unidades = set(), []
     for r, pu, au, ad in sorted(filas, key=lambda x: x[0]["ts_utc"]):
         if r["market_id"] in visto:

@@ -227,3 +227,6 @@ data/shadow/perps_klines_1h/
 /data/shadow/escaleras_cierre_ws_fase0.csv
 /data/shadow/saltos_chainlink_fase0.csv
 /data/shadow/candidata10_confirmacion_cruzada_reactivo_fase0.csv
+# updown diario v2 (19-Nov regla TWAP60): logger append-only fuera de git
+data/shadow/updown_diario_fase0_v2.csv
+data/shadow/updown_diario_ref_twap_cache.json
