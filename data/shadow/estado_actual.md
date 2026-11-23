@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-23 10:40 UTC
+# Estado del bot — 2026-11-23 10:47 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +218674.35 $ (ficción Kelly: +859569% s/ operativo) |
 | P&L sim hoy (2026-11-23) | 🟢 +1164.92 $ |
 | Operaciones resueltas | 1573615 (900296 WIN / 673319 LOSS) — 57.2% |
-| Señales abiertas | 215624 |
+| Señales abiertas | 216198 |
 
 ## Estrategias (visión global)
 
@@ -44,7 +44,7 @@
 | LATE_WINDOW_5MIN | 812 | 63.2% | +0.131 | 📈 madura (+0.36) | +500.00$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 1361 | 85.4% | +0.353 | 📈 madura (+0.05) (últ. 1000) | +470.71$ | 2.00$ | ✅ activa |
 | FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 50189 | 61.7% | +0.117 | 📉 agota (-0.03) (últ. 1000) | +402.21$ | 1.16$ | ✅ activa |
-| BALLENAS_CONFIRMADAS_15M | 4040 | 56.9% | +0.069 | ➡️ estable (últ. 1000) | +218.94$ | 0.83$ | ✅ activa |
+| BALLENAS_CONFIRMADAS_15M | 4040 | 56.9% | +0.069 | ➡️ estable (últ. 1000) | +218.94$ | 0.84$ | ✅ activa |
 | LIQUIDACIONES_5M | 4725 | 51.4% | +0.014 | 📈 madura (+0.05) (últ. 1000) | +179.76$ | 0.50$ | ✅ activa |
 | PRICE_TARGET_GBM | 1334 | 45.9% | -0.041 | 📈 madura (+0.11) (últ. 1000) | +134.80$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_FADE_15M | 1361 | 54.7% | +0.047 | ➡️ estable (últ. 1000) | +107.98$ | 0.50$ | ✅ activa |
@@ -91,22 +91,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-11-23T10:40 UTC
+✅ **OK** — última verificación 2026-11-23T10:46 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $61,383.00 | 0.1min |  |
-| ✅ ETH | $1,721.51 | 0.1min |  |
-| ✅ SOL | $72.24 | 0.1min |  |
-| ✅ XRP | $0.94 | 0.1min |  |
+| ✅ BTC | $61,265.62 | 0.2min |  |
+| ✅ ETH | $1,720.47 | 0.2min |  |
+| ✅ SOL | $72.26 | 0.2min |  |
+| ✅ XRP | $0.94 | 0.2min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $61,332.04 | consenso |  |
-| ETH | $1,720.64 | consenso |  |
-| SOL | $72.18 | consenso |  |
+| BTC | $61,317.60 | consenso |  |
+| ETH | $1,721.52 | consenso |  |
+| SOL | $72.26 | consenso |  |
 | XRP | $0.94 | consenso |  |
 
 ---
