@@ -1,64 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-09-02T07:08:01+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 68,
-      "resolve_postmortem_p50_s": 31.0,
-      "resolve_postmortem_p95_s": 46.0,
-      "resolve_postmortem_max_s": 52.0,
-      "n_ciclos_live_trade": 1361,
-      "hueco_live_trade_max_s": 83.0
-    },
-    "procesos_colgados": [
-      {
-        "pid": "2157252",
-        "cmd": "/root/polymarket-research/.venv/bin/python /root/polymarket-research/shadow_postmortem.py",
-        "segundos_vivo": 189
-      }
-    ],
-    "deploy": {
-      "n_screens": 13,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 84.0,
-      "gb_libres": 11.91,
-      "git_gb": 0.0,
-      "data_gb": 29.78,
-      "datalogs_gb": 8.29
-    },
-    "ram": {
-      "ram_total_gb": 7.56,
-      "ram_disponible_gb": 1.42,
-      "ram_pct_libre": 18.8
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 525,
-      "n_results_total": 356771
-    },
-    "integridad_datos_sports": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 4
-    },
-    "carga_sistema": {
-      "load1": 11.85,
-      "load5": 17.24,
-      "load15": 17.43,
-      "nproc": 4,
-      "ratio5": 4.31,
-      "n_procesos_total": 224
-    },
-    "git_push": {
-      "commits_sin_pushear": 2
-    },
-    "anomalias": [
-      "🚨 proceso colgado: /root/polymarket-research/.venv/bin/python /root/polymarket-research/shadow_postmortem.py (189s vivo)",
-      "🔥 CPU sobresuscrita: load5=17.24 en 4 cores (ratio=4.31x, umbral 3.0x) -- 224 procesos vivos"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-09-02T18:39:27+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 149,
@@ -18108,6 +18049,223 @@
       "💾 disco al 93% (5.66GB libres)",
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket.json 113.5h (máx 2.25h)",
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket_fino.json 113.3h (máx 2.25h)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-23T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 132,
+      "resolve_postmortem_p50_s": 164.3,
+      "resolve_postmortem_p95_s": 252.2,
+      "resolve_postmortem_max_s": 772.5,
+      "resolve_postmortem_duraciones_s": [
+        152.3,
+        149.0,
+        224.5,
+        221.6,
+        152.4,
+        142.5,
+        148.7,
+        152.6,
+        222.2,
+        210.5,
+        146.6,
+        155.2,
+        147.3,
+        127.8,
+        111.5,
+        628.5,
+        119.2,
+        115.5,
+        199.9,
+        149.3,
+        162.7,
+        772.5,
+        101.4,
+        163.8,
+        161.9,
+        124.8,
+        132.8,
+        221.6,
+        186.3,
+        168.3,
+        151.7,
+        141.6,
+        159.5,
+        243.3,
+        218.4,
+        173.8,
+        184.2,
+        165.4,
+        154.3,
+        237.4,
+        190.0,
+        161.0,
+        157.7,
+        372.4,
+        228.6,
+        236.3,
+        199.7,
+        149.6,
+        165.7,
+        176.9,
+        170.1,
+        252.2,
+        198.2,
+        149.4,
+        165.7,
+        152.2,
+        132.8,
+        243.2,
+        202.6,
+        149.1,
+        158.4,
+        173.7,
+        163.1,
+        228.1,
+        196.7,
+        219.4,
+        147.9,
+        166.1,
+        164.5,
+        238.8,
+        197.4,
+        141.9,
+        152.4,
+        176.3,
+        156.4,
+        235.7,
+        220.3,
+        172.5,
+        154.7,
+        172.4,
+        151.2,
+        231.6,
+        208.9,
+        171.6,
+        145.2,
+        172.9,
+        171.8,
+        365.9,
+        209.1,
+        152.7,
+        150.8,
+        151.5,
+        151.9,
+        243.7,
+        210.0,
+        145.1,
+        152.5,
+        158.1,
+        156.4,
+        221.0,
+        212.9,
+        151.9,
+        153.4,
+        151.6,
+        128.5,
+        238.9,
+        165.0,
+        109.9,
+        115.8,
+        123.0,
+        122.4,
+        208.5,
+        175.7,
+        132.4,
+        141.3,
+        144.1,
+        174.0,
+        217.5,
+        203.4,
+        147.8,
+        131.9,
+        152.1,
+        164.3,
+        220.8,
+        185.8,
+        154.9,
+        134.5,
+        141.5,
+        152.9,
+        266.9,
+        224.9,
+        258.1
+      ],
+      "n_ciclos_live_trade": 4161,
+      "hueco_live_trade_max_s": 66.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 25,
+      "stale": [
+        "ejeclive",
+        "walletmirror",
+        "sportsfase0"
+      ]
+    },
+    "disco": {
+      "pct_usado": 93.0,
+      "gb_libres": 5.13,
+      "git_gb": 0.0,
+      "data_gb": 18.89,
+      "datalogs_gb": 8.81
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 6.03,
+      "ram_pct_libre": 39.6
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 790,
+      "n_results_total": 1571221
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 3.44,
+      "load5": 4.78,
+      "load15": 6.38,
+      "nproc": 8,
+      "ratio5": 0.6,
+      "n_procesos_total": 334
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 0,
+      "eventos": []
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 2,
+      "gates": [
+        {
+          "gate": "wallet_mirror_gate_bucket.json",
+          "antiguedad_h": 137.5,
+          "maximo_h": 2.25
+        },
+        {
+          "gate": "wallet_mirror_gate_bucket_fino.json",
+          "antiguedad_h": 137.3,
+          "maximo_h": 2.25
+        }
+      ]
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 772s (umbral 400s)",
+      "⚠️ screens STALE (código en disco != código cargado): ejeclive, walletmirror, sportsfase0",
+      "💾 disco al 93% (5.13GB libres)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket.json 137.5h (máx 2.25h)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket_fino.json 137.3h (máx 2.25h)"
     ],
     "estado": "ANOMALIA"
   }
