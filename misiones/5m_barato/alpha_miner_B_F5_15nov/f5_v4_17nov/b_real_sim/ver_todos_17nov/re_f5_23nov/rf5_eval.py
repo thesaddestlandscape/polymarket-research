@@ -9,22 +9,43 @@ import os, sys, json, glob
 import numpy as np, pandas as pd
 HV = os.path.dirname(os.path.abspath(__file__)) + '/'
 sys.path.insert(0, HV)
-import rf5_core as K5
+import rf5_core as K5, rf5_nulo as NU, rf5_huecos as HU
 MIN_DIAS = 10; SEMILLA = 20261124; K_PERM = 2000
 
 def dias_validos(estado):
     """estado = {dia: manifest-resumen}. VALIDO <=> COMPLETE y criterio_iv_ok True y criterio_iii == 'OK' (tabla de suelo sucesora firmada)."""
     return sorted(d for d, m in estado.items() if m.get('status') == 'COMPLETE' and m.get('iv') is True and m.get('iii') == 'OK')
 
-def carga(out, dias):
-    A = [pd.read_pickle(out + f'rf5A_{d}.pkl') for d in dias]; K = [pd.read_pickle(out + f'rf5K_{d}.pkl') for d in dias if os.path.exists(out + f'rf5K_{d}.pkl')]
-    F = [pd.read_pickle(out + f'rf5_f5_0_{d}.pkl') for d in dias]
+PRECINTO = HV + 'PRECINTO_CIEGOS_18nov.txt'
+
+def precintados(path=None):
+    """nombres de fichero precintados (PRECINTO_CIEGOS_18nov.txt: prohibido abrirlos). Se leen del propio registro del precinto."""
+    p = path or PRECINTO
+    if not os.path.exists(p): return set()
+    return {os.path.basename(l.split(None, 1)[1].strip()) for l in open(p) if l.strip() and not l.startswith('#') and len(l.split()) >= 2}
+
+def carga(out, dias, precint=None, registro=None):
+    """Abre SOLO los pkl de los dias dados (ya VALIDOS). Un fichero precintado o ilegible (PermissionError) NO provoca excepcion: se registra 'precintado' en `registro` y el dia se omite entero (nunca datos parciales de un dia)."""
+    precint = precintados() if precint is None else precint; registro = registro if registro is not None else []; A = []; K = []; F = []
+    for d in dias:
+        fa, fk, ff = f'rf5A_{d}.pkl', f'rf5K_{d}.pkl', f'rf5_f5_0_{d}.pkl'
+        if fa in precint or ff in precint or fk in precint: registro.append(dict(dia=d, estado='precintado', motivo='listado en PRECINTO_CIEGOS')); continue
+        try:
+            a = pd.read_pickle(out + fa); f = pd.read_pickle(out + ff); k = pd.read_pickle(out + fk) if os.path.exists(out + fk) else None
+        except PermissionError: registro.append(dict(dia=d, estado='precintado', motivo='sin permiso de lectura (chmod)')); continue
+        A.append(a); F.append(f); (K.append(k) if k is not None else None)
+    if not A: return None, None
     return pd.concat(A + K, ignore_index=True), pd.concat(F, ignore_index=True)
+
+def sin_resolver_fuera(R):
+    """(R_primaria sin mercados sin desenlace oficial, R_peor_caso con todo: los sin resolver valen pnl = -coste). Sin columna sin_res => identicas."""
+    if 'sin_res' not in R.columns: return R, R
+    return R[~R.sin_res.fillna(False).astype(bool)], R
 
 def conteos(R, F):
     """Solo conteos/cobertura (SIN pnl, SIN coste, SIN EV)."""
     por = R.groupby(['dia', 'bloq', 'pol']).agg(ordenes=('mid', 'size'), rellenos=('q', lambda s: int((s > 0).sum())), lados=('mid', lambda s: 0)).reset_index().drop(columns='lados')
-    f5 = F[(F.bloq == 0)].groupby(['dia', 'coin']).agg(lados=('mid', 'size'), f5_invalidos=('f5_0', lambda s: int((~np.isfinite(s.astype(float))).sum()))).reset_index()
+    f5 = F[(F.bloq == 0) & (F.pol == 'base')].groupby(['dia', 'coin']).agg(lados=('mid', 'size'), f5_invalidos=('f5_0', lambda s: int((~np.isfinite(s.astype(float))).sum()))).reset_index()
     return dict(politicas_por_dia=por.to_dict('records'), f5_0_por_dia_moneda=f5.to_dict('records'))
 
 # ------------------------------------------------------------------ unidades y deltas
@@ -73,7 +94,11 @@ def familia_A(R, F, c, K=K_PERM, seed=SEMILLA):
         fp = f.copy()
         for g in G: fp[g] = f[rng.permutation(g)]
         mm = _masks(fp, ci, c, coins); Tmax.append(np.nanmax([T(delta_dias(m)) for m in mm.values()]))
-    Tmax = np.array(Tmax); out = {}; Tmx_obs = np.nanmax(list(Tobs.values())); out['T_max_obs'] = float(Tmx_obs); out['p_max_global'] = float((Tmax >= Tmx_obs).mean())
+    Tmax = np.array(Tmax); out = {}; Tmx_obs = np.nanmax(list(Tobs.values())); out['T_max_obs'] = float(Tmx_obs); out['p_max_global'] = float((1 + (Tmax >= Tmx_obs).sum()) / (len(Tmax) + 1)) if K else float('nan')
+    out['p_max_postfiltro'] = out['p_max_global']            # DESCRIPTIVO: permutar F5_0 y filtrar la base despues NO es confirmatorio (DICTAMEN 5; test 3)
+    if K and {'VETO_UP', 'VETO_DN'} <= set(R.pol.unique()):  # nulo EXACTO dentro del simulador (replicas por dia); si la composicion no reproduce la replica directa => NO_EXACTO
+        nu = NU.nulo_replicas(R, F, c, K=K, seed=seed); out['p_max_global'] = nu['p_max']; out['nulo'] = nu; out['nulo_exacto'] = bool(nu['exacto'])
+    else: out['nulo_exacto'] = None
     for k, m in obs.items():
         dd = delta_dias(m); dpnl_d = dd * cost_d; pt, lo, hi = ic90(dpnl_d, cost_d, seed=seed)
         Dc = deltas(R, k, 'fin'); cierre = ic90(Dc.dpnl.values, Dc.cost.values, K=2000, seed=seed)
@@ -83,7 +108,7 @@ def familia_A(R, F, c, K=K_PERM, seed=SEMILLA):
         D_inv = -dinv_p / cost_d.sum()
         out[k] = dict(delta=pt, ic90_dias=[lo, hi], ic90_cierres=[cierre[1], cierre[2]], pct_dias_pos=float((dd > 0).mean()), delta_sin_2_mejores_dias=sin_mejores(dpnl_d, cost_d), delta_inversion=D_inv,
                       T=float(Tobs[k]), n_dias=len(dias), lados_vetados=int(m.sum()), lados=int(len(m)), por_dia=dict(zip(dias, map(float, dd))))
-        out[k]['p_azar'] = p_azar(G, m, pnl, cost_d.sum(), -pnl[m].sum() / cost_d.sum(), K, rng)
+        out[k]['p_azar'] = p_azar(G, m, pnl, cost_d.sum(), -pnl[m].sum() / cost_d.sum(), K, rng) if K else float('nan')
     return out
 
 def p_azar(G, m, pnl, cost, delta_obs, K, rng):
@@ -94,7 +119,7 @@ def p_azar(G, m, pnl, cost, delta_obs, K, rng):
         for g, n in zip(G, ns):
             if n: s += pnl[g][rng.permutation(len(g))[:n]].sum()
         hit += (-s / cost) >= delta_obs
-    return float(hit / K)
+    return float((1 + hit) / (K + 1))
 
 def auc_binaria(score, y):
     """AUC de Mann-Whitney de la bandera 'F5_0 invalido' frente al desenlace y (0/1); NaN si falta una clase."""
@@ -105,19 +130,22 @@ def auc_binaria(score, y):
 
 def fuga_f5(R, F):
     """AUC por dia (n>=20) de 'F5_0 invalido' vs desenlace del lado; distribucion de antiguedad. 0 invalidos en todo => se exige el test unitario de la regla de 30 s (test_rf5.py)."""
-    gana = R[(R.pol == 'base') & (R.bloq == 0)].groupby(['dia', 'mid', 'k']).gana.first().reset_index(); X = F[(F.bloq == 0)].merge(gana, on=['dia', 'mid', 'k'], how='left'); X['inv'] = (~np.isfinite(X.f5_0.astype(float))).astype(int); out = {}
+    gana = R[(R.pol == 'base') & (R.bloq == 0)].groupby(['dia', 'mid', 'k']).gana.first().reset_index(); X = F[(F.bloq == 0) & (F.pol == 'base')].merge(gana, on=['dia', 'mid', 'k'], how='left'); X['inv'] = (~np.isfinite(X.f5_0.astype(float))).astype(int); out = {}
     for d, g in X.groupby('dia'):
         g = g.dropna(subset=['gana']); out[d] = dict(n=int(len(g)), auc=(auc_binaria(g.inv, g.gana) if len(g) >= 20 else None))
     ed = X.edad_ms.astype(float).dropna()
     return dict(por_dia=out, n_invalidos=int(X.inv.sum()), n=int(len(X)), edad_ms_pctiles=({str(p): float(np.percentile(ed, p)) for p in (50, 90, 99, 100)} if len(ed) else {}),
                 ok_banda=all(v['auc'] is None or (np.isnan(v['auc']) or 0.40 <= v['auc'] <= 0.60) for v in out.values()))
 
-def veredicto_A(k, a, fuga, c, bloq1_delta_pos):
+def veredicto_A(k, a, fuga, c, bloq1_delta_pos, peor=None, frag=None):
     """CONFIRMADA_k (prereg sec.3). Devuelve (veredicto, condiciones). Sensibilidad fail-closed NO implementada => nunca CONFIRMADA completa: 'CONFIRMADA_PENDIENTE_SENS'."""
-    cond = dict(delta_pos=a['delta'] > 0, ic90_dias_lo_pos=a['ic90_dias'][0] > 0, ic90_cierres_lo_pos=a['ic90_cierres'][0] > 0, p_max_lt_005=a['p_max_global'] < 0.05, dias_pos_60=a['pct_dias_pos'] >= 0.60,
+    cond = dict(delta_pos=a['delta'] > 0, ic90_dias_lo_pos=a['ic90_dias'][0] > 0, ic90_cierres_lo_pos=a['ic90_cierres'][0] > 0, p_max_lt_005=a['p_max_global'] < 0.05, nulo_exacto=(a.get('nulo_exacto') is True), dias_pos_60=a['pct_dias_pos'] >= 0.60,
                 sin2mejores_pos=a['delta_sin_2_mejores_dias'] > 0, mayor_que_inversion=a['delta'] > a['delta_inversion'], p_azar_le_010=a['p_azar'] <= 0.10, bloq1_pos=bool(bloq1_delta_pos), fuga_ok=bool(fuga['ok_banda']))
+    if peor is not None: cond['peor_caso_desenlace_ic90_pos'] = bool(peor['ic90_dias'][0] > 0)       # C3: lados con relleno sin resolver = -coste
     cond = {x: bool(v) for x, v in cond.items()}
-    if all(cond.values()): return 'CONFIRMADA_PENDIENTE_SENS_FAILCLOSED', cond
+    if all(cond.values()):
+        if frag is None: return 'CONFIRMADA_PENDIENTE_SENS_FAILCLOSED', cond            # sensibilidad por huecos no evaluada
+        return ('CONFIRMADA' if frag['estado'] == 'OK_HUECOS' else 'FRAGIL_HUECOS'), dict(cond, huecos=frag['estado'])
     return ('REFUTADA' if a['ic90_dias'][1] <= 0 else 'ACUMULANDO'), cond
 
 # ------------------------------------------------------------------ familia K
@@ -150,28 +178,58 @@ def familia_K(R):
     out['interaccion'] = float(sum(out['aislados'][x]['delta'] for x in ('F3', 'V5', 'V6')) - out['aislados']['K1_comb']['delta'])
     return out
 
-def veredicto_K(k, ev, kf):
+def veredicto_K(k, ev, kf, peor=None, frag=None):
     """COMBINADA_EV_POSITIVO (prereg sec.4) incompleta: faltan p_max_K y sensibilidad fail-closed => 'EV_POSITIVO_PENDIENTE_*' como mucho."""
     p = kf['politicas'].get(k);
     if p is None: return 'SIN_DATOS', {}
     cond = dict(ev_pos=p['ev_eur'] > 0, ic90_dias_lo_pos=p['ic90_dias'][0] > 0, ic90_cierres_lo_pos=p['ic90_cierres'][0] > 0, incond_pos=p['ev_incondicional_por_alta'] > 0, sin2_pos=p['ev_sin_2_mejores_dias'] > 0,
                 bloq1_pos=bool(kf['bloq1'].get(k) and kf['bloq1'][k]['ev_eur'] > 0), lc_pos=all(bool(v and v['ev_eur'] > 0) for v in kf['lcancel'].get(k, {}).values()),
                 capas_loo_pos=all(v['ic90_dias'][0] > 0 for v in kf['loo'].values()), inv_menor=(k != 'K1') or bool(kf['politicas']['INV_K1'] and kf['politicas']['INV_K1']['ev_eur'] < p['ev_eur']))
+    if peor is not None: cond['peor_caso_desenlace_ic90_pos'] = bool(peor is not None and peor.get(k) is not None and peor[k]['ic90_dias'][0] > 0)
     cond = {x: bool(v) for x, v in cond.items()}
     fr = (kf.get('frac_lados_cancelados_por_regla') or {}).get(k)
     if fr is not None and fr > 0.5: return 'SOLO_NO_OPERAR (>50 % de vidas disparadas; no cuenta)', dict(cond, frac_disparadas=fr)
-    if all(cond.values()): return 'EV_POSITIVO_PENDIENTE_PMAXK_Y_SENS', cond
+    if all(cond.values()): return (('EV_POSITIVO_PENDIENTE_PMAXK_Y_SENS' if frag is None else ('EV_POSITIVO_PENDIENTE_PMAXK' if frag['estado'] == 'OK_HUECOS' else 'FRAGIL_HUECOS')), cond)
     return ('REFUTADA_COMB' if p['ic90_dias'][1] <= 0 else 'ACUMULANDO'), cond
+
+def sensibilidad_huecos(R, F, c):
+    """E5: Delta (A) y EV (K) con y sin los mercados cuya vida solapa un hueco >=5 s, por moneda; FRAGIL_HUECOS si el signo cambia en >=2 de 3 monedas. Sin columna hueco => None (fail-closed: no hay CONFIRMADA)."""
+    excl = HU.mercados_excluidos(R)
+    if excl is None: return None
+    Rs = HU.excluye(R, excl); out = dict(n_mercados_excluidos=len(excl), n_mercados=int(R[(R.pol == 'base') & (R.bloq == 0)].groupby(['dia', 'mid']).ngroups), A={}, K={}); coins = ('eth', 'sol', 'xrp')
+    def delta_coin(RR_, k, c_):
+        X = RR_[RR_.coin.astype(str).str.lower() == c_]
+        if not len(X): return None
+        D = deltas(X, k, 'dia'); return float(D.dpnl.sum() / D.cost.sum()) if D.cost.sum() > 0 else None
+    def ev_coin(RR_, k, c_):
+        X = RR_[RR_.coin.astype(str).str.lower() == c_]; v = ev_pol(X, k) if len(X) else None; return None if v is None else v['ev_eur']
+    for k in ('F1', 'F2', 'F3', 'U13'): out['A'][k] = HU.veredicto_fragil({c_: delta_coin(R, k, c_) for c_ in coins}, {c_: delta_coin(Rs, k, c_) for c_ in coins})
+    for k in ('K1', 'K2', 'K3', 'K4'): out['K'][k] = HU.veredicto_fragil({c_: ev_coin(R, k, c_) for c_ in coins}, {c_: ev_coin(Rs, k, c_) for c_ in coins})
+    return out
+
+def por_bloque_4h(R):
+    """resultado por bloque de 4 h UTC del dia (C1, sesgo hora-del-dia): PnL, coste y EV por bloque para base, F3 y K1 (solo con >=10 dias validos; t_dec ms epoch)."""
+    out = {}
+    for pol in ('base', 'F3', 'K1'):
+        X = R[(R.pol == pol) & (R.bloq == 0) & (R.q > 0)]
+        if not len(X): continue
+        b = ((X.t_dec.astype('int64') // 3600000) % 24 // 4 * 4).astype(int); g = X.assign(b=b).groupby('b').agg(pnl=('pnl', 'sum'), cost=('cost', 'sum'), n=('pnl', 'size'))
+        out[pol] = {int(i): dict(n=int(r.n), pnl=float(r.pnl), coste=float(r.cost), ev=float(r.pnl / r.cost) if r.cost > 0 else None) for i, r in g.iterrows()}
+    return out
 
 def resumen(out, estado, c=None, min_dias=MIN_DIAS):
     c = c or K5.lee_cortes(); dv = dias_validos(estado); res = dict(measurement_id='RF5E-COMB-23NOV-v1', dias_validos=dv, n_dias_validos=len(dv), min_dias_mirada1=min_dias, estado_por_dia={d: m.get('status') for d, m in estado.items()})
     if not dv: res['modo'] = 'SOLO_CONTEOS (0 dias validos)'; return res
-    R, F = carga(out, dv); res['conteos'] = conteos(R, F)
+    reg = []; R, F = carga(out, dv, registro=reg); res['precintados_u_omitidos'] = reg
+    if R is None: res['modo'] = 'SOLO_CONTEOS (ningun dia legible/no precintado)'; return res
+    dv = sorted(set(R.dia)); res['dias_validos'] = dv; res['n_dias_validos'] = len(dv); res['conteos'] = conteos(R, F)
     if len(dv) < min_dias: res['modo'] = f'SOLO_CONTEOS ({len(dv)} < {min_dias} dias validos: sin EV, sin PnL, prereg sec.7)'; return res
-    res['modo'] = 'MIRADA_1' if len(dv) < 20 else 'MIRADA_2'; A = familia_A(R, F, c); fu = fuga_f5(R, F)
-    b1 = {k: deltas(R, k, 'dia', 1) for k in ('F1', 'F2', 'F3', 'U13')}; res['familia_A'] = {k: dict(A[k], veredicto=veredicto_A(k, dict(A[k], p_max_global=A['p_max_global']), fu, c, float(b1[k].dpnl.sum()) > 0)[0]) for k in ('F1', 'F2', 'F3', 'U13')}
+    res['modo'] = 'MIRADA_1' if len(dv) < 20 else 'MIRADA_2'; R_all = R; R, _ = sin_resolver_fuera(R_all); A = familia_A(R, F, c); fu = fuga_f5(R, F)
+    Aw = familia_A(R_all, F, c, K=0); Kw = {k: ev_pol(R_all, k) for k in ('K1', 'K2', 'K3', 'K4')}; res['peor_caso_desenlace'] = dict(familia_A={k: dict(delta=Aw[k]['delta'], ic90_dias=Aw[k]['ic90_dias']) for k in ('F1', 'F2', 'F3', 'U13')}, familia_K={k: (None if v is None else dict(ev_eur=v['ev_eur'], ic90_dias=v['ic90_dias'])) for k, v in Kw.items()})
+    res['por_bloque_4h'] = por_bloque_4h(R); sh = sensibilidad_huecos(R, F, c); res['sensibilidad_huecos'] = sh
+    b1 = {k: deltas(R, k, 'dia', 1) for k in ('F1', 'F2', 'F3', 'U13')}; res['familia_A'] = {k: dict(A[k], veredicto=veredicto_A(k, dict(A[k], p_max_global=A['p_max_global']), fu, c, float(b1[k].dpnl.sum()) > 0, Aw[k], (sh['A'][k] if sh else None))[0]) for k in ('F1', 'F2', 'F3', 'U13')}
     res['familia_A_global'] = dict(T_max_obs=A['T_max_obs'], p_max=A['p_max_global'], primario='F3'); res['fuga_f5'] = fu; res['familia_K'] = kf = familia_K(R)
-    res['veredictos_K'] = {k: veredicto_K(k, None, kf)[0] for k in ('K1', 'K2', 'K3', 'K4')}
+    res['veredictos_K'] = {k: veredicto_K(k, None, kf, Kw, (sh['K'][k] if sh else None))[0] for k in ('K1', 'K2', 'K3', 'K4')}
     return res
 
 if __name__ == '__main__':

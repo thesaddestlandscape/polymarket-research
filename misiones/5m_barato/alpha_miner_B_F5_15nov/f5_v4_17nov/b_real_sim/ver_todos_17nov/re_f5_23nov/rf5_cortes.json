@@ -24,7 +24,7 @@
  "measurement_id": "RF5E-COMB-23NOV-v1",
  "min_dias_mirada1": 10,
  "mirada2": 20,
- "nota_tabla": "(iii) del prereg: hasta que el chief firme la tabla de suelo sucesora (ruta+sha aqui, ANTES de abrir el dia) el dia no puede ser VALIDO; el runner lo marca suelo_pendiente.",
+ "nota_tabla": "(iii) del prereg: la tabla sucesora (ruta+sha, firmada por el chief) se verifica al cargar; un dia sin filas en ninguna tabla => suelo_pendiente (no VALIDO). Extensiones diarias: suelo_sucesora/suelo_diario.sh genera la propuesta (cron 04:40Z) y el chief firma la ruta+sha nuevos ANTES de abrir el dia (se anade a esta lista).",
  "origen": "prereg sec.1; reproducidos 23-Nov desde out_p0/p0_ordenes_2026-11-03..14.pkl (bloq0, 1.a orden por dia/mid/lado, f5t): n=7337 lados, p20/p80 por moneda coinciden a 1e-15 con el prereg. Este fichero se LEE, nunca se recalcula.",
  "prereg": "PREREG_RF5_ENTRADA_23nov.md sha 16be06b6194f8bbaf9225ba17fda56fe44a6faf5d4a0a790dfcd5340f82fac5e",
  "reglas": {
@@ -35,5 +35,10 @@
   "invalido": "F5_0 invalido (None/NaN/antiguedad>30 s) => NO entrar (todas las reglas F5)"
  },
  "semilla": 20261124,
- "tabla_suelo_sucesora": null
+ "tabla_suelo_sucesora": {
+  "ruta": "suelo_sucesora/tabla_suelo_sucesora_18_22nov.csv",
+  "sha256": "b72d49faa846f270460bc8a4eb9fe82850ec58f1c335fc00c3ae1b9090300919",
+  "dias": "2026-11-18..2026-11-22",
+  "firma": "chief 23-Nov 2026 (FIRMAS_CHIEF_23nov.txt)"
+ }
 }

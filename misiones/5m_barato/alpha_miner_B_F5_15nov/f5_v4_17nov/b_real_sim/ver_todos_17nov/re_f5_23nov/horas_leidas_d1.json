@@ -1,0 +1,2 @@
+{"nota": "C1 (ADENDA_RF5_CRITERIOS_v2 3a): horas de d-1 y d+1 que lee la simulacion de d (defecto de la adenda). Verificar con la simulacion real: eng_v5 lee la cinta/libro de d-1,d,d+1 (TXD de 3 dias) pero la ventana de trabajo de b_policy_sim es [fin-300 s, fin-T_STOP] de cada mercado 5m de d, es decir solo horas de d mas la hora 23 de d-1 y la 00 de d+1 por solape de mercados en los bordes. Cambiar esta lista = version nueva (nuevo sha en HASHES_rf5.txt).",
+ "d-1": [23], "d+1": [0]}

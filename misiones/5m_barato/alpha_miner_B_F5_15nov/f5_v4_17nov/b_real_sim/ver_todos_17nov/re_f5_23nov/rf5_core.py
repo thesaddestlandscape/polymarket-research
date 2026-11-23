@@ -24,7 +24,8 @@ def veta_f5(regla, coin, f5, c):
 
 # nombre -> (regla F5 | None | 'SET', V5, V6, L_cancel, inversion_binance). 'SET' = veto de lados explicito (inversion F5: los F5_0 MAS BAJOS, mismo n por dia x moneda)
 POLITICAS_A = {'base': (None, False, False, 74, False), 'F1': ('F1', False, False, 74, False), 'F2': ('F2', False, False, 74, False), 'F3': ('F3', False, False, 74, False),
-               'U13': ('U13', False, False, 74, False), 'INV_F3': ('SET', False, False, 74, False)}
+               'U13': ('U13', False, False, 74, False), 'INV_F3': ('SET', False, False, 74, False),
+               'VETO_UP': ('ALL_UP', False, False, 74, False), 'VETO_DN': ('ALL_DN', False, False, 74, False)}    # replicas del nulo exacto (E4): veto a TODAS las Up / Down
 POLITICAS_K = {'K1': ('F3', True, True, 74, False), 'K2': ('F1', True, True, 74, False), 'K3': ('F2', True, True, 74, False), 'K4': ('U13', True, True, 74, False), 'K5': (None, True, True, 74, False),
                'V5': (None, True, False, 74, False), 'V6': (None, False, True, 74, False), 'F3_V6': ('F3', False, True, 74, False), 'F3_V5': ('F3', True, False, 74, False), 'INV_K1': ('SET', True, True, 74, True)}
 for _k, _r in (('K1', 'F3'), ('K2', 'F1'), ('K3', 'F2'), ('K4', 'U13')):
@@ -68,7 +69,7 @@ class HookRF5:
             own = self.serie(int(k)); i = own.idx_rx(int(t)) if own is not None else -1
             f5 = C.f5t(own, int(t)); edad = float(int(t) - int(own.rx[i])) if i >= 0 else float('nan')
             self.f5_0[kk] = dict(coin=m.coin, f5_0=(float('nan') if f5 is None else f5), edad_ms=edad, t0=int(t), lado=('YES' if k == m.ku else 'NO'))
-            self.vetado[kk] = (kk in self.veto_set) if self.regla == 'SET' else veta_f5(self.regla, m.coin, f5, self.cortes)
+            self.vetado[kk] = (kk in self.veto_set) if self.regla == 'SET' else ((k == m.ku) if self.regla == 'ALL_UP' else ((k != m.ku) if self.regla == 'ALL_DN' else veta_f5(self.regla, m.coin, f5, self.cortes)))     # ALL_UP/ALL_DN: replicas del nulo (veto de un lado entero; F5_0 se mide igual)
             self.cont['lados_vetados_f5'] += int(self.vetado[kk]); self.cont['lados_intentados'] += 1
         return self.vetado[kk]
     def no_armar(self, m, k, t, L):

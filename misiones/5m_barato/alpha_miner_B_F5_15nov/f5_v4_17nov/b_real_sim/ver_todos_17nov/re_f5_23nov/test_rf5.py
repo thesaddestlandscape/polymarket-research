@@ -141,7 +141,7 @@ def test_sin_efecto_no_confirma():
     assert not v.startswith('CONFIRMADA')
 
 def test_confirmada_nunca_completa_sin_sens_failclosed():
-    a = dict(delta=0.1, ic90_dias=[0.05, 0.2], ic90_cierres=[0.04, 0.2], p_max_global=0.01, pct_dias_pos=0.9, delta_sin_2_mejores_dias=0.05, delta_inversion=-0.1, p_azar=0.01)
+    a = dict(delta=0.1, ic90_dias=[0.05, 0.2], ic90_cierres=[0.04, 0.2], nulo_exacto=True, p_max_global=0.01, pct_dias_pos=0.9, delta_sin_2_mejores_dias=0.05, delta_inversion=-0.1, p_azar=0.01)
     v, _ = EV.veredicto_A('F3', a, dict(ok_banda=True), C, True); assert v == 'CONFIRMADA_PENDIENTE_SENS_FAILCLOSED'
 
 def test_fuga_f5_regla_y_banda():

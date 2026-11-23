@@ -15,11 +15,12 @@ sys.path.insert(0, HV); sys.path.insert(0, V + 'r1v2_eval/'); sys.path.insert(0,
 import numpy as np, pandas as pd
 import puerta0_run as P0R                       # fija RU.OUT/PB, cobertura_tx, incompleto, sha_prereg (ver run_puerta0.sh)
 import fase_b_run as FB                         # carga_binance, anota; sobrescribe RU.code_hashes/ya_completo -> se re-sobrescriben abajo
-import sec7_run as RU, rf5_core as K5
+import sec7_run as RU, rf5_core as K5, rf5_gates as GT, cobertura_bruta as CB
+import contextlib, rf5_huecos as HU
 RU.OUT = OUT
 PREREG_RF5 = HV + 'PREREG_RF5_ENTRADA_23nov.md'; PREREG_RF5_SHA = '16be06b6194f8bbaf9225ba17fda56fe44a6faf5d4a0a790dfcd5340f82fac5e'
-HASHES = HV + 'HASHES_rf5.txt'; FICH_REG = ('rf5_core.py', 'rf5_run.py', 'rf5_eval.py', 'rf5_cortes.json', 'prep_tapes_rf5.sh', 'run_rf5.sh', 'vigia_rf5.py')
-COLS = ['dia', 'mid', 'coin', 'k', 'lado', 'L', 'q', 'cost', 'pnl', 'gana', 'fin', 't_dec', 'n_ord', 'motivo_fin', 'canal', 'estrato', 'f5t', 'tercil', 'bloq', 'pol', 'lcancel']
+HASHES = HV + 'HASHES_rf5.txt'; FICH_REG = ('rf5_core.py', 'rf5_run.py', 'rf5_eval.py', 'rf5_cortes.json', 'prep_tapes_rf5.sh', 'run_rf5.sh', 'vigia_rf5.py', 'rf5_gates.py', 'cobertura_bruta.py', 'horas_leidas_d1.json', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 't_proc_cronometro.py', 'rf5_acople_real.py', 'rf5_t_proc_ms.txt')
+COLS = ['dia', 'mid', 'coin', 'k', 'lado', 'L', 'q', 'cost', 'pnl', 'gana', 'fin', 't_dec', 'n_ord', 'motivo_fin', 'canal', 'estrato', 'f5t', 'tercil', 'bloq', 'pol', 'lcancel', 'sin_res', 'hueco']
 ts, log, sha, atomic_json, atomic_pkl = RU.ts, RU.log, RU.sha, RU.atomic_json, RU.atomic_pkl
 
 def t_proc():
@@ -31,7 +32,7 @@ def t_proc():
 def code_hashes():
     H = FB.code_hashes(); H['puerta0_run.py'] = sha(V + 'r1v2_eval/puerta0_run.py')
     for f in FICH_REG:
-        if f in ('prep_tapes_rf5.sh', 'run_rf5.sh', 'vigia_rf5.py') and not os.path.exists(HV + f): continue
+        if f in ('prep_tapes_rf5.sh', 'run_rf5.sh', 'vigia_rf5.py', 'rf5_gates.py', 'cobertura_bruta.py', 'horas_leidas_d1.json', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 't_proc_cronometro.py', 'rf5_acople_real.py', 'rf5_t_proc_ms.txt') and not os.path.exists(HV + f): continue
         H['rf5/' + f] = sha(HV + f)
     H['PREREG_RF5'] = sha(PREREG_RF5); return H
 RU.code_hashes = code_hashes
@@ -96,6 +97,37 @@ def asegura_ms2(d, sa2=None, dlr=None, volms=None, ext=None):
     log('ms_extract_v2', d, 'rc', r.returncode, (r.stdout or '')[-300:], (r.stderr or '')[-300:])
     return 'OK' if (r.returncode == 0 and os.path.exists(sa2 + f'ms2_{d}.npz')) else 'FALLO'
 
+@contextlib.contextmanager
+def desenlace_con_marcador():
+    """C3 peor caso (ADENDA_RF5_CRITERIOS_v2 3b): mercados SIN desenlace oficial no se saltan; entran en la simulacion con gana=0 (marcador) => todo relleno suyo da pnl = -coste (cota de peor caso exacta) y quedan marcados sin_res. Parche local y reversible del
+    capt_outcome del motor (mismo patron que test_b_real_sim.py); devuelve el conjunto de mids sin resolver."""
+    import eng_v5 as EV
+    global UNRES
+    G = EV.G; orig = G.capt_outcome; unres = set(); UNRES = unres
+    def f(E, k):
+        o = orig(E, k)
+        if o is None: unres.add(str(E.D.mid[k])); return 0.0
+        return o
+    G.capt_outcome = f
+    try: yield unres
+    finally: G.capt_outcome = orig; UNRES = set()
+
+def _res_huecos(g):
+    """resumen por moneda de huecos >=5 s: n y segundos totales (None = sin datos de la moneda)."""
+    return {c: (None if v is None else dict(n=len(v), segundos=round(sum(b - a for a, b in v) / 1000.0, 1))) for c, v in g.items()}
+
+def c3_lados(R, **kw):
+    """lados mercado-lado con relleno (union de politicas) -> GT.evalua_c3. R con cols mid,k,coin,q,cost,sin_res."""
+    X = R[R.q > 0]
+    g = X.groupby(['mid', 'k'], as_index=False).agg(coin=('coin', 'first'), coste=('cost', 'max'), sin_res=('sin_res', 'first')) if len(X) else X
+    c3 = GT.evalua_c3(g.assign(coin=g.coin.astype(str).str.upper()).to_dict('records') if len(g) else [], **kw); return c3
+
+def bloques4h(R):
+    """ordenes y rellenos por bloque de 4 h UTC (t_dec ms epoch; politica base, bloq 0): SOLO conteos (C1: sesgo hora-del-dia; el resultado por bloque lo emite rf5_eval con >=10 dias)."""
+    X = R[(R.pol == 'base') & (R.bloq == 0)]
+    if not len(X): return {}
+    b = ((X.t_dec.astype('int64') // 3600000) % 24 // 4).astype(int); return {int(i) * 4: dict(ordenes=int((b == i).sum()), rellenos=int(((b == i) & (X.q > 0)).sum())) for i in sorted(b.unique())}
+
 def construye_f5tab(hooks_f5, d, bloq, pol):
     return pd.DataFrame([dict(dia=d, bloq=bloq, pol=pol, mid=m, k=k, **v) for (m, k), v in hooks_f5.items()])
 
@@ -108,8 +140,12 @@ def _replay(d, P, W, ctx, nombre, tabla, bsrc, cortes, tp, veto_set=None):
         R = P0.unidad_primer_relleno(FB.anota(R, ctx, d)); R = R.assign(pol=nombre, lcancel=tabla[nombre][3])
     return R, cov, HK
 
-def _col(R, bloq):
-    R = R.assign(bloq=bloq)
+GAPS = {}; GAPS_BN = {}                         # huecos >=5 s por moneda del job en curso (ms del motor; Binance). Vacio => toda orden se marca hueco (fail-closed)
+UNRES = set()                                   # conjunto vivo de mids sin desenlace del job en curso (lo rellena desenlace_con_marcador)
+def _col(R, bloq, unres=None):
+    R = R.assign(bloq=bloq, sin_res=R.mid.astype(str).isin(UNRES if unres is None else unres).values)
+    R = R.assign(hueco=(HU.marca_huecos(R, GAPS) | (HU.marca_huecos(R, GAPS_BN) if GAPS_BN else False)).values)   # E5: la vida de la orden solapa un hueco >=5 s (o dato ausente => True)
+    R.loc[R.sin_res, 'gana'] = np.nan                       # C3: desenlace desconocido (pnl = -coste = peor caso por el marcador 0)
     for c in COLS:
         if c not in R.columns: R[c] = np.nan
     return R[COLS]
@@ -123,6 +159,16 @@ def _veto_f3_por_celda(f5b, cortes):
 def run_A(d):
     import b_policy_sim as BS, eng_v5 as EV, sec7_core as C
     cortes = K5.lee_cortes(); E, info = EV.build(d); P = BS.params(); Rs = []; f5s = []; cov = dict(motor=info, jobs={}, verif_veto_postfiltro={}, desenlace={}); base = {}
+    global GAPS, GAPS_BN
+    GAPS = HU.gaps_de_motor(E); GAPS_BN = {}; cov['huecos_ms'] = _res_huecos(GAPS)
+    f5x = []                                                # F5_0 medidos en las replicas VETO_UP/VETO_DN (nulo exacto): tablas aparte, no mezclan con f5s (indexado por bloq)
+    with desenlace_con_marcador() as unres: _bucle_A(d, P, E, cortes, Rs, f5s, cov, base, unres, f5x)
+    RA = pd.concat(Rs, ignore_index=True); cov['c3'] = c3_lados(RA); cov['por_bloque_4h'] = bloques4h(RA); cov['desenlace']['sin_desenlace_mercados'] = len(unres)
+    atomic_pkl(OUT + f'rf5A_{d}.pkl', RA); atomic_pkl(OUT + f'rf5_f5_0_{d}.pkl', pd.concat(f5s + f5x, ignore_index=True))
+    return dict(etiqueta='CONTEOS; sin EV', politicas={k: dict(ordenes=v['ordenes'], rellenos=v['rellenos']) for k, v in cov['jobs'].items()}), cov
+
+def _bucle_A(d, P, E, cortes, Rs, f5s, cov, base, unres, f5x):
+    import b_policy_sim as BS, sec7_core as C
     for bloq in (0, 1):
         W = C.EngineBloqueo(E, activo=bool(bloq)); ctx = dict(W=W, serie=W._serie)
         for nombre in K5.POLITICAS_A:
@@ -130,24 +176,30 @@ def run_A(d):
             vs = None
             if nombre == 'INV_F3': vs = K5.lados_a_vetar_inversion(f5s[0], _veto_f3_por_celda(f5s[0], cortes))
             R, c, HK = _replay(d, P, W, ctx, nombre, K5.POLITICAS_A, None, cortes, None, vs)
-            if len(R): Rs.append(_col(R, bloq))
+            if len(R): Rs.append(_col(R, bloq, unres))
             cov['jobs'][f'bloq{bloq}/{nombre}'] = dict(ordenes=int(len(R)), rellenos=int((R.q > 0).sum()) if len(R) else 0, contadores=dict(HK.cont), saltados=c.get('skip'))
+            if nombre in ('VETO_UP', 'VETO_DN'): f5x.append(construye_f5tab(HK.f5_0, d, bloq, nombre))
             if nombre == 'base':
                 base[bloq] = R; f5b = construye_f5tab(HK.f5_0, d, bloq, 'base'); f5s.append(f5b) if bloq == 0 else f5s.append(f5b)
-                cov['desenlace'] = dict(mercados=c.get('mercados'), sin_desenlace=(c.get('skip') or {}).get('sin_desenlace', 0))
+                cov['desenlace'] = dict(mercados=c.get('mercados'))
             elif nombre in ('F1', 'F2', 'F3', 'U13') and len(R) and bloq in base and len(base[bloq]):
                 f5ref = f5s[bloq] if len(f5s) > bloq else f5s[0]
                 cov['verif_veto_postfiltro'][f'bloq{bloq}/{nombre}'] = K5.verifica_veto_postfiltro(base[bloq], R, f5ref, nombre, cortes)
-    atomic_pkl(OUT + f'rf5A_{d}.pkl', pd.concat(Rs, ignore_index=True)); atomic_pkl(OUT + f'rf5_f5_0_{d}.pkl', pd.concat(f5s, ignore_index=True))
-    return dict(etiqueta='CONTEOS; sin EV', politicas={k: dict(ordenes=v['ordenes'], rellenos=v['rellenos']) for k, v in cov['jobs'].items()}), cov
 
 def run_K(d):
+    with desenlace_con_marcador() as unres:
+        res, cov = _run_K(d)
+    cov['c3'] = c3_lados(pd.read_pickle(OUT + f'rf5K_{d}.pkl')); cov['desenlace_sin_resolver_mercados'] = len(unres); return res, cov
+
+def _run_K(d):
     import b_policy_sim as BS, eng_v5 as EV, sec7_core as C, variantes_b as VB
     tp = t_proc()
     cortes = K5.lee_cortes(); f5b = pd.read_pickle(OUT + f'rf5_f5_0_{d}.pkl'); f5b0 = f5b[f5b.bloq == 0]; vs = K5.lados_a_vetar_inversion(f5b0, _veto_f3_por_celda(f5b0, cortes))
     bsrc = FB.carga_binance(d)
     if not bsrc: raise RuntimeError('DATA_BLOCKED: sin m5_registro Binance (ETH/SOL/XRP) para V5/V6 en %s' % d)
     E, info = EV.build(d); P = BS.params(); Rs = []; cov = dict(motor=info, t_proc_ms=tp, jobs={}, binance_coins=sorted(bsrc), conjuntos_exclusivos=None)
+    global GAPS, GAPS_BN
+    GAPS = HU.gaps_de_motor(E); GAPS_BN = HU.gaps_binance(bsrc); cov['huecos_ms'] = _res_huecos(GAPS); cov['huecos_binance'] = _res_huecos(GAPS_BN)
     for bloq in (0, 1):
         W = C.EngineBloqueo(E, activo=bool(bloq)); ctx = dict(W=W, serie=W._serie)
         for nombre in K5.POLITICAS_K:
@@ -167,47 +219,82 @@ def run_K(d):
     atomic_pkl(OUT + f'rf5K_{d}.pkl', pd.concat(Rs, ignore_index=True))
     return dict(etiqueta='CONTEOS; sin EV', politicas={k: dict(ordenes=v['ordenes'], rellenos=v['rellenos']) for k, v in cov['jobs'].items()}), cov
 
+def bad_horas(x, pb=None):
+    """horas malas de x (lista de ints) de bad_x.json de prep_day; None si falta/ilegible (fail-closed)."""
+    try: return sorted({int(h) for dd, h in json.load(open((pb or RU.PB) + f'bad_{x}.json'))['bad'] if dd == x})
+    except Exception: return None
+
+def valida_c1(d, pb=None, cob=None):
+    """C1 (ADENDA_RF5_CRITERIOS_v2 3a): cobertura SIN filtrar horas en d-1,d,d+1 + f_horas(d) + horas leidas de d-1/d+1. Devuelve (res, cb) o (None, faltan) si falta alguna fuente (PENDING/INCOMPLETE por antiguedad)."""
+    dias = P0R.dias_vec(d); cb = {}; faltan = []
+    for x in dias:
+        r = (cob or CB.obtener)(x)
+        if r is None: faltan.append(x)
+        else: cb[x] = r
+    if faltan: return None, faltan
+    hl = GT.lee_horas_leidas(); res = GT.evalua_c1(dias, {x: dict(units=cb[x]['units'], con_tx=cb[x]['con_tx']) for x in dias}, {x: bad_horas(x, pb) for x in dias}, hl)
+    res['detalle']['descriptivo'] = {x: dict(resumen=cb[x].get('resumen'), horas_malas_propias=cb[x].get('horas_malas_propias')) for x in dias}; return res, cb
+
+def suelo_estado(d, cortes):
+    """(iii): tabla de suelo sucesora (ruta+sha en rf5_cortes.json) -> estado del dia. Sin entrada para el dia => suelo_pendiente (no VALIDO)."""
+    df, info = GT.lee_tabla_suelo(cortes); r = GT.suelo_dia(df, d); r['tabla'] = info; return r
+
 def procesa_dia(d):
-    """Devuelve el estado del dia y escribe manifest_rf5dia_D.json. INCOMPLETE es terminal (no se reevalua)."""
+    """Devuelve el estado del dia y escribe manifest_rf5dia_D.json. INCOMPLETE es terminal (no se reevalua). Orden: registro/prereg -> cintas -> C1 (cobertura sin filtrar, horas) -> ms2 -> jobs A/K (con desenlace de marcador) -> C3 -> suelo."""
     prev = lee_dia(d)
     if prev and prev.get('status') == 'INCOMPLETE': log('INCOMPLETE terminal', d, prev.get('motivo')); return 'INCOMPLETE'
     base = dict(job=f'rf5 dia {d}', measurement_id='RF5E-COMB-23NOV-v1', dia=d, t_ini=ts(), primer_visto=((prev or {}).get('primer_visto') or ts()), code=code_hashes())
     P0R.sha_prereg()                                       # ValueError => el llamador sale 3 (fail-closed)
     prob = verifica_registro()
     if prob: atomic_json(dia_mpath(d), dict(base, status='BLOCKED', motivo=prob, t_fin=ts())); log('BLOCKED registro', prob); return 'BLOCKED'
-    cov = P0R.cobertura_tx(d); fuentes = estado_fuentes(d); faltan_tape = [x for x, v in cov['dias'].items() if v.get('motivo') == 'sin tape']
+    fuentes = estado_fuentes(d); faltan_tape = [x for x in P0R.dias_vec(d) if not (os.path.exists(RU.PB + f'tape_{x}.pkl') and os.path.exists(RU.PB + f'bad_{x}.json'))]
     if faltan_tape:                                        # cinta no producida (o fuente aun no extraida): recuperable <=48 h; mas viejo y sin fuente => perdido (terminal)
         perdido = [x for x in faltan_tape if not fuentes.get(x) and x < dmas(hoy(), -2)]
         st, mot = ('INCOMPLETE', f'fuente sa_ms perdida/ausente para {perdido}') if perdido else ('PENDING', f'sin cinta para {faltan_tape} (fuentes sa_ms: {fuentes})')
-        atomic_json(dia_mpath(d), dict(base, status=st, motivo=mot, cobertura_tx=cov, t_fin=ts())); log(st, d, mot); return st
-    mot = P0R.incompleto(d, cov, None)
-    if mot: atomic_json(dia_mpath(d), dict(base, status='INCOMPLETE', motivo=mot, cobertura_tx=cov, t_fin=ts())); log('INCOMPLETE', d, mot); return 'INCOMPLETE'
+        atomic_json(dia_mpath(d), dict(base, status=st, motivo=mot, t_fin=ts())); log(st, d, mot); return st
+    c1, cb = valida_c1(d)                                  # (i) sobre TODAS las unidades sin filtrar horas
+    if c1 is None:
+        st, mot = ('INCOMPLETE', f'sin fuente de cobertura bruta (sa_ms/on-chain) para {cb}') if any(x < dmas(hoy(), -2) for x in cb) else ('PENDING', f'cobertura bruta aun no calculable para {cb}')
+        atomic_json(dia_mpath(d), dict(base, status=st, motivo=mot, t_fin=ts())); log(st, d, mot); return st
+    if not c1['ok']: atomic_json(dia_mpath(d), dict(base, status='INCOMPLETE', motivo=c1['motivos'], c1=c1, t_fin=ts())); log('INCOMPLETE C1', d, c1['motivos']); return 'INCOMPLETE'
+    mot = P0R.incompleto(d, dict(ok=True, dias={}), None)   # solo sha de tape/bad contra TAPES_SHA256_ciegos.txt (la cobertura ya la hizo C1)
+    if mot: atomic_json(dia_mpath(d), dict(base, status='INCOMPLETE', motivo=mot, c1=c1, t_fin=ts())); log('INCOMPLETE', d, mot); return 'INCOMPLETE'
     m2 = asegura_ms2(d)
     if m2 != 'OK':
         st, mot = ('INCOMPLETE', 'sa_ms2 sin raw maker_ms (fuente perdida)') if (m2 == 'SIN_RAW' and d < dmas(hoy(), -2)) else (('PENDING', 'sa_ms2: raw maker_ms del dia aun no cerrado') if m2 == 'SIN_RAW' else ('FAILED', 'ms_extract_v2 fallo'))
-        atomic_json(dia_mpath(d), dict(base, status=st, motivo=mot, cobertura_tx=cov, t_fin=ts())); log(st, d, mot); return st
+        atomic_json(dia_mpath(d), dict(base, status=st, motivo=mot, c1=c1, t_fin=ts())); log(st, d, mot); return st
     btc = cobertura_btc(d); cortes = K5.lee_cortes(); st_j = {}
+    if prev and prev.get('c3_estado') == 'PENDIENTE':      # el desenlace pendiente pudo resolverse: re-simular (los desenlaces cambian la simulacion)
+        for modo in ('rf5A', 'rf5K'):
+            if os.path.exists(RU.mpath(modo, d)): os.replace(RU.mpath(modo, d), RU.mpath(modo, d) + '.pre_c3_' + time.strftime('%Y%m%dT%H%M%S', time.gmtime()))
     needs = dict(RU.inputs_dia(d), ms2=SA2 + f'ms2_{d}.npz')
     st_j['A'] = RU.job('rf5A', d, [f'rf5A_{d}.pkl', f'rf5_f5_0_{d}.pkl'], run_A, needs)
     if st_j['A'] == 'COMPLETE':
         if t_proc() is None:
             atomic_json(RU.mpath('rf5K', d), dict(job=f'rf5K {d}', status='BLOCKED', motivo='BLOCKED_T_PROC: falta RF5_T_PROC_MS / rf5_t_proc_ms.txt (sin default)', t_fin=ts())); st_j['K'] = 'BLOCKED'
         else: st_j['K'] = RU.job('rf5K', d, [f'rf5K_{d}.pkl'], run_K, dict(needs, m5=FB.M5 % d))
-    ma = json.load(open(RU.mpath('rf5A', d))) if os.path.exists(RU.mpath('rf5A', d)) else {}; den = ((ma.get('cobertura') or {}).get('desenlace') or {})
-    frac = None if not den.get('mercados') else 1 - den.get('sin_desenlace', 0) / (den['mercados'] + den.get('sin_desenlace', 0))
-    suelo = 'PENDIENTE_TABLA_SUELO_SUCESORA' if not cortes.get('tabla_suelo_sucesora') else 'OK'
+    c3 = c3s = None
+    if st_j.get('A') == 'COMPLETE':                        # C3 sobre las coberturas de cada job; el peor de los dos manda
+        ca = (json.load(open(RU.mpath('rf5A', d))).get('cobertura') or {}).get('c3'); ck = (json.load(open(RU.mpath('rf5K', d))).get('cobertura') or {}).get('c3') if st_j.get('K') == 'COMPLETE' else None
+        c3s = [x for x in (ca, ck) if x]; c3 = 'OK' if (c3s and all(x['estado'] == 'OK' for x in c3s)) else 'PENDIENTE'
+    try: su = suelo_estado(d, cortes)
+    except ValueError as ex: su = dict(estado='BLOQUEADO_TABLA', motivo=str(ex), por_moneda={}, tabla=None)
+    suelo = 'OK' if su['estado'] == 'OK' else ('PENDIENTE_TABLA_SUELO_SUCESORA' if su['estado'] in ('suelo_pendiente', 'BLOQUEADO_TABLA') else su['estado'])
     ok = st_j.get('A') == 'COMPLETE' and st_j.get('K') == 'COMPLETE'
     st = 'COMPLETE' if ok else ('PENDING' if st_j.get('K') == 'BLOCKED' and st_j.get('A') == 'COMPLETE' else ('BLOCKED' if 'BLOCKED' in st_j.values() else 'FAILED'))
-    atomic_json(dia_mpath(d), dict(base, status=st, jobs=st_j, cobertura_tx=cov, btc=btc, desenlace_frac=frac, criterio_iv_ok=(None if frac is None else frac >= 0.80), criterio_iii_suelo=suelo,
-                                   motivo=('BLOCKED_T_PROC (K pendiente)' if st == 'PENDING' else None), t_fin=ts(),
-                                   repro=f'cd {HV} && python3 rf5_run.py dia {d}'))
+    motivo = ('BLOCKED_T_PROC (K pendiente)' if st == 'PENDING' else None)
+    if st == 'COMPLETE' and c3 == 'PENDIENTE':
+        if GT.terminal_c3(d, hoy(), dmas): st, motivo = 'INCOMPLETE', 'C3: desenlace oficial < 0,99 en alguna moneda al llegar D+3 (terminal)'
+        else: st, motivo = 'PENDING', 'C3: desenlace oficial pendiente (se reintenta hasta D+3)'
+    atomic_json(dia_mpath(d), dict(base, status=st, jobs=st_j, c1=c1, c3_estado=c3, c3=c3s, btc=btc, criterio_iv_ok=(None if c3 is None else c3 == 'OK'), criterio_iii_suelo=suelo, suelo=su,
+                                   motivo=motivo, t_fin=ts(), t_proc_ms=t_proc(), repro=f'cd {HV} && python3 rf5_run.py dia {d}'))
     log('DIA', d, st, st_j); return st
 
 def estado():
     out = {}
     for f in sorted(os.listdir(OUT)):
-        if f.startswith('manifest_rf5dia_'):
-            m = json.load(open(OUT + f)); out[m['dia']] = dict(status=m['status'], motivo=m.get('motivo'), t_fin=m.get('t_fin'), jobs=m.get('jobs'), btc=(m.get('btc') or {}).get('estado'), iv=m.get('criterio_iv_ok'), iii=m.get('criterio_iii_suelo'))
+        if f.startswith('manifest_rf5dia_') and f.endswith('.json'):
+            m = json.load(open(OUT + f)); out[m['dia']] = dict(status=m['status'], motivo=m.get('motivo'), t_fin=m.get('t_fin'), jobs=m.get('jobs'), btc=(m.get('btc') or {}).get('estado'), iv=m.get('criterio_iv_ok'), iii=m.get('criterio_iii_suelo'), c3=m.get('c3_estado'))
     return out
 
 if __name__ == '__main__':
