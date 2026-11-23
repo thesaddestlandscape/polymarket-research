@@ -6,7 +6,9 @@ logs/
 data/binance/
 data/markets/
 data/trades/
-data/wallets/
+data/wallets
+# 23-Nov: data/wallets es symlink al volumen sdb (data_wallets_main); sin barra para que tambien ignore el enlace
+data/wallets.old_*
 data/funding/
 data/alerts/
 data/live/LIVE_MODE_ON
