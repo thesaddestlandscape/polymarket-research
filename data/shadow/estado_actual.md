@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-23 06:09 UTC
+# Estado del bot — 2026-11-23 06:15 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +77015.40 $ |
-| P&L sim compuesto | 🟢 +218333.56 $ (ficción Kelly: +858229% s/ operativo) |
-| P&L sim hoy (2026-11-23) | 🟢 +824.13 $ |
-| Operaciones resueltas | 1570960 (898780 WIN / 672180 LOSS) — 57.2% |
-| Señales abiertas | 191220 |
+| P&L fiel (stake fijo 1$) | +77014.40 $ |
+| P&L sim compuesto | 🟢 +218331.84 $ (ficción Kelly: +858223% s/ operativo) |
+| P&L sim hoy (2026-11-23) | 🟢 +822.41 $ |
+| Operaciones resueltas | 1570961 (898780 WIN / 672181 LOSS) — 57.2% |
+| Señales abiertas | 191847 |
 
 ## Estrategias (visión global)
 
@@ -76,37 +76,37 @@
 | FAVORITO_CONFIRMADO_DEPTH_FASE0 | 96120 | 60.1% | +0.101 | ➡️ estable (últ. 1000) | -1993.33$ | 1.01$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 35986 | 69.0% | +0.190 | 📈 madura (+0.05) (últ. 1000) | -2663.31$ | 1.90$ | ✅ activa |
 | BALLENAS_TARDIAS | 56457 | 41.6% | -0.084 | ➡️ estable (últ. 1000) | -7439.74$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO | 242362 | 61.2% | +0.112 | ➡️ estable (últ. 1000) | -9722.62$ | 1.13$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 242363 | 61.2% | +0.112 | ➡️ estable (últ. 1000) | -9724.34$ | 1.13$ | ✅ activa |
 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 138655 | 69.9% | +0.199 | ➡️ estable (últ. 1000) | -10135.48$ | 2.00$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-11-23T06:11 | FAVORITO_CONFIRMADO#SOL#5min | Solana Up or Down - November 23, 1:00AM-1:05AM ET… | ❌ LOSS | -1.72$ |
 | 2026-11-23T06:09 | BALLENAS_TARDIAS#SOL#5min | … | ✅ WIN | +0.43$ |
 | 2026-11-23T06:09 | BALLENAS_TARDIAS#XRP#5min | … | ✅ WIN | +0.15$ |
 | 2026-11-23T06:09 | CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | … | ✅ WIN | +5.93$ |
 | 2026-11-23T06:09 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min | … | ✅ WIN | +0.39$ |
-| 2026-11-23T06:09 | UPDOWN_GBM#SOL#5min | Solana Up or Down - November 23, 1:00AM-1:05AM ET… | ✅ WIN | +0.84$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-11-23T06:08 UTC
+✅ **OK** — última verificación 2026-11-23T06:15 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $61,524.64 | 0.2min |  |
-| ✅ ETH | $1,726.03 | 0.2min |  |
-| ✅ SOL | $72.01 | 0.2min |  |
-| ✅ XRP | $0.94 | 0.2min |  |
+| ✅ BTC | $61,641.39 | 0.2min |  |
+| ✅ ETH | $1,726.99 | 0.2min |  |
+| ✅ SOL | $72.03 | 0.2min |  |
+| ✅ XRP | $0.95 | 0.2min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $61,561.50 | consenso |  |
-| ETH | $1,727.09 | consenso |  |
-| SOL | $71.79 | consenso |  |
+| BTC | $61,641.39 | consenso |  |
+| ETH | $1,726.99 | consenso |  |
+| SOL | $71.81 | consenso |  |
 | XRP | $0.94 | consenso |  |
 
 ---
