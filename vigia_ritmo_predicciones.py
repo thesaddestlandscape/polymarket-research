@@ -11,7 +11,7 @@ la TASA de generación por estrategia. Este vigía compara el conteo de
 predicciones del día ANTERIOR completo (ayer, no hoy — hoy está a
 medias cuando corre el cron de madrugada) contra la mediana de los 7
 días previos a ese, por estrategia — y avisa por Telegram (latch, una
-vez por racha) si una estrategia con historial sólido (mediana≥20/día)
+vez por racha) si una estrategia con historial sólido (mediana≥5 mercados distintos/día)
 cae por debajo del 15% de su propia mediana.
 
 Deliberadamente NO usa un umbral fijo en valor absoluto (una estrategia
@@ -39,7 +39,12 @@ DIR_SHADOW = REPO / "data" / "shadow"
 LATCH = DIR_SHADOW / "vigia_ritmo_predicciones_latch.json"
 
 N_DIAS_BASELINE = 7  # días previos al día evaluado, para la mediana
-MEDIANA_MIN = 20     # solo vigila estrategias con historial sólido
+MEDIANA_MIN = 5      # mercados distintos/día; solo vigila estrategias con historial sólido
+# 23-Nov: se cuentan MERCADOS distintos por estrategia y día, no filas. Una señal
+# viva se re-escribe en cada ciclo (~20 s) mientras sigue en ventana, así que las
+# filas mezclan "cuántos mercados" con "cuánto tiempo duró cada uno" (RESOLUTION_SNIPER:
+# 6-448 filas/día con 3-18 mercados) y daban falsas alarmas (22-Nov: 6 filas = 3
+# mercados, igual que el 18-Nov, con universo y pipeline sanos).
 RATIO_ALARMA = 0.15  # cae por debajo del 15% de su mediana -> aviso
 
 
@@ -48,12 +53,18 @@ def _conteo_por_estrategia(fecha: date) -> dict:
     if f is None:
         return {}
     c: dict = {}
+    vistos: set = set()
     try:
         with _pa.abrir(f) as fh:
             for row in csv.DictReader(fh):
                 s = row.get("strategy", "")
-                if s:
-                    c[s] = c.get(s, 0) + 1
+                if not s:
+                    continue
+                clave = (s, row.get("market_id", ""))
+                if clave in vistos:
+                    continue
+                vistos.add(clave)
+                c[s] = c.get(s, 0) + 1
     except Exception as e:
         print(f"[vigia_ritmo_predicciones] WARN no se pudo leer {f.name}: "
               f"{type(e).__name__}: {e}")
@@ -97,7 +108,7 @@ def main() -> int:
         if ratio < RATIO_ALARMA:
             if not latch.get(s, {}).get("avisado"):
                 msg = (f"🔴 [vigia_ritmo_predicciones] {s}: {n_ayer} "
-                       f"predicciones ayer ({ayer.isoformat()}) vs "
+                       f"mercados con predicción ayer ({ayer.isoformat()}) vs "
                        f"mediana {mediana:.0f}/día (últimos {N_DIAS_BASELINE} "
                        f"días) — cayó a {ratio*100:.1f}% de su ritmo normal. "
                        f"Posible cable desconectado (fuente de datos rota, "
