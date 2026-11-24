@@ -1,6 +1,6 @@
 {
  "cutoff_utc": "2026-09-29T09:29:27+00:00",
- "generado_utc": "2026-11-23T08:50:23+00:00",
+ "generado_utc": "2026-11-24T08:50:25+00:00",
  "items": [
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_NO",
@@ -8,10 +8,10 @@
    "n_hist": 41,
    "ev_hist": 0.6267,
    "fill_libro_real": 0.42,
-   "n_fwd": 53,
-   "dias_fwd": 19,
-   "ev_fwd": 0.1667,
-   "ic_lo_fwd": -0.2085,
+   "n_fwd": 46,
+   "dias_fwd": 18,
+   "ev_fwd": 0.3174,
+   "ic_lo_fwd": -0.0806,
    "veredicto": "sin_concluir"
   },
   {
@@ -20,10 +20,10 @@
    "n_hist": 45,
    "ev_hist": 0.4318,
    "fill_libro_real": 0.35,
-   "n_fwd": 43,
+   "n_fwd": 41,
    "dias_fwd": 14,
-   "ev_fwd": 0.4435,
-   "ic_lo_fwd": 0.2258,
+   "ev_fwd": 0.3922,
+   "ic_lo_fwd": 0.178,
    "veredicto": "confirmado_forward"
   },
   {
@@ -32,11 +32,11 @@
    "n_hist": 44,
    "ev_hist": 0.3542,
    "fill_libro_real": null,
-   "n_fwd": 96,
+   "n_fwd": 102,
    "dias_fwd": 20,
-   "ev_fwd": 0.0096,
-   "ic_lo_fwd": -0.1982,
-   "veredicto": "sin_concluir"
+   "ev_fwd": -0.0385,
+   "ic_lo_fwd": -0.2138,
+   "veredicto": "refutado_forward"
   },
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min#BUY_YES",
@@ -44,10 +44,10 @@
    "n_hist": 40,
    "ev_hist": 0.3379,
    "fill_libro_real": 0.307,
-   "n_fwd": 26,
+   "n_fwd": 25,
    "dias_fwd": 16,
-   "ev_fwd": -0.3891,
-   "ic_lo_fwd": -0.6793,
+   "ev_fwd": -0.3037,
+   "ic_lo_fwd": -0.581,
    "veredicto": "refutado_forward"
   },
   {
@@ -56,10 +56,10 @@
    "n_hist": 58,
    "ev_hist": 0.2717,
    "fill_libro_real": 0.218,
-   "n_fwd": 67,
+   "n_fwd": 64,
    "dias_fwd": 21,
-   "ev_fwd": -0.0161,
-   "ic_lo_fwd": -0.1683,
+   "ev_fwd": -0.0656,
+   "ic_lo_fwd": -0.2174,
    "veredicto": "refutado_forward"
   },
   {
@@ -80,10 +80,10 @@
    "n_hist": 114,
    "ev_hist": 0.2597,
    "fill_libro_real": 0.338,
-   "n_fwd": 142,
+   "n_fwd": 133,
    "dias_fwd": 20,
-   "ev_fwd": -0.1487,
-   "ic_lo_fwd": -0.3288,
+   "ev_fwd": -0.1246,
+   "ic_lo_fwd": -0.3208,
    "veredicto": "refutado_forward"
   },
   {
@@ -92,10 +92,10 @@
    "n_hist": 121,
    "ev_hist": 0.2135,
    "fill_libro_real": 0.413,
-   "n_fwd": 105,
-   "dias_fwd": 21,
-   "ev_fwd": 0.0834,
-   "ic_lo_fwd": -0.0963,
+   "n_fwd": 102,
+   "dias_fwd": 20,
+   "ev_fwd": 0.1357,
+   "ic_lo_fwd": -0.0554,
    "veredicto": "sin_concluir"
   },
   {
@@ -104,10 +104,10 @@
    "n_hist": 76,
    "ev_hist": 0.2029,
    "fill_libro_real": 0.274,
-   "n_fwd": 88,
+   "n_fwd": 84,
    "dias_fwd": 21,
-   "ev_fwd": 0.052,
-   "ic_lo_fwd": -0.1058,
+   "ev_fwd": 0.0543,
+   "ic_lo_fwd": -0.1189,
    "veredicto": "sin_concluir"
   },
   {
@@ -116,10 +116,10 @@
    "n_hist": 62,
    "ev_hist": 0.1559,
    "fill_libro_real": 0.107,
-   "n_fwd": 41,
-   "dias_fwd": 18,
-   "ev_fwd": -0.1128,
-   "ic_lo_fwd": -0.2301,
+   "n_fwd": 39,
+   "dias_fwd": 17,
+   "ev_fwd": -0.1023,
+   "ic_lo_fwd": -0.2187,
    "veredicto": "refutado_forward"
   },
   {
@@ -128,10 +128,10 @@
    "n_hist": 89,
    "ev_hist": 0.1531,
    "fill_libro_real": 0.175,
-   "n_fwd": 56,
-   "dias_fwd": 4,
-   "ev_fwd": 0.1632,
-   "ic_lo_fwd": 0.0521,
+   "n_fwd": 31,
+   "dias_fwd": 3,
+   "ev_fwd": 0.169,
+   "ic_lo_fwd": 0.0121,
    "veredicto": "sin_concluir"
   },
   {
@@ -140,10 +140,10 @@
    "n_hist": 94,
    "ev_hist": 0.1357,
    "fill_libro_real": null,
-   "n_fwd": 118,
+   "n_fwd": 105,
    "dias_fwd": 21,
-   "ev_fwd": 0.07,
-   "ic_lo_fwd": -0.0122,
+   "ev_fwd": 0.0636,
+   "ic_lo_fwd": -0.0359,
    "veredicto": "sin_concluir"
   },
   {
@@ -152,10 +152,10 @@
    "n_hist": 138,
    "ev_hist": 0.1217,
    "fill_libro_real": 0.607,
-   "n_fwd": 149,
+   "n_fwd": 154,
    "dias_fwd": 21,
-   "ev_fwd": 0.0504,
-   "ic_lo_fwd": -0.0372,
+   "ev_fwd": 0.0611,
+   "ic_lo_fwd": -0.0354,
    "veredicto": "sin_concluir"
   },
   {
@@ -164,10 +164,10 @@
    "n_hist": 115,
    "ev_hist": 0.1131,
    "fill_libro_real": 0.186,
-   "n_fwd": 190,
-   "dias_fwd": 19,
-   "ev_fwd": 0.0419,
-   "ic_lo_fwd": -0.0277,
+   "n_fwd": 195,
+   "dias_fwd": 18,
+   "ev_fwd": 0.0293,
+   "ic_lo_fwd": -0.0389,
    "veredicto": "sin_concluir"
   },
   {
@@ -176,10 +176,10 @@
    "n_hist": 116,
    "ev_hist": 0.1042,
    "fill_libro_real": 0.628,
-   "n_fwd": 139,
+   "n_fwd": 146,
    "dias_fwd": 21,
-   "ev_fwd": -0.0179,
-   "ic_lo_fwd": -0.1493,
+   "ev_fwd": -0.0057,
+   "ic_lo_fwd": -0.1259,
    "veredicto": "refutado_forward"
   }
  ]
