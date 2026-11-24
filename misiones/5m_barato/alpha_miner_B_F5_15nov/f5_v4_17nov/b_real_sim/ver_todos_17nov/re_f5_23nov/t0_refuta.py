@@ -3,7 +3,7 @@
 Contrafactual exacto bajo supuesto: lados independientes (B coloca cada lado por separado) y no entrar = 0 ordenes en ese lado. Refutaciones: placebo dentro de dia x moneda, por moneda, por dia, reloj exchange, T de entrada, lado, quintiles."""
 import glob, json, numpy as np, pandas as pd
 rng = np.random.default_rng(20261123)
-R = pd.concat([pd.read_pickle(f) for f in sorted(glob.glob('../r1v2_eval/out_p0/p0_ordenes_2026-11-*.pkl'))], ignore_index=True)
+R = pd.concat([pd.read_pickle(f) for f in [f_ for f_ in sorted(glob.glob('../r1v2_eval/out_p0/p0_ordenes_2026-11-*.pkl')) if f_.rsplit('p0_ordenes_', 1)[1][:10] < '2026-11-15']], ignore_index=True)      # v3: nunca dias >= 15-Nov (ciegos desde 18-Nov)
 POST = R[R.dia < '2026-11-05']; R = R[R.dia >= '2026-11-05']
 def lados(Rv):
     Rv = Rv.sort_values('t_dec'); g = Rv.groupby(['dia', 'mid', 'lado'])

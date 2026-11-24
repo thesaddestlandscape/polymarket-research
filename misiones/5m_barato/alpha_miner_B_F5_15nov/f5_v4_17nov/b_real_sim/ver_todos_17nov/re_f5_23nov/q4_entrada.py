@@ -3,7 +3,7 @@
 Evalua 05-14 (y 03-04 aparte): diff EV(q0-3) - EV(q4), dPnL, IC90 dias, placebo permutando la etiqueta dentro de dia x moneda (K=2000, numpy)."""
 import glob, json, numpy as np, pandas as pd
 rng = np.random.default_rng(20261124)
-R = pd.concat([pd.read_pickle(f) for f in sorted(glob.glob('../r1v2_eval/out_p0/p0_ordenes_2026-11-*.pkl'))], ignore_index=True)
+R = pd.concat([pd.read_pickle(f) for f in [f_ for f_ in sorted(glob.glob('../r1v2_eval/out_p0/p0_ordenes_2026-11-*.pkl')) if f_.rsplit('p0_ordenes_', 1)[1][:10] < '2026-11-15']], ignore_index=True)      # v3: nunca dias >= 15-Nov (ciegos desde 18-Nov)
 def lados(Rv):
     return Rv.sort_values('t_dec').groupby(['dia', 'mid', 'lado']).agg(cost=('cost', 'sum'), pnl=('pnl', 'sum'), coin=('coin', 'first'), f0=('f5t', 'first')).reset_index()
 cortes = {c: float(np.quantile(x.f0, 0.8)) for c, x in lados(R[R.bloq == 0]).groupby('coin')}

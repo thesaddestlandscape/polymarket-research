@@ -5,7 +5,7 @@ import sys, glob, json, numpy as np, pandas as pd
 sys.path.insert(0, '../r1v2_eval'); import puerta0_core as P
 OUT = 'out'; import os; os.makedirs(OUT, exist_ok=True)
 rng = np.random.default_rng(20261123); K = 2000
-fs = sorted(glob.glob('../r1v2_eval/out_p0/p0_ordenes_2026-11-*.pkl'))
+fs = [f_ for f_ in sorted(glob.glob('../r1v2_eval/out_p0/p0_ordenes_2026-11-*.pkl')) if f_.rsplit('p0_ordenes_', 1)[1][:10] < '2026-11-15']      # v3: nunca dias >= 15-Nov (ciegos desde 18-Nov)
 R = pd.concat([pd.read_pickle(f) for f in fs], ignore_index=True)
 R = R[R.dia >= '2026-11-05']  # C = 05-14 (03-04 aparte)
 res = {}

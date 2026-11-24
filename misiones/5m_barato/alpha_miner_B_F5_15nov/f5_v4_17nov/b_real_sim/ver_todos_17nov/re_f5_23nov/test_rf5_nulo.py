@@ -52,7 +52,8 @@ def test_p_de_caso_conocido_efecto_fuerte_y_sin_efecto():
     F1 = F.assign(f5_0=3.0); Rr, _ = R, None; nu1 = NU.nulo_replicas(R, F1, C, K=50); assert nu1['p_max'] == 1.0 or nu1['exceden'] == 50               # F5_0 constante: toda permutacion da el mismo T => p = (1+K)/(K+1) = 1
 
 def test_p_exacto_con_todas_las_permutaciones_iguales():
-    R, F = _mundo(n_dias=4, n=9, seed=2); F2 = F.assign(f5_0=3.5); nu = NU.nulo_replicas(R, F2, C, K=100); assert nu['p_max'] == (1 + nu['exceden']) / 101 and nu['exceden'] == 100 and nu['p_max'] == 1.0
+    R, F = _mundo(n_dias=4, n=9, seed=2); F2 = F.assign(f5_0=3.5); nu = NU.nulo_replicas(R, F2, C, K=100, h=0); assert nu['p_max'] == (1 + nu['exceden']) / 101 and nu['exceden'] == 100 and nu['p_max'] == 1.0
+    nb = NU.nulo_replicas(R, F2, C, K=100, h=20); assert nb['n_perm'] == 20 and nb['exceden'] == 20 and nb['p_max'] == 1.0          # Besag-Clifford: para a las 20 exceedances, p = h/L
 
 def test_familia_A_usa_el_nulo_de_replicas_y_etiqueta_el_postfiltro():
     R, F = _mundo(n_dias=10, n=60, seed=1); a = EV.familia_A(R.assign(coin=R.coin), F, C, K=100)
@@ -70,8 +71,26 @@ def test_besag_clifford_formula():
 
 def test_nulo_K_run_reanuda_sin_duplicar_y_descarta_linea_corrupta(tmp_path):
     llamadas = []
-    def sim(d, delta): llamadas.append((d, delta)); return {'K1': (delta % 7) / 10.0 - 0.3, 'K2': (delta % 5) / 10.0 - 0.2}
+    def sim(d, delta, j=None): llamadas.append((d, delta)); return {'K1': (delta % 7) / 10.0 - 0.3, 'K2': (delta % 5) / 10.0 - 0.2}
     ck = str(tmp_path / 'ck.jsonl'); r1 = NU.nulo_K_run(['a', 'b', 'c'], 1e300, sim, ck, K=10, h=0); n1 = len(llamadas); assert n1 == 30 and r1['n_perm'] == 10 and r1['p_max'] == 1 / 11 and r1['parada'] == 'K_completo'
     open(ck, 'a').write('{corrupta\n'); llamadas.clear(); r2 = NU.nulo_K_run(['a', 'b', 'c'], 1e300, sim, ck, K=10, h=0); assert llamadas == [] and r2 == r1          # reanudado: 0 re-simulaciones y mismo resultado
     assert sum(1 for l in open(ck) if l.startswith('{"dia"')) == 30                                                                  # sin filas duplicadas (una por dia x permutacion)
     r3 = NU.nulo_K_run(['a', 'b', 'c'], -99.0, sim, str(tmp_path / 'ck2.jsonl'), K=1000, h=20); assert r3['parada'] == 'besag_clifford' and r3['n_perm'] == 20 and r3['p_max'] == 1.0
+
+def test_nulo_K_run_sim_bloque_mismo_resultado_que_por_llamada_y_construye_una_vez_por_bloque(tmp_path):
+    def val(d, delta): return {'K1': (delta % 7) / 10.0 - 0.3, 'K2': (delta % 5) / 10.0 - 0.2}
+    r_a = NU.nulo_K_run(['a', 'b'], 0.5, lambda d, dl, j: val(d, dl), str(tmp_path / 'a.jsonl'), K=12, h=0); builds = []
+    def blq(d, lista): builds.append((d, len(lista))); return {j: val(d, dl) for j, dl in lista}
+    r_b = NU.nulo_K_run(['a', 'b'], 0.5, None, str(tmp_path / 'b.jsonl'), K=12, h=0, sim_bloque=blq, bloque=6); assert r_a == r_b and builds == [('a', 6), ('b', 6), ('a', 6), ('b', 6)]
+    n = len(builds); NU.nulo_K_run(['a', 'b'], 0.5, None, str(tmp_path / 'b.jsonl'), K=12, h=0, sim_bloque=blq, bloque=6); assert len(builds) == n          # reanudado: nada que simular
+
+def test_permutacion_de_pares_deterministica_conserva_el_par_y_la_moneda():
+    M = pd.DataFrame(dict(coin=['eth'] * 5 + ['sol'] * 4, mid=[f'm{i}' for i in range(9)], f_up=np.arange(9) * 1.0, f_dn=np.arange(9) * 10.0))
+    a = NU.permuta_pares(M, NU.rng_perm('2026-11-20', 3)); b = NU.permuta_pares(M, NU.rng_perm('2026-11-20', 3)); c = NU.permuta_pares(M, NU.rng_perm('2026-11-20', 4)); assert a == b and a != c
+    assert all(abs(fd - 10 * fu) < 1e-9 for fu, fd in a.values())                                             # el par (Up, Down) viaja junto
+    assert {a[f'm{i}'][0] for i in range(5)} == set(range(5)) and {a[f'm{i}'][0] for i in range(5, 9)} == set(range(5, 9))   # permuta DENTRO de la moneda
+
+def test_veto_set_de_pares_usa_las_mismas_reglas_que_veta_f5_e_invalido_veta():
+    cortes = C; c0 = 'eth'; p80 = cortes['F3_p80'][c0]; pares = {'m1': (p80 + 1.0, 0.0), 'm2': (float('nan'), p80 - 1.0)}
+    v = NU.veto_set_de_pares('F3', pares, {'m1': (10, 11), 'm2': (20, 21)}, {'m1': c0, 'm2': c0}, cortes)
+    assert v == {('m1', 10), ('m2', 20)}                                                                       # alto => veta; NaN => veta; bajo => no

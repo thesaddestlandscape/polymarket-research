@@ -12,8 +12,9 @@ import numpy as np, pandas as pd
 import rf5_run as RR, rf5_core as K5, rf5_nulo as NU
 import b_policy_sim as BS, eng_v5 as EV, sec7_core as C
 cortes = K5.lee_cortes(); E, info = EV.build(d); P = BS.params(); res = dict(dia=d, motor=info if isinstance(info, dict) else str(info)); t = {}
+Wg = RR.motor(E, False)                       # UN motor con memo de run_segment para todas las replicas (RF5_LENTO=1 => original)
 def replica(nombre, E_=None, veto=None):
-    W = C.EngineBloqueo(E_ or E, activo=False); ctx = dict(W=W, serie=W._serie); t0 = time.time(); R, cov, HK = RR._replay(d, P, W, ctx, nombre, K5.POLITICAS_A, None, cortes, None, veto); t[nombre] = round(time.time() - t0, 1); return R, HK
+    W = Wg; ctx = dict(W=W, serie=W._serie); t0 = time.time(); R, cov, HK = RR._replay(d, P, W, ctx, nombre, K5.POLITICAS_A, None, cortes, None, veto); t[nombre] = round(time.time() - t0, 1); return R, HK
 with RR.desenlace_con_marcador() as unres:
     out = {}; f5 = []
     for n in ('base', 'F1', 'F2', 'F3', 'U13', 'VETO_UP', 'VETO_DN'):
@@ -40,7 +41,7 @@ import calendar
 bsrc = RR.FB.carga_binance(d)
 if bsrc:
     d0 = calendar.timegm(time.strptime(d, '%Y-%m-%d')) * 1000; bsh = {c_: NU.desplaza_circular(tt, pp, d0, NU.delta_perm(d, 1)) for c_, (tt, pp) in bsrc.items()}; tk = {}
-    W = C.EngineBloqueo(E, activo=False); ctx = dict(W=W, serie=W._serie)
+    W = Wg; ctx = dict(W=W, serie=W._serie)
     for n in ('K1', 'K2', 'K3', 'K4'):
         t0 = time.time(); R, cov, HK = RR._replay(d, P, W, ctx, n, K5.POLITICAS_K, bsh, cortes, 1.0, None); tk[n] = round(time.time() - t0, 1)
     res['segundos_permutacion_K_1dia_K1a4'] = tk; res['segundos_permutacion_total'] = round(sum(tk.values()), 1)

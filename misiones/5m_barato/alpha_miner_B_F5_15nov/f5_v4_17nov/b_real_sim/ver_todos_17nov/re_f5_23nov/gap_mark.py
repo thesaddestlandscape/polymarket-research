@@ -3,7 +3,7 @@
 Modo 'proxy' = causas conocidas deterministas (restart_ram 03:20/10:20/22:20Z +50 s todas; XRP 08/12/16Z primeros 115 s); modo 'real' = out/gaps/gaps_D.txt (hbgap.py)."""
 import sys, glob, json, numpy as np, pandas as pd
 modo = sys.argv[1] if len(sys.argv) > 1 else 'proxy'; rng = np.random.default_rng(20261123); POST = 15000
-R = pd.concat([pd.read_pickle(f) for f in sorted(glob.glob('../r1v2_eval/out_p0/p0_ordenes_2026-11-*.pkl'))], ignore_index=True); R = R[R.dia >= '2026-11-05'].copy()
+R = pd.concat([pd.read_pickle(f) for f in [f_ for f_ in sorted(glob.glob('../r1v2_eval/out_p0/p0_ordenes_2026-11-*.pkl')) if f_.rsplit('p0_ordenes_', 1)[1][:10] < '2026-11-15']], ignore_index=True); R = R[R.dia >= '2026-11-05'].copy()      # v3: nunca dias >= 15-Nov (ciegos desde 18-Nov)
 G = []  # (dia, coin, ini, fin)
 for d in sorted(R.dia.unique()):
     d0 = int(pd.Timestamp(d, tz='UTC').value // 10**6)

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """vigia_rf5.py [--telegram] [--aviso-fallo] -- vigia diario de RF5E-COMB-23NOV-v1 (prereg 16be06b6). Solo lee manifests/heartbeat/ficheros de fuente: NO calcula EV, NO toca nada.
 Estados por dia >=18-Nov: COMPLETE | INCOMPLETE (+motivo; terminal) | PENDING (<=48 h) | BLOCKED | FAILED | SIN_MANIFEST. Avisos (latch por firma SIN valores recalculados cada ciclo):
-  R1 el runner lleva >26 h sin correr (heartbeat.json); R2 a una fuente de un dia NO cerrado le quedan <=2 dias de retencion; R3 volumen HC < 15 GB libres; R4 PENDING >48 h; R5 dias FAILED/BLOCKED.
+  R1 el runner lleva >26 h sin correr (heartbeat.json); R2 a una fuente de un dia NO cerrado le quedan <=2 dias de retencion; R3 volumen HC < 15 GB libres; R4 PENDING >48 h; R5 dias FAILED/BLOCKED; R6 el juez Calma v4 (run_k6.sh, cron 11:50Z) lleva >26 h sin correr (heartbeat_k6.json; solo si ya hay algun dia COMPLETE); R7 manifest rf5K6 FAILED/BLOCKED.
+Tambien resume el estado de BTC (c4_btc_estado.json: n de 10 condiciones).
 Resumen diario: cuenta de dias validos (COMPLETE con criterio (iv) y (iii)) y estado por dia. Helper de Telegram: shadow_digest.enviar_telegram. Con --telegram envia; sin el, imprime. RF5_SIN_TELEGRAM=1: solo imprime."""
 import os, sys, json, time, shutil, glob
 HV = os.path.dirname(os.path.abspath(__file__)) + '/'
@@ -62,6 +63,20 @@ def avisos(est, hb, libre_gb, hoy_=None, ahora=None, fuentes=None):
         if m and m.get('status') in ('FAILED', 'BLOCKED'): A.append((f"R5_{d}_{m['status']}", f"RF5: dia {d} {m['status']}: {str(m.get('motivo'))[:200]}"))
     return A
 
+def avisos_k6(est, hb6, out=None, ahora=None):
+    """R6/R7 del juez Calma v4. Firmas estables (sin valores recalculados). Solo avisa por latido si ya existe algun dia COMPLETE (si no, el job no tiene nada que hacer)."""
+    A = []; ahora = ahora or time.time(); out = out or OUT
+    if any(m.get('status') == 'COMPLETE' for m in est.values()) and (hb6 is None or (ahora - hb6.get('epoch', 0)) / 3600.0 > HB_MAX_H): A.append(('R6_k6_parado', f"RF5: el juez Calma v4 (run_k6.sh 11:50Z) lleva >{HB_MAX_H:.0f} h sin correr (heartbeat_k6 {None if hb6 is None else hb6.get('t')})."))
+    for f in sorted(glob.glob(out + 'manifest_rf5K6_*.json')):
+        try: m = json.load(open(f))
+        except Exception: m = dict(status='FAILED', job=os.path.basename(f))
+        if m.get('status') in ('FAILED', 'BLOCKED'): A.append((f"R7_{os.path.basename(f)}_{m['status']}", f"RF5 K6: {m.get('job')} {m['status']}: {str(m.get('motivo') or m.get('err'))[:160]}"))
+    return A
+
+def resumen_btc(out=None):
+    try: j = json.load(open((out or OUT) + 'c4_btc_estado.json')); return f"BTC: {j['estado'].split(' ')[0]} ({j['n_ok']}/10 condiciones C4)"
+    except Exception: return 'BTC: DATA_BLOCKED_BTC (c4_btc_estado.json no disponible)'
+
 def resumen_texto(est, hoy_=None):
     cal = dias_calendario(hasta=hoy_); lineas = []; nv = 0
     for d in cal:
@@ -78,16 +93,19 @@ def envia(texto, telegram):
 def main(argv):
     tg = '--telegram' in argv
     if '--aviso-runner' in argv: envia('🚨 RF5E-COMB: run_rf5.sh terminó con error (algún día FAILED o fallo de entorno). Ver out_rf5_ciego/run_*.log y el estado por día.', tg); return 1
+    if '--aviso-k6' in argv: envia('🚨 RF5E-COMB: run_k6.sh (juez Calma v4) terminó con error (algún día FAILED o fallo de entorno). Ver out_rf5_ciego/run_k6_*.log.', tg); return 1
+    if '--aviso-suelo' in argv: envia('🚨 RF5E-COMB: suelo_diario.sh (tabla de suelo sucesora, cron 04:40Z) FALLÓ. La tabla del día no se propone al chief. Ver suelo_sucesora/suelo_diario.log.', tg); return 1
     if '--aviso-fallo' in argv: envia('🚨 vigia_rf5 FALLO (excepcion al leer el estado de RF5E-COMB). Ver logs/vigia_rf5.log.', tg); return 1
     est = lee_estado(); hb = json.load(open(OUT + 'heartbeat.json')) if os.path.exists(OUT + 'heartbeat.json') else None; libre = shutil.disk_usage(VOL).free / 1e9
     latch = json.load(open(LATCH)) if os.path.exists(LATCH) else {}; nuevos = []; vivos = set()
-    for firma, txt in avisos(est, hb, libre):
+    hb6 = json.load(open(OUT + 'heartbeat_k6.json')) if os.path.exists(OUT + 'heartbeat_k6.json') else None
+    for firma, txt in avisos(est, hb, libre) + avisos_k6(est, hb6):
         vivos.add(firma)
         if firma not in latch: nuevos.append(txt); latch[firma] = time.strftime('%FT%TZ', time.gmtime())
     for f in list(latch):                                     # firma resuelta => se limpia (si reaparece, vuelve a avisar)
         if f not in vivos: del latch[f]
     json.dump(latch, open(LATCH + '.tmp', 'w')); os.replace(LATCH + '.tmp', LATCH)
-    envia(resumen_texto(est) + (f'\nVolumen HC libre: {libre:.0f} GB' if True else '') + ('\n\nAVISOS NUEVOS:\n' + '\n'.join(nuevos) if nuevos else ''), tg)
+    envia(resumen_texto(est) + '\n' + resumen_btc() + (f'\nVolumen HC libre: {libre:.0f} GB' if True else '') + ('\n\nAVISOS NUEVOS:\n' + '\n'.join(nuevos) if nuevos else ''), tg)
     return 0
 
 if __name__ == '__main__': sys.exit(main(sys.argv[1:]))

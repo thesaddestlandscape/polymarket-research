@@ -114,8 +114,8 @@ def test_ic90_y_auc():
     assert EV.auc_binaria([0, 0, 1, 1], [0, 0, 1, 1]) == 1.0 and EV.auc_binaria([1, 1, 1, 1], [0, 1, 0, 1]) != EV.auc_binaria([1, 1, 1, 1], [0, 1, 0, 1]) or True
     assert EV.auc_binaria([1, 0, 1, 0], [0, 1, 0, 1]) == 0.0
 
-def test_antes_del_dia_10_solo_conteos_sin_ev(tmp_path):
-    R, F, est = _sint(n_dias=9); out = str(tmp_path) + '/'
+def test_antes_del_dia_6_solo_conteos_sin_ev(tmp_path):    # adenda interina 24-Nov: mirada 1 = 6.o dia valido
+    R, F, est = _sint(n_dias=5); out = str(tmp_path) + '/'
     for d in est:
         R[R.dia == d][[c for c in R.columns]].pipe(lambda x: x[x.pol.isin(['base', 'F1', 'F2', 'F3', 'U13'])]).to_pickle(out + f'rf5A_{d}.pkl'); F[F.dia == d].to_pickle(out + f'rf5_f5_0_{d}.pkl')
     r = EV.resumen(out, est, C); txt = json.dumps(r, default=str)

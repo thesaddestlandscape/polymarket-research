@@ -116,10 +116,10 @@ def test_c3_lados_union_y_columnas():
     r = RR.c3_lados(R); assert r['por_moneda']['ETH']['lados_relleno'] == 1 and r['por_moneda']['ETH']['coste_total'] == 1.5 and r['por_moneda']['SOL']['lados_relleno'] == 0   # sin relleno no cuenta como lado con relleno
 
 # ---------------------------------------------------------------- tabla de suelo sucesora
-def test_tabla_suelo_real_18_22_y_pendiente():
-    df, info = GT.lee_tabla_suelo(C); assert info[0]['sha256'] == 'b72d49faa846f270460bc8a4eb9fe82850ec58f1c335fc00c3ae1b9090300919' and len(df) == 8640
-    for d in ('2026-11-18', '2026-11-22'): r = GT.suelo_dia(df, d); assert r['estado'] == 'OK' and all(v['valido'] for v in r['por_moneda'].values())
-    assert GT.suelo_dia(df, '2026-11-23')['estado'] == 'suelo_pendiente' and GT.suelo_dia(None, '2026-11-18')['estado'] == 'suelo_pendiente'
+def test_tabla_suelo_real_18_23_y_pendiente():      # tabla firmada por el chief el 24-Nov (cortes: 18..23-Nov, sha 742ccfea; la anterior 18..22 queda en cortes['tabla_suelo_sucesora']['anterior'])
+    df, info = GT.lee_tabla_suelo(C); assert info[0]['sha256'] == '742ccfea90f29c1e541f7e336a323372a7a30dbf8c0e8ad7ffdd9839f5795a3a' and len(df) == 10368
+    for d in ('2026-11-18', '2026-11-23'): r = GT.suelo_dia(df, d); assert r['estado'] == 'OK' and all(v['valido'] for v in r['por_moneda'].values())
+    assert GT.suelo_dia(df, '2026-11-24')['estado'] == 'suelo_pendiente' and GT.suelo_dia(None, '2026-11-18')['estado'] == 'suelo_pendiente'
 
 def test_tabla_suelo_sha_distinto_falla_cerrado(tmp_path):
     p = tmp_path / 't.csv'; p.write_text('dia,coin,w0_ms,w0_utc,n_filas,p5_ms,clase_estrato,causal_w0,p5_prev_h1,p5_prev_h2\n')
@@ -146,8 +146,15 @@ def test_procesa_dia_incomplete_por_c1_y_terminal(tmp_path, monkeypatch):
     assert RR.procesa_dia(d) == 'INCOMPLETE'                                                                       # terminal: no se reevalua
 
 def test_dry_run_modulos_nuevos_sin_envio_ni_secretos():
-    src = ''.join(open(HV + f).read() for f in ('rf5_gates.py', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 'cobertura_bruta.py', 'rf5_acople_real.py'))
+    src = ''.join(open(HV + f).read() for f in ('rf5_gates.py', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 'cobertura_bruta.py', 'rf5_acople_real.py', 'calma_hook.py', 'calma_gate.py', 'rf5_rapido.py', 'rf5_nulo_run.py', 'rf5_k6_dia.py', 'c4_btc.py', 'prep_day_btc.py', 'c4_equiv_lowmem.py'))
     for prohibido in ('post_order', 'create_order', 'py_clob_client', 'requests.', 'urllib', '/.env', 'dotenv', 'private_key', 'sign_order', 'Account.sign', 'websockets'): assert prohibido not in src, prohibido
 
 def test_registro_cubre_los_ficheros_nuevos():
-    for f in ('rf5_gates.py', 'cobertura_bruta.py', 'horas_leidas_d1.json', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 't_proc_cronometro.py', 'rf5_acople_real.py', 'rf5_t_proc_ms.txt'): assert f in RR.FICH_REG, f
+    for f in ('rf5_gates.py', 'cobertura_bruta.py', 'horas_leidas_d1.json', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 't_proc_cronometro.py', 'rf5_acople_real.py', 'rf5_t_proc_ms.txt', 'rf5_rapido.py', 'rf5_rapido_prueba.py', 'calma_gate.py', 'calma_hook.py', 'rf5_k6_dia.py', 'run_k6.sh', 'rf5_nulo_run.py', 'c4_btc.py'): assert f in RR.FICH_REG, f
+
+def test_ningun_modulo_nuevo_imprime_ev_ni_pnl_de_dias_ciegos():
+    import re
+    for f in ('rf5_rapido_prueba.py', 'rf5_nulo_run.py', 'rf5_k6_dia.py', 'rf5_acople_real.py', 't_proc_cronometro.py', 'c4_btc.py'):
+        src = open(HV + f).read(); assert ("2026-11-18'" in src and 'prohibido' in src) or f in ('rf5_k6_dia.py', 'c4_btc.py', 'rf5_nulo_run.py'), f          # los ensayos se niegan a dias ciegos
+        for lin in src.split('\n'):
+            if re.search(r'print\(.*(\.pnl|\bpnl\b|ev_eur|\bEV\b)', lin) and 'sin EV' not in lin and 'EV/PnL' not in lin and '#' not in lin.split('print')[0]: pytest.fail(f'{f}: print con pnl/EV: {lin[:100]}')

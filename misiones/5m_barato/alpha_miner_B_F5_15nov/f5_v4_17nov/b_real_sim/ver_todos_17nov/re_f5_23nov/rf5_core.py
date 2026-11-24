@@ -30,6 +30,13 @@ POLITICAS_K = {'K1': ('F3', True, True, 74, False), 'K2': ('F1', True, True, 74,
                'V5': (None, True, False, 74, False), 'V6': (None, False, True, 74, False), 'F3_V6': ('F3', False, True, 74, False), 'F3_V5': ('F3', True, False, 74, False), 'INV_K1': ('SET', True, True, 74, True)}
 for _k, _r in (('K1', 'F3'), ('K2', 'F1'), ('K3', 'F2'), ('K4', 'U13')):
     for _lc in (111, 147): POLITICAS_K[f'{_k}@lc{_lc}'] = (_r, True, True, _lc, False)
+# K6 (ADENDA_RF5_K6_CALMA_v2 + ESPEC_HOOK_CALMA_V4): sexto elemento = retraso de armado de Calma en ms (300 = passT_v4 vigente; 0 = sensibilidad tq=t). Calma es el TERCER componente (junto a V5/V6) del mismo HookRF5.
+POLITICAS_K6 = {'K6': ('F3', True, True, 74, False, 300), 'K6@lc111': ('F3', True, True, 111, False, 300), 'K6@lc147': ('F3', True, True, 147, False, 300), 'K6_tq0': ('F3', True, True, 74, False, 0),
+                'CALMA': (None, False, False, 74, False, 300), 'K6_menosF3': (None, True, True, 74, False, 300), 'K6_menosV5': ('F3', False, True, 74, False, 300), 'K6_menosV6': ('F3', True, False, 74, False, 300)}
+# nulo por re-simulacion (E4): misma politica con el veto F5 EXPLICITO por lados ('SET': veto_set de (mid,k) construido con los F5_0 PERMUTADOS); K: ademas con las series Binance desplazadas.
+POLITICAS_NULO_A = {f'{r}_SET': ('SET', False, False, 74, False) for r in ('F1', 'F2', 'F3', 'U13')}
+POLITICAS_NULO_K = {f'K{i}_SET': ('SET', True, True, 74, False) for i in (1, 2, 3, 4)}
+REGLA_DE_K = {'K1_SET': 'F3', 'K2_SET': 'F1', 'K3_SET': 'F2', 'K4_SET': 'U13'}
 BLOQ1_SOLO = ('base', 'F1', 'F2', 'F3', 'U13', 'K1', 'K2', 'K3', 'K4', 'K5')      # bloq1 = sensibilidad: solo las politicas de la familia (sin ablacion/lc/inversion)
 
 def lados_a_vetar_inversion(f5tab, n_por_celda):
@@ -46,10 +53,10 @@ class HookRF5:
     """Politica combinada como UNA sola simulacion. Precedencia (prereg sec.4): veto F5 de entrada -> en cada alta/repegado no armar si V5 O V6 -> la orden viva se cancela en el primer disparo de cualquiera
     (+ L_cancel; efectividad rx+t_proc+L_cancel <= casado-20 ms via HookBase._t_end). F5_0 se mide en la PRIMERA alta INTENTADA del (mercado, lado) aunque V5/V6 la bloqueen; veto => 0 altas y 0 repegados en ese lado.
     Registra f5_0/edad/veto por (mid,k) y quien dispara cada cancelacion. Contrato de hooks de replay_variantes.HookBase."""
-    def __init__(self, serie_k, regla, cortes, v5=None, v6=None, veto_set=None, invierte=False):
+    def __init__(self, serie_k, regla, cortes, v5=None, v6=None, veto_set=None, invierte=False, calma=None):
         from collections import Counter
         self.cortes = cortes; self.regla = regla; self.serie = serie_k; self.v5 = v5; self.v6 = v6; self.veto_set = veto_set or set(); self.inv = invierte
-        self.comps = [h for h in (v5, v6) if h is not None]; self.tau = {}; self.quien = {}; self.f5_0 = {}; self.vetado = {}; self.cont = Counter()
+        self.calma = calma; self.comps = [h for h in (v5, v6, calma) if h is not None]; self.tau = {}; self.quien = {}; self.f5_0 = {}; self.vetado = {}; self.cont = Counter()
         self.fills = lambda: {}; self.dec = 0
     key = staticmethod(lambda m, o: (m.mid, int(o['n_ord'])))
     def extra_events(self, m, DEC):
@@ -75,32 +82,37 @@ class HookRF5:
     def no_armar(self, m, k, t, L):
         import variantes_b as VB
         self.cont['altas_o_repegados'] += 1; veto = self.f5_primera(m, k, t); b = False
-        for h in self.comps: b |= bool(VB.no_armar(self._adv(h, m, k), t, h.var))
+        for h in self.comps: b |= (bool(h.no_armar(m, k, t, L)) if h is self.calma else bool(VB.no_armar(self._adv(h, m, k), t, h.var)))      # Calma lleva su propio retraso de armado y contadores
         self.cont['no_armadas'] += int(veto or b); return bool(veto or b)
     def cancela(self, m, o, trx):
         import variantes_b as VB
         key = self.key(m, o)
         if key in self.tau: return False
         tbs = {}
-        for nom, h in (('V5', self.v5), ('V6', self.v6)):
+        for nom, h in (('V5', self.v5), ('V6', self.v6), ('CALMA', self.calma)):
             if h is None: continue
             tb = VB.primer_disparo(self._adv(h, m, o['k']), int(o['t_arr']), int(trx))
             if tb is not None: tbs[nom] = tb
         if not tbs: return False
-        tau = min(tbs.values()); self.tau[key] = tau; self.quien[key] = '+'.join(sorted(n for n, v in tbs.items() if v == tau)); self.cont['vidas_con_disparo'] += 1; return True
+        tau = min(tbs.values()); self.tau[key] = tau; self.quien[key] = '+'.join(n for n in ('V5', 'V6', 'CALMA') if tbs.get(n) == tau)      # orden fijo (ESPEC_HOOK sec.2)
+        self.cont['vidas_con_disparo'] += 1; return True
     def t_end(self, m, o, trx):
         h = self.comps[0]; return h._t_end(o, self.tau[self.key(m, o)], trx, h.tp, h.lc)
     def registra(self, m, o, trx): self.cont['cancelaciones_regla'] += 1
 
-def construye_hook(nombre, tabla, serie_k, bsrc, cortes, tp, fills, veto_set=None):
-    """tabla = POLITICAS_A | POLITICAS_K. tp = t_proc ms OBLIGATORIO si hay V5/V6 (sin default). fills = callable -> fills del EngineBloqueo vigente."""
+def construye_hook(nombre, tabla, serie_k, bsrc, cortes, tp, fills, veto_set=None, bsrc_calma=None):
+    """tabla = POLITICAS_A | POLITICAS_K. tp = t_proc ms OBLIGATORIO si hay V5/V6 (sin default). fills = callable -> fills del EngineBloqueo vigente.
+    bsrc_calma (None => = bsrc): fuente Binance de Calma SOLA. CAUSA RAIZ del bloqueante K6 (24-Nov): el test 'K6 con Calma vacia == K1' pasaba la serie vacia como `bsrc`, que alimenta TAMBIEN a V5/V6 (cegandolos: 17.600 ordenes = F3 solo, frente a 8.272 de K1).
+    Para anular SOLO a Calma hay que pasar bsrc real y bsrc_calma vacia; en produccion (K6) ambas son la misma serie."""
     import replay_variantes as RV, variantes_b as VB
-    regla, a5, a6, lc, inv = tabla[nombre]; v5 = v6 = None
-    if a5 or a6:
+    regla, a5, a6, lc, inv, *rest = tabla[nombre]; v5 = v6 = ca = None; delay = (rest[0] if rest else None)
+    if a5 or a6 or delay is not None:
         if tp is None: raise ValueError('t_proc obligatorio para V5/V6 (sin default)')
         if a5: v5 = RV.HookBinance(bsrc, VB.V5, tp, l_cancel=lc, fills=fills)
         if a6: v6 = RV.HookBinance(bsrc, VB.V6, tp, l_cancel=lc, fills=fills)
-    h = HookRF5(serie_k, regla, cortes, v5=v5, v6=v6, veto_set=veto_set, invierte=inv); h.fills = fills; return h
+        if delay is not None:
+            import calma_hook as CH; ca = CH.HookCalma(bsrc if bsrc_calma is None else bsrc_calma, tp, l_cancel=lc, fills=fills, delay_armar_ms=delay)
+    h = HookRF5(serie_k, regla, cortes, v5=v5, v6=v6, veto_set=veto_set, invierte=inv, calma=ca); h.fills = fills; return h
 
 def conjuntos_exclusivos(R_base, flags):
     """Tabla de conjuntos exclusivos (solo F5 / solo V5 / solo V6 / V5 y V6 / F5 y (V5 o V6) / ninguno) sobre las unidades (mid,lado) de la base, con n, coste y PnL (DESCRIPTIVA, no suma EV).

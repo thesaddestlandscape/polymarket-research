@@ -38,8 +38,12 @@ def resumen_excluidas_vs_validas(horas):
 
 def calcula(x, dl=None, txd=None, devp=None, keep=None):
     """cadena de prep_day.py hasta 'chain' (sin filtrar). Devuelve dict serializable o None si falta alguna fuente (el llamador decide PENDING/INCOMPLETE)."""
-    dl = dl or DL; txd = txd or TXD; devp = devp or DEVP
-    sys.path.insert(0, devp + 'captura_prints'); import reconstructor_relleno as RR
+    dl = dl or DL; txd = txd or TXD
+    if devp: sys.path.insert(0, devp + 'captura_prints')                  # solo tests/forzado explicito
+    else:
+        import hashlib; sys.path.insert(0, HV)                              # copia LOCAL byte a byte de dev/captura_prints/reconstructor_relleno.py (sha pinned): sin rutas a dev en ejecucion
+        if hashlib.sha256(open(HV + 'reconstructor_relleno.py', 'rb').read()).hexdigest()[:16] != 'cdfe43e469f86d40': raise ValueError('reconstructor_relleno.py cambio (sha): fail-closed')
+    import reconstructor_relleno as RR
     ms = dl + f'sa_ms/ms_{x}.npz'; files = sorted(glob.glob((keep or dl + 'keep_onchain_re_as_b/') + f'onchain_fills_{x}*.csv.gz'))
     if not os.path.exists(ms) or not files: return None
     z = np.load(ms, allow_pickle=True); tok5 = set(tt for tt, r in zip(z['tokens'], z['tmap']) if r[1] == '5min'); del z

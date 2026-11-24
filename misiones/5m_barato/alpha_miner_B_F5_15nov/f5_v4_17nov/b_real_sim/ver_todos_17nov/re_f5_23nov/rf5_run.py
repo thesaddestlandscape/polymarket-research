@@ -16,10 +16,22 @@ import numpy as np, pandas as pd
 import puerta0_run as P0R                       # fija RU.OUT/PB, cobertura_tx, incompleto, sha_prereg (ver run_puerta0.sh)
 import fase_b_run as FB                         # carga_binance, anota; sobrescribe RU.code_hashes/ya_completo -> se re-sobrescriben abajo
 import sec7_run as RU, rf5_core as K5, rf5_gates as GT, cobertura_bruta as CB
-import contextlib, rf5_huecos as HU
+import contextlib, rf5_huecos as HU, rf5_rapido as RP
 RU.OUT = OUT
 PREREG_RF5 = HV + 'PREREG_RF5_ENTRADA_23nov.md'; PREREG_RF5_SHA = '16be06b6194f8bbaf9225ba17fda56fe44a6faf5d4a0a790dfcd5340f82fac5e'
-HASHES = HV + 'HASHES_rf5.txt'; FICH_REG = ('rf5_core.py', 'rf5_run.py', 'rf5_eval.py', 'rf5_cortes.json', 'prep_tapes_rf5.sh', 'run_rf5.sh', 'vigia_rf5.py', 'rf5_gates.py', 'cobertura_bruta.py', 'horas_leidas_d1.json', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 't_proc_cronometro.py', 'rf5_acople_real.py', 'rf5_t_proc_ms.txt')
+HASHES = HV + 'HASHES_rf5.txt'; FICH_REG = ('rf5_core.py', 'rf5_run.py', 'rf5_eval.py', 'rf5_cortes.json', 'prep_tapes_rf5.sh', 'run_rf5.sh', 'vigia_rf5.py', 'rf5_gates.py', 'cobertura_bruta.py', 'horas_leidas_d1.json', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 't_proc_cronometro.py', 'rf5_acople_real.py', 'rf5_t_proc_ms.txt',
+            'rf5_rapido.py', 'rf5_rapido_prueba.py', 'calma_gate.py', 'calma_hook.py', 'rf5_k6_dia.py', 'run_k6.sh', 'rf5_nulo_run.py', 'c4_btc.py', 'reconstructor_relleno.py', 'prep_day_btc.py', 'c4_equiv_lowmem.py', 'lanza_pesado.sh', 'btc_backfill.sh', 'rf5_fronteras.py')
+# v3 (adenda interina 24-Nov sec.4 cond.1): TODO lo que el runner importa o lanza FUERA de re_f5_23nov/. 'EXT:' = relativo a /root/polymarket-research/, 'DEV:' = relativo a /root/polymarket-research-dev/ (prep_day.py y su reconstructor: worktree permanente). Se comprueban al arrancar (fail-closed) y entran en el sello de codigo de cada dia.
+BS_ = 'misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/'; L2_ = 'experimentos/5m_barato/l2_carrera_10nov/'
+FICH_EXT = tuple('EXT:' + x for x in (BS_ + 'b_policy_sim.py', BS_ + 'ejecutor_puro.py', BS_ + 'eng_v5.py', BS_ + 'ver_todos_17nov/r1v2_eval/e1_modelo.py', BS_ + 'ver_todos_17nov/r1v2_eval/familia6.py', BS_ + 'ver_todos_17nov/r1v2_eval/fase_b_run.py', BS_ + 'ver_todos_17nov/r1v2_eval/l2_rasgos.py',
+               BS_ + 'ver_todos_17nov/r1v2_eval/puerta0_core.py', BS_ + 'ver_todos_17nov/r1v2_eval/puerta0_run.py', BS_ + 'ver_todos_17nov/r1v2_eval/replay_variantes.py', BS_ + 'ver_todos_17nov/r1v2_eval/variantes_b.py', BS_ + 'ver_todos_17nov/r1v2_sec7/sec7_calculos.py',
+               BS_ + 'ver_todos_17nov/r1v2_sec7/sec7_core.py', BS_ + 'ver_todos_17nov/r1v2_sec7/sec7_run.py', 'misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/suelo_causal.py', L2_ + 'engine_clock.py', L2_ + 'engine_v3.py', L2_ + 'engine_v4.py', L2_ + 'passT_v4.py', L2_ + 'relojes.py', L2_ + 'stamp_v3.py',
+               L2_ + 'ms_extract_v2.py', 'experimentos/5m_barato/b_seleccion_adversa/scripts/ms_extract_lowmem.py', 'experimentos/5m_barato/b_seleccion_adversa/scripts/ms_extract.py', 'scripts/cron_pesado.sh')) + \
+           tuple('DEV:' + x for x in ('misiones/5m_barato/sonda1/p2/precursores_barrido/prep_day.py', 'misiones/5m_barato/sonda1/p2/captura_prints/reconstructor_relleno.py'))
+REPO_ = '/root/polymarket-research/'; DEVREPO_ = '/root/polymarket-research-dev/'
+def ruta_ext(n): return (DEVREPO_ if n.startswith('DEV:') else REPO_) + n.split(':', 1)[1]
+def nombre_ext(n): return os.path.relpath(ruta_ext(n), HV)       # nombre en HASHES_rf5.txt: ruta relativa a re_f5_23nov/ (asi `sha256sum -c HASHES_rf5.txt` funciona desde alli)
+OPCIONALES = FICH_REG[7:]                       # todo salvo core/run/eval/cortes/prep/run/vigia: si falta el fichero no entra en el sello de codigo (el registro fail-closed lo comprueba aparte)
 COLS = ['dia', 'mid', 'coin', 'k', 'lado', 'L', 'q', 'cost', 'pnl', 'gana', 'fin', 't_dec', 'n_ord', 'motivo_fin', 'canal', 'estrato', 'f5t', 'tercil', 'bloq', 'pol', 'lcancel', 'sin_res', 'hueco']
 ts, log, sha, atomic_json, atomic_pkl = RU.ts, RU.log, RU.sha, RU.atomic_json, RU.atomic_pkl
 
@@ -32,8 +44,10 @@ def t_proc():
 def code_hashes():
     H = FB.code_hashes(); H['puerta0_run.py'] = sha(V + 'r1v2_eval/puerta0_run.py')
     for f in FICH_REG:
-        if f in ('prep_tapes_rf5.sh', 'run_rf5.sh', 'vigia_rf5.py', 'rf5_gates.py', 'cobertura_bruta.py', 'horas_leidas_d1.json', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 't_proc_cronometro.py', 'rf5_acople_real.py', 'rf5_t_proc_ms.txt') and not os.path.exists(HV + f): continue
+        if f in OPCIONALES and not os.path.exists(HV + f): continue
         H['rf5/' + f] = sha(HV + f)
+    for n in FICH_EXT:
+        if os.path.exists(ruta_ext(n)): H['ext/' + n] = sha(ruta_ext(n))
     H['PREREG_RF5'] = sha(PREREG_RF5); return H
 RU.code_hashes = code_hashes
 
@@ -43,7 +57,7 @@ def ya_completo(modo, d, outs):
     try:
         m = json.load(open(p))
         ok = m.get('status') == 'COMPLETE' and set(m.get('outputs', {})) == set(outs) and all(os.path.exists(OUT + f) and sha(OUT + f) == h for f, h in m['outputs'].items()) and m.get('code') == code_hashes()
-        return bool(ok and (modo != 'rf5K' or (m.get('cobertura') or {}).get('t_proc_ms') == t_proc()))
+        return bool(ok and (modo not in ('rf5K', 'rf5K6') or (m.get('cobertura') or {}).get('t_proc_ms') == t_proc()))
     except Exception: return False
 RU.ya_completo = ya_completo
 
@@ -53,6 +67,11 @@ def verifica_registro():
     if sha(PREREG_RF5) != PREREG_RF5_SHA: prob.append('PREREG_RF5 sha != firmado')
     if not os.path.exists(HASHES): return prob + ['falta HASHES_rf5.txt (codigo no registrado)']
     reg = {l.split(None, 1)[1].strip(): l.split()[0] for l in open(HASHES) if l.strip() and not l.startswith('#') and len(l.split()) >= 2}
+    for n in FICH_EXT:
+        p = ruta_ext(n)
+        if not os.path.exists(p): prob.append(f'{n} no existe (fichero externo del runner)')
+        elif nombre_ext(n) not in reg: prob.append(f'{n} no registrado en HASHES_rf5.txt')
+        elif reg[nombre_ext(n)] != sha(p): prob.append(f'{n} sha != HASHES_rf5.txt (cambio de codigo externo = version nueva)')
     for f in FICH_REG:
         if not os.path.exists(HV + f): continue
         if f not in reg: prob.append(f'{f} no registrado en HASHES_rf5.txt')
@@ -131,10 +150,15 @@ def bloques4h(R):
 def construye_f5tab(hooks_f5, d, bloq, pol):
     return pd.DataFrame([dict(dia=d, bloq=bloq, pol=pol, mid=m, k=k, **v) for (m, k), v in hooks_f5.items()])
 
+def motor(E, activo):
+    """EngineBloqueo con memo de run_segment (rapido) o el original (RF5_LENTO=1)."""
+    import sec7_core as C
+    return C.EngineBloqueo(E, activo=activo) if os.environ.get('RF5_LENTO') else RP.EngineBloqueoCache(E, activo=activo)
+
 def _replay(d, P, W, ctx, nombre, tabla, bsrc, cortes, tp, veto_set=None):
     import replay_variantes as RV
     W.fills.clear(); HK = K5.construye_hook(nombre, tabla, W._serie, bsrc, cortes, tp, lambda: W.fills, veto_set)
-    R, cov = RV.run_day(d, P, E=W, HK=HK)
+    R, cov = RP.run_day(d, P, E=W, HK=HK)                    # simulador rapido (identico bit a bit a RV.run_day; RF5_LENTO=1 => lento)
     if len(R):
         import puerta0_core as P0
         R = P0.unidad_primer_relleno(FB.anota(R, ctx, d)); R = R.assign(pol=nombre, lcancel=tabla[nombre][3])
@@ -170,7 +194,7 @@ def run_A(d):
 def _bucle_A(d, P, E, cortes, Rs, f5s, cov, base, unres, f5x):
     import b_policy_sim as BS, sec7_core as C
     for bloq in (0, 1):
-        W = C.EngineBloqueo(E, activo=bool(bloq)); ctx = dict(W=W, serie=W._serie)
+        W = motor(E, bool(bloq)); ctx = dict(W=W, serie=W._serie)
         for nombre in K5.POLITICAS_A:
             if bloq == 1 and nombre not in K5.BLOQ1_SOLO: continue
             vs = None
@@ -201,7 +225,7 @@ def _run_K(d):
     global GAPS, GAPS_BN
     GAPS = HU.gaps_de_motor(E); GAPS_BN = HU.gaps_binance(bsrc); cov['huecos_ms'] = _res_huecos(GAPS); cov['huecos_binance'] = _res_huecos(GAPS_BN)
     for bloq in (0, 1):
-        W = C.EngineBloqueo(E, activo=bool(bloq)); ctx = dict(W=W, serie=W._serie)
+        W = motor(E, bool(bloq)); ctx = dict(W=W, serie=W._serie)
         for nombre in K5.POLITICAS_K:
             if bloq == 1 and nombre not in K5.BLOQ1_SOLO: continue
             R, c, HK = _replay(d, P, W, ctx, nombre, K5.POLITICAS_K, bsrc, cortes, tp, vs if nombre.startswith('INV_') else None)
