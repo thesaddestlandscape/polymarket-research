@@ -6,4 +6,4 @@ ok_ahora() { h=$((10#$(date -u +%H%M))); ram=$(awk '/MemAvailable/{print int($2/
 for i in $(seq 1 ${RF5_ESPERA:-720}); do ok_ahora && break; sleep 30; done
 ok_ahora || { echo "$(date -u +%FT%TZ) BLOCKED: ventana/RAM (ram=${ram}MB hhmm=$h)" >> "$LOG"; exit 3; }
 echo "$(date -u +%FT%TZ) lanzado (ram=${ram}MB)" >> "$LOG"
-/root/polymarket-research/scripts/cron_pesado.sh nice -n 19 ionice -c3 /usr/bin/time -v -o "$PICO" "$@" >> "$LOG" 2>&1; echo "$(date -u +%FT%TZ) FIN rc=$?" >> "$LOG"
+/root/polymarket-research/scripts/cron_pesado.sh nice -n 19 ionice -c3 /usr/bin/time -v -o "$PICO" "$@" >> "$LOG" 2>&1; rc=$?; echo "$(date -u +%FT%TZ) FIN rc=$rc" >> "$LOG"; exit $rc  # 24-Nov: propaga el rc del hijo (antes devolvia 0 aunque muriera)
