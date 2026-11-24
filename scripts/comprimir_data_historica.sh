@@ -45,6 +45,9 @@ CUTOFF_BORRAR=$(date -u -d "-${DIAS_BORRAR} days" +%Y-%m-%d)
 # el resto de directorios, sin cambios.
 DIAS_MANTENER_DATALOGS=3
 CUTOFF_COMPRIMIR_DATALOGS=$(date -u -d "-${DIAS_MANTENER_DATALOGS} days" +%Y-%m-%d)
+# 14-Nov (OK Javi): ventana de 2 dias SOLO para markets/positions/leaderboard (disco / al 88 %); el resto sigue en DIAS_MANTENER=3.
+DIAS_MANTENER_PESADOS=2
+CUTOFF_COMPRIMIR_PESADOS=$(date -u -d "-${DIAS_MANTENER_PESADOS} days" +%Y-%m-%d)
 
 comprimir_dir() {
   local dir="$1" patron="$2" cutoff="${3:-$CUTOFF_COMPRIMIR}" preservar_mtime="${4:-}"
@@ -95,9 +98,9 @@ borrar_gz_antiguos() {
 }
 
 cd /root/polymarket-research
-comprimir_dir data/markets "*.csv"
-comprimir_dir data/wallets "leaderboard_*.csv"
-comprimir_dir data/wallets "positions_*.csv"
+comprimir_dir data/markets "*.csv" "$CUTOFF_COMPRIMIR_PESADOS"
+comprimir_dir data/wallets "leaderboard_*.csv" "$CUTOFF_COMPRIMIR_PESADOS"
+comprimir_dir data/wallets "positions_*.csv" "$CUTOFF_COMPRIMIR_PESADOS"
 comprimir_dir data/trades "*.csv"
 # 04-Ago: chainlink_*.csv es el mayor fichero diario del repo (35-37MB/día)
 # y ninguno de sus lectores (fetch_chainlink_prices.py, resolution_sniper_
@@ -217,7 +220,8 @@ if mountpoint -q /mnt/HC_Volume_106538179 && mkdir -p "$MS_VOL" 2>/dev/null; the
       nice -n 19 ionice -c3 gzip -6 -c "$f" > "$f.gz.tmp" && cmp -s <(zcat "$f.gz.tmp") "$f" && mv "$f.gz.tmp" "$f.gz" && rm -f "$f" || { rm -f "$f.gz.tmp"; echo "ERROR comprimiendo $f"; }
     done
   fi
-  find /root/polymarket-research-datalogs -maxdepth 1 -name 'maker_ms_*_*.csv.gz' -mtime +4 -print0 |
+  # 24-Nov FIX: -type f. mover_datalogs_a_sdb deja SYMLINKS a datalogs_auto; sin -type f, stat del symlink (73 B) != tamaño real => cp -p (sigue el enlace) sobrescribia cada noche ~30 GB en maker_ms_crudo rompiendo la dedup por hardlinks
+  find /root/polymarket-research-datalogs -maxdepth 1 -type f -name 'maker_ms_*_*.csv.gz' -mtime +4 -print0 |
   while IFS= read -r -d '' f; do
     b=$(basename "$f")
     if [ ! -f "$MS_VOL/$b" ] || [ "$(stat -c %s "$MS_VOL/$b")" -ne "$(stat -c %s "$f")" ]; then
