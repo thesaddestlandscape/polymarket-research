@@ -71,7 +71,8 @@ class SimK6:
         with RR.desenlace_con_marcador():
             st = self.estado_dia(d, pre); return {j: self.una(st, j, delta) for j, delta in lista}
     def una(self, st, j, delta):
-        R, c, HK = RR._replay(st['d'], st['P'], st['W'], st['ctx'], 'K6', K5.POLITICAS_K6, st['bsrc'], self.cortes, self.tp, None, ev_shift=(st['d0'], delta, ('calma',)))     # C1: solo se desplazan los TIEMPOS de los saltos de Calma (serie original); pn, co = NR.unidades_dia(R)
+        R, c, HK = RR._replay(st['d'], st['P'], st['W'], st['ctx'], 'K6', K5.POLITICAS_K6, st['bsrc'], self.cortes, self.tp, None, ev_shift=(st['d0'], delta, ('calma',)))     # C1: solo se desplazan los TIEMPOS de los saltos de Calma (serie original)
+        pn, co = NR.unidades_dia(R)
         return {'K6': NR.delta_dia(pn, co, st['k1'][0], st['base'][1])}
 
 def escribe_estado(fam, d, n, kmax, estado):

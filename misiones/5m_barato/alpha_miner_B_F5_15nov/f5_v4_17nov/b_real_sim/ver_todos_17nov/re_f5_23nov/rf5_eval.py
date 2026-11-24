@@ -245,11 +245,12 @@ def lee_nulo(out, fam, dias, mirada):
 
 BLOQUEAN_MIRADA = ('K', 'K6')            # enmienda 24-Nov v3.1: la familia A NO bloquea (si se calcula tarde con 10 dias validos, se salta su mirada 1 y rige el umbral final)
 
-def k1_rechazada_persistente(out, mirada, dias, veredicto_k1):
+def k1_rechazada_persistente(out, mirada, dias, veredicto_k1, nuK=None):
     """C4 (grafo de Bretz persistente): si K1 se rechaza en la mirada 1 queda en `rf5_k1_mirada1.json` (escritura UNICA, sellada con el sello de codigo) y el final lo LEE sin recontrastar K. True si K1 se rechazo en la mirada 1 (fichero) o se rechaza ahora."""
     import rf5_nulo_inc as NI
     p = out + 'rf5_k1_mirada1.json'; ahora = (veredicto_k1 == 'COMBINADA_EV_POSITIVO')
-    if mirada == 1 and not os.path.exists(p):
+    definitivo = nuK is not None and veredicto_k1 is not None and 'PENDIENTE' not in str(veredicto_k1)      # v3.2: solo se precinta un veredicto DEFINITIVO de K1 (p_max_K del nulo disponible y veredicto no PENDIENTE*); si no, no se escribe nada (una mirada sin nulo no puede fijar 'K1 no rechazada')
+    if mirada == 1 and definitivo and not os.path.exists(p):
         try:
             with open(p, 'x') as f: json.dump(dict(k1_rechazada=bool(ahora), veredicto_K1=veredicto_k1, dias=list(dias), sello=NI.sello()), f, indent=1)
         except FileExistsError: pass
@@ -295,7 +296,7 @@ def resumen(out, estado, c=None, min_dias=None, replicas=None):
     if nuK is not None: kf['p_max_K'] = float(nuK['p_max']); kf['nulo_K'] = 'RESIMULADO (Besag-Clifford h=20)'; kf['umbral_p_K1_K4'] = FR.umbral_p('K1_K4', m)
     res['veredictos_K'] = {k: veredicto_K(k, None, kf, Kw, (sh['K'][k] if sh else None), m)[0] for k in ('K1', 'K2', 'K3', 'K4')}
     import rf5_nulo_inc as NI
-    k1_ok = k1_rechazada_persistente(out, m, dv, res['veredictos_K'].get('K1')); alfa6 = 0.05 if k1_ok else 0.01; d6 = NI.mirada_k6(estado); m6 = d6['mirada']; res['K6_mirada'] = dict(mirada=m6, nombre=d6['nombre'], dias_k6=d6['dias'], motivo=d6['motivo'], k1_rechazada_bretz=k1_ok)
+    k1_ok = k1_rechazada_persistente(out, m, dv, res['veredictos_K'].get('K1'), nuK); alfa6 = 0.05 if k1_ok else 0.01; d6 = NI.mirada_k6(estado); m6 = d6['mirada']; res['K6_mirada'] = dict(mirada=m6, nombre=d6['nombre'], dias_k6=d6['dias'], motivo=d6['motivo'], k1_rechazada_bretz=k1_ok)
     if m6 == 0: res['K6'] = dict(estado=f"SIN_MIRADA_K6 ({d6['nombre']}: {d6['motivo']})"); return res
     nu6 = lee_nulo(out, 'K6', d6['dias'], m6); m = m6
     res['K6'] = dict(umbral_p=FR.umbral_p('K6', m, alfa6), alfa=alfa6, K_max=FR.k_max('K6'), dias_k6=d6['dias'], nulo=('PENDIENTE: rf5_nulo_inc.py corre K6 (replicas incrementales completas de los dias de la mirada)' if nu6 is None else dict(p_max=float(nu6['p_max']), n_perm=nu6['n_perm'], K_max=nu6.get('K_max'))),

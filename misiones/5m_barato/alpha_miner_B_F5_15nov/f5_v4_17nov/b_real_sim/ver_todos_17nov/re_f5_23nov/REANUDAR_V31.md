@@ -17,6 +17,14 @@ Todas VERDES, sello de codigo 801394fed66753c1 (= HASHES v3.1 vigente; el codigo
 - (d) equiv repetidas: nulo_inc_equiv_K_2026-11-17.json y nulo_inc_equiv_K6_2026-11-17.json todo_igual=true (3 replicas, incremental == bloque, bit a bit). Logs: out_rf5_ciego/v31_*.log y v31_cola.log; picos de RAM v31_pico_*.txt.
 - Familia A (repetida tras v3.1, mismo sello 801394fed66753c1): nulo_inc_equiv_A_2026-11-17.json todo_igual=true (3 replicas, incremental == bloque) y nulo_identidad_A_2026-11-17.json todo_igual=true (F1/F2/F3/U13: 19.542/2.956/17.600/17.493 ordenes, bit a bit).
 
+## v3.2 (13:20-13:55Z) -- CORRECCIONES Y ESTADO FINAL DE LAS PRUEBAS (prevalece sobre lo anterior)
+- CORRECCION de mi informe anterior: equiv K y equiv K6 de las 12:38-12:53Z NO estaban verdes: equiv K murio por OOM del kernel (dmesg, pid 2917678; RAM compartida con el backfill) y equiv K6 fallo con NameError en SimK6.una; `lanza_pesado.sh` devuelve rc=0 aunque el hijo muera => comprobar SIEMPRE el JSON (fecha + campo `sello`) y no el rc. Los JSON que yo lei eran los antiguos (pre-C1, sin sello).
+- Arreglos: (1) k1_rechazada_persistente solo escribe rf5_k1_mirada1.json con nuK no None y veredicto K1 no PENDIENTE* (test que falla sin el arreglo); (2) SimK6.una recupera `pn, co = NR.unidades_dia(R)` (+ test que ejecuta SimK6.una). HASHES re-generado (83 entradas, verifica_registro []). SELLO FINAL = a5161ce9a7df8294.
+- equiv K6 2026-11-17 --K 3 con sello a5161ce9a7df8294: todo_igual=true (nulo_inc_equiv_K6_2026-11-17.json, 13:35Z).
+- equiv K con sello final: ver linea siguiente (lanzado 13:35Z, cola v32_cola.log). EQUIV_K_V32_PLACEHOLDER
+- ident K, ident K6 y equiv A / identidad A se hicieron con el sello 801394fed66753c1 (anterior al arreglo de SimK6.una y de rf5_eval): repetirlos manana con el sello final (no usan SimK6.una salvo equiv K6).
+- NO hecho: (3) fraccion de ordenes/Coste_base con alta < d0 en el manifest diario (cambia rf5_run => nuevo sello => repetir todas las pruebas; no cabia).
+
 ## PENDIENTE (manana)
 1. Si alguna prueba real de arriba no esta en verde o no corrio: relanzar `bash <scratchpad>/cola8.sh`-equivalente: `RF5_OUT=$D/out_rf5_ciego/ bash lanza_pesado.sh LOG PICO python3 -I rf5_nulo_inc.py ident K|K6 2026-11-17` y `... equiv K|K6 2026-11-17 --K 3` (uno a uno, nunca 06:00-09:15Z). NO editar codigo del nulo sin re-hashear (cualquier edicion invalida HASHES -> las ejecuciones escriben BLOCKED) y sin repetir las pruebas (cambia el sello).
 2. Revision del validador de v3.1; luego firma de HASHES por el chief (python3 scratch mkhashes.py desde D regenera; no firmado).

@@ -56,13 +56,13 @@ def test_mirada_k6_con_mas_del_20pc_no_evaluables_es_insufficient(inc):
     d = NI.mirada_k6(est); assert d['mirada'] == 1 and d['dias'] == [D(i) for i in range(2, 8)]
 
 def test_bretz_persistente_k1_rechazada_en_mirada1_se_lee_en_el_final(tmp_path):
-    out = str(tmp_path) + '/'
-    assert EV.k1_rechazada_persistente(out, 1, ['a'], 'COMBINADA_EV_POSITIVO') is True
-    assert EV.k1_rechazada_persistente(out, 2, ['a'], 'NO_CONFIRMADA') is True                  # leido del resumen sellado, sin recontrastar K
+    out = str(tmp_path) + '/'; NUK = dict(p_max=0.01)
+    assert EV.k1_rechazada_persistente(out, 1, ['a'], 'COMBINADA_EV_POSITIVO', NUK) is True
+    assert EV.k1_rechazada_persistente(out, 2, ['a'], 'NO_CONFIRMADA', NUK) is True                  # leido del resumen sellado, sin recontrastar K
     assert json.load(open(out + 'rf5_k1_mirada1.json'))['sello'] == NI.sello()
     o2 = str(tmp_path) + '/2/'; os.makedirs(o2)
-    assert EV.k1_rechazada_persistente(o2, 1, ['a'], 'NO_CONFIRMADA') is False and EV.k1_rechazada_persistente(o2, 2, ['a'], 'NO_CONFIRMADA') is False
-    assert EV.k1_rechazada_persistente(o2, 2, ['a'], 'COMBINADA_EV_POSITIVO') is True and json.load(open(o2 + 'rf5_k1_mirada1.json'))['k1_rechazada'] is False     # el fichero de la mirada 1 no se reescribe
+    assert EV.k1_rechazada_persistente(o2, 1, ['a'], 'NO_CONFIRMADA', NUK) is False and EV.k1_rechazada_persistente(o2, 2, ['a'], 'NO_CONFIRMADA', NUK) is False
+    assert EV.k1_rechazada_persistente(o2, 2, ['a'], 'COMBINADA_EV_POSITIVO', NUK) is True and json.load(open(o2 + 'rf5_k1_mirada1.json'))['k1_rechazada'] is False     # el fichero de la mirada 1 no se reescribe
 
 def test_lee_nulo_rechaza_sello_o_kmax_distinto(tmp_path):
     out = str(tmp_path) + '/'; base = dict(dias=['a'], mirada=1, estado='NULO_RESIMULADO_EXACTO', p_max=0.01)
@@ -75,3 +75,21 @@ def test_workers_fijo_a_1():
 
 def test_umbrales_vs_azar_exactos():
     assert FR.UMBRAL[1]['vs_azar'] == 0.07085 and FR.UMBRAL[2]['vs_azar'] == 0.06165
+
+def test_bretz_no_precinta_sin_nulo_K_ni_con_veredicto_pendiente(tmp_path):
+    """v3.2: sin nuK (o con veredicto PENDIENTE*) la mirada 1 NO escribe rf5_k1_mirada1.json; si lo hiciera, un 'K1 no rechazada' provisional quedaria fijado y K6 perderia el alfa 0,05 en el final."""
+    o = str(tmp_path) + '/'; f = o + 'rf5_k1_mirada1.json'
+    assert EV.k1_rechazada_persistente(o, 1, ['a'], 'EV_POSITIVO_PENDIENTE_PMAXK', None) is False and not os.path.exists(f)
+    assert EV.k1_rechazada_persistente(o, 1, ['a'], 'EV_POSITIVO_PENDIENTE_PMAXK', dict(p_max=0.01)) is False and not os.path.exists(f)
+    assert EV.k1_rechazada_persistente(o, 1, ['a'], 'NO_CONFIRMADA', None) is False and not os.path.exists(f)
+    assert EV.k1_rechazada_persistente(o, 1, ['a'], None, dict(p_max=0.01)) is False and not os.path.exists(f)
+    assert EV.k1_rechazada_persistente(o, 2, ['a'], 'COMBINADA_EV_POSITIVO', dict(p_max=0.01)) is True          # el final rechaza ahora: sin fichero previo, vale el veredicto actual
+
+def test_simk6_una_devuelve_delta_y_pasa_ev_shift(monkeypatch):
+    """v3.2: SimK6.una se rompio (NameError pn) sin que ningun test lo ejecutara; ahora se ejecuta con un replay simulado."""
+    import rf5_nulo_run as NR
+    visto = {}
+    def falso_replay(d, P, W, ctx, nombre, tabla, bsrc, cortes, tp, veto, bsrc_calma=None, ev_shift=None): visto['ev'] = ev_shift; return 'R', None, None
+    monkeypatch.setattr(RR, '_replay', falso_replay); monkeypatch.setattr(NR, 'unidades_dia', lambda R: ('pn', 'co')); monkeypatch.setattr(NR, 'delta_dia', lambda pn, co, k1, b: (pn, co, k1, b))
+    sim = NI.SimK6(cortes={}, tp=1.0); st = dict(d='x', P=None, W=None, ctx=None, bsrc={}, d0=1000, k1=('K1pnl', 'K1cost'), base=('bpnl', 'bcost'))
+    assert sim.una(st, 0, 5000) == {'K6': ('pn', 'co', 'K1pnl', 'bcost')} and visto['ev'] == (1000, 5000, ('calma',))

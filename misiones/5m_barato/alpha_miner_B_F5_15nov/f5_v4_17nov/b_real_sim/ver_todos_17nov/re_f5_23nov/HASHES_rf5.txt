@@ -1,8 +1,8 @@
-# HASHES_rf5 v3 (sha256, 2026-11-24T12:28:46Z) -- codigo de RF5E-COMB-23NOV-v1 tras ADENDA_RF5_INTERINA_24nov sec.4 (7 condiciones). NO FIRMADO: lo firma el chief tras la revision del validador (D/DIFF_V3_MOTIVOS.md; v2 conservado en HASHES_rf5.txt.v2).
+# HASHES_rf5 v3 (sha256, 2026-11-24T13:19:54Z) -- codigo de RF5E-COMB-23NOV-v1 tras ADENDA_RF5_INTERINA_24nov sec.4 (7 condiciones). NO FIRMADO: lo firma el chief tras la revision del validador (D/DIFF_V3_MOTIVOS.md; v2 conservado en HASHES_rf5.txt.v2).
 # Incluye ademas TODO lo que el runner importa o lanza fuera de re_f5_23nov/ (rutas relativas a re_f5_23nov/; `sha256sum -c HASHES_rf5.txt` desde alli). El runner (rf5_run.verifica_registro) comprueba FICH_REG + FICH_EXT al arrancar y aborta si algo no coincide.
 c0681d3be2bc62002c7944a614747daa412e17bec0cd458827ab922b8d0493ed  rf5_core.py
 569b174582e14e9af3ba01d6325f0851c19a9b5957a59e759e405668b127885a  rf5_run.py
-435f115a09e427d8cf000252d41a2b231d43d07024125fc08952f60572dc4b76  rf5_eval.py
+0140fe6574275c2e12de2cf5b7e7f513d78f131a4294ca94c78564e67e20c502  rf5_eval.py
 4e88fb3c8da7c46726baf7a56fc995e17c22ba7ec559f9663a9384d1bcdcc67b  rf5_cortes.json
 611d7a5175c5dd05df19f12902a47931c280efdee2d751430459811d2c38fb28  prep_tapes_rf5.sh
 c88dbc471d48b401fa44b835698a9116af4540cbb9f60d9e785e99caa7192e64  run_rf5.sh
@@ -30,7 +30,7 @@ bfa622e7b89805e9e4099cf01290c65db8e133c3d5fde5df91cfa720a1cfb7ac  c4_equiv_lowme
 b9b65548d0af1982d86cf090a09be5a977e9d93ec830727eaf360e117f8f2826  lanza_pesado.sh
 82f7f6de6233a9115b2c16860b36154f1fb106ffc7c19c3593e60815b9e33e46  btc_backfill.sh
 268d3862bdc5a41fc57ae71cf3ef4022a8977866dad171239131c7b7ef1dad42  rf5_fronteras.py
-b08b44a8fe97fc468d87d7466ceb0fd34b14359a669d3a2260509e73ce942e0b  rf5_nulo_inc.py
+7114a43f53d752cf3da27568a936b10a5a1423994dcff4af1d4d38f831e47aab  rf5_nulo_inc.py
 5d11f1fb623f5154c6180efa658b629d9ca3678e96f708e52f225465396ef650  run_nulo_inc.sh
 8ed51a818bcdbb1566fd98a8910f12c1e5367ac480866aeef174c6ac818ed953  cron_nulo_inc.txt
 a60f4b2c08068381c8f23034631e40ff3e1f3283f1b5462d3a08b5ac8923e221  test_rf5.py
@@ -40,7 +40,7 @@ e5cf7c81d3aba87a1e8613ed6a9da5100c41bb0ab83e8a4fcee153c64c1a0786  test_rf5_hueco
 2432a017803b7115299b6753f53a4b799b0a28d50025bc8088a428fde732bfff  test_rf5_k6.py
 d2a168cab3e78bb49a82ebfc36bb40ba8742eeb4e235b402210f4b3a1c70bfaf  test_t_proc.py
 16be06b6194f8bbaf9225ba17fda56fe44a6faf5d4a0a790dfcd5340f82fac5e  PREREG_RF5_ENTRADA_23nov.md
-487fffd67e79a0581f2c9ad78281267cdfc9a21e24bce575e6f4c8c1dc38af66  test_rf5_v31.py
+0db91505e3527bd4741d9a2f5c9d5506f52ea9b03befa24ed97972d7539742be  test_rf5_v31.py
 97e877054227e42fac9ce723ccc7e7c67caf68a923c7b157939759539a1682c9  desagrega.py
 281ed66b5f1e82bbdb437ce2f0e07a27b0c9b105c01a5e816734b1bfcd67254f  gap_mark.py
 c7498ca220911f45eb25351c7df38c7b844740eb36d387240cb40e6fc8b38c1d  q4_entrada.py
