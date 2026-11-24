@@ -12,7 +12,7 @@ import numpy as np, pandas as pd
 HV = os.path.dirname(os.path.abspath(__file__)) + '/'
 sys.path.insert(0, HV)
 import rf5_core as K5, rf5_nulo as NU, rf5_huecos as HU, rf5_fronteras as FR
-MIN_DIAS = FR.MIRADA1_DIAS; SEMILLA = FR.SEMILLA; K_PERM = FR.K_MAX['A']      # adenda interina 24-Nov sec.6: mirada 1 = 6.o dia valido, final = 10.o; Pocock-LD; Besag-Clifford h=20 con K_max 2000 (A) / 1500 (K); semilla 20261124
+MIN_DIAS = FR.MIRADA1_DIAS; SEMILLA = FR.SEMILLA; K_PERM = FR.K_MAX['A']      # adenda interina 24-Nov sec.6: mirada 1 = 6.o dia valido, final = 10.o; Pocock-LD; Besag-Clifford h=20 con K_max 500 (A) / 500 (K1-K4) / 1500 (K6), replicas INCREMENTALES por dia (ADENDA_RF5_NULO_INCREMENTAL); semilla 20261124
 
 def dias_validos(estado):
     """estado = {dia: manifest-resumen}. VALIDO <=> COMPLETE y criterio_iv_ok True y criterio_iii == 'OK' (tabla de suelo sucesora firmada)."""
@@ -180,7 +180,7 @@ def frac_cancel(R, pol, bloq=0):
     g = X.groupby(['dia', 'mid', 'k']).motivo_fin.apply(lambda s: bool((s == 'regla').any())); return float(g.mean())
 
 def familia_K(R, mirada=1):
-    out = dict(politicas={}, bloq1={}, lcancel={}, ablacion={}, loo={}, aislados={}, interaccion=None, nulo_K='PENDIENTE: rf5_nulo_run.py corre K (re-simulacion con series Binance desplazadas, Besag-Clifford h=20, K_max 1500) solo en la mirada con autorizacion del chief => sin p_max_K', p_max_K=None)
+    out = dict(politicas={}, bloq1={}, lcancel={}, ablacion={}, loo={}, aislados={}, interaccion=None, nulo_K='PENDIENTE: rf5_nulo_inc.py corre K (agrega las replicas incrementales por dia: re-simulacion con series Binance desplazadas, Besag-Clifford h=20, K_max 500) solo en la mirada con autorizacion del chief => sin p_max_K', p_max_K=None)
     for p in ['base', 'F3', 'F3_V6', 'F3_V5', 'V5', 'V6', 'K1', 'K2', 'K3', 'K4', 'K5', 'INV_F3', 'INV_K1']: out['politicas'][p] = ev_pol(R, p, 0, mirada)
     for p in ('K1', 'K2', 'K3', 'K4'):
         out['bloq1'][p] = ev_pol(R, p, 1, mirada); out['lcancel'][p] = {lc: ev_pol(R, f'{p}@lc{lc}', 0, mirada) for lc in (111, 147)}
@@ -242,11 +242,19 @@ def lee_nulo(out, fam, dias, mirada):
     except Exception: return None
     return r if (r.get('dias') == list(dias) and r.get('mirada') == mirada and r.get('estado') == 'NULO_RESIMULADO_EXACTO') else None
 
-def resumen(out, estado, c=None, min_dias=None):
+def replicas_faltan(dias):
+    """ADENDA_RF5_NULO_INCREMENTAL sec.5: {familia: {dia: n_faltan}} de las replicas del nulo (K, K6, A: j < K_max de cada familia) que faltan en los dias de la mirada; {} si estan todas. Solo se mira aqui, en la mirada."""
+    import rf5_nulo_inc as NI
+    f = {fam: NI.lee_replicas(fam, dias, FR.k_max(fam))[1] for fam in NI.ORDEN}; return {k: v for k, v in f.items() if v}
+
+def resumen(out, estado, c=None, min_dias=None, replicas=None):
     """min_dias se ignora (compatibilidad): la regla de mirada la fija rf5_fronteras.decide_mirada (adenda interina sec.2)."""
     c = c or K5.lee_cortes(); dec = FR.decide_mirada(estado); vals = FR.es_valido; dv_all = sorted(d for d, m in estado.items() if vals(m))
     res = dict(measurement_id='RF5E-COMB-23NOV-v1', codigo='v3', dias_validos=dv_all, n_dias_validos=len(dv_all), mirada_decision=dec, min_dias_mirada1=FR.MIRADA1_DIAS, estado_por_dia={d: m.get('status') for d, m in estado.items()})
     if not dv_all: res['modo'] = 'SOLO_CONTEOS (0 dias validos)'; return res
+    if dec['mirada'] > 0:                                    # si falta alguna replica del nulo de algun dia, la mirada ESPERA (no se baja K_max ni se mira con menos replicas): ni siquiera se abren los pkl
+        falt = (replicas or replicas_faltan)(dec['dias'])
+        if falt: res['modo'] = f"ESPERA_NULO_INCREMENTAL ({dec['nombre']}: faltan replicas {falt}; sin EV, sin PnL)"; res['replicas_faltan'] = falt; return res
     dv = dec['dias'] or dv_all[:FR.MIRADA1_DIAS]
     reg = []; R, F = carga(out, dv, registro=reg); res['precintados_u_omitidos'] = reg
     if R is None: res['modo'] = 'SOLO_CONTEOS (ningun dia legible/no precintado)'; return res
@@ -263,7 +271,9 @@ def resumen(out, estado, c=None, min_dias=None):
     res['familia_A_global'] = dict(T_max_obs=A['T_max_obs'], p_max=A['p_max_global'], umbral_p=FR.umbral_p('A', m), primario='F3'); res['fuga_f5'] = fu; res['familia_K'] = kf = familia_K(R, m)
     if nuK is not None: kf['p_max_K'] = float(nuK['p_max']); kf['nulo_K'] = 'RESIMULADO (Besag-Clifford h=20)'; kf['umbral_p_K1_K4'] = FR.umbral_p('K1_K4', m)
     res['veredictos_K'] = {k: veredicto_K(k, None, kf, Kw, (sh['K'][k] if sh else None), m)[0] for k in ('K1', 'K2', 'K3', 'K4')}
-    res['K6'] = 'NO evaluado en este evaluador: lo juzga rf5_k6 sobre rf5K6_*.pkl en la final de K6 (umbral rf5_fronteras.umbral_p("K6", m, alfa)); la mirada 1 SI contrasta K6 (adenda sec.6 D1)'
+    k1_ok = res['veredictos_K'].get('K1') == 'COMBINADA_EV_POSITIVO'; alfa6 = 0.05 if k1_ok else 0.01; nu6 = lee_nulo(out, 'K6', dv, m)
+    res['K6'] = dict(umbral_p=FR.umbral_p('K6', m, alfa6), alfa=alfa6, K_max=FR.k_max('K6'), nulo=('PENDIENTE: rf5_nulo_inc.py corre K6 (replicas incrementales completas de los dias de la mirada)' if nu6 is None else dict(p_max=float(nu6['p_max']), n_perm=nu6['n_perm'], K_max=nu6.get('K_max'))),
+                     cumple_p=(None if nu6 is None else bool(float(nu6['p_max']) <= FR.umbral_p('K6', m, alfa6))), gate='el resto del gate de K6 (EV, Delta pareado, L111/147, LOO, sin 2 mejores dias) lo evalua rf5_k6.gate_k6 sobre rf5K6_*.pkl con este p y rf5_fronteras.umbral_p (misma fuente)')
     return res
 
 if __name__ == '__main__':

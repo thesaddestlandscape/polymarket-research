@@ -1,4 +1,4 @@
-"""test_rf5_fronteras.py -- ADENDA_RF5_INTERINA_24nov sec.6 (Pocock-LD, mirada 1 en el 6.o dia valido, final en el 10.o, K_max 1500/2000, IC t por dias) y su cableado en rf5_eval / rf5_nulo_run. Datos sinteticos; no lee datos reales ni dias >= 18-Nov."""
+"""test_rf5_fronteras.py -- ADENDA_RF5_INTERINA_24nov sec.6 (Pocock-LD, mirada 1 en el 6.o dia valido, final en el 10.o, K_max 500 (K1-K4) / 500 (A) / 1500 (K6) (ADENDA_RF5_NULO_INCREMENTAL), IC t por dias) y su cableado en rf5_eval / rf5_nulo_run. Datos sinteticos; no lee datos reales ni dias >= 18-Nov."""
 import os, sys, json
 import numpy as np, pandas as pd, pytest
 HV = os.path.dirname(os.path.abspath(__file__)) + '/'; sys.path.insert(0, HV)
@@ -11,7 +11,7 @@ def _est(n_validos, extra=None):
 def test_constantes_transcritas_de_la_adenda_y_t_de_student():
     u1, u2 = FR.UMBRAL[1], FR.UMBRAL[2]
     assert (u1['p_max_K1_K4'], u2['p_max_K1_K4']) == (0.02834, 0.02171) and (u1['K6_alfa001'], u2['K6_alfa001']) == (0.00709, 0.00470) and (u1['K6_alfa005'], u2['K6_alfa005']) == (0.03543, 0.02792)
-    assert (u1['p_max_A'], u2['p_max_A']) == (0.03543, 0.02792) and (u1['vs_azar'], u2['vs_azar']) == (0.0709, 0.0617) and FR.K_MAX == {'K': 1500, 'A': 2000} and FR.SEMILLA == 20261124 and FR.H_BC == 20
+    assert (u1['p_max_A'], u2['p_max_A']) == (0.03543, 0.02792) and (u1['vs_azar'], u2['vs_azar']) == (0.0709, 0.0617) and FR.K_MAX == {'K': 500, 'A': 500, 'K6': 1500} and FR.SEMILLA == 20261124 and FR.H_BC == 20
     from scipy import stats
     assert stats.t.ppf(1 - u1['ic_unil'], 5) == pytest.approx(FR.T_MULT[1], abs=1e-3) and stats.t.ppf(1 - u2['ic_unil'], 9) == pytest.approx(FR.T_MULT[2], abs=1e-3)
 
@@ -52,7 +52,7 @@ def test_resumen_conteos_con_5_y_modo_final_con_10(tmp_path):
     for n, modo in ((5, 'SOLO_CONTEOS'), (6, 'MIRADA_1')):
         R, F, est = T._sint(n_dias=n); out = str(tmp_path) + f'/{n}/'; os.makedirs(out)
         for d in est: R[R.dia == d][R.columns].pipe(lambda x: x[x.pol.isin(['base', 'F1', 'F2', 'F3', 'U13'])]).to_pickle(out + f'rf5A_{d}.pkl'); F[F.dia == d].to_pickle(out + f'rf5_f5_0_{d}.pkl')
-        r = EV.resumen(out, est, K5.lee_cortes()); assert r['modo'].startswith(modo), r['modo']
+        r = EV.resumen(out, est, K5.lee_cortes(), replicas=lambda dias: {}); assert r['modo'].startswith(modo), r['modo']
         if n == 6: assert r['mirada_decision']['mirada'] == 1 and set(r['familia_A']) == {'F1', 'F2', 'F3', 'U13'} and r['familia_A_global']['umbral_p'] == 0.03543 and r['nulo_resimulado'] == dict(A=None, K=None)
 
 def test_nulo_resim_se_ignora_si_los_dias_no_coinciden(tmp_path):
@@ -74,3 +74,14 @@ def test_registro_cubre_ficheros_externos_y_falla_cerrado(tmp_path, monkeypatch)
     (tmp_path / 'a.py').write_text('1'); (tmp_path / 'b.py').write_text('2'); monkeypatch.setattr(RR, 'PREREG_RF5_SHA', hashlib.sha256(open(RR.PREREG_RF5, 'rb').read()).hexdigest())
     h = tmp_path / 'H.txt'; h.write_text(f"{hashlib.sha256(b'1').hexdigest()}  {RR.nombre_ext('EXT:a.py')}\n{'0' * 64}  {RR.nombre_ext('EXT:b.py')}\n"); monkeypatch.setattr(RR, 'HASHES', str(h)); p = RR.verifica_registro()
     assert any('EXT:b.py sha !=' in x for x in p) and any('EXT:c.py no existe' in x for x in p) and not any('EXT:a.py' in x for x in p)
+
+
+def test_la_mirada_espera_si_faltan_replicas_del_nulo(tmp_path):
+    import test_rf5 as T
+    R, F, est = T._sint(n_dias=6); out = str(tmp_path) + '/'
+    r = EV.resumen(out, est, K5.lee_cortes(), replicas=lambda dias: {'K': {dias[-1]: 1}}); assert r['modo'].startswith('ESPERA_NULO_INCREMENTAL') and r['replicas_faltan'] == {'K': {sorted(est)[5]: 1}}
+    assert 'familia_A' not in r and 'conteos' not in r and 'veredictos_K' not in r                       # ni se abrieron los pkl (out vacio: de abrirlos habria fallado/precintado)
+    import rf5_nulo_inc as NI, rf5_run as RR
+    RR_out = RR.OUT; RR.OUT = str(tmp_path) + '/vacio/'; os.makedirs(RR.OUT + 'nulo_inc/')
+    try: f = EV.replicas_faltan(sorted(est)[:6]); assert set(f) == {'K', 'K6', 'A'} and all(f[k][sorted(est)[0]] == FR.k_max(k) for k in f)
+    finally: RR.OUT = RR_out

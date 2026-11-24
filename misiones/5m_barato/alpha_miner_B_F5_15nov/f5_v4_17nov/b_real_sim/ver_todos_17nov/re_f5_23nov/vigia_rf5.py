@@ -73,6 +73,31 @@ def avisos_k6(est, hb6, out=None, ahora=None):
         if m.get('status') in ('FAILED', 'BLOCKED'): A.append((f"R7_{os.path.basename(f)}_{m['status']}", f"RF5 K6: {m.get('job')} {m['status']}: {str(m.get('motivo') or m.get('err'))[:160]}"))
     return A
 
+DESDE_NULO = '2026-11-24'; NULO_FAMS = ('K', 'K6', 'A'); NULO_MAX_H = 30.0
+def lee_nulo_estado(out=None):
+    """SOLO conteos (nulo_inc/nulo_inc_estado.json: replicas hechas por familia y dia); nunca abre las replicas precintadas."""
+    try: return json.load(open((out or OUT) + 'nulo_inc/nulo_inc_estado.json'))
+    except Exception: return {}
+
+def avisos_nulo(est, hbn, ne, ahora=None):
+    """R8 dia COMPLETE >= 24-Nov sin ninguna replica del nulo tras >30 h desde su cierre; R9 familia/dia BLOCKED; R10 el cron del nulo incremental (run_nulo_inc.sh) lleva >26 h sin correr con trabajo pendiente. Firmas estables."""
+    import calendar
+    A = []; ahora = ahora or time.time(); pend = False
+    for d, m in sorted(est.items()):
+        if d < DESDE_NULO or m.get('status') != 'COMPLETE': continue
+        t = m.get('t_fin'); edad = 0.0 if not t else (ahora - calendar.timegm(time.strptime(t[:19], '%Y-%m-%dT%H:%M:%S'))) / 3600.0
+        for fam in NULO_FAMS:
+            e = (ne.get(fam) or {}).get(d)
+            if e is None or e.get('estado') != 'COMPLETO': pend = True
+            if e is None and edad > NULO_MAX_H: A.append((f'R8_nulo_{fam}_{d}_sin_replicas', f"RF5 nulo incremental: dia {d} COMPLETE hace >{NULO_MAX_H:.0f} h sin replicas de la familia {fam}. Revisar cron run_nulo_inc.sh / out_rf5_ciego/nulo_inc/."))
+            if e is not None and str(e.get('estado', '')).startswith('BLOCKED'): A.append((f'R9_nulo_{fam}_{d}_BLOCKED', f"RF5 nulo incremental: {fam} {d} {str(e.get('estado'))[:120]}"))
+    if pend and (hbn is None or (ahora - hbn.get('epoch', 0)) / 3600.0 > HB_MAX_H): A.append(('R10_nulo_parado', f"RF5 nulo incremental: run_nulo_inc.sh lleva >{HB_MAX_H:.0f} h sin correr con replicas pendientes (heartbeat {None if hbn is None else hbn.get('t')})."))
+    return A
+
+def resumen_nulo(ne):
+    if not ne: return 'Nulo incremental: sin replicas todavia (solo conteos).'
+    return 'Nulo incremental (replicas hechas/K_max; solo conteos): ' + '; '.join(f"{fam}: " + ', '.join(f"{d[5:]} {v['n']}/{v['K_max']}" for d, v in sorted(ne[fam].items())) for fam in NULO_FAMS if fam in ne)
+
 def resumen_btc(out=None):
     try: j = json.load(open((out or OUT) + 'c4_btc_estado.json')); return f"BTC: {j['estado'].split(' ')[0]} ({j['n_ok']}/10 condiciones C4)"
     except Exception: return 'BTC: DATA_BLOCKED_BTC (c4_btc_estado.json no disponible)'
@@ -94,18 +119,20 @@ def main(argv):
     tg = '--telegram' in argv
     if '--aviso-runner' in argv: envia('🚨 RF5E-COMB: run_rf5.sh terminó con error (algún día FAILED o fallo de entorno). Ver out_rf5_ciego/run_*.log y el estado por día.', tg); return 1
     if '--aviso-k6' in argv: envia('🚨 RF5E-COMB: run_k6.sh (juez Calma v4) terminó con error (algún día FAILED o fallo de entorno). Ver out_rf5_ciego/run_k6_*.log.', tg); return 1
+    if '--aviso-nulo' in argv: envia('🚨 RF5E-COMB: run_nulo_inc.sh (nulo incremental) terminó con error (algún día BLOCKED o fallo de entorno). Ver out_rf5_ciego/nulo_inc/ y run_nulo_inc_*.log.', tg); return 1
     if '--aviso-suelo' in argv: envia('🚨 RF5E-COMB: suelo_diario.sh (tabla de suelo sucesora, cron 04:40Z) FALLÓ. La tabla del día no se propone al chief. Ver suelo_sucesora/suelo_diario.log.', tg); return 1
     if '--aviso-fallo' in argv: envia('🚨 vigia_rf5 FALLO (excepcion al leer el estado de RF5E-COMB). Ver logs/vigia_rf5.log.', tg); return 1
     est = lee_estado(); hb = json.load(open(OUT + 'heartbeat.json')) if os.path.exists(OUT + 'heartbeat.json') else None; libre = shutil.disk_usage(VOL).free / 1e9
     latch = json.load(open(LATCH)) if os.path.exists(LATCH) else {}; nuevos = []; vivos = set()
     hb6 = json.load(open(OUT + 'heartbeat_k6.json')) if os.path.exists(OUT + 'heartbeat_k6.json') else None
-    for firma, txt in avisos(est, hb, libre) + avisos_k6(est, hb6):
+    hbn = json.load(open(OUT + 'heartbeat_nulo_inc.json')) if os.path.exists(OUT + 'heartbeat_nulo_inc.json') else None; ne = lee_nulo_estado()
+    for firma, txt in avisos(est, hb, libre) + avisos_k6(est, hb6) + avisos_nulo(est, hbn, ne):
         vivos.add(firma)
         if firma not in latch: nuevos.append(txt); latch[firma] = time.strftime('%FT%TZ', time.gmtime())
     for f in list(latch):                                     # firma resuelta => se limpia (si reaparece, vuelve a avisar)
         if f not in vivos: del latch[f]
     json.dump(latch, open(LATCH + '.tmp', 'w')); os.replace(LATCH + '.tmp', LATCH)
-    envia(resumen_texto(est) + '\n' + resumen_btc() + (f'\nVolumen HC libre: {libre:.0f} GB' if True else '') + ('\n\nAVISOS NUEVOS:\n' + '\n'.join(nuevos) if nuevos else ''), tg)
+    envia(resumen_texto(est) + '\n' + resumen_btc() + '\n' + resumen_nulo(ne) + (f'\nVolumen HC libre: {libre:.0f} GB' if True else '') + ('\n\nAVISOS NUEVOS:\n' + '\n'.join(nuevos) if nuevos else ''), tg)
     return 0
 
 if __name__ == '__main__': sys.exit(main(sys.argv[1:]))

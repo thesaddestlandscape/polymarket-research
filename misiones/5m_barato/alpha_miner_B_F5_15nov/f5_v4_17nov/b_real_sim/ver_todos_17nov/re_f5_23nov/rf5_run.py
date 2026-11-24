@@ -155,9 +155,10 @@ def motor(E, activo):
     import sec7_core as C
     return C.EngineBloqueo(E, activo=activo) if os.environ.get('RF5_LENTO') else RP.EngineBloqueoCache(E, activo=activo)
 
-def _replay(d, P, W, ctx, nombre, tabla, bsrc, cortes, tp, veto_set=None):
+def _replay(d, P, W, ctx, nombre, tabla, bsrc, cortes, tp, veto_set=None, bsrc_calma=None):
+    """bsrc_calma (None => = bsrc): fuente Binance de Calma SOLA; solo el placebo de K6 del nulo la usa (series desplazadas), el resto de llamadas no cambia."""
     import replay_variantes as RV
-    W.fills.clear(); HK = K5.construye_hook(nombre, tabla, W._serie, bsrc, cortes, tp, lambda: W.fills, veto_set)
+    W.fills.clear(); HK = K5.construye_hook(nombre, tabla, W._serie, bsrc, cortes, tp, lambda: W.fills, veto_set, bsrc_calma=bsrc_calma)
     R, cov = RP.run_day(d, P, E=W, HK=HK)                    # simulador rapido (identico bit a bit a RV.run_day; RF5_LENTO=1 => lento)
     if len(R):
         import puerta0_core as P0

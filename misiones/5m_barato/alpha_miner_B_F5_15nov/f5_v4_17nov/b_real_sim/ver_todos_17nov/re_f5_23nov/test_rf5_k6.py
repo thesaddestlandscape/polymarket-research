@@ -4,9 +4,11 @@ import numpy as np, pandas as pd, pytest
 HV = os.path.dirname(os.path.abspath(__file__)) + '/'; sys.path.insert(0, HV)
 import rf5_k6 as K6
 
-def test_reserva_de_alfa_fwer_y_mirada2():
-    a = K6.alfas(False); assert a['K1_K4'] == 0.04 and a['K6'] == 0.01 and a['K1_K4'] + a['K6'] <= 0.05
-    assert K6.alfas(True)['K6'] == 0.05 and K6.alfas(False, 2)['K1_K4'] == 0.02 and K6.alfas(False, 2)['K6'] == 0.005 and K6.alfas(True, 2)['K6'] == 0.025
+def test_umbrales_pocock_de_la_adenda_y_una_sola_fuente():
+    import rf5_fronteras as FR
+    a = K6.alfas(False); assert a['K1_K4'] == 0.02834 and a['K6'] == 0.00709 and K6.alfas(True)['K6'] == 0.03543           # mirada 1 (6.o dia valido)
+    f = K6.alfas(False, 2); assert f['K1_K4'] == 0.02171 and f['K6'] == 0.00470 and K6.alfas(True, 2)['K6'] == 0.02792    # final (10.o); nada de alfa a mitad: la mirada de 20 d esta suprimida
+    assert a['K6'] == FR.UMBRAL[1]['K6_alfa001'] and f['K6'] == FR.UMBRAL[2]['K6_alfa001'] and K6.alfas(True)['K6'] == FR.UMBRAL[1]['K6_alfa005']      # misma fuente (sin duplicar constantes)
 
 def test_dias_evaluables_interseccion_e_insufficient_por_20pct():
     r = K6.dias_k6(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']); assert r['estado'] == 'OK' and r['no_evaluables'] == ['i', 'j'] and r['frac_no_evaluable'] == 0.2          # 20 % exacto no supera

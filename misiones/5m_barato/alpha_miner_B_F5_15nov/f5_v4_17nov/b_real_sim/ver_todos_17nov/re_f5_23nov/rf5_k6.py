@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """rf5_k6.py -- ESPEC E6 (ADENDA_RF5_K6_CALMA_v2): reserva de alfa K1-K4 / K6, gate de K6 y comprobaciones estructurales (particion exhaustiva, Calma∩F3=0, K6 sin Calma == K1, dias evaluables). Funciones PURAS sobre ordenes de la simulacion;
 la politica K6 (K1 + Calma-T1) la produce el hook de Calma del juez v4 (PENDIENTE: ver cola). Ninguna cifra Calma del forward viejo cuenta. 0 ordenes, 0 red."""
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + "/")
 import numpy as np, pandas as pd
 
 def alfas(k1_ev_positivo, mirada=1):
-    """grafo de reserva (ADENDA K6 v2): K1-K4 0,04 (mirada 2: x0,5 = 0,02); K6 0,01 (0,005); si K1 = COMBINADA_EV_POSITIVO, K6 hereda 0,05 (0,025). FWER <= 0,05."""
-    esc = 1.0 if mirada == 1 else 0.5
-    return dict(K1_K4=0.04 * esc, K6=(0.05 if k1_ev_positivo else 0.01) * esc, nota='K6 con alfa 0,05 solo si K1 = COMBINADA_EV_POSITIVO a 0,04')
+    """UMBRALES p VINCULANTES (Pocock-LD, ADENDA_RF5_INTERINA_24nov sec.6 D1; unica fuente: rf5_fronteras.UMBRAL). mirada 1 = 6.o dia valido, mirada 2 = FINAL (10.o). K1-K4 0,02834 | 0,02171; K6 0,00709 | 0,00470 (0,03543 | 0,02792 si K1 = COMBINADA_EV_POSITIVO).
+    La mirada de 20 dias esta SUPRIMIDA: ya no hay alfa a mitad."""
+    import rf5_fronteras as FR
+    return dict(K1_K4=FR.umbral_p('K1_K4', mirada), K6=FR.umbral_p('K6', mirada, 0.05 if k1_ev_positivo else 0.01), nota='K6 con alfa 0,05 solo si K1 = COMBINADA_EV_POSITIVO (grafo Bretz firmado)')
 
 def dias_k6(dias_validos_rf5, dias_calma_ok, max_no_evaluable=0.20):
     """dias de K6 = interseccion de evaluables; NO_EVALUABLE fijado por el manifest de entradas ANTES del EV; > 20 % de los dias validos RF5 => K6 INSUFFICIENT."""

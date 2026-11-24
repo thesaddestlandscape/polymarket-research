@@ -4,9 +4,9 @@ max-statistic sobre la familia (A: F1,F2,F3,U13; K: K1..K4). Cada permutacion j 
 (V5/V6) desplazadas circularmente delta_perm(dia, j) >= 60 s. Motor rapido (rf5_rapido) construido UNA vez por dia y bloque de permutaciones; checkpoint durable JSONL (out/nulo_FAM_ckpt.jsonl, un dia x j por linea). 0 ordenes, 0 red.
 MOTIVO DE LA SIMULACION COMPLETA (adenda interina 24-Nov sec.1; acople real medido en 17-Nov, out_rf5_ciego/acople_real_2026-11-17.json): b_policy_sim ACOPLA los mercados de un dia por el estado global busy/MAXV (ordenes vivas simultaneas), asi que el resultado de un mercado
 depende de las decisiones en los demas y la composicion exacta por tablas (replicas base/VETO_UP/VETO_DN, rf5_nulo.nulo_replicas) sale NO_EXACTO. El p de AMBAS familias sale de re-simular el dia completo en cada replica (veto F5 explicito por lados con los F5_0 permutados; en K, ademas series Binance desplazadas).
-K_max: familia K 1500, familia A 2000 (rf5_fronteras.K_MAX; adenda sec.6), h = 20, semilla 20261124. Prueba de identidad (`identidad DIA FAM`): la replica con el par F5_0 observado y desplazamiento 0 reproduce BIT A BIT la politica directa.
+K_max: K1-K4 500, A 500, K6 1500 (rf5_fronteras.K_MAX; adenda NULO_INCREMENTAL sec.3), h = 20, semilla 20261124. Prueba de identidad (`identidad DIA FAM`): la replica con el par F5_0 observado y desplazamiento 0 reproduce BIT A BIT la politica directa.
 Uso:  rf5_nulo_run.py ensayo DIA FAM [N]   -> dia NO ciego (<=17-Nov): N permutaciones de un dia, SOLO tiempos y conteos (sin EV/PnL)
-      rf5_nulo_run.py corre FAM [--K <K_max de la familia>] [--h 20] [--bloque 25]   -> mirada (6.o dia valido) o final (10.o): los dias los fija rf5_fronteras.decide_mirada; ESCRIBE p_max (solo con RF5_NULO_AUTORIZADO=1, autorizacion del chief)."""
+      rf5_nulo_run.py corre FAM [--h 20]   -> DELEGA en rf5_nulo_inc (replicas INCREMENTALES por dia; ADENDA_RF5_NULO_INCREMENTAL_24nov): agrega en la mirada; ESCRIBE p_max (solo con RF5_NULO_AUTORIZADO=1)."""
 import sys, os, json, time
 HV = os.path.dirname(os.path.abspath(__file__)) + '/'; sys.path.insert(0, HV)
 import numpy as np, pandas as pd
@@ -89,16 +89,22 @@ class SimNulo:
         """UNA replica (politica `nombre` del nulo) con el veto explicito por lados de `pares` y las series Binance `bsh` (None en A). Devuelve el DataFrame de ordenes del simulador completo."""
         regla = K5.REGLA_DE_K.get(nombre, nombre[:-4]); vs = NU.veto_set_de_pares(regla, pares, mid_k, coin_de, self.cortes)
         R, c, HK = RR._replay(d, P, W, ctx, nombre, self.pol_tabla, bsh, self.cortes, self.tp if bsh else None, vs); return R
+    def estado_dia(self, d, pre=None):
+        """prepara UNA vez por dia lo que comparten todas las replicas (series Binance, ids, tabla F5_0 por politica); debe llamarse DENTRO de RR.desenlace_con_marcador(). Se puede hacer fork despues (replicas independientes)."""
+        E, P, W, ctx, mid_k, coin_de, bsrc, d0 = self._ctx(d, pre); M = self.M_dia[self.M_dia.mid.isin(mid_k)]; T, _ = self.tablas(d, P, W, ctx, mid_k, bsrc)
+        return dict(d=d, P=P, W=W, ctx=ctx, mid_k=mid_k, coin_de=coin_de, bsrc=bsrc, d0=d0, M=M, T=T)
+    def una(self, st, j, delta):
+        """UNA permutacion j (desplazamiento delta de las series Binance en K): {pol: Delta_dia}. Determinista por (dia, j)."""
+        d = st['d']; asig = NU.permuta_asignacion(st['M'], NU.rng_perm(d, j)); [asig.setdefault(m_, m_) for m_ in st['mid_k']]      # mercados que ninguna replica de F5 intento (fuera de M) conservan su tabla: nunca quedan sin veto
+        bsh = {c: NU.desplaza_circular(tt, pp, st['d0'], delta) for c, (tt, pp) in st['bsrc'].items()} if st['bsrc'] else None; r_j = {}
+        for nombre in self.pols_nulo():
+            pares = {a: st['T'][nombre][b] for a, b in asig.items()}; pn, co = unidades_dia(self.replica(d, st['P'], st['W'], st['ctx'], nombre, pares, st['mid_k'], st['coin_de'], bsh)); r_j[nombre[:-4]] = delta_dia(pn, co, *self.base_dia[d])
+        return r_j
     def __call__(self, d, lista, pre=None):
-        E, P, W, ctx, mid_k, coin_de, bsrc, d0 = self._ctx(d, pre); out = {}; M = self.M_dia[self.M_dia.mid.isin(mid_k)]
+        out = {}
         with RR.desenlace_con_marcador():
-            T, _ = self.tablas(d, P, W, ctx, mid_k, bsrc)
-            for j, delta in lista:
-                asig = NU.permuta_asignacion(M, NU.rng_perm(d, j)); [asig.setdefault(m_, m_) for m_ in mid_k]      # mercados que ninguna replica de F5 intento (fuera de M) conservan su tabla: nunca quedan sin veto
-                bsh = {c: NU.desplaza_circular(tt, pp, d0, delta) for c, (tt, pp) in bsrc.items()} if bsrc else None; r_j = {}
-                for nombre in self.pols_nulo():
-                    pares = {a: T[nombre][b] for a, b in asig.items()}; pn, co = unidades_dia(self.replica(d, P, W, ctx, nombre, pares, mid_k, coin_de, bsh)); r_j[nombre[:-4]] = delta_dia(pn, co, *self.base_dia[d])
-                out[j] = r_j
+            st = self.estado_dia(d, pre)
+            for j, delta in lista: out[j] = self.una(st, j, delta)
         return out
     def identidad(self, d, pre=None):
         """PRUEBA DE IDENTIDAD (ADENDA interina sec.1): con pi = identidad (cada mercado conserva su propia tabla F5_0) y sin desplazar las series, la replica del nulo reproduce BIT A BIT la politica directa (F1..U13 | K1..K4) en el simulador completo. Devuelve {pol: dict(igual, ordenes_directa, ordenes_set)}."""
@@ -128,20 +134,8 @@ def main(argv):
         import b_policy_sim as BS, eng_v5 as EV
         cortes = K5.lee_cortes(); tp = RR.t_proc(); E, info = EV.build(d); P = BS.params(); W = RR.motor(E, False); ctx = dict(W=W, serie=W._serie); M, base_dia, Rb = prepara_dia(d, E, P, W, ctx, cortes)
         r = SimNulo(fam, base_dia, M, cortes, tp).identidad(d, (E, P, W, ctx)); res = dict(dia=d, familia=fam, identidad=r, todo_igual=bool(all(v['igual'] for v in r.values()))); json.dump(res, open(RR.OUT + f'nulo_identidad_{fam}_{d}.json', 'w'), indent=1); print(json.dumps(res)); return 0
-    if modo == 'corre':
-        if os.environ.get('RF5_NULO_AUTORIZADO') != '1': raise SystemExit('BLOQUEADO: el nulo por re-simulacion escribe p_max (EV): solo en la mirada con autorizacion del chief (RF5_NULO_AUTORIZADO=1)')
-        fam = argv[1]; K = int(argv[argv.index('--K') + 1]) if '--K' in argv else FR.k_max(fam); h = int(argv[argv.index('--h') + 1]) if '--h' in argv else FR.H_BC; bl = int(argv[argv.index('--bloque') + 1]) if '--bloque' in argv else 25
-        dec = FR.decide_mirada(RR.estado())          # dias EXACTOS de la mirada (6 primeros validos | 10 primeros): nunca por argumento
-        if dec['mirada'] == 0 or min(dec['dias']) < '2026-11-18': raise SystemExit(f"BLOQUEADO: sin mirada habilitada ({dec['nombre']}: {dec['motivo']})")
-        dias = dec['dias']; fk = 'K1_K4' if fam == 'K' else 'A'
-        if not FR.resolucion_ok(fk, dec['mirada'], k=K): raise SystemExit(f'BLOQUEADO: K_max={K} < 5/umbral de la mirada {dec["mirada"]} ({fk}): sin resolucion para rechazar')
-        cortes = K5.lee_cortes(); tp = RR.t_proc(); RA = pd.concat([pd.read_pickle(RR.OUT + f'rf5A_{d}.pkl') for d in dias], ignore_index=True); FA = pd.concat([pd.read_pickle(RR.OUT + f'rf5_f5_0_{d}.pkl') for d in dias], ignore_index=True)
-        Robs = RA if fam == 'A' else pd.concat([pd.read_pickle(RR.OUT + f'rf5K_{d}.pkl') for d in dias], ignore_index=True); Rb = RA[(RA.bloq == 0) & (RA.pol == 'base')]
-        obs = Tobs_max(fam, Rb, Robs, FAM[fam][1]); M = NU.tabla_mercados(RA, FA); base = {d: unidades_dia(Rb[Rb.dia == d]) for d in dias}
-        cache = {}
-        def sim_bloque(d, lista): return SimNulo(fam, base, M[M.dia == d], cortes, tp)(d, lista)
-        r = NU.nulo_K_run(dias, obs['Tmax'], None, RR.OUT + f'nulo_{fam}_ckpt.jsonl', K=K, h=h, sim_bloque=sim_bloque, bloque=bl); r.update(familia=fam, T_max_obs=obs['Tmax'], dias=dias, mirada=dec['mirada'], K_max=K, umbral_p=FR.umbral_p(fk, dec['mirada']), estado='NULO_RESIMULADO_EXACTO')
-        json.dump(r, open(RR.OUT + f'nulo_{fam}_resultado.json', 'w'), indent=1, default=str); print(json.dumps(r, default=str)); return 0
+    if modo == 'corre':          # v3 (ADENDA_RF5_NULO_INCREMENTAL_24nov): ya NO calcula en bloque; agrega las replicas incrementales (rf5_nulo_inc), y si faltan ESPERA
+        import rf5_nulo_inc as NI; return NI.main_corre(argv[1:])
     raise SystemExit(__doc__)
 
 if __name__ == '__main__': sys.exit(main(sys.argv[1:]))

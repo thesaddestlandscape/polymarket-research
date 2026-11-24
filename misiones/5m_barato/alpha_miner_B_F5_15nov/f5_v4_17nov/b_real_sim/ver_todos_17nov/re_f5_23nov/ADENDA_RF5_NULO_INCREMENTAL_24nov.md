@@ -1,0 +1,8 @@
+# ADENDA_RF5_NULO_INCREMENTAL_24nov — modifica §1/§6-D1 de ADENDA_RF5_INTERINA_24nov (sha 18d06c15). Redactada EN CIEGO por el chief (24-Nov), OK Javi 24-Nov; pendiente revisión del validador y firma.
+Motivo (hecho no ciego, 17-Nov): con acople real el nulo exige la simulación completa por réplica (~24,7 s por réplica-día, familia K, 4 políticas). Con K_max 1500 y 6 días, un observado extremo costaría ~250 h y no cabe antes de la mirada.
+1. Cálculo incremental: las réplicas del nulo se calculan POR DÍA en cuanto el día queda COMPLETE (tras run_rf5), con permutación determinista por (día, j) a partir de la semilla 20261124 (la misma función rng_perm ya registrada). Se guardan precintadas (solo estadísticos por réplica, sin observado agregado) y nadie las lee hasta decide_mirada. En la mirada solo se agregan las réplicas j=1..K_max de los días que entran. El resultado es idéntico al cálculo en bloque (test bit a bit obligatorio: agregado incremental == bloque en 17-Nov con K pequeño).
+2. Besag-Clifford se aplica sobre la secuencia agregada j=1,2,… (parada a h=20 excedencias; si no, p=(1+#)/(K_max+1)). Calcular réplicas de más no cambia el p.
+3. K_max: K1-K4 = 500; familia A = 500; K6 = 1500. Resolución ≥ 5/umbral en todos (K1-K4 final 0,02171 → 230; A final 0,02792 → 179; K6 final 0,00470 → 1064). Umbrales Pocock SIN cambios.
+4. Orden de cómputo: familia K (K1-K4, luego K6) antes que la familia A, que no decide la operación.
+5. Recursos: lanza_pesado/cron_pesado, nunca 06:00-09:15Z ni 22:15-22:30Z; si un día no termina sus réplicas antes de la mirada, la mirada espera (no se baja K_max ni se mira con menos réplicas).
+6. Días 18-22 Nov: se reprocesan con código v3 (las salidas v2 se conservan intactas). No cuentan como válidos.

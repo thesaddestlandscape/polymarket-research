@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """rf5_fronteras.py -- FRONTERAS Y REGLA DE MIRADA de RF5E-COMB-23NOV-v1 segun ADENDA_RF5_INTERINA_24nov SEC.6 (decisiones de firma de Javi 24-Nov: POCOCK de Lan-DeMets; prevalece sobre OBF del sec.1). Constantes TRANSCRITAS de la adenda, sin recalcular.
 Mirada 1 = 6.o dia VALIDO por orden de calendario (entran EXACTAMENTE los 6 primeros validos; t = 6/10 por construccion); final = 10.o dia valido; mas alla del 10.o: prereg nuevo (no hay mirada 20 d). Sin futilidad vinculante.
-Estos parametros NO viven en rf5_cortes.json (sha 4e88fb3c, no se toca): viven aqui (codigo hasheado en HASHES v3). Besag-Clifford: K_max = 1500 familia K (K6 final exige >= 1064) y 2000 familia A; h = 20; semilla 20261124. Puro: sin IO, sin red, 0 ordenes."""
+Estos parametros NO viven en rf5_cortes.json (sha 4e88fb3c, no se toca): viven aqui (codigo hasheado en HASHES v3). Besag-Clifford (ADENDA_RF5_NULO_INCREMENTAL_24nov sec.3, sustituye a 1500/2000 de la interina): K_max = 500 K1-K4, 500 familia A, 1500 K6 (final 0,00470 exige >= 1064); h = 20; semilla 20261124. Puro: sin IO, sin red, 0 ordenes."""
 import numpy as np
-SEMILLA = 20261124; H_BC = 20; K_MAX = {'K': 1500, 'A': 2000}
+SEMILLA = 20261124; H_BC = 20; K_MAX = {'K': 500, 'A': 500, 'K6': 1500}
 MIRADA1_DIAS = 6; FINAL_DIAS = 10
 # umbrales nominales UNILATERALES (p <= umbral => cumple), adenda sec.6 D1
 UMBRAL = {1: {'p_max_K1_K4': 0.02834, 'K6_alfa001': 0.00709, 'K6_alfa005': 0.03543, 'p_max_A': 0.03543, 'ic_unil': 0.03543, 'vs_azar': 0.0709},
@@ -53,4 +53,4 @@ def k_max(familia): return K_MAX[familia]
 
 def resolucion_ok(familia, mirada, k6_alfa=None, k=None):
     """adenda sec.1: K_max >= 5/umbral para poder rechazar con >=4 excedencias."""
-    f = 'K' if familia in ('K1_K4', 'K6', 'K') else 'A'; km = k or K_MAX[f]; return bool(km >= 5.0 / umbral_p(familia if familia != 'K' else 'K1_K4', mirada, k6_alfa))
+    f = {'K1_K4': 'K', 'K': 'K', 'K6': 'K6', 'A': 'A'}[familia]; km = k or K_MAX[f]; return bool(km >= 5.0 / umbral_p(familia if familia != 'K' else 'K1_K4', mirada, k6_alfa))
