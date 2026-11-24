@@ -5,9 +5,6 @@
  "GBM_LATE_15M_PYCONFIRMADO#DOGE#15min#BUY_NO": {
   "avisado": true
  },
- "FAVORITO_CONFIRMADO#BNB#5min#BUY_YES": {
-  "avisado": true
- },
  "GBM_LATE_15M_PYCONFIRMADO#BNB#15min#BUY_YES": {
   "avisado": true
  },
@@ -42,6 +39,9 @@
   "avisado": true
  },
  "GBM_LATE_60M#BNB#60min#BUY_NO": {
+  "avisado": true
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#XRP#60min#BUY_NO": {
   "avisado": true
  }
 }
