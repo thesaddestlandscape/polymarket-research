@@ -60,12 +60,12 @@
  "UPDOWN_GBM": {
   "ic_bayes_familia": 0.0598,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 17.56,
+  "pnl_fiel_combinado_eur": 16.51,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#60min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 17.5558,
-    "n_ejecutado": 584
+    "pnl_fiel_eur_sin_suelo": 16.5058,
+    "n_ejecutado": 585
    }
   ]
  }
