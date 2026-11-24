@@ -100,7 +100,7 @@ class HookRF5:
         h = self.comps[0]; return h._t_end(o, self.tau[self.key(m, o)], trx, h.tp, h.lc)
     def registra(self, m, o, trx): self.cont['cancelaciones_regla'] += 1
 
-def construye_hook(nombre, tabla, serie_k, bsrc, cortes, tp, fills, veto_set=None, bsrc_calma=None):
+def construye_hook(nombre, tabla, serie_k, bsrc, cortes, tp, fills, veto_set=None, bsrc_calma=None, ev_shift=None):
     """tabla = POLITICAS_A | POLITICAS_K. tp = t_proc ms OBLIGATORIO si hay V5/V6 (sin default). fills = callable -> fills del EngineBloqueo vigente.
     bsrc_calma (None => = bsrc): fuente Binance de Calma SOLA. CAUSA RAIZ del bloqueante K6 (24-Nov): el test 'K6 con Calma vacia == K1' pasaba la serie vacia como `bsrc`, que alimenta TAMBIEN a V5/V6 (cegandolos: 17.600 ordenes = F3 solo, frente a 8.272 de K1).
     Para anular SOLO a Calma hay que pasar bsrc real y bsrc_calma vacia; en produccion (K6) ambas son la misma serie."""
@@ -112,6 +112,11 @@ def construye_hook(nombre, tabla, serie_k, bsrc, cortes, tp, fills, veto_set=Non
         if a6: v6 = RV.HookBinance(bsrc, VB.V6, tp, l_cancel=lc, fills=fills)
         if delay is not None:
             import calma_hook as CH; ca = CH.HookCalma(bsrc if bsrc_calma is None else bsrc_calma, tp, l_cancel=lc, fills=fills, delay_armar_ms=delay)
+    if ev_shift is not None:                          # nulo (C1, decision del chief): eventos calculados sobre la serie ORIGINAL; solo se desplazan sus tiempos. ev_shift = (d0_ms, delta_ms, ('v5','v6') | ('calma',))
+        import rf5_nulo as NU
+        d0_, dl_, cuales = ev_shift; hk = dict(v5=v5, v6=v6, calma=ca)
+        for k in cuales:
+            if hk[k] is not None: hk[k].J = NU.desplaza_eventos(hk[k].J, d0_, dl_)
     h = HookRF5(serie_k, regla, cortes, v5=v5, v6=v6, veto_set=veto_set, invierte=inv, calma=ca); h.fills = fills; return h
 
 def conjuntos_exclusivos(R_base, flags):

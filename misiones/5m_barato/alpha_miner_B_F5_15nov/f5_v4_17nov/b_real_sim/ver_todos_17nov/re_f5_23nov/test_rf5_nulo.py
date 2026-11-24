@@ -61,10 +61,23 @@ def test_familia_A_usa_el_nulo_de_replicas_y_etiqueta_el_postfiltro():
     cond = EV.veredicto_A('F3', dict(a['F3'], p_max_global=a['p_max_global'], nulo_exacto=False), dict(ok_banda=True), C, True)[1]; assert cond['nulo_exacto'] is False
 
 # ---------------------------------------------------------------- familia K
-def test_desplazamiento_circular_conserva_series_y_minimo_60s():
-    t = np.arange(0, 86400000, 1000, dtype=np.int64); p = np.arange(len(t), dtype=float); t2, p2 = NU.desplaza_circular(t, p, 0, 123000)
-    assert len(t2) == len(t) and np.all(np.diff(t2) >= 0) and set(p2) == set(p) and t2[0] == 0
+def test_desplazamiento_de_eventos_conserva_numero_y_es_rotacion_en_el_dia():
+    d0 = 1_000_000_000; D = 86400000; up = np.array([d0 - 5000, d0 + 10, d0 + 5000, d0 + 70_000_000, d0 + D - 1], np.int64); dn = np.array([d0 + 123456], np.int64)
+    J = {'eth': dict(up=up, dn=dn)}
+    I = NU.desplaza_eventos(J, d0, 0); assert np.array_equal(I['eth']['up'], up) and np.array_equal(I['eth']['dn'], dn)       # delta=0 => identidad exacta
+    S = NU.desplaza_eventos(J, d0, 123000); u = S['eth']['up']
+    assert len(u) == len(up) and len(S['eth']['dn']) == 1 and np.all(np.diff(u) >= 0)                                          # el numero de eventos se conserva EXACTO (no se fabrica ni pierde ninguno)
+    assert u[0] == d0 - 5000                                                                                                   # el evento previo al dia no se mueve
+    dia = u[u >= d0]; assert np.all(dia < d0 + D) and sorted(dia) == sorted(d0 + (up[1:] - d0 + 123000) % D)                  # los del dia: rotacion mod 24 h
     assert all(60000 <= NU.delta_perm('2026-12-01', j) <= 86400000 - 60000 for j in range(200)) and NU.delta_perm('d', 3) == NU.delta_perm('d', 3) and NU.delta_perm('d', 3) != NU.delta_perm('e', 3)
+
+def test_construye_hook_ev_shift_no_toca_la_serie_ni_V5_V6_si_solo_calma():
+    import rf5_core as K5, numpy as np
+    t = np.arange(0, 600000, 100, dtype=np.int64); p = 100 + np.cumsum(np.where((t // 100) % 700 == 0, 0.5, 0.0)); bs = {'eth': (t, p)}
+    h0 = K5.construye_hook('K6', K5.POLITICAS_K6, [], bs, K5.lee_cortes(), 1.0, lambda: [])
+    h1 = K5.construye_hook('K6', K5.POLITICAS_K6, [], bs, K5.lee_cortes(), 1.0, lambda: [], ev_shift=(0, 200000, ('calma',)))
+    n = lambda J: sum(len(v) for c in J.values() for v in c.values())
+    assert n(h0.calma.J) == n(h1.calma.J) and h0.v5.J['eth']['up'].tolist() == h1.v5.J['eth']['up'].tolist() and h1.calma.series is bs
 
 def test_besag_clifford_formula():
     assert NU.besag_clifford(20, 200, 1000, 20) == 0.1 and NU.besag_clifford(5, 1000, 1000, 20) == 6 / 1001 and NU.besag_clifford(0, 1000, 1000, 20) == 1 / 1001

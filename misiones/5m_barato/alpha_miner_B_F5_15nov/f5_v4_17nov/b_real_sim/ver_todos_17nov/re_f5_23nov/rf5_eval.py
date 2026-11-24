@@ -3,7 +3,7 @@
 REGLA DE MIRADA (ADENDA_RF5_INTERINA_24nov sec.2/6, SUSTITUYE prereg sec.7; rf5_fronteras.decide_mirada): con < 6 dias validos (o un dia anterior pendiente) escribe SOLO conteos y cobertura; NUNCA calcula ni escribe EV/PnL. Mirada 1 = los 6 PRIMEROS validos; final = los 10 primeros; umbrales Pocock-LD e IC t de Student por dias en rf5_fronteras. Con mirada calcula Delta_k (familia A) y EV (familia K) con IC90 por dias y por cierre.
 Implementado: Delta_k = (PnL regla - PnL base)/coste base agregado por dias; T_k y p_max por permutacion de F5_0 dentro de dia x moneda (K<=1000 con parada secuencial Besag-Clifford h=20 [firma chief 23-Nov; el prereg decia 2000], semilla 20261124, mismas permutaciones para las 4 reglas); inversion; veto al azar;
 % dias>0; sin 2 mejores dias; bloq1; test de fuga F5 (AUC invalido/antiguo vs desenlace); EV/incondicional/L_cancel/inversion y ablacion+LOO de la familia K.
-NO implementado (declarado, impide CONFIRMADA/COMBINADA_EV_POSITIVO): sensibilidad fail-closed por huecos de stream (ESPEC_GRABADOR_CONEXION_23nov) y el p_max_K (lo calcula rf5_nulo_run.py en la mirada 1, no esta en este evaluador). 0 ordenes, 0 red.
+NO implementado (declarado, impide CONFIRMADA/COMBINADA_EV_POSITIVO): sensibilidad fail-closed por huecos de stream (ESPEC_GRABADOR_CONEXION_23nov) y el calculo de p_max_K / p_max_K6 / p_max_A (lo hace rf5_nulo_inc.py corre FAM sobre las replicas incrementales selladas; este evaluador SOLO lo lee con lee_nulo y rechaza otro sello de codigo o K_max). 0 ordenes, 0 red.
 NOTAS DE ALCANCE (adenda interina 24-Nov sec.5; no cambian ningun parametro): (1) el 23-Nov es INCOMPLETE (libro5/libro5_tx en pausa de 00 a 13:22Z => con_tx/units del dia < 0,90) y el 24-Nov lo es previsiblemente por d-1: el primer dia valido posible es el 25-Nov; (2) la tabla de suelo sucesora NO sustituye a bad_D (horas malas del dia);
 (3) clase de suelo hi SIN datos ciegos (1728/1728 ventanas lo por dia): todo veredicto vale SOLO para la clase lo (hi = DATA_BLOCKED); (4) K6 se juzga aparte (rf5_k6.gate_k6 sobre rf5K6_*.pkl); (5) BTC sigue DATA_BLOCKED_BTC (solo ETH/SOL/XRP).
 Uso: python3 rf5_eval.py [--dir out_rf5_ciego/] -> escribe rf5_resumen.json (+ imprime)."""
@@ -12,7 +12,7 @@ import numpy as np, pandas as pd
 HV = os.path.dirname(os.path.abspath(__file__)) + '/'
 sys.path.insert(0, HV)
 import rf5_core as K5, rf5_nulo as NU, rf5_huecos as HU, rf5_fronteras as FR
-MIN_DIAS = FR.MIRADA1_DIAS; SEMILLA = FR.SEMILLA; K_PERM = FR.K_MAX['A']      # adenda interina 24-Nov sec.6: mirada 1 = 6.o dia valido, final = 10.o; Pocock-LD; Besag-Clifford h=20 con K_max 500 (A) / 500 (K1-K4) / 1500 (K6), replicas INCREMENTALES por dia (ADENDA_RF5_NULO_INCREMENTAL); semilla 20261124
+MIN_DIAS = FR.MIRADA1_DIAS; SEMILLA = FR.SEMILLA; K_PERM = FR.K_MAX['A']      # adenda interina 24-Nov sec.6: mirada 1 = 6.o dia valido, final = 10.o; Pocock-LD; Besag-Clifford h=20 con K_max 500 (A) / 250 (K1-K4) / 1100 (K6) [enmienda 24-Nov v3.1], replicas INCREMENTALES por dia (ADENDA_RF5_NULO_INCREMENTAL); semilla 20261124
 
 def dias_validos(estado):
     """estado = {dia: manifest-resumen}. VALIDO <=> COMPLETE y criterio_iv_ok True y criterio_iii == 'OK' (tabla de suelo sucesora firmada)."""
@@ -240,12 +240,35 @@ def lee_nulo(out, fam, dias, mirada):
     if not os.path.exists(p): return None
     try: r = json.load(open(p))
     except Exception: return None
-    return r if (r.get('dias') == list(dias) and r.get('mirada') == mirada and r.get('estado') == 'NULO_RESIMULADO_EXACTO') else None
+    import rf5_nulo_inc as NI            # C2: un resultado con otro sello de codigo o K_max distinto NO vale
+    return r if (r.get('dias') == list(dias) and r.get('mirada') == mirada and r.get('estado') == 'NULO_RESIMULADO_EXACTO' and r.get('sello') == NI.sello() and r.get('K_max') == FR.k_max(fam)) else None
 
-def replicas_faltan(dias):
-    """ADENDA_RF5_NULO_INCREMENTAL sec.5: {familia: {dia: n_faltan}} de las replicas del nulo (K, K6, A: j < K_max de cada familia) que faltan en los dias de la mirada; {} si estan todas. Solo se mira aqui, en la mirada."""
+BLOQUEAN_MIRADA = ('K', 'K6')            # enmienda 24-Nov v3.1: la familia A NO bloquea (si se calcula tarde con 10 dias validos, se salta su mirada 1 y rige el umbral final)
+
+def k1_rechazada_persistente(out, mirada, dias, veredicto_k1):
+    """C4 (grafo de Bretz persistente): si K1 se rechaza en la mirada 1 queda en `rf5_k1_mirada1.json` (escritura UNICA, sellada con el sello de codigo) y el final lo LEE sin recontrastar K. True si K1 se rechazo en la mirada 1 (fichero) o se rechaza ahora."""
     import rf5_nulo_inc as NI
-    f = {fam: NI.lee_replicas(fam, dias, FR.k_max(fam))[1] for fam in NI.ORDEN}; return {k: v for k, v in f.items() if v}
+    p = out + 'rf5_k1_mirada1.json'; ahora = (veredicto_k1 == 'COMBINADA_EV_POSITIVO')
+    if mirada == 1 and not os.path.exists(p):
+        try:
+            with open(p, 'x') as f: json.dump(dict(k1_rechazada=bool(ahora), veredicto_K1=veredicto_k1, dias=list(dias), sello=NI.sello()), f, indent=1)
+        except FileExistsError: pass
+    try: previo = bool(json.load(open(p)).get('k1_rechazada'))
+    except Exception: previo = False
+    return previo or ahora
+
+def replicas_faltan(dias, estado=None):
+    """ADENDA_RF5_NULO_INCREMENTAL sec.5 + enmienda v3.1: {familia: {dia: n_faltan}} de las replicas que faltan, SOLO de las familias que bloquean (K, K6; A no). K usa los dias de la mirada; K6 usa los de SU mirada (`mirada_k6`, C3; sin `estado` usa `dias`). Un sello o K_max distinto (ValueError) cuenta como bloqueo con el mensaje."""
+    import rf5_nulo_inc as NI
+    f = {}
+    for fam in BLOQUEAN_MIRADA:
+        dd = list(dias)
+        if fam == 'K6' and estado is not None: dd = NI.mirada_k6(estado)['dias']
+        if not dd: continue
+        try: mis = NI.lee_replicas(fam, dd, FR.k_max(fam))[1]
+        except ValueError as ex: mis = {'SELLO_O_KMAX_DISTINTO': str(ex)[:160]}
+        if mis: f[fam] = mis
+    return f
 
 def resumen(out, estado, c=None, min_dias=None, replicas=None):
     """min_dias se ignora (compatibilidad): la regla de mirada la fija rf5_fronteras.decide_mirada (adenda interina sec.2)."""
@@ -253,7 +276,7 @@ def resumen(out, estado, c=None, min_dias=None, replicas=None):
     res = dict(measurement_id='RF5E-COMB-23NOV-v1', codigo='v3', dias_validos=dv_all, n_dias_validos=len(dv_all), mirada_decision=dec, min_dias_mirada1=FR.MIRADA1_DIAS, estado_por_dia={d: m.get('status') for d, m in estado.items()})
     if not dv_all: res['modo'] = 'SOLO_CONTEOS (0 dias validos)'; return res
     if dec['mirada'] > 0:                                    # si falta alguna replica del nulo de algun dia, la mirada ESPERA (no se baja K_max ni se mira con menos replicas): ni siquiera se abren los pkl
-        falt = (replicas or replicas_faltan)(dec['dias'])
+        falt = replicas(dec['dias']) if replicas else replicas_faltan(dec['dias'], estado)
         if falt: res['modo'] = f"ESPERA_NULO_INCREMENTAL ({dec['nombre']}: faltan replicas {falt}; sin EV, sin PnL)"; res['replicas_faltan'] = falt; return res
     dv = dec['dias'] or dv_all[:FR.MIRADA1_DIAS]
     reg = []; R, F = carga(out, dv, registro=reg); res['precintados_u_omitidos'] = reg
@@ -271,8 +294,11 @@ def resumen(out, estado, c=None, min_dias=None, replicas=None):
     res['familia_A_global'] = dict(T_max_obs=A['T_max_obs'], p_max=A['p_max_global'], umbral_p=FR.umbral_p('A', m), primario='F3'); res['fuga_f5'] = fu; res['familia_K'] = kf = familia_K(R, m)
     if nuK is not None: kf['p_max_K'] = float(nuK['p_max']); kf['nulo_K'] = 'RESIMULADO (Besag-Clifford h=20)'; kf['umbral_p_K1_K4'] = FR.umbral_p('K1_K4', m)
     res['veredictos_K'] = {k: veredicto_K(k, None, kf, Kw, (sh['K'][k] if sh else None), m)[0] for k in ('K1', 'K2', 'K3', 'K4')}
-    k1_ok = res['veredictos_K'].get('K1') == 'COMBINADA_EV_POSITIVO'; alfa6 = 0.05 if k1_ok else 0.01; nu6 = lee_nulo(out, 'K6', dv, m)
-    res['K6'] = dict(umbral_p=FR.umbral_p('K6', m, alfa6), alfa=alfa6, K_max=FR.k_max('K6'), nulo=('PENDIENTE: rf5_nulo_inc.py corre K6 (replicas incrementales completas de los dias de la mirada)' if nu6 is None else dict(p_max=float(nu6['p_max']), n_perm=nu6['n_perm'], K_max=nu6.get('K_max'))),
+    import rf5_nulo_inc as NI
+    k1_ok = k1_rechazada_persistente(out, m, dv, res['veredictos_K'].get('K1')); alfa6 = 0.05 if k1_ok else 0.01; d6 = NI.mirada_k6(estado); m6 = d6['mirada']; res['K6_mirada'] = dict(mirada=m6, nombre=d6['nombre'], dias_k6=d6['dias'], motivo=d6['motivo'], k1_rechazada_bretz=k1_ok)
+    if m6 == 0: res['K6'] = dict(estado=f"SIN_MIRADA_K6 ({d6['nombre']}: {d6['motivo']})"); return res
+    nu6 = lee_nulo(out, 'K6', d6['dias'], m6); m = m6
+    res['K6'] = dict(umbral_p=FR.umbral_p('K6', m, alfa6), alfa=alfa6, K_max=FR.k_max('K6'), dias_k6=d6['dias'], nulo=('PENDIENTE: rf5_nulo_inc.py corre K6 (replicas incrementales completas de los dias de la mirada)' if nu6 is None else dict(p_max=float(nu6['p_max']), n_perm=nu6['n_perm'], K_max=nu6.get('K_max'))),
                      cumple_p=(None if nu6 is None else bool(float(nu6['p_max']) <= FR.umbral_p('K6', m, alfa6))), gate='el resto del gate de K6 (EV, Delta pareado, L111/147, LOO, sin 2 mejores dias) lo evalua rf5_k6.gate_k6 sobre rf5K6_*.pkl con este p y rf5_fronteras.umbral_p (misma fuente)')
     return res
 

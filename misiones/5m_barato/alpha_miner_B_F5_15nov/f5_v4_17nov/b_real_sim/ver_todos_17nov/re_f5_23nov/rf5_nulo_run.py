@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """rf5_nulo_run.py -- NULO POR RE-SIMULACION de RF5E-COMB (ESPEC E4; firma chief 23-Nov: Besag-Clifford secuencial h=20, p = h/L si para; si no (1+#)/(K+1), K<=1000). Estadistico (declarado): T_k = media/ee por DIAS de Delta_k,d = (PnL_k,d - PnL_base,d)/Coste_base,d (unidades de primer relleno, bloq 0, LO),
 max-statistic sobre la familia (A: F1,F2,F3,U13; K: K1..K4). Cada permutacion j re-simula la politica con el veto F5 EXPLICITO por lados calculado con los F5_0 PERMUTADOS (el PAR Up/Down viaja junto, dentro de dia x moneda, RNG (semilla 20261124, dia, j)) y, en la familia K, con las series Binance
-(V5/V6) desplazadas circularmente delta_perm(dia, j) >= 60 s. Motor rapido (rf5_rapido) construido UNA vez por dia y bloque de permutaciones; checkpoint durable JSONL (out/nulo_FAM_ckpt.jsonl, un dia x j por linea). 0 ordenes, 0 red.
+(V5/V6): los TIEMPOS de los eventos (calculados sobre la serie original) desplazados circularmente delta_perm(dia, j) >= 60 s dentro del dia (C1, rf5_nulo.desplaza_eventos). Motor rapido (rf5_rapido) construido UNA vez por dia y bloque de permutaciones; checkpoint durable JSONL (out/nulo_FAM_ckpt.jsonl, un dia x j por linea). 0 ordenes, 0 red.
 MOTIVO DE LA SIMULACION COMPLETA (adenda interina 24-Nov sec.1; acople real medido en 17-Nov, out_rf5_ciego/acople_real_2026-11-17.json): b_policy_sim ACOPLA los mercados de un dia por el estado global busy/MAXV (ordenes vivas simultaneas), asi que el resultado de un mercado
-depende de las decisiones en los demas y la composicion exacta por tablas (replicas base/VETO_UP/VETO_DN, rf5_nulo.nulo_replicas) sale NO_EXACTO. El p de AMBAS familias sale de re-simular el dia completo en cada replica (veto F5 explicito por lados con los F5_0 permutados; en K, ademas series Binance desplazadas).
-K_max: K1-K4 500, A 500, K6 1500 (rf5_fronteras.K_MAX; adenda NULO_INCREMENTAL sec.3), h = 20, semilla 20261124. Prueba de identidad (`identidad DIA FAM`): la replica con el par F5_0 observado y desplazamiento 0 reproduce BIT A BIT la politica directa.
+depende de las decisiones en los demas y la composicion exacta por tablas (replicas base/VETO_UP/VETO_DN, rf5_nulo.nulo_replicas) sale NO_EXACTO. El p de AMBAS familias sale de re-simular el dia completo en cada replica (veto F5 explicito por lados con los F5_0 permutados; en K, ademas los tiempos de los eventos V5/V6 desplazados).
+K_max: K1-K4 250, A 500, K6 1100 (rf5_fronteras.K_MAX; enmienda Javi 24-Nov v3.1), h = 20, semilla 20261124. Prueba de identidad (`identidad DIA FAM`): la replica con el par F5_0 observado y desplazamiento 0 reproduce BIT A BIT la politica directa.
 Uso:  rf5_nulo_run.py ensayo DIA FAM [N]   -> dia NO ciego (<=17-Nov): N permutaciones de un dia, SOLO tiempos y conteos (sin EV/PnL)
       rf5_nulo_run.py corre FAM [--h 20]   -> DELEGA en rf5_nulo_inc (replicas INCREMENTALES por dia; ADENDA_RF5_NULO_INCREMENTAL_24nov): agrega en la mirada; ESCRIBE p_max (solo con RF5_NULO_AUTORIZADO=1)."""
 import sys, os, json, time
@@ -85,10 +85,10 @@ class SimNulo:
                 t[mid] = (float(fu['f5_0']) if fu is not None else a, float(fd['f5_0']) if fd is not None else b)
             T[nombre] = t
         return T, D
-    def replica(self, d, P, W, ctx, nombre, pares, mid_k, coin_de, bsh):
+    def replica(self, d, P, W, ctx, nombre, pares, mid_k, coin_de, bsh, desplaza=None):
         """UNA replica (politica `nombre` del nulo) con el veto explicito por lados de `pares` y las series Binance `bsh` (None en A). Devuelve el DataFrame de ordenes del simulador completo."""
         regla = K5.REGLA_DE_K.get(nombre, nombre[:-4]); vs = NU.veto_set_de_pares(regla, pares, mid_k, coin_de, self.cortes)
-        R, c, HK = RR._replay(d, P, W, ctx, nombre, self.pol_tabla, bsh, self.cortes, self.tp if bsh else None, vs); return R
+        R, c, HK = RR._replay(d, P, W, ctx, nombre, self.pol_tabla, bsh, self.cortes, self.tp if bsh else None, vs, ev_shift=((desplaza[0], desplaza[1], ('v5', 'v6')) if desplaza else None)); return R
     def estado_dia(self, d, pre=None):
         """prepara UNA vez por dia lo que comparten todas las replicas (series Binance, ids, tabla F5_0 por politica); debe llamarse DENTRO de RR.desenlace_con_marcador(). Se puede hacer fork despues (replicas independientes)."""
         E, P, W, ctx, mid_k, coin_de, bsrc, d0 = self._ctx(d, pre); M = self.M_dia[self.M_dia.mid.isin(mid_k)]; T, _ = self.tablas(d, P, W, ctx, mid_k, bsrc)
@@ -96,9 +96,9 @@ class SimNulo:
     def una(self, st, j, delta):
         """UNA permutacion j (desplazamiento delta de las series Binance en K): {pol: Delta_dia}. Determinista por (dia, j)."""
         d = st['d']; asig = NU.permuta_asignacion(st['M'], NU.rng_perm(d, j)); [asig.setdefault(m_, m_) for m_ in st['mid_k']]      # mercados que ninguna replica de F5 intento (fuera de M) conservan su tabla: nunca quedan sin veto
-        bsh = {c: NU.desplaza_circular(tt, pp, st['d0'], delta) for c, (tt, pp) in st['bsrc'].items()} if st['bsrc'] else None; r_j = {}
+        bsh = st['bsrc'] if st['bsrc'] else None; r_j = {}
         for nombre in self.pols_nulo():
-            pares = {a: st['T'][nombre][b] for a, b in asig.items()}; pn, co = unidades_dia(self.replica(d, st['P'], st['W'], st['ctx'], nombre, pares, st['mid_k'], st['coin_de'], bsh)); r_j[nombre[:-4]] = delta_dia(pn, co, *self.base_dia[d])
+            pares = {a: st['T'][nombre][b] for a, b in asig.items()}; pn, co = unidades_dia(self.replica(d, st['P'], st['W'], st['ctx'], nombre, pares, st['mid_k'], st['coin_de'], bsh, (st['d0'], delta) if bsh else None)); r_j[nombre[:-4]] = delta_dia(pn, co, *self.base_dia[d])
         return r_j
     def __call__(self, d, lista, pre=None):
         out = {}
@@ -112,7 +112,7 @@ class SimNulo:
         with RR.desenlace_con_marcador():
             T, D = self.tablas(d, P, W, ctx, mid_k, bsrc)
             for nombre in self.pols_nulo():
-                dire = nombre[:-4]; Rs = self.replica(d, P, W, ctx, nombre, T[nombre], mid_k, coin_de, bsrc)
+                dire = nombre[:-4]; Rs = self.replica(d, P, W, ctx, nombre, T[nombre], mid_k, coin_de, bsrc, (d0, 0) if bsrc else None)      # a) PASA por el desplazamiento de eventos con delta=0
                 ig = bool(igual(Rs, D[dire])); res[dire] = dict(igual=ig, ordenes_directa=int(len(D[dire])), ordenes_set=int(len(Rs)), **({} if ig else dict(difiere=difiere(Rs, D[dire]))))
         return res
     def pols_nulo(self): return list(self.pol_tabla)

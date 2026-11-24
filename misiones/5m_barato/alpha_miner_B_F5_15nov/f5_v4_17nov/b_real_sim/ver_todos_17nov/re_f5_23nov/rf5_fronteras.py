@@ -3,11 +3,11 @@
 Mirada 1 = 6.o dia VALIDO por orden de calendario (entran EXACTAMENTE los 6 primeros validos; t = 6/10 por construccion); final = 10.o dia valido; mas alla del 10.o: prereg nuevo (no hay mirada 20 d). Sin futilidad vinculante.
 Estos parametros NO viven en rf5_cortes.json (sha 4e88fb3c, no se toca): viven aqui (codigo hasheado en HASHES v3). Besag-Clifford (ADENDA_RF5_NULO_INCREMENTAL_24nov sec.3, sustituye a 1500/2000 de la interina): K_max = 500 K1-K4, 500 familia A, 1500 K6 (final 0,00470 exige >= 1064); h = 20; semilla 20261124. Puro: sin IO, sin red, 0 ordenes."""
 import numpy as np
-SEMILLA = 20261124; H_BC = 20; K_MAX = {'K': 500, 'A': 500, 'K6': 1500}
+SEMILLA = 20261124; H_BC = 20; K_MAX = {'K': 250, 'K6': 1100, 'A': 500}      # enmienda Javi 24-Nov (v3.1): resolucion K_max >= 5/umbral comprobada en test_rf5_fronteras
 MIRADA1_DIAS = 6; FINAL_DIAS = 10
 # umbrales nominales UNILATERALES (p <= umbral => cumple), adenda sec.6 D1
-UMBRAL = {1: {'p_max_K1_K4': 0.02834, 'K6_alfa001': 0.00709, 'K6_alfa005': 0.03543, 'p_max_A': 0.03543, 'ic_unil': 0.03543, 'vs_azar': 0.0709},
-          2: {'p_max_K1_K4': 0.02171, 'K6_alfa001': 0.00470, 'K6_alfa005': 0.02792, 'p_max_A': 0.02792, 'ic_unil': 0.02792, 'vs_azar': 0.0617}}      # clave 2 = FINAL (10 dias)
+UMBRAL = {1: {'p_max_K1_K4': 0.02834, 'K6_alfa001': 0.00709, 'K6_alfa005': 0.03543, 'p_max_A': 0.03543, 'ic_unil': 0.03543, 'vs_azar': 0.07085},
+          2: {'p_max_K1_K4': 0.02171, 'K6_alfa001': 0.00470, 'K6_alfa005': 0.02792, 'p_max_A': 0.02792, 'ic_unil': 0.02792, 'vs_azar': 0.06165}}      # clave 2 = FINAL (10 dias)
 T_MULT = {1: 2.288, 2: 2.194}              # t de Student unilateral, gl = n-1 (5 y 9), adenda sec.6 (2,2876 / 2,1945)
 IC_NIVEL = {1: 0.929, 2: 0.944}; DIAS_POS_MIN = {1: 4 / 6, 2: 6 / 10}      # % de dias con Delta>0: >=4/6 en la mirada 1, >=6/10 en la final
 MIRADA_NOMBRE = {1: 'MIRADA_1', 2: 'FINAL'}

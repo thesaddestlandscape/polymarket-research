@@ -20,7 +20,7 @@ import contextlib, rf5_huecos as HU, rf5_rapido as RP
 RU.OUT = OUT
 PREREG_RF5 = HV + 'PREREG_RF5_ENTRADA_23nov.md'; PREREG_RF5_SHA = '16be06b6194f8bbaf9225ba17fda56fe44a6faf5d4a0a790dfcd5340f82fac5e'
 HASHES = HV + 'HASHES_rf5.txt'; FICH_REG = ('rf5_core.py', 'rf5_run.py', 'rf5_eval.py', 'rf5_cortes.json', 'prep_tapes_rf5.sh', 'run_rf5.sh', 'vigia_rf5.py', 'rf5_gates.py', 'cobertura_bruta.py', 'horas_leidas_d1.json', 'rf5_nulo.py', 'rf5_huecos.py', 'rf5_k6.py', 't_proc_cronometro.py', 'rf5_acople_real.py', 'rf5_t_proc_ms.txt',
-            'rf5_rapido.py', 'rf5_rapido_prueba.py', 'calma_gate.py', 'calma_hook.py', 'rf5_k6_dia.py', 'run_k6.sh', 'rf5_nulo_run.py', 'c4_btc.py', 'reconstructor_relleno.py', 'prep_day_btc.py', 'c4_equiv_lowmem.py', 'lanza_pesado.sh', 'btc_backfill.sh', 'rf5_fronteras.py')
+            'rf5_rapido.py', 'rf5_rapido_prueba.py', 'calma_gate.py', 'calma_hook.py', 'rf5_k6_dia.py', 'run_k6.sh', 'rf5_nulo_run.py', 'c4_btc.py', 'reconstructor_relleno.py', 'prep_day_btc.py', 'c4_equiv_lowmem.py', 'lanza_pesado.sh', 'btc_backfill.sh', 'rf5_fronteras.py', 'rf5_nulo_inc.py', 'run_nulo_inc.sh', 'cron_nulo_inc.txt')
 # v3 (adenda interina 24-Nov sec.4 cond.1): TODO lo que el runner importa o lanza FUERA de re_f5_23nov/. 'EXT:' = relativo a /root/polymarket-research/, 'DEV:' = relativo a /root/polymarket-research-dev/ (prep_day.py y su reconstructor: worktree permanente). Se comprueban al arrancar (fail-closed) y entran en el sello de codigo de cada dia.
 BS_ = 'misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/'; L2_ = 'experimentos/5m_barato/l2_carrera_10nov/'
 FICH_EXT = tuple('EXT:' + x for x in (BS_ + 'b_policy_sim.py', BS_ + 'ejecutor_puro.py', BS_ + 'eng_v5.py', BS_ + 'ver_todos_17nov/r1v2_eval/e1_modelo.py', BS_ + 'ver_todos_17nov/r1v2_eval/familia6.py', BS_ + 'ver_todos_17nov/r1v2_eval/fase_b_run.py', BS_ + 'ver_todos_17nov/r1v2_eval/l2_rasgos.py',
@@ -155,10 +155,10 @@ def motor(E, activo):
     import sec7_core as C
     return C.EngineBloqueo(E, activo=activo) if os.environ.get('RF5_LENTO') else RP.EngineBloqueoCache(E, activo=activo)
 
-def _replay(d, P, W, ctx, nombre, tabla, bsrc, cortes, tp, veto_set=None, bsrc_calma=None):
+def _replay(d, P, W, ctx, nombre, tabla, bsrc, cortes, tp, veto_set=None, bsrc_calma=None, ev_shift=None):
     """bsrc_calma (None => = bsrc): fuente Binance de Calma SOLA; solo el placebo de K6 del nulo la usa (series desplazadas), el resto de llamadas no cambia."""
     import replay_variantes as RV
-    W.fills.clear(); HK = K5.construye_hook(nombre, tabla, W._serie, bsrc, cortes, tp, lambda: W.fills, veto_set, bsrc_calma=bsrc_calma)
+    W.fills.clear(); HK = K5.construye_hook(nombre, tabla, W._serie, bsrc, cortes, tp, lambda: W.fills, veto_set, bsrc_calma=bsrc_calma, ev_shift=ev_shift)
     R, cov = RP.run_day(d, P, E=W, HK=HK)                    # simulador rapido (identico bit a bit a RV.run_day; RF5_LENTO=1 => lento)
     if len(R):
         import puerta0_core as P0

@@ -40,9 +40,9 @@ res['segundos_replica'] = t; res['unres'] = len(unres)
 import calendar
 bsrc = RR.FB.carga_binance(d)
 if bsrc:
-    d0 = calendar.timegm(time.strptime(d, '%Y-%m-%d')) * 1000; bsh = {c_: NU.desplaza_circular(tt, pp, d0, NU.delta_perm(d, 1)) for c_, (tt, pp) in bsrc.items()}; tk = {}
+    d0 = calendar.timegm(time.strptime(d, '%Y-%m-%d')) * 1000; bsh = bsrc; evs = (d0, NU.delta_perm(d, 1), ('v5', 'v6')); tk = {}
     W = Wg; ctx = dict(W=W, serie=W._serie)
     for n in ('K1', 'K2', 'K3', 'K4'):
-        t0 = time.time(); R, cov, HK = RR._replay(d, P, W, ctx, n, K5.POLITICAS_K, bsh, cortes, 1.0, None); tk[n] = round(time.time() - t0, 1)
+        t0 = time.time(); R, cov, HK = RR._replay(d, P, W, ctx, n, K5.POLITICAS_K, bsh, cortes, 1.0, None, ev_shift=evs); tk[n] = round(time.time() - t0, 1)
     res['segundos_permutacion_K_1dia_K1a4'] = tk; res['segundos_permutacion_total'] = round(sum(tk.values()), 1)
 json.dump(res, open(HV + f'out_rf5_ciego/acople_real_{d}.json', 'w'), indent=1, default=str); print(json.dumps(res, default=str)[:2500])

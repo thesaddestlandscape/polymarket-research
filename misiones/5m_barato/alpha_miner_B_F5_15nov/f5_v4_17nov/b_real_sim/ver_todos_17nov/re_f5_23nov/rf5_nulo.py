@@ -4,7 +4,7 @@ Familia A (F1,F2,F3,U13): por dia hay replicas base / VETO_UP (veto a todas las 
  (F,F)=base, (T,F)=VETO_UP, (F,T)=VETO_DN, (T,T)=sin entrada (0). Nulo: permutar el PAR (F5_0^Up, F5_0^Down) entre mercados dentro de dia x moneda; p = (1+#{T* >= T})/(K+1) (no .mean()), K<=1000 con parada secuencial de Besag-Clifford h=20 (p = h/L si para antes; firma chief 23-Nov), semilla 20261124.
 F5_0 de un lado que la base no intenta sale de la replica donde el OTRO lado esta vetado (ahi si se intenta). `verifica_composicion` compara la composicion con la replica DIRECTA (F1/F2/F3/U13): si difiere (acople real, p.ej. MAXV/busy) el nulo se marca NO_EXACTO y NO es confirmatorio.
 VIGENCIA (adenda interina 24-Nov, acople real medido en 17-Nov: b_policy_sim acopla los mercados por el estado global busy/MAXV): el p CONFIRMATORIO de AMBAS familias sale de la SIMULACION COMPLETA por replica (rf5_nulo_run.py corre A|K; `nulo_K_run` + SimNulo), con K_max 2000 (A) / 1500 (K), h = 20, semilla 20261124 (rf5_fronteras). `nulo_replicas` (composicion por tablas) queda como DIAGNOSTICO y con acople real sale NO_EXACTO.
-Familia K: `nulo_K_run` re-simula con series Binance desplazadas circularmente (>=60 s) ; checkpoint durable por (dia, permutacion); Besag-Clifford h=20. Puro (sin IO) salvo checkpoint. 0 ordenes, 0 red."""
+Familia K: `nulo_K_run` re-simula con los TIEMPOS de los eventos de Binance (calculados sobre la serie original) desplazados circularmente (>=60 s, dentro del dia); checkpoint durable por (dia, permutacion); Besag-Clifford h=20. Puro (sin IO) salvo checkpoint. 0 ordenes, 0 red."""
 import os, sys, json, time
 import numpy as np, pandas as pd
 HV = os.path.dirname(os.path.abspath(__file__)) + '/'; sys.path.insert(0, HV)
@@ -75,9 +75,20 @@ def nulo_replicas(R, F, c, K=1000, seed=SEMILLA, h=20):
     return dict(T_obs=Tobs, T_max_obs=Tmax_obs, K=K, n_perm=n_perm, h=h, exceden=cnt, p_max=besag_clifford(cnt, n_perm, K, h), semilla=seed, composicion=comp, exacto=comp['exacto'], estado=('EXACTO' if comp['exacto'] else 'NO_EXACTO_ACOPLE (no confirmatorio)'))
 
 # ------------------------------------------------------------------ familia K: desplazamiento circular + re-simulacion
-def desplaza_circular(t, p, day_start_ms, delta_ms, dia_ms=86400000):
-    """desplaza los instantes circularmente dentro del dia (t' = day_start + (t - day_start + delta) mod dia), reordena por tiempo y devuelve (t', p'). delta >= 60 s. El punto de corte crea a lo sumo 1 retorno artificial (declarado)."""
-    t = np.asarray(t, np.int64); p = np.asarray(p, float); t2 = day_start_ms + (t - day_start_ms + int(delta_ms)) % dia_ms; o = np.argsort(t2, kind='stable'); return t2[o], p[o]
+# C1 (validador, 24-Nov; DECISION DEL CHIEF): los EVENTOS (saltos de Calma y disparos adversos de V5/V6) se calculan UNA vez sobre la serie ORIGINAL (los hooks los calculan en su __init__ con la serie observada) y SOLO sus TIEMPOS se
+# desplazan circularmente dentro del dia [d0, d0+24h). Asi no se fabrica ningun salto (nada se recalcula sobre una serie rotada, tampoco en la costura). UNA sola funcion compartida (SimK6.una y SimNulo.una, via rf5_core.construye_hook(ev_shift=...)).
+# BORDES DECLARADOS: (1) los eventos previos al dia [d0-3h, d0) se quedan en su sitio (son reales; solo afectan al no-armar/cancelar de los primeros segundos de los mercados que abren antes de d0); (2) en la costura de la rotacion (en d0 y en
+# d0+delta) dos eventos vecinos pueden quedar a <refractario (1 s) o unirse un evento rotado con uno previo al dia: NO se crea ningun evento (el NUMERO de eventos de la replica == el observado, exacto); (3) delta en [60 s, 24h-60 s].
+def desplaza_eventos(J, d0_ms, delta_ms, dia_ms=86400000):
+    """J = {coin: {'up': t_ordenado, 'dn': t_ordenado}} -> J' con los eventos de [d0, d0+dia) rotados t' = d0 + (t-d0+delta) mod dia (reordenados); los de fuera del dia, intactos. delta=0 => identidad exacta."""
+    out = {}
+    for c, v in J.items():
+        o = {}
+        for k in ('up', 'dn'):
+            t = np.asarray(v[k], np.int64); en = (t >= d0_ms) & (t < d0_ms + dia_ms)
+            r = np.concatenate([t[~en], d0_ms + (t[en] - d0_ms + int(delta_ms)) % dia_ms]); r.sort(kind='stable'); o[k] = r
+        out[c] = o
+    return out
 
 def delta_perm(dia, j, seed=SEMILLA, minimo_ms=60000, dia_ms=86400000):
     """desplazamiento determinista por (dia, permutacion): reproducible y reanudable. delta in [60 s, dia-60 s]."""

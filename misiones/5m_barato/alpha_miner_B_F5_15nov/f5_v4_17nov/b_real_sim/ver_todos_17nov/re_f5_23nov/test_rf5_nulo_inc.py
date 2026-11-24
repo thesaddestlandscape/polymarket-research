@@ -17,9 +17,9 @@ def fake(d, j, sesgo=0.0):
 def inc(tmp_path, monkeypatch):
     monkeypatch.setattr(RR, 'OUT', str(tmp_path) + '/'); os.makedirs(NI.dir_inc(), exist_ok=True); return tmp_path
 
-def escribe(fam, d, js):
+def escribe(fam, d, js, kmax):
     with open(NI.ruta(fam, d), 'a') as f:
-        for j in js: f.write(json.dumps(dict(dia=d, j=j, d=fake(d, j))) + '\n')
+        for j in js: f.write(json.dumps(dict(dia=d, j=j, d=fake(d, j), sello=NI.sello(), K_max=kmax)) + '\n')
 
 def test_incremental_igual_a_bloque_bit_a_bit_con_orden_y_reanudacion_distintos(inc):
     K = 80; Tobs = 1.3
@@ -28,7 +28,7 @@ def test_incremental_igual_a_bloque_bit_a_bit_con_orden_y_reanudacion_distintos(
     def sim_bloque(d, lista): calc.extend(lista); return {j: fake(d, j) for j, _ in lista}
     b = NU.nulo_K_run(DIAS, Tobs, None, ck, K=K, h=1000, sim_bloque=sim_bloque, bloque=25)         # h grande: recorre toda la secuencia
     # incremental: dias en otro orden, tamaños de bloque distintos, una interrupcion y reanudacion, lineas duplicadas y una truncada
-    escribe('K', DIAS[2], range(0, 30)); escribe('K', DIAS[0], range(K)); escribe('K', DIAS[2], range(20, K)); escribe('K', DIAS[1], range(K))
+    escribe('K', DIAS[2], range(0, 30), K); escribe('K', DIAS[0], range(K), K); escribe('K', DIAS[2], range(20, K), K); escribe('K', DIAS[1], range(K), K)
     with open(NI.ruta('K', DIAS[1]), 'a') as f: f.write('{"dia": "2026-12-02", "j": 7, "d": {"K1"')                       # linea truncada (corte de luz)
     hechos, faltan = NI.lee_replicas('K', DIAS, K); assert faltan == {} and len(hechos) == K * len(DIAS)
     assert all(hechos[(d, j)] == fake(d, j) for d in DIAS for j in range(K))                                               # las replicas son IDENTICAS a las del bloque
@@ -38,18 +38,18 @@ def test_incremental_igual_a_bloque_bit_a_bit_con_orden_y_reanudacion_distintos(
         assert (ii['p_max'], ii['exceden'], ii['n_perm'], ii['parada']) == (bb['p_max'], bb['exceden'], bb['n_perm'], bb['parada'])
 
 def test_replicas_de_mas_no_cambian_el_p(inc):
-    K = 50; escribe('K', DIAS[0], range(120)); escribe('K', DIAS[1], range(120)); escribe('K', DIAS[2], range(120))
+    K = 50; escribe('K', DIAS[0], range(K), K); escribe('K', DIAS[1], range(K), K); escribe('K', DIAS[2], range(K), K)
     a = NI.agrega_replicas('K', DIAS, 0.4, K, h=1000); h50, f = NI.lee_replicas('K', DIAS, K); assert f == {} and len(h50) == 3 * K     # solo j < K_max entran
     b = NU.nulo_K_run(DIAS, 0.4, None, str(inc / 'x.jsonl'), K=K, h=1000, sim_bloque=lambda d, l: {j: fake(d, j) for j, _ in l}, bloque=K); assert a['p_max'] == b['p_max']
 
 def test_si_falta_una_replica_la_mirada_espera(inc):
-    K = 40; escribe('K', DIAS[0], range(K)); escribe('K', DIAS[1], range(K)); escribe('K', DIAS[2], [j for j in range(K) if j != 17])
+    K = 40; escribe('K', DIAS[0], range(K), K); escribe('K', DIAS[1], range(K), K); escribe('K', DIAS[2], [j for j in range(K) if j != 17], K)
     h, f = NI.lee_replicas('K', DIAS, K); assert h is None and f == {DIAS[2]: 1}
     r = NI.agrega_replicas('K', DIAS, 1.0, K); assert r['estado'] == 'ESPERA_REPLICAS' and r['faltan'] == {DIAS[2]: 1} and 'p_max' not in r
-    escribe('K', DIAS[2], [17]); assert 'p_max' in NI.agrega_replicas('K', DIAS, 1.0, K)
+    escribe('K', DIAS[2], [17], K); assert 'p_max' in NI.agrega_replicas('K', DIAS, 1.0, K)
 
 def test_k_max_por_familia_y_resolucion_5_sobre_umbral():
-    assert FR.K_MAX == {'K': 500, 'A': 500, 'K6': 1500}
+    assert FR.K_MAX == {'K': 250, 'K6': 1100, 'A': 500}
     for m in (1, 2):
         assert FR.resolucion_ok('K1_K4', m) and FR.resolucion_ok('A', m) and FR.resolucion_ok('K6', m, 0.01) and FR.resolucion_ok('K6', m, 0.05)
     assert 5 / FR.UMBRAL[2]['p_max_K1_K4'] < 500 and 5 / FR.UMBRAL[2]['p_max_A'] < 500 and 1063 < 5 / FR.UMBRAL[2]['K6_alfa001'] < 1064 <= 1500 and not FR.resolucion_ok('K6', 2, 0.01, k=1000)
@@ -70,10 +70,10 @@ def test_corre_exige_autorizacion_y_el_estado_solo_tiene_conteos(inc, monkeypatc
     with pytest.raises(SystemExit) as e: NI.main_corre(['K'])
     assert 'BLOQUEADO' in str(e.value)
     NI.escribe_estado('K', DIAS[0], 12, 500, 'PARCIAL'); e = json.load(open(NI.ruta_estado()))
-    assert set(e['K'][DIAS[0]]) == {'n', 'K_max', 'estado', 't'} and e['K'][DIAS[0]]['n'] == 12
+    assert set(e['K'][DIAS[0]]) == {'n', 'K_max', 'estado', 'sello', 't'} and e['K'][DIAS[0]]['n'] == 12
 
 def test_agrega_sin_dias_de_mas_ni_de_menos_y_replicas_precintadas_en_su_dir(inc):
-    escribe('K', DIAS[0], range(10)); assert NI.ruta('K', DIAS[0]).startswith(NI.dir_inc()) and NI.dir_inc().endswith('nulo_inc/')
+    escribe('K', DIAS[0], range(10), 10); assert NI.ruta('K', DIAS[0]).startswith(NI.dir_inc()) and NI.dir_inc().endswith('nulo_inc/')
     assert NI.lee_replicas('K', [DIAS[0], DIAS[1]], 10)[0] is None                              # un dia sin ninguna replica: espera
 
 def test_vigia_avisos_del_nulo_incremental():
