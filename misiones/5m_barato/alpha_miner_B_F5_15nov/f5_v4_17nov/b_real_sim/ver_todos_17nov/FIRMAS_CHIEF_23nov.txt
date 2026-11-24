@@ -38,3 +38,24 @@ Reeval CXB60: 19-22 Nov INCOMPLETE (passT_v4 lee libro5_tx como fallback; cob 19
 ## Firma chief 2026-11-23T20:49Z: ESPEC_HOOK_CALMA_V4
 1b8f18930cc136d162af49c0127504b771c2a19c74baac73b0f46d941138d173  ESPEC_HOOK_CALMA_V4_23nov.md
 Decisión tq=t−300 FIRMADA (convención del motor vigente passT_v4, igual que V5/V6; regla «motor vigente en todo»); sensibilidad tq=t obligatoria y publicada.
+
+## Firma chief 2026-11-24T06:50Z (Javi 24-Nov OK): tabla suelo sucesora 18-23
+742ccfea90f29c1e541f7e336a323372a7a30dbf8c0e8ad7ffdd9839f5795a3a  re_f5_23nov/suelo_sucesora/tabla_suelo_sucesora_18_23nov.csv
+Auditoría agente de datos 24-Nov GREEN (reloj rx−ex, clase por ventana medida, 18-22 reproduce b72d49fa, 10.368 filas).
+Salvedades: (1) 23-Nov INCOMPLETE por pausa libro5/libro5_tx (00-13Z); la tabla NO sustituye bad_D. (2) Clase hi sin datos en días ciegos (todo lo): sensibilidad hi declarada sin datos.
+rf5_cortes.json rehasheado: 4e88fb3c8da7c46726baf7a56fc995e17c22ba7ec559f9663a9384d1bcdcc67b (solo esa línea de HASHES_rf5.txt; el resto de FAILED = ediciones ronda 2 del engineer sin rehash, a cerrar en su checklist).
+
+## Firma chief 2026-11-24T07:35Z (Javi 24-Nov OK, decisiones D1-D4 en §6): ADENDA_RF5_INTERINA_24nov
+18d06c15f1b38ee5a2f190bdffa89ee51dad6a32f2c9f1a0e68bd73d85e7fbef  ADENDA_RF5_INTERINA_24nov.md
+Pocock-LD (t=0,6/1,0); K6 también en mirada 1; BC K_max 1500 (K) / 2000 (A); C1 estricta (24-Nov previsible INCOMPLETE); plazo operativo 7-Dic sin relajar umbrales; micro-real 25 € / stake 5 €.
+
+## Decisión Javi 2026-11-24 ~09:50Z (registrada por el chief)
+B opera (micro-real, si hay rechazo en RF5) con la política K ganadora (F5 ± Calma). E1b S1 corre como CAPA EN SOMBRA con prereg y gate propios (días posteriores a su firma) y se incorpora solo al pasarlo. Matiza el mandato del 19-Nov. Subvariante BTC sigue DATA_BLOCKED en paralelo (entra cuando pase C4 y sus días).
+
+## Firma chief 2026-11-24 (Javi OK): NULO_INCREMENTAL + ENMIENDA_KMAX + estadístico K6 + HASHES v3.2 — firmado 2026-11-24T14:03Z con autorización explícita de Javi, tras ident K/K6 y equiv K/K6 verdes con sello a5161ce9a7df8294
+ADENDA_RF5_NULO_INCREMENTAL_24nov.md  99b0cf26a84d7b625612ebf7e3e69ee639d6479b64343aed89603792a7820f88
+ENMIENDA_RF5_NULO_KMAX_24nov.md       6a3b3154d43c98db5f957d9aa5af79c58016a764cb9aadb07a428ceaf2f8fcc3
+K_max: K1-K4 250, K6 1100, A 500 (A no bloquea la mirada K; si se calcula tarde con 10 días válidos, rige su mirada final). Validador: α válido, resolución ≥5/umbral.
+Estadístico K6 (fijado): Δ_d = (PnL_K6 − PnL_K1)/Coste_base por día de rf5_k6.dias_k6; T = media/ee por días; unilateral; p de Besag-Clifford (h=20, K_max 1100); réplica = rotación circular de los TIEMPOS de los eventos de Calma calculados sobre la serie original, δ uniforme en [60 s, 24h−60 s] (rf5_nulo.desplaza_eventos). Un rechazo significa «Calma alineada > Calma desplazada, incluida la estacionalidad horaria». Mirada K6 = 6.º/10.º día válido de K6. Bretz: si K1 se rechaza (cerrojo rf5_k1_mirada1.json escrito solo con nuK y K1 no PENDIENTE), K6 a α 0,05.
+Bordes de desplaza_eventos: los eventos en [d0−3h, d0) no se mueven (condicional, conservador; solo cuesta potencia). La costura no crea ni pierde eventos.
+HASHES_rf5.txt v3.2: 6fd0960012971c9aa5d0591538daae77820df7362532778cff73dd17026e81c3 (sello a5161ce9a7df8294). Antes de procesar días ≥24-Nov se reprocesan 18-22 con este código; las salidas v2 y v3 se conservan.
