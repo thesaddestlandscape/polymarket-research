@@ -1,11 +1,11 @@
 #!/bin/bash
-# forward_cron.sh -- cron diario del forward pasivo A1/F5 (mitigar_as_25oct). SOLO LECTURA, sin dinero real. Nunca 06-09Z; solo con load5<8 (04-Nov: era 4 y no corrió NUNCA en 9 días con nproc=8) (si no, reintenta mañana: idempotente).
+# forward_cron.sh -- cron diario del forward pasivo A1/F5 (mitigar_as_25oct). SOLO LECTURA, sin dinero real. Nunca 06-09Z; solo con load5<3*nproc (24-Nov: regla CLAUDE.md, RAM ya la guarda cron_pesado; antes 8 bloqueó el reintento del 23-Nov; 04-Nov: era 4 y no corrió NUNCA en 9 días con nproc=8) (si no, reintenta mañana: idempotente).
 # Procesa los dias nuevos >=24-Oct elegibles (fichero m5_registro_D cerrado) y regenera forward_diario.csv + RESUMEN.md. Log: datalogs/mitigar_as_25oct/forward/cron.log
 cd "$(dirname "$0")" || exit 1
 LOG=/root/polymarket-research-datalogs/mitigar_as_25oct/forward/cron.log; mkdir -p "$(dirname "$LOG")"
 H=$(date -u +%H)
 if [ "$H" -ge 6 ] && [ "$H" -lt 9 ]; then echo "=== $(date -u +%FT%TZ) fuera de horario (06-09Z): no se lanza" >> "$LOG"; exit 0; fi
-if ! python3 -c "import os,sys; sys.exit(0 if os.getloadavg()[1]<8 else 1)"; then echo "=== $(date -u +%FT%TZ) load5>=8: no se lanza ($(cut -d' ' -f1-3 /proc/loadavg))" >> "$LOG"; exit 0; fi
+if ! python3 -c "import os,sys; sys.exit(0 if os.getloadavg()[1]<3*os.cpu_count() else 1)"; then echo "=== $(date -u +%FT%TZ) load5>=3*nproc: no se lanza ($(cut -d' ' -f1-3 /proc/loadavg))" >> "$LOG"; exit 0; fi
 aviso() { /usr/bin/python3 -c "import sys; sys.path.insert(0,'/root/polymarket-research'); from shadow_digest import enviar_telegram as e; e(sys.argv[1])" "$1"; }
 echo "=== $(date -u +%FT%TZ) inicio" >> "$LOG"
 ulimit -v ${ULIMIT_KB:-unlimited}
