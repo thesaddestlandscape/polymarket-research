@@ -1,0 +1,2 @@
+timestamp_utc,slug,market_id,condition_id,activo,ventana_min,end_date,restante_s,strike,strike_src,spot,spot_src,dist_pct,lado_rezagado,best_ask,ask_usd_le2c,ask_usd_le3c,ask_usd_le5c,best_bid,py_yes_evento,outcome_real,rezagado_gano
+2026-11-24T00:04:48+00:00,btc-updown-5m-1795478400,7273542,0xebe2d43ed823d3b0bea3205d1ec65ddd1f584e27b11627a86eae52c08a633bd0,BTC,5,2026-11-24T00:05:00+00:00,11.6,61270.92,kline_open,61209.99,binance_ticker,-0.09944,Up,0.01,1302.79,1343.77,1409.91,,0.175,,
