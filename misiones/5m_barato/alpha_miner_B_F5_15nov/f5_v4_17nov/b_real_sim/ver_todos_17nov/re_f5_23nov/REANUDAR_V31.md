@@ -21,7 +21,7 @@ Todas VERDES, sello de codigo 801394fed66753c1 (= HASHES v3.1 vigente; el codigo
 - CORRECCION de mi informe anterior: equiv K y equiv K6 de las 12:38-12:53Z NO estaban verdes: equiv K murio por OOM del kernel (dmesg, pid 2917678; RAM compartida con el backfill) y equiv K6 fallo con NameError en SimK6.una; `lanza_pesado.sh` devuelve rc=0 aunque el hijo muera => comprobar SIEMPRE el JSON (fecha + campo `sello`) y no el rc. Los JSON que yo lei eran los antiguos (pre-C1, sin sello).
 - Arreglos: (1) k1_rechazada_persistente solo escribe rf5_k1_mirada1.json con nuK no None y veredicto K1 no PENDIENTE* (test que falla sin el arreglo); (2) SimK6.una recupera `pn, co = NR.unidades_dia(R)` (+ test que ejecuta SimK6.una). HASHES re-generado (83 entradas, verifica_registro []). SELLO FINAL = a5161ce9a7df8294.
 - equiv K6 2026-11-17 --K 3 con sello a5161ce9a7df8294: todo_igual=true (nulo_inc_equiv_K6_2026-11-17.json, 13:35Z).
-- equiv K con sello final: ver linea siguiente (lanzado 13:35Z, cola v32_cola.log). EQUIV_K_V32_PLACEHOLDER
+- equiv K 2026-11-17 --K 3 con sello a5161ce9a7df8294: todo_igual=true (nulo_inc_equiv_K_2026-11-17.json, 13:49Z; log v32_equivK.log).
 - ident K, ident K6 y equiv A / identidad A se hicieron con el sello 801394fed66753c1 (anterior al arreglo de SimK6.una y de rf5_eval): repetirlos manana con el sello final (no usan SimK6.una salvo equiv K6).
 - NO hecho: (3) fraccion de ordenes/Coste_base con alta < d0 en el manifest diario (cambia rf5_run => nuevo sello => repetir todas las pruebas; no cabia).
 
