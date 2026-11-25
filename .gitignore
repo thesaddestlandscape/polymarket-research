@@ -291,3 +291,7 @@ data/shadow/wallet_edge_score_por_marco.json
 data/shadow/wallets_nuevas_fase0.csv
 data/shadow/zonas_validadas_externas.json
 data/shadow/zonas_validadas_externas_historial.json
+# 25-Nov (3.ª pasada): familias diarias >1 MB/día
+data/shadow/resolution_sniper_obs_*.csv
+data/shadow/polymarket_perps_leaderboard_*.csv
+data/shadow/polymarket_perps_wallet_fills_*.csv
