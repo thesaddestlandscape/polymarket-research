@@ -48,8 +48,11 @@ def main() -> int:
     # try/except de main() ya evitaba el traceback crudo, pero gate_
     # calibracion.json llevaba días sin regenerarse. Mismo patrón de fondo
     # que vigia_gate_bucket_propio.py (fix el mismo día).
+    # 25-Nov: results.csv ya pesa 1,46 GB (4x el de Sep); con 400s llevaba
+    # timeout DIARIO desde el 27-Oct (JSON congelado un mes). 400s->1800s y cron
+    # movido a 10:21Z fuera del racimo 06-09Z, vía cron_pesado (lectura completa).
     r = subprocess.run([sys.executable, str(REPO / "analisis_gate_calibracion.py")],
-                        capture_output=True, text=True, timeout=400, cwd=str(REPO))
+                        capture_output=True, text=True, timeout=1800, cwd=str(REPO))
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_gate_calibracion.py: {r.stderr[-2000:]}")
         return 1
