@@ -212,6 +212,40 @@ def _multioffset_forward() -> tuple[dict, list]:
     return out, lineas
 
 
+def _equilibrio(cerr):
+    """Acierto de equilibrio = precio medio de entrada (apuesta binaria)."""
+    ps = []
+    for r in cerr:
+        try:
+            ps.append(float(r["entry_price"]))
+        except (KeyError, ValueError, TypeError):
+            pass
+    return round(sum(ps) / len(ps), 3) if ps else None
+
+
+def _ev_ic_por_dias(cerr, b=2000):
+    """EV/€ = Σpnl/Σstake e IC90 por bootstrap de DÍAS (unidad independiente)."""
+    import random
+    dias = defaultdict(lambda: [0.0, 0.0])
+    for r in cerr:
+        try:
+            dias[(r.get("timestamp_utc") or "")[:10]][0] += float(r["pnl_neto_eur"])
+            dias[(r.get("timestamp_utc") or "")[:10]][1] += float(r["stake_eur"])
+        except (KeyError, ValueError, TypeError):
+            pass
+    v = [x for x in dias.values() if x[1] > 0]
+    if not v:
+        return None, None, None, 0
+    ev = sum(a for a, _ in v) / sum(c for _, c in v)
+    rng = random.Random(0)
+    bs = []
+    for _ in range(b):
+        m = [rng.choice(v) for _ in v]
+        bs.append(sum(a for a, _ in m) / sum(c for _, c in m))
+    bs.sort()
+    return round(ev, 3), round(bs[int(0.05 * b)], 3), round(bs[int(0.95 * b)], 3), len(v)
+
+
 def main() -> int:
     ahora = datetime.now(timezone.utc)
     informe, lineas, alertas = {}, [], []
@@ -248,14 +282,25 @@ def main() -> int:
             if kill_m is not None:
                 d["kill"] = kill_m
             info["marcos"][marco] = d
-            if esperado.get(marco) and n >= 20 and hit is not None and hit < esperado[marco] - 0.10:
-                alertas.append(f"⚠️ {est} {marco}: acierto real {hit:.0%} (n={n}) vs esperado {esperado[marco]:.0%}")
+            # 25-Nov: el acierto se compara con el EQUILIBRIO (precio medio de entrada),
+            # no con un "esperado" fijo del 85-92 % (ese valía para ask 0,80-0,90; el
+            # live entra a 0,48/0,65 de media y daba una alarma falsa diaria con PnL > 0).
+            eq = _equilibrio(cerr)
+            ev, lo90, hi90, ndias = _ev_ic_por_dias(cerr)
+            d.update({"equilibrio": eq, "ev_eur": ev, "ic90_dias": [lo90, hi90], "dias": ndias})
+            if n >= 20 and hit is not None and eq is not None and hit < eq - 0.10:
+                alertas.append(f"⚠️ {est} {marco}: acierto real {hit:.0%} (n={n}) < equilibrio {eq:.0%} − 10 pp")
+            if ev is not None and ndias >= 10 and hi90 is not None and hi90 < 0:
+                alertas.append(f"🚨 {est} {marco}: EV/€ {ev:+.3f} con IC90 por días < 0 ({ndias} días)")
             if n >= 10 and sum(pnls) / n < 0:
                 alertas.append(f"⚠️ {est} {marco}: PnL medio real {sum(pnls) / n:+.3f} €/tr < 0 (n={n}, acierto {hit:.0%})")
             if n or d["abiertos"]:
                 lineas.append(f"{est.replace('RESOLUTION_SNIPER_', '')} {marco}: n={n} acierto="
-                              f"{'-' if hit is None else f'{hit:.0%}'} pnl={sum(pnls):+.2f}€ "
-                              f"({'-' if not n else f'{sum(pnls)/n:+.3f}'}/tr) abiertos={d['abiertos']}")
+                              f"{'-' if hit is None else f'{hit:.0%}'} (equilibrio "
+                              f"{'-' if eq is None else f'{eq:.0%}'}) pnl={sum(pnls):+.2f}€ "
+                              f"({'-' if not n else f'{sum(pnls)/n:+.3f}'}/tr) EV/€="
+                              f"{'-' if ev is None else f'{ev:+.3f}'} IC90 días="
+                              f"{'-' if lo90 is None else f'[{lo90:+.3f},{hi90:+.3f}]'} ({ndias} d) abiertos={d['abiertos']}")
             # 24-Sep (sustituye a vigia_resolution_sniper_naive_degradacion.py, que medía el
             # naive VIEJO post-cierre): desglose por moneda (CLAUDE.md pt.17), misma alerta.
             por_activo = defaultdict(list)
@@ -268,9 +313,10 @@ def main() -> int:
             for act, ps in sorted(por_activo.items()):
                 h = sum(p > 0 for p in ps) / len(ps)
                 d["por_activo"][act] = {"n": len(ps), "acierto": round(h, 3), "pnl_total": round(sum(ps), 2)}
-                if esperado.get(marco) and len(ps) >= 20 and h < esperado[marco] - 0.10:
+                eq_a = _equilibrio([r for r in cerr if (r.get("subtype") or "?").split("#")[0] == act])
+                if len(ps) >= 20 and eq_a is not None and h < eq_a - 0.10:
                     alertas.append(f"⚠️ {est} {act}#{marco}: acierto real {h:.0%} (n={len(ps)}) "
-                                   f"vs esperado {esperado[marco]:.0%}")
+                                   f"< equilibrio {eq_a:.0%} − 10 pp")
             if por_activo:
                 lineas.append("   " + " | ".join(f"{a} n={v['n']} {v['acierto']:.0%} {v['pnl_total']:+.2f}€"
                                               for a, v in d["por_activo"].items()))
