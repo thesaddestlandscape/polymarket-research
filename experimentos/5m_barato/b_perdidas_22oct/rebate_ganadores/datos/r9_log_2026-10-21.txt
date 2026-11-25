@@ -1,0 +1,15 @@
+filas 16876170 tras dedup trades 16875649
+tokens con eventos 192 16875649 eventos
+945 fills simulados
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/rebate_ganadores/scripts/r9_sim.py", line 111, in <module>
+    Eo=list(events(tok)); fl=sorted(zip((g.ts_est*1000-3000).astype(np.int64),g.pc,g.index)); i=0; bids={}
+  File "/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/rebate_ganadores/scripts/r9_sim.py", line 32, in events
+    yield from _events(tok)
+  File "/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/rebate_ganadores/scripts/r9_sim.py", line 37, in _events
+    ev_.sort(key=lambda e:(e[0],e[1]))
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/rebate_ganadores/scripts/r9_sim.py", line 37, in <lambda>
+    ev_.sort(key=lambda e:(e[0],e[1]))
+                          ^^^^^^^^^^^
+MemoryError

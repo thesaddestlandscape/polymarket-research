@@ -1,0 +1,3 @@
+- [Q11 barrido corregido 05-Nov](project_q11_barrido_corregido_05nov.md) — precursores no anticipan el barrido más allá de T/L/bid-L; colocarse delante pierde; puerta geométrica exploratoria
+- [Trampas al convertir hazard en política](project_trampas_politicas_hazard.md) — cancelación continua = no operar, control OWN-only, claves float32, BLAS/ulimit, carga VPS
+- [Arnés escalera G](reference_harness_escalera_g.md) — passA/passC1-C5 en experimentos/5m_barato/q11/barrido_corr/: G0=dec2 exacto, oráculos, walk-forward, políticas con reposición

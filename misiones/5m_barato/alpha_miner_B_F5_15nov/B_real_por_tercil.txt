@@ -1,0 +1,99 @@
+# B real 20-23 Oct: fills reales on-chain (e02real_fills.json, 215 fills -> 202 unidades mercado-lado; EV pond. total -0.0724; PnL -16.02 EUR; coste 221.30 EUR)
+Maker sin comision ni rebate (rebate teorico 0,2*0,07*q(1-q): +2.41 EUR, +0.011/EUR). Terciles con cortes TRAIN congelados.
+
+## F5 a t_fill-100 ms (primer fill de la unidad)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.178 (n=45) | medio -0.056 (n=88) | alto -0.069 (n=63) | nan +0.391 (n=6)
+G1: EV -0.098 (n=133, 65% del coste) IC90 cierre (-0.357,+0.184) | DeltaEV vs todo -0.025 IC90 (-0.189,+0.130) | sin 2 mejores cierres -0.213
+G2: EV -0.178 (n=45, 22% del coste) IC90 cierre (-0.614,+0.336) | DeltaEV vs todo -0.105 IC90 (-0.524,+0.325) | sin 2 mejores cierres -0.430
+inv: EV -0.069 (n=63, 32% del coste) IC90 cierre (-0.466,+0.346) | DeltaEV vs todo +0.004 IC90 (-0.291,+0.299) | sin 2 mejores cierres -0.299
+   placebo G1 (permutar tercil dentro de dia, 2000): DeltaEV obs -0.025, media placebo -0.026, p=0.504
+   placebo G2 (permutar tercil dentro de dia, 2000): DeltaEV obs -0.105, media placebo -0.043, p=0.576
+   concentracion G1: top-5 cierres de 91 suman +31.66 EUR de -13.95 EUR de pnl retenido; los 5 peores -14.97
+   por dia:
+               n  EV_todo  EV_G1  EV_alto
+dia                                      
+2026-10-20  37.0    0.070  0.213    0.017
+2026-10-21  72.0    0.166  0.119   -0.073
+2026-10-22  77.0   -0.267 -0.265   -0.073
+2026-10-23  16.0   -0.584 -0.527   -1.000
+
+## F5 a t_fill-250 ms (primer fill de la unidad)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.228 (n=62) | medio +0.313 (n=85) | alto -0.516 (n=50) | nan -0.020 (n=5)
+G1: EV +0.080 (n=147, 72% del coste) IC90 cierre (-0.205,+0.373) | DeltaEV vs todo +0.152 IC90 (+0.028,+0.275) | sin 2 mejores cierres -0.041
+G2: EV -0.228 (n=62, 31% del coste) IC90 cierre (-0.561,+0.126) | DeltaEV vs todo -0.155 IC90 (-0.476,+0.155) | sin 2 mejores cierres -0.390
+inv: EV -0.516 (n=50, 25% del coste) IC90 cierre (-0.872,-0.105) | DeltaEV vs todo -0.443 IC90 (-0.767,-0.112) | sin 2 mejores cierres -0.780
+   placebo G1 (permutar tercil dentro de dia, 2000): DeltaEV obs +0.152, media placebo +0.000, p=0.034
+   placebo G2 (permutar tercil dentro de dia, 2000): DeltaEV obs -0.155, media placebo -0.022, p=0.724
+   concentracion G1: top-5 cierres de 98 suman +40.69 EUR de +12.74 EUR de pnl retenido; los 5 peores -15.43
+   por dia:
+               n  EV_todo  EV_G1  EV_alto
+dia                                      
+2026-10-20  37.0    0.070  0.190   -0.053
+2026-10-21  72.0    0.166  0.370   -0.731
+2026-10-22  77.0   -0.267 -0.131   -0.594
+2026-10-23  16.0   -0.584 -0.451   -1.000
+
+## F5 a t_fill-1000 ms (primer fill de la unidad)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.352 (n=76) | medio +0.023 (n=84) | alto +0.415 (n=38) | nan -1.000 (n=4)
+G1: EV -0.159 (n=160, 79% del coste) IC90 cierre (-0.406,+0.099) | DeltaEV vs todo -0.087 IC90 (-0.217,+0.045) | sin 2 mejores cierres -0.259
+G2: EV -0.352 (n=76, 39% del coste) IC90 cierre (-0.636,-0.056) | DeltaEV vs todo -0.280 IC90 (-0.559,-0.017) | sin 2 mejores cierres -0.460
+inv: EV +0.415 (n=38, 18% del coste) IC90 cierre (-0.254,+1.106) | DeltaEV vs todo +0.488 IC90 (-0.092,+1.050) | sin 2 mejores cierres +0.031
+## F5 a t_fill-2000 ms (primer fill de la unidad)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.304 (n=91) | medio +0.216 (n=73) | alto +0.063 (n=34) | nan -1.000 (n=4)
+G1: EV -0.075 (n=164, 81% del coste) IC90 cierre (-0.352,+0.235) | DeltaEV vs todo -0.002 IC90 (-0.127,+0.115) | sin 2 mejores cierres -0.209
+G2: EV -0.304 (n=91, 45% del coste) IC90 cierre (-0.590,-0.012) | DeltaEV vs todo -0.232 IC90 (-0.481,-0.011) | sin 2 mejores cierres -0.436
+inv: EV +0.063 (n=34, 17% del coste) IC90 cierre (-0.490,+0.668) | DeltaEV vs todo +0.135 IC90 (-0.414,+0.724) | sin 2 mejores cierres -0.240
+## F5 a t_fill-5000 ms (primer fill de la unidad)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.337 (n=102) | medio +0.072 (n=69) | alto +0.614 (n=27) | nan -1.000 (n=4)
+G1: EV -0.162 (n=171, 84% del coste) IC90 cierre (-0.378,+0.075) | DeltaEV vs todo -0.090 IC90 (-0.208,+0.026) | sin 2 mejores cierres -0.256
+G2: EV -0.337 (n=102, 48% del coste) IC90 cierre (-0.615,-0.041) | DeltaEV vs todo -0.265 IC90 (-0.505,-0.047) | sin 2 mejores cierres -0.480
+inv: EV +0.614 (n=27, 14% del coste) IC90 cierre (-0.164,+1.528) | DeltaEV vs todo +0.686 IC90 (-0.004,+1.473) | sin 2 mejores cierres +0.113
+# Persistencia del tercil en fills: F5@100 (filas) vs F5@250 (cols)
+ter_250  alto  bajo  medio  nan
+ter_100                        
+alto       35     7     21    0
+bajo        4    32      9    0
+medio      10    23     54    1
+nan         1     0      1    4
+# Persistencia del tercil en fills: F5@100 (filas) vs F5@1000 (cols)
+ter_1000  alto  bajo  medio  nan
+ter_100                         
+alto        28    13     22    0
+bajo         2    25     18    0
+medio        7    38     43    0
+nan          1     0      1    4
+# Persistencia del tercil en fills: F5@100 (filas) vs F5@5000 (cols)
+ter_5000  alto  bajo  medio  nan
+ter_100                         
+alto        19    21     23    0
+bajo         4    31     10    0
+medio        4    48     36    0
+nan          0     2      0    4
+## F5_post (libro en la decision de la orden, ledger) - ordenes rellenadas  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.161 (n=89) | medio -0.084 (n=84) | alto +0.223 (n=29) | nan +nan (n=0)
+G1: EV -0.122 (n=173, 86% del coste) IC90 cierre (-0.356,+0.139) | DeltaEV vs todo -0.050 IC90 (-0.158,+0.054) | sin 2 mejores cierres -0.216
+G2: EV -0.161 (n=89, 43% del coste) IC90 cierre (-0.487,+0.225) | DeltaEV vs todo -0.088 IC90 (-0.358,+0.206) | sin 2 mejores cierres -0.314
+inv: EV +0.223 (n=29, 14% del coste) IC90 cierre (-0.489,+1.050) | DeltaEV vs todo +0.296 IC90 (-0.334,+0.971) | sin 2 mejores cierres -0.292
+
+# Orden-nivel (3.796 ordenes; F5_post = log1p(ask top) en la decision)
+          ordenes  rellenadas    coste      pnl  exposicion  P_fill  EV_pond_relleno  pnl_por_orden  pnl_por_EUR_expuesto
+ter_post                                                                                                                 
+alto          319          29  31.8846   7.1154      374.38  0.0909           0.2232         0.0223                0.0190
+bajo         2203          89  94.6409 -15.2000     2615.92  0.0404          -0.1606        -0.0069               -0.0058
+medio        1274          84  94.7753  -7.9384     1498.78  0.0659          -0.0838        -0.0062               -0.0053
+
+# Por moneda (unidades, F5@250): EV por tercil
+               n     EV   coste
+coin ter                       
+ETH  alto   44.0 -0.450  48.870
+     bajo   10.0  0.499  11.338
+     medio  23.0  0.592  26.375
+     nan     2.0  1.419   2.480
+SOL  alto    5.0 -1.000   5.880
+     bajo   24.0 -0.169  24.257
+     medio  33.0  0.182  37.527
+     nan     2.0 -1.000   2.500
+XRP  alto    1.0 -1.000   0.780
+     bajo   28.0 -0.518  33.211
+     medio  29.0  0.221  26.941
+     nan     1.0 -1.000   1.140

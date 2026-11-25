@@ -1,0 +1,124 @@
+# E2 ADD3: F5 por clase de suelo medida (ADDENDUM1 6fc7dba5 + ADDENDUM3 65ccdbb4) -- CENSURADA, solo sensibilidad, TODO «no validado»
+Dias: 34/35 COMPLETE | no COMPLETE: 2026-10-15[FAILED MemoryError: Unable to allocate 24.9 MiB for an array with shape (6515036,) and ] | estado PARTIAL
+(f) Reproduccion desde crudo (m5_registro re-extraido) frente a las caches ADD1: 34/34 dias identicos print a print
+
+## (a) CONTAMINACION de las celdas decisivas de ADD1 (epoca por calendario) segun la clase CAUSAL medida (esperado R1 -> hi, R2 -> lo); tipo B, todo el 5m
+p35|R1: prints 21034 | clase esperada hi: 93.2 % prints, 94.5 % EUR, 92.4 % mercado-lado | CONTAMINACION (lo): 5.8 % prints, 4.6 % EUR | indet 1.0 %
+p35|R2: prints 31247 | clase esperada lo: 97.9 % prints, 97.5 % EUR, 97.8 % mercado-lado | CONTAMINACION (hi): 0.0 % prints, 0.0 % EUR | indet 2.1 %
+p60|R1: prints 23534 | clase esperada hi: 93.2 % prints, 94.3 % EUR, 92.3 % mercado-lado | CONTAMINACION (lo): 5.8 % prints, 4.7 % EUR | indet 1.0 %
+p60|R2: prints 36347 | clase esperada lo: 97.8 % prints, 97.5 % EUR, 97.8 % mercado-lado | CONTAMINACION (hi): 0.0 % prints, 0.0 % EUR | indet 2.1 %
+Ventanas de 10 min por dia (clase medida) y horas UTC con clase inesperada para su epoca de calendario:
+  2026-10-09: lo 142 hi 0 indet 2 | inesperada 0 ventanas, horas -
+  2026-10-10: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-11: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-12: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-13: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-14: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-17: lo 55 hi 89 indet 0 | inesperada 4 ventanas, horas 08-10,14
+  2026-10-18: lo 0 hi 144 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-19: lo 2 hi 142 indet 0 | inesperada 2 ventanas, horas 16
+  2026-10-20: lo 0 hi 144 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-21: lo 6 hi 138 indet 0 | inesperada 6 ventanas, horas 22-23
+  2026-10-22: lo 1 hi 143 indet 0 | inesperada 1 ventanas, horas 03
+  2026-10-23: lo 67 hi 76 indet 1 | inesperada 67 ventanas, horas 04-06,13-22
+  2026-10-25: lo 0 hi 144 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-26: lo 3 hi 141 indet 0 | inesperada 3 ventanas, horas 03,22
+  2026-10-27: lo 89 hi 54 indet 1 | inesperada 16 ventanas, horas 00-01,06-09
+  2026-10-28: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-29: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-30: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-10-31: lo 142 hi 0 indet 2 | inesperada 0 ventanas, horas -
+  2026-11-01: lo 118 hi 0 indet 26 | inesperada 0 ventanas, horas -
+  2026-11-02: lo 128 hi 0 indet 16 | inesperada 0 ventanas, horas -
+  2026-11-03: lo 137 hi 0 indet 7 | inesperada 0 ventanas, horas -
+  2026-11-04: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-05: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-06: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-07: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-08: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-09: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-10: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-11: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-12: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-13: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+  2026-11-14: lo 144 hi 0 indet 0 | inesperada 0 ventanas, horas -
+
+## (b) CELDAS POR CLASE DE SUELO CAUSAL (35 dias decisivos; segmento = dia x clase; placebo por unidad B=1000, max-stat sobre estas celdas)
+p35|hi: prints 19613 | unidades 9562 (6172 mercado-lado) | 10 dias, 2346 cierres
+   EV pond. EUR: todo +0.046 bajo +0.089 medio +0.018 alto +0.012 | EV por unidad: todo +0.082 bajo +0.141 alto +0.038 | inversion (alto-todo) EUR -0.033
+   gradiente EUR diario +0.084 IC90 dias inf -0.078 dias+ 6/10 sin 2 mejores -0.036 | placebo unidad p celda 0.386 maxstat 0.890 (media +0.048)
+   gradiente unidad diario +0.082 IC90 dias inf +0.003 dias+ 7/10 sin 2 mejores +0.038 | placebo unidad p celda 0.175 maxstat 0.821 (media +0.029)
+p35|lo: prints 51182 | unidades 25967 (16749 mercado-lado) | 31 dias, 6810 cierres
+   EV pond. EUR: todo +0.218 bajo +0.283 medio +0.197 alto +0.149 | EV por unidad: todo +0.047 bajo +0.082 alto -0.017 | inversion (alto-todo) EUR -0.069
+   gradiente EUR diario +0.159 IC90 dias inf -0.059 dias+ 22/31 sin 2 mejores +0.090 | placebo unidad p celda 0.303 maxstat 0.642 (media +0.098)
+   gradiente unidad diario +0.070 IC90 dias inf -0.084 dias+ 23/31 sin 2 mejores +0.021 | placebo unidad p celda 0.370 maxstat 0.886 (media +0.048)
+p60|hi: prints 21941 | unidades 10324 (6461 mercado-lado) | 10 dias, 2367 cierres
+   EV pond. EUR: todo +0.065 bajo +0.114 medio +0.052 alto +0.013 | EV por unidad: todo +0.073 bajo +0.100 alto +0.066 | inversion (alto-todo) EUR -0.051
+   gradiente EUR diario +0.106 IC90 dias inf -0.065 dias+ 6/10 sin 2 mejores +0.020 | placebo unidad p celda 0.286 maxstat 0.821 (media +0.038)
+   gradiente unidad diario +0.040 IC90 dias inf -0.059 dias+ 7/10 sin 2 mejores -0.002 | placebo unidad p celda 0.518 maxstat 0.967 (media +0.043)
+p60|lo: prints 58951 | unidades 28436 (17879 mercado-lado) | 31 dias, 6904 cierres
+   EV pond. EUR: todo +0.211 bajo +0.309 medio +0.203 alto +0.082 | EV por unidad: todo +0.049 bajo +0.080 alto -0.007 | inversion (alto-todo) EUR -0.129
+   gradiente EUR diario +0.309 IC90 dias inf +0.143 dias+ 26/31 sin 2 mejores +0.214 | placebo unidad p celda 0.025 maxstat 0.122 (media +0.071)
+   gradiente unidad diario +0.141 IC90 dias inf +0.054 dias+ 25/31 sin 2 mejores +0.088 | placebo unidad p celda 0.243 maxstat 0.386 (media +0.088)
+
+## (c) CALENDARIO x CLASE CAUSAL (descriptivo; gradiente diario pond. EUR)
+  p35 R0-lo: prints 19381 dias 7 | gradiente EUR diario +0.137 IC90 inf -0.045 dias+ 5/7
+  p35 R0-hi: 0 prints (< 50)
+  p35 R1-lo: prints 1217 dias 7 | gradiente EUR diario -0.231 IC90 inf -1.310 dias+ 4/7
+  p35 R1-hi: prints 19602 dias 10 | gradiente EUR diario +0.083 IC90 inf -0.078 dias+ 6/10
+  p35 R2-lo: prints 30584 dias 19 | gradiente EUR diario +0.252 IC90 inf +0.111 dias+ 14/19
+  p35 R2-hi: 11 prints (< 50)
+  p60 R0-lo: prints 22030 dias 7 | gradiente EUR diario +0.209 IC90 inf +0.037 dias+ 6/7
+  p60 R0-hi: 0 prints (< 50)
+  p60 R1-lo: prints 1370 dias 7 | gradiente EUR diario +0.141 IC90 inf -0.808 dias+ 4/7
+  p60 R1-hi: prints 21924 dias 10 | gradiente EUR diario +0.104 IC90 inf -0.066 dias+ 6/10
+  p60 R2-lo: prints 35551 dias 19 | gradiente EUR diario +0.316 IC90 inf +0.220 dias+ 17/19
+  p60 R2-hi: 17 prints (< 50)
+
+## (d) CELDAS DECISIVAS DE ADD1 EN VENTANAS PURAS (R1 con clase causal hi; R2 con lo); placebo por unidad B=1000, max-stat sobre estas 4; entre corchetes ADD1 (calendario, contaminada)
+p35|R1_puro: prints 19602 | unidades 9553 (6166 mercado-lado) | 10 dias, 2344 cierres
+   EV pond. EUR: todo +0.046 bajo +0.089 medio +0.018 alto +0.012 | EV por unidad: todo +0.082 bajo +0.141 alto +0.038 | inversion (alto-todo) EUR -0.033
+   gradiente EUR diario +0.083 IC90 dias inf -0.078 dias+ 6/10 sin 2 mejores -0.036 | placebo unidad p celda 0.412 maxstat 0.917 (media +0.051)
+   gradiente unidad diario +0.081 IC90 dias inf +0.002 dias+ 7/10 sin 2 mejores +0.037 | placebo unidad p celda 0.159 maxstat 0.816 (media +0.029)
+   [ADD1: gradiente EUR diario +0.061 IC90 inf -0.099 dias+ 5/10 sin 2 mejores -0.056 placebo print maxstat 0.923 -> EXPLORATORIA]
+p35|R2_puro: prints 30584 | unidades 17043 (11346 mercado-lado) | 19 dias, 4833 cierres
+   EV pond. EUR: todo +0.140 bajo +0.229 medio +0.130 alto -0.004 | EV por unidad: todo +0.035 bajo +0.085 alto -0.069 | inversion (alto-todo) EUR -0.144
+   gradiente EUR diario +0.252 IC90 dias inf +0.111 dias+ 14/19 sin 2 mejores +0.194 | placebo unidad p celda 0.061 maxstat 0.140 (media +0.113)
+   gradiente unidad diario +0.154 IC90 dias inf +0.109 dias+ 17/19 sin 2 mejores +0.134 | placebo unidad p celda 0.027 maxstat 0.056 (media +0.080)
+   [ADD1: gradiente EUR diario +0.226 IC90 inf +0.093 dias+ 14/19 sin 2 mejores +0.173 placebo print maxstat 0.072 -> EXPLORATORIA]
+p60|R1_puro: prints 21924 | unidades 10310 (6452 mercado-lado) | 10 dias, 2365 cierres
+   EV pond. EUR: todo +0.065 bajo +0.114 medio +0.052 alto +0.014 | EV por unidad: todo +0.074 bajo +0.101 alto +0.067 | inversion (alto-todo) EUR -0.051
+   gradiente EUR diario +0.104 IC90 dias inf -0.066 dias+ 6/10 sin 2 mejores +0.017 | placebo unidad p celda 0.283 maxstat 0.857 (media +0.033)
+   gradiente unidad diario +0.041 IC90 dias inf -0.059 dias+ 7/10 sin 2 mejores -0.002 | placebo unidad p celda 0.523 maxstat 0.995 (media +0.040)
+   [ADD1: gradiente EUR diario +0.081 IC90 inf -0.092 dias+ 5/10 sin 2 mejores -0.013 placebo print maxstat 0.872 -> EXPLORATORIA]
+p60|R2_puro: prints 35551 | unidades 18819 (12204 mercado-lado) | 19 dias, 4921 cierres
+   EV pond. EUR: todo +0.130 bajo +0.234 medio +0.127 alto -0.065 | EV por unidad: todo +0.035 bajo +0.083 alto -0.057 | inversion (alto-todo) EUR -0.195
+   gradiente EUR diario +0.316 IC90 dias inf +0.220 dias+ 17/19 sin 2 mejores +0.275 | placebo unidad p celda 0.001 maxstat 0.035 (media +0.067)
+   gradiente unidad diario +0.145 IC90 dias inf +0.097 dias+ 17/19 sin 2 mejores +0.125 | placebo unidad p celda 0.018 maxstat 0.090 (media +0.073)
+   [ADD1: gradiente EUR diario +0.301 IC90 inf +0.206 dias+ 17/19 sin 2 mejores +0.261 placebo print maxstat 0.001 -> VALIDADA (gradiente poblacional censurado; NO EV de regla)]
+
+## (e) CLASE CONCURRENTE (definicion ADD2; descriptivo, sin placebo)
+p35|hi_concurrente: prints 19825 | unidades 9641 (6211 mercado-lado) | 10 dias, 2361 cierres
+   EV pond. EUR: todo +0.035 bajo +0.071 medio +0.011 alto +0.009 | EV por unidad: todo +0.078 bajo +0.133 alto +0.036 | inversion (alto-todo) EUR -0.026
+   gradiente EUR diario +0.064 IC90 dias inf -0.097 dias+ 6/10 sin 2 mejores -0.051
+   gradiente unidad diario +0.065 IC90 dias inf -0.021 dias+ 7/10 sin 2 mejores +0.017
+p35|lo_concurrente: prints 51608 | unidades 26180 (16888 mercado-lado) | 31 dias, 6866 cierres
+   EV pond. EUR: todo +0.225 bajo +0.280 medio +0.203 alto +0.172 | EV por unidad: todo +0.046 bajo +0.081 alto -0.016 | inversion (alto-todo) EUR -0.054
+   gradiente EUR diario +0.220 IC90 dias inf +0.119 dias+ 22/31 sin 2 mejores +0.184
+   gradiente unidad diario +0.053 IC90 dias inf -0.065 dias+ 23/31 sin 2 mejores +0.020
+p60|hi_concurrente: prints 22183 | unidades 10417 (6508 mercado-lado) | 10 dias, 2384 cierres
+   EV pond. EUR: todo +0.053 bajo +0.096 medio +0.044 alto +0.010 | EV por unidad: todo +0.070 bajo +0.092 alto +0.064 | inversion (alto-todo) EUR -0.044
+   gradiente EUR diario +0.089 IC90 dias inf -0.087 dias+ 5/10 sin 2 mejores -0.003
+   gradiente unidad diario +0.025 IC90 dias inf -0.064 dias+ 5/10 sin 2 mejores -0.014
+p60|lo_concurrente: prints 59431 | unidades 28653 (18005 mercado-lado) | 31 dias, 6956 cierres
+   EV pond. EUR: todo +0.218 bajo +0.316 medio +0.201 alto +0.104 | EV por unidad: todo +0.050 bajo +0.083 alto -0.005 | inversion (alto-todo) EUR -0.114
+   gradiente EUR diario +0.267 IC90 dias inf +0.191 dias+ 26/31 sin 2 mejores +0.239
+   gradiente unidad diario +0.076 IC90 dias inf +0.017 dias+ 21/31 sin 2 mejores +0.053
+
+## CRITERIO §4 «F5 robusta a la epoca» (hi y lo por separado: media diaria > 0, IC90 por dias inf > 0, sin 2 mejores > 0; placebo por unidad max-stat <= 0,0125)
+l_ef 35 ms: EXPLORATORY (media > 0 en ambas clases; n dias requerido hi 30, lo 55) -- sensibilidad ADD3, NO VALIDADO
+l_ef 60 ms: EXPLORATORY (media > 0 en ambas clases; n dias requerido hi 21, lo 8) -- sensibilidad ADD3, NO VALIDADO
+Regla §5 (p60|R2 en ventanas puras): no obliga a rebajar (sigue «no validado» hasta la revision independiente)
+
+RESUMEN: dias 34/35, reproduccion desde crudo 34/34; robustez p35 -> EXPLORATORY (media > 0 en ambas clases; n dias requerido hi 30, lo 55) -- sensibilidad ADD3, NO VALIDADO; p60 -> EXPLORATORY (media > 0 en ambas clases; n dias requerido hi 21, lo 8) -- sensibilidad ADD3, NO VALIDADO. PARTIAL.
+Tiempo 30 s. Limites: poblacion censurada (gradiente, no EV de regla); d_proc = 3 ms supuesto; causa de la alternancia del suelo INSUFICIENTE; clase causal con margen de 200 ms.

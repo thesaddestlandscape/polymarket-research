@@ -1,0 +1,18 @@
+### H2 (prereg): Y = NO-REP (tk_n<=199), walk-forward
+-- BASE logit (pc,T,hora,moneda,lado)
+ DISC                              n  29654 base 0.182 AUC 0.542 IC90cierre (0.532,0.552) | quintil sup Y 0.214 lift 1.18 IC90 (1.12,1.23) | placebo AUC p95 0.509
+ HOLD                              n  51212 base 0.187 AUC 0.538 IC90cierre (0.530,0.547) | quintil sup Y 0.214 lift 1.14 IC90 (1.09,1.19) | placebo AUC p95 0.503
+-- CTX logit C=.1
+ DISC                              n  29654 base 0.182 AUC 0.579 IC90cierre (0.570,0.588) | quintil sup Y 0.247 lift 1.35 IC90 (1.30,1.41) | placebo AUC p95 0.510
+ HOLD                              n  51212 base 0.187 AUC 0.579 IC90cierre (0.570,0.588) | quintil sup Y 0.247 lift 1.32 IC90 (1.28,1.36) | placebo AUC p95 0.502
+-- CTX+FLOW logit C=.1
+ DISC                              n  29654 base 0.182 AUC 0.583 IC90cierre (0.574,0.592) | quintil sup Y 0.245 lift 1.35 IC90 (1.29,1.40) | placebo AUC p95 0.512
+ HOLD                              n  51212 base 0.187 AUC 0.587 IC90cierre (0.579,0.597) | quintil sup Y 0.252 lift 1.35 IC90 (1.30,1.40) | placebo AUC p95 0.503
+-- CTX+FLOW hgb
+ DISC                              n  29654 base 0.182 AUC 0.627 IC90cierre (0.618,0.635) | quintil sup Y 0.278 lift 1.53 IC90 (1.47,1.58) | placebo AUC p95 0.511
+ HOLD                              n  51212 base 0.187 AUC 0.610 IC90cierre (0.603,0.619) | quintil sup Y 0.279 lift 1.49 IC90 (1.45,1.54) | placebo AUC p95 0.503
+
+### EXPLORATORIO: Y = BOT (tk_n>=2000)
+-- CTX+FLOW logit C=.1
+ DISC                              n  29654 base 0.475 AUC 0.605 IC90cierre (0.598,0.614) | quintil sup Y 0.621 lift 1.31 IC90 (1.28,1.34) | placebo AUC p95 0.500
+ HOLD                              n  51212 base 0.475 AUC 0.607 IC90cierre (0.600,0.614) | quintil sup Y 0.604 lift 1.27 IC90 (1.25,1.29) | placebo AUC p95 0.503

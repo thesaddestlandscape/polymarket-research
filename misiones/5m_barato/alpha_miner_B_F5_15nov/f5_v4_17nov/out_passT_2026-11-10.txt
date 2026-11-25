@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/passT_v4.py", line 21, in <module>
+    E = E4.DayEngV4(d, 'chain', tape, bad, modo=modo, dedupe=(ENG == 'dd')); D = E.D; K = E.K
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/engine_v3.py", line 80, in __init__
+    self.K = D if kc == fc else R.Day2(d, kc, light=True, with_otro=(kc == 'rx' and fc == 'ex'))
+                                ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/relojes.py", line 35, in __init__
+    o = np.lexsort((rx, qk)).astype(np.int32)                                         # (k, rx); lexsort es estable: empate = orden de fichero
+        ~~~~~~~~~~^^^^^^^^^^
+MemoryError
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/passT_v4.py", line 21, in <module>
+    E = E4.DayEngV4(d, 'chain', tape, bad, modo=modo, dedupe=(ENG == 'dd')); D = E.D; K = E.K
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/engine_v3.py", line 80, in __init__
+    self.K = D if kc == fc else R.Day2(d, kc, light=True, with_otro=(kc == 'rx' and fc == 'ex'))
+                                ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/relojes.py", line 35, in __init__
+    o = np.lexsort((rx, qk)).astype(np.int32)                                         # (k, rx); lexsort es estable: empate = orden de fichero
+        ~~~~~~~~~~^^^^^^^^^^
+MemoryError
+ok v3dd_2026-11-10 ramas_tm {'drop': 0, 'tev': 0, 'const63': 0, 'rxprint': 0, 'sig': 28709, 'amb': 18342, 'nosig': 5131, 'guard': 567, 'sinev': 501} tokens 1184 {'G0': (316, 74.3), 'GEO6': (250, 52.1), 'NJ3': (316, 69.1), 'NJ3A': (316, 74.4), 'CALM3': (264, 52.3), 'GEO6NJ3': (244, 51.0), 'CXB150': (66, 16.3), 'CXB300': (119, 15.8), 'CXB1000': (196, 30.7), 'CXB3000': (246, 82.5), 'CXJ150': (263, 54.8), 'CXJ1000': (279, 59.8)} binance {'BNB': 361569, 'BTC': 960732, 'DOGE': 93102, 'ETH': 757739, 'SOL': 183497, 'XRP': 181689} 35.2 s

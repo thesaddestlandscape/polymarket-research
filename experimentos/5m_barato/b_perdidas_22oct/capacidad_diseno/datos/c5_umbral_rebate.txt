@@ -1,0 +1,10 @@
+maker-dias 603
+inferido dia [0,0.1): n=  48 con pago>0: 0.46  pagado/inferido (suma)=23.27
+inferido dia [0.1,0.25): n=  25 con pago>0: 0.20  pagado/inferido (suma)=22.76
+inferido dia [0.25,0.5): n=  45 con pago>0: 0.18  pagado/inferido (suma)=2.06
+inferido dia [0.5,0.75): n=  25 con pago>0: 0.12  pagado/inferido (suma)=0.94
+inferido dia [0.75,1.0): n=  23 con pago>0: 0.43  pagado/inferido (suma)=0.59
+inferido dia [1.0,1.5): n=  48 con pago>0: 1.00  pagado/inferido (suma)=1.36
+inferido dia [1.5,2): n=  51 con pago>0: 1.00  pagado/inferido (suma)=1.65
+inferido dia [2,4): n= 132 con pago>0: 1.00  pagado/inferido (suma)=1.37
+inferido dia [4,1000000000.0): n= 206 con pago>0: 1.00  pagado/inferido (suma)=1.30

@@ -1,0 +1,31 @@
+dias ['2026-10-18', '2026-10-19', '2026-10-23'] mercados validos con fill sim {'2026-10-18': 70, '2026-10-19': 96, '2026-10-23': 96} | mercados reales por wallet: {'0x21f4c1a1': 243, '0x86b14772': 252, '0xe29042f5': 258}
+REAL 0x21f4c1a1 EV(+reb)/dia {'18': np.float64(0.0439), '19': np.float64(0.0158), '23': np.float64(0.0201)} total 0.0246 fills 11958
+REAL 0x86b14772 EV(+reb)/dia {'18': np.float64(-0.0071), '19': np.float64(-0.051), '23': np.float64(0.0276)} total -0.0043 fills 3116
+REAL 0xe29042f5 EV(+reb)/dia {'18': np.float64(-0.0024), '19': np.float64(0.07), '23': np.float64(-0.095)} total -0.0052 fills 17049
+SIM V2B EV(+reb)/dia {'18': np.float64(0.0019), '19': np.float64(-0.0463), '23': np.float64(-0.0844)} total -0.0467 sin reb -0.0524 fills 4182 acc/mercado-lado med 289.0
+
+CRITERIO por variante x wallet: dias con |dEV|<=0.005 y mismo signo / dias; error medio (sim-real)
+V2B 0x21f4c1a1: error<=0.5pp+signo 0/3 ; solo signo 1/3 ; error medio -0.0695 ; |error| medio 0.0695
+V2B 0x86b14772: error<=0.5pp+signo 1/3 ; solo signo 1/3 ; error medio -0.0328 ; |error| medio 0.0419
+V2B 0xe29042f5: error<=0.5pp+signo 0/3 ; solo signo 1/3 ; error medio -0.0338 ; |error| medio 0.0437
+MEDIA |error| (3 wallets x dias) V2B 0.0517
+
+PATA SUELTA vs EMPAREJADA (real, por wallet): EV terminal(+reb)/EUR y markout30 s del bid (Δbid/EUR)
+0x21f4c1a1 emparejada coste 56783 EV terminal 0.0816 markout30 0.0186 n 4809
+0x21f4c1a1 suelta coste 69533 EV terminal -0.0219 markout30 0.0082 n 7149
+0x86b14772 emparejada coste 14585 EV terminal 0.0898 markout30 0.053 n 1045
+0x86b14772 suelta coste 26612 EV terminal -0.0559 markout30 -0.0076 n 2071
+0xe29042f5 emparejada coste 57437 EV terminal 0.1535 markout30 0.046 n 6882
+0xe29042f5 suelta coste 72390 EV terminal -0.1311 markout30 -0.0514 n 10167
+
+BLOQUEADO por pares vs RESIDUO (pata suelta), por EUR de coste
+REAL 0x21f4c1a1 bloqueado +0.0268/EUR residuo -0.0066/EUR rebate +0.0045
+REAL 0x86b14772 bloqueado +0.0375/EUR residuo -0.0465/EUR rebate +0.0047
+REAL 0xe29042f5 bloqueado +0.0390/EUR residuo -0.0500/EUR rebate +0.0058
+SIM V2B bloqueado -0.0347/EUR residuo -0.0177/EUR rebate +0.0057
+
+NIVELES (sim): distribucion del coste por distancia al precio mas alto rellenado del mercado-lado no disponible; coste por banda sim:
+V2B {'[0.01, 0.1)': 118, '[0.1, 0.3)': 3734, '[0.3, 0.5)': 21477, '[0.5, 0.7)': 34475, '[0.7, 0.99)': 24537}
+REAL 0x21f4c1a1 {'[0.01, 0.1)': 2322, '[0.1, 0.3)': 6714, '[0.3, 0.5)': 17558, '[0.5, 0.7)': 31342, '[0.7, 0.99)': 68380}
+REAL 0x86b14772 {'[0.01, 0.1)': 1018, '[0.1, 0.3)': 2931, '[0.3, 0.5)': 4967, '[0.5, 0.7)': 9899, '[0.7, 0.99)': 22383}
+REAL 0xe29042f5 {'[0.01, 0.1)': 1123, '[0.1, 0.3)': 11532, '[0.3, 0.5)': 29224, '[0.5, 0.7)': 44961, '[0.7, 0.99)': 42986}

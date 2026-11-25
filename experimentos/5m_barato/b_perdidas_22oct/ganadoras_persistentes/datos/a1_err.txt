@@ -1,0 +1,4 @@
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/ganadoras_persistentes/scripts/a1_roster.py:37: RuntimeWarning: invalid value encountered in scalar divide
+  ev=df.S.sum()/df.C.sum(); pl=plS/np.maximum(plC,1e-9)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/ganadoras_persistentes/scripts/a1_roster.py:37: RuntimeWarning: invalid value encountered in scalar divide
+  ev=df.S.sum()/df.C.sum(); pl=plS/np.maximum(plC,1e-9)

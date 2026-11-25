@@ -1,0 +1,15 @@
+Eventos con otros(t-1000)>=5 y edad>=1,2 s: F 45, R 676, P 105 (P de 78 ordenes)
+
+EXIT  F vs R: tasa F 0.733 (n=45) vs control 0.110 (n=676); Delta estratificada +0.627 (15 estratos); IC90 por cierre (+0.479,+0.740) por dia (+0.608,+0.637); placebo p(>=obs)=0.000
+ALONE F vs R: tasa F 0.714 (n=45) vs control 0.072 (n=676); Delta estratificada +0.639 (15 estratos); IC90 por cierre (+0.505,+0.757) por dia (+0.603,+0.672); placebo p(>=obs)=0.000
+EXIT  F vs P: tasa F 0.733 (n=45) vs control 0.262 (n=105); Delta estratificada +0.472 (13 estratos); IC90 por cierre (+0.314,+0.635) por dia (+0.435,+0.587); placebo p(>=obs)=0.000
+ALONE F vs P: tasa F 0.714 (n=45) vs control 0.179 (n=105); Delta estratificada +0.532 (13 estratos); IC90 por cierre (+0.386,+0.689) por dia (+0.493,+0.660); placebo p(>=obs)=0.000
+
+VEREDICTO PREREGISTRADO (M_exit): A: especifica del relleno (firma de seleccion adversa) | F-R cumple True, F-P cumple True
+
+Tasas por grupo (sin estratificar, ponderadas por EUR):
+         n   exit  alone  S1_med  edad_med
+grp                                       
+F     45.0  0.733  0.714    45.0     2.734
+P    105.0  0.262  0.179    50.0     2.596
+R    676.0  0.110  0.072    55.0     1.557

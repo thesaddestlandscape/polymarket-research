@@ -1,0 +1,3 @@
+# Persistencia a bloques de 4 h UTC (cierre del mercado); EV pond. por bloque, menos media del tramo horario. DESCRIPTIVO (dias vistos)
+[todas] bloques 222 (validos 222, coste>=300 EUR) | lag-1 Spearman +0.038 (Pearson +0.019) p_perm unilateral 0.2670 (pares 221) | corr(bloque t, media 2 previos) = -0.039 (n=220) | sd EV bloque 0.295
+[tipoB] bloques 222 (validos 222, coste>=300 EUR) | lag-1 Spearman +0.020 (Pearson +0.001) p_perm unilateral 0.3552 (pares 221) | corr(bloque t, media 2 previos) = -0.049 (n=220) | sd EV bloque 0.456

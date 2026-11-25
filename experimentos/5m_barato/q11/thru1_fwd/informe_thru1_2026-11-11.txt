@@ -1,0 +1,6 @@
+# INFORME DIARIO H-Q11-THRU1 forward (DESCRIPTIVO; ningun veredicto fuera de checkpoints) generado 2026-11-11T13:48:50Z | hoy=2026-11-11
+Dias DESCRIPTIVOS-QUEMADOS (ADDENDUM6: no cuentan, no deciden): 2026-11-07, 2026-11-08
+Dias candidatos 2 | validos 0: 2026-11-09 NO VALIDO(Binance NO sano: H1 hueco conjunto <= 60s), 2026-11-10 PENDIENTE: dia sin asentar: bad_2026-11-10.json modificado hace menos de 10 min
+PENDIENTES (ADDENDUM7 C5, no se cachean): ['2026-11-10']
+  [salud 2026-11-09] H1 hueco conjunto max 148.0s (NO) | H2 cob conjunta 0.9898 (ok) | H3 min ratio 0.9679 (ok) | n intervalos>=30s 2 | sensibilidad {'H1=50s': False, 'H1=60s': False, 'H1=73s': False, 'H3=0.93': False, 'H3=0.95': False, 'H3=0.97': False, 'H2=4simb': False} | por moneda BTC:cob0.85,hueco149s,minh0.66 ETH:cob0.76,hueco148s,minh0.48 SOL:cob0.56,hueco152s,minh0.42 XRP:cob0.64,hueco148s,minh0.41 DOGE:cob0.41,hueco149s,minh0.32 BNB:cob0.75,hueco150s,minh0.42
+INSUFFICIENT: 0 dias validos (fila B: no se escribe estado)

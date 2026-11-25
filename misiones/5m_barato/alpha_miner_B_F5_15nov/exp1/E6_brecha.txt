@@ -1,0 +1,65 @@
+# E6 cuenta de la brecha de B (ADDENDUM1 sha 6fc7dba5)
+Dias esperados 37 (2026-10-09..2026-11-14): COMPLETE 35, FAILED 2
+  FAILED: 2026-10-16[ASSERT: C3: suelo p5 40.0 vs 19.5 (R0, 144 ventanas)], 2026-10-24[ASSERT: C3: suelo p5 20.0 vs 39.5 (R1, 144 ventanas)]
+Estado poblacion: PARTIAL; prints 531217
+
+## B real (sello tm3): 215 fills, 202 unidades (mercado-lado), 112 cierres, 4 dias, 100 % R1 | EV pond. EUR -0.0724 | PnL -16.02 EUR sobre 221.30 EUR (sin comision ni rebate)
+Por dia:
+            fills   coste     pnl     EV
+dia                                     
+2026-10-20   40.0  42.994   3.006  0.070
+2026-10-21   77.0  78.389  13.007  0.166
+2026-10-22   81.0  83.074 -22.192 -0.267
+2026-10-23   17.0  16.843  -9.843 -0.584
+Por moneda:
+      fills   coste     pnl     EV
+coin                              
+ETH    85.0  89.064   2.823  0.032
+SOL    71.0  70.164  -5.677 -0.081
+XRP    59.0  62.072 -13.168 -0.212
+Fills de B tipo B (bid(t_dec,l=60) - precio >= 0,0099): 119/215 (EV pond. +0.011); resto (a la altura del bid o por encima) 96 (EV pond. -0.170)
+
+## Poblacion en las MISMAS celdas dia x moneda de B (T_rem > 60 s), definiciones v3 (r_v3, t_dec = r_v3 - l_ef - 3 ms)
+p60 | tipo B: 12/12 celdas con poblacion, 9269 prints | EV esperado (pond. por coste de B en la celda) +0.1853; agrupado -0.1796 | B real -0.0724 -> BRECHA = -0.2577 (pond.) / +0.1072 (agrupada)  [POBLACION vs MEDIDO]
+    por celda (dia moneda: coste B, EV B, EV poblacion, n prints): 10-20 ETH: 18.4, +0.08, -0.68, 2176; 10-20 SOL: 14.8, +0.01, +0.14, 717; 10-20 XRP: 9.8, +0.13, +0.09, 281; 10-21 ETH: 31.5, +0.08, +0.10, 1455; 10-21 SOL: 23.4, +0.48, +0.47, 533; 10-21 XRP: 23.5, -0.02, +1.10, 377; 10-22 ETH: 33.8, -0.08, +0.44, 1183; 10-22 SOL: 26.8, -0.44, -0.11, 477; 10-22 XRP: 22.6, -0.34, +0.05, 308; 10-23 ETH: 5.3, +0.32, -0.04, 1052; 10-23 SOL: 5.3, -1.00, -0.16, 476; 10-23 XRP: 6.3, -1.00, -0.24, 234
+p60 | todas las filas: 12/12 celdas con poblacion, 51004 prints | EV esperado (pond. por coste de B en la celda) +0.0730; agrupado -0.0761 | B real -0.0724 -> BRECHA = -0.1454 (pond.) / +0.0037 (agrupada)  [POBLACION vs MEDIDO]
+    por celda (dia moneda: coste B, EV B, EV poblacion, n prints): 10-20 ETH: 18.4, +0.08, -0.51, 10893; 10-20 SOL: 14.8, +0.01, +0.10, 3644; 10-20 XRP: 9.8, +0.13, +0.08, 1650; 10-21 ETH: 31.5, +0.08, +0.04, 7887; 10-21 SOL: 23.4, +0.48, +0.23, 3023; 10-21 XRP: 23.5, -0.02, +0.36, 2037; 10-22 ETH: 33.8, -0.08, +0.29, 6701; 10-22 SOL: 26.8, -0.44, -0.07, 2993; 10-22 XRP: 22.6, -0.34, +0.06, 1643; 10-23 ETH: 5.3, +0.32, +0.06, 6035; 10-23 SOL: 5.3, -1.00, +0.02, 2891; 10-23 XRP: 6.3, -1.00, -0.25, 1607
+p35 | tipo B: 12/12 celdas con poblacion, 8255 prints | EV esperado (pond. por coste de B en la celda) +0.2027; agrupado -0.1933 | B real -0.0724 -> BRECHA = -0.2751 (pond.) / +0.1209 (agrupada)  [POBLACION vs MEDIDO]
+p35 | todas las filas: 12/12 celdas con poblacion, 51004 prints | EV esperado (pond. por coste de B en la celda) +0.0730; agrupado -0.0761 | B real -0.0724 -> BRECHA = -0.1454 (pond.) / +0.0037 (agrupada)  [POBLACION vs MEDIDO]
+
+## Poblacion (todas las celdas) por EPOCA, T_rem > 60 s, p60: EV pond. EUR  [POBLACION]
+R0 | tipo B: prints 20017, dias 8 | EV pond. +0.382 | media diaria +0.341 IC90 inf +0.096 | dias+ 8/8
+R0 | todas: prints 116487, dias 8 | EV pond. +0.137 | media diaria +0.138 IC90 inf +0.047 | dias+ 7/8
+R1 | tipo B: prints 20078, dias 10 | EV pond. +0.047 | media diaria +0.129 IC90 inf -0.047 | dias+ 8/10
+R1 | todas: prints 110872, dias 10 | EV pond. +0.010 | media diaria +0.038 IC90 inf -0.080 | dias+ 8/10
+R2 | tipo B: prints 30264, dias 19 | EV pond. +0.125 | media diaria +0.127 IC90 inf +0.052 | dias+ 16/19
+R2 | todas: prints 227344, dias 19 | EV pond. +0.021 | media diaria +0.020 IC90 inf -0.023 | dias+ 10/19
+
+## Palancas y su efecto sobre la brecha (puntos de EV por EUR; brecha de referencia = tipo B, T_rem > 60 s, p60, pond.)
+Falta para igualar a la poblacion (tipo B): +0.2577 EV por EUR; para igualar a la de todas las filas: +0.1454; para EV = 0: +0.0724
+E3 [MEDIDO sobre los 215 fills reales con tm3; timing de cancelacion SIMULADO]  (dEV = EV retenido - EV de todos los fills; dPnL = -pnl evitado):
+  CXB60 l_ef=35: dEV -0.0246 IC90 cierre [-0.2394, 0.196] | EV retenido -0.0970 | dPnL +4.23 EUR | evitados 94 | % de la brecha-a-poblacion cerrada -10 % | % del camino a EV=0 -34 %
+  CXB60 l_ef=60: dEV -0.0236 IC90 cierre [-0.1915, 0.1653] | EV retenido -0.0960 | dPnL +2.87 EUR | evitados 81 | % de la brecha-a-poblacion cerrada -9 % | % del camino a EV=0 -33 %
+  CXB60 l_ef=100: dEV +0.0018 IC90 cierre [-0.1365, 0.143] | EV retenido -0.0706 | dPnL +4.34 EUR | evitados 56 | % de la brecha-a-poblacion cerrada +1 % | % del camino a EV=0 +3 %
+  CXB60 l_ef=150: dEV -0.0187 IC90 cierre [-0.1295, 0.0925] | EV retenido -0.0911 | dPnL -0.51 EUR | evitados 40 | % de la brecha-a-poblacion cerrada -7 % | % del camino a EV=0 -26 %
+  F5C l_ef=35: dEV -0.0725 IC90 cierre [-0.2691, 0.1391] | EV retenido -0.1449 | dPnL -1.60 EUR | evitados 100 | % de la brecha-a-poblacion cerrada -28 % | % del camino a EV=0 -100 %
+  F5C l_ef=60: dEV -0.0585 IC90 cierre [-0.2457, 0.1285] | EV retenido -0.1309 | dPnL -0.60 EUR | evitados 95 | % de la brecha-a-poblacion cerrada -23 % | % del camino a EV=0 -81 %
+  F5C l_ef=100: dEV -0.0738 IC90 cierre [-0.2586, 0.1044] | EV retenido -0.1462 | dPnL -3.49 EUR | evitados 86 | % de la brecha-a-poblacion cerrada -29 % | % del camino a EV=0 -102 %
+  F5C l_ef=150: dEV -0.0213 IC90 cierre [-0.1812, 0.1414] | EV retenido -0.0937 | dPnL +2.69 EUR | evitados 79 | % de la brecha-a-poblacion cerrada -8 % | % del camino a EV=0 -29 %
+  F5A l_ef=35: dEV -0.0437 IC90 cierre [-0.1879, 0.1112] | EV retenido -0.1161 | dPnL -1.58 EUR | evitados 71 | % de la brecha-a-poblacion cerrada -17 % | % del camino a EV=0 -60 %
+  F5A l_ef=60: dEV -0.0516 IC90 cierre [-0.1898, 0.104] | EV retenido -0.1240 | dPnL -2.94 EUR | evitados 69 | % de la brecha-a-poblacion cerrada -20 % | % del camino a EV=0 -71 %
+  F5A l_ef=100: dEV -0.0596 IC90 cierre [-0.1998, 0.0915] | EV retenido -0.1320 | dPnL -4.36 EUR | evitados 67 | % de la brecha-a-poblacion cerrada -23 % | % del camino a EV=0 -82 %
+  F5A l_ef=150: dEV -0.0596 IC90 cierre [-0.1998, 0.0915] | EV retenido -0.1320 | dPnL -4.36 EUR | evitados 67 | % de la brecha-a-poblacion cerrada -23 % | % del camino a EV=0 -82 %
+  UNION l_ef=35: dEV -0.1523 IC90 cierre [-0.4548, 0.1722] | EV retenido -0.2247 | dPnL -0.64 EUR | evitados 144 | % de la brecha-a-poblacion cerrada -59 % | % del camino a EV=0 -210 %
+  UNION l_ef=60: dEV -0.0397 IC90 cierre [-0.3037, 0.2419] | EV retenido -0.1121 | dPnL +6.19 EUR | evitados 132 | % de la brecha-a-poblacion cerrada -15 % | % del camino a EV=0 -55 %
+  UNION l_ef=100: dEV -0.1222 IC90 cierre [-0.3369, 0.1088] | EV retenido -0.1946 | dPnL -4.87 EUR | evitados 112 | % de la brecha-a-poblacion cerrada -47 % | % del camino a EV=0 -169 %
+  UNION l_ef=150: dEV -0.0445 IC90 cierre [-0.2195, 0.1392] | EV retenido -0.1169 | dPnL +1.13 EUR | evitados 95 | % de la brecha-a-poblacion cerrada -17 % | % del camino a EV=0 -61 %
+  R2-equivalente (+20,5 ms de holgura de deteccion; SIMULADA): CXB60 l60 dEV +0.0319; F5C l60 dEV -0.0394; UNION l60 dEV +0.0090
+E5 regimen [POBLACION, descriptivo; no aditivo con E3]:
+  D1 vol30: dEV diario medio +0.063 IC90 inf -0.095, dias+ 7/16, EV viables +0.166 vs todo +0.143, 49 % del coste viable -> INSUFFICIENT (media <= 0 o < 50 % dias +; no refuta: poblacion censurada)
+  D2 vol4h: dEV diario medio +0.018 IC90 inf -0.275, dias+ 10/17, EV viables +0.190 vs todo +0.143, 44 % del coste viable -> EXPLORATORIA
+  D3 EV bloque previo: dEV diario medio +0.016 IC90 inf -0.111, dias+ 9/22, EV viables +0.184 vs todo +0.143, 48 % del coste viable -> INSUFFICIENT (media <= 0 o < 50 % dias +; no refuta: poblacion censurada)
+  D4 EV slot: dEV diario medio +0.002 IC90 inf -0.168, dias+ 8/15, EV viables +0.124 vs todo +0.125, 57 % del coste viable -> EXPLORATORIA
+Colocacion / tamano / cola (donde pone B la orden, tamano por orden, tiempo de vida): SIN MEDIR en EXP-1 (declarado en el ADDENDUM1 §3 E6); es el residuo de la cuenta.
+
+RESUMEN: B real -0.0724 vs poblacion tipo B misma celda +0.1853: brecha -0.2577 (B por debajo si <0); 4 dias R1, 202 unidades, 129 cierres: IC amplio; ninguna palanca de E3 sustituye al forward (dry-run CXB60 desde 22-Nov). Tiempo 2 s. PARTIAL: faltan dias de poblacion.

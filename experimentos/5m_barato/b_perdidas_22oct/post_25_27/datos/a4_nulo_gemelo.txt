@@ -1,0 +1,98 @@
+poblacion 17-22: unidades 27215 coste 26262 pnl -508 EV -0.0193 hit 0.2000 dias ['2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22']
+           n     hit      EV  precio
+bp                                  
+0.10  5465.0  0.1290  0.0300  0.1269
+0.15  7346.0  0.1628 -0.0509  0.1717
+0.20  6639.0  0.2131 -0.0496  0.2219
+0.25  7765.0  0.2739  0.0047  0.2697
+EV poblacion por dia:
+                 n      EV     hit
+dia                               
+2026-10-17  4310.0 -0.0441  0.1963
+2026-10-18  4602.0 -0.1546  0.1741
+2026-10-19  5295.0 -0.1061  0.1813
+2026-10-20  5293.0 -0.0264  0.2005
+2026-10-21  4903.0  0.1881  0.2405
+2026-10-22  2812.0  0.0527  0.2119
+EV poblacion por lado:
+            n      EV
+lado                 
+NO    13270.0 -0.0159
+YES   13945.0 -0.0226
+DEFF por cierre (varianza de sumas por cierre / suma de varianzas) = 10.98 ; n cierres 1613
+rho entre monedas dentro del mismo cierre (residuo de acierto): [[1.0, 0.383, 0.304], [0.383, 1.0, 0.347], [0.304, 0.347, 1.0]] media 0.345
+DEFF_B = 1+(m-1)rho con m=1.6 posiciones/cierre: 1.21
+M1 r25-r27 (23-Oct): n 16 obs PnL -9.84 | nulo(pop) media -0.31 sd 8.67 (sd*sqrt(DEFF) 9.52) | p(PnL nulo<=obs) indep 0.1290 ; cluster-ajustado (normal) 0.1583 ; hit obs 0.062 vs esperado 0.202
+M1 r25: n 4 obs PnL -4.78 | nulo(pop) media +0.19 sd 4.82 (sd*sqrt(DEFF) 5.29) | p(PnL nulo<=obs) indep 0.3609 ; cluster-ajustado (normal) 0.1740 ; hit obs 0.000 vs esperado 0.222
+M1 r26: n 8 obs PnL -1.01 | nulo(pop) media -0.21 sd 6.12 (sd*sqrt(DEFF) 6.72) | p(PnL nulo<=obs) indep 0.4792 ; cluster-ajustado (normal) 0.4522 ; hit obs 0.125 vs esperado 0.184
+M1 r27: n 4 obs PnL -4.05 | nulo(pop) media -0.29 sd 3.81 (sd*sqrt(DEFF) 4.18) | p(PnL nulo<=obs) indep 0.0000 ; cluster-ajustado (normal) 0.1840 ; hit obs 0.000 vs esperado 0.216
+M1 22-Oct: n 77 obs PnL -22.19 | nulo(pop) media -1.11 sd 18.99 (sd*sqrt(DEFF) 20.86) | p(PnL nulo<=obs) indep 0.1335 ; cluster-ajustado (normal) 0.1561 ; hit obs 0.156 vs esperado 0.206
+M1 B 20-22 (visto): n 186 obs PnL -6.18 | nulo(pop) media -3.61 sd 29.64 (sd*sqrt(DEFF) 32.56) | p(PnL nulo<=obs) indep 0.4747 ; cluster-ajustado (normal) 0.4685 ; hit obs 0.204 vs esperado 0.211
+M1 B total 20-23: n 202 obs PnL -16.02 | nulo(pop) media -4.11 sd 30.85 (sd*sqrt(DEFF) 33.89) | p(PnL nulo<=obs) indep 0.3555 ; cluster-ajustado (normal) 0.3626 ; hit obs 0.193 vs esperado 0.210
+M4 B20-22 lado=NO: n 79 EV B +0.281 vs pob -0.016 (n 13270)
+M4 B20-22 lado=YES: n 107 EV B -0.254 vs pob -0.023 (n 13945)
+M4 B20-22 coin=ETH: n 74 EV B +0.014 vs pob -0.046 (n 14645)
+M4 B20-22 coin=SOL: n 59 EV B -0.006 vs pob +0.013 (n 7581)
+M4 B20-22 coin=XRP: n 53 EV B -0.124 vs pob +0.010 (n 4989)
+
+M2 gemelo BASE 23-Oct: fills 213 mercados completos 278 de 336 con desenlace 777
+gemelo cons_r: dia n 44 hit 0.227 precio 0.222 EV +0.038 IC90 cierre (-0.416,+0.533) pnl +1.9 | ventana B 06:30-08:56 n 12 hit 0.083 EV -0.596 IC90 (-1.000,+0.075) pnl -8.9
+gemelo cons_x: dia n 56 hit 0.196 precio 0.217 EV -0.092 IC90 cierre (-0.496,+0.343) pnl -5.9 | ventana B 06:30-08:56 n 14 hit 0.071 EV -0.643 IC90 (-1.000,-0.049) pnl -10.8
+gemelo opt_x: dia n 81 hit 0.185 precio 0.218 EV -0.141 IC90 cierre (-0.506,+0.237) pnl -12.8 | ventana B 06:30-08:56 n 22 hit 0.045 EV -0.752 IC90 (-1.000,-0.304) pnl -18.2
+gemelo cons_x por moneda (dia):
+         n    hit     EV
+coin                    
+ETH   22.0  0.227  0.007
+SOL   17.0  0.118 -0.547
+XRP   17.0  0.235  0.192
+gemelo cons_x por lado (dia):
+         n    hit     EV
+lado                    
+NO    20.0  0.150 -0.318
+YES   36.0  0.222  0.038
+gemelo cons_x por hora UTC (dia):
+h      0    1      2      3       4      5      6    7    8     9
+n    6.0  2.0  5.000  7.000  10.000  5.000  4.000  3.0  9.0  5.00
+hit  0.0  0.0  0.200  0.429   0.200  0.400  0.250  0.0  0.0  0.40
+EV  -1.0 -1.0 -0.094  1.178  -0.174  1.147  0.408 -1.0 -1.0  0.88
+
+Emparejado B vs gemelo cons_x (misma mercado-lado):
+                     mercado lado  precio_B     pnl_B  precio_G     pnl_G  gana
+0   xrp-updown-5m-1792737300  YES      0.28 -1.400000       NaN       NaN   NaN
+1   sol-updown-5m-1792737300  YES      0.26 -1.300000       NaN       NaN   NaN
+2   eth-updown-5m-1792737300  YES      0.20 -1.000000       NaN       NaN   NaN
+3   sol-updown-5m-1792737600   NO      0.12 -1.080000       NaN       NaN   NaN
+4   xrp-updown-5m-1792741800  YES      0.23 -1.150000       NaN       NaN   NaN
+5   eth-updown-5m-1792742100   NO      0.16  5.880000       NaN       NaN   NaN
+6   xrp-updown-5m-1792742400  YES      0.29 -1.450000       NaN       NaN   NaN
+7   xrp-updown-5m-1792742700   NO      0.14 -0.032558      0.21 -1.050000   0.0
+8   eth-updown-5m-1792742700   NO      0.28 -1.400000      0.27 -1.350000   0.0
+9   xrp-updown-5m-1792743000   NO      0.16 -1.120000       NaN       NaN   NaN
+10  sol-updown-5m-1792743000   NO      0.13 -1.040000       NaN       NaN   NaN
+11  sol-updown-5m-1792743600   NO      0.14 -0.700000       NaN       NaN   NaN
+12  sol-updown-5m-1792745400  YES      0.23 -1.150000      0.26 -1.127828   0.0
+13  eth-updown-5m-1792745400  YES      0.27 -0.660760       NaN       NaN   NaN
+14  xrp-updown-5m-1792745700  YES      0.22 -1.100000       NaN       NaN   NaN
+15  eth-updown-5m-1792745700  YES      0.19 -1.140000      0.18 -1.080000   0.0
+B posiciones con gemelo relleno: 4 de 16 ; PnL B en esas -3.72 vs gemelo -4.61
+
+M3 hit gemelo cons_x dia 0.196 (n 56) ; pob 17-22 hit 0.200 ; B 20-22 hit 0.204 ; B 23-Oct 0.062
+
+M3 (fill-independiente) longshots con bid 0,10-0,30 a T 150-210 s, TODOS los mercados con desenlace oficial:
+ 22-Oct (desde 12:07Z): n 399 hit 0.236 bid medio 0.200 EV@bid +0.178
+ 23-Oct dia completo  : n 284 hit 0.236 bid medio 0.199 EV@bid +0.188
+ 23-Oct ventana B 06:30-08:56: n 68 hit 0.132 bid medio 0.191 EV@bid -0.306
+ 23-Oct fuera de ventana  : n 216 hit 0.269 bid medio 0.201 EV@bid +0.335
+ ventana por lado:
+         n    hit    bid
+lado                    
+NO    35.0  0.143  0.179
+YES   33.0  0.121  0.203
+ ventana por moneda:
+        n    hit    bid
+c                      
+eth  22.0  0.091  0.203
+sol  26.0  0.115  0.187
+xrp  20.0  0.200  0.182
+ ventana: mercados con desenlace 90 ganador YES(Up) 0.51
+ binomial P(<=1 acierto de 16 | p=0.20)= 0.141 ; P(0 de 4) 0.410

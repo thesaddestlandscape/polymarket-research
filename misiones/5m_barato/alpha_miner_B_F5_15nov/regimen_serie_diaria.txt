@@ -1,0 +1,58 @@
+# Serie diaria EV poblacion (ETH/SOL/XRP, banda, T_rem>60 s), EV pond. por EUR de cada dia. DESCRIPTIVO (dias ya vistos); n dias = 37
+dia        evTodas  evTipoB  costeTipoB(EUR)  nTipoB
+2026-10-09  +0.070   +0.159     7612.9    2493
+2026-10-10  +0.058   +0.158     8460.6    2149
+2026-10-11  +0.012   +0.063     7882.0    2113
+2026-10-12  +0.233   +0.452     7690.2    2094
+2026-10-13  +0.382   +1.114    15407.4    2305
+2026-10-14  +0.145   +0.191     6383.3    2230
+2026-10-15  -0.022   -0.017     7773.0    2106
+2026-10-16  -0.056   -0.156     8918.7    1964
+2026-10-17  +0.084   +0.391     6785.8    1674
+2026-10-18  +0.002   +0.119     7033.7    1657
+2026-10-19  -0.058   +0.051    13381.5    2098
+2026-10-20  -0.384   -0.621    18512.4    2574
+2026-10-21  +0.114   +0.275     8354.2    1926
+2026-10-22  +0.178   +0.305     6532.2    1677
+2026-10-23  +0.018   -0.056     5108.7    1478
+2026-10-24  -0.189   -0.172     5962.6    1375
+2026-10-25  +0.005   +0.079     6131.3    1517
+2026-10-26  +0.435   +0.577    10870.3    1836
+2026-10-27  +0.003   +0.121     7287.5    1465
+2026-10-28  -0.019   +0.137     8035.3    1480
+2026-10-29  +0.038   +0.136    10175.8    1619
+2026-10-30  -0.041   +0.100     9666.5    1543
+2026-10-31  +0.133   +0.386     9699.5    1423
+2026-11-01  +0.065   +0.183     6055.3    1306
+2026-11-02  +0.039   +0.202     8342.3    1450
+2026-11-03  +0.200   +0.626     7471.6    1578
+2026-11-04  -0.127   -0.133     6547.0    1605
+2026-11-05  +0.149   +0.387     6412.5    1447
+2026-11-06  -0.034   +0.040     6924.3    1389
+2026-11-07  +0.130   +0.048     8594.7    1618
+2026-11-08  -0.173   -0.171     8456.6    1717
+2026-11-09  +0.153   +0.186     4761.9    1255
+2026-11-10  -0.122   +0.027     5572.7    1355
+2026-11-11  +0.126   +0.224     7021.6    1443
+2026-11-12  -0.050   +0.058     6869.7    1509
+2026-11-13  -0.083   +0.042     7435.4    1643
+2026-11-14  +0.030   -0.114     8860.2    1775
+[todas] media diaria +0.039 sd 0.151 | lag-1 Pearson -0.046 Spearman -0.150 p_perm(unilateral) 0.5406 | n_eff por dias 37.0 de 37 | transiciones signo (++ +- -+ --) (13, 10, 10, 3)
+   corr(dia t, media k=3 dias previos) = -0.209 (n=34; descriptivo)
+   corr(dia t, media k=5 dias previos) = -0.014 (n=32; descriptivo)
+   corr(dia t, media k=7 dias previos) = -0.354 (n=30; descriptivo)
+   sin 20-23 Oct (nota: serie con salto, lag-1 sobre contiguos): media +0.046, dias+ 21/33
+[tipo B] media diaria +0.146 sd 0.281 | lag-1 Pearson +0.046 Spearman +0.021 p_perm(unilateral) 0.3176 | n_eff por dias 33.7 de 37 | transiciones signo (++ +- -+ --) (23, 6, 5, 2)
+   corr(dia t, media k=3 dias previos) = -0.155 (n=34; descriptivo)
+   corr(dia t, media k=5 dias previos) = +0.048 (n=32; descriptivo)
+   corr(dia t, media k=7 dias previos) = -0.228 (n=30; descriptivo)
+   sin 20-23 Oct (nota: serie con salto, lag-1 sobre contiguos): media +0.166, dias+ 27/33
+# Gradiente F5 poblacion por periodo (bajo_alto_dia del JSON; todos los T_rem):
+  P_OOS 04-14Nov | lag 100 ms | todas las filas banda: bajo_alto_dia={"m": 0.18817629102982056, "lo": 0.11792297201649614, "pos": 11, "n": 11} | todo=+0.000 G1={"ev": 0.03456114266314739, "dev": 0.03427197126496749, "ev_dia_medio": 0.033057
+  P_OOS 04-14Nov | lag 100 ms | tipo B (q<=bid-0,01): bajo_alto_dia={"m": 0.2523720501627423, "lo": 0.08191144929646138, "pos": 9, "n": 11} | todo=+0.051 G1={"ev": 0.09356393235329677, "dev": 0.043016545723717395, "ev_dia_medio": 0.10159
+  P_OOS 04-14Nov | lag 250 ms | todas las filas banda: bajo_alto_dia={"m": 0.17386718519998348, "lo": 0.09451468437372669, "pos": 10, "n": 11} | todo=+0.000 G1={"ev": 0.022373675389400258, "dev": 0.022084503991220358, "ev_dia_medio": 0.0217
+  P_OOS 04-14Nov | lag 250 ms | tipo B (q<=bid-0,01): bajo_alto_dia={"m": 0.17457183897910242, "lo": 0.04074480877614034, "pos": 7, "n": 11} | todo=+0.024 G1={"ev": 0.05191082642003667, "dev": 0.027952478651135086, "ev_dia_medio": 0.06111
+  P_DER 24Oct-03Nov | lag 100 ms | todas las filas banda: bajo_alto_dia={"m": 0.17178236632844437, "lo": 0.10363352808327739, "pos": 11, "n": 11} | todo=+0.064 G1={"ev": 0.08957382855702249, "dev": 0.025908558834686984, "ev_dia_medio": 0.07939
+  P_DER 24Oct-03Nov | lag 100 ms | tipo B (q<=bid-0,01): bajo_alto_dia={"m": 0.3187778677610502, "lo": 0.15880963907611997, "pos": 10, "n": 11} | todo=+0.230 G1={"ev": 0.2595585363381062, "dev": 0.029251770020274515, "ev_dia_medio": 0.241777
+  P_DER 24Oct-03Nov | lag 250 ms | todas las filas banda: bajo_alto_dia={"m": 0.12292767319441605, "lo": 0.09272260966976328, "pos": 11, "n": 11} | todo=+0.064 G1={"ev": 0.08297927737026788, "dev": 0.01931400764793237, "ev_dia_medio": 0.072273
+  P_DER 24Oct-03Nov | lag 250 ms | tipo B (q<=bid-0,01): bajo_alto_dia={"m": 0.22525069951981136, "lo": 0.11744535201494544, "pos": 9, "n": 11} | todo=+0.159 G1={"ev": 0.19048156586684428, "dev": 0.03155896892529628, "ev_dia_medio": 0.173034

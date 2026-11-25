@@ -1,0 +1,7 @@
+R7a maker que vende el barato a cada clase de tomadora (EV por € de capital complementario; días 13-21):
+  INV   : EV +0.0341 IC90d (0.0175, 0.0494) con rebate +0.0364 sin2 +0.0228 días+ 8/9 capital 770785 $ (coste barato tomado 156397 $)
+  R     : EV -0.0048 IC90d (-0.0254, 0.0222) con rebate -0.0025 sin2 -0.0224 días+ 5/9 capital 175217 $ (coste barato tomado 37253 $)
+  resto : EV +0.0022 IC90d (-0.0097, 0.0154) con rebate +0.0047 sin2 -0.0071 días+ 4/9 capital 17782634 $ (coste barato tomado 3823402 $)
+  todo  : EV +0.0035 IC90d (-0.0082, 0.0161) con rebate +0.0060 sin2 -0.0056 días+ 4/9 capital 18728638 $ (coste barato tomado 4017050 $)
+R7b celdas INV-tomador (maker complementario): A -0.0007 (cap 6293110) B +0.0035 Δ -0.0042 IC90d (-0.0149,+0.0076) sin2 -0.0133 días Δ>0 3/9
+EV A por día: [-0.0032, -0.0133, -0.0337, 0.0209, -0.0028, 0.0647, 0.0348, 0.003, -0.0569]

@@ -1,0 +1,36 @@
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/audit_final.py:7: Pandas4Warning: Timestamp.utcnow is deprecated and will be removed in a future version. Use Timestamp.now('UTC') instead.
+  L = [f'## EXP-1 CIERRE ({pd.Timestamp.utcnow().strftime("%FT%TZ")}); addendum {ADD_SHA[:8]}']
+## EXP-1 CIERRE (2026-11-15T20:12:40Z); addendum 6fc7dba5
+Fases (STATUS.json): E1: COMPLETE (2026-11-15T17:40:17Z); E3x: COMPLETE (2026-11-15T17:44:37Z); E7: COMPLETE (2026-11-15T18:06:22Z); E2agg: PARTIAL (2026-11-15T20:11:33Z); E6: PARTIAL (2026-11-15T20:12:40Z); E3: COMPLETE (2026-11-15T18:40:00Z); E5: PARTIAL (2026-11-15T20:12:37Z)
+Dias esperados 37 (2026-10-09..2026-11-14): COMPLETE 35, FAILED 2
+  FAILED: 2026-10-16[ASSERT: C3: suelo p5 40.0 vs 19.5 (R0, 144 ventanas)], 2026-10-24[ASSERT: C3: suelo p5 20.0 vs 39.5 (R1, 144 ventanas)]
+Duracion total del job: 152.6 min; E2 por dia: media 145 s; fases: E1 14 s, E3x 260 s, e3_reglas 12 s, e2_agrega 82 s, e5_regimen 3 s, e6_brecha 3 s
+Log final: 2026-11-15T20:12:40Z INICIO audit_final load1 5.77 MemAvail_MB 5353
+85b507ec7aa1fe3c2b81ee63b8409db1f8c3ce2e43dd256b0b68aec52b92c236  exp1/audit_final.py
+b9b10779ea84709753a96912bd7d7a0f5a8c3f149a406d7055a3218b9a6a6268  exp1/e1_b_real.py
+d29ff1b5cf9ad89dbbae786fee6fbe601d4b4a979010a001e905c9ba2fd907bd  exp1/e2_agrega.py
+5702da2c460f643de3c9125dbdbf7d334bc64ea4b307e0efd5a1d6d759e15c5a  exp1/e2_dia.py
+3108b66476d53680518a59f9889c156621a88d63765e440336332ed8d22405b2  exp1/e3_extrae.py
+82ed755263db14a24d36db2c3ed51beaaed4728db1793d74ea7ab46bf7af9ef3  exp1/e3_reglas.py
+6f7712d4e748acef5ccf07607914a1206dc4245492b66f926abf26f35c3944e1  exp1/e5_regimen.py
+5ff8e08622050067da30d5076062ab376d1d554f6e4e48865abe39078e6c2492  exp1/e6_brecha.py
+c68f1053d280032238edc25bf39e2cb3585d54ab298eac359f180a13fa8d9116  exp1/e7_calma.py
+e275deb720e4d59afc78827fbb89ac8019f2c41894f0dfec7c96b27faea3498c  exp1/lib1.py
+dfceaccda1131b11a9b2712939f74790764515e5d3620125f2d426b45d065a74  exp1/popdata.py
+6b28721d2c2309570801dfdd8daa5eb3736545b3e5fb000d2038153594bcbd86  exp1/resumen_final.py
+e9cccb980594b01da45e9be51eac71698b1d8449c20756dfe07c26faa19f2443  exp1/run_exp1.sh
+f521b62420ab894356203795c0edce1e7f18aaac2aa888411735e85c53e591c5  exp1/E1_B_real_v3.txt
+1607873df4a6b705af03ce8fc67532ee3f1d836fecf036d914c27b0fe1cca892  exp1/E2_poblacion.txt
+e3ec8b4b28050b4ead9f488af51c1afd87ee2f373a991560da84546a93b72d33  exp1/E3_reglas.txt
+dd5e54bee4f50af41616352d8eb52379d6690e2b2339494a2a86ad5b64361747  exp1/E5_regimen.txt
+9d81a5273941b697ff65993285f8c804f06708310d0cd9dee779b6f8059350c0  exp1/E6_brecha.txt
+e6dc1143f935fe31246c146412ced759042695c89fa4eea2bb074f15e1441d28  exp1/E7_calma.txt
+1772e6deaeed83a05fc8ed28e46a2878b009e1e9c44edc32a9b54a7009ce2128  exp1/E1_B_real_v3.json
+049239c2dfa30402e4da7cfdce5153b17a30e7bebf0ad98bd10b8acce7add2d7  exp1/E2_poblacion.json
+f8007efac01329550f9efea81cfbffe72f82a531df5a3d31f2e85526a4a3af9f  exp1/E3_reglas.json
+48c2e57b0f05b43516147d89936c791a5625cd1bfdf628cf32df78a64c931842  exp1/E5_regimen.json
+1f94edf6748ff0d260053dcdccad8832a7eadaee74bb10c0e9002ab0823601e1  exp1/E6_brecha.json
+2b593c39190fdeb3f49f48b3f2ecbe7fa0b127ec8ab050618f1385a60c756c96  exp1/E7_calma.json
+8a5c7521823c70ebe7f1acc6b78c3a386b155ef461897707859208a86d973dfa  exp1/B_fills_v3.pkl
+17473cca924ef46ec5bf762626b72a5dc718c134cf5ff9960d9922ef7c473623  exp1/STATUS.json
+manifiestos de poblacion por dia: acdbbc904ac54a23b9fd5610de0b82611a351fbc58d7f47bdf99ce308c932a65  (38 ficheros)

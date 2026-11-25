@@ -1,0 +1,23 @@
+	Command being timed: "python3 -I /root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia.py 2026-11-06"
+	User time (seconds): 151.17
+	System time (seconds): 73.34
+	Percent of CPU this job got: 131%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:50.13
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 917572
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 901
+	Minor (reclaiming a frame) page faults: 3707576
+	Voluntary context switches: 6270492
+	Involuntary context switches: 705628
+	Swaps: 0
+	File system inputs: 1276128
+	File system outputs: 394928
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

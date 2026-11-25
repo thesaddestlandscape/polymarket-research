@@ -1,0 +1,12 @@
+2025 (349 d, proxy) AR<=0: dias 349 | Delta(AR bajo) -0.063  Delta(AR alto) -0.087  diferencia (alto-bajo) -0.024 IC90 dias [-0.073,+0.025]   [diferencia>0 => penalizacion mayor cuando AR bajo]
+2025 (349 d, proxy) AR<=-0,10: dias 349 | Delta(AR bajo) -0.065  Delta(AR alto) -0.080  diferencia (alto-bajo) -0.015 IC90 dias [-0.063,+0.031]   [diferencia>0 => penalizacion mayor cuando AR bajo]
+    cobertura AR: 0.952, n medio ventana 26.9
+backfill (129 d, proxy) AR<=0: dias 127 | Delta(AR bajo) -0.083  Delta(AR alto) -0.162  diferencia (alto-bajo) -0.079 IC90 dias [-0.163,+0.008]   [diferencia>0 => penalizacion mayor cuando AR bajo]
+backfill (129 d, proxy) AR<=-0,10: dias 127 | Delta(AR bajo) -0.093  Delta(AR alto) -0.131  diferencia (alto-bajo) -0.039 IC90 dias [-0.126,+0.046]   [diferencia>0 => penalizacion mayor cuando AR bajo]
+    cobertura AR: 0.933, n medio ventana 26.3
+dic_ene (40 d, oficial) AR<=0: dias 40 | Delta(AR bajo) -0.167  Delta(AR alto) -0.175  diferencia (alto-bajo) -0.008 IC90 dias [-0.203,+0.198]   [diferencia>0 => penalizacion mayor cuando AR bajo]
+dic_ene (40 d, oficial) AR<=-0,10: dias 40 | Delta(AR bajo) -0.163  Delta(AR alto) -0.183  diferencia (alto-bajo) -0.020 IC90 dias [-0.181,+0.168]   [diferencia>0 => penalizacion mayor cuando AR bajo]
+    cobertura AR: 0.948, n medio ventana 26.1
+bookTicker (29 d, proxy) AR<=0: dias 29 | Delta(AR bajo) -0.189  Delta(AR alto) -0.042  diferencia (alto-bajo) +0.146 IC90 dias [-0.067,+0.364]   [diferencia>0 => penalizacion mayor cuando AR bajo]
+bookTicker (29 d, proxy) AR<=-0,10: dias 29 | Delta(AR bajo) -0.218  Delta(AR alto) -0.024  diferencia (alto-bajo) +0.194 IC90 dias [-0.014,+0.412]   [diferencia>0 => penalizacion mayor cuando AR bajo]
+    cobertura AR: 0.914, n medio ventana 26.1

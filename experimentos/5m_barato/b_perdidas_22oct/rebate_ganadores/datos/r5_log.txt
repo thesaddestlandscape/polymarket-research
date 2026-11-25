@@ -1,0 +1,57 @@
+cobertura desenlace oficial: 1.0000 de 1404677 fills (coste)
+poblacion BTC 5m: coste 81 M, makers 8742
+
+== 1. PnL por wallet (BTC 5m, 06..21-Oct, desenlace oficial) ==
+wallet  clase  coste_M  coste_T  pnl_M  pnl_T  reb_inf  EV_M(sin reb) EV_M(+reb)  dias  mercados  fills
+0x21f4c1a1 GAN   3,061,209   899,531    32,449  -14,072  13,659  +0.0106 +0.0151   16   4318   383660
+0x28cc505f PERD    904,496    31,172     2,776      478   4,452  +0.0031 +0.0080   16   4208    53036
+0x855e4848 PERD    902,658    32,063       -55    2,340   4,427  -0.0001 +0.0048   16   4184    51216
+0x85a186d1 PERD  1,198,370         0    -2,654        0   6,175  -0.0022 +0.0029   16   4337   216762
+0x86b14772 GAN   1,593,302    18,558    16,064   -1,217   6,749  +0.0101 +0.0143   16   4210    67405
+0x9d57c42e PERD  1,642,269   558,436       -65  -10,027   7,501  -0.0000 +0.0045   16   3489   276863
+0xe29042f5 GAN   1,981,128   974,568    20,829    1,345  11,678  +0.0105 +0.0164   14   3665   318091
+
+== 2. PnL diario (M, sin y con rebate) y sin 2 mejores dias; IC90 por dias del EV ponderado ==
+0x21f4c1a1 GAN dias+ 14/16 pnl_dia(+reb) med 3,372 | EV+reb +0.0151 IC90 dias (+0.0087,+0.0218) | sin 2 mejores +0.0125
+0x28cc505f PERD dias+ 8/16 pnl_dia(+reb) med 50 | EV+reb +0.0080 IC90 dias (-0.0045,+0.0191) | sin 2 mejores +0.0005
+0x855e4848 PERD dias+ 10/16 pnl_dia(+reb) med 366 | EV+reb +0.0048 IC90 dias (-0.0108,+0.0214) | sin 2 mejores -0.0045
+0x85a186d1 PERD dias+ 11/16 pnl_dia(+reb) med 161 | EV+reb +0.0029 IC90 dias (-0.0013,+0.0070) | sin 2 mejores +0.0010
+0x86b14772 GAN dias+ 13/16 pnl_dia(+reb) med 2,027 | EV+reb +0.0143 IC90 dias (+0.0035,+0.0290) | sin 2 mejores +0.0097
+0x9d57c42e PERD dias+ 13/16 pnl_dia(+reb) med 411 | EV+reb +0.0045 IC90 dias (+0.0014,+0.0076) | sin 2 mejores +0.0031
+0xe29042f5 GAN dias+ 11/14 pnl_dia(+reb) med 2,249 | EV+reb +0.0164 IC90 dias (+0.0103,+0.0218) | sin 2 mejores +0.0135
+
+== 3. Contrafactual de CELDA (dia,banda,tb,lado) con EV de los demas makers (leave-one-out) ==
+0x21f4c1a1 GAN cobertura celdas 1.000 | PnL real 32,449 vs esperado por mezcla de celdas 8,715 -> explica 0.27 ; residuo (seleccion dentro de celda) +23,734 = +0.0078 por EUR
+0x28cc505f PERD cobertura celdas 1.000 | PnL real 2,776 vs esperado por mezcla de celdas 741 -> explica 0.27 ; residuo (seleccion dentro de celda) +2,035 = +0.0023 por EUR
+0x855e4848 PERD cobertura celdas 1.000 | PnL real -55 vs esperado por mezcla de celdas 1,555 -> explica -28.35 ; residuo (seleccion dentro de celda) -1,610 = -0.0018 por EUR
+0x85a186d1 PERD cobertura celdas 1.000 | PnL real -2,653 vs esperado por mezcla de celdas 38 -> explica -0.01 ; residuo (seleccion dentro de celda) -2,691 = -0.0022 por EUR
+0x86b14772 GAN cobertura celdas 1.000 | PnL real 16,064 vs esperado por mezcla de celdas -8,928 -> explica -0.56 ; residuo (seleccion dentro de celda) +24,992 = +0.0157 por EUR
+0x9d57c42e PERD cobertura celdas 1.000 | PnL real -65 vs esperado por mezcla de celdas 3,580 -> explica -55.33 ; residuo (seleccion dentro de celda) -3,645 = -0.0022 por EUR
+0xe29042f5 GAN cobertura celdas 1.000 | PnL real 20,892 vs esperado por mezcla de celdas -6,620 -> explica -0.32 ; residuo (seleccion dentro de celda) +27,512 = +0.0139 por EUR
+
+== 4. Perfil: banda, T, lado, tamaño ==
+0x21f4c1a1 GAN coste por banda[0.01-.05,.05-.1,.1-.2,.2-.3,.3-.5,.5-.7,.7-.9,.9-.99]: 0.01 0.01 0.03 0.04 0.14 0.20 0.32 0.24 | por T[<=60,60-150,150-300]: 0.13 0.32 0.56 | acc/fill med 10.0 p90 71 | pc med 0.37
+0x28cc505f PERD coste por banda[0.01-.05,.05-.1,.1-.2,.2-.3,.3-.5,.5-.7,.7-.9,.9-.99]: 0.00 0.01 0.02 0.03 0.22 0.29 0.28 0.16 | por T[<=60,60-150,150-300]: 0.14 0.25 0.44 | acc/fill med 11.5 p90 93 | pc med 0.48
+0x855e4848 PERD coste por banda[0.01-.05,.05-.1,.1-.2,.2-.3,.3-.5,.5-.7,.7-.9,.9-.99]: 0.00 0.01 0.02 0.03 0.22 0.28 0.28 0.16 | por T[<=60,60-150,150-300]: 0.16 0.24 0.43 | acc/fill med 11.5 p90 97 | pc med 0.48
+0x85a186d1 PERD coste por banda[0.01-.05,.05-.1,.1-.2,.2-.3,.3-.5,.5-.7,.7-.9,.9-.99]: 0.00 0.01 0.03 0.05 0.18 0.29 0.28 0.15 | por T[<=60,60-150,150-300]: 0.08 0.30 0.52 | acc/fill med 10.0 p90 30 | pc med 0.45
+0x86b14772 GAN coste por banda[0.01-.05,.05-.1,.1-.2,.2-.3,.3-.5,.5-.7,.7-.9,.9-.99]: 0.00 0.01 0.02 0.03 0.10 0.26 0.43 0.16 | por T[<=60,60-150,150-300]: 0.13 0.28 0.59 | acc/fill med 16.3 p90 100 | pc med 0.55
+0x9d57c42e PERD coste por banda[0.01-.05,.05-.1,.1-.2,.2-.3,.3-.5,.5-.7,.7-.9,.9-.99]: 0.00 0.01 0.03 0.04 0.15 0.22 0.33 0.22 | por T[<=60,60-150,150-300]: 0.02 0.38 0.59 | acc/fill med 14.6 p90 30 | pc med 0.43
+0xe29042f5 GAN coste por banda[0.01-.05,.05-.1,.1-.2,.2-.3,.3-.5,.5-.7,.7-.9,.9-.99]: 0.00 0.01 0.03 0.04 0.27 0.36 0.26 0.04 | por T[<=60,60-150,150-300]: 0.00 0.14 0.70 | acc/fill med 9.9 p90 48 | pc med 0.46
+
+== 5. Cobertura de mercados e inventario (unidad mercado) ==
+mercados BTC 5m con desenlace en 06..21-Oct: 4711
+0x21f4c1a1 GAN mercados 4318 (0.92 de todos) | acc/mercado med 1650 | cobertura de pares: share acc emparejada 0.410; mercados cubiertos (>=20% lado corto) 0.92; solo un lado 0.02 | pnl mercado hedged 14,653 vs no 3,724
+0x28cc505f PERD mercados 4208 (0.89 de todos) | acc/mercado med 313 | cobertura de pares: share acc emparejada 0.285; mercados cubiertos (>=20% lado corto) 0.53; solo un lado 0.27 | pnl mercado hedged 2,964 vs no 291
+0x855e4848 PERD mercados 4184 (0.89 de todos) | acc/mercado med 304 | cobertura de pares: share acc emparejada 0.283; mercados cubiertos (>=20% lado corto) 0.51; solo un lado 0.30 | pnl mercado hedged 1,801 vs no 484
+0x85a186d1 PERD mercados 4337 (0.92 de todos) | acc/mercado med 520 | cobertura de pares: share acc emparejada 0.434; mercados cubiertos (>=20% lado corto) 1.00; solo un lado 0.00 | pnl mercado hedged -2,279 vs no -375
+0x86b14772 GAN mercados 4210 (0.89 de todos) | acc/mercado med 495 | cobertura de pares: share acc emparejada 0.303; mercados cubiertos (>=20% lado corto) 0.52; solo un lado 0.24 | pnl mercado hedged -19,962 vs no 34,809
+0x9d57c42e PERD mercados 3489 (0.74 de todos) | acc/mercado med 1252 | cobertura de pares: share acc emparejada 0.430; mercados cubiertos (>=20% lado corto) 0.97; solo un lado 0.00 | pnl mercado hedged -7,038 vs no -3,054
+0xe29042f5 GAN mercados 3665 (0.78 de todos) | acc/mercado med 1613 | cobertura de pares: share acc emparejada 0.459; mercados cubiertos (>=20% lado corto) 0.99; solo un lado 0.01 | pnl mercado hedged 21,088 vs no 1,085
+
+== 6. Rol tomador: parte del PnL (BTC) ==
+0x21f4c1a1 GAN tomador coste 899,531 (22.71% del total) pnl neto fee -14,072 EV -0.0156
+0x28cc505f PERD tomador coste 31,172 (3.33% del total) pnl neto fee 478 EV +0.0153
+0x855e4848 PERD tomador coste 32,063 (3.43% del total) pnl neto fee 2,340 EV +0.0730
+0x86b14772 GAN tomador coste 18,558 (1.15% del total) pnl neto fee -1,217 EV -0.0656
+0x9d57c42e PERD tomador coste 558,436 (25.38% del total) pnl neto fee -10,027 EV -0.0180
+0xe29042f5 GAN tomador coste 974,568 (32.97% del total) pnl neto fee 1,345 EV +0.0014

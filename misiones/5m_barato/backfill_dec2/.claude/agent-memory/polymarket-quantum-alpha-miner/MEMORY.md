@@ -1,0 +1,1 @@
+- [Fuga por submuestreo t%10](feedback_muestreo_negativos_fuga.md) — AUC .97 falso; muestrear negativos al azar y OMP_NUM_THREADS=1

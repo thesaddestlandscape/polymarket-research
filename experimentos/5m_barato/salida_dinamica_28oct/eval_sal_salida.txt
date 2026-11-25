@@ -1,0 +1,120 @@
+unidades totales dedup 50154 sin desenlace 76 | con relleno P: IS 25427 OOS 5711
+sonda X3 (P rellenadas): vacia(orden vendida entera/no colocada) 20125 NA(libro rancio) 6537 con sonda 4476 | NS 4258 PS 218 | X4 valida 30430
+
+===== A) EV TOTAL (todas las unidades con relleno P; Σpnl/Σcoste)  [esperado HOLD IS +0,0004 n=25427 | OOS -0,0318 n=5711]
+HOLD IS                    n=25427 coste= 26561.0 EVw=+0.0004 EVu=+0.0041 IC90c=(-0.022,+0.023) IC90d=(-0.025,+0.025) dias>0=8/18 sin2mejores=-0.0123
+HOLD OOS                   n= 5711 coste=  6032.4 EVw=-0.0318 EVu=-0.0014 IC90c=(-0.083,+0.018) IC90d=(-0.146,+0.090) dias>0=1/4 sin2mejores=-0.1458
+I1_vender_ya IS            n=25427 coste= 26561.0 EVw=-0.1164 EVu=-0.1085 IC90c=(-0.121,-0.112) IC90d=(-0.121,-0.112) dias>0=0/18 sin2mejores=-0.1179
+I1_vender_ya OOS           n= 5711 coste=  6032.4 EVw=-0.1263 EVu=-0.1136 IC90c=(-0.135,-0.118) IC90d=(-0.133,-0.119) dias>0=0/4 sin2mejores=-0.1344
+A30_sin_rebote IS          n=25427 coste= 26561.0 EVw=+0.0028 EVu=+0.0077 IC90c=(-0.019,+0.026) IC90d=(-0.023,+0.028) dias>0=9/18 sin2mejores=-0.0103
+A30_sin_rebote OOS         n= 5711 coste=  6032.4 EVw=-0.0291 EVu=+0.0003 IC90c=(-0.081,+0.019) IC90d=(-0.143,+0.093) dias>0=1/4 sin2mejores=-0.1444
+dias A30 IS  05:-0.160 06:+0.026 07:-0.051 08:+0.061 09:-0.025 10:+0.001 11:-0.032 12:-0.008 13:-0.112 14:+0.066 15:+0.065 16:+0.028 17:-0.009 18:-0.081 19:-0.068 20:+0.064 21:+0.128 22:+0.024
+dias A30 OOS 23:-0.013 24:-0.146 25:-0.143 26:+0.168
+REPRODUCCION R1 HOLD: OK
+
+===== B) Δ(regla − HOLD) PAREADO sobre todas las unidades (= ΔEV total por € de coste total) + pesimista
+Δ I1_vender_ya IS          n=25427 coste= 26561.0 EVw=-0.1168 EVu=-0.1126 IC90c=(-0.138,-0.096) IC90d=(-0.139,-0.093) dias>0=1/18 sin2mejores=-0.1274
+Δ I1_vender_ya OOS         n= 5711 coste=  6032.4 EVw=-0.0945 EVu=-0.1121 IC90c=(-0.141,-0.047) IC90d=(-0.212,+0.010) dias>0=2/4 sin2mejores=-0.1947
+Δ A30_sin_rebote IS        n=25427 coste= 26561.0 EVw=+0.0024 EVu=+0.0036 IC90c=(+0.001,+0.004) IC90d=(+0.001,+0.004) dias>0=14/18 sin2mejores=+0.0019
+Δ A30_sin_rebote OOS       n= 5711 coste=  6032.4 EVw=+0.0027 EVu=+0.0017 IC90c=(-0.000,+0.006) IC90d=(+0.000,+0.004) dias>0=3/4 sin2mejores=+0.0014
+EV total PESIMISTA A30 IS = HOLD_pes -0.015 + Δ +0.0024 = -0.0126  (IC90d inferior -0.0142)
+EV total PESIMISTA A30 OOS = HOLD_pes -0.046 + Δ +0.0027 = -0.0433  (IC90d inferior -0.0456)
+
+===== C) A30 sobre el conjunto DISPARADO: NS (sin rebote) vs INVERSION PS vs PLACEBO; Δ por € de coste del conjunto
+Δ NS (regla) IS            n= 3544 coste=  3280.5 EVw=+0.0196 EVu=+0.0257 IC90c=(+0.009,+0.030) IC90d=(+0.006,+0.032) dias>0=14/18 sin2mejores=+0.0154
+Δ NS (regla) OOS           n=  714 coste=   658.4 EVw=+0.0249 EVu=+0.0139 IC90c=(-0.004,+0.052) IC90d=(+0.003,+0.040) dias>0=3/4 sin2mejores=+0.0117
+Δ PS (inversion) IS        n=  161 coste=   186.0 EVw=+0.0046 EVu=-0.0004 IC90c=(-0.029,+0.037) IC90d=(-0.029,+0.035) dias>0=15/18 sin2mejores=-0.0101
+Δ PS (inversion) OOS       n=   57 coste=    60.9 EVw=-1.6071 EVu=-1.3063 IC90c=(-4.821,+0.055) IC90d=(-3.788,+0.115) dias>0=3/4 sin2mejores=-2.8085
+PLACEBO IS (500 aleatorios de NS∪PS, n=3544): media +0.0188 p5..p95 (+0.0171,+0.0214) | NS IS +0.0196 | frac placebo>=NS 0.224
+FILL-ABILITY salida I1 (tx+250ms) n=30430  bs>=restante 95.7%  q/restante medio 0.979  bid medio 0.217  acierto medio 0.232
+FILL-ABILITY salida A30 NS (T-30s) n=4258  bs>=restante 91.5%  q/restante medio 0.957  bid medio 0.016  acierto medio 0.011
+unidades P rellenadas con ASK/BID ausente en la sonda de salida: I1 708 de 31138 | A30: ver bloque NA/vacia arriba
+
+===== D) CALIBRACION del bid de salida (todas las fechas; Δ/acción = bid − fee − acierto; <0 => salir cuesta)
+I1 tx+250ms   bid <=0.02    n= 1637 bid medio 0.010 acierto 0.010 Δ/acc -0.0026 (por € de coste del tramo -0.0126)
+I1 tx+250ms   bid 0.02-0.05 n=  331 bid medio 0.039 acierto 0.042 Δ/acc -0.0049 (por € de coste del tramo -0.0254)
+I1 tx+250ms   bid 0.05-0.10 n= 1674 bid medio 0.090 acierto 0.106 Δ/acc -0.0185 (por € de coste del tramo -0.1308)
+I1 tx+250ms   bid 0.10-0.20 n=10373 bid medio 0.160 acierto 0.175 Δ/acc -0.0242 (por € de coste del tramo -0.1261)
+I1 tx+250ms   bid 0.20-0.40 n=15392 bid medio 0.255 acierto 0.272 Δ/acc -0.0300 (por € de coste del tramo -0.1106)
+I1 tx+250ms   bid >0.40     n= 1023 bid medio 0.814 acierto 0.827 Δ/acc -0.0307 (por € de coste del tramo -0.1308)
+A30 NS T-30s  bid <=0.02    n= 4023 bid medio 0.009 acierto 0.002 Δ/acc +0.0066 (por € de coste del tramo +0.0287)
+A30 NS T-30s  bid 0.02-0.05 n=  113 bid medio 0.037 acierto 0.035 Δ/acc -0.0013 (por € de coste del tramo -0.0057)
+A30 NS T-30s  bid 0.05-0.10 n=   52 bid medio 0.074 acierto 0.135 Δ/acc -0.0936 (por € de coste del tramo -0.3747)
+A30 NS T-30s  bid 0.10-0.20 n=   40 bid medio 0.147 acierto 0.150 Δ/acc +0.0082 (por € de coste del tramo +0.0353)
+A30 NS T-30s  bid >0.40     n=   21 bid medio 0.745 acierto 0.714 Δ/acc +0.0735 (por € de coste del tramo +0.2906)
+
+===== E) CELDAS I1 (vender ya, tx+250ms): K=38 (n>=40 y >=10 dias en IS); Δ por € de coste de la celda; max-statistic p=0.996; celdas con IC90d inferior>0: 0
+  EX bid 0.02-0.05     n=  282 coste=  135.7 Δ_IS=+0.0151 IC90d=(-0.090,+0.112) | OOS Δ=-0.2538 n=49
+  EX bid <=0.02        n= 1312 coste=  565.4 Δ_IS=-0.0146 IC90d=(-0.058,+0.021) | OOS Δ=-0.0043 n=325
+  EX bs<restante       n= 1016 coste= 1066.7 Δ_IS=-0.0433 IC90d=(-0.112,+0.025) | OOS Δ=-0.0011 n=305
+  coin=BTC             n= 6142 coste= 7712.7 Δ_IS=-0.0717 IC90d=(-0.104,-0.039) | OOS Δ=-0.0699 n=1455
+  Te<120               n= 1968 coste= 2112.2 Δ_IS=-0.0770 IC90d=(-0.145,-0.010) | OOS Δ=-0.1576 n=413
+  EX dbid-0.05..-0.02  n= 5874 coste= 6646.3 Δ_IS=-0.0772 IC90d=(-0.117,-0.037) | OOS Δ=-0.0785 n=1306
+  hora16-23            n= 8543 coste= 9037.2 Δ_IS=-0.0857 IC90d=(-0.117,-0.054) | OOS Δ=-0.1192 n=1875
+  v60<3                n=10360 coste=11246.0 Δ_IS=-0.0873 IC90d=(-0.114,-0.060) | OOS Δ=-0.0325 n=2446
+  EX dbid<=-0.10       n= 2017 coste= 1213.5 Δ_IS=-0.0901 IC90d=(-0.132,-0.052) | OOS Δ=-0.0443 n=478
+  spr=0.02             n= 9075 coste= 9962.4 Δ_IS=-0.0921 IC90d=(-0.126,-0.059) | OOS Δ=-0.1194 n=1517
+  hora00-07            n= 7931 coste= 8392.9 Δ_IS=-0.0963 IC90d=(-0.137,-0.057) | OOS Δ=-0.0953 n=1779
+  coin=XRP             n= 3404 coste= 3315.0 Δ_IS=-0.0970 IC90d=(-0.145,-0.046) | OOS Δ=-0.0782 n=942
+  np>=2                n= 5262 coste= 5636.0 Δ_IS=-0.0979 IC90d=(-0.143,-0.054) | OOS Δ=-0.1195 n=1292
+  Te120-180            n= 3509 coste= 3777.0 Δ_IS=-0.0997 IC90d=(-0.148,-0.050) | OOS Δ=-0.0412 n=669
+  EX dbid-0.02..0      n=10818 coste=12234.6 Δ_IS=-0.1046 IC90d=(-0.135,-0.071) | OOS Δ=-0.0839 n=2374
+  espera>=60s          n= 8877 coste= 7546.6 Δ_IS=-0.1047 IC90d=(-0.138,-0.071) | OOS Δ=-0.1491 n=1955
+  causa=B              n=23153 coste=24618.6 Δ_IS=-0.1119 IC90d=(-0.136,-0.087) | OOS Δ=-0.1059 n=5122
+  espera<10s           n= 8282 coste=10510.7 Δ_IS=-0.1157 IC90d=(-0.145,-0.086) | OOS Δ=-0.0311 n=1973
+  EX bid 0.10-0.20     n= 8519 coste= 7845.8 Δ_IS=-0.1162 IC90d=(-0.152,-0.079) | OOS Δ=-0.1707 n=1854
+  EX bs>=restante      n=23828 coste=25255.6 Δ_IS=-0.1210 IC90d=(-0.144,-0.097) | OOS Δ=-0.1007 n=5281
+  EX bid 0.20-0.40     n=12507 coste=16450.5 Δ_IS=-0.1219 IC90d=(-0.147,-0.097) | OOS Δ=-0.0619 n=2885
+  Te>=240              n=13459 coste=14121.6 Δ_IS=-0.1231 IC90d=(-0.160,-0.086) | OOS Δ=-0.1366 n=3280
+  np=1                 n=19582 coste=20686.3 Δ_IS=-0.1233 IC90d=(-0.145,-0.101) | OOS Δ=-0.0875 n=4294
+  v60>=10              n= 2967 coste= 3023.6 Δ_IS=-0.1280 IC90d=(-0.175,-0.078) | OOS Δ=-0.1509 n=566
+  EX bid 0.05-0.10     n= 1371 coste=  885.5 Δ_IS=-0.1285 IC90d=(-0.224,-0.034) | OOS Δ=-0.1410 n=303
+  coin=ETH             n= 4383 coste= 4670.7 Δ_IS=-0.1285 IC90d=(-0.174,-0.081) | OOS Δ=-0.0969 n=1047
+  Te180-240            n= 5908 coste= 6311.4 Δ_IS=-0.1305 IC90d=(-0.168,-0.090) | OOS Δ=+0.0055 n=1224
+  espera10-60s         n= 7685 coste= 8265.0 Δ_IS=-0.1325 IC90d=(-0.167,-0.098) | OOS Δ=-0.1365 n=1658
+  spr>=0.03            n=15769 coste=16359.9 Δ_IS=-0.1335 IC90d=(-0.159,-0.108) | OOS Δ=-0.0853 n=4069
+  coin=SOL             n= 4682 coste= 4936.6 Δ_IS=-0.1385 IC90d=(-0.170,-0.107) | OOS Δ=-0.0977 n=1088
+  v60 3-10             n=11517 coste=12052.7 Δ_IS=-0.1438 IC90d=(-0.178,-0.111) | OOS Δ=-0.1451 n=2574
+  EX bid >0.40         n=  853 coste=  439.3 Δ_IS=-0.1459 IC90d=(-0.249,-0.036) | OOS Δ=-0.0447 n=170
+  EX dbid-0.10..-0.05  n= 2175 coste= 2378.7 Δ_IS=-0.1541 IC90d=(-0.196,-0.111) | OOS Δ=-0.1818 n=564
+  coin=DOGE            n= 3174 coste= 2902.4 Δ_IS=-0.1564 IC90d=(-0.210,-0.104) | OOS Δ=-0.1235 n=582
+  hora08-15            n= 8370 coste= 8892.1 Δ_IS=-0.1708 IC90d=(-0.213,-0.130) | OOS Δ=-0.0721 n=1932
+  coin=BNB             n= 3059 coste= 2784.9 Δ_IS=-0.1756 IC90d=(-0.234,-0.121) | OOS Δ=-0.2108 n=472
+  causa=A              n= 1691 coste= 1703.6 Δ_IS=-0.2038 IC90d=(-0.289,-0.119) | OOS Δ=+0.0254 n=464
+  EX dbid>0            n= 3960 coste= 3849.1 Δ_IS=-0.2164 IC90d=(-0.265,-0.169) | OOS Δ=-0.1127 n=864
+
+===== E) CELDAS A30 NS (T-30s): K=32 (n>=40 y >=10 dias en IS); Δ por € de coste de la celda; max-statistic p=0.000; celdas con IC90d inferior>0: 16
+  v60>=10              n=  378 coste=  333.9 Δ_IS=+0.0455 IC90d=(+0.027,+0.065) | OOS Δ=-0.0464 n=60
+  EX bid 0.02-0.05     n=   94 coste=   80.5 Δ_IS=+0.0350 IC90d=(-0.101,+0.156) | OOS Δ=-0.1800 n=19
+  hora16-23            n= 1303 coste= 1221.8 Δ_IS=+0.0347 IC90d=(+0.024,+0.045) | OOS Δ=+0.0230 n=250
+  coin=DOGE            n=  660 coste=  543.2 Δ_IS=+0.0311 IC90d=(+0.010,+0.051) | OOS Δ=+0.0111 n=117
+  EX dbid-0.10..-0.05  n=   54 coste=   22.8 Δ_IS=+0.0295 IC90d=(-0.402,+0.379) | OOS Δ=-0.2578 n=11
+  Te120-180            n=  642 coste=  618.9 Δ_IS=+0.0293 IC90d=(-0.007,+0.062) | OOS Δ=-0.0223 n=108
+  EX bid <=0.02        n= 3359 coste= 3110.9 Δ_IS=+0.0274 IC90d=(+0.022,+0.032) | OOS Δ=+0.0351 n=664
+  EX bs<restante       n=  315 coste=  311.3 Δ_IS=+0.0262 IC90d=(+0.022,+0.031) | OOS Δ=+0.0201 n=48
+  Te<120               n=  572 coste=  576.7 Δ_IS=+0.0256 IC90d=(-0.012,+0.055) | OOS Δ=+0.0663 n=116
+  coin=BTC             n=  424 coste=  521.0 Δ_IS=+0.0255 IC90d=(+0.008,+0.036) | OOS Δ=+0.0386 n=82
+  espera>=60s          n= 1990 coste= 1552.3 Δ_IS=+0.0247 IC90d=(+0.005,+0.042) | OOS Δ=+0.0177 n=398
+  coin=SOL             n=  579 coste=  568.6 Δ_IS=+0.0239 IC90d=(+0.002,+0.042) | OOS Δ=+0.0500 n=122
+  np=1                 n= 2716 coste= 2459.4 Δ_IS=+0.0222 IC90d=(+0.012,+0.033) | OOS Δ=+0.0067 n=549
+  EX dbid<=-0.10       n= 3462 coste= 3233.5 Δ_IS=+0.0218 IC90d=(+0.010,+0.032) | OOS Δ=+0.0249 n=688
+  causa=A              n=  211 coste=  187.0 Δ_IS=+0.0218 IC90d=(-0.032,+0.053) | OOS Δ=+0.0899 n=70
+  spr>=0.03            n= 2537 coste= 2308.5 Δ_IS=+0.0211 IC90d=(+0.003,+0.036) | OOS Δ=+0.0212 n=580
+  coin=XRP             n=  678 coste=  597.4 Δ_IS=+0.0203 IC90d=(-0.011,+0.046) | OOS Δ=+0.0360 n=159
+  causa=B              n= 3333 coste= 3093.5 Δ_IS=+0.0195 IC90d=(+0.006,+0.031) | OOS Δ=+0.0189 n=644
+  espera10-60s         n=  847 coste=  856.3 Δ_IS=+0.0194 IC90d=(+0.000,+0.036) | OOS Δ=-0.0097 n=184
+  EX bs>=restante      n= 3229 coste= 2969.1 Δ_IS=+0.0189 IC90d=(+0.003,+0.033) | OOS Δ=+0.0253 n=666
+  coin=ETH             n=  520 coste=  510.3 Δ_IS=+0.0177 IC90d=(-0.005,+0.038) | OOS Δ=+0.0041 n=113
+  Te>=240              n= 1498 coste= 1318.2 Δ_IS=+0.0174 IC90d=(+0.002,+0.031) | OOS Δ=+0.0329 n=343
+  v60<3                n= 1650 coste= 1587.0 Δ_IS=+0.0172 IC90d=(-0.004,+0.035) | OOS Δ=+0.0131 n=339
+  v60 3-10             n= 1516 coste= 1359.5 Δ_IS=+0.0161 IC90d=(-0.004,+0.034) | OOS Δ=+0.0520 n=315
+  spr=0.02             n= 1007 coste=  971.9 Δ_IS=+0.0160 IC90d=(+0.003,+0.028) | OOS Δ=+0.0396 n=134
+  hora08-15            n= 1086 coste= 1001.7 Δ_IS=+0.0133 IC90d=(-0.007,+0.032) | OOS Δ=+0.0077 n=235
+  np>=2                n=  828 coste=  821.1 Δ_IS=+0.0118 IC90d=(-0.025,+0.039) | OOS Δ=+0.0774 n=165
+  Te180-240            n=  832 coste=  766.6 Δ_IS=+0.0112 IC90d=(-0.014,+0.032) | OOS Δ=+0.0079 n=147
+  espera<10s           n=  707 coste=  871.9 Δ_IS=+0.0107 IC90d=(-0.009,+0.030) | OOS Δ=+0.0779 n=132
+  hora00-07            n= 1155 coste= 1056.9 Δ_IS=+0.0082 IC90d=(-0.021,+0.033) | OOS Δ=+0.0452 n=229
+  coin=BNB             n=  683 coste=  540.0 Δ_IS=-0.0010 IC90d=(-0.042,+0.032) | OOS Δ=+0.0023 n=121
+  EX bid 0.05-0.10     n=   43 coste=   43.8 Δ_IS=-0.5031 IC90d=(-1.043,-0.040) | OOS Δ=+0.2958 n=9
+
+FIN eval_sal.py

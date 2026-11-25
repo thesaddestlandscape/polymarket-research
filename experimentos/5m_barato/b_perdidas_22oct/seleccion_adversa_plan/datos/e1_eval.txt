@@ -1,0 +1,20 @@
+===== DESC ['2026-10-17', '2026-10-18', '2026-10-19']
+BASE mercados 2396 rellenos 1680 (0.701) acierto rellenos 0.158 no rellenos 0.437 EV -0.2441 PnL -429.4 coste 1759.4
+S1_x2_w500   dPnL   +25.1 (+0.0143/EUR) IC90c -0.0075,+0.0341 dias +6.9 +7.1 +11.1 | EV -0.2441->-0.2497 ret 0.92 evit 231.5 sacr 184.0 sust -22.3 | D250 +0.0119 D0 +0.0186 INV +0.0006 placebo max +0.0105 media +0.0009 | mon ETH+13.4 SOL+15.1 XRP-3.4
+S1_x2_w2000  dPnL   +55.8 (+0.0317/EUR) IC90c +0.0012,+0.0593 dias +21.7 +11.6 +22.6 | EV -0.2441->-0.2452 ret 0.87 evit 339.0 sacr 247.9 sust -35.2 | D250 +0.0236 D0 +0.0406 INV +0.0021 placebo max +0.0145 media +0.0028 | mon ETH+17.5 SOL+25.5 XRP+12.8
+S1_x4_w500   dPnL    -0.1 (-0.0001/EUR) IC90c -0.0071,+0.0062 dias -0.9 -2.2 +3.0 | EV -0.2441->-0.2462 ret 0.99 evit 32.4 sacr 38.8 sust +6.3 | D250 -0.0016 D0 +0.0003 INV +0.0000 placebo max +0.0021 media +0.0005 | mon ETH+1.0 SOL-1.6 XRP+0.4
+S1_x4_w2000  dPnL    +3.3 (+0.0019/EUR) IC90c -0.0089,+0.0121 dias +1.4 -2.8 +4.7 | EV -0.2441->-0.2476 ret 0.98 evit 62.1 sacr 60.8 sust +2.0 | D250 +0.0022 D0 +0.0028 INV +0.0000 placebo max +0.0045 media +0.0010 | mon ETH+4.0 SOL+2.6 XRP-3.3
+S2_w500      dPnL   +11.4 (+0.0065/EUR) IC90c -0.0022,+0.0145 dias +2.8 +6.5 +2.1 | EV -0.2441->-0.2419 ret 0.98 evit 57.1 sacr 70.1 sust +24.3 | D250 +0.0092 D0 +0.0164 INV -0.0046 placebo max +0.0073 media +0.0015 | mon ETH+5.4 SOL+6.0 XRP-0.0
+S2_w2000     dPnL    +6.1 (+0.0035/EUR) IC90c -0.0076,+0.0134 dias -0.0 +4.2 +1.9 | EV -0.2441->-0.2463 ret 0.98 evit 76.2 sacr 77.6 sust +7.5 | D250 +0.0087 D0 +0.0134 INV +0.0015 placebo max +0.0098 media +0.0024 | mon ETH-0.3 SOL+6.5 XRP-0.0
+S3_w2000     dPnL   +69.6 (+0.0396/EUR) IC90c +0.0172,+0.0601 dias +18.6 +38.0 +13.0 | EV -0.2441->-0.2270 ret 0.90 evit 276.0 sacr 122.6 sust -83.8 | D250 +0.0326 D0 +0.0421 INV +0.0064 placebo max +0.0264 media +0.0079 | mon ETH+18.5 SOL+36.8 XRP+14.3
+ELEGIDA en DESC: S3_w2000 (+0.0396/EUR); p familiar (max-est. contra 8 desplazamientos) 0.111
+===== TEST ['2026-10-20', '2026-10-21', '2026-10-22']
+BASE mercados 2012 rellenos 1443 (0.717) acierto rellenos 0.184 no rellenos 0.522 EV -0.1109 PnL -166.0 coste 1496.0
+S1_x2_w500   dPnL   +41.3 (+0.0276/EUR) IC90c +0.0012,+0.0530 dias +23.5 +3.9 +14.0 | EV -0.1109->-0.0937 ret 0.89 evit 269.2 sacr 209.3 sust -18.5 | D250 +0.0353 D0 +0.0253 INV -0.0010 placebo max +0.0087 media +0.0006 | mon ETH+14.0 SOL+8.3 XRP+19.0
+S1_x2_w2000  dPnL   +62.2 (+0.0416/EUR) IC90c +0.0098,+0.0730 dias +42.0 +2.2 +18.1 | EV -0.1109->-0.0834 ret 0.83 evit 403.6 sacr 295.4 sust -45.9 | D250 +0.0490 D0 +0.0265 INV +0.0027 placebo max +0.0123 media +0.0006 | mon ETH+26.3 SOL+11.7 XRP+24.3
+S1_x4_w500   dPnL    +7.2 (+0.0048/EUR) IC90c -0.0046,+0.0135 dias +8.1 -2.7 +1.8 | EV -0.1109->-0.1077 ret 0.99 evit 43.9 sacr 23.7 sust -13.0 | D250 +0.0059 D0 +0.0055 INV -0.0022 placebo max +0.0013 media +0.0001 | mon ETH+0.9 SOL-3.2 XRP+9.4
+S1_x4_w2000  dPnL   +21.6 (+0.0144/EUR) IC90c -0.0010,+0.0293 dias +17.5 -2.9 +7.0 | EV -0.1109->-0.1006 ret 0.96 evit 104.2 sacr 51.0 sust -31.6 | D250 +0.0165 D0 +0.0165 INV +0.0000 placebo max +0.0046 media +0.0003 | mon ETH+5.0 SOL+6.8 XRP+9.9
+S2_w500      dPnL   -14.2 (-0.0095/EUR) IC90c -0.0226,+0.0027 dias -12.1 +0.5 -2.5 | EV -0.1109->-0.1226 ret 0.98 evit 76.0 sacr 64.0 sust -26.3 | D250 -0.0045 D0 -0.0164 INV +0.0124 placebo max +0.0020 media -0.0015 | mon ETH-13.8 SOL+1.4 XRP-1.9
+S2_w2000     dPnL   -15.3 (-0.0102/EUR) IC90c -0.0257,+0.0037 dias -14.2 +3.5 -4.7 | EV -0.1109->-0.1240 ret 0.98 evit 92.2 sacr 84.8 sust -22.8 | D250 -0.0053 D0 -0.0093 INV +0.0057 placebo max +0.0040 media -0.0024 | mon ETH-11.6 SOL-1.8 XRP-1.9
+S3_w2000     dPnL    -3.9 (-0.0026/EUR) IC90c -0.0321,+0.0243 dias +12.1 -5.2 -10.8 | EV -0.1109->-0.1278 ret 0.89 evit 243.1 sacr 212.6 sust -34.5 | D250 +0.0047 D0 -0.0037 INV +0.0090 placebo max +0.0071 media +0.0019 | mon ETH+1.4 SOL+4.5 XRP-9.8
+GATE TEST S3_w2000 {'G1': np.False_, 'G2': False, 'G3': np.False_, 'G4': np.False_, 'G5': np.True_, 'G6': np.True_} -> REJECTED

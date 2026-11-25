@@ -1,0 +1,24 @@
+unidades <1 s 1257 | con t_exch 1217
+(e) recv-t_exch primeros prints <1 s: p10=38 p50=41 p90=91 p99=298 ms
+    idem primeros prints >=5 s (control): p10=38 p50=40 p90=67 p99=180 ms
+
+(c) FX_d = t_exch + d < t0+85 (fraccion de unidades <1 s con t_exch conocido y por EUR)
+ d=  0  fantasma  395/1217 = 32.5%  por EUR 34.0% | EVw fantasma -0.093  EVw resto -0.074
+ d=100  fantasma   43/1217 = 3.5%  por EUR 3.7% | EVw fantasma -0.116  EVw resto -0.079
+ d=200  fantasma   16/1217 = 1.3%  por EUR 1.4% | EVw fantasma -0.567  EVw resto -0.074
+ d=300  fantasma    8/1217 = 0.7%  por EUR 0.7% | EVw fantasma -0.142  EVw resto -0.080
+ d=500  fantasma    4/1217 = 0.3%  por EUR 0.4% | EVw fantasma -1.000  EVw resto -0.077
+
+(d) subtramos de <1 s (dt desde t0): n, FX_0, FX_300, EVw total / sin FX_0 / sin FX_300
+ [ 85, 200) n= 587 FX0=65% FX300=1% | EVw -0.101 / sinFX0 -0.178 / sinFX300 -0.104
+ [200, 400) n= 311 FX0=4% FX300=0% | EVw +0.038 / sinFX0 +0.080 / sinFX300 +0.042
+ [400,1000) n= 319 FX0=1% FX300=0% | EVw -0.158 / sinFX0 -0.153 / sinFX300 -0.154
+
+(b) FC observada vs esperada solo por ruido de reloj (unidades st=ok)
+ no-FX0 (t_exch>=t0+85)     n= 708 FC obs=33.1%  esperada por ruido (si e fuera el evento)=34.0%
+ FX0 (t_exch<t0+85)         n= 308 FC obs=53.2%  esperada por ruido (si e fuera el evento)=53.5%
+
+(a) FC con ambiguos (unidades <1 s con st ok|amb): cota inf (todos los candidatos), sup (alguno), resuelta=mas cercano a t_exch+OFF
+ N=1204  FC_inf=35.5%  FC_sup=41.1%  FC_resuelta=40.3%
+
+Resumen <1 s: PRIM literal (FX0|FC ok) = 629/1257 = 50.0% ; 5-20 s: 0/1306

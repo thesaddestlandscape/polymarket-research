@@ -1,0 +1,57 @@
+POBLACION rellenos bid 0,10-0,30 5m ETH/SOL/XRP con desenlace oficial: 329998 | por dia n / pnl / EV€ / Σcoste:
+  2026-10-05: 7087 / -2995 / -0.169 / 17705 | flag 0.057 | bn_age p90 2664 ms
+  2026-10-06: 19365 / +282 / +0.006 / 44481 | flag 0.057 | bn_age p90 2154 ms
+  2026-10-07: 23956 / -121 / -0.002 / 49542 | flag 0.086 | bn_age p90 1456 ms
+  2026-10-08: 24606 / +8624 / +0.151 / 57134 | flag 0.159 | bn_age p90 1308 ms
+  2026-10-09: 21828 / +4109 / +0.092 / 44464 | flag 0.092 | bn_age p90 2067 ms
+  2026-10-10: 18231 / +2190 / +0.049 / 44728 | flag 0.031 | bn_age p90 2904 ms
+  2026-10-11: 18287 / +727 / +0.017 / 42617 | flag 0.044 | bn_age p90 2301 ms
+  2026-10-12: 19200 / +7128 / +0.171 / 41625 | flag 0.087 | bn_age p90 2053 ms
+  2026-10-13: 19951 / +19801 / +0.393 / 50335 | flag 0.100 | bn_age p90 1955 ms
+  2026-10-14: 18995 / +5559 / +0.155 / 35818 | flag 0.098 | bn_age p90 1732 ms
+  2026-10-15: 18769 / +1348 / +0.034 / 39535 | flag 0.147 | bn_age p90 1331 ms
+  2026-10-16: 17233 / -1860 / -0.048 / 38861 | flag 0.086 | bn_age p90 1958 ms
+  2026-10-17: 14285 / +2267 / +0.071 / 31982 | flag 0.043 | bn_age p90 3131 ms
+  2026-10-18: 13699 / +95 / +0.003 / 29343 | flag 0.099 | bn_age p90 2699 ms
+  2026-10-19: 15091 / -2049 / -0.050 / 40785 | flag 0.078 | bn_age p90 2446 ms
+  2026-10-20: 18613 / -16768 / -0.317 / 52946 | flag 0.076 | bn_age p90 2282 ms
+  2026-10-21: 15011 / +4293 / +0.121 / 35529 | flag 0.101 | bn_age p90 1890 ms
+  2026-10-22: 13228 / +5452 / +0.179 / 30490 | flag 0.102 | bn_age p90 1565 ms
+  2026-10-23: 12563 / -14 / -0.001 / 26236 | flag 0.074 | bn_age p90 1917 ms
+
+=== H1 BN_W300_X2 en la poblacion (dias != 20-22 Oct) ===
+unidades mercado+lado 17450, cierres 4413, dias 16; rellenos con bandera 24722 (0.087)
+EV€ con bandera +0.1355 (coste 48736) | sin bandera +0.0656 (coste 586454) | dif +0.0699 IC90 cierre (-0.0411,+0.1826)
+dPnL quitar marcados -6604.5 | placebo media -4794.6 se 2140.1 | EXCESO -1809.9 p=0.8100
+por dia (dif EV€ marcado − no marcado): {'2026-10-05': 0.246, '2026-10-06': 0.158, '2026-10-07': 0.06, '2026-10-08': 0.31, '2026-10-09': -0.029, '2026-10-10': -0.011, '2026-10-11': 0.072, '2026-10-12': 0.344, '2026-10-13': -0.196, '2026-10-14': 0.086, '2026-10-15': 0.281, '2026-10-16': -0.109, '2026-10-17': -0.073, '2026-10-18': -0.524, '2026-10-19': -0.11, '2026-10-23': -0.173}
+dias con >=30 unidades marcadas: 16, con dif<0: 8 (0.50)
+sin los 2 dias mas favorables ['2026-10-18', '2026-10-13']: dif +0.1309
+  ETH: dif +0.1031 (marcados coste 26866)
+  SOL: dif +0.0704 (marcados coste 14267)
+  XRP: dif +0.0227 (marcados coste 7602)
+
+LATENCIA: rellenos con disparo en [t-1000,t]: 25745 (0.091); lead p10/p25/p50/p75 = [150. 240. 460. 800.] ms
+  lead >= 90 ms (capturable): 0.960  | EV€ lead>=90: +0.1355  lead<90: -0.2482
+  lead >= 150 ms (capturable): 0.913  | EV€ lead>=150: +0.1417  lead<150: -0.1266
+  lead >= 250 ms (capturable): 0.746  | EV€ lead>=250: +0.1455  lead<250: +0.0362
+  EV€ sin disparo en 1 s: +0.0667
+
+=== H2 cuando operar (walk-forward por dia) ===
+ventanas por dia sin rellenos en banda (o sin desenlace): {'2026-10-05': 0.06, '2026-10-06': 0.01, '2026-10-07': 0.01, '2026-10-08': 0.0, '2026-10-09': 0.01, '2026-10-10': 0.02, '2026-10-11': 0.01, '2026-10-12': 0.0, '2026-10-13': 0.01, '2026-10-14': 0.01, '2026-10-15': 0.02, '2026-10-16': 0.01, '2026-10-17': 0.02, '2026-10-18': 0.01, '2026-10-19': 0.01, '2026-10-20': 0.02, '2026-10-21': 0.01, '2026-10-22': 0.02, '2026-10-23': 0.02}
+dias ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11', '2026-10-12', '2026-10-13', '2026-10-14', '2026-10-15', '2026-10-16', '2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23']
+R1: dias test 16 | saltadas 3749/13815 | dPnL +7780 | EXCESO +16639 (p=0.0035, IC90 cierre +4699,+28127) | sin2dias +6796 | INVERSION -19063 | ret€ 0.67 | niveles ['T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T1', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0'] | PASA
+      transferencia a B 20-22 Oct: base pnl -9.00 sobre 178.9 € (183 rellenos) | dPnL B si salta +17.85
+R2: dias test 16 | saltadas 3109/13815 | dPnL +2539 | EXCESO +15292 (p=0.0305, IC90 cierre -3259,+32095) | sin2dias +3024 | INVERSION -18164 | ret€ 0.73 | niveles ['T1', 'T1', 'T1', 'T1', 'T1', 'T1', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0'] | FALLA
+      transferencia a B 20-22 Oct: base pnl -9.00 sobre 178.9 € (183 rellenos) | dPnL B si salta +4.06
+R3: dias test 16 | saltadas 4187/13815 | dPnL +2924 | EXCESO +13437 (p=0.0525, IC90 cierre +565,+27197) | sin2dias +1075 | INVERSION +10640 | ret€ 0.67 | niveles ['T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0'] | FALLA
+      transferencia a B 20-22 Oct: base pnl -9.00 sobre 178.9 € (183 rellenos) | dPnL B si salta -3.94
+R4: dias test 16 | saltadas 2302/13815 | dPnL -3205 | EXCESO +3625 (p=0.3345, IC90 cierre -7579,+13952) | sin2dias -3107 | INVERSION -869 | ret€ 0.85 | niveles ['5', '5', '5', '0', '0', '4', '4', '0', '0', '0', '0', '0', '0', '1', '1', '1'] | FALLA
+      transferencia a B 20-22 Oct: base pnl -9.00 sobre 178.9 € (183 rellenos) | dPnL B si salta -21.20
+R5: dias test 16 | saltadas 4604/13815 | dPnL -1308 | EXCESO +12350 (p=0.0985, IC90 cierre +1421,+24096) | sin2dias +3306 | INVERSION +22188 | ret€ 0.91 | niveles ['XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP', 'XRP'] | FALLA
+      transferencia a B 20-22 Oct: base pnl -9.00 sobre 178.9 € (183 rellenos) | dPnL B si salta +5.94
+R6: dias test 16 | saltadas 4553/13815 | dPnL -15474 | EXCESO -728 (p=0.5430, IC90 cierre -16077,+14894) | sin2dias -8644 | INVERSION +10447 | ret€ 0.67 | niveles ['T2', 'T1', 'T0', 'T0', 'T0', 'T1', 'T1', 'T1', 'T0', 'T1', 'T1', 'T1', 'T1', 'T1', 'T1', 'T1'] | FALLA
+      transferencia a B 20-22 Oct: base pnl -9.00 sobre 178.9 € (183 rellenos) | dPnL B si salta +12.61
+R7: dias test 16 | saltadas 5658/13815 | dPnL -2706 | EXCESO +12867 (p=0.0995, IC90 cierre -716,+26335) | sin2dias +3679 | INVERSION -2035 | ret€ 0.85 | niveles ['T1', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0', 'T0'] | FALLA
+      transferencia a B 20-22 Oct: base pnl -9.00 sobre 178.9 € (183 rellenos) | dPnL B si salta +15.89
+
+Escala poblacion: Σcoste/dia medio en banda 39692 $ (todas las makers); EXCESO/dia por rasgo: {'R1': np.float64(1040.0), 'R2': np.float64(955.7), 'R3': np.float64(839.8), 'R4': np.float64(226.5), 'R5': np.float64(771.8), 'R6': np.float64(-45.5), 'R7': np.float64(804.2)}

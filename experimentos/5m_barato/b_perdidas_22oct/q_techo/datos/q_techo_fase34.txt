@@ -1,0 +1,105 @@
+# Q-TECHO TEST 17-21 (n=36125, EUR=34560); regla primaria: familia MAP m=0.0 (elegida en DESC); prereg 850d7101
+
+== G-Q1 prediccion (fuera de muestra, TEST 17-21): logloss/Brier medios, AUC; diferencias pareadas q - benchmark, IC90 por cierre (negativo = q mejor) ==
+cobertura mid5 0.999
+  q_MAP: logloss 0.49735 Brier 0.15972 AUC 0.5966
+  q_LOG: logloss 0.49829 Brier 0.16011 AUC 0.5942
+  q_HGB: logloss 0.50109 Brier 0.16077 AUC 0.5845
+  q_LOGF: logloss 0.49824 Brier 0.16005 AUC 0.5964
+  q_R3: logloss 0.50702 Brier 0.16281 AUC 0.5175
+  precio pc: logloss 0.49518 Brier 0.15904 AUC 0.6064
+  mid5 (n=36089): logloss 0.50967 Brier 0.16456 AUC 0.5838
+  q_MAP vs mid5 ll: dif media -0.01221 IC90 cierre [-0.01503,-0.00947] n=36089 <- q MEJOR
+  q_MAP vs mid5 br: dif media -0.00479 IC90 cierre [-0.00589,-0.00373] n=36089 <- q MEJOR
+  q_MAP vs pc ll: dif media +0.00217 IC90 cierre [+0.00129,+0.00303] n=36125 <- q peor
+  q_MAP vs pc br: dif media +0.00068 IC90 cierre [+0.00039,+0.00097] n=36125 <- q peor
+  q_MAP vs R3-ind ll: dif media -0.00967 IC90 cierre [-0.01207,-0.00711] n=36125 <- q MEJOR
+  q_MAP vs R3-ind br: dif media -0.00309 IC90 cierre [-0.00387,-0.00226] n=36125 <- q MEJOR
+  q_LOG vs mid5 ll: dif media -0.01129 IC90 cierre [-0.01402,-0.00853] n=36089 <- q MEJOR
+  q_LOG vs mid5 br: dif media -0.00440 IC90 cierre [-0.00547,-0.00332] n=36089 <- q MEJOR
+  q_LOG vs pc ll: dif media +0.00311 IC90 cierre [+0.00148,+0.00475] n=36125 <- q peor
+  q_LOG vs pc br: dif media +0.00107 IC90 cierre [+0.00054,+0.00162] n=36125 <- q peor
+  q_LOG vs MAP ll: dif media +0.00094 IC90 cierre [-0.00034,+0.00220] n=36125 
+  q_LOG vs MAP br: dif media +0.00039 IC90 cierre [-0.00004,+0.00082] n=36125 
+  q_LOG vs R3-ind ll: dif media -0.00873 IC90 cierre [-0.01115,-0.00617] n=36125 <- q MEJOR
+  q_LOG vs R3-ind br: dif media -0.00270 IC90 cierre [-0.00353,-0.00182] n=36125 <- q MEJOR
+  q_HGB vs mid5 ll: dif media -0.00871 IC90 cierre [-0.01188,-0.00552] n=36089 <- q MEJOR
+  q_HGB vs mid5 br: dif media -0.00375 IC90 cierre [-0.00493,-0.00260] n=36089 <- q MEJOR
+  q_HGB vs pc ll: dif media +0.00569 IC90 cierre [+0.00328,+0.00815] n=36125 <- q peor
+  q_HGB vs pc br: dif media +0.00172 IC90 cierre [+0.00096,+0.00248] n=36125 <- q peor
+  q_HGB vs MAP ll: dif media +0.00351 IC90 cierre [+0.00133,+0.00571] n=36125 <- q peor
+  q_HGB vs MAP br: dif media +0.00104 IC90 cierre [+0.00036,+0.00172] n=36125 <- q peor
+  q_HGB vs R3-ind ll: dif media -0.00616 IC90 cierre [-0.00860,-0.00375] n=36125 <- q MEJOR
+  q_HGB vs R3-ind br: dif media -0.00205 IC90 cierre [-0.00286,-0.00125] n=36125 <- q MEJOR
+  q_LOGF vs mid5 ll: dif media -0.01132 IC90 cierre [-0.01426,-0.00836] n=36089 <- q MEJOR
+  q_LOGF vs mid5 br: dif media -0.00446 IC90 cierre [-0.00560,-0.00333] n=36089 <- q MEJOR
+  q_LOGF vs pc ll: dif media +0.00306 IC90 cierre [+0.00116,+0.00504] n=36125 <- q peor
+  q_LOGF vs pc br: dif media +0.00101 IC90 cierre [+0.00038,+0.00168] n=36125 <- q peor
+  q_LOGF vs MAP ll: dif media +0.00089 IC90 cierre [-0.00067,+0.00247] n=36125 
+  q_LOGF vs MAP br: dif media +0.00033 IC90 cierre [-0.00020,+0.00088] n=36125 
+  q_LOGF vs R3-ind ll: dif media -0.00878 IC90 cierre [-0.01137,-0.00628] n=36125 <- q MEJOR
+  q_LOGF vs R3-ind br: dif media -0.00276 IC90 cierre [-0.00366,-0.00188] n=36125 <- q MEJOR
+
+== fiabilidad del q primario por decil (q, acierto real, pc medio, EV/EUR del decil) ==
+                   n       q     hit      pc      ev
+(0.125, 0.132]  4059  0.1310  0.1301  0.1288  0.0248
+(0.132, 0.141]  3482  0.1357  0.1272  0.1293 -0.0211
+(0.141, 0.184]  3734  0.1753  0.1776  0.1731 -0.0098
+(0.184, 0.2]    4129  0.1930  0.1380  0.1792 -0.2246
+(0.2, 0.238]    2868  0.2208  0.2200  0.2126  0.0178
+(0.238, 0.245]  3638  0.2423  0.2163  0.2311 -0.0745
+(0.245, 0.251]  3442  0.2479  0.2284  0.2310 -0.0146
+(0.251, 0.292]  4949  0.2841  0.2744  0.2796 -0.0351
+(0.292, 0.294]  2266  0.2942  0.2833  0.2803  0.0009
+(0.294, 0.302]  3558  0.2982  0.2737  0.2808 -0.0298
+== EV/EUR por decil de edge (q-pc) del q primario (monotonia = ordena) ==
+    (-0.0366, -0.0117]  (-0.0117, -0.00594]  (-0.00594, -0.000906]  (-0.000906, 0.00389]  (0.00389, 0.00951]  (0.00951, 0.0139]  (0.0139, 0.0205]  (0.0205, 0.0246]  (0.0246, 0.0322]  (0.0322, 0.0522]
+e              -0.0192              -0.0085                -0.0037                0.0015              0.0062             0.0117            0.0167            0.0225            0.0286            0.0373
+ev              0.0041              -0.0392                -0.0591               -0.0533              0.0280             0.0352           -0.1000           -0.0701           -0.0723           -0.0852
+
+== G-Q2 reglas en TEST (dPnL = -PnL de las saltadas; EV ponderado por EUR; precio = relleno real del maker) ==
+PRIMARIA MAP m=0.0: skip 11388/36125 ret 0.674 | EV_all -0.0411 EV_ret -0.0426 [-0.108,+0.022] EV_skip -0.0378 | dPnL +425.1 IC90cierre [-361.5,+1155.8] p_perm 0.4558 | dias+ 3/5 sin2mejores -6.7 | haircut50 +212.5 | dPnL/moneda {ETH:+440.4, SOL:-134.8, XRP:+119.4} EVret/moneda {'ETH': -0.071, 'SOL': 0.014, 'XRP': -0.025} 
+  inversion (saltar cola ALTA del edge, mismo EUR): skip 12322/36125 ret 0.674 | EV_all -0.0411 EV_ret -0.0194 [-0.083,+0.045] EV_skip -0.0858 | dPnL +965.8 IC90cierre [+148.9,+1748.9] p_perm nan | dias+ 3/5 sin2mejores +161.3 | haircut50 +482.9 | dPnL/moneda {ETH:+780.7, SOL:+88.1, XRP:+97.0} EVret/moneda {'ETH': -0.053, 'SOL': 0.058, 'XRP': -0.014} 
+-- rejilla completa de familias x m en TEST (DESCRIPTIVA, multiplicidad declarada) --
+   q_MAP   m=0.00: skip 11388 ret 0.674 EV_ret -0.0426 EV_skip -0.0378 dPnL   +425.1 IC90 [-361.5,+1155.8]
+   q_MAP   m=0.01: skip 18444 ret 0.471 EV_ret -0.0612 EV_skip -0.0231 dPnL   +423.4 IC90 [-757.8,+1546.4]
+   q_MAP   m=0.02: skip 25098 ret 0.290 EV_ret -0.0798 EV_skip -0.0252 dPnL   +618.2 IC90 [-945.9,+2161.8]
+   q_MAP   m=0.03: skip 31244 ret 0.133 EV_ret -0.0471 EV_skip -0.0401 dPnL  +1201.9 IC90 [-710.1,+3037.6]
+   q_MAP   m=0.04: skip 35175 ret 0.023 EV_ret -0.0606 EV_skip -0.0406 dPnL  +1370.7 IC90 [-778.9,+3428.7]
+   q_MAP   m=0.06: skip 36125 ret 0.000 EV_ret +nan EV_skip -0.0411 dPnL  +1419.0 IC90 [-748.1,+3548.8]
+   q_LOG   m=0.00: skip 10918 ret 0.644 EV_ret -0.0434 EV_skip -0.0369 dPnL   +454.2 IC90 [-281.9,+1212.2]
+   q_LOG   m=0.01: skip 16949 ret 0.485 EV_ret -0.0408 EV_skip -0.0413 dPnL   +735.3 IC90 [-306.1,+1779.0]
+   q_LOG   m=0.02: skip 23242 ret 0.326 EV_ret -0.0582 EV_skip -0.0327 dPnL   +762.1 IC90 [-629.2,+2175.5]
+   q_LOG   m=0.03: skip 28600 ret 0.191 EV_ret -0.0624 EV_skip -0.0360 dPnL  +1006.0 IC90 [-689.6,+2686.2]
+   q_LOG   m=0.04: skip 32106 ret 0.102 EV_ret -0.0612 EV_skip -0.0388 dPnL  +1203.3 IC90 [-681.6,+3045.9]
+   q_LOG   m=0.06: skip 35158 ret 0.025 EV_ret -0.1897 EV_skip -0.0373 dPnL  +1256.3 IC90 [-862.7,+3308.8]
+   q_HGB   m=0.00: skip 13646 ret 0.540 EV_ret -0.0507 EV_skip -0.0298 dPnL   +473.8 IC90 [-454.7,+1384.3]
+   q_HGB   m=0.01: skip 17713 ret 0.427 EV_ret -0.0443 EV_skip -0.0386 dPnL   +765.1 IC90 [-357.5,+1903.2]
+   q_HGB   m=0.02: skip 21700 ret 0.323 EV_ret -0.0536 EV_skip -0.0351 dPnL   +821.4 IC90 [-588.7,+2192.9]
+   q_HGB   m=0.03: skip 25428 ret 0.233 EV_ret -0.0512 EV_skip -0.0380 dPnL  +1006.8 IC90 [-623.3,+2556.5]
+   q_HGB   m=0.04: skip 28555 ret 0.160 EV_ret -0.0424 EV_skip -0.0408 dPnL  +1184.8 IC90 [-605.4,+2883.2]
+   q_HGB   m=0.06: skip 33009 ret 0.063 EV_ret +0.0290 EV_skip -0.0458 dPnL  +1482.2 IC90 [-494.2,+3421.7]
+   q_LOGF  m=0.00: skip 12092 ret 0.598 EV_ret -0.0281 EV_skip -0.0603 dPnL   +838.5 IC90 [+19.0,+1675.6]
+   q_LOGF  m=0.01: skip 16886 ret 0.464 EV_ret -0.0264 EV_skip -0.0537 dPnL   +995.4 IC90 [-97.2,+2105.2]
+   q_LOGF  m=0.02: skip 22520 ret 0.324 EV_ret -0.0305 EV_skip -0.0461 dPnL  +1076.7 IC90 [-274.8,+2499.2]
+   q_LOGF  m=0.03: skip 27374 ret 0.208 EV_ret -0.0220 EV_skip -0.0461 dPnL  +1261.1 IC90 [-393.3,+2919.9]
+   q_LOGF  m=0.04: skip 31087 ret 0.123 EV_ret -0.0044 EV_skip -0.0462 dPnL  +1400.3 IC90 [-457.1,+3189.3]
+   q_LOGF  m=0.06: skip 34491 ret 0.041 EV_ret +0.0505 EV_skip -0.0450 dPnL  +1491.3 IC90 [-530.9,+3424.9]
+H-r60 (saltar r60f <= p20 DESC por moneda): skip 5885/36125 ret 0.847 | EV_all -0.0411 EV_ret -0.0393 [-0.103,+0.025] EV_skip -0.0507 | dPnL +268.6 IC90cierre [-456.7,+974.6] p_perm 0.5837 | dias+ 3/5 sin2mejores -273.7 | haircut50 +134.3 | dPnL/moneda {ETH:+151.0, SOL:+161.6, XRP:-43.9} EVret/moneda {'ETH': -0.078, 'SOL': 0.051, 'XRP': -0.048} 
+R0 (saltar CON rpre_s>=7,7): skip 11468/36125 ret 0.686 | EV_all -0.0411 EV_ret -0.0008 [-0.082,+0.078] EV_skip -0.1289 | dPnL +1399.8 IC90cierre [+73.7,+2685.8] p_perm 0.0020 | dias+ 4/5 sin2mejores +160.8 | haircut50 +699.9 | dPnL/moneda {ETH:+666.8, SOL:+454.7, XRP:+278.4} EVret/moneda {'ETH': -0.057, 'SOL': 0.115, 'XRP': 0.035} 
+-- lineas base R2/R3 (elegidas con 17-21: EN MUESTRA aqui; ver DESC-OOS abajo) --
+R2 (retener lvl15<=0,03): skip 25912/36125 ret 0.290 | EV_all -0.0411 EV_ret +0.0840 [-0.048,+0.214] EV_skip -0.0921 | dPnL +2260.4 IC90cierre [+439.3,+4025.9] p_perm 0.0005 | dias+ 5/5 sin2mejores +738.4 | haircut50 +1130.2 | dPnL/moneda {ETH:+1822.6, SOL:+73.2, XRP:+364.6} EVret/moneda {'ETH': 0.057, 'SOL': 0.115, 'XRP': 0.139} 
+R3 (R2 & vol30ws>=26 & hora>=4): skip 28810/36125 ret 0.209 | EV_all -0.0411 EV_ret +0.1078 [-0.054,+0.264] EV_skip -0.0803 | dPnL +2196.2 IC90cierre [+294.9,+4005.2] p_perm 0.0010 | dias+ 4/5 sin2mejores +581.9 | haircut50 +1098.1 | dPnL/moneda {ETH:+1757.0, SOL:+130.2, XRP:+309.0} EVret/moneda {'ETH': 0.057, 'SOL': 0.198, 'XRP': 0.225} 
+
+== G-Q3: contra R0 y R3 ==
+dPnL(primaria) - dPnL(R0): -974.8 IC90 cierre [-2137.1,+213.3]
+dPnL(primaria) - dPnL(R_r60): +156.4 IC90 cierre [-581.4,+897.8]
+q-top-edge a retencion igualada con R3 (0.209): skip 30517/36125 ret 0.209 | EV_all -0.0411 EV_ret -0.0266 [-0.105,+0.053] EV_skip -0.0449 | dPnL +1227.2 IC90cierre [-639.6,+3016.7] p_perm 0.5972 | dias+ 3/5 sin2mejores +185.0 | haircut50 +613.6 | dPnL/moneda {ETH:+1234.2, SOL:-168.5, XRP:+161.5} EVret/moneda {'ETH': -0.066, 'SOL': 0.019, 'XRP': 0.0} 
+dPnL(q a retencion R3) - dPnL(R3): -969.0 IC90 cierre [-2040.0,+186.9]
+q-cap DENTRO de R3 (retenidas por R3: 7315): skip 2126/7315 ret 0.700 | EV_all +0.1078 EV_ret +0.0737 [-0.080,+0.240] EV_skip +0.1874 | dPnL -405.3 IC90cierre [-817.4,+5.8] p_perm 0.7546 | dias+ 2/5 sin2mejores -438.1 | haircut50 -202.6 | dPnL/moneda {ETH:-183.3, SOL:-119.8, XRP:-102.2} EVret/moneda {'ETH': 0.025, 'SOL': 0.171, 'XRP': 0.208} 
+q-cap FUERA de R3 (28810): skip 9262/28810 ret 0.668 | EV_all -0.0803 EV_ret -0.0748 [-0.148,+0.001] EV_skip -0.0914 | dPnL +830.3 IC90cierre [+154.6,+1491.7] p_perm 0.3323 | dias+ 4/5 sin2mejores +200.7 | haircut50 +415.2 | dPnL/moneda {ETH:+623.7, SOL:-15.0, XRP:+221.6} EVret/moneda {'ETH': -0.1, 'SOL': -0.027, 'XRP': -0.059} 
+
+== R2/R3 en 09-16 (OOS genuino para ellas; vol30ws mio ~15 % menor: umbral 26 aproximado) ==
+R2 09-16: skip 54429/77793 ret 0.304 | EV_all +0.0556 EV_ret +0.0645 [-0.023,+0.155] EV_skip +0.0517 | dPnL -2715.0 IC90cierre [-5832.1,+165.1] p_perm 0.3828 | dias+ 2/8 sin2mejores -3322.6 | haircut50 -1357.5 | dPnL/moneda {ETH:-2309.4, SOL:-962.6, XRP:+557.0} EVret/moneda {'ETH': 0.057, 'SOL': 0.078, 'XRP': 0.072} 
+R3 09-16: skip 60161/77793 ret 0.231 | EV_all +0.0556 EV_ret +0.0833 [-0.014,+0.187] EV_skip +0.0472 | dPnL -2742.5 IC90cierre [-5868.1,+205.7] p_perm 0.2369 | dias+ 2/8 sin2mejores -3797.9 | haircut50 -1371.3 | dPnL/moneda {ETH:-1861.8, SOL:-1337.4, XRP:+456.6} EVret/moneda {'ETH': 0.109, 'SOL': 0.025, 'XRP': 0.079} 
+R0 09-16: skip 24171/77793 ret 0.690 | EV_all +0.0556 EV_ret +0.0583 [+0.005,+0.118] EV_skip +0.0496 | dPnL -1159.9 IC90cierre [-3311.5,+901.6] p_perm 0.3653 | dias+ 4/8 sin2mejores -1724.3 | haircut50 -580.0 | dPnL/moneda {ETH:-458.8, SOL:-748.0, XRP:+46.8} EVret/moneda {'ETH': 0.082, 'SOL': 0.053, 'XRP': -0.044} 

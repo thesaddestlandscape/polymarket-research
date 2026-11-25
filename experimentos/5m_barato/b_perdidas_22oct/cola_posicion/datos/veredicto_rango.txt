@@ -1,0 +1,30 @@
+B: ordenes con relleno 186 (sin mapa de tokens/oc_D: 3 incluidas aqui por on-chain directo) | n_same=1 (SOLO): 160 (86.0%) | n_same>=2: 26
+  S1 = media q = 0.272 (nula 0,5)  IC90 por tx [0.144, 0.413]  por dia [0.25, 0.295]
+  S2 = P(primero) = 0.692  E0 = 0.463  diferencia +0.229  IC90 por tx [0.095, 0.364]  por dia [0.196, 0.279]
+  n_same>=2 por moneda: {'eth': 13, 'sol': 9, 'xrp': 4}  | q por moneda: {'eth': 0.314, 'sol': 0.333, 'xrp': 0.0}
+  distribucion rank/n: {(2, 0): 18, (2, 1): 4, (3, 2): 1, (4, 1): 1, (4, 3): 1, (5, 3): 1}
+  bajo orden aleatorio con estos n_same: S1 ~ 0.500 +- 0.096 (IC90 nulo [0.34, 0.657]) => diferencia minima detectable ~0.16
+  robustez con todas las filas de relleno (n=28): S1 0.253, P(primero) 0.714 vs E0 0.460
+
+POBLACION 17-22 Oct (ETH/SOL/XRP 5m, banda 0,10-0,30, T 60-300; sin B): filas multi-maker 34123, wallets con >=30 obs: 95
+  S1 mediana de wallets 0.482 (p10 0.262, p90 0.756); B (0.272) esta en el percentil 12 (0 = el mas delantero)
+  P(primero)-E0: mediana +0.013; B +0.229
+  Top wallets mas DELANTERAS (S1 bajo, n>=30):
+                                     maker    n    S1  prim    e0       acc  dprim
+0x5eae42e922a44d72f223abe7685597443aba0a34   45 0.000 1.000 0.459   180.600  0.541
+0xf0d6ba6ed6c3e9d45161e016dd494c456864e94c  143 0.036 0.951 0.474   672.916  0.477
+0xce7f1f1b48ca3c72a974fcd7e78b156d9eb17ae3  112 0.131 0.839 0.471   511.110  0.368
+0x4c91e0c64cae70e88cbaa50bd535c50abf952114   55 0.136 0.855 0.467   256.536  0.387
+0x4a3e837b35cd280bcd13fb56650362142a9e3319   99 0.147 0.798 0.449  1087.646  0.349
+0x8483b49e8305bf31bf975960ac3e2a59c99296c5   73 0.209 0.781 0.455   656.771  0.326
+0xf074dc84e438e22488da4e078fad1be62ede723b 1620 0.211 0.735 0.438 11429.256  0.297
+0x07b57abe58db9d350c9644038688547f371a9b71  142 0.218 0.754 0.469   649.589  0.285
+  Top wallets mas TRASERAS:
+                                     maker    n    S1  prim    e0       acc  dprim
+0x7a00723afddc26a7b525fb8767fbe0ec176b7595   42 0.821 0.119 0.464   363.319 -0.345
+0xdc6f735092eb0d46cda0af34a966dcadaab2a838   50 0.833 0.040 0.281   239.675 -0.241
+0xbc1fc906a4f56c242a720a7b9a8e2c4a92d8723f  146 0.841 0.110 0.386  6853.837 -0.276
+0xa64552f2d51167cc34b698992aa7e78e47a3ccb2 1245 0.847 0.106 0.413 28460.131 -0.307
+0xae68447c01fc86864fd0e5e58aae986eeb8abf83 1455 0.857 0.109 0.431 30238.635 -0.322
+
+Wallets por delante de B en el mismo nivel (n filas): {'0x31393e2f': 2, '0x829207d1': 1, '0xdf4c6a94': 1, '0xf6ab262d': 1, '0x097080e9': 1, '0x79a5ad32': 1, '0x80eff2fa': 1, '0x5e8e7771': 1, '0x729494a7': 1, '0x9d57c42e': 1}

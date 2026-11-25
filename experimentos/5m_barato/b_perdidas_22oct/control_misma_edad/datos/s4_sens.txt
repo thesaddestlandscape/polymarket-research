@@ -1,0 +1,28 @@
+Delta1 por moneda (banda A / B), IC90 cierre
+  banda A ETH tau 150: +0.056 (+0.036,+0.073) nE=9137
+  banda A ETH tau 300: -0.010 (-0.026,+0.006) nE=7205
+  banda A ETH tau 500: -0.006 (-0.027,+0.011) nE=5783
+  banda A SOL tau 150: +0.050 (+0.026,+0.073) nE=3427
+  banda A SOL tau 300: +0.011 (-0.013,+0.035) nE=2823
+  banda A SOL tau 500: +0.008 (-0.016,+0.032) nE=2352
+  banda A XRP tau 150: +0.080 (+0.056,+0.097) nE=2251
+  banda A XRP tau 300: +0.038 (+0.022,+0.053) nE=1903
+  banda A XRP tau 500: +0.014 (-0.006,+0.032) nE=1648
+  banda B ETH tau 150: +0.100 (+0.081,+0.115) nE=15742
+  banda B ETH tau 300: +0.032 (+0.016,+0.047) nE=12309
+  banda B ETH tau 500: +0.015 (-0.003,+0.028) nE=9611
+  banda B SOL tau 150: +0.081 (+0.060,+0.095) nE=7527
+  banda B SOL tau 300: +0.033 (+0.017,+0.050) nE=6014
+  banda B SOL tau 500: +0.025 (+0.005,+0.040) nE=4836
+  banda B XRP tau 150: +0.020 (-0.006,+0.038) nE=3652
+  banda B XRP tau 300: -0.005 (-0.023,+0.012) nE=2955
+  banda B XRP tau 500: +0.017 (-0.005,+0.034) nE=2406
+
+Delta1 banda A tau 150 sin cada dia
+  sin 2026-10-20: +0.059 (+0.043,+0.072)
+  sin 2026-10-21: +0.059 (+0.035,+0.078)
+  sin 2026-10-22: +0.053 (+0.035,+0.068)
+
+B rellenos, EXIT(t*-300): acierto exit1 vs exit0 y diferencia de EV; Fisher unilateral (exit1 peor) y bootstrap por cierre
+  exit1 n=14 gana=1; exit0 n=33 gana=7; Fisher p(exit1<=)=0.234
+  Delta EV (exit1-exit0) -0.633, IC90 cierre (-1.748,+0.533) ; dias de F: {'2026-10-22': 21, '2026-10-21': 15, '2026-10-20': 11}

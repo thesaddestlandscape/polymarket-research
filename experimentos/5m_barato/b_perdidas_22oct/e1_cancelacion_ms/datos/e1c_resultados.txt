@@ -1,0 +1,116 @@
+ordenes 3195 {'ok': 3160, 'relleno_sin_print': 35}
+rellenas ok 148 sin pnl 7 | no rellenas ok 3012
+print localizado por talla exacta (1/2) vs aproximado (0): {1.0: 113, 2.0: 23, 0.0: 5}
+BASE sin cancelar: n=141 pnl=-2.37 coste=145.27 EV€=-0.0163 | por dia: {'2026-10-20': '29/-1.80/-0.057', '2026-10-21': '57/+4.92/+0.085', '2026-10-22': '55/-5.49/-0.099'}
+elegidas en TRAIN (max dPnL): {'BN': 'BN_W300_X2', 'KNIFE5': 'KN_W300_d1', 'L15': 'L15_W300_c1', 'TRADE': 'TR_W1000', 'DEPTH': 'AH_f80', 'EDAD': 'ED_A1'}
+
+TODAS las configs (TRAIN | TEST | TODO): dPnL, n_evitados, EVret, tasa disparo en vidas NO rellenas
+  AH_f50         TRAIN  -2.30 (76) | TEST +10.81 (45) | TODO  +8.51 (121) | tasaN 0.66
+  AH_f80         TRAIN +12.60 (71) | TEST  +7.86 (42) | TODO +20.46 (113) | tasaN 0.50
+  BN_W1000_X1    TRAIN  +1.39 (37) | TEST +14.10 (17) | TODO +15.49 (54) | tasaN 0.09
+  BN_W1000_X2    TRAIN  +5.54 (14) | TEST  +9.40 (8) | TODO +14.94 (22) | tasaN 0.03
+  BN_W1000_X3    TRAIN  +1.80 (2) | TEST  +3.55 (3) | TODO  +5.35 (5) | tasaN 0.01
+  BN_W1000_X5    TRAIN  -0.00 (0) | TEST  +1.05 (1) | TODO  +1.05 (1) | tasaN 0.00
+  BN_W100_X1     TRAIN  -0.98 (27) | TEST +12.65 (11) | TODO +11.67 (38) | tasaN 0.02
+  BN_W100_X2     TRAIN  +4.60 (4) | TEST  +4.55 (4) | TODO  +9.15 (8) | tasaN 0.00
+  BN_W100_X3     TRAIN  +0.70 (1) | TEST  +3.55 (3) | TODO  +4.25 (4) | tasaN 0.00
+  BN_W100_X5     TRAIN  -0.00 (0) | TEST  +1.05 (1) | TODO  +1.05 (1) | tasaN 0.00
+  BN_W300_X1     TRAIN  -0.92 (33) | TEST  +9.10 (17) | TODO  +8.18 (50) | tasaN 0.04
+  BN_W300_X2     TRAIN  +6.81 (8) | TEST  +5.85 (5) | TODO +12.66 (13) | tasaN 0.01
+  BN_W300_X3     TRAIN  +0.70 (1) | TEST  +3.55 (3) | TODO  +4.25 (4) | tasaN 0.00
+  BN_W300_X5     TRAIN  -0.00 (0) | TEST  +1.05 (1) | TODO  +1.05 (1) | tasaN 0.00
+  CB_BN+DP       TRAIN +12.60 (71) | TEST  +7.86 (42) | TODO +20.46 (113) | tasaN 0.50
+  CB_BN+KN+DP    TRAIN  +5.58 (75) | TEST  +7.47 (47) | TODO +13.05 (122) | tasaN 0.73
+  CB_KN+DP       TRAIN  +5.58 (75) | TEST  +7.47 (47) | TODO +13.05 (122) | tasaN 0.73
+  DP_W1000_f50   TRAIN  -0.90 (73) | TEST  +4.42 (49) | TODO  +3.52 (122) | tasaN 0.57
+  DP_W1000_f80   TRAIN  -3.10 (71) | TEST  +1.42 (46) | TODO  -1.68 (117) | tasaN 0.43
+  DP_W300_f50    TRAIN  -0.26 (71) | TEST  +5.77 (45) | TODO  +5.51 (116) | tasaN 0.56
+  DP_W300_f80    TRAIN  -2.51 (69) | TEST  +8.82 (43) | TODO  +6.31 (112) | tasaN 0.41
+  ED_A1          TRAIN  +5.04 (40) | TEST  -0.15 (25) | TODO  +4.89 (65) | tasaN 0.32
+  ED_A10         TRAIN  -1.55 (3) | TEST  +0.60 (1) | TODO  -0.95 (4) | tasaN 0.01
+  ED_A2          TRAIN  -3.22 (27) | TEST  +1.25 (17) | TODO  -1.97 (44) | tasaN 0.14
+  ED_A5          TRAIN  -8.65 (11) | TEST  -0.80 (5) | TODO  -9.45 (16) | tasaN 0.04
+  GAP_g1         TRAIN  -2.04 (47) | TEST  +8.87 (29) | TODO  +6.83 (76) | tasaN 0.18
+  GAP_g2         TRAIN  +1.93 (68) | TEST  +8.97 (44) | TODO +10.91 (112) | tasaN 0.52
+  KN_W1000_d1    TRAIN  -0.65 (68) | TEST  +9.02 (43) | TODO  +8.37 (111) | tasaN 0.69
+  KN_W1000_d2    TRAIN  +2.15 (51) | TEST  -0.65 (27) | TODO  +1.50 (78) | tasaN 0.46
+  KN_W1000_d3    TRAIN  +2.05 (28) | TEST  -1.55 (16) | TODO  +0.50 (44) | tasaN 0.29
+  KN_W300_d1     TRAIN  +3.58 (64) | TEST  +8.37 (43) | TODO +11.95 (107) | tasaN 0.63
+  KN_W300_d2     TRAIN  -2.43 (42) | TEST  +7.36 (22) | TODO  +4.92 (64) | tasaN 0.33
+  KN_W300_d3     TRAIN  -7.44 (18) | TEST  +9.40 (12) | TODO  +1.96 (30) | tasaN 0.16
+  L15_W1000_c1   TRAIN  +7.73 (54) | TEST  +2.95 (27) | TODO +10.68 (81) | tasaN 0.34
+  L15_W1000_c2   TRAIN  +2.93 (30) | TEST  +3.45 (22) | TODO  +6.38 (52) | tasaN 0.16
+  L15_W300_c1    TRAIN +15.63 (47) | TEST  +3.80 (28) | TODO +19.43 (75) | tasaN 0.24
+  L15_W300_c2    TRAIN  +8.66 (27) | TEST  +8.35 (17) | TODO +17.02 (44) | tasaN 0.09
+  SOLO           TRAIN  -4.25 (65) | TEST  +7.37 (42) | TODO  +3.11 (107) | tasaN 0.30
+  TR_W1000       TRAIN  +8.86 (25) | TEST  -2.24 (9) | TODO  +6.61 (34) | tasaN 0.18
+  TR_W200        TRAIN  +8.21 (15) | TEST  +0.65 (6) | TODO  +8.86 (21) | tasaN 0.11
+
+GATE en TEST (22-Oct) por familia, K_test=7, alfa=0.0143
+  BN      BN_W300_X2     TEST dPnL +5.85 (evita 5/55; placebo media +0.52 se 4.13 p=0.037; IC90 cierre +1.30,+11.20) EVret +0.007 ret 0.89 ganadores perdidos 0 (+0.00 EUR) hp_evit -0.234 hp_ret -0.007 | TODO dPnL +12.66 EVret +0.078 sin2dias +1.56 sin2cierres +8.36 | MDE 12.50 | GATE FALLA
+          lead requerido (TODO) 90ms:+12.66(13) 150ms:+7.21(8) 250ms:+2.31(4) 400ms:+0.01(2) 1000ms:-1.04(1)
+          solo print exacto (TODO): dPnL +10.36 evita 11/136 placebo p=0.058 | EXTRA no prereg, test=20-21: dPnL +6.81 evita 8 p=0.132
+  KNIFE5  KN_W300_d1     TEST dPnL +8.37 (evita 43/55; placebo media +4.34 se 5.95 p=0.240; IC90 cierre -14.25,+28.21) EVret +0.238 ret 0.22 ganadores perdidos 7 (+28.05 EUR) hp_evit -0.045 hp_ret +0.037 | TODO dPnL +11.95 EVret +0.271 sin2dias +0.60 sin2cierres +4.75 | MDE 18.04 | GATE FALLA
+          lead requerido (TODO) 90ms:+11.95(107) 150ms:+21.77(92) 250ms:+22.83(71) 400ms:+19.68(55) 1000ms:+0.65(28)
+          solo print exacto (TODO): dPnL +8.90 evita 104/136 placebo p=0.157 | EXTRA no prereg, test=20-21: dPnL +3.58 evita 64 p=0.247
+  L15     L15_W300_c1    TEST dPnL +3.80 (evita 28/55; placebo media +3.02 se 7.21 p=0.440; IC90 cierre -16.50,+21.36) EVret -0.063 ret 0.48 ganadores perdidos 5 (+20.00 EUR) hp_evit -0.027 hp_ret -0.027 | TODO dPnL +19.43 EVret +0.251 sin2dias +3.80 sin2cierres +12.48 | MDE 21.83 | GATE FALLA
+          lead requerido (TODO) 90ms:+19.43(75) 150ms:+13.68(61) 250ms:+8.33(46) 400ms:+2.83(32) 1000ms:-6.73(16)
+          solo print exacto (TODO): dPnL +16.38 evita 72/136 placebo p=0.057 | EXTRA no prereg, test=20-21: dPnL +15.63 evita 47 p=0.030
+  TRADE   TR_W1000       TEST dPnL -2.24 (evita 9/55; placebo media +0.91 se 5.35 p=0.777; IC90 cierre -13.29,+7.05) EVret -0.162 ret 0.86 ganadores perdidos 2 (+8.10 EUR) hp_evit +0.031 hp_ret -0.039 | TODO dPnL +6.61 EVret +0.038 sin2dias -2.24 sin2cierres +1.26 | MDE 16.22 | GATE FALLA
+          lead requerido (TODO) 90ms:+6.61(34) 150ms:+5.26(33) 250ms:+6.46(29) 400ms:+7.31(24) 1000ms:+2.08(12)
+          solo print exacto (TODO): dPnL +5.51 evita 33/136 placebo p=0.281 | EXTRA no prereg, test=20-21: dPnL +8.86 evita 25 p=0.137
+  DEPTH   AH_f80         TEST dPnL +7.86 (evita 42/55; placebo media +4.07 se 6.04 p=0.246; IC90 cierre -15.09,+27.92) EVret +0.188 ret 0.23 ganadores perdidos 7 (+27.85 EUR) hp_evit -0.041 hp_ret +0.018 | TODO dPnL +20.46 EVret +0.672 sin2dias -0.35 sin2cierres +14.06 | MDE 18.32 | GATE FALLA
+          lead requerido (TODO) 90ms:+20.46(113) 150ms:+16.86(92) 250ms:+17.60(62) 400ms:+11.45(48) 1000ms:-2.08(25)
+          solo print exacto (TODO): dPnL +18.16 evita 111/136 placebo p=0.024 | EXTRA no prereg, test=20-21: dPnL +12.60 evita 71 p=0.025
+  EDAD    ED_A1          TEST dPnL -0.15 (evita 25/55; placebo media +2.43 se 7.15 p=0.653; IC90 cierre -19.99,+15.96) EVret -0.184 ret 0.55 ganadores perdidos 5 (+20.00 EUR) hp_evit +0.001 hp_ret -0.051 | TODO dPnL +4.89 EVret +0.033 sin2dias -0.15 sin2cierres -0.61 | MDE 21.67 | GATE FALLA
+          lead requerido (TODO) 90ms:+4.89(65) 150ms:+2.88(61) 250ms:+0.58(59) 400ms:+0.58(59) 1000ms:-1.97(44)
+          solo print exacto (TODO): dPnL +4.89 evita 65/136 placebo p=0.307 | EXTRA no prereg, test=20-21: dPnL +5.04 evita 40 p=0.245
+  COMBO   CB_BN+DP       TEST dPnL +7.86 (evita 42/55; placebo media +4.17 se 6.06 p=0.248; IC90 cierre -12.50,+27.67) EVret +0.188 ret 0.23 ganadores perdidos 7 (+27.85 EUR) hp_evit -0.041 hp_ret +0.018 | TODO dPnL +20.46 EVret +0.672 sin2dias -0.35 sin2cierres +14.06 | MDE 18.35 | GATE FALLA
+          lead requerido (TODO) 90ms:+20.46(113) 150ms:+18.31(93) 250ms:+17.60(62) 400ms:+11.45(48) 1000ms:-2.08(25)
+          solo print exacto (TODO): dPnL +18.16 evita 111/136 placebo p=0.015 | EXTRA no prereg, test=20-21: dPnL +12.60 evita 71 p=0.024
+
+Desglose moneda x banda (TODO) de las elegidas: base n/pnl/EV | evitados n/pnl | EVret
+  BN_W300_X2     ETH 0,10-0,20: base 23/+2.29/+0.129 | evit 1/-1.00 | EVret +0.197
+  BN_W300_X2     ETH 0,20-0,30: base 31/-8.20/-0.215 | evit 2/-2.35 | EVret -0.163
+  BN_W300_X2     SOL 0,10-0,20: base 18/+1.37/+0.100 | evit 0/+0.00 | EVret +0.100
+  BN_W300_X2     SOL 0,20-0,30: base 30/-0.74/-0.021 | evit 3/-3.50 | EVret +0.085
+  BN_W300_X2     XRP 0,10-0,20: base 14/+9.27/+0.864 | evit 2/-1.70 | EVret +1.215
+  BN_W300_X2     XRP 0,20-0,30: base 25/-6.34/-0.217 | evit 5/-4.11 | EVret -0.094
+  KN_W300_d1     ETH 0,10-0,20: base 23/+2.29/+0.129 | evit 17/+1.40 | EVret +0.216
+  KN_W300_d1     ETH 0,20-0,30: base 31/-8.20/-0.215 | evit 21/-5.51 | EVret -0.212
+  KN_W300_d1     SOL 0,10-0,20: base 18/+1.37/+0.100 | evit 13/-4.48 | EVret +1.409
+  KN_W300_d1     SOL 0,20-0,30: base 30/-0.74/-0.021 | evit 25/-9.79 | EVret +1.521
+  KN_W300_d1     XRP 0,10-0,20: base 14/+9.27/+0.864 | evit 10/+12.32 | EVret -1.000
+  KN_W300_d1     XRP 0,20-0,30: base 25/-6.34/-0.217 | evit 21/-5.89 | EVret -0.083
+  L15_W300_c1    ETH 0,10-0,20: base 23/+2.29/+0.129 | evit 13/+4.45 | EVret -0.302
+  L15_W300_c1    ETH 0,20-0,30: base 31/-8.20/-0.215 | evit 17/-6.40 | EVret -0.108
+  L15_W300_c1    SOL 0,10-0,20: base 18/+1.37/+0.100 | evit 9/-6.83 | EVret +1.205
+  L15_W300_c1    SOL 0,20-0,30: base 30/-0.74/-0.021 | evit 13/-5.01 | EVret +0.206
+  L15_W300_c1    XRP 0,10-0,20: base 14/+9.27/+0.864 | evit 7/-0.80 | EVret +2.042
+  L15_W300_c1    XRP 0,20-0,30: base 25/-6.34/-0.217 | evit 16/-4.84 | EVret -0.130
+  TR_W1000       ETH 0,10-0,20: base 23/+2.29/+0.129 | evit 12/-4.70 | EVret +0.872
+  TR_W1000       ETH 0,20-0,30: base 31/-8.20/-0.215 | evit 8/+0.79 | EVret -0.310
+  TR_W1000       SOL 0,10-0,20: base 18/+1.37/+0.100 | evit 4/-2.98 | EVret +0.408
+  TR_W1000       SOL 0,20-0,30: base 30/-0.74/-0.021 | evit 6/-2.75 | EVret +0.072
+  TR_W1000       XRP 0,10-0,20: base 14/+9.27/+0.864 | evit 0/+0.00 | EVret +0.864
+  TR_W1000       XRP 0,20-0,30: base 25/-6.34/-0.217 | evit 4/+3.02 | EVret -0.363
+  AH_f80         ETH 0,10-0,20: base 23/+2.29/+0.129 | evit 18/+0.10 | EVret +0.777
+  AH_f80         ETH 0,20-0,30: base 31/-8.20/-0.215 | evit 26/-1.71 | EVret -1.000
+  AH_f80         SOL 0,10-0,20: base 18/+1.37/+0.100 | evit 13/-4.53 | EVret +1.438
+  AH_f80         SOL 0,20-0,30: base 30/-0.74/-0.021 | evit 26/-11.68 | EVret +2.692
+  AH_f80         XRP 0,10-0,20: base 14/+9.27/+0.864 | evit 10/+7.35 | EVret +0.623
+  AH_f80         XRP 0,20-0,30: base 25/-6.34/-0.217 | evit 20/-9.99 | EVret +0.575
+  ED_A1          ETH 0,10-0,20: base 23/+2.29/+0.129 | evit 10/+7.00 | EVret -0.485
+  ED_A1          ETH 0,20-0,30: base 31/-8.20/-0.215 | evit 12/-9.40 | EVret +0.050
+  ED_A1          SOL 0,10-0,20: base 18/+1.37/+0.100 | evit 5/-4.00 | EVret +0.557
+  ED_A1          SOL 0,20-0,30: base 30/-0.74/-0.021 | evit 15/-3.12 | EVret +0.135
+  ED_A1          XRP 0,10-0,20: base 14/+9.27/+0.864 | evit 8/+3.85 | EVret +1.183
+  ED_A1          XRP 0,20-0,30: base 25/-6.34/-0.217 | evit 15/+0.78 | EVret -0.587
+  CB_BN+DP       ETH 0,10-0,20: base 23/+2.29/+0.129 | evit 18/+0.10 | EVret +0.777
+  CB_BN+DP       ETH 0,20-0,30: base 31/-8.20/-0.215 | evit 26/-1.71 | EVret -1.000
+  CB_BN+DP       SOL 0,10-0,20: base 18/+1.37/+0.100 | evit 13/-4.53 | EVret +1.438
+  CB_BN+DP       SOL 0,20-0,30: base 30/-0.74/-0.021 | evit 26/-11.68 | EVret +2.692
+  CB_BN+DP       XRP 0,10-0,20: base 14/+9.27/+0.864 | evit 10/+7.35 | EVret +0.623
+  CB_BN+DP       XRP 0,20-0,30: base 25/-6.34/-0.217 | evit 20/-9.99 | EVret +0.575
+
+Selección adversa: hit-p rellenas base -0.0031 n 141

@@ -1,0 +1,13 @@
+ANCLA: timestamp firmado de las ordenes de B vs t_call0 del ledger (ms): mediana -0.32 | n 198
+
+Co-makers del MISMO nivel rellenados ANTES que B (li menor), n=13 ordenes en 8 txs:
+  firmaron ANTES que B (consistente con FIFO): 13 (100.0%)
+  firmaron despues de B pero antes de su ack (ambiguo): 0 (0.0%)
+  firmaron despues del ack de B => LLEGARON DESPUES con certeza y se rellenaron ANTES: 0 (0.0%), acciones 0.0 de 106.8
+  dts_ms (firma_otro - firma_B) cuantiles 0/10/25/50/75/90/100: [-1792515913242.0, -92108.0, -11392.0, -3669.0, -1659.0, -968.0, -945.0]
+
+Co-makers del MISMO nivel rellenados DESPUES que B (li mayor), n=24: firmaron antes que B 2 (8.3%) [esperado ~0 si FIFO por llegada]; firmaron despues 22
+  dts_ms cuantiles 0/10/25/50/75/90/100: [-79663.0, 123.0, 256.0, 499.0, 1214.0, 3059.0, 15009.0]
+
+INVERSIONES entre pares del mismo nivel (todas las wallets, 79 pares en 29 txs): el segundo en li firmo ANTES que el primero (dts<0): 12 (15.2%); con margen >250 ms: 5 (6.3%); >1 s: 5 (6.3%)
+  dts cuantiles 1/5/10/25/50: [-1792515909644.0, -18000.0, -129.0, 112.0, 749.0]

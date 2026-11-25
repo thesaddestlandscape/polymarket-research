@@ -1,0 +1,91 @@
+dias (12): TRAIN ['2026-10-26', '2026-10-27', '2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31'] | HOLD ['2026-11-01', '2026-11-02', '2026-11-03', '2026-11-04', '2026-11-07', '2026-11-08']
+
+== 0. Reproduccion contra passT (RT_*.pkl): G0 y GEO6 identicos por dia (n, pnl)
+  G0 y GEO6 identicos a RT_*.pkl en los 12 dias: True
+  10 d (26-Oct..04-Nov): G0 n=2938 pnl=-166.9 EV=-0.076 (esperado 2.938, -166,9, -0,076); GEO6 dPnL=+140.0 (esperado +140)
+
+== 1. Auditoria de causalidad (todas las evaluaciones de armado)
+  IW (Binance recepcion): evaluaciones 7256850, con dato 7203742, NaN->se arma 53108 (0.0073); tick usado > t_dec-300: 0
+  GEO6 (bid a t_dec-300): evaluaciones con cotizacion 7237174; cotizacion usada > t_dec-300: 0
+  test de truncamiento (serie Binance cortada en t_dec-300): 90900 recomputos, distintos 0
+  => rasgos con datos posteriores al armado: 0
+
+== TRAIN 26-31 Oct (6 dias)
+  G0          n=2193 EUR= 1631.8 pnl= -159.9 EV/EUR=-0.098 sin2dias=-0.227 dias+=1/6
+  GEO6        n=1696 EUR= 1269.3 pnl=  -51.3 EV/EUR=-0.040 sin2dias=-0.175 dias+=2/6
+  IW5         n=1741 EUR= 1311.4 pnl=  -73.3 EV/EUR=-0.056 sin2dias=-0.183 dias+=2/6
+  GEO6IW5     n=1479 EUR= 1114.2 pnl=  -13.0 EV/EUR=-0.012 sin2dias=-0.152 dias+=2/6
+  IWINV5      n=2174 EUR= 1617.2 pnl= -145.5 EV/EUR=-0.090 sin2dias=-0.220 dias+=1/6
+  GEO6IWINV5  n=1671 EUR= 1250.2 pnl=  -32.4 EV/EUR=-0.026 sin2dias=-0.160 dias+=2/6
+-- IW5 vs G0
+  dPnL=  +86.6 (dias d>0 4/6; sin 2 mejores dias +11.9) IC90dia(+1.7,+169.2) IC90cierre(-8.4,+173.8) | quita 452 de 2193 rellenos
+    placebo (PIW5, 30 desplazamientos): media +262.6 [+222.4,+287.0] p(placebo>=obs)=1.000
+-- GEO6 vs G0 (referencia)
+  dPnL= +108.6 (dias d>0 6/6; sin 2 mejores dias +30.7) IC90dia(+46.5,+182.9) IC90cierre(+26.8,+180.3) | quita 497 de 2193 rellenos
+-- GEO6^IW5 vs GEO6
+  dPnL=  +38.3 (dias d>0 4/6; sin 2 mejores dias -5.3) IC90dia(-19.3,+99.9) IC90cierre(-29.0,+99.4) | quita 217 de 1696 rellenos
+    placebo (PGEO6IW5, 30 desplazamientos): media +250.5 [+227.6,+271.4] p(placebo>=obs)=1.000
+-- GEO6^IW5 vs G0
+  dPnL= +146.9 (dias d>0 5/6; sin 2 mejores dias +43.7) IC90dia(+57.9,+237.9) IC90cierre(+36.6,+252.5) | quita 714 de 2193 rellenos
+-- IWINV5 vs G0 (control)
+  dPnL=  +14.4 (dias d>0 3/6; sin 2 mejores dias +0.5) IC90dia(+0.5,+28.4) IC90cierre(+3.6,+28.2) | quita 19 de 2193 rellenos
+-- GEO6^IWINV5 vs GEO6 (control)
+  dPnL=  +18.9 (dias d>0 3/6; sin 2 mejores dias +1.7) IC90dia(+3.5,+39.4) IC90cierre(+4.6,+36.7) | quita 25 de 1696 rellenos
+
+== HOLD 01-08 Nov (6 dias)
+  G0          n=1450 EUR= 1082.1 pnl= -270.5 EV/EUR=-0.250 sin2dias=-0.435 dias+=2/6
+  GEO6        n=1149 EUR=  864.8 pnl= -184.8 EV/EUR=-0.214 sin2dias=-0.420 dias+=3/6
+  IW5         n=1232 EUR=  929.2 pnl= -168.5 EV/EUR=-0.181 sin2dias=-0.414 dias+=3/6
+  GEO6IW5     n=1035 EUR=  783.3 pnl= -119.3 EV/EUR=-0.152 sin2dias=-0.389 dias+=3/6
+  IWINV5      n=1450 EUR= 1082.1 pnl= -270.5 EV/EUR=-0.250 sin2dias=-0.435 dias+=2/6
+  GEO6IWINV5  n=1148 EUR=  864.3 pnl= -184.3 EV/EUR=-0.213 sin2dias=-0.419 dias+=3/6
+-- IW5 vs G0
+  dPnL= +102.1 (dias d>0 6/6; sin 2 mejores dias +28.7) IC90dia(+43.8,+162.6) IC90cierre(+60.7,+141.6) | quita 218 de 1450 rellenos
+    placebo (PIW5, 30 desplazamientos): media +189.1 [+164.1,+210.1] p(placebo>=obs)=1.000
+-- GEO6 vs G0 (referencia)
+  dPnL=  +85.7 (dias d>0 5/6; sin 2 mejores dias +31.5) IC90dia(+36.4,+133.7) IC90cierre(+17.3,+150.0) | quita 301 de 1450 rellenos
+-- GEO6^IW5 vs GEO6
+  dPnL=  +65.5 (dias d>0 6/6; sin 2 mejores dias +14.8) IC90dia(+23.1,+109.8) IC90cierre(+40.2,+91.5) | quita 114 de 1149 rellenos
+    placebo (PGEO6IW5, 30 desplazamientos): media +155.1 [+135.4,+170.7] p(placebo>=obs)=1.000
+-- GEO6^IW5 vs G0
+  dPnL= +151.2 (dias d>0 5/6; sin 2 mejores dias +66.0) IC90dia(+76.2,+224.3) IC90cierre(+74.5,+221.7) | quita 415 de 1450 rellenos
+-- IWINV5 vs G0 (control)
+  dPnL=   +0.0 (dias d>0 0/6; sin 2 mejores dias +0.0) IC90dia(+0.0,+0.0) IC90cierre(+0.0,+0.0) | quita 0 de 1450 rellenos
+-- GEO6^IWINV5 vs GEO6 (control)
+  dPnL=   +0.5 (dias d>0 1/6; sin 2 mejores dias +0.0) IC90dia(+0.0,+1.5) IC90cierre(+0.0,+1.5) | quita 1 de 1149 rellenos
+
+== TODO 12 d (12 dias)
+  G0          n=3643 EUR= 2713.9 pnl= -430.4 EV/EUR=-0.159 sin2dias=-0.254 dias+=3/12
+  GEO6        n=2845 EUR= 2134.1 pnl= -236.1 EV/EUR=-0.111 sin2dias=-0.207 dias+=5/12
+  IW5         n=2973 EUR= 2240.7 pnl= -241.7 EV/EUR=-0.108 sin2dias=-0.200 dias+=5/12
+  GEO6IW5     n=2514 EUR= 1897.5 pnl= -132.3 EV/EUR=-0.070 sin2dias=-0.171 dias+=5/12
+  IWINV5      n=3624 EUR= 2699.3 pnl= -416.0 EV/EUR=-0.154 sin2dias=-0.251 dias+=3/12
+  GEO6IWINV5  n=2819 EUR= 2114.5 pnl= -216.7 EV/EUR=-0.102 sin2dias=-0.200 dias+=5/12
+-- IW5 vs G0
+  dPnL= +188.7 (dias d>0 10/12; sin 2 mejores dias +108.8) IC90dia(+90.8,+292.2) IC90cierre(+81.9,+289.8) | quita 670 de 3643 rellenos
+    placebo (PIW5, 30 desplazamientos): media +451.7 [+403.7,+488.2] p(placebo>=obs)=1.000
+-- GEO6 vs G0 (referencia)
+  dPnL= +194.3 (dias d>0 11/12; sin 2 mejores dias +116.5) IC90dia(+109.1,+279.3) IC90cierre(+87.8,+291.9) | quita 798 de 3643 rellenos
+-- GEO6^IW5 vs GEO6
+  dPnL= +103.8 (dias d>0 10/12; sin 2 mejores dias +47.2) IC90dia(+28.9,+177.4) IC90cierre(+32.5,+169.6) | quita 331 de 2845 rellenos
+    placebo (PGEO6IW5, 30 desplazamientos): media +405.6 [+377.2,+437.6] p(placebo>=obs)=1.000
+-- GEO6^IW5 vs G0
+  dPnL= +298.1 (dias d>0 10/12; sin 2 mejores dias +194.9) IC90dia(+182.1,+415.5) IC90cierre(+166.1,+425.4) | quita 1129 de 3643 rellenos
+-- IWINV5 vs G0 (control)
+  dPnL=  +14.4 (dias d>0 3/12; sin 2 mejores dias +0.5) IC90dia(+0.5,+29.9) IC90cierre(+3.2,+28.4) | quita 19 de 3643 rellenos
+-- GEO6^IWINV5 vs GEO6 (control)
+  dPnL=  +19.4 (dias d>0 4/12; sin 2 mejores dias +2.2) IC90dia(+2.2,+42.2) IC90cierre(+4.6,+37.6) | quita 26 de 2845 rellenos
+
+== dPnL por dia (GEO6^IW5 - GEO6 | IW5 - G0 | GEO6 - G0)
+  2026-10-26     -7.7 |   -13.1 |    +3.2
+  2026-10-27    +12.0 |   +34.6 |   +36.8
+  2026-10-28    +13.4 |   +40.1 |   +41.0
+  2026-10-29    +30.3 |   +27.5 |    +2.9
+  2026-10-30     +3.4 |    +2.9 |    +0.3
+  2026-10-31    -13.1 |    -5.4 |   +24.3
+  2026-11-01     +2.4 |    +7.2 |    -6.7
+  2026-11-02     +1.4 |    +5.1 |    +3.7
+  2026-11-03    +26.3 |   +39.8 |   +18.4
+  2026-11-04    +24.3 |   +33.6 |   +16.1
+  2026-11-07     +6.9 |    +7.9 |   +27.9
+  2026-11-08     +4.1 |    +8.5 |   +26.4

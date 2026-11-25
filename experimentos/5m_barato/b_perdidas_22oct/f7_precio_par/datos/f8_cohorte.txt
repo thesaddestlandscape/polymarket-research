@@ -1,0 +1,22 @@
+wallets D 48 H 47
+EV(+reb)/EUR cohorte D: ponderado 0.0081 ; mediana 0.0058 ; H: ponderado 0.0062 ; mediana 0.0063
+ganadores/controles (D):
+               n        coste      ev    lock   loose   f_emp   f_par  mg_med   f_neg    f_m4  ret_med  loose_ev
+maker                                                                                                           
+0x21f4c1a1  3214  3173979.000  0.0052  0.0174 -0.0104  0.8177  0.9841  0.0200  0.4156  0.4350     34.3   -0.0871
+0x85a186d1  3192   813619.125  0.0002  0.0097 -0.0147  0.8780  0.9994  0.0100  0.4294  0.3528     23.8   -0.2567
+0x86b14772  3089  1400373.500  0.0083 -0.0470  0.0513  0.6306  0.7103 -0.0400  0.5793  0.3127     49.4    0.1285
+0x9d57c42e  2489  1484677.250 -0.0010  0.0178 -0.0166  0.8628  0.9960  0.0300  0.3605  0.4298     20.7   -0.4952
+0xe29042f5  2515  1901395.500  0.0130  0.0198 -0.0007  0.9187  0.9920  0.0121  0.3995  0.3779     15.2   -0.0096
+persistencia EV D->H: spearman 0.05 n=47
+Rasgo(D) vs EV_H  (spearman, p); K=9 rasgos -> Bonferroni p<0.0056
+  lock      vs EV_H: rho -0.26 p 0.085 (n=46) | vs EV_D (mecanico): -0.16
+  loose     vs EV_H: rho +0.14 p 0.338 (n=46) | vs EV_D (mecanico): +0.55
+  f_emp     vs EV_H: rho +0.06 p 0.678 (n=46) | vs EV_D (mecanico): -0.44
+  f_par     vs EV_H: rho +0.18 p 0.237 (n=46) | vs EV_D (mecanico): -0.42
+  mg_med    vs EV_H: rho -0.17 p 0.261 (n=46) | vs EV_D (mecanico): +0.03
+  f_neg     vs EV_H: rho +0.12 p 0.437 (n=46) | vs EV_D (mecanico): +0.25
+  f_m4      vs EV_H: rho -0.27 p 0.067 (n=46) | vs EV_D (mecanico): +0.41
+  ret_med   vs EV_H: rho -0.05 p 0.763 (n=46) | vs EV_D (mecanico): +0.46
+  loose_ev  vs EV_H: rho +0.11 p 0.453 (n=46) | vs EV_D (mecanico): +0.50
+cohorte D: margen FIFO por accion ponderado: p10 -0.240 p25 -0.080 p50 0.010 p75 0.100 p90 0.240 ; frac<0 0.45 ; 0-2c 0.10 ; 2-5c 0.09 ; 5-10c 0.11 ; >=10c 0.25

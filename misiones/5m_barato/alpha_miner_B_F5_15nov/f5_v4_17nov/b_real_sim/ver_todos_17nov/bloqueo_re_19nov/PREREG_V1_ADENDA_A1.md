@@ -1,0 +1,5 @@
+# ADENDA A1 a PREREG_V1_IDENTIDAD_19nov.md (sha da9f4a89...), 19-Nov, TRAS la 1a medicion (out/v1_analisis_n17b.txt). Declarada post hoc.
+Hecho: V1a/V1c recall 0,62/0,81 pero placebo tick 0,665 (= recall) y precision_lb 0,026: el lote rx agrupa muchos eventos (varios t_ms): no discrimina. Omision del 1er script: faltaba precision y placebo de V1b (estaba prerregistrada) -> se calcula sin cambiar nada.
+Exploratorio nuevo (no confirma solo, requiere tramo nuevo): V1e = V1b (mismo t_ms que la T) + nivel canonico en direccion del tomador: T BUY en tt a p -> (tt, p..p+20); T SELL en tt a p -> (comp tt, 1000-p..1020-p). Diagnostico: distribucion t_ms_inc - t_ms_T en los aciertos V1c.
+Mismo criterio de aceptacion del PREREG. Tramo de confirmacion: libro5_ms_2026-11-17_3094008 (04:20-05:50, NO mirado).
+A1b (post hoc, mismo dia): precision condicionada a CONSUMO: solo disparos cuyo nivel canonico recibe despues una T (mismo par de tokens, precio canonico igual) en (rx, rx+60 s]; elimina del denominador los GTC cancelados (no identificables on-chain). Verdad = REST+ como antes. Referencia sin regla: todo incremento al nivel de la T (+-1 tick) en el lote (V1a nivel).

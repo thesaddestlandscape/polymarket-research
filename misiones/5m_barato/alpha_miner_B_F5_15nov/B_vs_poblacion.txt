@@ -1,0 +1,17 @@
+# Poblacion 20-23 Oct (ETH/SOL/XRP, banda, r_D) vs B real (215 fills / 202 unidades)
+        conjunto  n_filas  coste_EUR  EV_todo  EV_bajo  EV_medio  EV_alto
+ poblacion todas    59415 145200.993   -0.048   -0.002    -0.001   -0.194
+poblacion tipo B     9179  43056.677   -0.144   -0.122    -0.107   -0.233
+  B real (fills)      215    221.301   -0.072   -0.166    -0.065   -0.066
+
+Tamano medio (acc) poblacion banda: 12.0 (mediana 6.0); B: 5-6 acc.
+
+Por dia (EV pond.): poblacion todas / poblacion tipo B / B real (n fills)
+2026-10-20: pob todas -0.317 | pob tipoB -0.545 | B real +0.070 (n=40)
+2026-10-21: pob todas +0.121 | pob tipoB +0.261 | B real +0.166 (n=77)
+2026-10-22: pob todas +0.179 | pob tipoB +0.315 | B real -0.267 (n=81)
+2026-10-23: pob todas -0.001 | pob tipoB -0.064 | B real -0.584 (n=17)
+EV esperado de B con la celda ['dia', 'coin'] de poblacion todas: +0.084 | real -0.072 (cubre 100% fills) | exceso B = -0.157
+EV esperado de B con la celda ['dia', 'coin', 'ter'] de poblacion todas: +0.033 | real -0.072 (cubre 100% fills) | exceso B = -0.105
+EV esperado de B con la celda ['dia', 'coin'] de poblacion tipo B: +0.212 | real -0.072 (cubre 100% fills) | exceso B = -0.284
+EV esperado de B con la celda ['dia', 'coin', 'ter'] de poblacion tipo B: +0.127 | real -0.088 (cubre 97% fills) | exceso B = -0.215

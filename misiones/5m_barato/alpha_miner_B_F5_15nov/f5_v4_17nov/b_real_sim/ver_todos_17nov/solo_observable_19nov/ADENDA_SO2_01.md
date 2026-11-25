@@ -1,0 +1,3 @@
+# ADENDA SO-2 01 (19-Nov ~08:50Z), tras ver SO-2 (INCONCLUSO), antes de calcular. POST HOC, EXPLORATORY.
+F5_t en colocación deja dentro de bajo/medio el 87 % de las NONE (48/55) porque solo el 9,5 % de las órdenes cae en alto. Variante dinámica (lo que permitiría el contrato R1v2: cancelar si F5_t > C1 durante la vida): para cada orden RELLENA, F5_t en el último estado L2 con recepción ≤ real_tm3 − 150 ms (margen de latencia de cancelación 33-111 ms + proceso). Métrica: % de NONE, TRAZA y resto de rellenos que estarían en alto (cancelables a tiempo). Sin criterio de aceptación (cota descriptiva del máximo evitable por F5_t dinámico); se reporta con n.
+- corrección de bug (19-Nov 08:50Z, antes de interpretar): TRAZA_c1 exigía c1 (la 1.ª corrida mezclaba TP con traza).

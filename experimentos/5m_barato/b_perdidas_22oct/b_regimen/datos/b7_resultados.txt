@@ -1,0 +1,18 @@
+#### P1 09-16
+R0 (CON): skip EUR 23394 (0.31) | EV_all +0.0556 EV_ret +0.0583 [+0.005,+0.118] | dEV +0.0027 EXCESO_EV +0.0037 p_perm 0.3653 | dPnL -1160 (exceso dPnL sobre nulo +191)
+N2 (AR2h<=-0,10): skip EUR 25781 (0.34) | EV_all +0.0556 EV_ret +0.0829 [+0.029,+0.139] | dEV +0.0274 EXCESO_EV +0.0220 p_perm 0.0210 | dPnL -73 (exceso dPnL sobre nulo +1096)
+UNION R0 u N2: skip EUR 41235 (0.55) | EV_all +0.0556 EV_ret +0.0914 [+0.026,+0.163] | dEV +0.0358 EXCESO_EV +0.0318 p_perm 0.0260 | dPnL -1064 (exceso dPnL sobre nulo +1090)
+INTERSECCION R0 y N2: skip EUR 7940 (0.11) | EV_all +0.0556 EV_ret +0.0596 [+0.014,+0.110] | dEV +0.0040 EXCESO_EV +0.0033 p_perm 0.2674 | dPnL -168 (exceso dPnL sobre nulo +223)
+CON solo si AR2h<=0: skip EUR 11623 (0.15) | EV_all +0.0556 EV_ret +0.0695 [+0.022,+0.122] | dEV +0.0139 EXCESO_EV +0.0131 p_perm 0.0210 | dPnL +242 (exceso dPnL sobre nulo +835)
+   ETH: EV_all +0.069 | EV_ret R0 +0.082 | EV_ret N2 +0.095 | EV_ret union +0.099
+   SOL: EV_all +0.071 | EV_ret R0 +0.053 | EV_ret N2 +0.104 | EV_ret union +0.091
+   XRP: EV_all -0.034 | EV_ret R0 -0.044 | EV_ret N2 -0.010 | EV_ret union +0.057
+#### P2 17-21
+R0 (CON): skip EUR 10863 (0.31) | EV_all -0.0411 EV_ret -0.0008 [-0.082,+0.078] | dEV +0.0402 EXCESO_EV +0.0379 p_perm 0.0020 | dPnL +1400 (exceso dPnL sobre nulo +898)
+N2 (AR2h<=-0,10): skip EUR 15805 (0.46) | EV_all -0.0411 EV_ret -0.0212 [-0.106,+0.063] | dEV +0.0199 EXCESO_EV +0.0071 p_perm 0.3588 | dPnL +1022 (exceso dPnL sobre nulo +132)
+UNION R0 u N2: skip EUR 21817 (0.63) | EV_all -0.0411 EV_ret -0.0145 [-0.122,+0.095] | dEV +0.0265 EXCESO_EV +0.0117 p_perm 0.3353 | dPnL +1234 (exceso dPnL sobre nulo +149)
+INTERSECCION R0 y N2: skip EUR 4851 (0.14) | EV_all -0.0411 EV_ret -0.0078 [-0.077,+0.062] | dEV +0.0333 EXCESO_EV +0.0301 p_perm 0.0005 | dPnL +1188 (exceso dPnL sobre nulo +893)
+CON solo si AR2h<=0: skip EUR 6536 (0.19) | EV_all -0.0411 EV_ret +0.0012 [-0.070,+0.072] | dEV +0.0423 EXCESO_EV +0.0388 p_perm 0.0005 | dPnL +1454 (exceso dPnL sobre nulo +1089)
+   ETH: EV_all -0.072 | EV_ret R0 -0.057 | EV_ret N2 -0.036 | EV_ret union -0.057
+   SOL: EV_all +0.025 | EV_ret R0 +0.115 | EV_ret N2 +0.033 | EV_ret union +0.087
+   XRP: EV_all -0.033 | EV_ret R0 +0.035 | EV_ret N2 -0.060 | EV_ret union -0.022

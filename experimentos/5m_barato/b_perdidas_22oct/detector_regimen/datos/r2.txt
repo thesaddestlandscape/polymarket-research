@@ -1,0 +1,160 @@
+
+=== S_A backfill | monedas ['ETH', 'SOL', 'XRP'] | T=180 | desenlace win_proxy ===
+unidades 39864 dias 129  CON 13842 CONTRA 11716 NEUTRO 14306; EV/EUR todas -0.1643; acierto 0.1671 vs q medio 0.2000
+H1 Delta=EV(CON)-EV(CONTRA): -0.1146  IC90 dias (-0.1587,-0.0700)
+   placebo (perm CON/CONTRA en dia x moneda x q): p una cola (Delta<=obs) = 0.0000; SE_dias=0.0273; MDE(1,64 SE)=0.0448
+   EV CON: -0.2237 (n 13842, coste 2758, acierto 0.155 vs q 0.199)
+   EV CONTRA: -0.1091 (n 11716, coste 2353, acierto 0.179 vs q 0.201)
+H2 R: Delta(TREND)=-0.1929 (n 7078), Delta(REVERT)=-0.0967 (n 12829); I=-0.0962  IC90 (-0.2128,+0.0179)  p2 dias=0.1840  p_Bonf(x3)=0.5520
+H2 D: Delta(TENDENCIA)=-0.1189 (n 18037), Delta(RANGO)=-0.0994 (n 18308); I=-0.0195  IC90 (-0.1036,+0.0613)  p2 dias=0.7180  p_Bonf(x3)=1.0000
+H2 COH: Delta(COH4)=-0.1142 (n 25832), Delta(NOCOH)=-0.1189 (n 14028); I=+0.0047  IC90 (-0.0778,+0.0925)  p2 dias=0.9240  p_Bonf(x3)=1.0000
+   R=TREND: n 7078  Delta -0.1929  EV todo -0.1346
+   R=MIXTO: n 17361  Delta -0.0685  EV todo -0.1773
+   R=REVERT: n 12829  Delta -0.0967  EV todo -0.1708
+dia-nivel (n dias 129): Dp=-Sum e CON; X=Sum e todas las unidades del dia. Dp>0 en 0.860 de los dias; PnL skip-CON total +617.0 acc-EUR; sin 2 mejores dias +587.3
+   Spearman(X,Dp) = -0.590 p=0.0000 n_dias 129
+   Spearman(ER,Dp) = -0.033 p=0.7178 n_dias 126
+   Spearman(ER,X) = +0.030 p=0.7377 n_dias 126
+   Spearman(Xprev,X) = -0.031 p=0.7317 n_dias 128
+   Spearman(Xprev,Dp) = +0.016 p=0.8613 n_dias 128
+   Dp en dias X<mediana (malos): media +6.79 n 64; en dias X>=mediana (buenos): +2.81 n 65
+
+=== S_B dic_ene | monedas ['ETH', 'SOL', 'XRP'] | T=180 | desenlace win_oficial ===
+unidades 12486 dias 40  CON 4467 CONTRA 3754 NEUTRO 4265; EV/EUR todas -0.1955; acierto 0.1608 vs q medio 0.1999
+H1 Delta=EV(CON)-EV(CONTRA): -0.1713  IC90 dias (-0.2445,-0.1004)
+   placebo (perm CON/CONTRA en dia x moneda x q): p una cola (Delta<=obs) = 0.0000; SE_dias=0.0440; MDE(1,64 SE)=0.0721
+   EV CON: -0.2673 (n 4467, coste 891, acierto 0.146 vs q 0.200)
+   EV CONTRA: -0.0959 (n 3754, coste 750, acierto 0.181 vs q 0.200)
+H2 R: Delta(TREND)=-0.2095 (n 1980), Delta(REVERT)=-0.1891 (n 3787); I=-0.0204  IC90 (-0.2652,+0.2157)  p2 dias=0.8340  p_Bonf(x3)=1.0000
+H2 D: Delta(TENDENCIA)=-0.1060 (n 5527), Delta(RANGO)=-0.2284 (n 5184); I=+0.1224  IC90 (-0.0371,+0.2717)  p2 dias=0.2070  p_Bonf(x3)=0.6210
+H2 COH: Delta(COH4)=-0.1359 (n 7512), Delta(NOCOH)=-0.2291 (n 4974); I=+0.0932  IC90 (-0.0501,+0.2278)  p2 dias=0.2740  p_Bonf(x3)=0.8220
+   R=TREND: n 1980  Delta -0.2095  EV todo -0.1060
+   R=MIXTO: n 5243  Delta -0.1328  EV todo -0.1883
+   R=REVERT: n 3787  Delta -0.1891  EV todo -0.2242
+dia-nivel (n dias 40): Dp=-Sum e CON; X=Sum e todas las unidades del dia. Dp>0 en 0.925 de los dias; PnL skip-CON total +238.2 acc-EUR; sin 2 mejores dias +216.1
+   Spearman(X,Dp) = -0.507 p=0.0009 n_dias 40
+   Spearman(ER,Dp) = -0.056 p=0.7346 n_dias 39
+   Spearman(ER,X) = -0.020 p=0.9056 n_dias 39
+   Spearman(Xprev,X) = +0.175 p=0.2869 n_dias 39
+   Spearman(Xprev,Dp) = -0.443 p=0.0047 n_dias 39
+   Dp en dias X<mediana (malos): media +7.52 n 20; en dias X>=mediana (buenos): +4.39 n 20
+
+=== S_Bproxy dic_ene | monedas ['ETH', 'SOL', 'XRP'] | T=180 | desenlace win_proxy ===
+unidades 12974 dias 42  CON 4658 CONTRA 3927 NEUTRO 4389; EV/EUR todas -0.1970; acierto 0.1606 vs q medio 0.2000
+H1 Delta=EV(CON)-EV(CONTRA): -0.1882  IC90 dias (-0.2576,-0.1262)
+   placebo (perm CON/CONTRA en dia x moneda x q): p una cola (Delta<=obs) = 0.0000; SE_dias=0.0395; MDE(1,64 SE)=0.0648
+   EV CON: -0.2800 (n 4658, coste 931, acierto 0.144 vs q 0.200)
+   EV CONTRA: -0.0918 (n 3927, coste 785, acierto 0.182 vs q 0.200)
+H2 R: Delta(TREND)=-0.2423 (n 2048), Delta(REVERT)=-0.1855 (n 3965); I=-0.0569  IC90 (-0.3151,+0.1812)  p2 dias=0.7370  p_Bonf(x3)=1.0000
+H2 D: Delta(TENDENCIA)=-0.1081 (n 5876), Delta(RANGO)=-0.2773 (n 5263); I=+0.1692  IC90 (+0.0239,+0.3023)  p2 dias=0.0500  p_Bonf(x3)=0.1500
+H2 COH: Delta(COH4)=-0.1377 (n 7827), Delta(NOCOH)=-0.2724 (n 5147); I=+0.1347  IC90 (+0.0131,+0.2512)  p2 dias=0.0700  p_Bonf(x3)=0.2100
+   R=TREND: n 2048  Delta -0.2423  EV todo -0.1110
+   R=MIXTO: n 5425  Delta -0.1567  EV todo -0.1746
+   R=REVERT: n 3965  Delta -0.1855  EV todo -0.2413
+dia-nivel (n dias 42): Dp=-Sum e CON; X=Sum e todas las unidades del dia. Dp>0 en 1.000 de los dias; PnL skip-CON total +260.5 acc-EUR; sin 2 mejores dias +237.5
+   Spearman(X,Dp) = -0.545 p=0.0002 n_dias 42
+   Spearman(ER,Dp) = +0.009 p=0.9552 n_dias 41
+   Spearman(ER,X) = -0.079 p=0.6223 n_dias 41
+   Spearman(Xprev,X) = +0.116 p=0.4700 n_dias 41
+   Spearman(Xprev,Dp) = -0.328 p=0.0363 n_dias 41
+   Dp en dias X<mediana (malos): media +7.28 n 21; en dias X>=mediana (buenos): +5.13 n 21
+
+=== S_Cprox bookticker(28d) | monedas ['ETH', 'SOL', 'XRP'] | T=180 | desenlace win_proxy ===
+unidades 8635 dias 29  CON 2981 CONTRA 2703 NEUTRO 2951; EV/EUR todas -0.1637; acierto 0.1664 vs q medio 0.1990
+H1 Delta=EV(CON)-EV(CONTRA): -0.1551  IC90 dias (-0.2641,-0.0537)
+   placebo (perm CON/CONTRA en dia x moneda x q): p una cola (Delta<=obs) = 0.0020; SE_dias=0.0641; MDE(1,64 SE)=0.1051
+   EV CON: -0.2492 (n 2981, coste 590, acierto 0.149 vs q 0.198)
+   EV CONTRA: -0.0941 (n 2703, coste 539, acierto 0.181 vs q 0.199)
+H2 R: Delta(TREND)=-0.4151 (n 1448), Delta(REVERT)=-0.0592 (n 2384); I=-0.3559  IC90 (-0.5460,-0.1703)  p2 dias=0.0010  p_Bonf(x3)=0.0030
+H2 D: Delta(TENDENCIA)=-0.1277 (n 4169), Delta(RANGO)=-0.2841 (n 2757); I=+0.1564  IC90 (-0.0245,+0.3341)  p2 dias=0.1560  p_Bonf(x3)=0.4680
+H2 COH: Delta(COH4)=-0.1749 (n 5473), Delta(NOCOH)=-0.1240 (n 2798); I=-0.0509  IC90 (-0.2343,+0.1383)  p2 dias=0.6230  p_Bonf(x3)=1.0000
+   R=TREND: n 1448  Delta -0.4151  EV todo -0.1944
+   R=MIXTO: n 3412  Delta -0.1368  EV todo -0.1320
+   R=REVERT: n 2384  Delta -0.0592  EV todo -0.1566
+dia-nivel (n dias 29): Dp=-Sum e CON; X=Sum e todas las unidades del dia. Dp>0 en 0.897 de los dias; PnL skip-CON total +147.0 acc-EUR; sin 2 mejores dias +117.6
+   Spearman(X,Dp) = -0.631 p=0.0002 n_dias 29
+   Spearman(ER,Dp) = +0.289 p=0.1358 n_dias 28
+   Spearman(ER,X) = -0.288 p=0.1374 n_dias 28
+   Spearman(Xprev,X) = +0.251 p=0.1982 n_dias 28
+   Spearman(Xprev,Dp) = -0.270 p=0.1640 n_dias 28
+   Dp en dias X<mediana (malos): media +7.78 n 14; en dias X>=mediana (buenos): +2.55 n 15
+
+=== sensA backfill | monedas ['ETH', 'SOL', 'XRP'] | T=120 | desenlace win_proxy ===
+unidades 39336 dias 129  CON 13790 CONTRA 11697 NEUTRO 13849; EV/EUR todas -0.0873; acierto 0.1903 vs q medio 0.2085
+H1 Delta=EV(CON)-EV(CONTRA): -0.1462  IC90 dias (-0.1936,-0.0988)
+   placebo (perm CON/CONTRA en dia x moneda x q): p una cola (Delta<=obs) = 0.0000; SE_dias=0.0293; MDE(1,64 SE)=0.0481
+   EV CON: -0.1663 (n 13790, coste 2881, acierto 0.174 vs q 0.209)
+   EV CONTRA: -0.0201 (n 11697, coste 2429, acierto 0.203 vs q 0.208)
+H2 R: Delta(TREND)=-0.1906 (n 7232), Delta(REVERT)=-0.0465 (n 12322); I=-0.1441  IC90 (-0.2700,-0.0171)  p2 dias=0.0710  p_Bonf(x3)=0.2130
+H2 D: Delta(TENDENCIA)=-0.1345 (n 17933), Delta(RANGO)=-0.1281 (n 17932); I=-0.0064  IC90 (-0.0994,+0.0860)  p2 dias=0.9060  p_Bonf(x3)=1.0000
+H2 COH: Delta(COH4)=-0.1733 (n 25625), Delta(NOCOH)=-0.0877 (n 13710); I=-0.0856  IC90 (-0.1807,+0.0118)  p2 dias=0.1480  p_Bonf(x3)=0.4440
+   R=TREND: n 7232  Delta -0.1906  EV todo -0.0635
+   R=MIXTO: n 17283  Delta -0.1607  EV todo -0.0971
+   R=REVERT: n 12322  Delta -0.0465  EV todo -0.0812
+dia-nivel (n dias 129): Dp=-Sum e CON; X=Sum e todas las unidades del dia. Dp>0 en 0.775 de los dias; PnL skip-CON total +479.1 acc-EUR; sin 2 mejores dias +448.6
+   Spearman(X,Dp) = -0.504 p=0.0000 n_dias 129
+   Spearman(ER,Dp) = -0.079 p=0.3770 n_dias 126
+   Spearman(ER,X) = -0.028 p=0.7537 n_dias 126
+   Spearman(Xprev,X) = -0.127 p=0.1531 n_dias 128
+   Spearman(Xprev,Dp) = +0.076 p=0.3917 n_dias 128
+   Dp en dias X<mediana (malos): media +5.45 n 64; en dias X>=mediana (buenos): +2.00 n 65
+
+=== sensB dic_ene | monedas ['ETH', 'SOL', 'XRP'] | T=120 | desenlace win_oficial ===
+unidades 12416 dias 40  CON 4354 CONTRA 3908 NEUTRO 4154; EV/EUR todas -0.0895; acierto 0.1896 vs q medio 0.2082
+H1 Delta=EV(CON)-EV(CONTRA): -0.2469  IC90 dias (-0.3295,-0.1708)
+   placebo (perm CON/CONTRA en dia x moneda x q): p una cola (Delta<=obs) = 0.0000; SE_dias=0.0497; MDE(1,64 SE)=0.0816
+   EV CON: -0.1832 (n 4354, coste 908, acierto 0.170 vs q 0.209)
+   EV CONTRA: +0.0636 (n 3908, coste 815, acierto 0.222 vs q 0.209)
+H2 R: Delta(TREND)=-0.3565 (n 2006), Delta(REVERT)=-0.2578 (n 3836); I=-0.0987  IC90 (-0.3091,+0.1218)  p2 dias=0.4480  p_Bonf(x3)=1.0000
+H2 D: Delta(TENDENCIA)=-0.2102 (n 5556), Delta(RANGO)=-0.3402 (n 5114); I=+0.1300  IC90 (-0.0439,+0.3053)  p2 dias=0.2130  p_Bonf(x3)=0.6390
+H2 COH: Delta(COH4)=-0.1915 (n 7516), Delta(NOCOH)=-0.3412 (n 4900); I=+0.1496  IC90 (+0.0019,+0.2941)  p2 dias=0.0970  p_Bonf(x3)=0.2910
+   R=TREND: n 2006  Delta -0.3565  EV todo -0.0204
+   R=MIXTO: n 5124  Delta -0.2290  EV todo -0.0884
+   R=REVERT: n 3836  Delta -0.2578  EV todo -0.1138
+dia-nivel (n dias 40): Dp=-Sum e CON; X=Sum e todas las unidades del dia. Dp>0 en 0.875 de los dias; PnL skip-CON total +166.5 acc-EUR; sin 2 mejores dias +140.5
+   Spearman(X,Dp) = -0.363 p=0.0212 n_dias 40
+   Spearman(ER,Dp) = +0.203 p=0.2151 n_dias 39
+   Spearman(ER,X) = -0.004 p=0.9805 n_dias 39
+   Spearman(Xprev,X) = +0.041 p=0.8048 n_dias 39
+   Spearman(Xprev,Dp) = -0.299 p=0.0643 n_dias 39
+   Dp en dias X<mediana (malos): media +5.09 n 20; en dias X>=mediana (buenos): +3.23 n 20
+
+=== replica backfill BTC/BNB/DOGE | monedas ['BTC', 'BNB', 'DOGE'] | T=180 | desenlace win_proxy ===
+unidades 39726 dias 129  CON 12673 CONTRA 11003 NEUTRO 16050; EV/EUR todas -0.0980; acierto 0.1800 vs q medio 0.1995
+H1 Delta=EV(CON)-EV(CONTRA): -0.0554  IC90 dias (-0.0986,-0.0110)
+   placebo (perm CON/CONTRA en dia x moneda x q): p una cola (Delta<=obs) = 0.0200; SE_dias=0.0264; MDE(1,64 SE)=0.0433
+   EV CON: -0.1459 (n 12673, coste 2507, acierto 0.169 vs q 0.198)
+   EV CONTRA: -0.0905 (n 11003, coste 2212, acierto 0.183 vs q 0.201)
+H2 R: Delta(TREND)=-0.1215 (n 7365), Delta(REVERT)=-0.0051 (n 12276); I=-0.1164  IC90 (-0.2400,+0.0139)  p2 dias=0.1460  p_Bonf(x3)=0.4380
+H2 D: Delta(TENDENCIA)=-0.0678 (n 18197), Delta(RANGO)=-0.0374 (n 18012); I=-0.0304  IC90 (-0.1166,+0.0529)  p2 dias=0.5790  p_Bonf(x3)=1.0000
+H2 COH: Delta(COH4)=-0.0694 (n 25872), Delta(NOCOH)=-0.0251 (n 13849); I=-0.0443  IC90 (-0.1456,+0.0615)  p2 dias=0.5010  p_Bonf(x3)=1.0000
+   R=TREND: n 7365  Delta -0.1215  EV todo -0.1004
+   R=MIXTO: n 17461  Delta -0.0470  EV todo -0.1048
+   R=REVERT: n 12276  Delta -0.0051  EV todo -0.1067
+dia-nivel (n dias 129): Dp=-Sum e CON; X=Sum e todas las unidades del dia. Dp>0 en 0.775 de los dias; PnL skip-CON total +365.8 acc-EUR; sin 2 mejores dias +338.1
+   Spearman(X,Dp) = -0.479 p=0.0000 n_dias 129
+   Spearman(ER,Dp) = -0.027 p=0.7675 n_dias 126
+   Spearman(ER,X) = -0.018 p=0.8392 n_dias 126
+   Spearman(Xprev,X) = -0.003 p=0.9688 n_dias 128
+   Spearman(Xprev,Dp) = +0.033 p=0.7077 n_dias 128
+   Dp en dias X<mediana (malos): media +4.41 n 64; en dias X>=mediana (buenos): +1.29 n 65
+
+=== replica dic_ene BTC | monedas ['BTC'] | T=180 | desenlace win_oficial ===
+unidades 4037 dias 40  CON 1107 CONTRA 960 NEUTRO 1970; EV/EUR todas -0.2153; acierto 0.1566 vs q medio 0.1995
+H1 Delta=EV(CON)-EV(CONTRA): -0.1080  IC90 dias (-0.2237,+0.0054)
+   placebo (perm CON/CONTRA en dia x moneda x q): p una cola (Delta<=obs) = 0.1460; SE_dias=0.0705; MDE(1,64 SE)=0.1157
+   EV CON: -0.2836 (n 1107, coste 219, acierto 0.142 vs q 0.198)
+   EV CONTRA: -0.1757 (n 960, coste 192, acierto 0.165 vs q 0.200)
+H2 R: Delta(TREND)=-0.1088 (n 713), Delta(REVERT)=-0.2626 (n 1096); I=+0.1538  IC90 (-0.3386,+0.5986)  p2 dias=0.5950  p_Bonf(x3)=1.0000
+H2 D: Delta(TENDENCIA)=-0.0943 (n 2038), Delta(RANGO)=-0.0500 (n 1399); I=-0.0444  IC90 (-0.3381,+0.2457)  p2 dias=0.8040  p_Bonf(x3)=1.0000
+H2 COH: Delta(COH4)=+0.0459 (n 2476), Delta(NOCOH)=-0.3868 (n 1561); I=+0.4327  IC90 (+0.1585,+0.6825)  p2 dias=0.0090  p_Bonf(x3)=0.0270
+   R=TREND: n 713  Delta -0.1088  EV todo -0.1494
+   R=MIXTO: n 1733  Delta +0.0160  EV todo -0.2310
+   R=REVERT: n 1096  Delta -0.2626  EV todo -0.2215
+dia-nivel (n dias 40): Dp=-Sum e CON; X=Sum e todas las unidades del dia. Dp>0 en 0.800 de los dias; PnL skip-CON total +62.2 acc-EUR; sin 2 mejores dias +53.9
+   Spearman(X,Dp) = -0.537 p=0.0003 n_dias 40
+   Spearman(ER,Dp) = -0.025 p=0.8814 n_dias 39
+   Spearman(ER,X) = +0.064 p=0.6970 n_dias 39
+   Spearman(Xprev,X) = -0.146 p=0.3760 n_dias 39
+   Spearman(Xprev,Dp) = +0.265 p=0.1033 n_dias 39
+   Dp en dias X<mediana (malos): media +2.14 n 20; en dias X>=mediana (buenos): +0.96 n 20

@@ -1,0 +1,70 @@
+
+######## DESC 09-16: n=77793 EUR=75509
+            n         eur        pnl     hit      pc      EV  cuota_eur
+cls                                                                    
+CON     24171  23393.8063  1159.9202  0.2236  0.2128  0.0496     0.3098
+CONTRA  26118  25282.5155  1316.8418  0.2221  0.2118  0.0521     0.3348
+NA        359    374.1347    19.6722  0.2340  0.2200  0.0526     0.0050
+NEU     27145  26458.4743  1700.3494  0.2265  0.2122  0.0643     0.3504
+EV por clase x act:
+cls    CON  CONTRA     NA    NEU
+act                             
+ETH  0.036   0.082 -0.160  0.087
+SOL  0.104   0.053  1.567  0.048
+XRP -0.014  -0.059  0.770 -0.037
+EV por clase x hb:
+cls    CON  CONTRA     NA    NEU
+hb                              
+0    0.126   0.014 -0.180 -0.078
+1   -0.020   0.068 -1.000  0.086
+2    0.005   0.002  1.713  0.122
+3    0.098   0.145  0.353  0.108
+PC (skip CON): skip 24171/77793 ret 0.690 | EV_all +0.0556 EV_ret +0.0583 [+0.005,+0.118] EV_skip +0.0496 | dPnL -1159.9 IC90 [-3311.5,+901.6] p_perm 0.3653 | dias+ 4/8 sin2 -1724.3 haircut50 -580.0 | dPnL moneda {'ETH': -458.8, 'SOL': -748.0, 'XRP': 46.8} bloque6h {0: -757.8, 1: 116.8, 2: -30.9, 3: -488.1} | EVret moneda {'ETH': 0.082, 'SOL': 0.053, 'XRP': -0.044}
+PC+MAP: skip 37467/77793 ret 0.506 | EV_all +0.0556 EV_ret +0.0613 [+0.003,+0.125] EV_skip +0.0498 | dPnL -1857.5 IC90 [-4121.8,+259.9] p_perm 0.4328 | dias+ 3/8 sin2 -2369.1 haircut50 -928.8 | dPnL moneda {'ETH': -709.6, 'SOL': -1076.1, 'XRP': -71.8} bloque6h {0: -692.4, 1: -105.4, 2: -51.0, 3: -1008.6} | EVret moneda {'ETH': 0.094, 'SOL': 0.035, 'XRP': -0.221}
+PC+r60: skip 32719/77793 ret 0.585 | EV_all +0.0556 EV_ret +0.0647 [+0.011,+0.125] EV_skip +0.0427 | dPnL -1337.4 IC90 [-3678.3,+868.7] p_perm 0.1839 | dias+ 4/8 sin2 -2089.3 haircut50 -668.7 | dPnL moneda {'ETH': -829.6, 'SOL': -603.8, 'XRP': 96.0} bloque6h {0: -233.5, 1: -117.3, 2: -478.3, 3: -508.2} | EVret moneda {'ETH': 0.083, 'SOL': 0.076, 'XRP': -0.043}
+PC+MAP+r60: skip 43894/77793 ret 0.429 | EV_all +0.0556 EV_ret +0.0691 [+0.009,+0.135] EV_skip +0.0454 | dPnL -1957.0 IC90 [-4370.3,+362.3] p_perm 0.2509 | dias+ 3/8 sin2 -2516.9 haircut50 -978.5 | dPnL moneda {'ETH': -1110.5, 'SOL': -860.7, 'XRP': 14.1} bloque6h {0: -358.2, 1: -182.5, 2: -368.4, 3: -1047.9} | EVret moneda {'ETH': 0.092, 'SOL': 0.064, 'XRP': -0.214}
+PC+R3(retener R3): skip 61210/77793 ret 0.217 | EV_all +0.0556 EV_ret +0.0757 [-0.026,+0.184] EV_skip +0.0500 | dPnL -2956.9 IC90 [-6154.1,-8.9] p_perm 0.3323 | dias+ 2/8 sin2 -3961.6 haircut50 -1478.5 | dPnL moneda {'ETH': -1881.6, 'SOL': -1491.2, 'XRP': 415.8} bloque6h {0: -353.7, 1: -181.0, 2: -1396.1, 3: -1026.1} | EVret moneda {'ETH': 0.113, 'SOL': -0.007, 'XRP': 0.053}
+(solo MAP): skip 19762/77793 ret 0.725 | EV_all +0.0556 EV_ret +0.0641 [+0.017,+0.116] EV_skip +0.0330 | dPnL -683.8 IC90 [-1740.9,+344.4] p_perm 0.2939 | dias+ 2/8 sin2 -1001.7 haircut50 -341.9 | dPnL moneda {'ETH': -351.7, 'SOL': -358.2, 'XRP': 26.0} bloque6h {0: -116.4, 1: 56.2, 2: 134.5, 3: -758.1} | EVret moneda {'ETH': 0.078, 'SOL': 0.065, 'XRP': -0.111}
+(solo r60): skip 13621/77793 ret 0.833 | EV_all +0.0556 EV_ret +0.0567 [+0.014,+0.105] EV_skip +0.0498 | dPnL -628.9 IC90 [-1803.9,+511.3] p_perm 0.4098 | dias+ 3/8 sin2 -1035.2 haircut50 -314.5 | dPnL moneda {'ETH': -716.8, 'SOL': -92.4, 'XRP': 180.3} bloque6h {0: 201.4, 1: -33.0, 2: -495.9, 3: -301.4} | EVret moneda {'ETH': 0.064, 'SOL': 0.08, 'XRP': -0.019}
+
+######## TEST 17-21: n=36125 EUR=34560
+            n         eur        pnl     hit      pc      EV  cuota_eur
+cls                                                                    
+CON     11468  10863.4121 -1399.8337  0.1849  0.2110 -0.1289     0.3143
+CONTRA  11971  11486.2358   865.5080  0.2301  0.2109  0.0754     0.3324
+NA         24     17.3274   -17.3274  0.0000  0.1738 -1.0000     0.0005
+NEU     12662  12192.9505  -867.3769  0.1980  0.2112 -0.0711     0.3528
+EV por clase x act:
+cls    CON  CONTRA   NA    NEU
+act                           
+ETH -0.107   0.029 -1.0 -0.127
+SOL -0.147   0.138  NaN  0.088
+XRP -0.183   0.134  NaN -0.072
+EV por clase x hb:
+cls    CON  CONTRA   NA    NEU
+hb                            
+0   -0.232  -0.088  NaN -0.084
+1   -0.201   0.310 -1.0  0.026
+2    0.138   0.131  NaN -0.016
+3   -0.252  -0.060  NaN -0.229
+PC (skip CON): skip 11468/36125 ret 0.686 | EV_all -0.0411 EV_ret -0.0008 [-0.082,+0.078] EV_skip -0.1289 | dPnL +1399.8 IC90 [+73.7,+2685.8] p_perm 0.0020 | dias+ 4/5 sin2 +160.8 haircut50 +699.9 | dPnL moneda {'ETH': 666.8, 'SOL': 454.7, 'XRP': 278.4} bloque6h {0: 645.6, 1: 540.0, 2: -405.3, 3: 619.6} | EVret moneda {'ETH': -0.057, 'SOL': 0.115, 'XRP': 0.035}
+PC+MAP: skip 19118/36125 ret 0.466 | EV_all -0.0411 EV_ret +0.0043 [-0.082,+0.085] EV_skip -0.0806 | dPnL +1488.1 IC90 [+66.4,+2860.3] p_perm 0.0210 | dias+ 4/5 sin2 +172.3 haircut50 +744.1 | dPnL moneda {'ETH': 994.8, 'SOL': 266.7, 'XRP': 226.6} bloque6h {0: 907.1, 1: 241.2, 2: -467.9, 3: 807.7} | EVret moneda {'ETH': -0.048, 'SOL': 0.11, 'XRP': 0.055}
+PC+r60: skip 15297/36125 ret 0.587 | EV_all -0.0411 EV_ret +0.0132 [-0.070,+0.096] EV_skip -0.1182 | dPnL +1687.1 IC90 [+290.1,+3015.2] p_perm 0.0040 | dias+ 3/5 sin2 +121.5 haircut50 +843.6 | dPnL moneda {'ETH': 936.4, 'SOL': 525.0, 'XRP': 225.8} bloque6h {0: 677.3, 1: 213.0, 2: -141.5, 3: 938.3} | EVret moneda {'ETH': -0.045, 'SOL': 0.146, 'XRP': 0.022}
+PC+MAP+r60: skip 21754/36125 ret 0.399 | EV_all -0.0411 EV_ret +0.0286 [-0.060,+0.114] EV_skip -0.0873 | dPnL +1813.3 IC90 [+273.1,+3258.7] p_perm 0.0060 | dias+ 4/5 sin2 +214.2 haircut50 +906.6 | dPnL moneda {'ETH': 1300.5, 'SOL': 313.6, 'XRP': 199.2} bloque6h {0: 906.8, 1: 41.6, 2: -226.2, 3: 1091.1} | EVret moneda {'ETH': -0.021, 'SOL': 0.138, 'XRP': 0.036}
+PC+R3(retener R3): skip 29277/36125 ret 0.196 | EV_all -0.0411 EV_ret +0.1000 [-0.061,+0.257] EV_skip -0.0755 | dPnL +2097.2 IC90 [+106.4,+3919.6] p_perm 0.0015 | dias+ 4/5 sin2 +601.2 haircut50 +1048.6 | dPnL moneda {'ETH': 1636.5, 'SOL': 152.4, 'XRP': 308.2} bloque6h {0: 1057.2, 1: 594.3, 2: -477.4, 3: 923.2} | EVret moneda {'ETH': 0.033, 'SOL': 0.221, 'XRP': 0.238}
+(solo MAP): skip 11388/36125 ret 0.674 | EV_all -0.0411 EV_ret -0.0426 [-0.108,+0.022] EV_skip -0.0378 | dPnL +425.1 IC90 [-361.5,+1155.8] p_perm 0.4558 | dias+ 3/5 sin2 -6.7 haircut50 +212.5 | dPnL moneda {'ETH': 440.4, 'SOL': -134.8, 'XRP': 119.4} bloque6h {0: 475.7, 1: -196.6, 2: -206.6, 3: 352.6} | EVret moneda {'ETH': -0.071, 'SOL': 0.014, 'XRP': -0.025}
+(solo r60): skip 5885/36125 ret 0.847 | EV_all -0.0411 EV_ret -0.0393 [-0.103,+0.025] EV_skip -0.0507 | dPnL +268.6 IC90 [-456.7,+974.6] p_perm 0.5837 | dias+ 3/5 sin2 -273.7 haircut50 +134.3 | dPnL moneda {'ETH': 151.0, 'SOL': 161.6, 'XRP': -43.9} bloque6h {0: 82.9, 1: -375.6, 2: 92.5, 3: 468.9} | EVret moneda {'ETH': -0.078, 'SOL': 0.051, 'XRP': -0.048}
+
+######## ESCALA (escenario; la cuota NO esta medida; flujo 33,9 kEUR/dia de MAPA-ESCALA)
+DESC 09-16 PC (skip CON): EV_ret +0.058 IC90[+0.005,+0.118] ret 0.69 cuota 1%: +5.0 kEUR/anio (IC [+0.5,+10.1]); hueco a 200k 195 k; con brecha ejecucion -0,053: +0.5 k
+DESC 09-16 PC (skip CON): EV_ret +0.058 IC90[+0.005,+0.118] ret 0.69 cuota 3%: +14.9 kEUR/anio (IC [+1.4,+30.2]); hueco a 200k 185 k; con brecha ejecucion -0,053: +1.4 k
+DESC 09-16 PC (skip CON): EV_ret +0.058 IC90[+0.005,+0.118] ret 0.69 cuota 5%: +24.9 kEUR/anio (IC [+2.3,+50.3]); hueco a 200k 175 k; con brecha ejecucion -0,053: +2.3 k
+DESC 09-16 PC+MAP+r60: EV_ret +0.069 IC90[+0.009,+0.135] ret 0.43 cuota 1%: +3.7 kEUR/anio (IC [+0.5,+7.2]); hueco a 200k 196 k; con brecha ejecucion -0,053: +0.9 k
+DESC 09-16 PC+MAP+r60: EV_ret +0.069 IC90[+0.009,+0.135] ret 0.43 cuota 3%: +11.0 kEUR/anio (IC [+1.4,+21.6]); hueco a 200k 189 k; con brecha ejecucion -0,053: +2.6 k
+DESC 09-16 PC+MAP+r60: EV_ret +0.069 IC90[+0.009,+0.135] ret 0.43 cuota 5%: +18.4 kEUR/anio (IC [+2.3,+35.9]); hueco a 200k 182 k; con brecha ejecucion -0,053: +4.3 k
+TEST 17-21 PC (skip CON): EV_ret -0.001 IC90[-0.082,+0.078] ret 0.69 cuota 1%: -0.1 kEUR/anio (IC [-7.0,+6.6]); hueco a 200k 200 k; con brecha ejecucion -0,053: -4.6 k
+TEST 17-21 PC (skip CON): EV_ret -0.001 IC90[-0.082,+0.078] ret 0.69 cuota 3%: -0.2 kEUR/anio (IC [-20.9,+19.8]); hueco a 200k 200 k; con brecha ejecucion -0,053: -13.7 k
+TEST 17-21 PC (skip CON): EV_ret -0.001 IC90[-0.082,+0.078] ret 0.69 cuota 5%: -0.3 kEUR/anio (IC [-34.8,+33.0]); hueco a 200k 200 k; con brecha ejecucion -0,053: -22.8 k
+TEST 17-21 PC+MAP+r60: EV_ret +0.029 IC90[-0.060,+0.114] ret 0.40 cuota 1%: +1.4 kEUR/anio (IC [-3.0,+5.6]); hueco a 200k 199 k; con brecha ejecucion -0,053: -1.2 k
+TEST 17-21 PC+MAP+r60: EV_ret +0.029 IC90[-0.060,+0.114] ret 0.40 cuota 3%: +4.2 kEUR/anio (IC [-9.0,+16.9]); hueco a 200k 196 k; con brecha ejecucion -0,053: -3.6 k
+TEST 17-21 PC+MAP+r60: EV_ret +0.029 IC90[-0.060,+0.114] ret 0.40 cuota 5%: +7.1 kEUR/anio (IC [-14.9,+28.1]); hueco a 200k 193 k; con brecha ejecucion -0,053: -6.0 k

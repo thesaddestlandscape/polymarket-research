@@ -1,0 +1,16 @@
+VALIDACION INDEPENDIENTE 27-Oct-2026 ~14:55Z (validador QA; codigo propio, sin importar el del medidor)
+Codigo/salidas: experimentos/5m_barato/validador_indep_27oct/{ext.py,ana.py,ext.log,ana.log}
+Reglas: EVw = sum pnl / sum coste; 1 obs por mercado-lado (SEGFAV: mercado-lado-Tbucket, como su prereg); IC90 bootstrap por CIERRE y por DIA; sin 2 mejores dias; 26-Oct = OOS.
+Independiente: Binance TD (filas x crudas de m5_registro 24-26, recepcion c7), seleccion de unidades, agregacion, bootstrap; SEGFAV 26-Oct re-extraido del crudo.
+NO independiente: modelo de relleno vpv (relleno_pes/opt) y prints A/B del frente (fr_D); desenlace = maker_ms_desenlaces_cache.json (misma fuente).
+
+(1) E-TD — CONFIRMADO. Opt retenidos TODO -0,0047 (IC90c -0,043..+0,034; n=6.794, 864 cierres) vs informado -0,003 (-0,042..+0,035). Pes -0,297 (-0,339..-0,255) vs -0,289.
+    Dias opt 24 -0,057 / 25 -0,024 / 26 +0,062 (IC -0,011..+0,128, no >0); sin 2 mejores -0,057. Mecanismo: DIF apartados-no apartados pes -0,146 (-0,220..-0,072), opt -0,143 (-0,211..-0,071).
+    Solo 3 dias: sin 2 mejores = 1 dia. Veredicto EXPLORATORY/sin EV>0 se sostiene.
+(2) FRENTE-TD — CONFIRMADO. -0,2173 (IC90c -0,259..-0,177; n=5.086, 864 cierres) vs -0,217 (n=5.081); dias -0,233/-0,276/-0,143 (0/3>0); DESC -0,254, OOS26 -0,143 (-0,227..-0,067).
+    FAV-TD -0,0560 (-0,074..-0,037), OOS26 -0,106. Sin TD el frente es peor (-0,254). REJECTED se sostiene; la extraccion de prints no se re-derivo del crudo.
+(3) SEGFAV — CONFIRMADO. sha256 PREREG = 2a44915c... (coincide). Desde sf_D: n=18.087, 2.186 cierres, EVw -0,0315 (IC90c -0,040..-0,023; IC90 dias -0,041..-0,021), 0/8 dias >0, sin 2 mejores -0,0384, DESC -0,0284, OOS26 -0,0524.
+    Placebo: DELTA S-P +0,0104 (IC90 +0,006..+0,014; placebo reponderado -0,042): el print aporta ~1c, menos que la comision (~1,1c/acc a p 0,8).
+    Re-extraccion propia 26-Oct desde crudo: S -0,048 (-0,076..-0,020) n=2.381 vs -0,052 n=2.329; 2.311 de 2.514 unidades coinciden con sf (89 % con el mismo td): diferencias de borde, mismo signo y magnitud.
+    On-chain 26-Oct (primeras 3 h): el 'side' de las filas t del WS coincide con el lado del TOMADOR on-chain en 68.503/68.503 casos no ambiguos (0 desacuerdos; 579 ambiguos, 5 sin cruce): la premisa «BUY = tomador compra F» es correcta.
+Limites: dependencia entre monedas del mismo cierre cubierta por bootstrap por cierre, no por dia (3 dias en E-TD/frente). Etiquetas: E-TD EXPLORATORY (mecanismo), EV no; FRENTE REJECTED; SEGFAV REJECTED. Nada de esto autoriza live.

@@ -1,0 +1,55 @@
+# E2 ADD2 (ADDENDUM1 6fc7dba5 + ADDENDUM2 28c39f45) -- poblacion CENSURADA: gradiente, NO EV de regla
+Dias esperados 37 (2026-10-09..2026-11-14): COMPLETE 37
+  de ellos por ADDENDUM2 28c39f45 (epoca por suelo medido; FAILED-C3 en ADD1, fuera de las celdas decisivas): 2026-10-16, 2026-10-24
+Estado: COMPLETO 37/37; prints 560379 (dias ADD1 531217, dias ADD2 29162; etiquetas ADD2 {'R0': 6147, 'R0hi': 11122, 'R1': 4459, 'R1lo': 7253, 'indet': 181})
+
+## (1) Regresion C10 frente a E2_poblacion.json (ADD1): p35|R1 OK: 10 segmentos reproducidos (|d| <= 0,0006), n_prints 21034 = ADD1; p35|R2 OK: 19 segmentos reproducidos (|d| <= 0,0006), n_prints 31247 = ADD1; p60|R1 OK: 10 segmentos reproducidos (|d| <= 0,0006), n_prints 23534 = ADD1; p60|R2 OK: 19 segmentos reproducidos (|d| <= 0,0006), n_prints 36347 = ADD1
+
+## (2) DECISIVAS de ADD1 con unidad mercado-lado (35 dias, tipo B, todo el 5m). Placebo por UNIDAD B=1000, max-stat K=4; regla §4: VALIDADA se mantiene solo si placebo unidad maxstat <= 0,0125 y gradiente por unidad > 0
+p35|R1: prints 21034 | unidades 10323 (6676 mercado-lado) | 10 dias, 2554 cierres
+   EV pond. EUR: todo +0.034 bajo +0.062 medio +0.030 alto -0.006 | EV medio por unidad: todo +0.082 bajo +0.140 medio +0.050 alto +0.035 | inversion (alto - todo): EUR -0.040, unidad -0.047
+   gradiente EUR diario +0.061 IC90 dias inf -0.099 (p_t 0.251) dias+ 5/10 sin 2 mejores -0.056 | placebo por unidad: p celda 0.553 maxstat 0.963 (media placebo +0.076)
+   gradiente por unidad diario +0.091 IC90 dias inf +0.020 (p_t 0.022) dias+ 8/10 sin 2 mejores +0.048 | placebo por unidad: p celda 0.191 maxstat 0.717 (media placebo +0.045)
+   placebo por PRINT (ADD1): p celda 0.250 maxstat 0.923 | etiqueta ADD1 -> ADD2: EXPLORATORIA -> EXPLORATORIA
+p35|R2: prints 31247 | unidades 17422 (11606 mercado-lado) | 19 dias, 4943 cierres
+   EV pond. EUR: todo +0.138 bajo +0.218 medio +0.129 alto +0.003 | EV medio por unidad: todo +0.032 bajo +0.080 medio +0.042 alto -0.070 | inversion (alto - todo): EUR -0.135, unidad -0.102
+   gradiente EUR diario +0.226 IC90 dias inf +0.093 (p_t 0.004) dias+ 14/19 sin 2 mejores +0.173 | placebo por unidad: p celda 0.103 maxstat 0.289 (media placebo +0.114)
+   gradiente por unidad diario +0.151 IC90 dias inf +0.105 (p_t 0.000) dias+ 17/19 sin 2 mejores +0.131 | placebo por unidad: p celda 0.023 maxstat 0.067 (media placebo +0.079)
+   placebo por PRINT (ADD1): p celda 0.037 maxstat 0.072 | etiqueta ADD1 -> ADD2: EXPLORATORIA -> EXPLORATORIA
+p60|R1: prints 23534 | unidades 11151 (6990 mercado-lado) | 10 dias, 2576 cierres
+   EV pond. EUR: todo +0.051 bajo +0.084 medio +0.062 alto -0.005 | EV medio por unidad: todo +0.073 bajo +0.094 medio +0.065 alto +0.065 | inversion (alto - todo): EUR -0.056, unidad -0.008
+   gradiente EUR diario +0.081 IC90 dias inf -0.092 (p_t 0.207) dias+ 5/10 sin 2 mejores -0.013 | placebo por unidad: p celda 0.370 maxstat 0.933 (media placebo +0.048)
+   gradiente por unidad diario +0.028 IC90 dias inf -0.066 (p_t 0.297) dias+ 6/10 sin 2 mejores -0.010 | placebo por unidad: p celda 0.667 maxstat 0.999 (media placebo +0.050)
+   placebo por PRINT (ADD1): p celda 0.221 maxstat 0.872 | etiqueta ADD1 -> ADD2: EXPLORATORIA -> EXPLORATORIA
+p60|R2: prints 36347 | unidades 19243 (12480 mercado-lado) | 19 dias, 5032 cierres
+   EV pond. EUR: todo +0.129 bajo +0.235 medio +0.118 alto -0.055 | EV medio por unidad: todo +0.034 bajo +0.081 medio +0.033 alto -0.056 | inversion (alto - todo): EUR -0.184, unidad -0.090
+   gradiente EUR diario +0.301 IC90 dias inf +0.206 (p_t 0.000) dias+ 17/19 sin 2 mejores +0.261 | placebo por unidad: p celda 0.005 maxstat 0.068 (media placebo +0.067)
+   gradiente por unidad diario +0.143 IC90 dias inf +0.095 (p_t 0.000) dias+ 17/19 sin 2 mejores +0.122 | placebo por unidad: p celda 0.022 maxstat 0.106 (media placebo +0.073)
+   placebo por PRINT (ADD1): p celda 0.000 maxstat 0.001 | etiqueta ADD1 -> ADD2: VALIDADA (gradiente poblacional censurado; NO EV de regla) -> EXPLORATORIA (sensible a la unidad mercado-lado: placebo por unidad maxstat 0.068 > 0,0125)
+
+## (3) SENSIBILIDAD §2 (no decide): celdas por clase de suelo medido, 37 dias (hi = R1 + R0hi + R2hi; lo = R2 + R1lo); placebo por unidad B=1000, max-stat sobre estas 4
+p35|suelo_hi: prints 23727 | unidades 11609 (7467 mercado-lado) | 12 dias, 2843 cierres
+   EV pond. EUR: todo +0.035 bajo +0.093 medio +0.015 alto -0.030 | EV medio por unidad: todo +0.068 bajo +0.132 medio +0.033 alto +0.018 | inversion (alto - todo): EUR -0.065, unidad -0.050
+   gradiente EUR diario +0.186 IC90 dias inf -0.028 (p_t 0.074) dias+ 7/12 sin 2 mejores +0.048 | placebo por unidad: p celda 0.240 maxstat 0.499 (media placebo +0.113)
+   gradiente por unidad diario +0.103 IC90 dias inf +0.041 (p_t 0.006) dias+ 10/12 sin 2 mejores +0.071 | placebo por unidad: p celda 0.156 maxstat 0.557 (media placebo +0.055)
+p35|suelo_lo: prints 32268 | unidades 18033 (12020 mercado-lado) | 20 dias, 5110 cierres
+   EV pond. EUR: todo +0.127 bajo +0.203 medio +0.122 alto -0.006 | EV medio por unidad: todo +0.026 bajo +0.072 medio +0.035 alto -0.076 | inversion (alto - todo): EUR -0.134, unidad -0.101
+   gradiente EUR diario +0.219 IC90 dias inf +0.092 (p_t 0.004) dias+ 15/20 sin 2 mejores +0.168 | placebo por unidad: p celda 0.096 maxstat 0.313 (media placebo +0.105)
+   gradiente por unidad diario +0.150 IC90 dias inf +0.107 (p_t 0.000) dias+ 18/20 sin 2 mejores +0.132 | placebo por unidad: p celda 0.022 maxstat 0.069 (media placebo +0.076)
+p60|suelo_hi: prints 26495 | unidades 12527 (7820 mercado-lado) | 12 dias, 2866 cierres
+   EV pond. EUR: todo +0.048 bajo +0.099 medio +0.053 alto -0.030 | EV medio por unidad: todo +0.059 bajo +0.090 medio +0.044 alto +0.043 | inversion (alto - todo): EUR -0.078, unidad -0.016
+   gradiente EUR diario +0.177 IC90 dias inf -0.025 (p_t 0.072) dias+ 7/12 sin 2 mejores +0.058 | placebo por unidad: p celda 0.182 maxstat 0.552 (media placebo +0.083)
+   gradiente por unidad diario +0.046 IC90 dias inf -0.038 (p_t 0.173) dias+ 8/12 sin 2 mejores +0.010 | placebo por unidad: p celda 0.646 maxstat 0.991 (media placebo +0.060)
+p60|suelo_lo: prints 37481 | unidades 19877 (12909 mercado-lado) | 20 dias, 5202 cierres
+   EV pond. EUR: todo +0.118 bajo +0.220 medio +0.110 alto -0.065 | EV medio por unidad: todo +0.025 bajo +0.072 medio +0.025 alto -0.063 | inversion (alto - todo): EUR -0.183, unidad -0.089
+   gradiente EUR diario +0.294 IC90 dias inf +0.204 (p_t 0.000) dias+ 18/20 sin 2 mejores +0.255 | placebo por unidad: p celda 0.004 maxstat 0.080 (media placebo +0.055)
+   gradiente por unidad diario +0.141 IC90 dias inf +0.096 (p_t 0.000) dias+ 18/20 sin 2 mejores +0.121 | placebo por unidad: p celda 0.023 maxstat 0.112 (media placebo +0.070)
+
+## (3b) Gradiente propio de los dias ADD2 (tipo B, todo el 5m, por segmento dia-etiqueta; EUR / por unidad)
+2026-10-16 p35: prints 2871 unidades 1280 | 2026-10-16|R0: EUR -0.107 unidad +0.099, 2026-10-16|R0hi: EUR +0.455 unidad +0.244 | EV EUR bajo +0.067 alto -0.148
+2026-10-16 p60: prints 3211 unidades 1377 | 2026-10-16|R0: EUR -0.143 unidad +0.180, 2026-10-16|R0hi: EUR +0.259 unidad +0.270 | EV EUR bajo -0.121 alto -0.198
+2026-10-24 p35: prints 1796 unidades 1046 | 2026-10-24|R1: EUR +1.172 unidad +0.083, 2026-10-24|R1lo: EUR +0.080 unidad +0.141 | EV EUR bajo +0.096 alto -0.458
+2026-10-24 p60: prints 1985 unidades 1102 | 2026-10-24|R1: EUR +1.059 unidad +0.002, 2026-10-24|R1lo: EUR +0.168 unidad +0.108 | EV EUR bajo +0.080 alto -0.491
+
+RESUMEN: 0/4 celdas decisivas VALIDADAS tras ADD2; p35|R1 -> EXPLORATORIA; p35|R2 -> EXPLORATORIA; p60|R1 -> EXPLORATORIA; p60|R2 -> EXPLORATORIA (sensible a la unidad mercado-lado: placebo por unidad maxstat 0.068 > 0,0125)
+Tiempo 25 s. Limites: poblacion censurada (solo fills ajenos; gradiente, NO EV de regla), d_proc = 3 ms supuesto, sin ancla independiente del reloj de relleno propio; dias ADD2 solo en sensibilidad.

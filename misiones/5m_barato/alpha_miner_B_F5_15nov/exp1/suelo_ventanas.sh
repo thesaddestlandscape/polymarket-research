@@ -1,0 +1,5 @@
+#!/bin/bash
+# suelo_ventanas.sh DIA... -- diagnostico ligero (solo lectura, awk en streaming): p5 de (rx-ex) por ventana de 10 min en las filas q con bid en [0,03;0,45] de m5_registro; resume el % de ventanas con suelo > 30 ms (regimen ~40 ms) y los episodios.
+for d in "$@"; do
+  nice -n 19 ionice -c3 zcat /mnt/HC_Volume_106538179/m5_registro/m5_registro_$d.csv.gz | awk -F, '$1=="q" && $4>=0.03 && $4<=0.45 {x=$8-$2; if(x<-50)x=-50; if(x>400)x=400; w=int($8/600000); c[w,x]++; t[w]++; if(!(w in s)){s[w]=1; ws[++nw]=w}} END{asort(ws); for(i=1;i<=nw;i++){w=ws[i]; if(t[w]<200) continue; a=0; lim=0.05*t[w]; for(x=-50;x<=400;x++){a+=c[w,x]; if(a>=lim){p5=x;break}}; printf "%s %d %d\n", strftime("%Y-%m-%dT%H:%MZ", w*600, 1), t[w], p5}}' | awk -v d=$d '{n++; p=$3; if(p>30){h++; if(!inr){st=$1; inr=1}} else if(inr){runs=runs" "substr(st,12,5)"-"substr(pv,12,5); inr=0}; pv=$1} END{if(inr) runs=runs" "substr(st,12,5)"-"substr(pv,12,5)"+"; printf "%s ventanas=%d con_suelo>30ms=%d (%.0f%%) episodios(UTC):%s\n", d, n, h, (n?100*h/n:0), (runs==""?" ninguno":runs)}'
+done

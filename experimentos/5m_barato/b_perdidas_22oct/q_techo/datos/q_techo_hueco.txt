@@ -1,0 +1,27 @@
+nocional anual (EUR~USD) x EV/EUR = EUR/anio; % del objetivo 200.000
+B actual (68 $/dia): nocional 25 k
+   dEV incremental de PC pooled 13 d (+0,015): 0.4 kEUR/anio = 0.2 % de 200k; con brecha de ejecucion B (-0,053): -0.9 k
+   EV_ret PC pooled 13 d (+0,040): 1.0 kEUR/anio = 0.5 % de 200k; con brecha de ejecucion B (-0,053): -0.3 k
+   EV_ret PC DESC 09-16 (+0,058): 1.4 kEUR/anio = 0.7 % de 200k; con brecha de ejecucion B (-0,053): 0.1 k
+   R3 TEST in-sample (+0,108): 2.7 kEUR/anio = 1.3 % de 200k; con brecha de ejecucion B (-0,053): 1.4 k
+techo R3 (130 fills x 2,44 $): nocional 116 k
+   dEV incremental de PC pooled 13 d (+0,015): 1.7 kEUR/anio = 0.9 % de 200k; con brecha de ejecucion B (-0,053): -4.4 k
+   EV_ret PC pooled 13 d (+0,040): 4.6 kEUR/anio = 2.3 % de 200k; con brecha de ejecucion B (-0,053): -1.5 k
+   EV_ret PC DESC 09-16 (+0,058): 6.7 kEUR/anio = 3.4 % de 200k; con brecha de ejecucion B (-0,053): 0.6 k
+   R3 TEST in-sample (+0,108): 12.5 kEUR/anio = 6.3 % de 200k; con brecha de ejecucion B (-0,053): 6.4 k
+nicho 3 % cuota x ret 0,686: nocional 255 k
+   dEV incremental de PC pooled 13 d (+0,015): 3.8 kEUR/anio = 1.9 % de 200k; con brecha de ejecucion B (-0,053): -9.7 k
+   EV_ret PC pooled 13 d (+0,040): 10.2 kEUR/anio = 5.1 % de 200k; con brecha de ejecucion B (-0,053): -3.3 k
+   EV_ret PC DESC 09-16 (+0,058): 14.8 kEUR/anio = 7.4 % de 200k; con brecha de ejecucion B (-0,053): 1.3 k
+   R3 TEST in-sample (+0,108): 27.5 kEUR/anio = 13.8 % de 200k; con brecha de ejecucion B (-0,053): 14.0 k
+nicho 5 % cuota x ret 0,686: nocional 424 k
+   dEV incremental de PC pooled 13 d (+0,015): 6.4 kEUR/anio = 3.2 % de 200k; con brecha de ejecucion B (-0,053): -16.1 k
+   EV_ret PC pooled 13 d (+0,040): 17.0 kEUR/anio = 8.5 % de 200k; con brecha de ejecucion B (-0,053): -5.5 k
+   EV_ret PC DESC 09-16 (+0,058): 24.6 kEUR/anio = 12.3 % de 200k; con brecha de ejecucion B (-0,053): 2.1 k
+   R3 TEST in-sample (+0,108): 45.8 kEUR/anio = 22.9 % de 200k; con brecha de ejecucion B (-0,053): 23.3 k
+nicho 10 % cuota x ret 0,686 (no medido): nocional 849 k
+   dEV incremental de PC pooled 13 d (+0,015): 12.7 kEUR/anio = 6.4 % de 200k; con brecha de ejecucion B (-0,053): -32.3 k
+   EV_ret PC pooled 13 d (+0,040): 34.0 kEUR/anio = 17.0 % de 200k; con brecha de ejecucion B (-0,053): -11.0 k
+   EV_ret PC DESC 09-16 (+0,058): 49.2 kEUR/anio = 24.6 % de 200k; con brecha de ejecucion B (-0,053): 4.2 k
+   R3 TEST in-sample (+0,108): 91.7 kEUR/anio = 45.8 % de 200k; con brecha de ejecucion B (-0,053): 46.7 k
+EV/EUR necesario para 200k con cada nocional: {'B actual (68 $/dia)': 8.03, 'techo R3 (130 fills x 2,44 $)': 1.73, 'nicho 3 % cuota x ret 0,686': 0.79, 'nicho 5 % cuota x ret 0,686': 0.47, 'nicho 10 % cuota x ret 0,686 (no medido)': 0.24}

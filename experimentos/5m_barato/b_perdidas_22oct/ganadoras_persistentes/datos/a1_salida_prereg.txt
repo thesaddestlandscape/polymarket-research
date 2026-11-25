@@ -1,0 +1,28 @@
+fills banda 5100265 cobertura desenlace 1.0
+
+== S1_WF
+       dia  elegibles  roster   S   C  ev
+2026-10-13       1894       0 0.0 0.0 NaN
+2026-10-14       1937       0 0.0 0.0 NaN
+2026-10-15       1939       0 0.0 0.0 NaN
+2026-10-16       1938       0 0.0 0.0 NaN
+2026-10-17       1943       0 0.0 0.0 NaN
+2026-10-18       1958       0 0.0 0.0 NaN
+2026-10-19       1945       0 0.0 0.0 NaN
+2026-10-20       1899       0 0.0 0.0 NaN
+2026-10-21       1900       0 0.0 0.0 NaN
+EV€ roster nan | IC90 días (nan, nan) | sin 2 mejores 0.0 | días+ 0/9 | coste 0 $ pnl 0 $ | top1 wallet nan
+placebo EV€ media 0.0000 p95 0.0000 | p(placebo>=roster) 0.000 | inversión (malas BH) EV€ -0.0932 coste 49123
+
+== S1b_split
+       dia  elegibles  roster   S   C  ev
+2026-10-14       2110       0 0.0 0.0 NaN
+2026-10-15       2110       0 0.0 0.0 NaN
+2026-10-16       2110       0 0.0 0.0 NaN
+2026-10-17       2110       0 0.0 0.0 NaN
+2026-10-18       2110       0 0.0 0.0 NaN
+2026-10-19       2110       0 0.0 0.0 NaN
+2026-10-20       2110       0 0.0 0.0 NaN
+2026-10-21       2110       0 0.0 0.0 NaN
+EV€ roster nan | IC90 días (nan, nan) | sin 2 mejores 0.0 | días+ 0/8 | coste 0 $ pnl 0 $ | top1 wallet nan
+placebo EV€ media 0.0000 p95 0.0000 | p(placebo>=roster) 0.000 | inversión (malas BH) EV€ -0.0189 coste 23852

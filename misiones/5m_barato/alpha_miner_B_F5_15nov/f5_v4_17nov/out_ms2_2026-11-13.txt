@@ -1,0 +1,22 @@
+2026-11-13 1124981.csv.gz q 22956519 t 94787
+2026-11-13 1652710.csv.gz q 22986111 t 95042
+2026-11-13 1659705.csv.gz q 24064110 t 100455
+2026-11-13 1688931.csv.gz q 25592090 t 107310
+2026-11-13 3868191.csv.gz q 25592090 t 107310
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 102, in <module>
+    for d in sys.argv[1:]: day(d)
+                           ~~~^^^
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 88, in day
+    qt, qr, qk, qV = cat(Q, 4); tt, tr_, tk_, tV = cat(T, 3)
+                     ~~~^^^^^^
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 45, in cat
+    V.append(col(3, j)[o])
+             ~~~~~~~~~^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 97.6 MiB for an array with shape (25592090,) and data type float32
+2026-11-13 1124981.csv.gz q 22956519 t 94787
+2026-11-13 1652710.csv.gz q 22986111 t 95042
+2026-11-13 1659705.csv.gz q 24064110 t 100455
+2026-11-13 1688931.csv.gz q 25592090 t 107310
+2026-11-13 3868191.csv.gz q 25592090 t 107310
+2026-11-13 tokens 4690 q 25592090 t 107310 {'q_parsed': 71230371, 'q_kept': 25592090, 'q_rx_missing': 0, 'q_rx_lt_ex': 0, 't_parsed': 670552, 't_kept': 107310, 't_rx_missing': 0, 't_rx_lt_ex': 0} guardado /root/polymarket-research-datalogs/sa_ms2/ms2_2026-11-13.npz

@@ -1,0 +1,134 @@
+=== B total 20-23 Oct: n 202 pnl -16.023 coste 221.301 EV -0.0724
+Por dia:
+               n   gan   coste     pnl     EV    hit  precio
+dia                                                         
+2026-10-20  37.0   8.0  42.994   3.006  0.070  0.216   0.228
+2026-10-21  72.0  18.0  78.389  13.007  0.166  0.250   0.223
+2026-10-22  77.0  12.0  83.074 -22.192 -0.267  0.156   0.217
+2026-10-23  16.0   1.0  16.843  -9.843 -0.584  0.062   0.216
+Por run (r25-r27 + previa):
+            n   gan    coste    pnl     EV    hit
+run                                              
+previa  186.0  38.0  204.457 -6.180 -0.030  0.204
+r25       4.0   0.0    4.780 -4.780 -1.000  0.000
+r26       8.0   1.0    8.013 -1.013 -0.126  0.125
+r27       4.0   0.0    4.051 -4.051 -1.000  0.000
+--- 23-Oct por coin
+        n  gan  coste    pnl     EV
+coin                               
+ETH   5.0  1.0  5.321  1.679  0.316
+SOL   5.0  0.0  5.270 -5.270 -1.000
+XRP   6.0  0.0  6.253 -6.253 -1.000
+--- B 20-22 (visto) por coin
+         n   gan   coste    pnl     EV
+coin                                  
+ETH   74.0  15.0  83.743  1.143  0.014
+SOL   59.0  13.0  64.894 -0.407 -0.006
+XRP   53.0  10.0  55.820 -6.916 -0.124
+--- 23-Oct por lado
+        n  gan   coste     pnl     EV
+lado                                 
+NO    7.0  1.0   6.493   0.507  0.078
+YES   9.0  0.0  10.351 -10.351 -1.000
+--- B 20-22 (visto) por lado
+          n   gan    coste     pnl     EV
+lado                                     
+NO     79.0  20.0   85.577  24.072  0.281
+YES   107.0  18.0  118.880 -30.251 -0.254
+--- 23-Oct por clase_rpre
+               n  gan   coste     pnl     EV
+clase_rpre                                  
+a_favor      6.0  1.0   5.443   1.557  0.286
+en_contra   10.0  0.0  11.400 -11.400 -1.000
+--- B 20-22 (visto) por clase_rpre
+               n   gan    coste     pnl     EV
+clase_rpre                                    
+a_favor     86.0  15.0   94.963 -22.131 -0.233
+en_contra   98.0  23.0  107.984  17.462  0.162
+neutra       2.0   0.0    1.511  -1.511 -1.000
+--- 23-Oct por h_w1
+         n  gan   coste     pnl     EV
+h_w1                                  
+0     12.0  0.0  13.141 -13.141 -1.000
+1      4.0  1.0   3.703   3.297  0.891
+--- B 20-22 (visto) por h_w1
+          n   gan    coste     pnl     EV
+h_w1                                     
+0     126.0  29.0  138.219  18.227  0.132
+1      60.0   9.0   66.238 -24.407 -0.368
+--- 23-Oct por R
+          n  gan  coste    pnl    EV
+R                                   
+MIXTO   6.0  1.0  5.183  1.817  0.35
+REVERT  8.0  0.0  9.060 -9.060 -1.00
+TREND   2.0  0.0  2.600 -2.600 -1.00
+--- B 20-22 (visto) por R
+           n   gan   coste     pnl     EV
+R                                        
+MIXTO   88.0  21.0  96.499  12.287  0.127
+NA       3.0   0.0   3.700  -3.700 -1.000
+REVERT  74.0  13.0  81.296 -11.804 -0.145
+TREND   21.0   4.0  22.962  -2.962 -0.129
+--- precio 0,05 23-Oct
+        n  gan  coste    pnl
+bp                          
+0.10  4.0  0.0  2.853 -2.853
+0.15  3.0  1.0  3.380  3.620
+0.20  4.0  0.0  4.400 -4.400
+0.25  5.0  0.0  6.211 -6.211
+--- precio 0,05 B 20-22
+         n   gan   coste     pnl     EV
+bp                                     
+0.10  27.0   6.0  24.036  18.173  0.756
+0.15  38.0   6.0  37.834  -4.665 -0.123
+0.20  60.0  16.0  65.301  14.694  0.225
+0.25  61.0  10.0  77.287 -34.383 -0.445
+--- hora 23-Oct
+         n  gan  coste    pnl
+hora                         
+6      4.0  0.0  4.780 -4.780
+7      2.0  1.0  2.270  4.730
+8     10.0  0.0  9.793 -9.793
+
+##### REGLAS sobre posiciones reales
+
+## 23-Oct (r25-r27) FORWARD
+RL0 h_w1==1: evaluadas 16 (pnl -9.84, coste 16.84, EV -0.584) | saltadas 4 coste 3.70 pnl_saltadas +3.30 -> dPnL -3.30 ; ganancias perdidas 5.88 ; EV retenido -1.000 ; p_perm(dP>=obs) 0.953 ; IC90 cierre dP (-15.06,+4.60) ; n_cierres 10
+RL1 h_w1 & TREND: n_evaluadas 16 saltadas 0
+RL2 h_w1 & TREND|MIXTO: evaluadas 16 (pnl -9.84, coste 16.84, EV -0.584) | saltadas 3 coste 2.30 pnl_saltadas +4.70 -> dPnL -4.70 ; ganancias perdidas 5.88 ; EV retenido -1.000 ; p_perm(dP>=obs) 0.986 ; IC90 cierre dP (-16.42,+2.37) ; n_cierres 10
+S1p Binance>=2bps en contra (2s previos a t_det): evaluadas 16 (pnl -9.84, coste 16.84, EV -0.584) | saltadas 2 coste 2.55 pnl_saltadas -2.55 -> dPnL +2.55 ; ganancias perdidas 0.00 ; EV retenido -0.510 ; p_perm(dP>=obs) 0.127 ; IC90 cierre dP (-0.00,+5.45) ; n_cierres 10
+
+## B 20-22 (VISTO por W1, descriptivo)
+RL0 h_w1==1: evaluadas 183 (pnl -2.48, coste 200.76, EV -0.012) | saltadas 60 coste 66.24 pnl_saltadas -24.41 -> dPnL +24.41 ; ganancias perdidas 32.11 ; EV retenido +0.163 ; p_perm(dP>=obs) 0.049 ; IC90 cierre dP (-0.88,+48.53) ; n_cierres 101
+RL1 h_w1 & TREND: evaluadas 183 (pnl -2.48, coste 200.76, EV -0.012) | saltadas 9 coste 10.53 pnl_saltadas -5.53 -> dPnL +5.53 ; ganancias perdidas 3.60 ; EV retenido +0.016 ; p_perm(dP>=obs) 0.207 ; IC90 cierre dP (-3.22,+13.73) ; n_cierres 101
+RL2 h_w1 & TREND|MIXTO: evaluadas 183 (pnl -2.48, coste 200.76, EV -0.012) | saltadas 42 coste 46.47 pnl_saltadas -19.97 -> dPnL +19.97 ; ganancias perdidas 20.43 ; EV retenido +0.113 ; p_perm(dP>=obs) 0.064 ; IC90 cierre dP (+0.60,+39.31) ; n_cierres 101
+S1p Binance>=2bps en contra (2s previos a t_det): evaluadas 177 (pnl -1.00, coste 194.28, EV -0.005) | saltadas 41 coste 46.03 pnl_saltadas -23.59 -> dPnL +23.59 ; ganancias perdidas 17.76 ; EV retenido +0.152 ; p_perm(dP>=obs) 0.029 ; IC90 cierre dP (+2.63,+42.37) ; n_cierres 96
+
+## B total 20-23
+RL0 h_w1==1: evaluadas 199 (pnl -12.32, coste 217.60, EV -0.057) | saltadas 64 coste 69.94 pnl_saltadas -21.11 -> dPnL +21.11 ; ganancias perdidas 37.99 ; EV retenido +0.060 ; p_perm(dP>=obs) 0.124 ; IC90 cierre dP (-7.26,+47.26) ; n_cierres 111
+RL1 h_w1 & TREND: evaluadas 199 (pnl -12.32, coste 217.60, EV -0.057) | saltadas 9 coste 10.53 pnl_saltadas -5.53 -> dPnL +5.53 ; ganancias perdidas 3.60 ; EV retenido -0.033 ; p_perm(dP>=obs) 0.217 ; IC90 cierre dP (-3.40,+14.13) ; n_cierres 111
+RL2 h_w1 & TREND|MIXTO: evaluadas 199 (pnl -12.32, coste 217.60, EV -0.057) | saltadas 45 coste 48.77 pnl_saltadas -15.28 -> dPnL +15.28 ; ganancias perdidas 26.31 ; EV retenido +0.017 ; p_perm(dP>=obs) 0.177 ; IC90 cierre dP (-8.41,+37.38) ; n_cierres 111
+S1p Binance>=2bps en contra (2s previos a t_det): evaluadas 193 (pnl -10.85, coste 211.13, EV -0.051) | saltadas 43 coste 48.58 pnl_saltadas -26.14 -> dPnL +26.14 ; ganancias perdidas 17.76 ; EV retenido +0.094 ; p_perm(dP>=obs) 0.029 ; IC90 cierre dP (+5.39,+44.61) ; n_cierres 106
+
+## shadow-disponible (22-Oct pm + 23-Oct)
+RB2 (salta si NO pasa): evaluadas 29 (pnl -16.39, coste 30.39, EV -0.539) | saltadas 21 coste 21.23 pnl_saltadas -7.23 -> dPnL +7.23 ; ganancias perdidas 11.76 ; EV retenido -1.000 ; p_perm(dP>=obs) 0.923 ; IC90 cierre dP (-10.37,+23.43) ; n_cierres 20
+RB3 (salta si NO pasa): evaluadas 29 (pnl -16.39, coste 30.39, EV -0.539) | saltadas 22 coste 22.26 pnl_saltadas -8.26 -> dPnL +8.26 ; ganancias perdidas 11.76 ; EV retenido -1.000 ; p_perm(dP>=obs) 0.931 ; IC90 cierre dP (-10.46,+24.00) ; n_cierres 20
+RL0 sobre el mismo conjunto: evaluadas 29 (pnl -16.39, coste 30.39, EV -0.539) | saltadas 9 coste 8.50 pnl_saltadas -1.50 -> dPnL +1.50 ; ganancias perdidas 5.88 ; EV retenido -0.680 ; p_perm(dP>=obs) 0.863 ; IC90 cierre dP (-11.72,+11.18) ; n_cierres 20
+
+## shadow-disponible 23-Oct
+RB2 (salta si NO pasa): evaluadas 15 (pnl -8.80, coste 15.80, EV -0.557) | saltadas 10 coste 9.91 pnl_saltadas -2.91 -> dPnL +2.91 ; ganancias perdidas 5.88 ; EV retenido -1.000 ; p_perm(dP>=obs) 0.877 ; IC90 cierre dP (-9.69,+13.99) ; n_cierres 10
+RB3 (salta si NO pasa): evaluadas 15 (pnl -8.80, coste 15.80, EV -0.557) | saltadas 10 coste 9.91 pnl_saltadas -2.91 -> dPnL +2.91 ; ganancias perdidas 5.88 ; EV retenido -1.000 ; p_perm(dP>=obs) 0.873 ; IC90 cierre dP (-9.93,+13.93) ; n_cierres 10
+RL0 sobre el mismo conjunto: evaluadas 15 (pnl -8.80, coste 15.80, EV -0.557) | saltadas 4 coste 3.70 pnl_saltadas +3.30 -> dPnL -3.30 ; ganancias perdidas 5.88 ; EV retenido -1.000 ; p_perm(dP>=obs) 0.949 ; IC90 cierre dP (-15.06,+4.88) ; n_cierres 10
+Delta EV(h_w1=1)-EV(h_w1=0) 23-Oct: n1=4 EV1 +0.891 n0=12 EV0 -1.000 Delta +1.891 IC90 cierre (+0.000,+6.250) ; PnL h1 +3.30 PnL h0 -13.14
+Delta EV(h_w1=1)-EV(h_w1=0) B 20-22 visto: n1=60 EV1 -0.368 n0=126 EV0 +0.132 Delta -0.500 IC90 cierre (-0.954,-0.023) ; PnL h1 -24.41 PnL h0 +18.23
+Delta EV(h_w1=1)-EV(h_w1=0) B total: n1=64 EV1 -0.302 n0=138 EV0 +0.034 Delta -0.335 IC90 cierre (-0.817,+0.154) ; PnL h1 -21.11 PnL h0 +5.09
+
+#### markout de rellenos B (rel. al precio, ponderado por coste)
+23-Oct mk5 -0.126 mk30 -0.433 mk120 -0.101 n_mk 14
+20-22 mk5 -0.092 mk30 0.015 mk120 -0.051 n_mk 162
+
+#### L1 conteo
+2026-10-20 posiciones 37 h_w1=1 14 h_w1=0 23
+2026-10-21 posiciones 72 h_w1=1 28 h_w1=0 44
+2026-10-22 posiciones 77 h_w1=1 18 h_w1=0 59
+2026-10-23 posiciones 16 h_w1=1 4 h_w1=0 12

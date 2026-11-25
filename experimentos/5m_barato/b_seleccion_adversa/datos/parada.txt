@@ -1,0 +1,13 @@
+
+---
+# PARADA ORDENADA 22-Oct ~09:50Z (apagado del servidor por rescale) -- punto exacto de reanudacion
+Procesos: ninguno en marcha. Cron instalado y que se mantiene: `40 10 * * *` -> `scripts/r1_fwd_cron.sh` (forward R1, solo medicion). Respaldo del crontab previo: `datos/crontab_backup_22oct.txt`.
+HECHO: informe v1 + reglas_congeladas.json v1 (hash del FICHERO 4550b14b...ec0a7; `sha256sum -c HASH_v1.txt`; el 22296520... era el hash del contenido sin el campo hash, circular); forward R1 (extractor `r1_fwd_extract.py` validado: 20-Oct 8.748 unidades EV -0,033 vs 8.888/-0,034; vigia `r1_fwd_vigia.py`; cron). Lectura 0 pre-forward (21-Oct tras 10:08Z, n=4.538): EV todas +0,246; R1a pujar +0,271 vs descartar +0,123. Postmortem re-ejecutable de B real `scripts/b_postmortem.py` (209 pujas, 128 rellenos, EV +0,157 IC90 (-0,157,+0,471), sin 2 mejores +0,032; hipotesis spread<=0,02: n=89 EV +0,394 vs n=39 -0,3/-0,4). Capacidad: el bote maker de la banda ETH/SOL/XRP 0,10-0,30 es 868 $/dia = 317 k$/ano para TODOS los makers antes de rebate; 200 k exigiria ~63 %.
+Datos guardados: `datalogs/sa_ms/ms_2026-10-17.npz` (registro ms 17-Oct, compacto), `datalogs/sa_r1/units_2026-10-20/21.csv.gz`, `datos/units/`, `datos/sim/`, `datos/tape_celdas.csv`.
+PENDIENTE, en orden:
+1. `python3 scripts/ms_extract.py 2026-10-18 2026-10-19 2026-10-20 2026-10-21` (de uno en uno, nice 19). El 18-Oct fallo por memoria al concatenar 21 M filas q (con mas RAM va tal cual). PRIORIDAD: el registro ms rota a ~5 dias (`ls /root/polymarket-research-datalogs/maker_ms_2026-10-1*`).
+2. `scripts/sim_v2.py S OUT dias` (S = scratch /tmp/.../46569fb1.../scratchpad con alt_*.csv y gmap*.json: PUEDE HABERSE PERDIDO con el apagado (tmpfs); regenerar con b_lecciones_wallets/scripts/gmap.py y gmap19.py y alt_19..21 desde datalogs/onchain_fills_*.csv.gz; los dias <=18 usan parquet persistente). Luego `attach_ms.py S`, `an_pie.py datos/pie_celdas.csv`, `an_v2.py 300`.
+3. Escribir «camino a 200 k€» (cuenta + hueco con LIBRO_OBJETIVO_200K.md: optimista no validado ~34 k, techo teorico ~119 k), candidatas por €/ano, reglas_congeladas.json v2 + `sha256sum reglas_congeladas.json > HASH.txt`.
+4. Con 300-500 pujas de B: `python3 scripts/b_postmortem.py`.
+5. Tras reiniciar: `crontab -l | grep sa_r1`; primer dato forward real = units_2026-10-22 (cron 10:40Z del 23-Oct); estado con `python3 scripts/r1_fwd_vigia.py`; log `datalogs/sa_r1/cron.log`.
+Conclusion hasta ahora: la seleccion adversa del maker simulado que persigue el precio es 0,237/EUR (sim de cinta; nivel no transferible); R1 recupera ~12 %; el ~88 % restante sigue como hipotesis abierta (orden de Javi); la capacidad del bote limita los 200 k tanto como la seleccion adversa.

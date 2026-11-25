@@ -1,0 +1,72 @@
+== modo rf_union. TUNE 20-Oct: rejilla (cada celda: n pujas, tasa, acuerdo, kappa)
+ lat_can alloc  n  tasa_sim  tasa_real   acu  kappa  recall  prec
+      65    hi 43     0.302      0.721 0.488  0.129   0.355 0.846
+      65    lo 43     0.233      0.721 0.465  0.135   0.290 0.900
+      65  prop 43     0.302      0.721 0.488  0.129   0.355 0.846
+     150    hi 43     0.465      0.721 0.651  0.323   0.581 0.900
+     150    lo 43     0.302      0.721 0.488  0.129   0.355 0.846
+     150  prop 43     0.465      0.721 0.651  0.323   0.581 0.900
+     280    hi 43     0.605      0.721 0.698  0.334   0.710 0.846
+     280    lo 43     0.419      0.721 0.558  0.176   0.484 0.833
+     280  prop 43     0.581      0.721 0.721  0.399   0.710 0.880
+     450    hi 43     0.721      0.721 0.767  0.422   0.839 0.839
+     450    lo 43     0.605      0.721 0.698  0.334   0.710 0.846
+     450  prop 43     0.698      0.721 0.791  0.493   0.839 0.867
+
+celda elegida en TUNE: 450 prop
+
+######## EVAL celda elegida: lat_can=450 alloc=prop  dias=['2026-10-21', '2026-10-22']  pujas con mercado en sim 212; mismo lado 196 (B0 = 0.925)
+B1 tasa sim 0.704 real 0.587  diff +0.117 IC90 mercados [0.061 0.173]
+B2 exactitud 0.740  kappa 0.440 IC90 [0.332 0.545]  recall 0.878  precision 0.732  (tabla sim/real: 11=101 10=37 01=14 00=44)
+B3 edad al relleno: sim n=138 mediana 0.99s p25/p75 0.40/2.21 | real n=96 mediana 1.06s p25/p75 0.51/3.25 | KS D=0.124 p=0.320 |dmed|=0.07s
+   pares con relleno en ambos y t_print real: n=86  |t_sim-t_real|<=1s: 0.570 (<=0,3s 0.535); dif mediana +0.00s p10/p90 -75.49/+7.66
+B4 EV sim -0.048 (coste 124.1, pnl -5.98) | real on-chain -0.048 (coste 115.3, pnl -5.53) | diff -0.000 IC90 mercados [-0.224  0.233]
+   ambos     n=101 coste    88.4 pnl   -9.46 EV -0.107 hit 0.208 | EV real mismos -0.012; precio sim 0.216 real 0.208
+   solo sim  n= 37 coste    35.7 pnl   +3.48 EV +0.098 hit 0.216
+   solo real n= 14 coste    15.8 pnl   -4.31 EV -0.273 hit 0.214
+   cuotas de coste sim X1/X2/X3: {'X1': 0.378, 'X2': 0.237, 'X3': 0.384} | real C1/C2/C3: {'C1': 0.198, 'C2': 0.291, 'C3': 0.511}
+   ETH: n=66 tasa sim 0.818 real 0.652 acuerdo 0.773 EV sim +0.193 real -0.138
+   SOL: n=65 tasa sim 0.677 real 0.569 acuerdo 0.708 EV sim -0.334 real +0.043
+   XRP: n=65 tasa sim 0.615 real 0.538 acuerdo 0.738 EV sim -0.098 real -0.037
+
+######## EVAL B_FIEL nominal: lat_can=280 alloc=prop  dias=['2026-10-21', '2026-10-22']  pujas con mercado en sim 212; mismo lado 196 (B0 = 0.925)
+B1 tasa sim 0.582 real 0.587  diff -0.005 IC90 mercados [-0.061  0.051]
+B2 exactitud 0.740  kappa 0.464 IC90 [0.364 0.568]  recall 0.774  precision 0.781  (tabla sim/real: 11=89 10=25 01=26 00=56)
+B3 edad al relleno: sim n=114 mediana 1.01s p25/p75 0.34/2.34 | real n=96 mediana 1.06s p25/p75 0.51/3.25 | KS D=0.120 p=0.401 |dmed|=0.05s
+   pares con relleno en ambos y t_print real: n=77  |t_sim-t_real|<=1s: 0.584 (<=0,3s 0.571); dif mediana +0.00s p10/p90 -63.86/+35.75
+B4 EV sim -0.060 (coste 96.9, pnl -5.78) | real on-chain -0.048 (coste 115.3, pnl -5.53) | diff -0.012 IC90 mercados [-0.239  0.216]
+   ambos     n= 89 coste    72.9 pnl   +1.07 EV +0.015 hit 0.225 | EV real mismos +0.055; precio sim 0.212 real 0.209
+   solo sim  n= 25 coste    24.0 pnl   -6.86 EV -0.285 hit 0.160
+   solo real n= 26 coste    26.8 pnl  -10.37 EV -0.386 hit 0.154
+   cuotas de coste sim X1/X2/X3: {'X1': 0.367, 'X2': 0.224, 'X3': 0.409} | real C1/C2/C3: {'C1': 0.198, 'C2': 0.291, 'C3': 0.511}
+   ETH: n=66 tasa sim 0.652 real 0.652 acuerdo 0.727 EV sim +0.210 real -0.138
+   SOL: n=65 tasa sim 0.554 real 0.569 acuerdo 0.769 EV sim -0.321 real +0.043
+   XRP: n=65 tasa sim 0.538 real 0.538 acuerdo 0.723 EV sim -0.134 real -0.037
+
+######## TUNE B_FIEL nominal (referencia): lat_can=280 alloc=prop  dias=['2026-10-20']  pujas con mercado en sim 45; mismo lado 43 (B0 = 0.956)
+B1 tasa sim 0.581 real 0.721  diff -0.140 IC90 mercados [-0.256 -0.023]
+B2 exactitud 0.721  kappa 0.399 IC90 [0.168 0.628]  recall 0.710  precision 0.880  (tabla sim/real: 11=22 10=3 01=9 00=9)
+B3 edad al relleno: sim n=25 mediana 1.56s p25/p75 0.51/2.81 | real n=24 mediana 0.98s p25/p75 0.47/2.85 | KS D=0.187 p=0.692 |dmed|=0.57s
+   pares con relleno en ambos y t_print real: n=19  |t_sim-t_real|<=1s: 0.737 (<=0,3s 0.684); dif mediana +0.00s p10/p90 -13.66/+2.28
+B4 EV sim +0.511 (coste 18.9, pnl +9.64) | real on-chain +0.041 (coste 33.6, pnl +1.37) | diff +0.470 IC90 mercados [-0.198  1.238]
+   ambos     n= 22 coste    16.9 pnl   +1.58 EV +0.094 hit 0.227 | EV real mismos +0.055; precio sim 0.200 real 0.218
+   solo sim  n=  3 coste     1.9 pnl   +8.06 EV +4.155 hit 0.667
+   solo real n=  9 coste     9.9 pnl   +0.06 EV +0.006 hit 0.222
+   cuotas de coste sim X1/X2/X3: {'X1': 0.199, 'X2': 0.489, 'X3': 0.313} | real C1/C2/C3: {'C1': 0.198, 'C2': 0.238, 'C3': 0.564}
+   ETH: n=16 tasa sim 0.750 real 0.875 acuerdo 0.750 EV sim +0.570 real +0.017
+   SOL: n=14 tasa sim 0.500 real 0.643 acuerdo 0.714 EV sim +0.896 real +0.395
+   XRP: n=13 tasa sim 0.462 real 0.615 acuerdo 0.692 EV sim -0.128 real -0.385
+
+######## TODOS los dias celda elegida (descriptivo): lat_can=450 alloc=prop  dias=['2026-10-20', '2026-10-21', '2026-10-22']  pujas con mercado en sim 257; mismo lado 239 (B0 = 0.930)
+B1 tasa sim 0.703 real 0.611  diff +0.092 IC90 mercados [0.038 0.146]
+B2 exactitud 0.749  kappa 0.448 IC90 [0.352 0.54 ]  recall 0.870  precision 0.756  (tabla sim/real: 11=127 10=41 01=19 00=52)
+B3 edad al relleno: sim n=168 mediana 1.01s p25/p75 0.41/2.29 | real n=120 mediana 1.06s p25/p75 0.50/3.01 | KS D=0.099 p=0.471 |dmed|=0.05s
+   pares con relleno en ambos y t_print real: n=108  |t_sim-t_real|<=1s: 0.574 (<=0,3s 0.537); dif mediana +0.00s p10/p90 -80.72/+8.19
+B4 EV sim +0.001 (coste 146.7, pnl +0.13) | real on-chain -0.028 (coste 148.9, pnl -4.16) | diff +0.029 IC90 mercados [-0.17  0.23]
+   ambos     n=127 coste   108.6 pnl   -6.10 EV -0.056 hit 0.213 | EV real mismos +0.004; precio sim 0.213 real 0.211
+   solo sim  n= 41 coste    38.1 pnl   +6.23 EV +0.163 hit 0.244
+   solo real n= 19 coste    21.1 pnl   -4.65 EV -0.220 hit 0.211
+   cuotas de coste sim X1/X2/X3: {'X1': 0.389, 'X2': 0.25, 'X3': 0.361} | real C1/C2/C3: {'C1': 0.198, 'C2': 0.279, 'C3': 0.523}
+   ETH: n=82 tasa sim 0.841 real 0.695 acuerdo 0.805 EV sim +0.210 real -0.099
+   SOL: n=79 tasa sim 0.658 real 0.582 acuerdo 0.722 EV sim -0.173 real +0.120
+   XRP: n=78 tasa sim 0.603 real 0.551 acuerdo 0.718 EV sim -0.136 real -0.104

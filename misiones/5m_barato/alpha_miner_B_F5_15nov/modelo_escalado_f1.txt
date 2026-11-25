@@ -1,0 +1,26 @@
+# (a) EV tipo B pooled (T_rem>60 s) por periodo: con todo, sin sus 2 MEJORES dias por pnl (convencion del proyecto) y, para el bloque de B real, sin el PEOR dia (diagnostico, no robustez)
+INS 09-19 Oct     EV +0.283 (coste 97,329 EUR) | sin 2 mejores (10-13,10-12): +0.093 | sin el peor (10-16): +0.327 | dia de mayor |pnl| 10-13 (+1.114 sobre 15,407 EUR = 62 % del pnl del periodo)
+B real 20-23 Oct  EV -0.195 (coste 38,508 EUR) | sin 2 mejores (10-21,10-22): -0.499 | sin el peor (10-20): +0.200 | dia de mayor |pnl| 10-20 (-0.621 sobre 18,512 EUR = 153 % del pnl del periodo)
+DER 24Oct-03Nov   EV +0.237 (coste 89,698 EUR) | sin 2 mejores (10-26,11-03): +0.145 | sin el peor (10-24): +0.266 | dia de mayor |pnl| 10-26 (+0.577 sobre 10,870 EUR = 29 % del pnl del periodo)
+OOS 04-14Nov      EV +0.041 (coste 77,457 EUR) | sin 2 mejores (11-05,11-11): -0.014 | sin el peor (11-08): +0.067 | dia de mayor |pnl| 11-05 (+0.387 sobre 6,412 EUR = 78 % del pnl del periodo)
+[A] V_tipoB (T>60 s, ETH/SOL/XRP, banda 0,10-0,30, todos los makers) = 8,189 EUR/dia (media de 37 dias 09-Oct..14-Nov; poblacion, no capturable entera)
+[A] B real: coste 55.3 EUR/dia = 0.68 % de V; 50.5 unidades/dia; SD retorno/EUR por unidad 2.14 (validaciones.txt); EV -0,072 (n=202)
+[A] motor TRAIN 15 d (PASS_T_V3 §5-6): CXB60 EV +0,135, 39,6 EUR/dia de coste, 58,8 rellenos/dia; F5A+CXB60 +0,206, 28,7 EUR/dia (maximo de K=10, in-sample)
+# (b) anual (kEUR) = 365 x coste_dia x EV x f (f=1: sin regimen). EV de escenario: 0 / +0,03 (ΔEV poblacional G1 OOS +0,02..+0,04 sobre base ~0) / +0,05 / +0,135 (CXB60 motor) / +0,206 (F5A+CXB60 motor)
+coste_dia (cuota s de V)   EV+0.000  EV+0.030  EV+0.050  EV+0.135  EV+0.206
+   55 EUR/dia (s=  0.7 %)       0.0      0.6      1.0      2.7      4.1
+  150 EUR/dia (s=  1.8 %)       0.0      1.6      2.7      7.4     11.3
+  500 EUR/dia (s=  6.1 %)       0.0      5.5      9.1     24.6     37.6
+ 1000 EUR/dia (s= 12.2 %)       0.0     10.9     18.2     49.3     75.2
+ 2000 EUR/dia (s= 24.4 %)       0.0     21.9     36.5     98.5    150.4
+coste_dia necesario para 200 kEUR/ano (EUR/dia | % de V): EV+0.030: 18,265 | 223 % ; EV+0.050: 10,959 | 134 % ; EV+0.135: 4,059 | 50 % ; EV+0.206: 2,660 | 32 %
+# Composicion (Kelly fraccional k=0,5; n_u unidades/dia fijo; sigma^2 = SD^2; stake/unidad u = k*EV/sigma^2 * banca; crecimiento/dia = n_u*k(2-k)*EV^2/(2 sigma^2))
+EV+0.030 cap  500 EUR/dia: crecimiento  0.37 %/dia | stake/unidad   9.9 EUR | banca Kelly-1/2 necesaria    3023 EUR | dias desde 20 EUR   1348 | anual al tope    5.5 kEUR =  2.7 % del hueco
+EV+0.030 cap 2000 EUR/dia: crecimiento  0.37 %/dia | stake/unidad  39.6 EUR | banca Kelly-1/2 necesaria   12091 EUR | dias desde 20 EUR   1721 | anual al tope   21.9 kEUR = 10.9 % del hueco
+EV+0.050 cap  500 EUR/dia: crecimiento  1.03 %/dia | stake/unidad   9.9 EUR | banca Kelly-1/2 necesaria    1814 EUR | dias desde 20 EUR    436 | anual al tope    9.1 kEUR =  4.6 % del hueco
+EV+0.050 cap 2000 EUR/dia: crecimiento  1.03 %/dia | stake/unidad  39.6 EUR | banca Kelly-1/2 necesaria    7255 EUR | dias desde 20 EUR    570 | anual al tope   36.5 kEUR = 18.2 % del hueco
+EV+0.135 cap  500 EUR/dia: crecimiento  7.54 %/dia | stake/unidad   9.9 EUR | banca Kelly-1/2 necesaria     672 EUR | dias desde 20 EUR     47 | anual al tope   24.6 kEUR = 12.3 % del hueco
+EV+0.135 cap 2000 EUR/dia: crecimiento  7.54 %/dia | stake/unidad  39.6 EUR | banca Kelly-1/2 necesaria    2687 EUR | dias desde 20 EUR     65 | anual al tope   98.5 kEUR = 49.3 % del hueco
+EV+0.206 cap  500 EUR/dia: crecimiento 17.55 %/dia | stake/unidad   9.9 EUR | banca Kelly-1/2 necesaria     440 EUR | dias desde 20 EUR     18 | anual al tope   37.6 kEUR = 18.8 % del hueco
+EV+0.206 cap 2000 EUR/dia: crecimiento 17.55 %/dia | stake/unidad  39.6 EUR | banca Kelly-1/2 necesaria    1761 EUR | dias desde 20 EUR     26 | anual al tope  150.4 kEUR = 75.2 % del hueco
+Nota: unidades NO independientes (racimos por cierre): el n efectivo es menor y el crecimiento real, menor; con EV<=0 la fraccion Kelly es 0 (no se escala).

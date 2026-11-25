@@ -1,0 +1,420 @@
+# E2 poblacion con r_v3 (ADDENDUM1 sha 6fc7dba5) -- CENSURADA: solo gradiente, NO EV de regla
+Dias esperados 37 (2026-10-09..2026-11-14): COMPLETE 35, FAILED 2
+  FAILED: 2026-10-16[ASSERT: C3: suelo p5 40.0 vs 19.5 (R0, 144 ventanas)], 2026-10-24[ASSERT: C3: suelo p5 20.0 vs 39.5 (R1, 144 ventanas)]
+Estado: PARTIAL (dias no COMPLETE listados arriba); prints 531217 (ETH/SOL/XRP, q en (0,10;0,30], desenlace oficial cobertura >= 0,995 por dia)
+Prints por epoca: {'R0': 140500, 'R1': 129655, 'R2': 261062} | por moneda: {'ETH': 341749, 'SOL': 124701, 'XRP': 64767}
+Categorias de estado q en t_dec (p35): ok 99.8 %, sin_fila 0.1 %, sin_ask 0.0 %, cruzado 0.1 % | por epoca "ok": R0 99.8 %, R1 99.9 %, R2 99.8 %
+Categorias de estado q en t_dec (p60): ok 99.8 %, sin_fila 0.1 %, sin_ask 0.0 %, cruzado 0.1 % | por epoca "ok": R0 99.8 %, R1 99.9 %, R2 99.8 %
+Categorias de estado q en t_dec (p100): ok 99.8 %, sin_fila 0.1 %, sin_ask 0.0 %, cruzado 0.1 % | por epoca "ok": R0 99.8 %, R1 99.9 %, R2 99.8 %
+Categorias de estado q en t_dec (p150): ok 99.8 %, sin_fila 0.1 %, sin_ask 0.0 %, cruzado 0.1 % | por epoca "ok": R0 99.7 %, R1 99.8 %, R2 99.8 %
+
+## DECISIVAS (K_pop=4; TODO el 5m; tipo B; gradiente = EV(bajo) - EV(alto) pond. EUR por segmento dia-epoca; placebo B=1000, claves independientes por celda (conservador); umbral p <= 0,0125)
+p35|R1: n=21034 prints, 2554 cierres, 10 segmentos | grad media diaria +0.061 IC90 dias inf -0.099 p_t 0.251 | dias+ 5/10 (50 %) | sin 2 mejores -0.056 | pooled +0.069 IC90 cierre (-0.098,+0.236) | placebo celda p 0.250 (media +0.005) maxstat p 0.923 -> EXPLORATORIA | n requerido 14743 cierres
+    serie diaria bajo-alto: 2026-10-17|R1:-0.07, 2026-10-18|R1:+0.12, 2026-10-19|R1:-0.21, 2026-10-20|R1:+0.01, 2026-10-21|R1:+0.59, 2026-10-22|R1:-0.25, 2026-10-23|R1:-0.04, 2026-10-25|R1:-0.12, 2026-10-26|R1:+0.12, 2026-10-27|R1:+0.47
+p35|R2: n=31247 prints, 4943 cierres, 19 segmentos | grad media diaria +0.226 IC90 dias inf +0.093 p_t 0.004 | dias+ 14/19 (74 %) | sin 2 mejores +0.173 | pooled +0.216 IC90 cierre (+0.080,+0.350) | placebo celda p 0.037 (media +0.105) maxstat p 0.072 -> EXPLORATORIA | n requerido 1943 cierres
+    serie diaria bajo-alto: 2026-10-27|R2:+0.12, 2026-10-28|R2:+0.38, 2026-10-29|R2:-0.14, 2026-10-30|R2:+0.68, 2026-10-31|R2:+0.17, 2026-11-01|R2:+0.22, 2026-11-02|R2:+0.65, 2026-11-03|R2:+0.20, 2026-11-04|R2:+0.63, 2026-11-05|R2:+0.42, 2026-11-06|R2:+0.05, 2026-11-07|R2:+0.68, 2026-11-08|R2:-0.13, 2026-11-09|R2:-0.06, 2026-11-10|R2:+0.67, 2026-11-11|R2:-0.49, 2026-11-12|R2:+0.06, 2026-11-13|R2:-0.04, 2026-11-14|R2:+0.21
+p60|R1: n=23534 prints, 2576 cierres, 10 segmentos | grad media diaria +0.081 IC90 dias inf -0.092 p_t 0.207 | dias+ 5/10 (50 %) | sin 2 mejores -0.013 | pooled +0.089 IC90 cierre (-0.079,+0.254) | placebo celda p 0.221 (media +0.015) maxstat p 0.872 -> EXPLORATORIA | n requerido 8730 cierres
+    serie diaria bajo-alto: 2026-10-17|R1:-0.00, 2026-10-18|R1:+0.49, 2026-10-19|R1:-0.20, 2026-10-20|R1:-0.12, 2026-10-21|R1:+0.42, 2026-10-22|R1:-0.28, 2026-10-23|R1:+0.04, 2026-10-25|R1:-0.25, 2026-10-26|R1:+0.42, 2026-10-27|R1:+0.28
+p60|R2: n=36347 prints, 5032 cierres, 19 segmentos | grad media diaria +0.301 IC90 dias inf +0.206 p_t 0.000 | dias+ 17/19 (89 %) | sin 2 mejores +0.261 | pooled +0.290 IC90 cierre (+0.166,+0.405) | placebo celda p 0.000 (media +0.076) maxstat p 0.001 -> VALIDADA (gradiente poblacional censurado; NO EV de regla) | n requerido 905 cierres
+    serie diaria bajo-alto: 2026-10-27|R2:+0.18, 2026-10-28|R2:+0.47, 2026-10-29|R2:+0.04, 2026-10-30|R2:+0.53, 2026-10-31|R2:+0.49, 2026-11-01|R2:+0.20, 2026-11-02|R2:+0.64, 2026-11-03|R2:+0.45, 2026-11-04|R2:+0.49, 2026-11-05|R2:+0.40, 2026-11-06|R2:+0.19, 2026-11-07|R2:+0.65, 2026-11-08|R2:-0.13, 2026-11-09|R2:-0.05, 2026-11-10|R2:+0.44, 2026-11-11|R2:+0.46, 2026-11-12|R2:+0.04, 2026-11-13|R2:+0.14, 2026-11-14|R2:+0.08
+
+## DESCRIPTIVO 1: terciles de F5 por spec (l_ef) x epoca x poblacion (EV pond. EUR; IC90 por cierre por bootstrap; G1/G2/inv)
+## p35 | epoca R0 | tipo B | todo T  (n=22433 unidades, 2091 cierres, 8 dias)
+EV pond. todo +0.386 | bajo +0.433 (n=6952) | medio +0.365 (n=7059) | alto +0.337 (n=8356) | nan +2.453 (n=66)
+G1: EV +0.401 (n=14011, 64% del coste) IC90 cierre (+0.215,+0.593) | DeltaEV vs todo +0.015 IC90 (-0.056,+0.074) | sin 2 mejores cierres +0.271
+G2: EV +0.433 (n=6952, 34% del coste) IC90 cierre (+0.196,+0.682) | DeltaEV vs todo +0.047 IC90 (-0.072,+0.152) | sin 2 mejores cierres +0.228
+inv: EV +0.337 (n=8356, 36% del coste) IC90 cierre (+0.089,+0.647) | DeltaEV vs todo -0.048 IC90 (-0.173,+0.086) | sin 2 mejores cierres +0.123
+## p35 | epoca R0 | tipo B | T_rem>60 s  (n=17534 unidades, 2081 cierres, 8 dias)
+EV pond. todo +0.392 | bajo +0.497 (n=4547) | medio +0.329 (n=5478) | alto +0.361 (n=7452) | nan +0.318 (n=57)
+G1: EV +0.414 (n=10025, 59% del coste) IC90 cierre (+0.186,+0.662) | DeltaEV vs todo +0.022 IC90 (-0.046,+0.099) | sin 2 mejores cierres +0.239
+G2: EV +0.497 (n=4547, 30% del coste) IC90 cierre (+0.186,+0.839) | DeltaEV vs todo +0.105 IC90 (-0.052,+0.254) | sin 2 mejores cierres +0.209
+inv: EV +0.361 (n=7452, 41% del coste) IC90 cierre (+0.083,+0.654) | DeltaEV vs todo -0.031 IC90 (-0.148,+0.067) | sin 2 mejores cierres +0.130
+## p35 | epoca R0 | todas | todo T  (n=140500 unidades, 2118 cierres, 8 dias)
+EV pond. todo +0.139 | bajo +0.197 (n=48103) | medio +0.109 (n=45109) | alto +0.093 (n=47004) | nan +1.178 (n=284)
+G1: EV +0.156 (n=93212, 66% del coste) IC90 cierre (+0.077,+0.236) | DeltaEV vs todo +0.017 IC90 (-0.005,+0.039) | sin 2 mejores cierres +0.114
+G2: EV +0.197 (n=48103, 35% del coste) IC90 cierre (+0.103,+0.299) | DeltaEV vs todo +0.058 IC90 (+0.014,+0.098) | sin 2 mejores cierres +0.133
+inv: EV +0.093 (n=47004, 34% del coste) IC90 cierre (-0.017,+0.204) | DeltaEV vs todo -0.046 IC90 (-0.094,-0.002) | sin 2 mejores cierres +0.029
+## p35 | epoca R0 | todas | T_rem>60 s  (n=116487 unidades, 2118 cierres, 8 dias)
+EV pond. todo +0.137 | bajo +0.226 (n=35606) | medio +0.091 (n=37153) | alto +0.099 (n=43483) | nan +0.128 (n=245)
+G1: EV +0.160 (n=72759, 62% del coste) IC90 cierre (+0.069,+0.250) | DeltaEV vs todo +0.023 IC90 (-0.001,+0.049) | sin 2 mejores cierres +0.106
+G2: EV +0.226 (n=35606, 32% del coste) IC90 cierre (+0.108,+0.347) | DeltaEV vs todo +0.089 IC90 (+0.037,+0.137) | sin 2 mejores cierres +0.140
+inv: EV +0.099 (n=43483, 38% del coste) IC90 cierre (-0.017,+0.215) | DeltaEV vs todo -0.038 IC90 (-0.079,+0.003) | sin 2 mejores cierres +0.031
+## p35 | epoca R1 | tipo B | todo T  (n=21034 unidades, 2554 cierres, 10 dias)
+EV pond. todo +0.034 | bajo +0.062 (n=7969) | medio +0.030 (n=7608) | alto -0.006 (n=5391) | nan +0.049 (n=66)
+G1: EV +0.047 (n=15577, 75% del coste) IC90 cierre (-0.063,+0.174) | DeltaEV vs todo +0.013 IC90 (-0.023,+0.050) | sin 2 mejores cierres +0.002
+G2: EV +0.062 (n=7969, 40% del coste) IC90 cierre (-0.061,+0.207) | DeltaEV vs todo +0.028 IC90 (-0.052,+0.109) | sin 2 mejores cierres +0.027
+inv: EV -0.006 (n=5391, 25% del coste) IC90 cierre (-0.147,+0.161) | DeltaEV vs todo -0.040 IC90 (-0.146,+0.070) | sin 2 mejores cierres -0.057
+## p35 | epoca R1 | tipo B | T_rem>60 s  (n=17792 unidades, 2534 cierres, 10 dias)
+EV pond. todo +0.027 | bajo +0.062 (n=6165) | medio +0.017 (n=6460) | alto -0.008 (n=5104) | nan +0.000 (n=63)
+G1: EV +0.040 (n=12625, 73% del coste) IC90 cierre (-0.091,+0.184) | DeltaEV vs todo +0.013 IC90 (-0.030,+0.052) | sin 2 mejores cierres -0.007
+G2: EV +0.062 (n=6165, 38% del coste) IC90 cierre (-0.092,+0.223) | DeltaEV vs todo +0.035 IC90 (-0.063,+0.120) | sin 2 mejores cierres +0.020
+inv: EV -0.008 (n=5104, 27% del coste) IC90 cierre (-0.154,+0.156) | DeltaEV vs todo -0.036 IC90 (-0.142,+0.088) | sin 2 mejores cierres -0.060
+## p35 | epoca R1 | todas | todo T  (n=129655 unidades, 2628 cierres, 10 dias)
+EV pond. todo +0.014 | bajo +0.057 (n=53016) | medio +0.038 (n=46113) | alto -0.096 (n=30367) | nan +0.016 (n=159)
+G1: EV +0.048 (n=99129, 76% del coste) IC90 cierre (-0.022,+0.116) | DeltaEV vs todo +0.034 IC90 (+0.020,+0.050) | sin 2 mejores cierres +0.028
+G2: EV +0.057 (n=53016, 41% del coste) IC90 cierre (-0.012,+0.131) | DeltaEV vs todo +0.042 IC90 (+0.009,+0.074) | sin 2 mejores cierres +0.042
+inv: EV -0.096 (n=30367, 23% del coste) IC90 cierre (-0.171,-0.018) | DeltaEV vs todo -0.110 IC90 (-0.162,-0.067) | sin 2 mejores cierres -0.117
+## p35 | epoca R1 | todas | T_rem>60 s  (n=110872 unidades, 2628 cierres, 10 dias)
+EV pond. todo +0.010 | bajo +0.055 (n=42786) | medio +0.037 (n=39297) | alto -0.094 (n=28644) | nan -0.021 (n=145)
+G1: EV +0.046 (n=82083, 74% del coste) IC90 cierre (-0.032,+0.126) | DeltaEV vs todo +0.036 IC90 (+0.019,+0.054) | sin 2 mejores cierres +0.025
+G2: EV +0.055 (n=42786, 39% del coste) IC90 cierre (-0.023,+0.139) | DeltaEV vs todo +0.044 IC90 (+0.007,+0.081) | sin 2 mejores cierres +0.037
+inv: EV -0.094 (n=28644, 26% del coste) IC90 cierre (-0.173,-0.014) | DeltaEV vs todo -0.104 IC90 (-0.157,-0.057) | sin 2 mejores cierres -0.115
+## p35 | epoca R2 | tipo B | todo T  (n=31247 unidades, 4943 cierres, 19 dias)
+EV pond. todo +0.138 | bajo +0.218 (n=12052) | medio +0.129 (n=12103) | alto +0.003 (n=6903) | nan -0.090 (n=189)
+G1: EV +0.172 (n=24155, 80% del coste) IC90 cierre (+0.093,+0.244) | DeltaEV vs todo +0.034 IC90 (+0.009,+0.060) | sin 2 mejores cierres +0.151
+G2: EV +0.218 (n=12052, 39% del coste) IC90 cierre (+0.132,+0.304) | DeltaEV vs todo +0.081 IC90 (+0.017,+0.149) | sin 2 mejores cierres +0.195
+inv: EV +0.003 (n=6903, 20% del coste) IC90 cierre (-0.113,+0.125) | DeltaEV vs todo -0.135 IC90 (-0.235,-0.036) | sin 2 mejores cierres -0.055
+## p35 | epoca R2 | tipo B | T_rem>60 s  (n=25904 unidades, 4894 cierres, 19 dias)
+EV pond. todo +0.136 | bajo +0.207 (n=9202) | medio +0.140 (n=10078) | alto +0.015 (n=6454) | nan -0.252 (n=170)
+G1: EV +0.171 (n=19280, 78% del coste) IC90 cierre (+0.084,+0.264) | DeltaEV vs todo +0.035 IC90 (+0.005,+0.064) | sin 2 mejores cierres +0.146
+G2: EV +0.207 (n=9202, 36% del coste) IC90 cierre (+0.113,+0.299) | DeltaEV vs todo +0.071 IC90 (-0.004,+0.143) | sin 2 mejores cierres +0.179
+inv: EV +0.015 (n=6454, 21% del coste) IC90 cierre (-0.108,+0.143) | DeltaEV vs todo -0.121 IC90 (-0.222,-0.010) | sin 2 mejores cierres -0.046
+## p35 | epoca R2 | todas | todo T  (n=261062 unidades, 5222 cierres, 19 dias)
+EV pond. todo +0.021 | bajo +0.070 (n=105854) | medio +0.028 (n=99666) | alto -0.089 (n=55049) | nan +0.002 (n=493)
+G1: EV +0.049 (n=205520, 79% del coste) IC90 cierre (+0.011,+0.088) | DeltaEV vs todo +0.029 IC90 (+0.018,+0.039) | sin 2 mejores cierres +0.041
+G2: EV +0.070 (n=105854, 40% del coste) IC90 cierre (+0.031,+0.109) | DeltaEV vs todo +0.049 IC90 (+0.024,+0.072) | sin 2 mejores cierres +0.061
+inv: EV -0.089 (n=55049, 21% del coste) IC90 cierre (-0.143,-0.033) | DeltaEV vs todo -0.110 IC90 (-0.148,-0.069) | sin 2 mejores cierres -0.105
+## p35 | epoca R2 | todas | T_rem>60 s  (n=227344 unidades, 5221 cierres, 19 dias)
+EV pond. todo +0.021 | bajo +0.067 (n=87902) | medio +0.038 (n=86847) | alto -0.084 (n=52163) | nan -0.207 (n=432)
+G1: EV +0.053 (n=174749, 77% del coste) IC90 cierre (+0.005,+0.096) | DeltaEV vs todo +0.031 IC90 (+0.020,+0.043) | sin 2 mejores cierres +0.042
+G2: EV +0.067 (n=87902, 38% del coste) IC90 cierre (+0.021,+0.111) | DeltaEV vs todo +0.046 IC90 (+0.019,+0.073) | sin 2 mejores cierres +0.058
+inv: EV -0.084 (n=52163, 22% del coste) IC90 cierre (-0.143,-0.029) | DeltaEV vs todo -0.105 IC90 (-0.144,-0.067) | sin 2 mejores cierres -0.101
+## p35 | epoca all | tipo B | todo T  (n=74714 unidades, 9587 cierres, 35 dias)
+EV pond. todo +0.167 | bajo +0.217 (n=26973) | medio +0.147 (n=26770) | alto +0.115 (n=20650) | nan +0.571 (n=321)
+G1: EV +0.183 (n=53743, 75% del coste) IC90 cierre (+0.113,+0.251) | DeltaEV vs todo +0.015 IC90 (-0.009,+0.040) | sin 2 mejores cierres +0.155
+G2: EV +0.217 (n=26973, 38% del coste) IC90 cierre (+0.128,+0.304) | DeltaEV vs todo +0.050 IC90 (+0.001,+0.097) | sin 2 mejores cierres +0.172
+inv: EV +0.115 (n=20650, 25% del coste) IC90 cierre (+0.001,+0.233) | DeltaEV vs todo -0.052 IC90 (-0.130,+0.022) | sin 2 mejores cierres +0.040
+## p35 | epoca all | tipo B | T_rem>60 s  (n=61230 unidades, 9508 cierres, 35 dias)
+EV pond. todo +0.161 | bajo +0.216 (n=19914) | medio +0.139 (n=22016) | alto +0.125 (n=19010) | nan -0.140 (n=290)
+G1: EV +0.176 (n=41930, 72% del coste) IC90 cierre (+0.102,+0.258) | DeltaEV vs todo +0.015 IC90 (-0.014,+0.043) | sin 2 mejores cierres +0.143
+G2: EV +0.216 (n=19914, 35% del coste) IC90 cierre (+0.117,+0.319) | DeltaEV vs todo +0.054 IC90 (+0.002,+0.112) | sin 2 mejores cierres +0.160
+inv: EV +0.125 (n=19010, 27% del coste) IC90 cierre (+0.007,+0.251) | DeltaEV vs todo -0.036 IC90 (-0.111,+0.041) | sin 2 mejores cierres +0.045
+## p35 | epoca all | todas | todo T  (n=531217 unidades, 9967 cierres, 35 dias)
+EV pond. todo +0.050 | bajo +0.096 (n=206973) | medio +0.049 (n=190888) | alto -0.026 (n=132420) | nan +0.494 (n=936)
+G1: EV +0.074 (n=397861, 75% del coste) IC90 cierre (+0.040,+0.105) | DeltaEV vs todo +0.024 IC90 (+0.014,+0.033) | sin 2 mejores cierres +0.064
+G2: EV +0.096 (n=206973, 39% del coste) IC90 cierre (+0.060,+0.133) | DeltaEV vs todo +0.046 IC90 (+0.029,+0.063) | sin 2 mejores cierres +0.081
+inv: EV -0.026 (n=132420, 25% del coste) IC90 cierre (-0.076,+0.023) | DeltaEV vs todo -0.076 IC90 (-0.104,-0.047) | sin 2 mejores cierres -0.049
+## p35 | epoca all | todas | T_rem>60 s  (n=454703 unidades, 9966 cierres, 35 dias)
+EV pond. todo +0.048 | bajo +0.099 (n=166294) | medio +0.050 (n=163297) | alto -0.021 (n=124290) | nan -0.066 (n=822)
+G1: EV +0.074 (n=329591, 73% del coste) IC90 cierre (+0.038,+0.111) | DeltaEV vs todo +0.026 IC90 (+0.016,+0.037) | sin 2 mejores cierres +0.062
+G2: EV +0.099 (n=166294, 37% del coste) IC90 cierre (+0.055,+0.142) | DeltaEV vs todo +0.051 IC90 (+0.031,+0.072) | sin 2 mejores cierres +0.079
+inv: EV -0.021 (n=124290, 27% del coste) IC90 cierre (-0.074,+0.032) | DeltaEV vs todo -0.069 IC90 (-0.098,-0.041) | sin 2 mejores cierres -0.046
+## p60 | epoca R0 | tipo B | todo T  (n=25508 unidades, 2098 cierres, 8 dias)
+EV pond. todo +0.381 | bajo +0.489 (n=7925) | medio +0.396 (n=8044) | alto +0.266 (n=9466) | nan -0.138 (n=73)
+G1: EV +0.446 (n=15969, 65% del coste) IC90 cierre (+0.223,+0.657) | DeltaEV vs todo +0.065 IC90 (+0.001,+0.122) | sin 2 mejores cierres +0.285
+G2: EV +0.489 (n=7925, 34% del coste) IC90 cierre (+0.219,+0.761) | DeltaEV vs todo +0.108 IC90 (-0.010,+0.212) | sin 2 mejores cierres +0.258
+inv: EV +0.266 (n=9466, 35% del coste) IC90 cierre (+0.052,+0.490) | DeltaEV vs todo -0.116 IC90 (-0.226,+0.001) | sin 2 mejores cierres +0.109
+## p60 | epoca R0 | tipo B | T_rem>60 s  (n=20017 unidades, 2091 cierres, 8 dias)
+EV pond. todo +0.382 | bajo +0.547 (n=5290) | medio +0.341 (n=6198) | alto +0.289 (n=8466) | nan -0.163 (n=63)
+G1: EV +0.447 (n=11488, 60% del coste) IC90 cierre (+0.183,+0.702) | DeltaEV vs todo +0.064 IC90 (-0.010,+0.130) | sin 2 mejores cierres +0.229
+G2: EV +0.547 (n=5290, 31% del coste) IC90 cierre (+0.199,+0.897) | DeltaEV vs todo +0.164 IC90 (-0.005,+0.314) | sin 2 mejores cierres +0.225
+inv: EV +0.289 (n=8466, 40% del coste) IC90 cierre (+0.079,+0.541) | DeltaEV vs todo -0.093 IC90 (-0.207,+0.018) | sin 2 mejores cierres +0.122
+## p60 | epoca R0 | todas | todo T  (n=140500 unidades, 2118 cierres, 8 dias)
+EV pond. todo +0.139 | bajo +0.205 (n=48325) | medio +0.120 (n=45062) | alto +0.087 (n=46796) | nan +0.033 (n=317)
+G1: EV +0.166 (n=93387, 66% del coste) IC90 cierre (+0.080,+0.254) | DeltaEV vs todo +0.027 IC90 (+0.004,+0.050) | sin 2 mejores cierres +0.116
+G2: EV +0.205 (n=48325, 35% del coste) IC90 cierre (+0.104,+0.309) | DeltaEV vs todo +0.066 IC90 (+0.026,+0.106) | sin 2 mejores cierres +0.135
+inv: EV +0.087 (n=46796, 34% del coste) IC90 cierre (-0.014,+0.191) | DeltaEV vs todo -0.052 IC90 (-0.102,-0.004) | sin 2 mejores cierres +0.029
+## p60 | epoca R0 | todas | T_rem>60 s  (n=116487 unidades, 2118 cierres, 8 dias)
+EV pond. todo +0.137 | bajo +0.233 (n=35899) | medio +0.093 (n=37009) | alto +0.091 (n=43308) | nan -0.020 (n=271)
+G1: EV +0.165 (n=72908, 62% del coste) IC90 cierre (+0.067,+0.262) | DeltaEV vs todo +0.028 IC90 (+0.002,+0.054) | sin 2 mejores cierres +0.101
+G2: EV +0.233 (n=35899, 32% del coste) IC90 cierre (+0.108,+0.359) | DeltaEV vs todo +0.096 IC90 (+0.042,+0.149) | sin 2 mejores cierres +0.141
+inv: EV +0.091 (n=43308, 37% del coste) IC90 cierre (-0.014,+0.200) | DeltaEV vs todo -0.045 IC90 (-0.094,+0.000) | sin 2 mejores cierres +0.030
+## p60 | epoca R1 | tipo B | todo T  (n=23534 unidades, 2576 cierres, 10 dias)
+EV pond. todo +0.051 | bajo +0.084 (n=8836) | medio +0.062 (n=8517) | alto -0.005 (n=6106) | nan -0.797 (n=75)
+G1: EV +0.073 (n=17353, 75% del coste) IC90 cierre (-0.050,+0.198) | DeltaEV vs todo +0.022 IC90 (-0.013,+0.059) | sin 2 mejores cierres +0.027
+G2: EV +0.084 (n=8836, 40% del coste) IC90 cierre (-0.052,+0.232) | DeltaEV vs todo +0.032 IC90 (-0.045,+0.111) | sin 2 mejores cierres +0.036
+inv: EV -0.005 (n=6106, 25% del coste) IC90 cierre (-0.143,+0.142) | DeltaEV vs todo -0.056 IC90 (-0.164,+0.050) | sin 2 mejores cierres -0.053
+## p60 | epoca R1 | tipo B | T_rem>60 s  (n=20078 unidades, 2565 cierres, 10 dias)
+EV pond. todo +0.047 | bajo +0.092 (n=6931) | medio +0.051 (n=7280) | alto -0.012 (n=5799) | nan -0.786 (n=68)
+G1: EV +0.072 (n=14211, 73% del coste) IC90 cierre (-0.059,+0.204) | DeltaEV vs todo +0.025 IC90 (-0.015,+0.065) | sin 2 mejores cierres +0.019
+G2: EV +0.092 (n=6931, 38% del coste) IC90 cierre (-0.071,+0.260) | DeltaEV vs todo +0.045 IC90 (-0.042,+0.142) | sin 2 mejores cierres +0.037
+inv: EV -0.012 (n=5799, 27% del coste) IC90 cierre (-0.146,+0.131) | DeltaEV vs todo -0.059 IC90 (-0.163,+0.052) | sin 2 mejores cierres -0.061
+## p60 | epoca R1 | todas | todo T  (n=129655 unidades, 2628 cierres, 10 dias)
+EV pond. todo +0.014 | bajo +0.060 (n=52920) | medio +0.032 (n=46259) | alto -0.089 (n=30310) | nan -0.499 (n=166)
+G1: EV +0.047 (n=99179, 76% del coste) IC90 cierre (-0.023,+0.117) | DeltaEV vs todo +0.033 IC90 (+0.019,+0.049) | sin 2 mejores cierres +0.028
+G2: EV +0.060 (n=52920, 41% del coste) IC90 cierre (-0.014,+0.137) | DeltaEV vs todo +0.046 IC90 (+0.014,+0.078) | sin 2 mejores cierres +0.042
+inv: EV -0.089 (n=30310, 24% del coste) IC90 cierre (-0.167,-0.012) | DeltaEV vs todo -0.103 IC90 (-0.154,-0.058) | sin 2 mejores cierres -0.110
+## p60 | epoca R1 | todas | T_rem>60 s  (n=110872 unidades, 2628 cierres, 10 dias)
+EV pond. todo +0.010 | bajo +0.057 (n=42654) | medio +0.034 (n=39417) | alto -0.088 (n=28656) | nan -0.513 (n=145)
+G1: EV +0.046 (n=82071, 74% del coste) IC90 cierre (-0.030,+0.126) | DeltaEV vs todo +0.036 IC90 (+0.019,+0.055) | sin 2 mejores cierres +0.026
+G2: EV +0.057 (n=42654, 39% del coste) IC90 cierre (-0.025,+0.144) | DeltaEV vs todo +0.047 IC90 (+0.010,+0.084) | sin 2 mejores cierres +0.036
+inv: EV -0.088 (n=28656, 26% del coste) IC90 cierre (-0.169,-0.009) | DeltaEV vs todo -0.099 IC90 (-0.152,-0.052) | sin 2 mejores cierres -0.111
+## p60 | epoca R2 | tipo B | todo T  (n=36347 unidades, 5032 cierres, 19 dias)
+EV pond. todo +0.129 | bajo +0.235 (n=13839) | medio +0.118 (n=14198) | alto -0.055 (n=8154) | nan -0.037 (n=156)
+G1: EV +0.174 (n=28037, 80% del coste) IC90 cierre (+0.094,+0.252) | DeltaEV vs todo +0.046 IC90 (+0.023,+0.067) | sin 2 mejores cierres +0.154
+G2: EV +0.235 (n=13839, 39% del coste) IC90 cierre (+0.141,+0.325) | DeltaEV vs todo +0.106 IC90 (+0.041,+0.172) | sin 2 mejores cierres +0.204
+inv: EV -0.055 (n=8154, 20% del coste) IC90 cierre (-0.159,+0.049) | DeltaEV vs todo -0.184 IC90 (-0.270,-0.092) | sin 2 mejores cierres -0.087
+## p60 | epoca R2 | tipo B | T_rem>60 s  (n=30264 unidades, 5004 cierres, 19 dias)
+EV pond. todo +0.125 | bajo +0.213 (n=10604) | medio +0.135 (n=11855) | alto -0.038 (n=7663) | nan -0.075 (n=142)
+G1: EV +0.171 (n=22459, 78% del coste) IC90 cierre (+0.088,+0.255) | DeltaEV vs todo +0.046 IC90 (+0.021,+0.070) | sin 2 mejores cierres +0.147
+G2: EV +0.213 (n=10604, 36% del coste) IC90 cierre (+0.108,+0.309) | DeltaEV vs todo +0.087 IC90 (+0.010,+0.158) | sin 2 mejores cierres +0.174
+inv: EV -0.038 (n=7663, 21% del coste) IC90 cierre (-0.143,+0.072) | DeltaEV vs todo -0.163 IC90 (-0.245,-0.075) | sin 2 mejores cierres -0.071
+## p60 | epoca R2 | todas | todo T  (n=261062 unidades, 5222 cierres, 19 dias)
+EV pond. todo +0.021 | bajo +0.078 (n=105383) | medio +0.029 (n=100177) | alto -0.108 (n=55041) | nan +0.073 (n=461)
+G1: EV +0.054 (n=205560, 79% del coste) IC90 cierre (+0.016,+0.091) | DeltaEV vs todo +0.034 IC90 (+0.023,+0.043) | sin 2 mejores cierres +0.046
+G2: EV +0.078 (n=105383, 40% del coste) IC90 cierre (+0.037,+0.119) | DeltaEV vs todo +0.058 IC90 (+0.031,+0.081) | sin 2 mejores cierres +0.068
+inv: EV -0.108 (n=55041, 21% del coste) IC90 cierre (-0.160,-0.055) | DeltaEV vs todo -0.129 IC90 (-0.166,-0.091) | sin 2 mejores cierres -0.119
+## p60 | epoca R2 | todas | T_rem>60 s  (n=227344 unidades, 5221 cierres, 19 dias)
+EV pond. todo +0.021 | bajo +0.074 (n=87492) | medio +0.042 (n=87234) | alto -0.103 (n=52216) | nan -0.067 (n=402)
+G1: EV +0.058 (n=174726, 77% del coste) IC90 cierre (+0.010,+0.102) | DeltaEV vs todo +0.036 IC90 (+0.025,+0.049) | sin 2 mejores cierres +0.047
+G2: EV +0.074 (n=87492, 38% del coste) IC90 cierre (+0.026,+0.119) | DeltaEV vs todo +0.052 IC90 (+0.024,+0.080) | sin 2 mejores cierres +0.062
+inv: EV -0.103 (n=52216, 22% del coste) IC90 cierre (-0.159,-0.047) | DeltaEV vs todo -0.124 IC90 (-0.163,-0.086) | sin 2 mejores cierres -0.115
+## p60 | epoca all | tipo B | todo T  (n=85389 unidades, 9705 cierres, 35 dias)
+EV pond. todo +0.168 | bajo +0.246 (n=30600) | medio +0.158 (n=30759) | alto +0.069 (n=23726) | nan -0.268 (n=304)
+G1: EV +0.203 (n=61359, 75% del coste) IC90 cierre (+0.133,+0.280) | DeltaEV vs todo +0.035 IC90 (+0.013,+0.056) | sin 2 mejores cierres +0.168
+G2: EV +0.246 (n=30600, 38% del coste) IC90 cierre (+0.161,+0.342) | DeltaEV vs todo +0.078 IC90 (+0.034,+0.126) | sin 2 mejores cierres +0.194
+inv: EV +0.069 (n=23726, 25% del coste) IC90 cierre (-0.029,+0.173) | DeltaEV vs todo -0.099 IC90 (-0.162,-0.035) | sin 2 mejores cierres +0.014
+## p60 | epoca all | tipo B | T_rem>60 s  (n=70359 unidades, 9659 cierres, 35 dias)
+EV pond. todo +0.161 | bajo +0.241 (n=22825) | medio +0.149 (n=25333) | alto +0.079 (n=21928) | nan -0.295 (n=273)
+G1: EV +0.194 (n=48158, 72% del coste) IC90 cierre (+0.112,+0.277) | DeltaEV vs todo +0.033 IC90 (+0.009,+0.057) | sin 2 mejores cierres +0.152
+G2: EV +0.241 (n=22825, 35% del coste) IC90 cierre (+0.137,+0.356) | DeltaEV vs todo +0.080 IC90 (+0.023,+0.137) | sin 2 mejores cierres +0.176
+inv: EV +0.079 (n=21928, 27% del coste) IC90 cierre (-0.022,+0.189) | DeltaEV vs todo -0.082 IC90 (-0.146,-0.019) | sin 2 mejores cierres +0.022
+## p60 | epoca all | todas | todo T  (n=531217 unidades, 9967 cierres, 35 dias)
+EV pond. todo +0.050 | bajo +0.103 (n=206628) | medio +0.051 (n=191498) | alto -0.034 (n=132147) | nan -0.039 (n=944)
+G1: EV +0.078 (n=398126, 75% del coste) IC90 cierre (+0.043,+0.111) | DeltaEV vs todo +0.028 IC90 (+0.019,+0.037) | sin 2 mejores cierres +0.066
+G2: EV +0.103 (n=206628, 39% del coste) IC90 cierre (+0.065,+0.141) | DeltaEV vs todo +0.053 IC90 (+0.035,+0.071) | sin 2 mejores cierres +0.087
+inv: EV -0.034 (n=132147, 25% del coste) IC90 cierre (-0.080,+0.011) | DeltaEV vs todo -0.084 IC90 (-0.111,-0.056) | sin 2 mejores cierres -0.055
+## p60 | epoca all | todas | T_rem>60 s  (n=454703 unidades, 9966 cierres, 35 dias)
+EV pond. todo +0.048 | bajo +0.105 (n=166045) | medio +0.051 (n=163660) | alto -0.031 (n=124180) | nan -0.129 (n=818)
+G1: EV +0.078 (n=329705, 73% del coste) IC90 cierre (+0.040,+0.117) | DeltaEV vs todo +0.030 IC90 (+0.020,+0.040) | sin 2 mejores cierres +0.064
+G2: EV +0.105 (n=166045, 37% del coste) IC90 cierre (+0.059,+0.151) | DeltaEV vs todo +0.057 IC90 (+0.036,+0.078) | sin 2 mejores cierres +0.084
+inv: EV -0.031 (n=124180, 27% del coste) IC90 cierre (-0.078,+0.018) | DeltaEV vs todo -0.079 IC90 (-0.106,-0.051) | sin 2 mejores cierres -0.053
+## p100 | epoca R0 | tipo B | todo T  (n=30046 unidades, 2110 cierres, 8 dias)
+EV pond. todo +0.348 | bajo +0.444 (n=9480) | medio +0.339 (n=9362) | alto +0.264 (n=11131) | nan -0.030 (n=73)
+G1: EV +0.395 (n=18842, 64% del coste) IC90 cierre (+0.177,+0.602) | DeltaEV vs todo +0.047 IC90 (-0.007,+0.095) | sin 2 mejores cierres +0.236
+G2: EV +0.444 (n=9480, 34% del coste) IC90 cierre (+0.162,+0.739) | DeltaEV vs todo +0.097 IC90 (-0.041,+0.253) | sin 2 mejores cierres +0.207
+inv: EV +0.264 (n=11131, 35% del coste) IC90 cierre (+0.088,+0.442) | DeltaEV vs todo -0.084 IC90 (-0.172,+0.013) | sin 2 mejores cierres +0.142
+## p100 | epoca R0 | tipo B | T_rem>60 s  (n=23849 unidades, 2109 cierres, 8 dias)
+EV pond. todo +0.344 | bajo +0.488 (n=6488) | medio +0.288 (n=7301) | alto +0.278 (n=10000) | nan -0.031 (n=60)
+G1: EV +0.389 (n=13789, 60% del coste) IC90 cierre (+0.141,+0.657) | DeltaEV vs todo +0.045 IC90 (-0.027,+0.104) | sin 2 mejores cierres +0.174
+G2: EV +0.488 (n=6488, 30% del coste) IC90 cierre (+0.113,+0.880) | DeltaEV vs todo +0.143 IC90 (-0.073,+0.355) | sin 2 mejores cierres +0.155
+inv: EV +0.278 (n=10000, 40% del coste) IC90 cierre (+0.090,+0.482) | DeltaEV vs todo -0.066 IC90 (-0.160,+0.040) | sin 2 mejores cierres +0.149
+## p100 | epoca R0 | todas | todo T  (n=140500 unidades, 2118 cierres, 8 dias)
+EV pond. todo +0.139 | bajo +0.195 (n=48790) | medio +0.119 (n=44995) | alto +0.096 (n=46372) | nan +0.253 (n=343)
+G1: EV +0.160 (n=93785, 66% del coste) IC90 cierre (+0.072,+0.248) | DeltaEV vs todo +0.021 IC90 (-0.000,+0.043) | sin 2 mejores cierres +0.107
+G2: EV +0.195 (n=48790, 35% del coste) IC90 cierre (+0.090,+0.310) | DeltaEV vs todo +0.056 IC90 (+0.004,+0.113) | sin 2 mejores cierres +0.119
+inv: EV +0.096 (n=46372, 33% del coste) IC90 cierre (-0.002,+0.188) | DeltaEV vs todo -0.043 IC90 (-0.088,-0.001) | sin 2 mejores cierres +0.053
+## p100 | epoca R0 | todas | T_rem>60 s  (n=116487 unidades, 2118 cierres, 8 dias)
+EV pond. todo +0.137 | bajo +0.222 (n=36309) | medio +0.093 (n=36954) | alto +0.098 (n=42951) | nan +0.206 (n=273)
+G1: EV +0.159 (n=73263, 62% del coste) IC90 cierre (+0.061,+0.262) | DeltaEV vs todo +0.022 IC90 (-0.002,+0.047) | sin 2 mejores cierres +0.092
+G2: EV +0.222 (n=36309, 32% del coste) IC90 cierre (+0.091,+0.372) | DeltaEV vs todo +0.085 IC90 (+0.016,+0.164) | sin 2 mejores cierres +0.121
+inv: EV +0.098 (n=42951, 37% del coste) IC90 cierre (-0.002,+0.195) | DeltaEV vs todo -0.038 IC90 (-0.081,+0.003) | sin 2 mejores cierres +0.053
+## p100 | epoca R1 | tipo B | todo T  (n=27617 unidades, 2606 cierres, 10 dias)
+EV pond. todo +0.040 | bajo +0.047 (n=10709) | medio +0.065 (n=9848) | alto -0.004 (n=6988) | nan -0.351 (n=72)
+G1: EV +0.055 (n=20557, 76% del coste) IC90 cierre (-0.063,+0.172) | DeltaEV vs todo +0.016 IC90 (-0.013,+0.046) | sin 2 mejores cierres +0.016
+G2: EV +0.047 (n=10709, 40% del coste) IC90 cierre (-0.084,+0.189) | DeltaEV vs todo +0.007 IC90 (-0.064,+0.086) | sin 2 mejores cierres -0.009
+inv: EV -0.004 (n=6988, 24% del coste) IC90 cierre (-0.133,+0.133) | DeltaEV vs todo -0.043 IC90 (-0.138,+0.047) | sin 2 mejores cierres -0.051
+## p100 | epoca R1 | tipo B | T_rem>60 s  (n=23680 unidades, 2598 cierres, 10 dias)
+EV pond. todo +0.038 | bajo +0.042 (n=8541) | medio +0.068 (n=8413) | alto -0.006 (n=6658) | nan -0.301 (n=68)
+G1: EV +0.055 (n=16954, 74% del coste) IC90 cierre (-0.071,+0.186) | DeltaEV vs todo +0.017 IC90 (-0.019,+0.056) | sin 2 mejores cierres +0.009
+G2: EV +0.042 (n=8541, 38% del coste) IC90 cierre (-0.111,+0.205) | DeltaEV vs todo +0.004 IC90 (-0.078,+0.089) | sin 2 mejores cierres -0.024
+inv: EV -0.006 (n=6658, 26% del coste) IC90 cierre (-0.130,+0.146) | DeltaEV vs todo -0.043 IC90 (-0.152,+0.058) | sin 2 mejores cierres -0.054
+## p100 | epoca R1 | todas | todo T  (n=129655 unidades, 2628 cierres, 10 dias)
+EV pond. todo +0.014 | bajo +0.046 (n=53647) | medio +0.039 (n=46306) | alto -0.081 (n=29535) | nan -0.278 (n=167)
+G1: EV +0.043 (n=99953, 77% del coste) IC90 cierre (-0.026,+0.112) | DeltaEV vs todo +0.029 IC90 (+0.015,+0.045) | sin 2 mejores cierres +0.024
+G2: EV +0.046 (n=53647, 41% del coste) IC90 cierre (-0.026,+0.120) | DeltaEV vs todo +0.032 IC90 (-0.003,+0.066) | sin 2 mejores cierres +0.025
+inv: EV -0.081 (n=29535, 23% del coste) IC90 cierre (-0.157,-0.003) | DeltaEV vs todo -0.095 IC90 (-0.149,-0.047) | sin 2 mejores cierres -0.102
+## p100 | epoca R1 | todas | T_rem>60 s  (n=110872 unidades, 2628 cierres, 10 dias)
+EV pond. todo +0.010 | bajo +0.044 (n=43366) | medio +0.040 (n=39383) | alto -0.082 (n=27975) | nan -0.309 (n=148)
+G1: EV +0.042 (n=82749, 75% del coste) IC90 cierre (-0.036,+0.119) | DeltaEV vs todo +0.031 IC90 (+0.015,+0.050) | sin 2 mejores cierres +0.022
+G2: EV +0.044 (n=43366, 39% del coste) IC90 cierre (-0.041,+0.131) | DeltaEV vs todo +0.033 IC90 (-0.007,+0.073) | sin 2 mejores cierres +0.019
+inv: EV -0.082 (n=27975, 25% del coste) IC90 cierre (-0.160,-0.003) | DeltaEV vs todo -0.093 IC90 (-0.149,-0.044) | sin 2 mejores cierres -0.105
+## p100 | epoca R2 | tipo B | todo T  (n=44493 unidades, 5107 cierres, 19 dias)
+EV pond. todo +0.115 | bajo +0.203 (n=16832) | medio +0.103 (n=17640) | alto -0.023 (n=9860) | nan -0.256 (n=161)
+G1: EV +0.151 (n=34472, 80% del coste) IC90 cierre (+0.081,+0.219) | DeltaEV vs todo +0.036 IC90 (+0.015,+0.055) | sin 2 mejores cierres +0.132
+G2: EV +0.203 (n=16832, 38% del coste) IC90 cierre (+0.117,+0.287) | DeltaEV vs todo +0.088 IC90 (+0.023,+0.147) | sin 2 mejores cierres +0.177
+inv: EV -0.023 (n=9860, 20% del coste) IC90 cierre (-0.108,+0.068) | DeltaEV vs todo -0.138 IC90 (-0.211,-0.056) | sin 2 mejores cierres -0.047
+## p100 | epoca R2 | tipo B | T_rem>60 s  (n=37455 unidades, 5092 cierres, 19 dias)
+EV pond. todo +0.116 | bajo +0.212 (n=13154) | medio +0.101 (n=14890) | alto -0.011 (n=9268) | nan -0.221 (n=143)
+G1: EV +0.153 (n=28044, 78% del coste) IC90 cierre (+0.078,+0.225) | DeltaEV vs todo +0.037 IC90 (+0.014,+0.060) | sin 2 mejores cierres +0.130
+G2: EV +0.212 (n=13154, 36% del coste) IC90 cierre (+0.110,+0.301) | DeltaEV vs todo +0.096 IC90 (+0.020,+0.166) | sin 2 mejores cierres +0.180
+inv: EV -0.011 (n=9268, 22% del coste) IC90 cierre (-0.111,+0.094) | DeltaEV vs todo -0.127 IC90 (-0.206,-0.043) | sin 2 mejores cierres -0.036
+## p100 | epoca R2 | todas | todo T  (n=261062 unidades, 5222 cierres, 19 dias)
+EV pond. todo +0.021 | bajo +0.075 (n=105639) | medio +0.014 (n=100878) | alto -0.081 (n=54086) | nan +0.686 (n=459)
+G1: EV +0.045 (n=206517, 79% del coste) IC90 cierre (+0.006,+0.083) | DeltaEV vs todo +0.024 IC90 (+0.013,+0.034) | sin 2 mejores cierres +0.036
+G2: EV +0.075 (n=105639, 40% del coste) IC90 cierre (+0.033,+0.115) | DeltaEV vs todo +0.054 IC90 (+0.030,+0.079) | sin 2 mejores cierres +0.065
+inv: EV -0.081 (n=54086, 21% del coste) IC90 cierre (-0.132,-0.025) | DeltaEV vs todo -0.101 IC90 (-0.138,-0.062) | sin 2 mejores cierres -0.091
+## p100 | epoca R2 | todas | T_rem>60 s  (n=227344 unidades, 5221 cierres, 19 dias)
+EV pond. todo +0.021 | bajo +0.080 (n=87614) | medio +0.015 (n=87984) | alto -0.078 (n=51353) | nan +0.672 (n=393)
+G1: EV +0.047 (n=175598, 77% del coste) IC90 cierre (+0.001,+0.091) | DeltaEV vs todo +0.026 IC90 (+0.014,+0.037) | sin 2 mejores cierres +0.037
+G2: EV +0.080 (n=87614, 38% del coste) IC90 cierre (+0.029,+0.127) | DeltaEV vs todo +0.059 IC90 (+0.031,+0.087) | sin 2 mejores cierres +0.069
+inv: EV -0.078 (n=51353, 22% del coste) IC90 cierre (-0.133,-0.022) | DeltaEV vs todo -0.099 IC90 (-0.136,-0.059) | sin 2 mejores cierres -0.088
+## p100 | epoca all | tipo B | todo T  (n=102156 unidades, 9822 cierres, 35 dias)
+EV pond. todo +0.151 | bajo +0.209 (n=37021) | medio +0.140 (n=36850) | alto +0.081 (n=27979) | nan -0.254 (n=306)
+G1: EV +0.175 (n=73871, 75% del coste) IC90 cierre (+0.106,+0.248) | DeltaEV vs todo +0.025 IC90 (+0.007,+0.042) | sin 2 mejores cierres +0.141
+G2: EV +0.209 (n=37021, 38% del coste) IC90 cierre (+0.121,+0.308) | DeltaEV vs todo +0.059 IC90 (+0.010,+0.111) | sin 2 mejores cierres +0.156
+inv: EV +0.081 (n=27979, 25% del coste) IC90 cierre (+0.001,+0.167) | DeltaEV vs todo -0.069 IC90 (-0.122,-0.018) | sin 2 mejores cierres +0.038
+## p100 | epoca all | tipo B | T_rem>60 s  (n=84984 unidades, 9798 cierres, 35 dias)
+EV pond. todo +0.146 | bajo +0.213 (n=28183) | medio +0.127 (n=30604) | alto +0.088 (n=25926) | nan -0.221 (n=271)
+G1: EV +0.169 (n=58787, 72% del coste) IC90 cierre (+0.093,+0.251) | DeltaEV vs todo +0.023 IC90 (+0.003,+0.042) | sin 2 mejores cierres +0.127
+G2: EV +0.213 (n=28183, 36% del coste) IC90 cierre (+0.107,+0.331) | DeltaEV vs todo +0.067 IC90 (+0.010,+0.132) | sin 2 mejores cierres +0.147
+inv: EV +0.088 (n=25926, 27% del coste) IC90 cierre (+0.002,+0.174) | DeltaEV vs todo -0.057 IC90 (-0.109,-0.004) | sin 2 mejores cierres +0.043
+## p100 | epoca all | todas | todo T  (n=531217 unidades, 9967 cierres, 35 dias)
+EV pond. todo +0.050 | bajo +0.095 (n=208076) | medio +0.044 (n=192179) | alto -0.018 (n=129993) | nan +0.383 (n=969)
+G1: EV +0.071 (n=400255, 75% del coste) IC90 cierre (+0.036,+0.103) | DeltaEV vs todo +0.021 IC90 (+0.012,+0.029) | sin 2 mejores cierres +0.058
+G2: EV +0.095 (n=208076, 39% del coste) IC90 cierre (+0.055,+0.135) | DeltaEV vs todo +0.045 IC90 (+0.026,+0.064) | sin 2 mejores cierres +0.077
+inv: EV -0.018 (n=129993, 24% del coste) IC90 cierre (-0.064,+0.026) | DeltaEV vs todo -0.068 IC90 (-0.092,-0.041) | sin 2 mejores cierres -0.033
+## p100 | epoca all | todas | T_rem>60 s  (n=454703 unidades, 9966 cierres, 35 dias)
+EV pond. todo +0.048 | bajo +0.101 (n=167289) | medio +0.039 (n=164321) | alto -0.016 (n=122279) | nan +0.357 (n=814)
+G1: EV +0.070 (n=331610, 73% del coste) IC90 cierre (+0.032,+0.109) | DeltaEV vs todo +0.022 IC90 (+0.012,+0.033) | sin 2 mejores cierres +0.055
+G2: EV +0.101 (n=167289, 37% del coste) IC90 cierre (+0.054,+0.151) | DeltaEV vs todo +0.053 IC90 (+0.029,+0.076) | sin 2 mejores cierres +0.079
+inv: EV -0.016 (n=122279, 27% del coste) IC90 cierre (-0.061,+0.028) | DeltaEV vs todo -0.064 IC90 (-0.091,-0.038) | sin 2 mejores cierres -0.033
+## p150 | epoca R0 | tipo B | todo T  (n=34973 unidades, 2114 cierres, 8 dias)
+EV pond. todo +0.309 | bajo +0.378 (n=11640) | medio +0.248 (n=10900) | alto +0.300 (n=12355) | nan -0.173 (n=78)
+G1: EV +0.316 (n=22540, 65% del coste) IC90 cierre (+0.115,+0.496) | DeltaEV vs todo +0.006 IC90 (-0.038,+0.053) | sin 2 mejores cierres +0.182
+G2: EV +0.378 (n=11640, 34% del coste) IC90 cierre (+0.134,+0.625) | DeltaEV vs todo +0.069 IC90 (-0.039,+0.174) | sin 2 mejores cierres +0.184
+inv: EV +0.300 (n=12355, 35% del coste) IC90 cierre (+0.102,+0.501) | DeltaEV vs todo -0.009 IC90 (-0.096,+0.072) | sin 2 mejores cierres +0.156
+## p150 | epoca R0 | tipo B | T_rem>60 s  (n=28022 unidades, 2114 cierres, 8 dias)
+EV pond. todo +0.302 | bajo +0.395 (n=8302) | medio +0.184 (n=8631) | alto +0.323 (n=11025) | nan -0.076 (n=64)
+G1: EV +0.289 (n=16933, 61% del coste) IC90 cierre (+0.066,+0.500) | DeltaEV vs todo -0.013 IC90 (-0.063,+0.037) | sin 2 mejores cierres +0.113
+G2: EV +0.395 (n=8302, 30% del coste) IC90 cierre (+0.096,+0.702) | DeltaEV vs todo +0.093 IC90 (-0.064,+0.242) | sin 2 mejores cierres +0.129
+inv: EV +0.323 (n=11025, 39% del coste) IC90 cierre (+0.112,+0.534) | DeltaEV vs todo +0.021 IC90 (-0.056,+0.097) | sin 2 mejores cierres +0.168
+## p150 | epoca R0 | todas | todo T  (n=140500 unidades, 2118 cierres, 8 dias)
+EV pond. todo +0.139 | bajo +0.177 (n=50310) | medio +0.116 (n=45163) | alto +0.117 (n=44630) | nan +0.186 (n=397)
+G1: EV +0.149 (n=95473, 67% del coste) IC90 cierre (+0.066,+0.233) | DeltaEV vs todo +0.010 IC90 (-0.009,+0.031) | sin 2 mejores cierres +0.103
+G2: EV +0.177 (n=50310, 36% del coste) IC90 cierre (+0.081,+0.283) | DeltaEV vs todo +0.038 IC90 (-0.006,+0.083) | sin 2 mejores cierres +0.113
+inv: EV +0.117 (n=44630, 32% del coste) IC90 cierre (+0.012,+0.218) | DeltaEV vs todo -0.022 IC90 (-0.067,+0.021) | sin 2 mejores cierres +0.063
+## p150 | epoca R0 | todas | T_rem>60 s  (n=116487 unidades, 2118 cierres, 8 dias)
+EV pond. todo +0.137 | bajo +0.191 (n=37732) | medio +0.094 (n=37203) | alto +0.124 (n=41246) | nan +0.087 (n=306)
+G1: EV +0.144 (n=74935, 64% del coste) IC90 cierre (+0.052,+0.237) | DeltaEV vs todo +0.008 IC90 (-0.014,+0.031) | sin 2 mejores cierres +0.085
+G2: EV +0.191 (n=37732, 33% del coste) IC90 cierre (+0.074,+0.319) | DeltaEV vs todo +0.055 IC90 (-0.002,+0.115) | sin 2 mejores cierres +0.105
+inv: EV +0.124 (n=41246, 36% del coste) IC90 cierre (+0.012,+0.233) | DeltaEV vs todo -0.013 IC90 (-0.055,+0.028) | sin 2 mejores cierres +0.066
+## p150 | epoca R1 | tipo B | todo T  (n=31793 unidades, 2613 cierres, 10 dias)
+EV pond. todo +0.026 | bajo +0.017 (n=12591) | medio +0.049 (n=11199) | alto +0.008 (n=7911) | nan -0.021 (n=92)
+G1: EV +0.032 (n=23790, 75% del coste) IC90 cierre (-0.071,+0.150) | DeltaEV vs todo +0.006 IC90 (-0.025,+0.037) | sin 2 mejores cierres -0.007
+G2: EV +0.017 (n=12591, 40% del coste) IC90 cierre (-0.115,+0.156) | DeltaEV vs todo -0.009 IC90 (-0.085,+0.067) | sin 2 mejores cierres -0.041
+inv: EV +0.008 (n=7911, 25% del coste) IC90 cierre (-0.118,+0.144) | DeltaEV vs todo -0.018 IC90 (-0.113,+0.079) | sin 2 mejores cierres -0.041
+## p150 | epoca R1 | tipo B | T_rem>60 s  (n=27438 unidades, 2608 cierres, 10 dias)
+EV pond. todo +0.021 | bajo +0.014 (n=10198) | medio +0.036 (n=9648) | alto +0.013 (n=7512) | nan -0.035 (n=80)
+G1: EV +0.025 (n=19846, 73% del coste) IC90 cierre (-0.091,+0.150) | DeltaEV vs todo +0.003 IC90 (-0.032,+0.042) | sin 2 mejores cierres -0.016
+G2: EV +0.014 (n=10198, 38% del coste) IC90 cierre (-0.124,+0.158) | DeltaEV vs todo -0.007 IC90 (-0.090,+0.079) | sin 2 mejores cierres -0.053
+inv: EV +0.013 (n=7512, 26% del coste) IC90 cierre (-0.124,+0.146) | DeltaEV vs todo -0.009 IC90 (-0.118,+0.092) | sin 2 mejores cierres -0.038
+## p150 | epoca R1 | todas | todo T  (n=129655 unidades, 2628 cierres, 10 dias)
+EV pond. todo +0.014 | bajo +0.041 (n=54870) | medio +0.037 (n=46072) | alto -0.072 (n=28507) | nan -0.149 (n=206)
+G1: EV +0.039 (n=100942, 78% del coste) IC90 cierre (-0.031,+0.108) | DeltaEV vs todo +0.025 IC90 (+0.011,+0.040) | sin 2 mejores cierres +0.019
+G2: EV +0.041 (n=54870, 42% del coste) IC90 cierre (-0.032,+0.119) | DeltaEV vs todo +0.027 IC90 (-0.006,+0.063) | sin 2 mejores cierres +0.017
+inv: EV -0.072 (n=28507, 22% del coste) IC90 cierre (-0.151,+0.008) | DeltaEV vs todo -0.086 IC90 (-0.140,-0.037) | sin 2 mejores cierres -0.093
+## p150 | epoca R1 | todas | T_rem>60 s  (n=110872 unidades, 2628 cierres, 10 dias)
+EV pond. todo +0.010 | bajo +0.041 (n=44499) | medio +0.035 (n=39253) | alto -0.073 (n=26956) | nan -0.203 (n=164)
+G1: EV +0.038 (n=83752, 76% del coste) IC90 cierre (-0.040,+0.116) | DeltaEV vs todo +0.027 IC90 (+0.011,+0.045) | sin 2 mejores cierres +0.017
+G2: EV +0.041 (n=44499, 40% del coste) IC90 cierre (-0.040,+0.129) | DeltaEV vs todo +0.030 IC90 (-0.008,+0.071) | sin 2 mejores cierres +0.015
+inv: EV -0.073 (n=26956, 24% del coste) IC90 cierre (-0.155,+0.010) | DeltaEV vs todo -0.084 IC90 (-0.139,-0.031) | sin 2 mejores cierres -0.095
+## p150 | epoca R2 | tipo B | todo T  (n=53619 unidades, 5168 cierres, 19 dias)
+EV pond. todo +0.097 | bajo +0.142 (n=21361) | medio +0.109 (n=20885) | alto -0.018 (n=11186) | nan -0.067 (n=187)
+G1: EV +0.125 (n=42246, 80% del coste) IC90 cierre (+0.062,+0.191) | DeltaEV vs todo +0.028 IC90 (+0.009,+0.046) | sin 2 mejores cierres +0.107
+G2: EV +0.142 (n=21361, 40% del coste) IC90 cierre (+0.068,+0.222) | DeltaEV vs todo +0.045 IC90 (-0.004,+0.099) | sin 2 mejores cierres +0.122
+inv: EV -0.018 (n=11186, 19% del coste) IC90 cierre (-0.103,+0.075) | DeltaEV vs todo -0.115 IC90 (-0.192,-0.032) | sin 2 mejores cierres -0.046
+## p150 | epoca R2 | tipo B | T_rem>60 s  (n=45773 unidades, 5159 cierres, 19 dias)
+EV pond. todo +0.094 | bajo +0.131 (n=17277) | medio +0.111 (n=17769) | alto -0.002 (n=10562) | nan -0.182 (n=165)
+G1: EV +0.121 (n=35046, 79% del coste) IC90 cierre (+0.052,+0.190) | DeltaEV vs todo +0.027 IC90 (+0.004,+0.047) | sin 2 mejores cierres +0.100
+G2: EV +0.131 (n=17277, 38% del coste) IC90 cierre (+0.053,+0.213) | DeltaEV vs todo +0.037 IC90 (-0.025,+0.095) | sin 2 mejores cierres +0.110
+inv: EV -0.002 (n=10562, 21% del coste) IC90 cierre (-0.098,+0.097) | DeltaEV vs todo -0.096 IC90 (-0.173,-0.014) | sin 2 mejores cierres -0.031
+## p150 | epoca R2 | todas | todo T  (n=261062 unidades, 5222 cierres, 19 dias)
+EV pond. todo +0.021 | bajo +0.051 (n=109003) | medio +0.029 (n=100612) | alto -0.073 (n=50912) | nan +0.701 (n=535)
+G1: EV +0.041 (n=209615, 80% del coste) IC90 cierre (+0.003,+0.078) | DeltaEV vs todo +0.020 IC90 (+0.010,+0.029) | sin 2 mejores cierres +0.032
+G2: EV +0.051 (n=109003, 41% del coste) IC90 cierre (+0.012,+0.090) | DeltaEV vs todo +0.030 IC90 (+0.007,+0.054) | sin 2 mejores cierres +0.040
+inv: EV -0.073 (n=50912, 19% del coste) IC90 cierre (-0.124,-0.013) | DeltaEV vs todo -0.094 IC90 (-0.132,-0.054) | sin 2 mejores cierres -0.085
+## p150 | epoca R2 | todas | T_rem>60 s  (n=227344 unidades, 5221 cierres, 19 dias)
+EV pond. todo +0.021 | bajo +0.048 (n=90751) | medio +0.036 (n=87792) | alto -0.066 (n=48360) | nan +0.691 (n=441)
+G1: EV +0.042 (n=178543, 78% del coste) IC90 cierre (-0.005,+0.084) | DeltaEV vs todo +0.021 IC90 (+0.009,+0.032) | sin 2 mejores cierres +0.032
+G2: EV +0.048 (n=90751, 40% del coste) IC90 cierre (+0.001,+0.091) | DeltaEV vs todo +0.026 IC90 (+0.002,+0.053) | sin 2 mejores cierres +0.039
+inv: EV -0.066 (n=48360, 21% del coste) IC90 cierre (-0.124,-0.005) | DeltaEV vs todo -0.087 IC90 (-0.126,-0.046) | sin 2 mejores cierres -0.078
+## p150 | epoca all | tipo B | todo T  (n=120385 unidades, 9894 cierres, 35 dias)
+EV pond. todo +0.129 | bajo +0.156 (n=45592) | medio +0.121 (n=42984) | alto +0.100 (n=31452) | nan -0.070 (n=357)
+G1: EV +0.139 (n=88576, 75% del coste) IC90 cierre (+0.076,+0.203) | DeltaEV vs todo +0.010 IC90 (-0.008,+0.030) | sin 2 mejores cierres +0.111
+G2: EV +0.156 (n=45592, 38% del coste) IC90 cierre (+0.078,+0.239) | DeltaEV vs todo +0.027 IC90 (-0.012,+0.067) | sin 2 mejores cierres +0.114
+inv: EV +0.100 (n=31452, 25% del coste) IC90 cierre (+0.008,+0.191) | DeltaEV vs todo -0.029 IC90 (-0.088,+0.025) | sin 2 mejores cierres +0.048
+## p150 | epoca all | tipo B | T_rem>60 s  (n=101233 unidades, 9880 cierres, 35 dias)
+EV pond. todo +0.121 | bajo +0.147 (n=35777) | medio +0.104 (n=36048) | alto +0.112 (n=29099) | nan -0.119 (n=309)
+G1: EV +0.125 (n=71825, 73% del coste) IC90 cierre (+0.058,+0.196) | DeltaEV vs todo +0.004 IC90 (-0.018,+0.026) | sin 2 mejores cierres +0.091
+G2: EV +0.147 (n=35777, 36% del coste) IC90 cierre (+0.062,+0.244) | DeltaEV vs todo +0.026 IC90 (-0.021,+0.072) | sin 2 mejores cierres +0.095
+inv: EV +0.112 (n=29099, 27% del coste) IC90 cierre (+0.023,+0.216) | DeltaEV vs todo -0.009 IC90 (-0.066,+0.048) | sin 2 mejores cierres +0.058
+## p150 | epoca all | todas | todo T  (n=531217 unidades, 9967 cierres, 35 dias)
+EV pond. todo +0.050 | bajo +0.078 (n=214183) | medio +0.051 (n=191847) | alto -0.004 (n=124049) | nan +0.374 (n=1138)
+G1: EV +0.065 (n=406030, 76% del coste) IC90 cierre (+0.031,+0.097) | DeltaEV vs todo +0.015 IC90 (+0.006,+0.024) | sin 2 mejores cierres +0.054
+G2: EV +0.078 (n=214183, 40% del coste) IC90 cierre (+0.041,+0.116) | DeltaEV vs todo +0.028 IC90 (+0.011,+0.046) | sin 2 mejores cierres +0.063
+inv: EV -0.004 (n=124049, 23% del coste) IC90 cierre (-0.055,+0.045) | DeltaEV vs todo -0.054 IC90 (-0.082,-0.026) | sin 2 mejores cierres -0.024
+## p150 | epoca all | todas | T_rem>60 s  (n=454703 unidades, 9966 cierres, 35 dias)
+EV pond. todo +0.048 | bajo +0.078 (n=172982) | medio +0.049 (n=164248) | alto +0.000 (n=116562) | nan +0.332 (n=911)
+G1: EV +0.064 (n=337230, 74% del coste) IC90 cierre (+0.027,+0.101) | DeltaEV vs todo +0.015 IC90 (+0.006,+0.025) | sin 2 mejores cierres +0.050
+G2: EV +0.078 (n=172982, 38% del coste) IC90 cierre (+0.035,+0.126) | DeltaEV vs todo +0.030 IC90 (+0.008,+0.051) | sin 2 mejores cierres +0.058
+inv: EV +0.000 (n=116562, 26% del coste) IC90 cierre (-0.047,+0.050) | DeltaEV vs todo -0.048 IC90 (-0.074,-0.020) | sin 2 mejores cierres -0.021
+
+## DESCRIPTIVO 2: sensibilidades (c=16/22, d_proc=10/30, delta=-/+suelo) a l_ef=35 y 60, tipo B, por epoca: terciles y gradiente agrupado (sin bootstrap; no deciden)
+p35 R1: n=21034 | EV bajo +0.062 medio +0.030 alto -0.006 | gradiente pooled +0.069 | media diaria +0.061 dias+ 5/10
+p35 R2: n=31247 | EV bajo +0.218 medio +0.129 alto +0.003 | gradiente pooled +0.216 | media diaria +0.226 dias+ 14/19
+c16_35 R1: n=20734 | EV bajo +0.053 medio +0.032 alto -0.005 | gradiente pooled +0.059 | media diaria +0.062 dias+ 6/10
+c16_35 R2: n=30635 | EV bajo +0.210 medio +0.138 alto +0.010 | gradiente pooled +0.201 | media diaria +0.205 dias+ 14/19
+c22_35 R1: n=21316 | EV bajo +0.058 medio +0.062 alto -0.008 | gradiente pooled +0.066 | media diaria +0.064 dias+ 4/10
+c22_35 R2: n=31832 | EV bajo +0.238 medio +0.121 alto +0.001 | gradiente pooled +0.237 | media diaria +0.251 dias+ 15/19
+d10_35 R1: n=21757 | EV bajo +0.068 medio +0.058 alto -0.001 | gradiente pooled +0.069 | media diaria +0.068 dias+ 5/10
+d10_35 R2: n=32732 | EV bajo +0.236 medio +0.127 alto -0.010 | gradiente pooled +0.247 | media diaria +0.258 dias+ 15/19
+d30_35 R1: n=23754 | EV bajo +0.090 medio +0.057 alto -0.004 | gradiente pooled +0.094 | media diaria +0.089 dias+ 6/10
+d30_35 R2: n=36763 | EV bajo +0.237 medio +0.116 alto -0.069 | gradiente pooled +0.305 | media diaria +0.318 dias+ 16/19
+dm_35 R1: n=25023 | EV bajo +0.078 medio +0.056 alto -0.006 | gradiente pooled +0.084 | media diaria +0.043 dias+ 4/10
+dm_35 R2: n=35188 | EV bajo +0.224 medio +0.126 alto -0.059 | gradiente pooled +0.283 | media diaria +0.292 dias+ 17/19
+dp_35 R1: n=16935 | EV bajo +0.105 medio +0.046 alto +0.014 | gradiente pooled +0.091 | media diaria +0.106 dias+ 5/10
+dp_35 R2: n=27200 | EV bajo +0.182 medio +0.113 alto +0.056 | gradiente pooled +0.126 | media diaria +0.132 dias+ 14/19
+p60 R1: n=23534 | EV bajo +0.084 medio +0.062 alto -0.005 | gradiente pooled +0.089 | media diaria +0.081 dias+ 5/10
+p60 R2: n=36347 | EV bajo +0.235 medio +0.118 alto -0.055 | gradiente pooled +0.290 | media diaria +0.301 dias+ 17/19
+c16_60 R1: n=23228 | EV bajo +0.095 medio +0.054 alto -0.011 | gradiente pooled +0.106 | media diaria +0.095 dias+ 5/10
+c16_60 R2: n=35744 | EV bajo +0.215 medio +0.124 alto -0.052 | gradiente pooled +0.267 | media diaria +0.276 dias+ 17/19
+c22_60 R1: n=23873 | EV bajo +0.093 medio +0.064 alto -0.012 | gradiente pooled +0.105 | media diaria +0.097 dias+ 5/10
+c22_60 R2: n=36932 | EV bajo +0.219 medio +0.108 alto -0.061 | gradiente pooled +0.280 | media diaria +0.292 dias+ 16/19
+d10_60 R1: n=24251 | EV bajo +0.094 medio +0.070 alto -0.016 | gradiente pooled +0.110 | media diaria +0.098 dias+ 5/10
+d10_60 R2: n=37787 | EV bajo +0.196 medio +0.132 alto -0.055 | gradiente pooled +0.251 | media diaria +0.264 dias+ 17/19
+d30_60 R1: n=26302 | EV bajo +0.044 medio +0.092 alto -0.025 | gradiente pooled +0.070 | media diaria +0.025 dias+ 4/10
+d30_60 R2: n=41931 | EV bajo +0.186 medio +0.107 alto -0.007 | gradiente pooled +0.194 | media diaria +0.201 dias+ 15/19
+dm_60 R1: n=27549 | EV bajo +0.040 medio +0.068 alto +0.002 | gradiente pooled +0.038 | media diaria -0.002 dias+ 4/10
+dm_60 R2: n=40257 | EV bajo +0.196 medio +0.120 alto -0.038 | gradiente pooled +0.233 | media diaria +0.252 dias+ 16/19
+dp_60 R1: n=19670 | EV bajo +0.044 medio +0.070 alto -0.001 | gradiente pooled +0.045 | media diaria +0.063 dias+ 5/10
+dp_60 R2: n=32486 | EV bajo +0.228 medio +0.134 alto -0.000 | gradiente pooled +0.228 | media diaria +0.239 dias+ 15/19
+
+## DESCRIPTIVO 3: periodos antiguos (INS 09-19 Oct, DER 24-Oct..03-Nov, OOS 04-14 Nov) y reproduccion de las columnas VIEJAS (tau = r_rx - lag, sin filas de ask vacio) frente a poblacion_por_tercil.txt (NO VALIDADO; solo para ver si cambia el signo)
+INS 2026-10-09..2026-10-19 | viejo tau=r_rx-100 | todas: n=178778 cierres=2879 | EV bajo +0.155 medio +0.099 alto +0.041 | gradiente +0.114
+INS 2026-10-09..2026-10-19 | viejo tau=r_rx-100 | tipo B: n=27033 cierres=2837 | EV bajo +0.383 medio +0.354 alto +0.248 | gradiente +0.135
+INS 2026-10-09..2026-10-19 | viejo tau=r_rx-250 | todas: n=178778 cierres=2879 | EV bajo +0.128 medio +0.073 alto +0.099 | gradiente +0.029
+INS 2026-10-09..2026-10-19 | viejo tau=r_rx-250 | tipo B: n=47207 cierres=2874 | EV bajo +0.272 medio +0.151 alto +0.283 | gradiente -0.011
+INS 2026-10-09..2026-10-19 | v3 l_ef=35 | todas: n=178778 cierres=2879 | EV bajo +0.139 medio +0.097 alto +0.054 | gradiente +0.085
+INS 2026-10-09..2026-10-19 | v3 l_ef=35 | tipo B: n=28615 cierres=2838 | EV bajo +0.302 medio +0.329 alto +0.287 | gradiente +0.016
+INS 2026-10-09..2026-10-19 | v3 l_ef=60 | todas: n=178778 cierres=2879 | EV bajo +0.155 medio +0.090 alto +0.054 | gradiente +0.101
+INS 2026-10-09..2026-10-19 | v3 l_ef=60 | tipo B: n=32432 cierres=2852 | EV bajo +0.394 medio +0.314 alto +0.235 | gradiente +0.159
+INS 2026-10-09..2026-10-19 | v3 l_ef=100 | todas: n=178778 cierres=2879 | EV bajo +0.145 medio +0.088 alto +0.064 | gradiente +0.081
+INS 2026-10-09..2026-10-19 | v3 l_ef=100 | tipo B: n=38118 cierres=2867 | EV bajo +0.344 medio +0.260 alto +0.246 | gradiente +0.098
+INS 2026-10-09..2026-10-19 | v3 l_ef=150 | todas: n=178778 cierres=2879 | EV bajo +0.129 medio +0.092 alto +0.079 | gradiente +0.050
+INS 2026-10-09..2026-10-19 | v3 l_ef=150 | tipo B: n=44176 cierres=2871 | EV bajo +0.292 medio +0.199 alto +0.265 | gradiente +0.027
+DER 2026-10-24..2026-11-03 | viejo tau=r_rx-100 | todas: n=123862 cierres=2828 | EV bajo +0.149 medio +0.068 alto -0.010 | gradiente +0.159 | viejo archivo: +0.132/+0.048/-0.033
+DER 2026-10-24..2026-11-03 | viejo tau=r_rx-100 | tipo B: n=18320 cierres=2717 | EV bajo +0.406 medio +0.166 alto +0.158 | gradiente +0.248 | viejo archivo: +0.389/+0.140/+0.113
+DER 2026-10-24..2026-11-03 | viejo tau=r_rx-250 | todas: n=123862 cierres=2828 | EV bajo +0.125 medio +0.079 alto +0.005 | gradiente +0.120 | viejo archivo: +0.105/+0.060/-0.016
+DER 2026-10-24..2026-11-03 | viejo tau=r_rx-250 | tipo B: n=33230 cierres=2808 | EV bajo +0.272 medio +0.154 alto +0.058 | gradiente +0.213 | viejo archivo: +0.248/+0.137/+0.037
+DER 2026-10-24..2026-11-03 | v3 l_ef=35 | todas: n=123862 cierres=2828 | EV bajo +0.142 medio +0.076 alto -0.011 | gradiente +0.153
+DER 2026-10-24..2026-11-03 | v3 l_ef=35 | tipo B: n=17554 cierres=2695 | EV bajo +0.360 medio +0.209 alto +0.138 | gradiente +0.223
+DER 2026-10-24..2026-11-03 | v3 l_ef=60 | todas: n=123862 cierres=2828 | EV bajo +0.144 medio +0.084 alto -0.033 | gradiente +0.177
+DER 2026-10-24..2026-11-03 | v3 l_ef=60 | tipo B: n=20223 cierres=2738 | EV bajo +0.373 medio +0.214 alto +0.063 | gradiente +0.310
+DER 2026-10-24..2026-11-03 | v3 l_ef=100 | todas: n=123862 cierres=2828 | EV bajo +0.138 medio +0.079 alto -0.014 | gradiente +0.151
+DER 2026-10-24..2026-11-03 | v3 l_ef=100 | tipo B: n=24349 cierres=2771 | EV bajo +0.334 medio +0.198 alto +0.066 | gradiente +0.268
+DER 2026-10-24..2026-11-03 | v3 l_ef=150 | todas: n=123862 cierres=2828 | EV bajo +0.123 medio +0.080 alto +0.006 | gradiente +0.117
+DER 2026-10-24..2026-11-03 | v3 l_ef=150 | tipo B: n=29070 cierres=2804 | EV bajo +0.285 medio +0.170 alto +0.071 | gradiente +0.214
+OOS 2026-11-04..2026-11-14 | viejo tau=r_rx-100 | todas: n=168994 cierres=3111 | EV bajo +0.059 medio +0.007 alto -0.135 | gradiente +0.193 | viejo archivo: +0.059/+0.007/-0.135
+OOS 2026-11-04..2026-11-14 | viejo tau=r_rx-100 | tipo B: n=20637 cierres=2981 | EV bajo +0.128 medio +0.056 alto -0.132 | gradiente +0.261 | viejo archivo: +0.129/+0.057/-0.132
+OOS 2026-11-04..2026-11-14 | viejo tau=r_rx-250 | todas: n=168994 cierres=3111 | EV bajo +0.056 medio -0.017 alto -0.123 | gradiente +0.178 | viejo archivo: +0.056/-0.018/-0.122
+OOS 2026-11-04..2026-11-14 | viejo tau=r_rx-250 | tipo B: n=40054 cierres=3097 | EV bajo +0.081 medio +0.020 alto -0.098 | gradiente +0.178 | viejo archivo: +0.081/+0.020/-0.097
+OOS 2026-11-04..2026-11-14 | v3 l_ef=35 | todas: n=168994 cierres=3111 | EV bajo +0.052 medio +0.000 alto -0.111 | gradiente +0.162
+OOS 2026-11-04..2026-11-14 | v3 l_ef=35 | tipo B: n=18748 cierres=2943 | EV bajo +0.132 medio +0.040 alto -0.050 | gradiente +0.182
+OOS 2026-11-04..2026-11-14 | v3 l_ef=60 | todas: n=168994 cierres=3111 | EV bajo +0.058 medio +0.006 alto -0.134 | gradiente +0.192
+OOS 2026-11-04..2026-11-14 | v3 l_ef=60 | tipo B: n=21825 cierres=2998 | EV bajo +0.140 medio +0.052 alto -0.113 | gradiente +0.253
+OOS 2026-11-04..2026-11-14 | v3 l_ef=100 | todas: n=168994 cierres=3111 | EV bajo +0.052 medio -0.014 alto -0.100 | gradiente +0.152
+OOS 2026-11-04..2026-11-14 | v3 l_ef=100 | tipo B: n=26815 cierres=3049 | EV bajo +0.100 medio +0.045 alto -0.061 | gradiente +0.161
+OOS 2026-11-04..2026-11-14 | v3 l_ef=150 | todas: n=168994 cierres=3111 | EV bajo +0.027 medio +0.009 alto -0.098 | gradiente +0.125
+OOS 2026-11-04..2026-11-14 | v3 l_ef=150 | tipo B: n=32334 cierres=3081 | EV bajo +0.042 medio +0.078 alto -0.063 | gradiente +0.105
+
+## DESCRIPTIVO 4: gradiente por moneda (p60, tipo B, R1 y R2; pooled)
+R1 ETH: n=15061 | bajo -0.033 medio +0.051 alto +0.001 | gradiente -0.034
+R1 SOL: n=5424 | bajo +0.217 medio +0.061 alto -0.074 | gradiente +0.291
+R1 XRP: n=3049 | bajo +0.271 medio +0.187 alto -0.312 | gradiente +0.583
+R2 ETH: n=23526 | bajo +0.210 medio +0.095 alto -0.043 | gradiente +0.253
+R2 SOL: n=7879 | bajo +0.197 medio +0.271 alto -0.165 | gradiente +0.362
+R2 XRP: n=4942 | bajo +0.369 medio -0.003 alto -0.401 | gradiente +0.770
+
+RESUMEN: 1/4 celdas decisivas cumplen el gate; etiquetas: p35|R1 -> EXPLORATORIA; p35|R2 -> EXPLORATORIA; p60|R1 -> EXPLORATORIA; p60|R2 -> VALIDADA (gradiente poblacional censurado; NO EV de regla) | PARTIAL: faltan dias
+Tiempo 80 s. Limites: poblacion censurada (solo fills ajenos), d_proc=3 ms supuesto, sin ancla independiente del reloj de relleno propio; segmentos dia-epoca (17-Oct y 27-Oct parciales).

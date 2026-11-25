@@ -1,0 +1,97 @@
+dias con salida ps: ['2026-10-18', '2026-10-22', '2026-10-23'] | MISSING: ['2026-10-19', '2026-10-20', '2026-10-21']
+regresion B: ['2026-10-18 mercados validos 70 (F7: ver f6_log) fills B ref 1147 mio 1147 IDENTICO=True', '2026-10-22 mercados validos 96 (F7: ver f6_log) fills B ref 1483 mio 1483 IDENTICO=True', '2026-10-23 mercados validos 96 (F7: ver f6_log) fills B ref 1447 mio 1447 IDENTICO=True']
+
+== EV(+reb)/EUR ponderado por variante (todos los dias, mercados con relleno) ==
+B     pooled -0.0562 | por dia [0.002, -0.072, -0.084] | mercados 262 coste 82,932 net total -4,657
+NB10  pooled -0.0520 | por dia [-0.008, -0.064, -0.074] | mercados 262 coste 81,720 net total -4,247
+NB0   pooled -0.0598 | por dia [-0.024, -0.061, -0.086] | mercados 262 coste 72,931 net total -4,362
+AC10  pooled -0.0456 | por dia [0.004, -0.055, -0.074] | mercados 262 coste 84,836 net total -3,869
+CB    pooled -0.0102 | por dia [-0.033, 0.017, -0.018] | mercados 262 coste 58,674 net total -598
+SY    pooled -0.0534 | por dia [0.017, -0.061, -0.101] | mercados 262 coste 82,677 net total -4,417
+SN    pooled -0.0328 | por dia [-0.003, -0.011, -0.078] | mercados 261 coste 86,454 net total -2,832
+P4    pooled -0.0759 | por dia [-0.071, -0.097, -0.06] | mercados 262 coste 47,855 net total -3,634
+B7    pooled -0.0562 | por dia [0.002, -0.072, -0.084] | mercados 262 coste 82,932 net total -4,657
+
+dias test ['2026-10-22', '2026-10-23'] | >21-Oct limpios: ['2026-10-22', '2026-10-23']
+
+== S1 (rasgos A): P(completa>=90% acc emparejadas) bajo P4 | mercados con relleno train+test; tasa y=1 0.202
+AUC por dia [0.453, 0.483] media/IC90 (np.float64(0.468), np.float64(0.375), np.float64(0.56)) pooled 0.462 (n 192)
+[S1 (rasgos A) -> base P4 thr70] mercados 192 armados 106 (0.55) coste armado 19,304/34,630 | EV armado -0.0755 dias -0.0773 IC90 (-0.2010,+0.0465) boot (-0.1457,-0.0131) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias +0.0011 IC90 (-0.0039,+0.0061) boot (-0.0417,+0.0478) | placebo -0.0773 p(plac>=pol) 0.482 | net armado -1,458 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0755 todos -0.0778 (n 106/192)
+[S1 (rasgos A) -> base P4 thr50] mercados 192 armados 73 (0.38) coste armado 13,299/34,630 | EV armado -0.0355 dias -0.0450 IC90 (-0.2740,+0.1839) boot (-0.1204,+0.0406) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias +0.0334 IC90 (-0.0768,+0.1435) boot (-0.0207,+0.1029) | placebo -0.0789 p(plac>=pol) 0.121 | net armado -472 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0355 todos -0.0778 (n 73/192)
+[S1 (rasgos A) -> base P4 thr90] mercados 192 armados 159 (0.83) coste armado 29,233/34,630 | EV armado -0.0724 dias -0.0720 IC90 (-0.1577,+0.0136) boot (-0.1265,-0.0229) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias +0.0064 IC90 (-0.0268,+0.0395) boot (-0.0134,+0.0240) | placebo -0.0780 p(plac>=pol) 0.352 | net armado -2,117 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0724 todos -0.0778 (n 159/192)
+[S1 (rasgos A) -> base P4 INV thr70] mercados 192 armados 86 (0.45) coste armado 15,326/34,630 | EV armado -0.0807 dias -0.0799 IC90 (-0.1912,+0.0313) boot (-0.1535,-0.0143) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias -0.0016 IC90 (-0.0091,+0.0060) boot (-0.0549,+0.0483) | placebo -0.0785 p(plac>=pol) 0.539 | net armado -1,237 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0807 todos -0.0778 (n 86/192)
+[S1 (rasgos A) -> base B thr70] mercados 192 armados 106 (0.55) coste armado 33,177/60,176 | EV armado -0.0951 dias -0.0949 IC90 (-0.1449,-0.0450) boot (-0.1318,-0.0562) sin2 +nan dias+ 0/2 | todos -0.0781 | delta dias -0.0167 IC90 (-0.0274,-0.0061) boot (-0.0415,+0.0062) | placebo -0.0783 p(plac>=pol) 0.858 | net armado -3,156 vs todos -4,701
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0951 todos -0.0781 (n 106/192)
+[S1 (rasgos A) -> base B thr50] mercados 192 armados 73 (0.38) coste armado 23,691/60,176 | EV armado -0.1073 dias -0.1085 IC90 (-0.1767,-0.0403) boot (-0.1524,-0.0641) sin2 +nan dias+ 0/2 | todos -0.0781 | delta dias -0.0303 IC90 (-0.1378,+0.0772) boot (-0.0636,+0.0040) | placebo -0.0772 p(plac>=pol) 0.924 | net armado -2,541 vs todos -4,701
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.1073 todos -0.0781 (n 73/192)
+[S1 (rasgos A) -> base B thr90] mercados 192 armados 159 (0.83) coste armado 49,827/60,176 | EV armado -0.0877 dias -0.0883 IC90 (-0.1373,-0.0392) boot (-0.1187,-0.0591) sin2 +nan dias+ 0/2 | todos -0.0781 | delta dias -0.0101 IC90 (-0.0198,-0.0003) boot (-0.0211,+0.0029) | placebo -0.0779 p(plac>=pol) 0.909 | net armado -4,369 vs todos -4,701
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0877 todos -0.0781 (n 159/192)
+[S1 (rasgos A) -> base B INV thr70] mercados 192 armados 86 (0.45) coste armado 26,999/60,176 | EV armado -0.0572 dias -0.0574 IC90 (-0.0723,-0.0425) boot (-0.1004,-0.0163) sin2 +nan dias+ 0/2 | todos -0.0781 | delta dias +0.0208 IC90 (-0.0036,+0.0453) boot (-0.0085,+0.0518) | placebo -0.0777 p(plac>=pol) 0.142 | net armado -1,545 vs todos -4,701
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0572 todos -0.0781 (n 86/192)
+
+== S1b (A+Binance): P(completa>=90% acc emparejadas) bajo P4 | mercados con relleno train+test; tasa y=1 0.202
+AUC por dia [0.454, 0.456] media/IC90 (np.float64(0.455), np.float64(0.449), np.float64(0.461)) pooled 0.451 (n 192)
+[S1b (A+Binance) -> base P4 thr70] mercados 192 armados 112 (0.58) coste armado 20,747/34,630 | EV armado -0.0747 dias -0.0775 IC90 (-0.2288,+0.0738) boot (-0.1426,-0.0110) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias +0.0009 IC90 (-0.0317,+0.0334) boot (-0.0381,+0.0405) | placebo -0.0771 p(plac>=pol) 0.440 | net armado -1,549 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0747 todos -0.0778 (n 112/192)
+[S1b (A+Binance) -> base P4 thr50] mercados 192 armados 76 (0.40) coste armado 13,668/34,630 | EV armado -0.0432 dias -0.0516 IC90 (-0.4142,+0.3111) boot (-0.1314,+0.0359) sin2 +nan dias+ 1/2 | todos -0.0778 | delta dias +0.0268 IC90 (-0.2170,+0.2707) boot (-0.0268,+0.0939) | placebo -0.0794 p(plac>=pol) 0.144 | net armado -591 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0432 todos -0.0778 (n 76/192)
+[S1b (A+Binance) -> base P4 thr90] mercados 192 armados 153 (0.80) coste armado 28,290/34,630 | EV armado -0.0739 dias -0.0738 IC90 (-0.1256,-0.0221) boot (-0.1263,-0.0276) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias +0.0045 IC90 (-0.0624,+0.0715) boot (-0.0188,+0.0259) | placebo -0.0789 p(plac>=pol) 0.369 | net armado -2,089 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0739 todos -0.0778 (n 153/192)
+[S1b (A+Binance) -> base P4 INV thr70] mercados 192 armados 80 (0.42) coste armado 13,883/34,630 | EV armado -0.0826 dias -0.0815 IC90 (-0.1485,-0.0144) boot (-0.1543,-0.0096) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias -0.0031 IC90 (-0.0547,+0.0486) boot (-0.0647,+0.0532) | placebo -0.0762 p(plac>=pol) 0.591 | net armado -1,146 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0826 todos -0.0778 (n 80/192)
+[S1b (A+Binance) -> base B thr70] mercados 192 armados 112 (0.58) coste armado 34,612/60,176 | EV armado -0.0901 dias -0.0902 IC90 (-0.0911,-0.0892) boot (-0.1248,-0.0520) sin2 +nan dias+ 0/2 | todos -0.0781 | delta dias -0.0119 IC90 (-0.0522,+0.0283) boot (-0.0357,+0.0107) | placebo -0.0782 p(plac>=pol) 0.797 | net armado -3,120 vs todos -4,701
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0901 todos -0.0781 (n 112/192)
+[S1b (A+Binance) -> base B thr50] mercados 192 armados 76 (0.40) coste armado 24,878/60,176 | EV armado -0.0914 dias -0.0913 IC90 (-0.1608,-0.0218) boot (-0.1335,-0.0459) sin2 +nan dias+ 0/2 | todos -0.0781 | delta dias -0.0131 IC90 (-0.0432,+0.0171) boot (-0.0446,+0.0210) | placebo -0.0787 p(plac>=pol) 0.707 | net armado -2,273 vs todos -4,701
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0914 todos -0.0781 (n 76/192)
+[S1b (A+Binance) -> base B thr90] mercados 192 armados 153 (0.80) coste armado 47,193/60,176 | EV armado -0.0778 dias -0.0778 IC90 (-0.0812,-0.0743) boot (-0.1124,-0.0444) sin2 +nan dias+ 0/2 | todos -0.0781 | delta dias +0.0004 IC90 (-0.0354,+0.0363) boot (-0.0140,+0.0138) | placebo -0.0777 p(plac>=pol) 0.498 | net armado -3,670 vs todos -4,701
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0778 todos -0.0781 (n 153/192)
+[S1b (A+Binance) -> base B INV thr70] mercados 192 armados 80 (0.42) coste armado 25,564/60,176 | EV armado -0.0618 dias -0.0632 IC90 (-0.1410,+0.0146) boot (-0.1044,-0.0198) sin2 +nan dias+ 0/2 | todos -0.0781 | delta dias +0.0150 IC90 (-0.0235,+0.0535) boot (-0.0177,+0.0487) | placebo -0.0778 p(plac>=pol) 0.213 | net armado -1,581 vs todos -4,701
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0618 todos -0.0781 (n 80/192)
+
+== S2 (ridge EV/EUR de mercado bajo P4) correlacion Spearman por dia: [np.float64(0.055), np.float64(0.151)]
+[S2 -> base P4 thr70] mercados 192 armados 136 (0.71) coste armado 25,051/34,630 | EV armado -0.0637 dias -0.0651 IC90 (-0.3086,+0.1783) boot (-0.1222,-0.0122) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias +0.0133 IC90 (-0.1114,+0.1379) boot (-0.0175,+0.0443) | placebo -0.0778 p(plac>=pol) 0.224 | net armado -1,597 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.0637 todos -0.0778 (n 136/192)
+[S2 -> base P4 INV thr70] mercados 192 armados 56 (0.29) coste armado 9,579/34,630 | EV armado -0.1147 dias -0.1144 IC90 (-0.3272,+0.0985) boot (-0.2086,-0.0241) sin2 +nan dias+ 0/2 | todos -0.0778 | delta dias -0.0360 IC90 (-0.3676,+0.2956) boot (-0.1154,+0.0422) | placebo -0.0778 p(plac>=pol) 0.803 | net armado -1,099 vs todos -2,695
+     dias >21-Oct ['2026-10-22', '2026-10-23']: EV armado -0.1147 todos -0.0778 (n 56/192)
+
+== Reglas vs B (mismos mercados validos, mercados con relleno; EV/EUR ponderado) ==
+NB10  EV -0.0520 (B -0.0562) | por dia [-0.008, -0.064, -0.074] | delta dias +0.0030 IC90 (-0.0156,+0.0217) p1 0.341 boot mercados (-0.0188,+0.0270) | sin2 -0.0737 | dias+ 0/3 | net total -4,247 vs B -4,657 | coste 81,720 vs 82,932
+NB0   EV -0.0598 (B -0.0562) | por dia [-0.024, -0.061, -0.086] | delta dias -0.0055 IC90 (-0.0374,+0.0264) p1 0.668 boot mercados (-0.0295,+0.0219) | sin2 -0.0857 | dias+ 0/3 | net total -4,362 vs B -4,657 | coste 72,931 vs 82,932
+AC10  EV -0.0456 (B -0.0562) | por dia [0.004, -0.055, -0.074] | delta dias +0.0098 IC90 (-0.0024,+0.0219) p1 0.072 boot mercados (-0.0039,+0.0241) | sin2 -0.0740 | dias+ 1/3 | net total -3,869 vs B -4,657 | coste 84,836 vs 82,932
+CB    EV -0.0102 (B -0.0562) | por dia [-0.033, 0.017, -0.018] | delta dias +0.0402 IC90 (-0.0711,+0.1515) p1 0.201 boot mercados (+0.0148,+0.0795) | sin2 -0.0330 | dias+ 1/3 | net total -598 vs B -4,657 | coste 58,674 vs 82,932
+SY    EV -0.0534 (B -0.0562) | por dia [0.017, -0.061, -0.101] | delta dias +0.0030 IC90 (-0.0259,+0.0320) p1 0.395 boot mercados (-0.0154,+0.0212) | sin2 -0.1011 | dias+ 1/3 | net total -4,417 vs B -4,657 | coste 82,677 vs 82,932
+SN    EV -0.0328 (B -0.0562) | por dia [-0.003, -0.011, -0.078] | delta dias +0.0206 IC90 (-0.0387,+0.0799) p1 0.208 boot mercados (+0.0068,+0.0418) | sin2 -0.0781 | dias+ 0/3 | net total -2,832 vs B -4,657 | coste 86,454 vs 82,932
+BH-FDR q=0,10 sobre ['NB10', 'NB0', 'AC10', 'CB'] p1 [0.341, 0.668, 0.072, 0.201] -> significativas: []
+
+== S3: eleccion de lado primero (ridge sobre diff EV/EUR YES-first - NO-first). dias test ['2026-10-22', '2026-10-23'] n 192
+Spearman por dia: [np.float64(-0.183), np.float64(0.061)]
+  modelo       EV -0.0595 (B mismos mercados -0.0781) delta dias +0.0182 IC90 (-0.0915,+0.1279) net -3,712 vs B -4,701
+  invertido    EV -0.0641 (B mismos mercados -0.0781) delta dias +0.0134 IC90 (-0.1399,+0.1667) net -3,846 vs B -4,701
+  siempre YES  EV -0.0807 (B mismos mercados -0.0781) delta dias -0.0028 IC90 (-0.0903,+0.0846) net -4,802 vs B -4,701
+  siempre NO   EV -0.0438 (B mismos mercados -0.0781) delta dias +0.0335 IC90 (-0.1381,+0.2052) net -2,756 vs B -4,701
+
+== AUC primera pata huerfana (descriptivo) modelo A: tasa huerfana 0.076 n 262 | AUC por dia [0.459, 0.577] media/IC90 (np.float64(0.518), np.float64(0.147), np.float64(0.889)) pooled 0.520
+
+== AUC primera pata huerfana (descriptivo) modelo A+Binance: tasa huerfana 0.076 n 262 | AUC por dia [0.504, 0.548] media/IC90 (np.float64(0.526), np.float64(0.386), np.float64(0.666)) pooled 0.518
+flag own_drop5>=2c: n 98/262 huerfana 0.041 vs 0.098; AUC por dia [0.42, 0.446, 0.371]
+flag oth_drop5>=2c: n 117/262 huerfana 0.060 vs 0.090; AUC por dia [0.565, 0.295, 0.354]
+
+== €/año techo (EV/€ x 5 € x 288 x 365 = x525.600) por variante, IC90 por dias del EV/€ ==
+B     EV/€ -0.0562 -> -29,517 €/año | IC90 dias EV (-0.1302,+0.0272) -> (-68,431,+14,285) | dias 3
+P4    EV/€ -0.0759 -> -39,917 €/año | IC90 dias EV (-0.1084,-0.0434) -> (-56,994,-22,812) | dias 3
+NB10  EV/€ -0.0520 -> -27,314 €/año | IC90 dias EV (-0.1085,+0.0115) -> (-57,031,+6,065) | dias 3
+NB0   EV/€ -0.0598 -> -31,437 €/año | IC90 dias EV (-0.1091,-0.0049) -> (-57,354,-2,583) | dias 3
+AC10  EV/€ -0.0456 -> -23,970 €/año | IC90 dias EV (-0.1105,+0.0270) -> (-58,102,+14,215) | dias 3
+CB    EV/€ -0.0102 -> -5,360 €/año | IC90 dias EV (-0.0545,+0.0318) -> (-28,633,+16,722) | dias 3
+SN    EV/€ -0.0328 -> -17,215 €/año | IC90 dias EV (-0.1002,+0.0384) -> (-52,651,+20,198) | dias 3
+SY    EV/€ -0.0534 -> -28,082 €/año | IC90 dias EV (-0.1494,+0.0524) -> (-78,529,+27,556) | dias 3
+
+== Placebo de coste (B remuestreado al coste por mercado de la regla, 500 sorteos) ==
+CB: EV -0.0102 | placebo B al mismo coste -0.0540 IC90 (-0.0687,-0.0403) p(plac>=regla) 0.000
+NB10: EV -0.0520 | placebo B al mismo coste -0.0563 IC90 (-0.0636,-0.0487) p(plac>=regla) 0.178
+AC10: EV -0.0456 | placebo B al mismo coste -0.0545 IC90 (-0.0576,-0.0515) p(plac>=regla) 0.000
+NB0: EV -0.0598 | placebo B al mismo coste -0.0556 IC90 (-0.0655,-0.0461) p(plac>=regla) 0.746

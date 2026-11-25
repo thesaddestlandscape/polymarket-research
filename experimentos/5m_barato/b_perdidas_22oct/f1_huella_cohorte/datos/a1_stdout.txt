@@ -1,0 +1,184 @@
+makers totales 35365 con coste>=200 (solo volumen) 12663 coste conservado 0.9956
+unidades 6563380 con desenlace 6201626 cobertura coste 0.93963
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  el=T.index[(T.cost>=500)].intersection(Cm.index[Cm.sum(1)>=200])
+FWD BTC makers elegibles 960 coste out 31578788 EV maker out 0.0016 (con rebate 0.0061)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  el=T.index[(T.cost>=500)].intersection(Cm.index[Cm.sum(1)>=200])
+FWD ALT makers elegibles 180 coste out 4171624 EV maker out 0.0020 (con rebate 0.0065)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  el=T.index[(T.cost>=500)].intersection(Cm.index[Cm.sum(1)>=200])
+FWD ALL makers elegibles 1060 coste out 36003776 EV maker out 0.0017 (con rebate 0.0062)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  el=T.index[(T.cost>=500)].intersection(Cm.index[Cm.sum(1)>=200])
+REV BTC makers elegibles 908 coste out 38596556 EV maker out 0.0038 (con rebate 0.0082)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  el=T.index[(T.cost>=500)].intersection(Cm.index[Cm.sum(1)>=200])
+REV ALT makers elegibles 171 coste out 5549342 EV maker out 0.0058 (con rebate 0.0102)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:27: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  el=T.index[(T.cost>=500)].intersection(Cm.index[Cm.sum(1)>=200])
+REV ALL makers elegibles 1009 coste out 44737844 EV maker out 0.0040 (con rebate 0.0084)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:44: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values; idx=[i for i,t in enumerate(tests) if t[0]==cs]
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:84: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  evd=(Pd.sum(1)/Cd.sum(1).replace(0,np.nan)); rk=evd.rank(pct=True,method='average').fillna(0.5)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:84: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  evd=(Pd.sum(1)/Cd.sum(1).replace(0,np.nan)); rk=evd.rank(pct=True,method='average').fillna(0.5)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:86: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:86: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values
+BASELINE resultado DESC->HOLD BTC EV_top 0.0064 EV_bot -0.0414 diff 0.0478  p(placebo permutacion) 0.000  n_top 320
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:84: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  evd=(Pd.sum(1)/Cd.sum(1).replace(0,np.nan)); rk=evd.rank(pct=True,method='average').fillna(0.5)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:84: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  evd=(Pd.sum(1)/Cd.sum(1).replace(0,np.nan)); rk=evd.rank(pct=True,method='average').fillna(0.5)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:86: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:86: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values
+BASELINE resultado DESC->HOLD ALT EV_top 0.0112 EV_bot -0.0281 diff 0.0393  p(placebo permutacion) 0.000  n_top 60
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:84: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  evd=(Pd.sum(1)/Cd.sum(1).replace(0,np.nan)); rk=evd.rank(pct=True,method='average').fillna(0.5)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:84: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  evd=(Pd.sum(1)/Cd.sum(1).replace(0,np.nan)); rk=evd.rank(pct=True,method='average').fillna(0.5)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:86: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/f1_huella_cohorte/scripts/a1_contrastes.py:86: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  pt=Pm.sum(1).values; ct=Cm.sum(1).values
+BASELINE resultado DESC->HOLD ALL EV_top 0.0063 EV_bot -0.0409 diff 0.0472  p(placebo permutacion) 0.000  n_top 354
+      U            rasgo  n_top  n_bot  ev_top  ev_bot    diff       z  p_marg   p_fam  ic90_lo  ic90_hi  diff_sin2  diff_cap30  top_wallet_share_top
+2   BTC   r03_carry>=.90    320    320  0.0047 -0.0262  0.0309  8.9897  0.0000  0.0000   0.0186   0.0465     0.0321      0.0309                0.0722
+4   BTC     r05_pc_medio    320    320  0.0065 -0.0244  0.0310  8.9246  0.0000  0.0000   0.0173   0.0478     0.0349      0.0310                0.0949
+10  BTC       r11_logdia    320    320  0.0036 -0.0226  0.0262  7.6934  0.0000  0.0000   0.0186   0.0346     0.0215      0.0276                0.0387
+9   BTC   r10_med_unidad    320    320  0.0032 -0.0171  0.0203  5.8075  0.0000  0.0000   0.0086   0.0341     0.0217      0.0203                0.0443
+14  BTC          r15_yes    320    320 -0.0108  0.0070 -0.0178 -5.1859  0.0000  0.0000  -0.0267  -0.0089    -0.0193     -0.0178                0.1550
+22  ALT   r03_carry>=.90     60     60  0.0050 -0.0269  0.0319  4.9045  0.0000  0.0000  -0.0009   0.0569     0.0414      0.0319                0.1950
+30  ALT       r11_logdia     60     60  0.0025 -0.0505  0.0531  8.0153  0.0000  0.0000   0.0065   0.0977     0.0357      0.0531                0.0869
+44  ALL     r05_pc_medio    354    354  0.0065 -0.0196  0.0260  8.1773  0.0000  0.0000   0.0149   0.0386     0.0251      0.0260                0.0830
+54  ALL          r15_yes    354    354 -0.0084  0.0070 -0.0154 -4.9985  0.0000  0.0000  -0.0262  -0.0051    -0.0219     -0.0154                0.1127
+42  ALL   r03_carry>=.90    354    354  0.0037 -0.0233  0.0271  8.4561  0.0000  0.0000   0.0158   0.0412     0.0266      0.0271                0.0577
+50  ALL       r11_logdia    354    354  0.0034 -0.0231  0.0265  8.4955  0.0000  0.0000   0.0161   0.0387     0.0199      0.0276                0.0338
+56  ALL   r17_ord_unidad    354    354  0.0033 -0.0109  0.0142  4.5629  0.0000  0.0000   0.0055   0.0236     0.0118      0.0142                0.0392
+45  ALL      r06_med_sec    354    354  0.0050 -0.0079  0.0129  4.2227  0.0000  0.0000   0.0086   0.0180     0.0146      0.0129                0.1140
+5   BTC      r06_med_sec    320    320  0.0040 -0.0090  0.0130  3.8078  0.0000  0.0030   0.0073   0.0199     0.0144      0.0130                0.1408
+8   BTC      r09_med_acc    320    320  0.0013 -0.0117  0.0130  3.7637  0.0000  0.0035   0.0077   0.0188     0.0159      0.0130                0.0659
+16  BTC   r17_ord_unidad    320    320  0.0030 -0.0100  0.0129  3.7598  0.0005  0.0035   0.0034   0.0234     0.0095      0.0129                0.0434
+49  ALL   r10_med_unidad    354    354  0.0033 -0.0084  0.0117  3.7427  0.0000  0.0035  -0.0021   0.0267     0.0122      0.0117                0.0413
+48  ALL      r09_med_acc    354    354  0.0026 -0.0080  0.0105  3.3884  0.0005  0.0260   0.0058   0.0158     0.0121      0.0105                0.0560
+36  ALT   r17_ord_unidad     60     60  0.0032 -0.0184  0.0217  3.3051  0.0005  0.0375   0.0031   0.0374     0.0277      0.0247                0.1179
+3   BTC       r04_p<0.30    320    320 -0.0046  0.0051 -0.0097 -2.7646  0.0045  0.2040  -0.0211   0.0018    -0.0185     -0.0097                0.1284
+47  ALL        r08_tarde    354    354  0.0047 -0.0026  0.0073  2.3959  0.0180  0.4880   0.0029   0.0118     0.0050      0.0073                0.1059
+21  ALT     r02_p.05-.30     60     60  0.0101 -0.0043  0.0144  2.1788  0.0315  0.6775   0.0088   0.0205     0.0122      0.0144                0.2379
+7   BTC        r08_tarde    320    320  0.0036 -0.0038  0.0074  2.1420  0.0300  0.7090   0.0003   0.0153     0.0024      0.0074                0.1305
+43  ALL       r04_p<0.30    354    354 -0.0027  0.0035 -0.0062 -1.9499  0.0515  0.8620  -0.0159   0.0036    -0.0143     -0.0062                0.1118
+28  ALT      r09_med_acc     60     60  0.0003  0.0126 -0.0123 -1.8256  0.0675  0.9340  -0.0173  -0.0069    -0.0142     -0.0114                0.2217
+35  ALT        r16_noche     60     60 -0.0044  0.0066 -0.0110 -1.6971  0.0890  0.9720  -0.0291   0.0101    -0.0193     -0.0108                0.1171
+23  ALT       r04_p<0.30     60     60  0.0086 -0.0019  0.0105  1.5932  0.1120  0.9880   0.0024   0.0179     0.0072      0.0105                0.2814
+59  ALL        r20_taker    354    354 -0.0022  0.0025 -0.0048 -1.5426  0.1285  0.9925  -0.0128   0.0028    -0.0104     -0.0048                0.1658
+29  ALT   r10_med_unidad     60     60  0.0032  0.0126 -0.0094 -1.4123  0.1600  0.9985  -0.0246   0.0050    -0.0042     -0.0094                0.1368
+25  ALT      r06_med_sec     60     60  0.0019  0.0106 -0.0087 -1.3087  0.1940  0.9995  -0.0316   0.0134    -0.0021     -0.0092                0.4064
+0   BTC       r01_p<0.10    320    320 -0.0015  0.0017 -0.0032 -0.9241  0.3530  1.0000  -0.0089   0.0022    -0.0073     -0.0032                0.0770
+18  BTC  r19_ambos_lados    320    320  0.0032  0.0025  0.0007  0.2060  0.8280  1.0000  -0.0094   0.0118     0.0001      0.0007                0.0413
+32  ALT      r13_monedas     60     68 -0.0001  0.0046 -0.0046 -0.7329  0.4595  1.0000  -0.0090  -0.0003    -0.0051     -0.0046                0.0907
+34  ALT          r15_yes     60     60 -0.0025  0.0005 -0.0030 -0.4442  0.6890  1.0000  -0.0219   0.0184    -0.0206     -0.0030                0.2539
+31  ALT  r12_vent_simult     60     81  0.0018  0.0043 -0.0026 -0.4176  0.6820  1.0000  -0.0060   0.0007    -0.0024     -0.0026                0.0986
+27  ALT        r08_tarde     60     60  0.0066  0.0071 -0.0005 -0.0762  0.9480  1.0000  -0.0199   0.0167    -0.0005     -0.0005                0.2908
+20  ALT       r01_p<0.10     60     60  0.0040 -0.0037  0.0077  1.2149  0.2365  1.0000  -0.0019   0.0194    -0.0017      0.0077                0.2649
+24  ALT     r05_pc_medio     60     60  0.0067  0.0018  0.0049  0.7675  0.4500  1.0000  -0.0078   0.0203    -0.0018      0.0068                0.1367
+26  ALT        r07_fr30s     60     60  0.0038  0.0046 -0.0009 -0.1327  0.8970  1.0000  -0.0194   0.0171    -0.0109     -0.0009                0.1534
+19  BTC        r20_taker    320    320 -0.0012  0.0025 -0.0037 -1.0647  0.2940  1.0000  -0.0112   0.0034    -0.0087     -0.0037                0.1682
+6   BTC        r07_fr30s    320    320 -0.0020 -0.0039  0.0019  0.5437  0.5805  1.0000  -0.0048   0.0093    -0.0004      0.0019                0.0952
+15  BTC        r16_noche    320    320  0.0005  0.0004  0.0000  0.0109  0.9920  1.0000  -0.0072   0.0085     0.0036      0.0000                0.1068
+1   BTC     r02_p.05-.30    320    320 -0.0006  0.0010 -0.0016 -0.4631  0.6630  1.0000  -0.0123   0.0080    -0.0096     -0.0016                0.0934
+40  ALL       r01_p<0.10    354    354 -0.0019  0.0003 -0.0023 -0.7241  0.4690  1.0000  -0.0077   0.0033    -0.0067     -0.0023                0.0759
+38  ALT  r19_ambos_lados     60     60  0.0023 -0.0013  0.0036  0.5609  0.5895  1.0000  -0.0134   0.0204     0.0100      0.0034                0.0997
+39  ALT        r20_taker     60     64  0.0058  0.0025  0.0033  0.5064  0.6130  1.0000  -0.0136   0.0257    -0.0109      0.0033                0.2104
+46  ALL        r07_fr30s    354    354 -0.0019 -0.0029  0.0010  0.3097  0.7870  1.0000  -0.0041   0.0061    -0.0026      0.0010                0.0871
+41  ALL     r02_p.05-.30    354    354  0.0007  0.0001  0.0006  0.2007  0.8375  1.0000  -0.0081   0.0094    -0.0000      0.0006                0.0829
+55  ALL        r16_noche    354    354 -0.0003  0.0017 -0.0021 -0.6488  0.5145  1.0000  -0.0087   0.0054    -0.0043     -0.0021                0.0898
+58  ALL  r19_ambos_lados    354    354  0.0032  0.0029  0.0003  0.1014  0.9245  1.0000  -0.0066   0.0079     0.0005      0.0003                0.0374
+REV
+      U            rasgo  ev_top  ev_bot    diff        z   p_fam
+0   BTC       r01_p<0.10  0.0024  0.0011  0.0013   0.4233  1.0000
+1   BTC     r02_p.05-.30 -0.0020 -0.0023  0.0003   0.0856  1.0000
+2   BTC   r03_carry>=.90  0.0036  0.0009  0.0027   0.8905  1.0000
+3   BTC       r04_p<0.30 -0.0014  0.0017 -0.0031  -1.0160  1.0000
+4   BTC     r05_pc_medio  0.0046 -0.0111  0.0157   5.2155  0.0000
+5   BTC      r06_med_sec  0.0038  0.0002  0.0036   1.2365  1.0000
+6   BTC        r07_fr30s  0.0049 -0.0029  0.0077   2.6630  0.2645
+7   BTC        r08_tarde  0.0048 -0.0033  0.0081   2.7491  0.2135
+8   BTC      r09_med_acc  0.0054 -0.0072  0.0126   4.2506  0.0020
+9   BTC   r10_med_unidad  0.0048 -0.0060  0.0108   3.6054  0.0130
+10  BTC       r11_logdia  0.0050 -0.0388  0.0438  14.7467  0.0000
+11  BTC  r12_vent_simult     NaN     NaN     NaN      NaN     NaN
+12  BTC      r13_monedas     NaN     NaN     NaN      NaN     NaN
+13  BTC    r14_cuota_btc     NaN     NaN     NaN      NaN     NaN
+14  BTC          r15_yes  0.0097 -0.0056  0.0153   5.1256  0.0000
+15  BTC        r16_noche  0.0034 -0.0001  0.0035   1.1936  1.0000
+16  BTC   r17_ord_unidad  0.0042 -0.0141  0.0183   6.1053  0.0000
+17  BTC       r18_ventas     NaN     NaN     NaN      NaN     NaN
+18  BTC  r19_ambos_lados  0.0036 -0.0041  0.0077   2.5221  0.3735
+19  BTC        r20_taker  0.0009  0.0033 -0.0024  -0.8273  1.0000
+20  ALT       r01_p<0.10  0.0086 -0.0017  0.0104   1.8260  0.9235
+21  ALT     r02_p.05-.30  0.0098  0.0012  0.0086   1.4867  0.9950
+22  ALT   r03_carry>=.90  0.0048 -0.0068  0.0116   2.0590  0.7790
+23  ALT       r04_p<0.30  0.0094  0.0032  0.0061   1.0595  1.0000
+24  ALT     r05_pc_medio  0.0052  0.0044  0.0007   0.1272  1.0000
+25  ALT      r06_med_sec  0.0066  0.0076 -0.0010  -0.1766  1.0000
+26  ALT        r07_fr30s  0.0065  0.0125 -0.0060  -1.0633  1.0000
+27  ALT        r08_tarde  0.0087 -0.0021  0.0107   1.8391  0.9155
+28  ALT      r09_med_acc  0.0107 -0.0003  0.0110   1.8841  0.8915
+29  ALT   r10_med_unidad  0.0039  0.0149 -0.0110  -1.8792  0.8930
+30  ALT       r11_logdia  0.0070 -0.0159  0.0228   3.9168  0.0035
+31  ALT  r12_vent_simult  0.0068  0.0038  0.0031   0.5710  1.0000
+32  ALT      r13_monedas  0.0064  0.0043  0.0022   0.4230  1.0000
+33  ALT    r14_cuota_btc     NaN     NaN     NaN      NaN     NaN
+34  ALT          r15_yes  0.0060  0.0008  0.0052   0.9113  1.0000
+35  ALT        r16_noche  0.0040  0.0061 -0.0022  -0.3687  1.0000
+36  ALT   r17_ord_unidad  0.0044 -0.0164  0.0207   3.5707  0.0140
+37  ALT       r18_ventas     NaN     NaN     NaN      NaN     NaN
+38  ALT  r19_ambos_lados  0.0041  0.0101 -0.0060  -1.0109  1.0000
+39  ALT        r20_taker -0.0099  0.0043 -0.0142  -2.4545  0.4270
+40  ALL       r01_p<0.10  0.0029  0.0017  0.0012   0.4043  1.0000
+41  ALL     r02_p.05-.30  0.0001 -0.0026  0.0027   0.9702  1.0000
+42  ALL   r03_carry>=.90  0.0029  0.0025  0.0003   0.1170  1.0000
+43  ALL       r04_p<0.30  0.0008  0.0054 -0.0046  -1.6711  0.9735
+44  ALL     r05_pc_medio  0.0044 -0.0110  0.0154   5.5673  0.0000
+45  ALL      r06_med_sec  0.0042  0.0006  0.0036   1.2974  1.0000
+46  ALL        r07_fr30s  0.0062 -0.0007  0.0069   2.4785  0.4065
+47  ALL        r08_tarde  0.0047 -0.0006  0.0054   1.9076  0.8800
+48  ALL      r09_med_acc  0.0055 -0.0069  0.0125   4.4270  0.0010
+49  ALL   r10_med_unidad  0.0041  0.0019  0.0022   0.8032  1.0000
+50  ALL       r11_logdia  0.0053 -0.0277  0.0330  11.8947  0.0000
+51  ALL  r12_vent_simult     NaN     NaN     NaN      NaN     NaN
+52  ALL      r13_monedas     NaN     NaN     NaN      NaN     NaN
+53  ALL    r14_cuota_btc     NaN     NaN     NaN      NaN     NaN
+54  ALL          r15_yes  0.0088 -0.0043  0.0131   4.7390  0.0000
+55  ALL        r16_noche  0.0050  0.0008  0.0042   1.5170  0.9940
+56  ALL   r17_ord_unidad  0.0041 -0.0135  0.0176   6.2340  0.0000
+57  ALL       r18_ventas     NaN     NaN     NaN      NaN     NaN
+58  ALL  r19_ambos_lados  0.0037 -0.0020  0.0057   2.0005  0.8235
+59  ALL        r20_taker  0.0000  0.0034 -0.0033  -1.1954  1.0000

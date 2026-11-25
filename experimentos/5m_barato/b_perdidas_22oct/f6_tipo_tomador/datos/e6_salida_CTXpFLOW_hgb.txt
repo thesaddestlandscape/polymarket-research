@@ -1,0 +1,23 @@
+modelo CTX+FLOW hgb | DISC test 12-14 n 29654 HOLD n 51212
+
+== DISC (test 12-14, solo seleccion del nivel)
+ nivel 0.5 {'ETH': np.float64(0.184), 'SOL': np.float64(0.145), 'XRP': np.float64(0.188)}
+  DISC top 50%               retiene  50.0% EUR (14975 u.) EV_ret +0.0790 vs total +0.0654 | dPnL   -739.9 EUR (haircut50 -370.0) IC90cierre (-1995.6,+501.5) | sin2mejoresdias -544.2 | dias>0 1/3 | placebo p 0.2067 (nulo medio -877.5, p95 -612.7) | EUR/dia retenido 4771
+ nivel 0.3 {'ETH': np.float64(0.218), 'SOL': np.float64(0.175), 'XRP': np.float64(0.224)}
+  DISC top 30%               retiene  30.0% EUR (9126 u.) EV_ret +0.0896 vs total +0.0654 | dPnL  -1101.6 EUR (haircut50 -550.8) IC90cierre (-2754.6,+569.8) | sin2mejoresdias -764.0 | dias>0 1/3 | placebo p 0.1200 (nulo medio -1289.6, p95 -1015.2) | EUR/dia retenido 2862
+ nivel 0.2 {'ETH': np.float64(0.238), 'SOL': np.float64(0.195), 'XRP': np.float64(0.246)}
+  DISC top 20%               retiene  20.0% EUR (6200 u.) EV_ret +0.1221 vs total +0.0654 | dPnL  -1171.7 EUR (haircut50 -585.9) IC90cierre (-2999.4,+675.1) | sin2mejoresdias -875.1 | dias>0 1/3 | placebo p 0.0200 (nulo medio -1477.6, p95 -1252.9) | EUR/dia retenido 1909
+nivel elegido en DISC: (0.5, np.float64(-739.9397353518839))
+
+== HOLD (15-20) una pasada: nivel elegido + los otros 2 descriptivos
+  ELEGIDO top 50%            retiene  49.7% EUR (26664 u.) EV_ret +0.0026 vs total -0.0110 | dPnL   +606.4 EUR (haircut50 +303.2) IC90cierre (-885.1,+2097.9) | sin2mejoresdias -249.4 | dias>0 4/6 | placebo p 0.1565 (nulo medio +397.2, p95 +741.1) | EUR/dia retenido 4067
+    INVERSION top 50%        retiene  50.3% EUR (24548 u.) EV_ret -0.0245 vs total -0.0110 | dPnL    -64.6 EUR (haircut50 -32.3) IC90cierre (-1637.3,+1442.9) | sin2mejoresdias -566.1 | dias>0 2/6 | placebo p 0.8320 (nulo medio +135.1, p95 +482.0) | EUR/dia retenido 4122
+  descript.top 30%           retiene  29.2% EUR (16095 u.) EV_ret +0.0517 vs total -0.0110 | dPnL  +1284.0 EUR (haircut50 +642.0) IC90cierre (-676.9,+3244.3) | sin2mejoresdias -4.1 | dias>0 4/6 | placebo p 0.0000 (nulo medio +544.8, p95 +862.0) | EUR/dia retenido 2391
+    INVERSION top 30%        retiene  70.8% EUR (35117 u.) EV_ret -0.0369 vs total -0.0110 | dPnL   -742.2 EUR (haircut50 -371.1) IC90cierre (-1769.4,+291.3) | sin2mejoresdias -811.4 | dias>0 2/6 | placebo p 1.0000 (nulo medio -16.2, p95 +284.8) | EUR/dia retenido 5798
+  descript.top 20%           retiene  18.6% EUR (10407 u.) EV_ret +0.0796 vs total -0.0110 | dPnL  +1267.6 EUR (haircut50 +633.8) IC90cierre (-931.5,+3467.3) | sin2mejoresdias -25.4 | dias>0 4/6 | placebo p 0.0000 (nulo medio +590.7, p95 +880.0) | EUR/dia retenido 1520
+    INVERSION top 20%        retiene  81.4% EUR (40805 u.) EV_ret -0.0317 vs total -0.0110 | dPnL   -725.8 EUR (haircut50 -362.9) IC90cierre (-1496.2,-7.6) | sin2mejoresdias -790.1 | dias>0 2/6 | placebo p 1.0000 (nulo medio -59.8, p95 +201.8) | EUR/dia retenido 6669
+
+== ORACULO (clase real): retener solo NO-REP / retener solo REP
+  ORACULO retener NO-REP     retiene  17.7% EUR (9580 u.) EV_ret +0.0342 vs total -0.0110 | dPnL   +838.9 EUR (haircut50 +419.5) IC90cierre (-1359.8,+3003.5) | sin2mejoresdias -522.3 | dias>0 4/6 | placebo p 0.0025 (nulo medio +374.1, p95 +650.4) | EUR/dia retenido 1448
+  ORACULO retener REP        retiene  82.3% EUR (41632 u.) EV_ret -0.0207 vs total -0.0110 | dPnL   -297.1 EUR (haircut50 -148.6) IC90cierre (-944.1,+362.7) | sin2mejoresdias -371.3 | dias>0 1/6 | placebo p 0.9975 (nulo medio +167.7, p95 +441.9) | EUR/dia retenido 6742
+  ORACULO NO-REP en DISC(12-14) retiene  17.2% EUR (5409 u.) EV_ret +0.0634 vs total +0.0654 | dPnL  -1559.5 EUR (haircut50 -779.7) IC90cierre (-3449.0,+265.8) | sin2mejoresdias -934.3 | dias>0 1/3 | placebo p 0.5420 (nulo medio -1545.4, p95 -1333.1) | EUR/dia retenido 1640

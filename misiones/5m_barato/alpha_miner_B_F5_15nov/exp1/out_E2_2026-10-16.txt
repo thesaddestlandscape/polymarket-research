@@ -1,0 +1,6 @@
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia.py:15: Pandas4Warning: Timestamp.utcnow is deprecated and will be removed in a future version. Use Timestamp.now('UTC') instead.
+  t0 = time.time(); man = dict(job='e2_dia', dia=D, estado='RUNNING', code=CODE_SHA, addendum=ADD_SHA[:8], smoke=SMOKE, inicio=pd.Timestamp.utcnow().strftime('%FT%TZ'))
+2026-10-16 FAILED ASSERT: C3: suelo p5 40.0 vs 19.5 (R0, 144 ventanas)
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia.py:15: Pandas4Warning: Timestamp.utcnow is deprecated and will be removed in a future version. Use Timestamp.now('UTC') instead.
+  t0 = time.time(); man = dict(job='e2_dia', dia=D, estado='RUNNING', code=CODE_SHA, addendum=ADD_SHA[:8], smoke=SMOKE, inicio=pd.Timestamp.utcnow().strftime('%FT%TZ'))
+2026-10-16 FAILED ASSERT: C3: suelo p5 40.0 vs 19.5 (R0, 144 ventanas)

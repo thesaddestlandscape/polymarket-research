@@ -1,0 +1,36 @@
+A. pagos desde 2026-03-01: n= 13815 minimo= 1.001 n<1.0: 0
+   [1.00,1.05): 68  [1.05,1.10): 64  [0.90,1.00): 0
+   antes de marzo: n= 438 n<1: 154 min 0.0113 (sin suelo)
+   ultimo pago <1: 2026-02-26 03:08:58+00:00  ; cambio de regimen entre 2026-02-26 y marzo
+   cota 95% (regla de 3) de P(pago<1 | regimen actual) < 0.00022
+B. lag pago-relleno 0 corr(inferido_dia, pagado)= 0.811
+B. lag pago-relleno 1 corr(inferido_dia, pagado)= 0.912
+B. lag pago-relleno 2 corr(inferido_dia, pagado)= 0.812
+C. maker-dias con relleno 5m/15m ese dia: 2406
+                        n    p_pago  mediana_pag_si
+bin                                                
+[0.0, 0.25)           131  0.213740         2.08275
+[0.25, 0.5)           100  0.130000         1.76460
+[0.5, 0.75)            81  0.234568         1.41480
+[0.75, 0.9)            31  0.516129         1.41295
+[0.9, 1.0)             27  0.666667         1.39495
+[1.0, 1.1)             17  1.000000         1.24230
+[1.1, 1.25)            32  1.000000         1.43500
+[1.25, 1.5)            48  1.000000         1.57910
+[1.5, 2.0)             75  1.000000         1.99190
+[2.0, 4.0)            179  1.000000         3.65440
+[4.0, 1000000000.0)  1685  1.000000       146.97930
+D. makers con inferido 16d>50 (n=121): ratio pagado/inferido mediana 1.10 p10 1.01 p90 1.49
+E. makers "puros" (ratio 0.9-1.5, n=109 makers, 1558 maker-dias)
+   k (pagado/inferido en dias pagados)= 1.144
+   dias pagados con inf*k<1.0 (contradicen suelo): 6 de 1524 ; dias NO pagados con inf*k>=1.0: 1 de 34
+   k*inf en [0,0.5): n=  17 P(pago)=0.12 +-0.13 (IC90 normal)
+   k*inf en [0.5,0.7): n=   6 P(pago)=0.17 +-0.25 (IC90 normal)
+   k*inf en [0.7,0.85): n=   8 P(pago)=0.12 +-0.19 (IC90 normal)
+   k*inf en [0.85,1.0): n=   8 P(pago)=0.25 +-0.25 (IC90 normal)
+   k*inf en [1.0,1.2): n=   4 P(pago)=0.75 +-0.36 (IC90 normal)
+   k*inf en [1.2,2): n=  18 P(pago)=1.00 +-0.00 (IC90 normal)
+   k*inf en [2,99): n= 606 P(pago)=1.00 +-0.00 (IC90 normal)
+F. dias pagados precedidos de dias sin pago (makers puros): n= 22
+   mediana paid/(inf*k)=0.90 ; paid/((inf+unpaid_prev)*k)=0.87 ; (acumulacion implicaria el segundo ~1 y el primero >1)
+   media unpaid_prev*k=0.77 ; media (paid-inf*k)=-1.29

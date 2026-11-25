@@ -1,0 +1,29 @@
+# INFORME DIARIO PREREG_DB1 (DESCRIPTIVO; veredicto solo en checkpoints) generado 2026-11-17T13:38:24Z | hoy=2026-11-17 | codigo f33f2e4dd148 | prereg 1d12afa2
+Dias candidatos 7: 2026-11-10=valido_db1+db2, 2026-11-11=valido_db1+db2, 2026-11-12=valido_db1, 2026-11-13=valido_db1, 2026-11-14=valido_db1, 2026-11-15=valido_db1, 2026-11-16=valido_db1
+  2026-11-12: lado del print: concordancia 0.9373381667529778 con 15448 casados (< 0,95 o < 1000)
+  2026-11-13: lado del print: concordancia 0.9356107341147439 con 12968 casados (< 0,95 o < 1000)
+  2026-11-14: lado del print: concordancia 0.9009530703341778 con 16578 casados (< 0,95 o < 1000)
+  2026-11-15: lado del print: concordancia 0.9132027711164402 con 15012 casados (< 0,95 o < 1000)
+  2026-11-16: lado del print: concordancia 0.9334214701216288 con 18910 casados (< 0,95 o < 1000)
+Horas por dia (tx_ws perdidas / Binance perdidas / restantes de 24; ADDENDUM3-B): 11-10: 7/0/17, 11-11: 5/1/18, 11-12: 5/0/19, 11-13: 8/0/16, 11-14: 5/0/19, 11-15: 4/2/18, 11-16: 0/1/23
+[DB1] dias 7 | G0 n=2443 arm n=1155 quitados=1680 (buenos 183 pnl +761.3 / malos 1497 pnl -1108.4); tiempo de cotizacion quitado 0.308
+   dPnL BASE +303.02 (n cierres 476, no nulos 379) IC90 cierre (+128.57,+469.23) IC90 dia (+128.97,+468.34); sin 2 mejores dias +136.31; sin 5 mejores cierres +263.48
+   dPnL CROSS +54.96 IC90 cierre (-43.96,+153.34) dia (-44.17,+148.15); STRICT/OPT/THIN +291.05/+252.26/+339.01; con rebate (aparte) BASE +291.64
+   EV por EUR (Σpnl/Σcoste, sin rebate): G0 -0.259 -> arm -0.195; EV por unidad arm -0.185; rebate arm +10.00 / G0 +21.37
+   por moneda ETH:+67.4 SOL:+134.1 XRP:+101.5 | por lado YES:+146.5 NO:+156.5 | por franja L 0,05-0,15:+103.6 0,15-0,25:+199.4 0,25-0,35:+0.0 | mayor moneda del dPnL positivo 0.44 | inversion dPnL +19.37
+   dPnL por dia: 11-10:-20.5 11-11:+5.3 11-12:+90.9 11-13:+75.8 11-14:+72.1 11-15:+59.2 11-16:+20.2
+   R6 sensibilidad dPnL BASE (sin rebate) G=15 s +235.86 | G=30 s +303.02 | G=60 s +303.02 | mismo signo
+   RMR (rellenos de rafaga residuales; sec. 6): G0: n 1002 / 2443 EUR 734.7 pnl -215.9 (rafaga conocida 1.00, 2443/2443) | DB1_150: n 400 / 1155 EUR 289.8 pnl -73.0 cancelable 0.61 (rafaga conocida 1.00, 1155/1155) | DB2_150: n 599 / 1790 EUR 432.2 pnl -99.1 cancelable 0.41 (rafaga conocida 1.00, 1790/1790) | DBU_150: n 270 / 878 EUR 194.6 pnl -31.3 cancelable 0.74 (rafaga conocida 1.00, 878/878)
+   marcador ex ante G0: mk1: marc 1316 prec 0.91 recob 0.55 mk5: marc 1401 prec 0.92 recob 0.59 mk30: marc 1294 prec 0.94 recob 0.56 | salida (Δpnl vs mantener, todos/marc mk1) sv150:+120.5/+80.5 (sin libro 0/2443) sv500:-28.3/-23.5 (sin libro 0/2443) sv1000:-54.3/-62.5 (sin libro 0/2443)
+   marcador ex ante DB1_150: mk1: marc 487 prec 0.89 recob 0.43 mk5: marc 557 prec 0.90 recob 0.50 mk30: marc 559 prec 0.96 recob 0.53 | salida (Δpnl vs mantener, todos/marc mk1) sv150:+1.8/+5.7 (sin libro 0/1155) sv500:+4.4/+0.2 (sin libro 0/1155) sv1000:-71.6/-50.3 (sin libro 0/1155)
+[DB2] dias 2 | G0 n=636 arm n=484 quitados=279 (buenos 42 pnl +176.6 / malos 237 pnl -173.6); tiempo de cotizacion quitado 0.270
+   dPnL BASE -16.44 (n cierres 118, no nulos 79) IC90 cierre (-82.08,+41.70) IC90 dia (+nan,+nan); sin 2 mejores dias +nan; sin 5 mejores cierres -37.26
+   dPnL CROSS -47.68 IC90 cierre (-96.12,-3.40) dia (+nan,+nan); STRICT/OPT/THIN -22.10/-9.16/+6.09; con rebate (aparte) BASE -17.87
+   EV por EUR (Σpnl/Σcoste, sin rebate): G0 +0.193 -> arm +0.213; EV por unidad arm +0.281; rebate arm +4.13 / G0 +5.57
+   por moneda ETH:-16.6 SOL:+4.1 XRP:-3.9 | por lado YES:+24.0 NO:-40.4 | por franja L 0,05-0,15:-32.5 0,15-0,25:+16.0 0,25-0,35:+0.0 | mayor moneda del dPnL positivo 1.00 | inversion dPnL -14.57
+   dPnL por dia: 11-10:-29.6 11-11:+13.2
+   R6 sensibilidad dPnL BASE (sin rebate) G=15 s -14.16 | G=30 s -16.44 | G=60 s -16.44 | mismo signo
+   RMR (rellenos de rafaga residuales; sec. 6): G0: n 292 / 636 EUR 214.4 pnl +8.2 (rafaga conocida 1.00, 636/636) | DB1_150: n 141 / 365 EUR 103.8 pnl +18.8 cancelable 0.52 (rafaga conocida 1.00, 365/365) | DB2_150: n 189 / 484 EUR 134.3 pnl +6.2 cancelable 0.37 (rafaga conocida 1.00, 484/484) | DBU_150: n 103 / 290 EUR 71.9 pnl +8.1 cancelable 0.66 (rafaga conocida 1.00, 290/290)
+   marcador ex ante G0: mk1: marc 339 prec 0.85 recob 0.55 mk5: marc 366 prec 0.86 recob 0.60 mk30: marc 321 prec 0.89 recob 0.55 | salida (Δpnl vs mantener, todos/marc mk1) sv150:-122.7/-68.2 (sin libro 0/636) sv500:-148.5/-86.0 (sin libro 0/636) sv1000:-173.1/-97.6 (sin libro 0/636)
+   marcador ex ante DB2_150: mk1: marc 262 prec 0.82 recob 0.55 mk5: marc 281 prec 0.84 recob 0.60 mk30: marc 249 prec 0.88 recob 0.56 | salida (Δpnl vs mantener, todos/marc mk1) sv150:-90.0/-52.6 (sin libro 0/484) sv500:-86.5/-55.9 (sin libro 0/484) sv1000:-121.0/-70.3 (sin libro 0/484)
+Nota: techo de etiqueta sin L2 = CANDIDATO (EXPLORATORY hasta medicion L2). Si DB1 y CXJ150 (PREREG_Q11_THRU1_FWD) pasan a la vez: UN solo hallazgo, nunca sumados.

@@ -1,0 +1,13 @@
+# DISENO toxicidad del fill + mecanismo PG_O50 (RE-Q11, reverse-engineer, 05-Nov ~14:15Z). EXPLORATORIO sobre 10 dias GASTADOS (26-Oct..04-Nov). Fijado ANTES de calcular.
+Datos: experimentos/5m_barato/q11/barrido_corr/out/A_all.pkl (2.938 rellenos G0, escalera G, cinta re-sincronizada = dec2) + dec2_D.pkl (edad, lagj; union por k,L,tf,q) + RC5d/SC5d (GEO*) + motor escalera_B (solo para leer el libro D: bid/ask en tf-300 y markouts post-relleno). Excluir blq (src=bloque).
+Unidad = cierre (fin). EV = SUM(pnl)/SUM(cost) (rebate incluido). IC por bootstrap de cierres (4000) a 5/95 y a 1,25/98,75 (alfa/4); IC por dia (bootstrap de dias). Sin 2 mejores dias. Placebo: permutar la etiqueta binaria dentro de dia x moneda (1000), p bilateral |dif|.
+Rasgos (solo autorizados, <= tf-300 ms): rel = g300_bid - L; g300_bsz; g300_spr; edad = tf - t_arr (ms, de la propia orden: causal); lagj (ultimo salto adverso Binance, recepcion; el lag se mide hasta tf, es la condicion del instante del relleno, conocida <=tf, NO es precursor: se reporta como condicion de toxicidad, no como regla ex ante); T; moneda; lado.
+CONTRASTES PRINCIPALES (familia 4, promocion alfa/4): dif = EV(grupo malo propuesto) - EV(resto), se espera <0.
+ K1 posicion: rel <= +0,005 (nuestro L en o por encima del bid real a tf-300) vs rel > +0,005.
+ K2 edad: edad <= 3000 ms vs > 3000 ms.
+ K3 lagj: lagj <= 3000 ms vs > 3000 ms (replica de P-B en G0; dias gastados).
+ K4 ciclo: T >= 150 s (primera mitad del 5m) vs T < 150 s.
+Secundarios descriptivos (sin p): terciles de bsz y spr, moneda, lado, rel en 4 tramos (<-0,005 / [-0,005,0,005] / (0,005,0,055) / >=0,055).
+DESCOMPOSICION (mecanismo, todos los grupos): m0 = mid(tf-300) = (bid+ask)/2; EV = DESCUENTO (m0-L)/L*q-ponderado + INFORMACION (gana-m0)/L; markouts mid(tf+10 s), mid(tf+60 s) - m0 (o sin dato = missing).
+MECANISMO PG/GEO (hipotesis H-TOX-1..5 del ledger del caso): (a) Delta(GEO6-G0) por cierre = PnL quitado (rellenos de G0 ausentes en GEO6) + PnL anadido (rellenos de GEO6 ausentes en G0, efecto hueco); (b) descomposicion descuento/informacion de quitados vs conservados; (c) fraccion de rellenos profundos (rel>0) cuyo tx tiene sh_tx<5 (cota de relleno parcial: BASE optimista); (d) Delta sin 2 mejores dias y por dia.
+Decision: si K1 dif<0 con IC alfa/4 sup<0 y la parte INFORMACION de K1 tambien <0 => filtro de AS (propone prereg forward GEO6/PG_O50 como filtro). Si la dif de K1 se explica por DESCUENTO (informacion igual o peor en profundos) => no es filtro de AS, es precio de entrada (geometria): el forward sigue valiendo pero la etiqueta es 'descuento', y depende de la fidelidad del relleno profundo (c). Si (a) muestra Delta dominado por anadidos => artefacto de hueco.

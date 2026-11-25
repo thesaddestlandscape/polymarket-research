@@ -1,0 +1,82 @@
+Poblacion: 28871 unidades con desenlace, coste 28716 EUR, EV -0.0215. Cobertura (no missing y !=0) por indicador:
+r300=0.979 r60=0.968 r900=0.980 rop=0.955 rpre=0.974 b15=0.949 d15=0.941 f60=0.986
+
+Correlacion de contexto: P(gana) y EV por clase, TODA la poblacion (para ver si el indicador esta ya en el precio)
+
+== DESC 17-19 ==
+ ind  nCON  nCONTRA   evCON  evCONTRA   delta  ic_cierre_lo  ic_cierre_hi  ic_dia_lo  ic_dia_hi  hitCON  hitCONTRA  pcCON  pcCONTRA   costCON  costCONTRA
+r300  3723    11186 -0.0580   -0.1185  0.0605       -0.1110        0.2274     0.0130     0.1021  0.2133     0.1814 0.2241    0.2040 3977.8127  10908.3164
+ r60  2284    12476  0.0652   -0.1324  0.1976        0.0559        0.3378     0.1362     0.2579  0.2259     0.1825 0.2098    0.2085 2297.5202  12429.0245
+r900  5549     9406 -0.2835    0.0039 -0.2874       -0.4336       -0.1309    -0.3378    -0.2290  0.1537     0.2099 0.2141    0.2062 5629.4869   9316.3269
+ rop  1267    13231 -0.1001   -0.1018  0.0017       -0.1773        0.1976    -0.0465     0.0497  0.2170     0.1855 0.2386    0.2045 1446.3841  12938.0110
+rpre  7095     7731 -0.2449    0.0055 -0.2504       -0.4248       -0.0690    -0.3161    -0.1809  0.1590     0.2138 0.2092    0.2093 7045.0068   7781.6516
+ b15  3581    10911 -0.1528   -0.0936 -0.0591       -0.2344        0.1196    -0.1364     0.0335  0.1851     0.1896 0.2159    0.2073 3654.3046  10854.2362
+ d15  3087    11280 -0.0940   -0.1026  0.0086       -0.1712        0.1802    -0.0547     0.0679  0.1999     0.1873 0.2194    0.2066 3220.6770  11160.0241
+ f60  8035     7021 -0.0936   -0.1270  0.0333       -0.0767        0.1322    -0.0010     0.0691  0.1912     0.1842 0.2081    0.2098 8033.8429   7000.4148
+
+== TEST 20-22 ==
+ ind  nCON  nCONTRA   evCON  evCONTRA   delta  ic_cierre_lo  ic_cierre_hi  ic_dia_lo  ic_dia_hi  hitCON  hitCONTRA  pcCON  pcCONTRA   costCON  costCONTRA
+r300  3021    10323  0.1221    0.0562  0.0659       -0.1114        0.2473    -0.0136     0.1402  0.2539     0.2141 0.2221    0.2007 3233.0347   9956.0960
+ r60  2116    11084  0.0031    0.0902 -0.0870       -0.2173        0.0389    -0.1173    -0.0460  0.2150     0.2250 0.2095    0.2047 2112.5924  10932.3561
+r900  4730     8615  0.0478    0.1101 -0.0623       -0.2656        0.1386    -0.1639     0.0804  0.2220     0.2284 0.2101    0.2031 4736.1514   8460.7495
+ rop  1090    11995 -0.2481    0.1120 -0.3602       -0.5389       -0.1405    -0.4412    -0.2925  0.1752     0.2274 0.2328    0.2021 1226.9991  11644.1332
+rpre  6135     7148  0.0234    0.1263 -0.1029       -0.3117        0.1121    -0.2300     0.0273  0.2099     0.2374 0.2045    0.2067 5966.1957   7181.9650
+ b15  3086     9822  0.0303    0.0765 -0.0462       -0.2427        0.1641    -0.1567     0.0455  0.2223     0.2216 0.2126    0.2043 3131.3604   9691.8406
+ d15  2395    10403  0.0867    0.0631  0.0236       -0.1993        0.2353    -0.0421     0.0826  0.2413     0.2179 0.2184    0.2034 2506.6924  10201.5277
+ f60  7072     6349  0.0549    0.1106 -0.0556       -0.1715        0.0613    -0.1312     0.0005  0.2182     0.2317 0.2053    0.2056 6984.9198   6276.6749
+
+== TODO 17-22 ==
+ ind  nCON  nCONTRA   evCON  evCONTRA   delta  ic_cierre_lo  ic_cierre_hi  ic_dia_lo  ic_dia_hi  hitCON  hitCONTRA  pcCON  pcCONTRA    costCON  costCONTRA
+r300  6744    21509  0.0227   -0.0351  0.0578       -0.0695        0.1782     0.0063     0.1044  0.2315     0.1971 0.2232    0.2024  7210.8475  20864.4124
+ r60  4400    23560  0.0355   -0.0282  0.0637       -0.0342        0.1610    -0.0344     0.1670  0.2207     0.2025 0.2096    0.2067  4410.1126  23361.3806
+r900 10279    18021 -0.1322    0.0544 -0.1866       -0.3140       -0.0615    -0.2794    -0.0645  0.1851     0.2187 0.2123    0.2047 10365.6383  17777.0764
+ rop  2357    25226 -0.1681   -0.0005 -0.1675       -0.3031       -0.0321    -0.3081    -0.0349  0.1977     0.2055 0.2359    0.2033  2673.3832  24582.1442
+rpre 13230    14879 -0.1219    0.0635 -0.1854       -0.3230       -0.0529    -0.2822    -0.0839  0.1826     0.2251 0.2070    0.2081 13011.2025  14963.6166
+ b15  6667    20733 -0.0683   -0.0134 -0.0549       -0.1822        0.0722    -0.1393     0.0293  0.2023     0.2048 0.2144    0.2058  6785.6650  20546.0768
+ d15  5482    21683 -0.0150   -0.0235  0.0085       -0.1358        0.1419    -0.0448     0.0612  0.2180     0.2020 0.2190    0.2051  5727.3694  21361.5519
+ f60 15107    13370 -0.0245   -0.0147 -0.0099       -0.0896        0.0689    -0.0606     0.0366  0.2038     0.2067 0.2068    0.2078 15018.7627  13277.0897
+
+Delta por dia (CON-CONTRA):
+      2026-10-17  2026-10-18  2026-10-19  2026-10-20  2026-10-21  2026-10-22
+r300      -0.006       0.032       0.127      -0.040       0.148       0.094
+r60        0.289       0.203       0.105      -0.110      -0.029      -0.114
+r900      -0.220      -0.261      -0.375      -0.057      -0.213       0.217
+rop       -0.080       0.073       0.006      -0.378      -0.231      -0.502
+rpre      -0.189      -0.182      -0.368       0.007      -0.307       0.044
+b15        0.094      -0.089      -0.155       0.103      -0.133      -0.198
+d15        0.111      -0.091       0.002       0.115      -0.042      -0.047
+f60       -0.027       0.093       0.034       0.041      -0.117      -0.153
+
+PLACEBO estratos (dia,act,lado,pc 0,05) en TEST (1000 perms): una cola en el sentido de DESC; p max-estadistico entre 8 indicadores
+  r300: Delta TEST +0.0659 dir DESC +1 media placebo +0.0050 p una cola 0.048
+  r60: Delta TEST -0.0870 dir DESC +1 media placebo -0.0097 p una cola 0.951
+  r900: Delta TEST -0.0623 dir DESC -1 media placebo -0.0014 p una cola 0.032
+  rop: Delta TEST -0.3602 dir DESC +1 media placebo -0.0228 p una cola 1.000
+  rpre: Delta TEST -0.1029 dir DESC -1 media placebo +0.0085 p una cola 0.001
+  b15: Delta TEST -0.0462 dir DESC -1 media placebo -0.0084 p una cola 0.158
+  d15: Delta TEST +0.0236 dir DESC +1 media placebo +0.0005 p una cola 0.303
+  f60: Delta TEST -0.0556 dir DESC +1 media placebo -0.0007 p una cola 0.947
+  max-estadistico: obs +0.1029; p = 0.043
+PLACEBO en TODO 17-22 (dos colas): r300: +0.0578 p=0.022 r60: +0.0637 p=0.035 r900: -0.1866 p=0.000 rop: -0.1675 p=0.000 rpre: -0.1854 p=0.000 b15: -0.0549 p=0.043 d15: +0.0085 p=0.712 f60: -0.0099 p=0.714
+
+REGLA SKIP en TEST: quitar la clase de peor EV en DESC (por indicador); PnL total, coste quitado y placebo (quitar misma fraccion de coste al azar en estratos)
+  base TEST: n 13622 coste 13477 PnL +994.9 EUR EV +0.0738
+  r300: quita CONTRA (EV DESC -0.118 vs -0.058); n quitadas 10323 (74 % del coste); EV TEST retenido +0.1235; dPnL -559.9 EUR (placebo media -720.5, p 0.048)
+  r60: quita CONTRA (EV DESC -0.132 vs +0.065); n quitadas 11084 (81 % del coste); EV TEST retenido +0.0036; dPnL -985.8 EUR (placebo media -826.3, p 0.962)
+  r900: quita CON (EV DESC -0.284 vs +0.004); n quitadas 4730 (35 % del coste); EV TEST retenido +0.0879; dPnL -226.2 EUR (placebo media -339.9, p 0.153)
+  rop: quita CONTRA (EV DESC -0.102 vs -0.100); n quitadas 11995 (86 % del coste); EV TEST retenido -0.1687; dPnL -1304.3 EUR (placebo media -889.7, p 1.000)
+  rpre: quita CON (EV DESC -0.245 vs +0.005); n quitadas 6135 (44 % del coste); EV TEST retenido +0.1139; dPnL -139.8 EUR (placebo media -453.4, p 0.002)
+  b15: quita CON (EV DESC -0.153 vs -0.094); n quitadas 3086 (23 % del coste); EV TEST retenido +0.0870; dPnL -94.8 EUR (placebo media -215.5, p 0.088)
+  d15: quita CONTRA (EV DESC -0.103 vs -0.094); n quitadas 10403 (76 % del coste); EV TEST retenido +0.1073; dPnL -643.3 EUR (placebo media -735.8, p 0.183)
+  f60: quita CONTRA (EV DESC -0.127 vs -0.094); n quitadas 6349 (47 % del coste); EV TEST retenido +0.0418; dPnL -694.0 EUR (placebo media -471.6, p 0.971)
+
+== B real: 175 posiciones, coste 193.6 PnL -2.32 EV -0.012; t0 con flag (sin t_det): 9
+ ind  nCON  nCONTRA  evCON  evCONTRA  delta  ic_cierre_lo  ic_cierre_hi  hitCON  hitCONTRA  pnlCON  pnlCONTRA
+r300    41      118  0.376    -0.054  0.430        -0.290         1.185   0.317      0.195  17.732     -6.926
+ r60    31      129 -0.571     0.181 -0.752        -1.294        -0.195   0.097      0.248 -19.984     25.430
+r900    64       95 -0.199     0.096 -0.295        -0.902         0.313   0.188      0.221 -14.134      9.999
+ rop    13      144 -0.672     0.115 -0.787        -1.356         0.008   0.077      0.236 -10.264     18.115
+rpre    85       89 -0.225     0.204 -0.429        -0.971         0.095   0.176      0.247 -21.168     20.050
+ b15    45      119 -0.346     0.129 -0.475        -1.004         0.030   0.156      0.235 -16.836     17.092
+ d15    30      134 -0.325     0.072 -0.397        -0.934         0.223   0.167      0.224 -10.473     10.730
+ f60    84       81 -0.060     0.106 -0.166        -0.721         0.392   0.190      0.247  -5.540      9.536

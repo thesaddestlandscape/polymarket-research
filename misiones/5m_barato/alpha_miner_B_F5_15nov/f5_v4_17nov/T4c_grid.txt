@@ -1,0 +1,10 @@
+# T4c rejilla ampliada (1225 configs H=1) dev 17 dias / hold-out 20; Spearman score dev vs hold-out 0.576
+top 10 por score dev (lo_en_hi+nolo_en_lo s): (12, 34, 0.1, 1) dev 1324 ho 2361; (12, 32, 0.1, 1) dev 1333 ho 2371; (12, 34, 0.1, 2) dev 1341 ho 2449; (12, 32, 0.07, 1) dev 1343 ho 2336; (12, 30, 0.1, 1) dev 1347 ho 2379; (12, 34, 0.07, 1) dev 1349 ho 2325; (12, 32, 0.1, 2) dev 1350 ho 2459; (12, 30, 0.07, 1) dev 1351 ho 2338; (12, 32, 0.07, 2) dev 1360 ho 2424; (12, 30, 0.1, 2) dev 1364 ho 2467
+minimax (vecindad +-1): mejor (12, 34, 0.1, 1) robust 1791 (score dev 1324, ho 2361); meseta = 182 configs con robust <= 1,5x
+  meseta W: [8, 12, 20, 30]
+  meseta C: [26, 28, 30, 32, 34]
+  meseta rho: [0.02, 0.035, 0.05, 0.07, 0.1]
+  meseta nmin: [1, 2, 3, 5, 7, 10, 15]
+  meseta en dev: score min/med/max 1324/1583/2325; lo_en_hi 209/528/1528; nolo_en_lo 722/1003/1705; lohi p90 68.0/135/221; lohi_miss max 0
+  meseta en hold-out: score min/med/max 1636/2854/3859; lo_en_hi 24/80/288; nolo_en_lo 1348/2785/3795; lohi p90 10.6/15/41; lohi_miss max 0
+punto 1b (5, 30, 0.05, 10): dev 2794 ho 7126, robust 7471; en meseta: False

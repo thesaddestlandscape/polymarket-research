@@ -1,0 +1,39 @@
+2026-10-09 FAILED MemoryError: Unable to allocate 14.8 MiB for an array with shape (1942184,) and data type object
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/t2_dia_v4.py", line 101, in <module>
+    ch = ch[ch.tok.isin(keep)]; parts.append(ch.assign(id=ch.tok.map(codes).astype(np.int64)).drop(columns=['tok', 'd']))
+                                                          ~~~~~~~~~~^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/series.py", line 4675, in map
+    new_values = self._map_values(func, na_action=na_action)
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/base.py", line 1020, in _map_values
+    return arr.map(mapper, na_action=na_action)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/arrays/arrow/array.py", line 1753, in map
+    return super().map(mapper, na_action)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/arrays/base.py", line 2745, in map
+    return map_array(self, mapper, na_action=na_action)
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/algorithms.py", line 1704, in map_array
+    indexer = mapper.index.get_indexer(arr)
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/indexes/base.py", line 3796, in get_indexer
+    return self._get_indexer(target, method, limit, tolerance)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/indexes/base.py", line 3821, in _get_indexer
+    tgt_values = target._get_engine_target()
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/indexes/base.py", line 5158, in _get_engine_target
+    return self._values.astype(object)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/arrays/string_arrow.py", line 338, in astype
+    return super().astype(dtype, copy=copy)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/arrays/base.py", line 883, in astype
+    return np.array(self, dtype=dtype, copy=copy)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/arrays/arrow/array.py", line 864, in __array__
+    return self.to_numpy(dtype=dtype, copy=copy)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/arrays/arrow/array.py", line 1731, in to_numpy
+    result = result.copy()
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 14.8 MiB for an array with shape (1942184,) and data type object
+2026-10-09 manifiesto previo no valido/incompleto (estado FAILED ): se recalcula este dia
+2026-10-09 COMPLETE hist_filas 14706756 paridad_p5 0 prints_btc 82946 cob 1.0 s 140

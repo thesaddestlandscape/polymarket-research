@@ -1,0 +1,20 @@
+== R9 E2 BTC: modelo congelado frozen_R10_hgb_BTC.pkl sha256 5e49591531739afb04a6e6a98612284446cd62d5d2671d76270764c2fd5dd7e7 thr 0.015061
+  (i) reproduccion INVERSION: IS +0.364 [+0.179,+0.614] +9/10 sin2 +0.274 121E/d n735 | OOS +0.298 [+0.110,+0.516] +8/10 sin2 +0.172 55E/d n735 | DEV +0.567 [-0.296,+1.415] +2/2 sin2 +nan 67E/d n735
+  (ii) dias con relleno 22; 2 mejores dias (06,15) aportan 28 % del pnl; EV pooled sin ellos +0.298; EV por dia: 06:+0.93 07:-0.38 08:+0.23 09:+0.16 10:+0.38 11:+0.85 12:+0.53 13:+0.23 14:+0.43 15:+0.60 16:+0.15 17:+0.35 18:+0.40 19:-0.20 20:+0.26 21:+0.18 22:-0.05 23:+0.80 24:+0.29 25:+0.95 26:+0.69 27:+0.42
+  (iii) rellenos 735 en 603 (dia,token) distintos; ordenes 1824
+  (iv) perfil mediana [bajo-relleno | SIEMPRE-relleno]: acc1 10|26.7; acc5 66.8|161; acc30 528|971; acc60 790|1.57e+03; np1 1|3; np5 6|11; np30 34|58; np60 49|92; tsl200 3.47e+04|1.92e+04; tsl800 3e+05|3e+05; n800_60 0|0; coin_n60 0|0; comp_acc5 0|0; bb 0.31|0.24; spr 0.01|0.01; bs 190|154; dbb1 0|0; dbb5 -0.01|-0.02; cbb 0.68|0.73; dcbb1 0|0.01; dcbb5 0.01|0.03; bid15 0.58|0.39; m15 0.29|0.14; dbid15 0|0; trem 251|165; hour 9|12; jadv 6e+04|6e+04; jopp 6e+04|6e+04; jn30 0|0; jn300 83|12
+      y medio bajo-relleno 0.351 (precio 0.258) | SIEMPRE-relleno 0.184 (precio 0.202)
+  (v) origen propio         n 93: IS +0.362 [-0.113,+1.369] +7/10 sin2 +0.142 11E/d n93 | OOS +0.044 [-0.548,+0.494] +4/10 sin2 -0.332 10E/d n93 | DEV +0.807 [+0.602,+1.014] +2/2 sin2 +nan 17E/d n93
+  (v) origen complementario n 642: IS +0.364 [+0.171,+0.650] +9/10 sin2 +0.278 110E/d n642 | OOS +0.351 [+0.142,+0.641] +8/10 sin2 +0.240 46E/d n642 | DEV +0.488 [-0.649,+1.596] +2/2 sin2 +nan 50E/d n642
+      libros con bb+bb_comp>1 (cruzados) 0 de 735; bb−(1−ask_comp)>0,02: 0; EV de los cruzados -
+  (vi) T_rem  15- 60: IS - | OOS - | DEV -
+  (vi) T_rem  60-120: IS +0.408 [-3.286,+3.667] +1/3 sin2 +nan 2E/d n6 | OOS +0.818 [-10.162,+11.610] +1/2 sin2 +nan 3E/d n6 | DEV -1.000 [+nan,+nan] +0/1 sin2 +nan 3E/d n6
+  (vi) T_rem 120-200: IS -0.069 [-0.299,+0.329] +4/10 sin2 -0.190 25E/d n155 | OOS -0.446 [-0.845,-0.171] +1/9 sin2 -0.722 16E/d n155 | DEV +1.899 [+nan,+nan] +1/1 sin2 +nan 7E/d n155
+  (vi) T_rem 200-286: IS +0.476 [+0.259,+0.725] +9/10 sin2 +0.373 96E/d n574 | OOS +0.556 [+0.291,+0.835] +10/10 sin2 +0.371 40E/d n574 | DEV +0.530 [+0.300,+0.757] +2/2 sin2 +nan 62E/d n574
+  (vi) precio [0.09,0.15): IS -0.623 [-1.682,+1.269] +1/9 sin2 -1.000 3E/d n26 | OOS +0.923 [-3.820,+5.986] +1/4 sin2 -1.000 1E/d n26 | DEV -
+  (vi) precio [0.15,0.22): IS +0.660 [-0.129,+1.008] +6/10 sin2 +0.178 10E/d n74 | OOS +0.857 [-0.610,+1.522] +4/8 sin2 -0.141 5E/d n74 | DEV +1.740 [-11.219,+13.065] +1/2 sin2 +nan 4E/d n74
+  (vi) precio [0.22,0.29): IS +0.362 [+0.149,+0.653] +9/10 sin2 +0.259 109E/d n635 | OOS +0.250 [+0.012,+0.513] +6/10 sin2 +0.091 51E/d n635 | DEV +0.500 [+0.336,+0.661] +2/2 sin2 +nan 63E/d n635
+  comparador SIEMPRE    IS -0.029 [-0.096,+0.033] +4/10 sin2 -0.074 2580E/d n27712 | OOS -0.150 [-0.203,-0.099] +1/10 sin2 -0.183 2518E/d n27712 | DEV -0.121 [-1.302,+1.040] +1/2 sin2 +nan 2553E/d n27712
+  comparador ALEATORIO  IS -0.071 [-0.230,+0.091] +5/10 sin2 -0.145 110E/d n846 | OOS -0.069 [-0.353,+0.087] +5/10 sin2 -0.263 52E/d n846 | DEV -0.295 [-1.842,+1.301] +0/2 sin2 +nan 57E/d n846
+  comparador ALTO q95   IS -0.071 [-0.207,+0.067] +4/10 sin2 -0.155 319E/d n3881 | OOS -0.228 [-0.323,-0.122] +1/10 sin2 -0.271 320E/d n3881 | DEV -0.014 [-1.890,+1.739] +1/2 sin2 +nan 299E/d n3881
+  cobertura bid15 (no NaN) en filas: 1.000 ; mediana bid15 0.370 ; corr(bid15,bb) 0.107

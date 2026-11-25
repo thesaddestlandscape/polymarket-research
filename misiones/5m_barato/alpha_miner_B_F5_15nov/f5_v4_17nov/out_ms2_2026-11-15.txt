@@ -1,0 +1,14 @@
+2026-11-15 1781318.csv.gz q 11316083 t 48653
+2026-11-15 3035871.csv.gz q 24253190 t 110959
+2026-11-15 3868191.csv.gz q 24253190 t 110959
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 102, in <module>
+    for d in sys.argv[1:]: day(d)
+                           ~~~^^^
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 88, in day
+    qt, qr, qk, qV = cat(Q, 4); tt, tr_, tk_, tV = cat(T, 3)
+                     ~~~^^^^^^
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 45, in cat
+    V.append(col(3, j)[o])
+             ~~~~~~~~~^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 92.5 MiB for an array with shape (24253190,) and data type float32

@@ -1,0 +1,137 @@
+sanity: cobertura z240 1.0 | corr(rpre_mine, rpre tab) 1.0
+P1 09-16: n=77793 EUR=75509 EV=+0.0556 dias=8 cierres=2304
+P2 17-21: n=36125 EUR=34560 EV=-0.0411 dias=5 cierres=1272
+
+#### H-D: EV/EUR por clase de regimen x CON/NEU/CONTRA (n, EUR) por periodo
+--- P1 09-16 por reg
+                n        eur     EV
+reg cls                            
+ALC CON      2336   2284.530  0.037
+    CONTRA   2447   2365.067 -0.134
+    NEU      2028   2002.847 -0.106
+BAJ CON      3848   3695.219  0.206
+    CONTRA   4613   4400.351 -0.124
+    NEU      1715   1641.943  0.073
+LAT CON     17987  17414.057  0.018
+    CONTRA  19058  18517.098  0.118
+    NEU     23402  22813.684  0.079
+--- P1 09-16 por aln
+                    n        eur     EV
+aln     cls                            
+ALIGN   CON      4266   4119.426  0.161
+        CONTRA   2337   2220.806 -0.114
+        NEU      1775   1747.715 -0.081
+COUNTER CON      1918   1860.323  0.100
+        CONTRA   4723   4544.611 -0.135
+        NEU      1968   1897.075  0.025
+FLAT    CON     17987  17414.057  0.018
+        CONTRA  19058  18517.098  0.118
+        NEU     23402  22813.684  0.079
+--- P1 09-16 por moneda x reg x cls (EV)
+cls        CON  CONTRA     NA    NEU
+act reg                             
+ETH ALC  0.094  -0.224    NaN  0.029
+    BAJ  0.494  -0.316    NaN  0.306
+    LAT -0.066   0.217 -0.160  0.081
+SOL ALC  0.185   0.063    NaN -0.564
+    BAJ -0.022   0.058    NaN -0.263
+    LAT  0.119   0.050  1.567  0.129
+XRP ALC -0.764  -0.161    NaN -0.172
+    BAJ -0.260   0.183 -1.000 -0.029
+    LAT  0.116  -0.107  1.404 -0.028
+--- P2 17-21 por reg
+                n        eur     EV
+reg cls                            
+ALC CON      1598   1492.065 -0.359
+    CONTRA   1506   1402.790  0.101
+    NEU       909    834.948 -0.309
+BAJ CON      1330   1269.447  0.258
+    CONTRA   1398   1422.711  0.415
+    NEU       890    868.110 -0.166
+LAT CON      8540   8101.900 -0.147
+    CONTRA   9067   8660.734  0.015
+    NEU     10863  10489.893 -0.044
+--- P2 17-21 por aln
+                    n        eur     EV
+aln     cls                            
+ALIGN   CON      1993   1877.875 -0.203
+        CONTRA    851    863.174  0.177
+        NEU       811    771.650 -0.447
+COUNTER CON       935    883.637  0.195
+        CONTRA   2053   1962.328  0.295
+        NEU       988    931.408 -0.061
+FLAT    CON      8540   8101.900 -0.147
+        CONTRA   9067   8660.734  0.015
+        NEU     10863  10489.893 -0.044
+--- P2 17-21 por moneda x reg x cls (EV)
+cls        CON  CONTRA   NA    NEU
+act reg                           
+ETH ALC -0.298   0.104  NaN -0.490
+    BAJ  0.450   0.147  NaN -0.131
+    LAT -0.180  -0.011 -1.0 -0.096
+SOL ALC -0.357  -0.118  NaN -0.334
+    BAJ -0.186   1.684  NaN -0.376
+    LAT -0.105   0.044  NaN  0.147
+XRP ALC -0.634   0.434  NaN  0.676
+    BAJ -0.213   0.560  NaN  0.095
+    LAT -0.109   0.051  NaN -0.131
+
+#### Delta_dir = EV(COUNTER) - EV(ALIGN) (z240 respecto al lado), IC90 por cierre
+P1 09-16: EV COUNTER -0.046 (EUR 8302) | EV ALIGN +0.031 (EUR 8100) | FLAT +0.073 | Delta_dir -0.077 IC90 [-0.313,+0.178]
+    ETH: COUNTER -0.028 ALIGN +0.099
+    SOL: COUNTER -0.107 ALIGN +0.052
+    XRP: COUNTER +0.004 ALIGN -0.290
+P2 17-21: EV COUNTER +0.184 (EUR 3777) | EV ALIGN -0.163 (EUR 3513) | FLAT -0.057 | Delta_dir +0.347 IC90 [-0.000,+0.696]
+    ETH: COUNTER +0.107 ALIGN -0.105
+    SOL: COUNTER +0.388 ALIGN -0.372
+    XRP: COUNTER +0.249 ALIGN -0.063
+
+######## F_A (ajuste P1 -> eval P2)
+ajuste: S_R(aln)=[]  S_R2(reg)=[]  S_N=[]
+CONTROL R0 (CONTRA-only incondicional, saltar todos CON)
+R0: ret 0.686 | EV_all -0.0411 EV_ret -0.0008 [-0.082,+0.078] EV_skip -0.1289 | dEV +0.0402 nulo +0.0023 EXCESO_EV +0.0379 p_perm 0.0020 | dPnL +1400
+V(E1) ajuste: EV top30 +0.040 vs resto +0.060 candidato=False cortes={'ETH': np.float64(0.026), 'SOL': np.float64(0.03), 'XRP': np.float64(-0.005)}
+V_E1 (cand=False): ret 0.781 | EV_all -0.0411 EV_ret -0.0420 [-0.106,+0.022] EV_skip -0.0376 | dEV -0.0010 nulo +0.0029 EXCESO_EV -0.0039 p_perm 0.6567 | dPnL +285
+   control inversion V_E1 (cola baja): ret 0.622 | EV_all -0.0411 EV_ret -0.0537 [-0.116,+0.009] EV_skip -0.0203 | dEV -0.0126 nulo -0.0018 EXCESO_EV -0.0108 p_perm 0.7531 | dPnL +266
+V(E2) ajuste: EV top30 +0.073 vs resto +0.048 candidato=False cortes={'ETH': np.float64(0.045), 'SOL': np.float64(0.04), 'XRP': np.float64(0.04)}
+V_E2 (cand=False): ret 0.674 | EV_all -0.0411 EV_ret -0.0522 [-0.120,+0.017] EV_skip -0.0179 | dEV -0.0112 nulo +0.0024 EXCESO_EV -0.0136 p_perm 0.8281 | dPnL +202
+   control inversion V_E2 (cola baja): ret 0.709 | EV_all -0.0411 EV_ret -0.0475 [-0.110,+0.015] EV_skip -0.0255 | dEV -0.0064 nulo -0.0007 EXCESO_EV -0.0057 p_perm 0.6687 | dPnL +256
+V(E3) ajuste: EV top30 +0.030 vs resto +0.067 candidato=True cortes={'ETH': np.float64(0.116), 'SOL': np.float64(0.11), 'XRP': np.float64(0.118)}
+V_E3 (cand=True): ret 0.707 | EV_all -0.0411 EV_ret -0.0525 [-0.127,+0.021] EV_skip -0.0134 | dEV -0.0115 nulo +0.0026 EXCESO_EV -0.0140 p_perm 0.8451 | dPnL +136
+   control inversion V_E3 (cola baja): ret 0.703 | EV_all -0.0411 EV_ret -0.0358 [-0.099,+0.030] EV_skip -0.0535 | dEV +0.0053 nulo -0.0010 EXCESO_EV +0.0062 p_perm 0.3438 | dPnL +550
+H-N2 (AR2h<=-0,10, sin ajuste): ret 0.543 | EV_all -0.0411 EV_ret -0.0212 [-0.106,+0.063] EV_skip -0.0647 | dEV +0.0199 nulo +0.0128 EXCESO_EV +0.0071 p_perm 0.3588 | dPnL +1022
+(AR2h cobertura en eval: 1.000; fraccion con AR2h<=-0,10: 0.457)
+
+######## F_B (ajuste P2 -> eval P1; OOS GENUINO)
+ajuste: S_R(aln)=['ALIGN', 'FLAT']  S_R2(reg)=['ALC', 'LAT']  S_N=[('ETH', 'ALC'), ('ETH', 'LAT'), ('XRP', 'LAT')]
+CONTROL R0 (CONTRA-only incondicional, saltar todos CON)
+R0: ret 0.690 | EV_all +0.0556 EV_ret +0.0583 [+0.005,+0.118] EV_skip +0.0496 | dEV +0.0027 nulo -0.0010 EXCESO_EV +0.0037 p_perm 0.3653 | dPnL -1160
+H-R (CON x aln): ret 0.715 | EV_all +0.0556 EV_ret +0.0597 [+0.007,+0.117] EV_skip +0.0452 | dEV +0.0041 nulo -0.0019 EXCESO_EV +0.0060 p_perm 0.2579 | dPnL -974
+H-R2 (CON x reg): ret 0.739 | EV_all +0.0556 EV_ret +0.0681 [+0.016,+0.126] EV_skip +0.0202 | dEV +0.0125 nulo -0.0014 EXCESO_EV +0.0139 p_perm 0.0645 | dPnL -397
+H-N (celdas moneda x reg no pujar): ret 0.372 | EV_all +0.0556 EV_ret +0.0573 [-0.001,+0.121] EV_skip +0.0546 | dEV +0.0017 nulo +0.0101 EXCESO_EV -0.0083 p_perm 0.7641 | dPnL -2590
+V(E1) ajuste: EV top30 -0.055 vs resto -0.036 candidato=False cortes={'ETH': np.float64(0.022), 'SOL': np.float64(0.022), 'XRP': np.float64(0.006)}
+V_E1 (cand=False): ret 0.727 | EV_all +0.0556 EV_ret +0.0590 [+0.016,+0.106] EV_skip +0.0465 | dEV +0.0034 nulo +0.0043 EXCESO_EV -0.0009 p_perm 0.5387 | dPnL -959
+   control inversion V_E1 (cola baja): ret 0.735 | EV_all +0.0556 EV_ret +0.0616 [+0.016,+0.111] EV_skip +0.0390 | dEV +0.0060 nulo +0.0022 EXCESO_EV +0.0038 p_perm 0.3063 | dPnL -779
+V(E2) ajuste: EV top30 -0.011 vs resto -0.055 candidato=False cortes={'ETH': np.float64(0.045), 'SOL': np.float64(0.04), 'XRP': np.float64(0.05)}
+V_E2 (cand=False): ret 0.693 | EV_all +0.0556 EV_ret +0.0455 [-0.002,+0.096] EV_skip +0.0783 | dEV -0.0101 nulo -0.0005 EXCESO_EV -0.0096 p_perm 0.8166 | dPnL -1814
+   control inversion V_E2 (cola baja): ret 0.698 | EV_all +0.0556 EV_ret +0.0568 [+0.015,+0.102] EV_skip +0.0528 | dEV +0.0012 nulo +0.0005 EXCESO_EV +0.0007 p_perm 0.4578 | dPnL -1204
+V(E3) ajuste: EV top30 -0.013 vs resto -0.053 candidato=False cortes={'ETH': np.float64(0.114), 'SOL': np.float64(0.107), 'XRP': np.float64(0.12)}
+V_E3 (cand=False): ret 0.695 | EV_all +0.0556 EV_ret +0.0657 [+0.015,+0.119] EV_skip +0.0325 | dEV +0.0101 nulo +0.0007 EXCESO_EV +0.0094 p_perm 0.1839 | dPnL -748
+   control inversion V_E3 (cola baja): ret 0.699 | EV_all +0.0556 EV_ret +0.0384 [-0.005,+0.085] EV_skip +0.0956 | dEV -0.0172 nulo +0.0008 EXCESO_EV -0.0181 p_perm 0.9655 | dPnL -2171
+H-N2 (AR2h<=-0,10, sin ajuste): ret 0.659 | EV_all +0.0556 EV_ret +0.0829 [+0.029,+0.139] EV_skip +0.0028 | dEV +0.0274 nulo +0.0053 EXCESO_EV +0.0220 p_perm 0.0210 | dPnL -73
+(AR2h cobertura en eval: 0.997; fraccion con AR2h<=-0,10: 0.339)
+
+#### Perfil EV por decil de cada medida de edge aparente (EUR-ponderado), por periodo
+E1 P1 09-16: EV por decil (bajo->alto) +0.006 +0.040 +0.059 +0.070 +0.109 +0.076 -0.040 +0.135 +0.002 +0.030 | E medio -0.030 -0.010 -0.003 +0.004 +0.009 +0.016 +0.022 +0.028 +0.036 +0.053
+E1 P2 17-21: EV por decil (bajo->alto) +0.000 -0.033 -0.057 -0.058 +0.027 +0.035 -0.099 -0.071 -0.078 -0.079 | E medio -0.019 -0.009 -0.004 +0.002 +0.006 +0.012 +0.017 +0.022 +0.028 +0.037
+E2 P1 09-16: EV por decil (bajo->alto) +0.086 +0.059 +0.035 -0.016 +0.055 +0.063 +0.047 +0.049 +0.029 +0.144 | E medio -0.065 -0.014 +0.002 +0.005 +0.013 +0.021 +0.033 +0.052 +0.082 +0.199
+E2 P2 17-21: EV por decil (bajo->alto) -0.001 -0.018 -0.052 -0.117 -0.036 -0.084 -0.064 +0.006 -0.073 +0.032 | E medio -0.058 -0.012 +0.002 +0.005 +0.014 +0.023 +0.036 +0.054 +0.084 +0.180
+E3 P1 09-16: EV por decil (bajo->alto) +0.146 +0.081 +0.059 +0.025 +0.066 +0.081 +0.010 -0.006 -0.003 +0.093 | E medio -0.063 -0.001 +0.026 +0.046 +0.064 +0.083 +0.103 +0.128 +0.163 +0.266
+E3 P2 17-21: EV por decil (bajo->alto) -0.023 -0.070 -0.090 -0.062 -0.031 -0.050 -0.020 -0.042 -0.011 -0.013 | E medio -0.062 -0.002 +0.025 +0.046 +0.064 +0.082 +0.102 +0.126 +0.160 +0.252
+
+######## H-C combinada (reglas con dPnL>0 y menor p en F_B, union; mismas reglas ajustadas en cada pliegue)
+reglas elegidas para H-C: [] (pasan gate formal en F_B: []) -> EXPLORATORIA
+F_A (ajuste P1 -> eval P2)
+  H-C: vacia
+F_B (ajuste P2 -> eval P1; OOS GENUINO)
+  H-C: vacia

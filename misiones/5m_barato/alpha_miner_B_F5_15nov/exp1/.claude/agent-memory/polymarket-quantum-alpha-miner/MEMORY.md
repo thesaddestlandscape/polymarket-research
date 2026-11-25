@@ -1,0 +1,1 @@
+- [Q-C2 δ por orden, brecha de B (16-Nov)](project_qc2_delta_propio_brecha_b_16nov.md) — cierra 26 % (techo δ 41 %); MIX 80 % era anular TP reales; HI = retraso del feed WS; RTT ≥1 s endógena

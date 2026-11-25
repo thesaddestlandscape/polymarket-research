@@ -1,0 +1,182 @@
+dias cargados [np.int64(6), np.int64(7), np.int64(8), np.int64(9), np.int64(10), np.int64(11), np.int64(12), np.int64(13), np.int64(14), np.int64(15), np.int64(16), np.int64(17), np.int64(18), np.int64(19), np.int64(20), np.int64(21)]
+=== EV MAKER por banda de FILL y moneda, DESC (06-14) y HOLD (15-22)
+BTC DESC
+  <.05                       EV -0.0169 (con reb -0.0033) coste 233765 (25974/dia) | dias+ 5/9 | IC90 dias (-0.197,+0.142) cierre (-0.205,+0.187) n_cierres 2591 | sin2 -0.1217 | wallet top 7.2%
+  .05-.10                    EV +0.0865 (con reb +0.0995) coste 332921 (36991/dia) | dias+ 6/9 | IC90 dias (+0.000,+0.184) cierre (-0.053,+0.217) n_cierres 2591 | sin2 +0.0152 | wallet top 8.5%
+  .10-.20                    EV +0.1053 (con reb +0.1172) coste 1026793 (114088/dia) | dias+ 8/9 | IC90 dias (+0.039,+0.177) cierre (+0.017,+0.195) n_cierres 2592 | sin2 +0.0452 | wallet top 5.7%
+  .20-.30                    EV +0.0813 (con reb +0.0918) coste 1637915 (181991/dia) | dias+ 8/9 | IC90 dias (+0.039,+0.122) cierre (+0.025,+0.138) n_cierres 2592 | sin2 +0.0553 | wallet top 5.2%
+  .05-.30                    EV +0.0901 (con reb +0.1013) coste 2997628 (333070/dia) | dias+ 9/9 | IC90 dias (+0.050,+0.134) cierre (+0.026,+0.157) n_cierres 2592 | sin2 +0.0503 | wallet top 5.8%
+  .30-.50                    EV +0.0111 (con reb +0.0193) coste 8418852 (935428/dia) | dias+ 5/9 | IC90 dias (-0.005,+0.028) cierre (-0.008,+0.030) n_cierres 2594 | sin2 -0.0022 | wallet top 3.2%
+  .50-.70                    EV -0.0103 (con reb -0.0045) coste 10922600 (1213622/dia) | dias+ 3/9 | IC90 dias (-0.023,+0.004) cierre (-0.024,+0.005) n_cierres 2594 | sin2 -0.0194 | wallet top 3.4%
+  .70-.90                    EV -0.0135 (con reb -0.0107) coste 11985249 (1331694/dia) | dias+ 3/9 | IC90 dias (-0.024,-0.004) cierre (-0.030,+0.002) n_cierres 2592 | sin2 -0.0193 | wallet top 5.1%
+  >=.90                      EV -0.0001 (con reb +0.0005) coste 9792039 (1088004/dia) | dias+ 5/9 | IC90 dias (-0.007,+0.007) cierre (-0.008,+0.007) n_cierres 2591 | sin2 -0.0045 | wallet top 5.1%
+  TODAS                      EV +0.0019 (con reb +0.0066) coste 44350133 (4927793/dia) | dias+ 5/9 | IC90 dias (-0.001,+0.005) cierre (-0.001,+0.005) n_cierres 2594 | sin2 -0.0003 | wallet top 4.4%
+BTC HOLD
+  <.05                       EV -0.1215 (con reb -0.1079) coste 217712 (31102/dia) | dias+ 1/7 | IC90 dias (-0.288,+0.078) cierre (-0.363,+0.159) n_cierres 2016 | sin2 -0.2605 | wallet top 5.3%
+  .05-.10                    EV -0.0574 (con reb -0.0445) coste 287834 (41119/dia) | dias+ 3/7 | IC90 dias (-0.201,+0.074) cierre (-0.195,+0.091) n_cierres 2016 | sin2 -0.1466 | wallet top 5.3%
+  .10-.20                    EV -0.0088 (con reb +0.0030) coste 822304 (117472/dia) | dias+ 3/7 | IC90 dias (-0.134,+0.115) cierre (-0.098,+0.076) n_cierres 2016 | sin2 -0.1158 | wallet top 4.6%
+  .20-.30                    EV +0.0507 (con reb +0.0612) coste 1315623 (187946/dia) | dias+ 5/7 | IC90 dias (-0.029,+0.113) cierre (-0.012,+0.120) n_cierres 2016 | sin2 +0.0042 | wallet top 3.9%
+  .05-.30                    EV +0.0177 (con reb +0.0290) coste 2425760 (346537/dia) | dias+ 4/7 | IC90 dias (-0.083,+0.105) cierre (-0.051,+0.092) n_cierres 2016 | sin2 -0.0544 | wallet top 4.1%
+  .30-.50                    EV -0.0030 (con reb +0.0051) coste 6806655 (972379/dia) | dias+ 3/7 | IC90 dias (-0.033,+0.025) cierre (-0.028,+0.020) n_cierres 2019 | sin2 -0.0294 | wallet top 4.4%
+  .50-.70                    EV -0.0106 (con reb -0.0048) coste 9613590 (1373370/dia) | dias+ 3/7 | IC90 dias (-0.028,+0.008) cierre (-0.027,+0.006) n_cierres 2018 | sin2 -0.0209 | wallet top 4.4%
+  .70-.90                    EV -0.0010 (con reb +0.0019) coste 9904013 (1414859/dia) | dias+ 3/7 | IC90 dias (-0.018,+0.018) cierre (-0.019,+0.017) n_cierres 2016 | sin2 -0.0158 | wallet top 3.7%
+  >=.90                      EV +0.0131 (con reb +0.0137) coste 7619988 (1088570/dia) | dias+ 6/7 | IC90 dias (+0.006,+0.020) cierre (+0.006,+0.020) n_cierres 2016 | sin2 +0.0082 | wallet top 4.4%
+  TODAS                      EV -0.0004 (con reb +0.0043) coste 36587719 (5226817/dia) | dias+ 4/7 | IC90 dias (-0.006,+0.004) cierre (-0.004,+0.003) n_cierres 2019 | sin2 -0.0035 | wallet top 3.1%
+ALT(5) DESC
+  <.05                       EV +0.0361 (con reb +0.0497) coste 42483 (4720/dia) | dias+ 5/9 | IC90 dias (-0.116,+0.170) cierre (-0.160,+0.253) n_cierres 2592 | sin2 -0.0556 | wallet top 8.7%
+  .05-.10                    EV +0.1889 (con reb +0.2019) coste 58268 (6474/dia) | dias+ 7/9 | IC90 dias (+0.017,+0.392) cierre (+0.019,+0.415) n_cierres 2593 | sin2 +0.0244 | wallet top 9.3%
+  .10-.20                    EV +0.1430 (con reb +0.1549) coste 170584 (18954/dia) | dias+ 8/9 | IC90 dias (+0.072,+0.224) cierre (+0.067,+0.233) n_cierres 2592 | sin2 +0.0714 | wallet top 8.6%
+  .20-.30                    EV +0.0845 (con reb +0.0950) coste 251340 (27927/dia) | dias+ 7/9 | IC90 dias (+0.034,+0.137) cierre (+0.029,+0.143) n_cierres 2591 | sin2 +0.0451 | wallet top 6.9%
+  .05-.30                    EV +0.1180 (con reb +0.1293) coste 480191 (53355/dia) | dias+ 8/9 | IC90 dias (+0.055,+0.184) cierre (+0.046,+0.189) n_cierres 2593 | sin2 +0.0573 | wallet top 7.8%
+  .30-.50                    EV +0.0210 (con reb +0.0291) coste 1129708 (125523/dia) | dias+ 7/9 | IC90 dias (+0.008,+0.034) cierre (-0.001,+0.043) n_cierres 2594 | sin2 +0.0101 | wallet top 6.5%
+  .50-.70                    EV -0.0239 (con reb -0.0182) coste 1574258 (174918/dia) | dias+ 0/9 | IC90 dias (-0.033,-0.015) cierre (-0.038,-0.010) n_cierres 2592 | sin2 -0.0299 | wallet top 7.0%
+  .70-.90                    EV -0.0150 (con reb -0.0123) coste 1981926 (220214/dia) | dias+ 3/9 | IC90 dias (-0.027,-0.003) cierre (-0.028,-0.000) n_cierres 2593 | sin2 -0.0221 | wallet top 7.0%
+  >=.90                      EV +0.0029 (con reb +0.0036) coste 1466378 (162931/dia) | dias+ 6/9 | IC90 dias (-0.002,+0.008) cierre (-0.005,+0.010) n_cierres 2591 | sin2 -0.0007 | wallet top 9.1%
+  TODAS                      EV +0.0028 (con reb +0.0074) coste 6674944 (741660/dia) | dias+ 4/9 | IC90 dias (-0.003,+0.009) cierre (-0.002,+0.008) n_cierres 2595 | sin2 -0.0017 | wallet top 6.1%
+ALT(5) HOLD
+  <.05                       EV -0.0485 (con reb -0.0348) coste 30759 (4394/dia) | dias+ 3/7 | IC90 dias (-0.241,+0.155) cierre (-0.222,+0.134) n_cierres 2016 | sin2 -0.1961 | wallet top 11.1%
+  .05-.10                    EV -0.0709 (con reb -0.0579) coste 38730 (5533/dia) | dias+ 3/7 | IC90 dias (-0.250,+0.108) cierre (-0.209,+0.087) n_cierres 2016 | sin2 -0.2140 | wallet top 11.1%
+  .10-.20                    EV -0.0288 (con reb -0.0169) coste 110304 (15758/dia) | dias+ 4/7 | IC90 dias (-0.145,+0.101) cierre (-0.113,+0.062) n_cierres 2016 | sin2 -0.1190 | wallet top 9.8%
+  .20-.30                    EV -0.0444 (con reb -0.0339) coste 166413 (23773/dia) | dias+ 4/7 | IC90 dias (-0.142,+0.033) cierre (-0.113,+0.026) n_cierres 2016 | sin2 -0.0842 | wallet top 11.3%
+  .05-.30                    EV -0.0422 (con reb -0.0309) coste 315446 (45064/dia) | dias+ 4/7 | IC90 dias (-0.151,+0.063) cierre (-0.115,+0.026) n_cierres 2016 | sin2 -0.1019 | wallet top 9.4%
+  .30-.50                    EV -0.0069 (con reb +0.0013) coste 840805 (120115/dia) | dias+ 4/7 | IC90 dias (-0.048,+0.030) cierre (-0.040,+0.026) n_cierres 2017 | sin2 -0.0248 | wallet top 7.8%
+  .50-.70                    EV -0.0193 (con reb -0.0136) coste 1241256 (177322/dia) | dias+ 2/7 | IC90 dias (-0.044,+0.000) cierre (-0.040,+0.001) n_cierres 2016 | sin2 -0.0369 | wallet top 7.3%
+  .70-.90                    EV +0.0112 (con reb +0.0140) coste 1406412 (200916/dia) | dias+ 3/7 | IC90 dias (-0.009,+0.031) cierre (-0.003,+0.025) n_cierres 2016 | sin2 -0.0080 | wallet top 7.3%
+  >=.90                      EV +0.0088 (con reb +0.0095) coste 970105 (138586/dia) | dias+ 5/7 | IC90 dias (-0.003,+0.021) cierre (+0.002,+0.015) n_cierres 2014 | sin2 +0.0008 | wallet top 10.3%
+  TODAS                      EV -0.0042 (con reb +0.0005) coste 4804784 (686398/dia) | dias+ 4/7 | IC90 dias (-0.010,+0.002) cierre (-0.011,+0.003) n_cierres 2018 | sin2 -0.0082 | wallet top 7.3%
+ETH DESC
+  <.05                       EV +0.1723 (con reb +0.1859) coste 23022 (2558/dia) | dias+ 5/9 | IC90 dias (-0.132,+0.455) cierre (-0.117,+0.533) n_cierres 2590 | sin2 -0.0550 | wallet top 15.1%
+  .05-.10                    EV +0.2651 (con reb +0.2781) coste 34519 (3835/dia) | dias+ 6/9 | IC90 dias (+0.013,+0.506) cierre (+0.010,+0.579) n_cierres 2566 | sin2 +0.0365 | wallet top 15.7%
+  .10-.20                    EV +0.1980 (con reb +0.2099) coste 105427 (11714/dia) | dias+ 7/9 | IC90 dias (+0.080,+0.327) cierre (+0.081,+0.316) n_cierres 2580 | sin2 +0.1008 | wallet top 14.0%
+  .20-.30                    EV +0.1235 (con reb +0.1340) coste 155611 (17290/dia) | dias+ 8/9 | IC90 dias (+0.052,+0.214) cierre (+0.040,+0.215) n_cierres 2573 | sin2 +0.0562 | wallet top 11.2%
+  .05-.30                    EV +0.1666 (con reb +0.1779) coste 295557 (32840/dia) | dias+ 6/9 | IC90 dias (+0.065,+0.271) cierre (+0.060,+0.274) n_cierres 2591 | sin2 +0.0833 | wallet top 12.7%
+  .30-.50                    EV +0.0295 (con reb +0.0377) coste 709621 (78847/dia) | dias+ 8/9 | IC90 dias (+0.010,+0.047) cierre (-0.001,+0.062) n_cierres 2592 | sin2 +0.0159 | wallet top 7.7%
+  .50-.70                    EV -0.0301 (con reb -0.0244) coste 925036 (102782/dia) | dias+ 1/9 | IC90 dias (-0.046,-0.014) cierre (-0.050,-0.010) n_cierres 2585 | sin2 -0.0373 | wallet top 11.9%
+  .70-.90                    EV -0.0231 (con reb -0.0204) coste 1098211 (122023/dia) | dias+ 2/9 | IC90 dias (-0.041,-0.008) cierre (-0.043,-0.004) n_cierres 2587 | sin2 -0.0326 | wallet top 10.3%
+  >=.90                      EV -0.0016 (con reb -0.0009) coste 889679 (98853/dia) | dias+ 4/9 | IC90 dias (-0.008,+0.005) cierre (-0.012,+0.008) n_cierres 2572 | sin2 -0.0068 | wallet top 9.7%
+  TODAS                      EV +0.0049 (con reb +0.0096) coste 3941126 (437903/dia) | dias+ 6/9 | IC90 dias (-0.005,+0.014) cierre (-0.003,+0.013) n_cierres 2593 | sin2 -0.0029 | wallet top 10.3%
+ETH HOLD
+  <.05                       EV -0.3191 (con reb -0.3055) coste 16440 (2349/dia) | dias+ 1/7 | IC90 dias (-0.508,-0.106) cierre (-0.516,-0.104) n_cierres 2015 | sin2 -0.4615 | wallet top 18.2%
+  .05-.10                    EV -0.0961 (con reb -0.0832) coste 23697 (3385/dia) | dias+ 2/7 | IC90 dias (-0.319,+0.144) cierre (-0.283,+0.091) n_cierres 1986 | sin2 -0.2989 | wallet top 18.2%
+  .10-.20                    EV -0.1032 (con reb -0.0913) coste 72801 (10400/dia) | dias+ 2/7 | IC90 dias (-0.245,+0.038) cierre (-0.214,+0.013) n_cierres 2006 | sin2 -0.2039 | wallet top 14.9%
+  .20-.30                    EV -0.0968 (con reb -0.0863) coste 110277 (15754/dia) | dias+ 3/7 | IC90 dias (-0.231,+0.034) cierre (-0.191,+0.003) n_cierres 1995 | sin2 -0.1573 | wallet top 12.2%
+  .05-.30                    EV -0.0990 (con reb -0.0877) coste 206776 (29539/dia) | dias+ 2/7 | IC90 dias (-0.249,+0.022) cierre (-0.188,-0.002) n_cierres 2015 | sin2 -0.1591 | wallet top 13.8%
+  .30-.50                    EV -0.0123 (con reb -0.0042) coste 538193 (76885/dia) | dias+ 5/7 | IC90 dias (-0.083,+0.046) cierre (-0.056,+0.035) n_cierres 2013 | sin2 -0.0410 | wallet top 9.2%
+  .50-.70                    EV -0.0168 (con reb -0.0111) coste 786650 (112379/dia) | dias+ 4/7 | IC90 dias (-0.050,+0.012) cierre (-0.047,+0.012) n_cierres 2001 | sin2 -0.0432 | wallet top 11.5%
+  .70-.90                    EV +0.0306 (con reb +0.0335) coste 828583 (118369/dia) | dias+ 5/7 | IC90 dias (+0.000,+0.065) cierre (+0.010,+0.051) n_cierres 2010 | sin2 +0.0010 | wallet top 12.4%
+  >=.90                      EV +0.0130 (con reb +0.0136) coste 571900 (81700/dia) | dias+ 5/7 | IC90 dias (-0.003,+0.028) cierre (+0.004,+0.021) n_cierres 1982 | sin2 +0.0024 | wallet top 13.1%
+  TODAS                      EV -0.0043 (con reb +0.0005) coste 2948542 (421220/dia) | dias+ 4/7 | IC90 dias (-0.014,+0.007) cierre (-0.014,+0.006) n_cierres 2017 | sin2 -0.0122 | wallet top 11.8%
+SOL DESC
+  <.05                       EV -0.1086 (con reb -0.0950) coste 8343 (927/dia) | dias+ 3/9 | IC90 dias (-0.386,+0.161) cierre (-0.340,+0.131) n_cierres 2589 | sin2 -0.3027 | wallet top 7.5%
+  .05-.10                    EV +0.1826 (con reb +0.1955) coste 11683 (1298/dia) | dias+ 4/9 | IC90 dias (-0.148,+0.634) cierre (-0.123,+0.567) n_cierres 2420 | sin2 -0.1238 | wallet top 10.2%
+  .10-.20                    EV +0.0773 (con reb +0.0892) coste 37287 (4143/dia) | dias+ 5/9 | IC90 dias (-0.049,+0.202) cierre (-0.037,+0.197) n_cierres 2517 | sin2 -0.0123 | wallet top 7.9%
+  .20-.30                    EV +0.0421 (con reb +0.0527) coste 59229 (6581/dia) | dias+ 6/9 | IC90 dias (-0.042,+0.119) cierre (-0.024,+0.108) n_cierres 2494 | sin2 -0.0138 | wallet top 9.9%
+  .05-.30                    EV +0.0694 (con reb +0.0807) coste 108198 (12022/dia) | dias+ 6/9 | IC90 dias (-0.034,+0.188) cierre (-0.022,+0.169) n_cierres 2590 | sin2 -0.0142 | wallet top 8.1%
+  .30-.50                    EV +0.0121 (con reb +0.0203) coste 257049 (28561/dia) | dias+ 5/9 | IC90 dias (-0.020,+0.044) cierre (-0.015,+0.041) n_cierres 2566 | sin2 -0.0111 | wallet top 7.7%
+  .50-.70                    EV -0.0204 (con reb -0.0148) coste 399481 (44387/dia) | dias+ 3/9 | IC90 dias (-0.035,-0.005) cierre (-0.039,-0.003) n_cierres 2524 | sin2 -0.0314 | wallet top 6.9%
+  .70-.90                    EV -0.0082 (con reb -0.0055) coste 534711 (59412/dia) | dias+ 5/9 | IC90 dias (-0.036,+0.020) cierre (-0.026,+0.009) n_cierres 2579 | sin2 -0.0223 | wallet top 7.9%
+  >=.90                      EV +0.0117 (con reb +0.0124) coste 340657 (37851/dia) | dias+ 7/9 | IC90 dias (+0.004,+0.019) cierre (+0.003,+0.020) n_cierres 2471 | sin2 +0.0067 | wallet top 7.8%
+  TODAS                      EV +0.0007 (con reb +0.0052) coste 1648440 (183160/dia) | dias+ 5/9 | IC90 dias (-0.005,+0.006) cierre (-0.005,+0.006) n_cierres 2591 | sin2 -0.0025 | wallet top 5.8%
+SOL HOLD
+  <.05                       EV +0.3426 (con reb +0.3563) coste 6075 (868/dia) | dias+ 6/7 | IC90 dias (+0.159,+0.548) cierre (-0.069,+0.768) n_cierres 2016 | sin2 +0.2061 | wallet top 9.7%
+  .05-.10                    EV -0.0184 (con reb -0.0055) coste 7194 (1028/dia) | dias+ 2/7 | IC90 dias (-0.144,+0.111) cierre (-0.219,+0.189) n_cierres 1819 | sin2 -0.1255 | wallet top 13.3%
+  .10-.20                    EV +0.1026 (con reb +0.1145) coste 21069 (3010/dia) | dias+ 5/7 | IC90 dias (-0.047,+0.240) cierre (-0.019,+0.230) n_cierres 1911 | sin2 +0.0003 | wallet top 13.3%
+  .20-.30                    EV +0.0932 (con reb +0.1037) coste 32164 (4595/dia) | dias+ 5/7 | IC90 dias (+0.002,+0.170) cierre (+0.007,+0.181) n_cierres 1869 | sin2 +0.0355 | wallet top 18.5%
+  .05-.30                    EV +0.0832 (con reb +0.0944) coste 60428 (8633/dia) | dias+ 5/7 | IC90 dias (-0.024,+0.177) cierre (-0.003,+0.176) n_cierres 2015 | sin2 +0.0177 | wallet top 15.3%
+  .30-.50                    EV -0.0037 (con reb +0.0044) coste 170698 (24385/dia) | dias+ 3/7 | IC90 dias (-0.026,+0.021) cierre (-0.043,+0.041) n_cierres 1993 | sin2 -0.0238 | wallet top 11.1%
+  .50-.70                    EV -0.0218 (con reb -0.0162) coste 255092 (36442/dia) | dias+ 2/7 | IC90 dias (-0.038,-0.008) cierre (-0.043,+0.002) n_cierres 1966 | sin2 -0.0322 | wallet top 8.2%
+  .70-.90                    EV -0.0257 (con reb -0.0229) coste 336070 (48010/dia) | dias+ 1/7 | IC90 dias (-0.040,-0.008) cierre (-0.045,-0.006) n_cierres 1996 | sin2 -0.0380 | wallet top 8.8%
+  >=.90                      EV +0.0041 (con reb +0.0047) coste 230997 (33000/dia) | dias+ 4/7 | IC90 dias (-0.005,+0.015) cierre (-0.006,+0.014) n_cierres 1890 | sin2 -0.0039 | wallet top 9.7%
+  TODAS                      EV -0.0064 (con reb -0.0020) coste 1059360 (151337/dia) | dias+ 1/7 | IC90 dias (-0.013,-0.001) cierre (-0.015,+0.002) n_cierres 2016 | sin2 -0.0104 | wallet top 7.4%
+XRP DESC
+  <.05                       EV -0.2015 (con reb -0.1879) coste 6886 (765/dia) | dias+ 2/9 | IC90 dias (-0.390,+0.032) cierre (-0.409,+0.012) n_cierres 2585 | sin2 -0.3679 | wallet top 24.7%
+  .05-.10                    EV -0.0470 (con reb -0.0341) coste 5726 (636/dia) | dias+ 4/9 | IC90 dias (-0.223,+0.159) cierre (-0.255,+0.180) n_cierres 2262 | sin2 -0.1966 | wallet top 9.7%
+  .10-.20                    EV +0.0321 (con reb +0.0441) coste 14189 (1577/dia) | dias+ 3/9 | IC90 dias (-0.066,+0.139) cierre (-0.064,+0.135) n_cierres 2396 | sin2 -0.0637 | wallet top 12.1%
+  .20-.30                    EV -0.0320 (con reb -0.0215) coste 19918 (2213/dia) | dias+ 4/9 | IC90 dias (-0.109,+0.042) cierre (-0.100,+0.035) n_cierres 2197 | sin2 -0.0890 | wallet top 15.0%
+  .05-.30                    EV -0.0113 (con reb +0.0001) coste 39833 (4426/dia) | dias+ 4/9 | IC90 dias (-0.089,+0.058) cierre (-0.081,+0.067) n_cierres 2583 | sin2 -0.0619 | wallet top 12.5%
+  .30-.50                    EV -0.0077 (con reb +0.0005) coste 97410 (10823/dia) | dias+ 4/9 | IC90 dias (-0.039,+0.019) cierre (-0.036,+0.022) n_cierres 2496 | sin2 -0.0265 | wallet top 15.2%
+  .50-.70                    EV -0.0151 (con reb -0.0094) coste 138921 (15436/dia) | dias+ 5/9 | IC90 dias (-0.042,+0.011) cierre (-0.038,+0.008) n_cierres 2442 | sin2 -0.0318 | wallet top 10.7%
+  .70-.90                    EV +0.0023 (con reb +0.0051) coste 185297 (20589/dia) | dias+ 4/9 | IC90 dias (-0.011,+0.016) cierre (-0.016,+0.019) n_cierres 2443 | sin2 -0.0070 | wallet top 12.3%
+  >=.90                      EV +0.0050 (con reb +0.0057) coste 127097 (14122/dia) | dias+ 7/9 | IC90 dias (+0.000,+0.010) cierre (-0.006,+0.015) n_cierres 1971 | sin2 +0.0013 | wallet top 16.9%
+  TODAS                      EV -0.0061 (con reb -0.0015) coste 595444 (66160/dia) | dias+ 4/9 | IC90 dias (-0.015,+0.003) cierre (-0.014,+0.001) n_cierres 2590 | sin2 -0.0127 | wallet top 8.1%
+XRP HOLD
+  <.05                       EV +0.3512 (con reb +0.3649) coste 4336 (619/dia) | dias+ 4/7 | IC90 dias (-0.130,+0.882) cierre (-0.158,+0.938) n_cierres 2014 | sin2 -0.0849 | wallet top 24.5%
+  .05-.10                    EV +0.2097 (con reb +0.2226) coste 3334 (476/dia) | dias+ 5/7 | IC90 dias (+0.008,+0.420) cierre (-0.068,+0.510) n_cierres 1581 | sin2 +0.0082 | wallet top 9.6%
+  .10-.20                    EV +0.1394 (con reb +0.1513) coste 9151 (1307/dia) | dias+ 5/7 | IC90 dias (-0.032,+0.298) cierre (-0.032,+0.332) n_cierres 1781 | sin2 -0.0250 | wallet top 20.0%
+  .20-.30                    EV -0.0545 (con reb -0.0440) coste 14012 (2002/dia) | dias+ 1/7 | IC90 dias (-0.134,+0.009) cierre (-0.135,+0.031) n_cierres 1700 | sin2 -0.0882 | wallet top 21.7%
+  .05-.30                    EV +0.0457 (con reb +0.0570) coste 26496 (3785/dia) | dias+ 5/7 | IC90 dias (-0.058,+0.145) cierre (-0.058,+0.157) n_cierres 2000 | sin2 -0.0384 | wallet top 19.6%
+  .30-.50                    EV -0.0007 (con reb +0.0073) coste 83112 (11873/dia) | dias+ 4/7 | IC90 dias (-0.062,+0.064) cierre (-0.040,+0.038) n_cierres 1919 | sin2 -0.0557 | wallet top 17.7%
+  .50-.70                    EV -0.0308 (con reb -0.0251) coste 115600 (16514/dia) | dias+ 1/7 | IC90 dias (-0.057,-0.009) cierre (-0.062,-0.003) n_cierres 1870 | sin2 -0.0465 | wallet top 12.4%
+  .70-.90                    EV -0.0090 (con reb -0.0062) coste 123992 (17713/dia) | dias+ 1/7 | IC90 dias (-0.022,+0.007) cierre (-0.031,+0.014) n_cierres 1876 | sin2 -0.0204 | wallet top 11.4%
+  >=.90                      EV +0.0006 (con reb +0.0013) coste 85982 (12283/dia) | dias+ 3/7 | IC90 dias (-0.005,+0.006) cierre (-0.011,+0.011) n_cierres 1468 | sin2 -0.0037 | wallet top 14.0%
+  TODAS                      EV -0.0044 (con reb +0.0003) coste 439518 (62788/dia) | dias+ 2/7 | IC90 dias (-0.013,+0.005) cierre (-0.015,+0.007) n_cierres 2015 | sin2 -0.0132 | wallet top 10.7%
+DOGE DESC
+  <.05                       EV -0.1613 (con reb -0.1477) coste 2588 (288/dia) | dias+ 3/9 | IC90 dias (-0.423,+0.165) cierre (-0.440,+0.129) n_cierres 2445 | sin2 -0.4080 | wallet top 11.6%
+  .05-.10                    EV +0.0092 (con reb +0.0221) coste 3828 (425/dia) | dias+ 6/9 | IC90 dias (-0.083,+0.115) cierre (-0.230,+0.282) n_cierres 1894 | sin2 -0.0633 | wallet top 11.1%
+  .10-.20                    EV -0.0044 (con reb +0.0075) coste 8491 (943/dia) | dias+ 4/9 | IC90 dias (-0.094,+0.083) cierre (-0.138,+0.128) n_cierres 2140 | sin2 -0.0615 | wallet top 11.8%
+  .20-.30                    EV -0.0179 (con reb -0.0074) coste 9600 (1067/dia) | dias+ 4/9 | IC90 dias (-0.096,+0.063) cierre (-0.120,+0.081) n_cierres 1777 | sin2 -0.0654 | wallet top 11.5%
+  .05-.30                    EV -0.0080 (con reb +0.0035) coste 21919 (2435/dia) | dias+ 3/9 | IC90 dias (-0.056,+0.049) cierre (-0.107,+0.101) n_cierres 2524 | sin2 -0.0487 | wallet top 11.0%
+  .30-.50                    EV +0.0098 (con reb +0.0180) coste 36887 (4099/dia) | dias+ 6/9 | IC90 dias (-0.022,+0.040) cierre (-0.029,+0.049) n_cierres 2250 | sin2 -0.0045 | wallet top 10.0%
+  .50-.70                    EV +0.0192 (con reb +0.0248) coste 65318 (7258/dia) | dias+ 5/9 | IC90 dias (-0.021,+0.056) cierre (-0.009,+0.047) n_cierres 2199 | sin2 -0.0131 | wallet top 17.2%
+  .70-.90                    EV -0.0008 (con reb +0.0020) coste 105943 (11771/dia) | dias+ 3/9 | IC90 dias (-0.018,+0.017) cierre (-0.021,+0.023) n_cierres 2220 | sin2 -0.0143 | wallet top 21.3%
+  >=.90                      EV +0.0117 (con reb +0.0125) coste 59952 (6661/dia) | dias+ 8/9 | IC90 dias (+0.003,+0.019) cierre (-0.000,+0.023) n_cierres 1307 | sin2 +0.0054 | wallet top 16.0%
+  TODAS                      EV +0.0056 (con reb +0.0100) coste 292607 (32512/dia) | dias+ 6/9 | IC90 dias (-0.009,+0.019) cierre (-0.005,+0.017) n_cierres 2589 | sin2 -0.0055 | wallet top 16.6%
+DOGE HOLD
+  <.05                       EV -0.1569 (con reb -0.1433) coste 2456 (351/dia) | dias+ 2/7 | IC90 dias (-0.619,+0.448) cierre (-0.560,+0.436) n_cierres 1969 | sin2 -0.6170 | wallet top 28.5%
+  .05-.10                    EV -0.3159 (con reb -0.3029) coste 2597 (371/dia) | dias+ 0/7 | IC90 dias (-0.419,-0.202) cierre (-0.463,-0.154) n_cierres 1796 | sin2 -0.3965 | wallet top 12.9%
+  .10-.20                    EV +0.0806 (con reb +0.0925) coste 4053 (579/dia) | dias+ 3/7 | IC90 dias (-0.115,+0.286) cierre (-0.095,+0.252) n_cierres 1297 | sin2 -0.0885 | wallet top 12.7%
+  .20-.30                    EV +0.1886 (con reb +0.1992) coste 5750 (821/dia) | dias+ 5/7 | IC90 dias (-0.008,+0.325) cierre (+0.010,+0.346) n_cierres 1225 | sin2 +0.0538 | wallet top 11.4%
+  .05-.30                    EV +0.0477 (con reb +0.0592) coste 12400 (1771/dia) | dias+ 4/7 | IC90 dias (-0.102,+0.179) cierre (-0.069,+0.176) n_cierres 1991 | sin2 -0.0689 | wallet top 10.9%
+  .30-.50                    EV +0.0365 (con reb +0.0446) coste 26763 (3823/dia) | dias+ 4/7 | IC90 dias (-0.057,+0.096) cierre (-0.011,+0.084) n_cierres 1711 | sin2 -0.0396 | wallet top 10.0%
+  .50-.70                    EV -0.0131 (con reb -0.0074) coste 47262 (6752/dia) | dias+ 2/7 | IC90 dias (-0.050,+0.036) cierre (-0.049,+0.022) n_cierres 1684 | sin2 -0.0475 | wallet top 10.7%
+  .70-.90                    EV +0.0011 (con reb +0.0039) coste 75241 (10749/dia) | dias+ 5/7 | IC90 dias (-0.019,+0.020) cierre (-0.024,+0.025) n_cierres 1728 | sin2 -0.0109 | wallet top 15.4%
+  >=.90                      EV +0.0050 (con reb +0.0057) coste 42897 (6128/dia) | dias+ 5/7 | IC90 dias (-0.001,+0.012) cierre (-0.007,+0.015) n_cierres 1100 | sin2 +0.0004 | wallet top 13.0%
+  TODAS                      EV +0.0042 (con reb +0.0085) coste 207017 (29574/dia) | dias+ 4/7 | IC90 dias (-0.011,+0.020) cierre (-0.009,+0.018) n_cierres 2017 | sin2 -0.0096 | wallet top 11.8%
+BNB DESC
+  <.05                       EV +0.1696 (con reb +0.1831) coste 1644 (183/dia) | dias+ 3/9 | IC90 dias (-0.326,+0.783) cierre (-0.251,+0.698) n_cierres 2090 | sin2 -0.2769 | wallet top 13.3%
+  .05-.10                    EV -0.0164 (con reb -0.0035) coste 2511 (279/dia) | dias+ 4/9 | IC90 dias (-0.181,+0.184) cierre (-0.227,+0.206) n_cierres 1653 | sin2 -0.1691 | wallet top 14.8%
+  .10-.20                    EV +0.0423 (con reb +0.0542) coste 5190 (577/dia) | dias+ 4/9 | IC90 dias (-0.135,+0.211) cierre (-0.095,+0.179) n_cierres 1836 | sin2 -0.0954 | wallet top 13.9%
+  .20-.30                    EV +0.0492 (con reb +0.0597) coste 6982 (776/dia) | dias+ 5/9 | IC90 dias (-0.064,+0.161) cierre (-0.046,+0.136) n_cierres 1525 | sin2 -0.0350 | wallet top 20.0%
+  .05-.30                    EV +0.0355 (con reb +0.0469) coste 14683 (1631/dia) | dias+ 6/9 | IC90 dias (-0.086,+0.148) cierre (-0.066,+0.125) n_cierres 2384 | sin2 -0.0425 | wallet top 16.1%
+  .30-.50                    EV +0.0005 (con reb +0.0088) coste 28741 (3193/dia) | dias+ 6/9 | IC90 dias (-0.032,+0.036) cierre (-0.040,+0.043) n_cierres 2161 | sin2 -0.0182 | wallet top 13.0%
+  .50-.70                    EV -0.0173 (con reb -0.0117) coste 45501 (5056/dia) | dias+ 4/9 | IC90 dias (-0.053,+0.016) cierre (-0.050,+0.016) n_cierres 2062 | sin2 -0.0405 | wallet top 9.7%
+  .70-.90                    EV -0.0057 (con reb -0.0029) coste 57764 (6418/dia) | dias+ 3/9 | IC90 dias (-0.038,+0.026) cierre (-0.032,+0.021) n_cierres 1931 | sin2 -0.0354 | wallet top 11.2%
+  >=.90                      EV +0.0091 (con reb +0.0099) coste 48994 (5444/dia) | dias+ 6/9 | IC90 dias (-0.001,+0.018) cierre (-0.003,+0.020) n_cierres 1320 | sin2 +0.0033 | wallet top 15.2%
+  TODAS                      EV +0.0007 (con reb +0.0052) coste 197327 (21925/dia) | dias+ 5/9 | IC90 dias (-0.013,+0.013) cierre (-0.013,+0.013) n_cierres 2588 | sin2 -0.0073 | wallet top 10.2%
+BNB HOLD
+  <.05                       EV +0.3697 (con reb +0.3833) coste 1452 (207/dia) | dias+ 3/7 | IC90 dias (-0.363,+1.305) cierre (-0.226,+1.123) n_cierres 1731 | sin2 -0.3795 | wallet top 14.3%
+  .05-.10                    EV -0.1127 (con reb -0.0997) coste 1908 (273/dia) | dias+ 3/7 | IC90 dias (-0.331,+0.137) cierre (-0.326,+0.124) n_cierres 1146 | sin2 -0.3230 | wallet top 11.3%
+  .10-.20                    EV +0.1772 (con reb +0.1892) coste 3229 (461/dia) | dias+ 3/7 | IC90 dias (-0.060,+0.426) cierre (-0.025,+0.390) n_cierres 1221 | sin2 -0.0620 | wallet top 13.1%
+  .20-.30                    EV -0.0054 (con reb +0.0051) coste 4210 (601/dia) | dias+ 4/7 | IC90 dias (-0.091,+0.087) cierre (-0.114,+0.099) n_cierres 1111 | sin2 -0.0643 | wallet top 24.7%
+  .05-.30                    EV +0.0358 (con reb +0.0473) coste 9347 (1335/dia) | dias+ 3/7 | IC90 dias (-0.086,+0.178) cierre (-0.087,+0.176) n_cierres 1797 | sin2 -0.0757 | wallet top 15.7%
+  .30-.50                    EV +0.0249 (con reb +0.0331) coste 22039 (3148/dia) | dias+ 5/7 | IC90 dias (+0.007,+0.042) cierre (-0.019,+0.073) n_cierres 1696 | sin2 +0.0143 | wallet top 21.4%
+  .50-.70                    EV -0.0277 (con reb -0.0221) coste 36653 (5236/dia) | dias+ 1/7 | IC90 dias (-0.057,-0.003) cierre (-0.068,+0.012) n_cierres 1649 | sin2 -0.0464 | wallet top 20.5%
+  .70-.90                    EV +0.0016 (con reb +0.0044) coste 42527 (6075/dia) | dias+ 3/7 | IC90 dias (-0.020,+0.029) cierre (-0.026,+0.029) n_cierres 1518 | sin2 -0.0205 | wallet top 23.2%
+  >=.90                      EV -0.0026 (con reb -0.0020) coste 38330 (5476/dia) | dias+ 4/7 | IC90 dias (-0.021,+0.018) cierre (-0.016,+0.011) n_cierres 1004 | sin2 -0.0145 | wallet top 21.0%
+  TODAS                      EV +0.0025 (con reb +0.0069) coste 150346 (21478/dia) | dias+ 4/7 | IC90 dias (-0.013,+0.018) cierre (-0.012,+0.018) n_cierres 2016 | sin2 -0.0080 | wallet top 17.4%
+=== TOMADOR (sin fee y con fee) por banda, BTC, periodo (control suma cero)
+DESC <.05 EV tomador (neto de fee) -0.0976 coste 215005
+DESC .05-.10 EV tomador (neto de fee) -0.0884 coste 310526
+DESC .10-.20 EV tomador (neto de fee) -0.0165 coste 1111323
+DESC .20-.30 EV tomador (neto de fee) +0.0033 coste 1866541
+DESC .30-.50 EV tomador (neto de fee) -0.0264 coste 7027735
+DESC .50-.70 EV tomador (neto de fee) -0.0363 coste 12635053
+DESC .70-.90 EV tomador (neto de fee) -0.0361 coste 11032375
+DESC >=.90 EV tomador (neto de fee) -0.0055 coste 11957679
+HOLD <.05 EV tomador (neto de fee) -0.5025 coste 172314
+HOLD .05-.10 EV tomador (neto de fee) -0.3061 coste 233570
+HOLD .10-.20 EV tomador (neto de fee) -0.1164 coste 868160
+HOLD .20-.30 EV tomador (neto de fee) -0.0268 coste 1637722
+HOLD .30-.50 EV tomador (neto de fee) -0.0284 coste 6139417
+HOLD .50-.70 EV tomador (neto de fee) -0.0259 coste 10302275
+HOLD .70-.90 EV tomador (neto de fee) -0.0211 coste 8852563
+HOLD >=.90 EV tomador (neto de fee) +0.0013 coste 10821860
+identidad: M+T pnl neto fee (todo) por periodo: {'DESC': (103756, -1350195, 51025077, 53205786), 'HOLD': (-35674, -1018011, 41392503, 44107676)}
+=== BTC vs ALT: mix de bandas vs dentro de banda (maker, HOLD y DESC)
+DESC EV BTC 0.0019  ALT 0.0028  dif -0.0009 | within-band (mix ALT) -0.0010 | efecto mix 0.0001
+  cuota de coste por banda BTC {0: 0.005, 1: 0.008, 2: 0.023, 3: 0.037, 4: 0.19, 5: 0.246, 6: 0.27, 7: 0.221} ALT {0: 0.006, 1: 0.009, 2: 0.026, 3: 0.038, 4: 0.169, 5: 0.236, 6: 0.297, 7: 0.22}
+HOLD EV BTC -0.0004  ALT -0.0042  dif 0.0038 | within-band (mix ALT) 0.0036 | efecto mix 0.0002
+  cuota de coste por banda BTC {0: 0.006, 1: 0.008, 2: 0.022, 3: 0.036, 4: 0.186, 5: 0.263, 6: 0.271, 7: 0.208} ALT {0: 0.006, 1: 0.008, 2: 0.023, 3: 0.035, 4: 0.175, 5: 0.258, 6: 0.293, 7: 0.202}
+=== makers grandes BTC (top48 por coste en DESC, fill-level): % positivos DESC/HOLD y banda cheap
+top48 DESC: positivos DESC 34  HOLD 32 (con coste HOLD>0 48) ; EV DESC 0.0071 HOLD 0.0055
+makers BTC en banda .05-.30 con coste>=3000 en DESC: 141; EV DESC 0.0963 HOLD 0.0306; % positivos DESC 86% HOLD 57%

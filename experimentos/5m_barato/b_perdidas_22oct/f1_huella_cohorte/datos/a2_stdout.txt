@@ -1,0 +1,130 @@
+=== A. EV maker por moneda y periodo (ponderado por €; reb separado)
+DESC
+             coste      EV   EVreb          n
+BTC   4.109191e+07  0.0015  0.0060  1049191.0
+ETH   3.746920e+06  0.0037  0.0083   213777.0
+SOL   1.605622e+06  0.0015  0.0060   123718.0
+XRP   5.730224e+05 -0.0064 -0.0020    72690.0
+DOGE  2.874595e+05  0.0060  0.0104    42620.0
+BNB   1.897990e+05  0.0020  0.0064    31997.0
+HOLD
+             coste      EV   EVreb         n
+BTC   3.380598e+07  0.0001  0.0047  894709.0
+ETH   2.811974e+06 -0.0028  0.0019  145228.0
+SOL   1.029806e+06 -0.0027  0.0016   86282.0
+XRP   4.100942e+05 -0.0012  0.0034   48515.0
+DOGE  1.999104e+05  0.0026  0.0068   29564.0
+BNB   1.408937e+05  0.0063  0.0106   23538.0
+=== B. EV por banda de precio (pc medio de la unidad), BTC vs ALT
+DESC
+                       coste      EV   EVreb         n
+(ALT, <.05)     2.771272e+04 -0.1568 -0.1432   77898.0
+(ALT, .05-.10)  3.038912e+04  0.0478  0.0607   19779.0
+(ALT, .10-.20)  1.116447e+05 -0.2627 -0.2509   37650.0
+(ALT, .20-.30)  2.175435e+05 -0.2520 -0.2415   36712.0
+(ALT, .30-.50)  9.495413e+05 -0.1982 -0.1900   88629.0
+(ALT, .50-.70)  1.681187e+06  0.0119  0.0174   96458.0
+(ALT, .70-.90)  2.383360e+06  0.1052  0.1080   90607.0
+(ALT, >=.90)    1.001444e+06  0.0193  0.0200   37069.0
+(BTC, <.05)     1.490550e+05 -0.1696 -0.1560  117074.0
+(BTC, .05-.10)  1.190416e+05 -0.2790 -0.2661   32982.0
+(BTC, .10-.20)  5.359256e+05 -0.4326 -0.4208   67440.0
+(BTC, .20-.30)  1.301157e+06 -0.4446 -0.4342   83484.0
+(BTC, .30-.50)  6.157491e+06 -0.3240 -0.3158  219380.0
+(BTC, .50-.70)  1.154936e+07  0.0415  0.0470  236393.0
+(BTC, .70-.90)  1.531701e+07  0.1520  0.1548  209360.0
+(BTC, >=.90)    5.962870e+06  0.0199  0.0206   83078.0
+HOLD
+                       coste      EV   EVreb         n
+(ALT, <.05)     2.068054e+04 -0.1651 -0.1515   50197.0
+(ALT, .05-.10)  2.144600e+04 -0.3545 -0.3415   13660.0
+(ALT, .10-.20)  7.324862e+04 -0.4161 -0.4042   23962.0
+(ALT, .20-.30)  1.446885e+05 -0.3863 -0.3758   24054.0
+(ALT, .30-.50)  6.863515e+05 -0.2187 -0.2105   59581.0
+(ALT, .50-.70)  1.324399e+06  0.0160  0.0215   71824.0
+(ALT, .70-.90)  1.636823e+06  0.1229  0.1257   64007.0
+(ALT, >=.90)    6.850406e+05  0.0227  0.0233   25842.0
+(BTC, <.05)     1.287785e+05 -0.1677 -0.1541   89830.0
+(BTC, .05-.10)  9.773105e+04 -0.5285 -0.5155   26031.0
+(BTC, .10-.20)  4.139063e+05 -0.5761 -0.5643   56286.0
+(BTC, .20-.30)  1.073090e+06 -0.5428 -0.5324   75050.0
+(BTC, .30-.50)  5.062384e+06 -0.3377 -0.3295  188657.0
+(BTC, .50-.70)  9.989738e+06  0.0360  0.0415  213867.0
+(BTC, .70-.90)  1.255256e+07  0.1670  0.1699  176231.0
+(BTC, >=.90)    4.487795e+06  0.0341  0.0348   68757.0
+=== C. EV por tamano de maker (terciles de coste maker en el periodo + top50) x BTC/ALT; n makers; % makers con EV>0 (>=20 unidades)
+DESC
+                  coste      EV   EVreb         n
+g   tam                                          
+ALT T1     2.048718e+03  0.0967  0.1087    7722.0
+    T2     2.334762e+04 -0.0513 -0.0447   17231.0
+    T3     4.433901e+06  0.0030  0.0077  383257.0
+    top50  1.943525e+06  0.0012  0.0052   76592.0
+BTC T1     4.849729e+03  0.2680  0.2774   10002.0
+    T2     1.306404e+05 -0.0416 -0.0351   44453.0
+    T3     1.643697e+07 -0.0057 -0.0013  815301.0
+    top50  2.451946e+07  0.0066  0.0111  179435.0
+  top48 por coste en BTC : 35 /48 positivos; EV ponderado 0.0066; coste top48 24703612 de 41091912 (60.1%)
+  resto con coste>=500: 1480 makers, 35.3% positivos, EV -0.0055
+  top48 por coste en ALT : 31 /48 positivos; EV ponderado 0.0042; coste top48 5398140 de 6402823 (84.3%)
+  resto con coste>=500: 237 makers, 39.7% positivos, EV -0.0018
+HOLD
+                  coste      EV   EVreb         n
+g   tam                                          
+ALT T1     7.741452e+02 -0.0414 -0.0304    1431.0
+    T2     1.508650e+04 -0.0777 -0.0712   11979.0
+    T3     3.123100e+06 -0.0070 -0.0022  266375.0
+    top50  1.453717e+06  0.0092  0.0133   53342.0
+BTC T1     2.431765e+03 -0.2097 -0.1988    4172.0
+    T2     8.610863e+04 -0.0971 -0.0905   35650.0
+    T3     1.415693e+07 -0.0051 -0.0005  705871.0
+    top50  1.956051e+07  0.0044  0.0089  149016.0
+  top48 por coste en BTC : 29 /48 positivos; EV ponderado 0.0045; coste top48 19915820 de 33805980 (58.9%)
+  resto con coste>=500: 1234 makers, 36.6% positivos, EV -0.0045
+  top48 por coste en ALT : 27 /48 positivos; EV ponderado 0.0017; coste top48 3860492 de 4592678 (84.1%)
+  resto con coste>=500: 202 makers, 45.5% positivos, EV -0.0152
+=== D. ventaja de los 48-50 mayores vs resto DENTRO de celda (dia,moneda,banda,lado), ponderada por coste de los grandes
+DESC BTC EV grandes 0.0066 EV resto -0.0059 diff bruta 0.0125 | diff intra-celda -0.0101 IC90 por dias (-0.0179,-0.0024) celdas 144
+DESC ALT EV grandes 0.0012 EV resto 0.0028 diff bruta -0.0016 | diff intra-celda -0.0188 IC90 por dias (-0.0239,-0.0133) celdas 627
+HOLD BTC EV grandes 0.0044 EV resto -0.0057 diff bruta 0.0101 | diff intra-celda -0.0129 IC90 por dias (-0.0193,-0.0063) celdas 128
+HOLD ALT EV grandes 0.0092 EV resto -0.0073 diff bruta 0.0165 | diff intra-celda -0.0005 IC90 por dias (-0.0071,0.0061) celdas 517
+=== E. huella de los 4 ganadores ex-post (NO evidencia independiente) y lookalikes
+direcciones: {'0xb0f85baa': [np.str_('0xb0f85baa97990910a3e8ac2b4a58a322f01ecef5')], '0x21f4c1a1': [np.str_('0x21f4c1a1be34a39a7bc20985df4b7e5a39fb691d')], '0xe29042f5': [np.str_('0xe29042f5d913dcc4015aab3455c13c58514ca33f')], '0x86b14772': [np.str_('0x86b14772a4da70f3e6d5eee06933ebef143efc87')]}
+0xb0f85baa rasgos DESC (valor) : {'r01_p<0.10': 0.042, 'r02_p.05-.30': 0.089, 'r03_carry>=.90': 0.598, 'r04_p<0.30': 0.108, 'r05_pc_medio': 0.788, 'r06_med_sec': 162.998, 'r07_fr30s': 0.008, 'r08_tarde': 0.323, 'r09_med_acc': 12.733, 'r10_med_unidad': 5.743, 'r11_logdia': 4.218, 'r12_vent_simult': 1.835, 'r13_monedas': 3.0, 'r14_cuota_btc': 0.562, 'r15_yes': 0.447, 'r16_noche': 0.275, 'r17_ord_unidad': 3.979, 'r18_ventas': 0.0, 'r19_ambos_lados': 0.14, 'r20_taker': 0.0} | coste maker DESC 148798
+0x21f4c1a1 rasgos DESC (valor) : {'r01_p<0.10': 0.023, 'r02_p.05-.30': 0.089, 'r03_carry>=.90': 0.257, 'r04_p<0.30': 0.098, 'r05_pc_medio': 0.684, 'r06_med_sec': 144.305, 'r07_fr30s': 0.126, 'r08_tarde': 0.302, 'r09_med_acc': 9.861, 'r10_med_unidad': 258.034, 'r11_logdia': 5.333, 'r12_vent_simult': 1.0, 'r13_monedas': 1.0, 'r14_cuota_btc': 1.0, 'r15_yes': 0.479, 'r16_noche': 0.233, 'r17_ord_unidad': 17.231, 'r18_ventas': 0.0, 'r19_ambos_lados': 0.973, 'r20_taker': 0.237} | coste maker DESC 1936616
+0xe29042f5 rasgos DESC (valor) : {'r01_p<0.10': 0.007, 'r02_p.05-.30': 0.094, 'r03_carry>=.90': 0.051, 'r04_p<0.30': 0.095, 'r05_pc_medio': 0.587, 'r06_med_sec': 79.4, 'r07_fr30s': 0.241, 'r08_tarde': 0.005, 'r09_med_acc': 9.384, 'r10_med_unidad': 186.371, 'r11_logdia': 4.906, 'r12_vent_simult': 1.0, 'r13_monedas': 1.0, 'r14_cuota_btc': 1.0, 'r15_yes': 0.497, 'r16_noche': 0.233, 'r17_ord_unidad': 22.167, 'r18_ventas': 0.0, 'r19_ambos_lados': 0.99, 'r20_taker': 0.218} | coste maker DESC 725293
+0x86b14772 rasgos DESC (valor) : {'r01_p<0.10': 0.005, 'r02_p.05-.30': 0.037, 'r03_carry>=.90': 0.161, 'r04_p<0.30': 0.038, 'r05_pc_medio': 0.714, 'r06_med_sec': 144.453, 'r07_fr30s': 0.123, 'r08_tarde': 0.316, 'r09_med_acc': 17.771, 'r10_med_unidad': 186.681, 'r11_logdia': 5.125, 'r12_vent_simult': 1.0, 'r13_monedas': 1.0, 'r14_cuota_btc': 1.0, 'r15_yes': 0.508, 'r16_noche': 0.214, 'r17_ord_unidad': 4.496, 'r18_ventas': 0.0, 'r19_ambos_lados': 0.694, 'r20_taker': 0.003} | coste maker DESC 1201390
+percentil de cada rasgo entre elegibles (cost>=500, universo ALL, DESC)
+            r01_p<0.10  r02_p.05-.30  r03_carry>=.90  r04_p<0.30  r05_pc_medio  r06_med_sec  r07_fr30s  r08_tarde  r09_med_acc  r10_med_unidad  r11_logdia  r12_vent_simult  r13_monedas  r14_cuota_btc  r15_yes  r16_noche  r17_ord_unidad  r18_ventas  r19_ambos_lados  r20_taker
+0xb0f85baa        0.87          0.69            0.86        0.73          0.83         0.66       0.29       0.63         0.85            0.35        0.95             0.97         0.87           0.12     0.20       0.75            0.85        0.36             0.46       0.14
+0x21f4c1a1        0.82          0.70            0.77        0.69          0.71         0.56       0.59       0.61         0.70            0.97        1.00             0.39         0.36           0.65     0.32       0.57            0.99        0.36             0.96       0.50
+0xe29042f5        0.59          0.72            0.49        0.68          0.43         0.21       0.80       0.09         0.63            0.95        0.99             0.39         0.36           0.65     0.51       0.57            1.00        0.36             0.98       0.49
+0x86b14772        0.53          0.38            0.69        0.34          0.76         0.56       0.58       0.62         0.95            0.96        1.00             0.39         0.36           0.65     0.64       0.46            0.87        0.36             0.85       0.29
+0xb0f85baa EV maker DESC 0.0502 (coste 148798) HOLD 0.0262 (coste 188660)
+0x21f4c1a1 EV maker DESC 0.0075 (coste 1936616) HOLD 0.0157 (coste 1125871)
+0xe29042f5 EV maker DESC 0.0161 (coste 725293) HOLD 0.0062 (coste 988742)
+0x86b14772 EV maker DESC 0.0047 (coste 1201389) HOLD 0.0266 (coste 392068)
+LOOKALIKES K=20 (distancia en percentiles de 20 rasgos al centroide de los 4; evaluables HOLD n=20): EV HOLD 0.0020 (con reb 0.0067) vs elegibles 0.0006; p placebo (muestra aleatoria igual tamano) 0.858; % positivos 50%; coste 7261675; wallet top 10%
+LOOKALIKES K=50 (distancia en percentiles de 20 rasgos al centroide de los 4; evaluables HOLD n=47): EV HOLD 0.0022 (con reb 0.0069) vs elegibles 0.0006; p placebo (muestra aleatoria igual tamano) 0.781; % positivos 49%; coste 13803127; wallet top 7%
+perdedores DESC (coste>=2000, EV<0): 533; ganadores DESC: 328
+                 med_perd  med_gan  0xb0f85baa  0x21f4c1a1  0xe29042f5  0x86b14772
+r01_p<0.10          0.005    0.007       0.042       0.023       0.007       0.005
+r02_p.05-.30        0.064    0.065       0.089       0.089       0.094       0.037
+r03_carry>=.90      0.075    0.117       0.598       0.257       0.051       0.161
+r04_p<0.30          0.067    0.069       0.108       0.098       0.095       0.038
+r05_pc_medio        0.629    0.636       0.788       0.684       0.587       0.714
+r06_med_sec       118.642  149.887     162.998     144.305      79.400     144.453
+r07_fr30s           0.120    0.101       0.008       0.126       0.241       0.123
+r08_tarde           0.195    0.318       0.323       0.302       0.005       0.316
+r09_med_acc         8.282    8.991      12.733       9.861       9.384      17.771
+r10_med_unidad     10.524   14.109       5.743     258.034     186.371     186.681
+r11_logdia          2.833    3.159       4.218       5.333       4.906       5.125
+r12_vent_simult     1.000    1.000       1.835       1.000       1.000       1.000
+r13_monedas         1.000    1.000       3.000       1.000       1.000       1.000
+r14_cuota_btc       1.000    1.000       0.562       1.000       1.000       1.000
+r15_yes             0.497    0.495       0.447       0.479       0.497       0.508
+r16_noche           0.228    0.219       0.275       0.233       0.233       0.214
+r17_ord_unidad      1.870    1.925       3.979      17.231      22.167       4.496
+r18_ventas          0.000    0.000       0.000       0.000       0.000       0.000
+r19_ambos_lados     0.307    0.266       0.140       0.973       0.990       0.694
+r20_taker           0.065    0.086       0.000       0.237       0.218       0.003

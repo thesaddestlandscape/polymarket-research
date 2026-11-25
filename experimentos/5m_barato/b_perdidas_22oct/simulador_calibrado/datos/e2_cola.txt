@@ -1,0 +1,9 @@
+pares 952
+mediana real 38.0 sim al t_dec real 38.0 sim al t_dec sim 40.0
+razon sim/real (t_dec real) p25/p50/p75 {0.25: 1.0, 0.5: 1.0, 0.75: 1.0}
+dif sim-real (acc) p25/p50/p75 {0.25: 0.0, 0.5: 0.0, 0.75: 0.0} | frac |dif|<=2: 0.789 | cola real<=5: 0.161 sim<=5: 0.154
+         n   real   sim
+act                    
+ETH  327.0  45.00  42.5
+SOL  280.0  25.00  26.0
+XRP  345.0  37.91  38.0

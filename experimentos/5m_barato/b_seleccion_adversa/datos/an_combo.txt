@@ -1,0 +1,39 @@
+todas                    disc EV -0.055 IC90d(-0.087,-0.022) sin2mejoresdias -0.083 dias+ 1/3 n=23919 €=22951 | retenido EUR 1.00 | unid/dia 7973
+todas                    hold EV -0.013 IC90d(-0.034,+0.044) sin2mejoresdias +nan dias+ 1/2 n=12206 €=11609 | retenido EUR 1.00 | unid/dia 6103
+todas                    todo EV -0.041 IC90d(-0.073,-0.007) sin2mejoresdias -0.068 dias+ 2/5 n=36125 €=34560 | retenido EUR 1.00 | unid/dia 7225
+A lvl15<=0.03            disc EV +0.042 IC90d(+0.004,+0.084) sin2mejoresdias -0.015 dias+ 2/3 n=5969 €=5932 | retenido EUR 0.26 | unid/dia 1990
+A lvl15<=0.03            hold EV +0.147 IC90d(+0.100,+0.296) sin2mejoresdias +nan dias+ 2/2 n=2826 €=2790 | retenido EUR 0.24 | unid/dia 1413
+A lvl15<=0.03            todo EV +0.076 IC90d(+0.031,+0.140) sin2mejoresdias +0.042 dias+ 4/5 n=8795 €=8722 | retenido EUR 0.25 | unid/dia 1759
+A & R1a(ws)              disc EV +0.058 IC90d(+0.039,+0.078) sin2mejoresdias +0.038 dias+ 3/3 n=5387 €=5392 | retenido EUR 0.23 | unid/dia 1796
+A & R1a(ws)              hold EV +0.141 IC90d(+0.076,+0.341) sin2mejoresdias +nan dias+ 2/2 n=2627 €=2611 | retenido EUR 0.22 | unid/dia 1314
+A & R1a(ws)              todo EV +0.085 IC90d(+0.051,+0.147) sin2mejoresdias +0.052 dias+ 5/5 n=8014 €=8003 | retenido EUR 0.23 | unid/dia 1603
+A & R1b                  disc EV +0.079 IC90d(+0.075,+0.084) sin2mejoresdias +0.073 dias+ 3/3 n=5081 €=5101 | retenido EUR 0.22 | unid/dia 1694
+A & R1b                  hold EV +0.186 IC90d(+0.167,+0.265) sin2mejoresdias +nan dias+ 2/2 n=2152 €=2100 | retenido EUR 0.18 | unid/dia 1076
+A & R1b                  todo EV +0.110 IC90d(+0.081,+0.155) sin2mejoresdias +0.096 dias+ 5/5 n=7233 €=7201 | retenido EUR 0.21 | unid/dia 1447
+A & R1                   disc EV +0.092 IC90d(+0.062,+0.119) sin2mejoresdias +0.056 dias+ 3/3 n=4593 €=4643 | retenido EUR 0.20 | unid/dia 1531
+A & R1                   hold EV +0.166 IC90d(+0.135,+0.296) sin2mejoresdias +nan dias+ 2/2 n=1986 €=1946 | retenido EUR 0.17 | unid/dia 993
+A & R1                   todo EV +0.114 IC90d(+0.079,+0.155) sin2mejoresdias +0.090 dias+ 5/5 n=6579 €=6589 | retenido EUR 0.19 | unid/dia 1316
+A & d_open>=0.17         disc EV +0.053 IC90d(-0.005,+0.115) sin2mejoresdias -0.005 dias+ 1/3 n=4247 €=3996 | retenido EUR 0.17 | unid/dia 1416
+A & d_open>=0.17         hold EV +0.152 IC90d(+0.064,+0.181) sin2mejoresdias +nan dias+ 2/2 n=1914 €=1784 | retenido EUR 0.15 | unid/dia 957
+A & d_open>=0.17         todo EV +0.083 IC90d(+0.007,+0.159) sin2mejoresdias +0.005 dias+ 3/5 n=6161 €=5780 | retenido EUR 0.17 | unid/dia 1232
+A & R1 & d_open>=0.17    disc EV +0.075 IC90d(+0.049,+0.102) sin2mejoresdias +0.033 dias+ 3/3 n=3309 €=3190 | retenido EUR 0.14 | unid/dia 1103
+A & R1 & d_open>=0.17    hold EV +0.077 IC90d(-0.176,+0.131) sin2mejoresdias +nan dias+ 1/2 n=1326 €=1230 | retenido EUR 0.11 | unid/dia 663
+A & R1 & d_open>=0.17    todo EV +0.075 IC90d(+0.031,+0.109) sin2mejoresdias +0.035 dias+ 4/5 n=4635 €=4421 | retenido EUR 0.13 | unid/dia 927
+d_open>=0.17 solo        disc EV +0.010 IC90d(-0.040,+0.063) sin2mejoresdias -0.056 dias+ 1/3 n=17377 €=15865 | retenido EUR 0.69 | unid/dia 5792
+d_open>=0.17 solo        hold EV +0.052 IC90d(+0.048,+0.064) sin2mejoresdias +nan dias+ 2/2 n=8787 €=7929 | retenido EUR 0.68 | unid/dia 4394
+d_open>=0.17 solo        todo EV +0.024 IC90d(-0.018,+0.070) sin2mejoresdias -0.016 dias+ 3/5 n=26164 €=23794 | retenido EUR 0.69 | unid/dia 5233
+R1 & d_open              disc EV +0.018 IC90d(-0.012,+0.048) sin2mejoresdias -0.041 dias+ 2/3 n=13521 €=12569 | retenido EUR 0.55 | unid/dia 4507
+R1 & d_open              hold EV +0.129 IC90d(+0.114,+0.180) sin2mejoresdias +nan dias+ 2/2 n=6353 €=5730 | retenido EUR 0.49 | unid/dia 3176
+R1 & d_open              todo EV +0.053 IC90d(+0.012,+0.105) sin2mejoresdias +0.018 dias+ 4/5 n=19874 €=18299 | retenido EUR 0.53 | unid/dia 3975
+A por dia: {'2026-10-17': (np.float64(0.107), 1843), '2026-10-18': (np.float64(-0.015), 2068), '2026-10-19': (np.float64(0.042), 2058), '2026-10-20': (np.float64(0.1), 2136), '2026-10-21': (np.float64(0.296), 690)}
+no-A por dia: {'2026-10-17': (np.float64(-0.05), 5348), '2026-10-18': (np.float64(-0.085), 5332), '2026-10-19': (np.float64(-0.153), 6360), '2026-10-20': (np.float64(-0.095), 6365), '2026-10-21': (np.float64(-0.031), 2517)}
+A por moneda: {'ETH': (np.float64(0.045), 5162), 'SOL': (np.float64(0.135), 2263), 'XRP': (np.float64(0.099), 1370)}
+A por banda pc: {'(0.1, 0.15]': (np.float64(0.231), 1588), '(0.15, 0.2]': (np.float64(-0.014), 1951), '(0.2, 0.25]': (np.float64(0.136), 2325), '(0.25, 0.3]': (np.float64(0.036), 2931)}
+lvl15<=-0.05 n=6837 EV disc +0.003 hold +0.158
+lvl15<=0.00 n=8116 EV disc +0.034 hold +0.169
+lvl15<=0.01 n=8335 EV disc +0.034 hold +0.166
+lvl15<=0.02 n=8572 EV disc +0.035 hold +0.157
+lvl15<=0.03 n=8795 EV disc +0.042 hold +0.147
+lvl15<=0.05 n=9402 EV disc +0.045 hold +0.139
+lvl15<=0.08 n=10682 EV disc +0.021 hold +0.096
+lvl15<=0.12 n=14257 EV disc -0.044 hold +0.037

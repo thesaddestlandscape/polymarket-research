@@ -1,0 +1,31 @@
+Ordenes B con vida medible: 3272 (rellenos 186, canceladas 3086); vida mediana 0.59 s; dias 3
+
+TODAS
+   A0 0         n= 411 rellenos= 33  P(relleno)=0.080  vida media 1.32s  tasa/100 s en riesgo 6.07 (IC90 por dia 5.65,6.41)
+   A0 (0,10]    n= 307 rellenos= 25  P(relleno)=0.081  vida media 1.28s  tasa/100 s en riesgo 6.38 (IC90 por dia 5.56,8.43)
+   A0 (10,30]   n= 662 rellenos= 33  P(relleno)=0.050  vida media 1.23s  tasa/100 s en riesgo 4.04 (IC90 por dia 3.73,4.73)
+   A0 (30,80]   n= 960 rellenos= 55  P(relleno)=0.057  vida media 1.17s  tasa/100 s en riesgo 4.91 (IC90 por dia 4.67,5.46)
+   A0 >80       n= 932 rellenos= 40  P(relleno)=0.043  vida media 1.24s  tasa/100 s en riesgo 3.46 (IC90 por dia 2.54,4.73)
+
+MONEDA eth
+   A0 0         n=  62 rellenos=  3  P(relleno)=0.048  vida media 1.19s  tasa/100 s en riesgo 4.07 (IC90 por dia 2.13,6.27)
+   A0 (0,10]    n=  91 rellenos=  9  P(relleno)=0.099  vida media 1.29s  tasa/100 s en riesgo 7.69 (IC90 por dia 5.98,13.97)
+   A0 (10,30]   n= 168 rellenos= 13  P(relleno)=0.077  vida media 1.11s  tasa/100 s en riesgo 6.95 (IC90 por dia 4.91,9.27)
+   A0 (30,80]   n= 509 rellenos= 30  P(relleno)=0.059  vida media 1.06s  tasa/100 s en riesgo 5.58 (IC90 por dia 5.12,6.31)
+   A0 >80       n= 365 rellenos= 19  P(relleno)=0.052  vida media 1.24s  tasa/100 s en riesgo 4.21 (IC90 por dia 3.74,4.54)
+
+MONEDA sol
+   A0 0         n= 136 rellenos= 11  P(relleno)=0.081  vida media 1.06s  tasa/100 s en riesgo 7.63 (IC90 por dia 7.01,7.94)
+   A0 (0,10]    n= 118 rellenos= 11  P(relleno)=0.093  vida media 1.08s  tasa/100 s en riesgo 8.64 (IC90 por dia 6.53,10.23)
+   A0 (10,30]   n= 282 rellenos= 10  P(relleno)=0.035  vida media 1.21s  tasa/100 s en riesgo 2.93 (IC90 por dia 2.18,4.34)
+   A0 (30,80]   n= 255 rellenos= 17  P(relleno)=0.067  vida media 0.97s  tasa/100 s en riesgo 6.87 (IC90 por dia 5.30,8.66)
+   A0 >80       n= 256 rellenos= 10  P(relleno)=0.039  vida media 0.97s  tasa/100 s en riesgo 4.03 (IC90 por dia 1.34,8.04)
+
+MONEDA xrp
+   A0 0         n= 213 rellenos= 19  P(relleno)=0.089  vida media 1.53s  tasa/100 s en riesgo 5.84 (IC90 por dia 4.77,6.97)
+   A0 (0,10]    n=  98 rellenos=  5  P(relleno)=0.051  vida media 1.50s  tasa/100 s en riesgo 3.40 (IC90 por dia 2.15,8.02)
+   A0 (10,30]   n= 212 rellenos= 10  P(relleno)=0.047  vida media 1.36s  tasa/100 s en riesgo 3.46 (IC90 por dia 2.02,5.65)
+   A0 (30,80]   n= 196 rellenos=  8  P(relleno)=0.041  vida media 1.71s  tasa/100 s en riesgo 2.38 (IC90 por dia 1.38,3.18)
+   A0 >80       n= 311 rellenos= 11  P(relleno)=0.035  vida media 1.47s  tasa/100 s en riesgo 2.41 (IC90 por dia 1.91,3.21)
+
+Correlacion Spearman A0 vs P(relleno) por orden: -0.048; A0 vs vida (todas): +0.022

@@ -1,0 +1,51 @@
+2026-10-24 k 5076 t keys 472653 onchain keys 621684
+2026-10-24 frescos casados n=320999 p5=1365 p25=1808 p50=2217 p75=2607 p95=3146 IQR=799 ms
+2026-10-24 listo
+2026-10-25 k 5076 t keys 458363 onchain keys 610841
+2026-10-25 frescos casados n=306601 p5=1356 p25=1798 p50=2199 p75=2581 p95=3085 IQR=783 ms
+2026-10-25 listo
+2026-10-26 k 5092 t keys 534615 onchain keys 677805
+2026-10-26 frescos casados n=368254 p5=1354 p25=1793 p50=2192 p75=2575 p95=3071 IQR=782 ms
+2026-10-26 listo
+
+===== RUIDO RELOJ ON-CHAIN (ts_chain - t_exch, prints frescos casados):
+2026-10-24 n=320999 p5=1365 p25=1808 p50=2217 p75=2607 p95=3146 IQR=799
+2026-10-25 n=306601 p5=1356 p25=1798 p50=2199 p75=2581 p95=3085 IQR=783
+2026-10-26 n=368254 p5=1354 p25=1793 p50=2192 p75=2575 p95=3071 IQR=782
+
+===== FRACCION FANTASMA POR TRAMO (unidades; entre parentesis por EUR de coste)
+tramo         n  okchn    amb   none   sinT     FX     FC  FXyFC   PRIM   FD  PRIM|FD
+<1 s       1257   1016    188     13     40  FX 395/31%/33% | FC 398/32%/32% | FXyFC 164/13%/13% | PRIM 629/50%/51% | FD 327/26%/25% | PRIM|FD 840/67%/67%
+1-5 s       763    682     45      1     35  FX 1/0%/0% | FC 0/0%/0% | FXyFC 0/0%/0% | PRIM 1/0%/0% | FD 320/42%/44% | PRIM|FD 320/42%/44%
+5-20 s     1306   1207     42     14     43  FX 0/0%/0% | FC 0/0%/0% | FXyFC 0/0%/0% | PRIM 0/0%/0% | FD 540/41%/43% | PRIM|FD 540/41%/43%
+>=20 s     1760   1620     88     24     28  FX 0/0%/0% | FC 0/0%/0% | FXyFC 0/0%/0% | PRIM 0/0%/0% | FD 710/40%/43% | PRIM|FD 710/40%/43%
+
+===== EVw (1 obs por mercado-lado; IC90 por cierre) =====
+TODO baseline (control vs -0,217)            n= 5086 cierres= 864 coste=  6243.8 EVw=-0.2173 IC90c=(-0.261,-0.177) | 24:-0.233(n1744) 25:-0.276(n1656) 26:-0.143(n1686) | sin2mejoresdias=-0.2757
+ANTES   <1 s                                 n= 1257 cierres= 711 coste=  1729.4 EVw=-0.0763 IC90c=(-0.147,-0.008) | 24:+0.004(n440) 25:-0.201(n413) 26:-0.035(n404) | sin2mejoresdias=-0.2012
+  sin PRIM (FX|FC)  <1 s                     n=  628 cierres= 451 coste=   842.8 EVw=-0.0785 IC90c=(-0.180,+0.029) | 24:+0.022(n221) 25:-0.212(n197) 26:-0.061(n210) | sin2mejoresdias=-0.2116
+  sin FXyFC         <1 s                     n= 1093 cierres= 648 coste=  1496.3 EVw=-0.0785 IC90c=(-0.157,-0.008) | 24:-0.000(n384) 25:-0.194(n354) 26:-0.048(n355) | sin2mejoresdias=-0.1944
+  sin PRIM|FD       <1 s                     n=  417 cierres= 324 coste=   570.7 EVw=-0.1059 IC90c=(-0.232,+0.011) | 24:-0.019(n151) 25:-0.257(n141) 26:-0.040(n125) | sin2mejoresdias=-0.2569
+  solo PRIM (los fantasma) <1 s              n=  629 cierres= 481 coste=   886.7 EVw=-0.0743 IC90c=(-0.172,+0.028)
+ANTES   1-5 s                                n=  763 cierres= 515 coste=   939.5 EVw=-0.1629 IC90c=(-0.259,-0.067) | 24:-0.370(n263) 25:-0.126(n214) 26:+0.013(n286) | sin2mejoresdias=-0.3704
+  sin PRIM (FX|FC)  1-5 s                    n=  762 cierres= 514 coste=   938.1 EVw=-0.1669 IC90c=(-0.265,-0.075) | 24:-0.370(n263) 25:-0.140(n213) 26:+0.013(n286) | sin2mejoresdias=-0.3704
+  sin FXyFC         1-5 s                    n=  763 cierres= 515 coste=   939.5 EVw=-0.1629 IC90c=(-0.259,-0.067) | 24:-0.370(n263) 25:-0.126(n214) 26:+0.013(n286) | sin2mejoresdias=-0.3704
+  sin PRIM|FD       1-5 s                    n=  443 cierres= 342 coste=   528.6 EVw=-0.1831 IC90c=(-0.304,-0.063) | 24:-0.387(n161) 25:-0.170(n118) 26:+0.025(n164) | sin2mejoresdias=-0.3874
+  solo PRIM (los fantasma) 1-5 s             n=    1 cierres=   1 coste=     1.4 EVw=+2.4483 IC90c=(+2.448,+2.448)
+ANTES   5-20 s                               n= 1306 cierres= 696 coste=  1597.2 EVw=-0.2586 IC90c=(-0.327,-0.181) | 24:-0.328(n451) 25:-0.336(n402) 26:-0.115(n453) | sin2mejoresdias=-0.3360
+  sin PRIM (FX|FC)  5-20 s                   n= 1306 cierres= 696 coste=  1597.2 EVw=-0.2586 IC90c=(-0.327,-0.181) | 24:-0.328(n451) 25:-0.336(n402) 26:-0.115(n453) | sin2mejoresdias=-0.3360
+  sin FXyFC         5-20 s                   n= 1306 cierres= 696 coste=  1597.2 EVw=-0.2586 IC90c=(-0.327,-0.181) | 24:-0.328(n451) 25:-0.336(n402) 26:-0.115(n453) | sin2mejoresdias=-0.3360
+  sin PRIM|FD       5-20 s                   n=  766 cierres= 525 coste=   916.8 EVw=-0.3082 IC90c=(-0.403,-0.207) | 24:-0.351(n276) 25:-0.405(n227) 26:-0.176(n263) | sin2mejoresdias=-0.4045
+  solo PRIM (los fantasma) 5-20 s            n=0
+ANTES   >=20 s                               n= 1760 cierres= 772 coste=  1977.6 EVw=-0.3331 IC90c=(-0.394,-0.275) | 24:-0.301(n590) 25:-0.352(n627) 26:-0.347(n543) | sin2mejoresdias=-0.3516
+  sin PRIM (FX|FC)  >=20 s                   n= 1760 cierres= 772 coste=  1977.6 EVw=-0.3331 IC90c=(-0.394,-0.275) | 24:-0.301(n590) 25:-0.352(n627) 26:-0.347(n543) | sin2mejoresdias=-0.3516
+  sin FXyFC         >=20 s                   n= 1760 cierres= 772 coste=  1977.6 EVw=-0.3331 IC90c=(-0.394,-0.275) | 24:-0.301(n590) 25:-0.352(n627) 26:-0.347(n543) | sin2mejoresdias=-0.3516
+  sin PRIM|FD       >=20 s                   n= 1050 cierres= 632 coste=  1127.8 EVw=-0.3491 IC90c=(-0.428,-0.271) | 24:-0.298(n352) 25:-0.326(n384) 26:-0.432(n314) | sin2mejoresdias=-0.4322
+  solo PRIM (los fantasma) >=20 s            n=0
+
+===== RE-SIMULACION quitando prints fantasma (FX|FC) de cada vida; unidad re-asignada al siguiente print
+TODO re-sim                                  n= 4975 cierres= 864 coste=  6059.0 EVw=-0.2227 IC90c=(-0.266,-0.181) | 24:-0.248(n1697) 25:-0.269(n1620) 26:-0.151(n1658) | sin2mejoresdias=-0.2687
+RESIM <1 s                                   n=  996 cierres= 639 coste=  1351.5 EVw=-0.1067 IC90c=(-0.183,-0.026) | 24:-0.095(n347) 25:-0.143(n321) 26:-0.083(n328) | sin2mejoresdias=-0.1434
+RESIM 1-5 s                                  n=  844 cierres= 545 coste=  1041.8 EVw=-0.1369 IC90c=(-0.233,-0.041) | 24:-0.319(n290) 25:-0.125(n241) 26:+0.033(n313) | sin2mejoresdias=-0.3194
+RESIM 5-20 s                                 n= 1352 cierres= 711 coste=  1658.1 EVw=-0.2466 IC90c=(-0.319,-0.175) | 24:-0.294(n463) 25:-0.335(n424) 26:-0.114(n465) | sin2mejoresdias=-0.3348
+RESIM >=20 s                                 n= 1783 cierres= 774 coste=  2007.6 EVw=-0.3257 IC90c=(-0.390,-0.270) | 24:-0.280(n597) 25:-0.359(n634) 26:-0.337(n552) | sin2mejoresdias=-0.3591

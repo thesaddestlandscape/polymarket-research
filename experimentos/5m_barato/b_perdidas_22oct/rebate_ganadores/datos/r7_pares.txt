@@ -1,0 +1,17 @@
+wallet clase | PnL total(+reb) | bloqueado por pares | residuo direccional | EV bloqueado/EUR | EV residuo/EUR | mercados con par | pnl/mercado dir (IC90 mercados)
+0x21f4c1a1 GAN  |   32,035 |  217,176 | -198,800 | +0.0548 | -0.0502 | 0.98 | -47.69 (-50.72,-44.23) ; pares: precio medio YES+NO emparejado 0.932
+0x28cc505f PERD |    7,707 |    3,607 |     -352 | +0.0039 | -0.0004 | 0.73 | +1.31 (-2.03,+4.61) ; pares: precio medio YES+NO emparejado 0.992
+0x855e4848 PERD |    6,711 |     -894 |    3,179 | -0.0010 | +0.0034 | 0.70 | +1.17 (-2.62,+4.73) ; pares: precio medio YES+NO emparejado 0.992
+0x85a186d1 PERD |    3,521 |   62,441 |  -65,096 | +0.0521 | -0.0543 | 1.00 | -15.02 (-15.90,-14.16) ; pares: precio medio YES+NO emparejado 0.946
+0x86b14772 GAN  |   21,596 |  -55,113 |   69,960 | -0.0342 | +0.0434 | 0.76 | +14.61 (+10.91,+18.43) ; pares: precio medio YES+NO emparejado 1.011
+0x9d57c42e PERD |   -2,591 |  129,219 | -139,312 | +0.0587 | -0.0633 | 1.00 | -40.09 (-41.21,-38.96) ; pares: precio medio YES+NO emparejado 0.928
+0xe29042f5 GAN  |   33,852 |   74,816 |  -52,642 | +0.0253 | -0.0178 | 0.99 | -14.76 (-16.81,-12.49) ; pares: precio medio YES+NO emparejado 0.970
+
+== EV maker (sin rebate) por orden de llegada en el mercado y tamano de fill ==
+0x21f4c1a1 GAN  llegada tercio1 +0.0296 tercio2 +0.0211 tercio3 -0.0224 | tamano mediana-baja +0.0004 p90+ +0.0208 | por T(<=60,60-150,150-300): +0.0022 +0.0063 +0.0150
+0x28cc505f PERD llegada tercio1 +0.0054 tercio2 -0.0078 tercio3 +0.0097 | tamano mediana-baja -0.0036 p90+ +0.0110 | por T(<=60,60-150,150-300): +0.0220 +0.0026 -0.0164
+0x855e4848 PERD llegada tercio1 -0.0101 tercio2 -0.0123 tercio3 +0.0228 | tamano mediana-baja -0.0127 p90+ -0.0058 | por T(<=60,60-150,150-300): +0.0046 -0.0044 -0.0070
+0x85a186d1 PERD llegada tercio1 +0.0042 tercio2 +0.0161 tercio3 -0.0318 | tamano mediana-baja -0.0029 p90+ -0.0037 | por T(<=60,60-150,150-300): -0.0081 -0.0058 -0.0021
+0x86b14772 GAN  llegada tercio1 -0.0222 tercio2 +0.0104 tercio3 +0.0531 | tamano mediana-baja -0.0141 p90+ +0.0193 | por T(<=60,60-150,150-300): -0.0308 -0.0042 +0.0260
+0x9d57c42e PERD llegada tercio1 +0.0132 tercio2 +0.0020 tercio3 -0.0170 | tamano mediana-baja -0.0244 p90+ +0.0103 | por T(<=60,60-150,150-300): -0.0050 +0.0013 -0.0007
+0xe29042f5 GAN  llegada tercio1 +0.0122 tercio2 +0.0106 tercio3 +0.0085 | tamano mediana-baja +0.0048 p90+ +0.0167 | por T(<=60,60-150,150-300): -0.4248 +0.0158 +0.0108

@@ -1,0 +1,5 @@
+(a) nulo poblacion 17-22 (maker medio a su precio): hit medio esperado 0.202 ; PnL esperado -0.30 (sd 8.68) ; P(PnL<=obs -9.84) 0.139 ; P(<=1 acierto) 0.134
+(b) + regimen ventana 06:30-08:56 (longshots genericos, fill-independiente): hit medio esperado 0.137 ; PnL esperado -5.58 (sd 7.43) ; P(PnL<=obs -9.84) 0.332 ; P(<=1 acierto) 0.331
+(c) + AS tipo gemelo en ventana (1/14 fills; n=14, IC90 EV (-1,-0.05)) [cota, muy ruidosa]: hit medio esperado 0.075 ; PnL esperado -10.65 (sd 5.71) ; P(PnL<=obs -9.84) 0.643 ; P(<=1 acierto) 0.657
+
+Descomposicion (PnL en $, aproximada): observado -9.84 = nulo -0.30 + regimen -5.28 + AS(gemelo, cota) -5.07 + residuo/azar +0.81

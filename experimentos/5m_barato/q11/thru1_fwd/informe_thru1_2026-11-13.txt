@@ -1,0 +1,33 @@
+# INFORME DIARIO H-Q11-THRU1 forward (DESCRIPTIVO; ningun veredicto fuera de checkpoints) generado 2026-11-13T13:20:46Z | hoy=2026-11-13
+Dias DESCRIPTIVOS-QUEMADOS (ADDENDUM6: no cuentan, no deciden): 2026-11-07, 2026-11-08
+Dias candidatos 4 | validos 3: 2026-11-09 NO VALIDO(Binance NO sano: H1 hueco conjunto <= 60s), 2026-11-10, 2026-11-11, 2026-11-12
+  [salud 2026-11-09] H1 hueco conjunto max 148.0s (NO) | H2 cob conjunta 0.9898 (ok) | H3 min ratio 0.9679 (ok) | n intervalos>=30s 2 | sensibilidad {'H1=50s': False, 'H1=60s': False, 'H1=73s': False, 'H3=0.93': False, 'H3=0.95': False, 'H3=0.97': False, 'H2=4simb': False} | por moneda BTC:cob0.85,hueco149s,minh0.66 ETH:cob0.76,hueco148s,minh0.48 SOL:cob0.56,hueco152s,minh0.42 XRP:cob0.64,hueco148s,minh0.41 DOGE:cob0.41,hueco149s,minh0.32 BNB:cob0.75,hueco150s,minh0.42
+  [salud 2026-11-10] H1 hueco conjunto max 3.9s (ok) | H2 cob conjunta 0.9929 (ok) | H3 min ratio 0.9775 (ok) | n intervalos>=30s 0 | sensibilidad {'H1=50s': True, 'H1=60s': True, 'H1=73s': True, 'H3=0.93': True, 'H3=0.95': True, 'H3=0.97': True, 'H2=4simb': True} | por moneda BTC:cob0.85,hueco8s,minh0.76 ETH:cob0.71,hueco15s,minh0.51 SOL:cob0.56,hueco18s,minh0.40 XRP:cob0.57,hueco25s,minh0.40 DOGE:cob0.38,hueco52s,minh0.23 BNB:cob0.74,hueco16s,minh0.44
+  [salud 2026-11-11] H1 hueco conjunto max 9.3s (ok) | H2 cob conjunta 0.9935 (ok) | H3 min ratio 0.9675 (ok) | n intervalos>=30s 0 | sensibilidad {'H1=50s': True, 'H1=60s': True, 'H1=73s': True, 'H3=0.93': True, 'H3=0.95': True, 'H3=0.97': False, 'H2=4simb': True} | por moneda BTC:cob0.84,hueco10s,minh0.74 ETH:cob0.63,hueco17s,minh0.55 SOL:cob0.57,hueco20s,minh0.48 XRP:cob0.55,hueco18s,minh0.45 DOGE:cob0.37,hueco33s,minh0.24 BNB:cob0.71,hueco15s,minh0.46
+  [salud 2026-11-12] H1 hueco conjunto max 4.5s (ok) | H2 cob conjunta 0.9882 (ok) | H3 min ratio 0.9749 (ok) | n intervalos>=30s 0 | sensibilidad {'H1=50s': True, 'H1=60s': True, 'H1=73s': True, 'H3=0.93': True, 'H3=0.95': True, 'H3=0.97': True, 'H2=4simb': True} | por moneda BTC:cob0.84,hueco9s,minh0.73 ETH:cob0.63,hueco16s,minh0.42 SOL:cob0.53,hueco27s,minh0.39 XRP:cob0.52,hueco28s,minh0.37 DOGE:cob0.37,hueco43s,minh0.23 BNB:cob0.71,hueco15s,minh0.43
+PC_AS: dias no validos por rasgo (cobertura r1&r4 < 0,95; solo afecta a PC_AS): ['2026-11-10']
+Cobertura rasgo PC_AS (unidades cierre-moneda NO, SOLO en arm_dias(PC_AS)=2 dias): 1.000 | G0 rellenos 674 pnl -97.15 EV -0.194 | G0 todos los dias comunes: 992 rellenos, EV -0.026
+
+## PG_O50: dias que cuentan nd_validos=3 (validos 3); G0 992 rellenos, brazo 387
+VEREDICTO PG_O50: EN_CURSO (nd=3; checkpoints evaluados: [])
+  [descriptivo acumulado] dPnL BASE +33.12 cierres 192 IC90c (-102.154,+157.511) sin2dias -51.022 | por dia: 2026-11-10:-51.0 2026-11-11:-24.7 2026-11-12:+108.9
+  [cotas dPnL] BASE=+33.1 STRICT=+33.8 OPT=+23.3 THIN=+59.1 CROSS=+30.6
+
+## GEO6: dias que cuentan nd_validos=3 (validos 3); G0 992 rellenos, brazo 762
+VEREDICTO GEO6: EN_CURSO (nd=3; checkpoints evaluados: [])
+  [descriptivo acumulado] dPnL BASE +4.64 cierres 192 IC90c (-57.296,+61.678) sin2dias -29.455 | por dia: 2026-11-10:-29.5 2026-11-11:-12.3 2026-11-12:+46.4
+  [cotas dPnL] BASE=+5.3 STRICT=+8.9 OPT=+7.3 THIN=+6.1 CROSS=+3.9
+
+## CXJ150: dias que cuentan nd_validos=3 (validos 3); G0 992 rellenos, brazo 817
+VEREDICTO CXJ150: EN_CURSO (nd=3; checkpoints evaluados: [])
+  [descriptivo acumulado] dPnL BASE +42.10 cierres 192 IC90c (-20.490,+98.519) sin2dias -16.436 | por dia: 2026-11-10:-16.4 2026-11-11:+9.3 2026-11-12:+49.2
+  [cotas dPnL] BASE=+42.1 CROSS=-2.6
+
+## PC_AS: dias que cuentan nd_validos=2 (validos 2); G0 674 rellenos, brazo 566
+VEREDICTO PC_AS: INSUFFICIENT (nd=2; checkpoints evaluados: [])
+  [descriptivo acumulado] dPnL BASE +13.60 cierres 135 IC90c (-41.482,+62.948) sin2dias nan | por dia: 2026-11-11:+8.9 2026-11-12:+4.7
+  [cotas dPnL] BASE=+13.6 STRICT=+15.6 OPT=+16.5 THIN=+23.8 CROSS=+34.6
+
+[secundarios descriptivos dPnL BASE vs G0: DIAS COMUNES (todos los validos), NO son arm_dias(PC_AS) ni de ningun brazo; los descriptivos por brazo van arriba con sus propios dias; no deciden] NJ3A=+2.6 CXJ1000=+21.2 GEO6NJ3=+3.9 CXB150=-16.0 CXB300=-10.6 CXB1000=+2.4 CXB3000=+62.4 PG_O50-GEO6=+27.8 | GEO6+CXJ150: no disponible (requiere simulacion nueva)
+NOTA: CXJ150 bajo BASE/CROSS = redteam/rt_cxj150_cross.py (script nuevo, sha propio, rt_sim.py/passT.py sin tocar); dia sin RX_D no cuenta para CXJ150.
+FIN

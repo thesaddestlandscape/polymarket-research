@@ -1,0 +1,120 @@
+# T2/T3 F5-V4: F5 por CLASE CAUSAL v4 (suelo_causal, ventana movil 10 min; excluye indet/mixta) -- SPEC sha 63b5c325 -- CENSURADA, gradiente poblacional (NO EV de regla), TODO «no validado»
+
+## GRUPO ALL3: dias 35/35 COMPLETE
+### ALL3 exclusion por clase causal v4 (tipo B; prints = rellenos poblacionales)
+  p35: prints 74714 | lo 71.6 % hi 26.5 % mixta 0.4 % indet 1.5 % (prints) | EUR: lo 70.9 hi 27.3 mixta 0.3 indet 1.6 | EXCLUIDO (mixta+indet) 1.86 % prints, 1.81 % EUR
+  p60: prints 85389 | lo 72.1 % hi 26.0 % mixta 0.3 % indet 1.6 % (prints) | EUR: lo 71.3 hi 26.9 mixta 0.3 indet 1.6 | EXCLUIDO (mixta+indet) 1.91 % prints, 1.85 % EUR
+### ALL3 validacion vs clase de FUTURO (5 min siguientes, tot>=100): de los prints declarados lo/hi, % con clase futura determinada y DISTINTA (contaminacion) y % futura indet
+  p35 ADD3 ventana alineada previa: lo: n 53776, contaminada 0.45 % prints / 0.29 % EUR, futura indet 0.8 % | hi: n 19788, contaminada 1.14 % prints / 0.75 % EUR, futura indet 0.2 %
+  p35 v4 causal movil pura: lo: n 53491, contaminada 0.16 % prints / 0.10 % EUR, futura indet 0.4 % | hi: n 19831, contaminada 0.52 % prints / 0.37 % EUR, futura indet 0.1 %
+  p60 ADD3 ventana alineada previa: lo: n 61923, contaminada 0.46 % prints / 0.30 % EUR, futura indet 0.7 % | hi: n 22131, contaminada 1.16 % prints / 0.77 % EUR, futura indet 0.2 %
+  p60 v4 causal movil pura: lo: n 61559, contaminada 0.15 % prints / 0.08 % EUR, futura indet 0.4 % | hi: n 22196, contaminada 0.54 % prints / 0.39 % EUR, futura indet 0.1 %
+
+### ALL3 CELDAS por CONTROL ADD3: clase causal de ADD3 (ventana alineada previa) (segmento = dia x clase; placebo por unidad B=1000, max-stat sobre estas celdas)
+p35|hi: prints 19788 | unidades 9640 (6220 mercado-lado) | 11 dias, 2364 cierres
+   EV pond. EUR: todo +0.045 bajo +0.088 medio +0.017 alto +0.012 G1(bajo+medio) +0.055 | EV por unidad: todo +0.081 bajo +0.140 medio +0.047 alto +0.036 G1 +0.095 | inversion (alto-todo) EUR -0.032
+   gradiente EUR diario +0.066 IC90 dias inf -0.083 dias+ 6/11 sin 2 mejores -0.045 | placebo unidad p celda 0.464 maxstat 0.915 (media +0.050)
+   gradiente unidad diario +0.079 IC90 dias inf +0.009 dias+ 8/11 sin 2 mejores +0.040 | placebo unidad p celda 0.297 maxstat 0.872 (media +0.045)
+   exceso alto (EUR) total +203 diario +18.472 IC90 dias inf -138.965 dias+ 5/11 sin 2 mejores -77.915 | EV diario G1 +0.094 IC90 inf -0.067 dias+ 7/11 sin 2 mejores +0.012
+p35|lo: prints 53776 | unidades 27167 (17465 mercado-lado) | 32 dias, 7072 cierres
+   EV pond. EUR: todo +0.215 bajo +0.283 medio +0.194 alto +0.141 G1(bajo+medio) +0.238 | EV por unidad: todo +0.053 bajo +0.084 medio +0.059 alto -0.005 G1 +0.072 | inversion (alto-todo) EUR -0.074
+   gradiente EUR diario +0.165 IC90 dias inf -0.047 dias+ 23/32 sin 2 mejores +0.098 | placebo unidad p celda 0.265 maxstat 0.564 (media +0.089)
+   gradiente unidad diario +0.065 IC90 dias inf -0.084 dias+ 23/32 sin 2 mejores +0.018 | placebo unidad p celda 0.369 maxstat 0.925 (media +0.044)
+   exceso alto (EUR) total +6003 diario +187.580 IC90 dias inf +41.687 dias+ 23/32 sin 2 mejores +128.449 | EV diario G1 +0.227 IC90 inf +0.142 dias+ 25/32 sin 2 mejores +0.183
+p60|hi: prints 22131 | unidades 10404 (6510 mercado-lado) | 11 dias, 2385 cierres
+   EV pond. EUR: todo +0.064 bajo +0.112 medio +0.052 alto +0.013 G1(bajo+medio) +0.084 | EV por unidad: todo +0.073 bajo +0.099 medio +0.060 alto +0.064 G1 +0.080 | inversion (alto-todo) EUR -0.050
+   gradiente EUR diario +0.079 IC90 dias inf -0.082 dias+ 6/11 sin 2 mejores -0.004 | placebo unidad p celda 0.348 maxstat 0.889 (media +0.033)
+   gradiente unidad diario +0.051 IC90 dias inf -0.041 dias+ 8/11 sin 2 mejores +0.016 | placebo unidad p celda 0.656 maxstat 0.966 (media +0.074)
+   exceso alto (EUR) total +481 diario +43.708 IC90 dias inf -153.320 dias+ 5/11 sin 2 mejores -78.419 | EV diario G1 +0.117 IC90 inf -0.046 dias+ 7/11 sin 2 mejores +0.037
+p60|lo: prints 61923 | unidades 29730 (18624 mercado-lado) | 32 dias, 7168 cierres
+   EV pond. EUR: todo +0.208 bajo +0.304 medio +0.205 alto +0.076 G1(bajo+medio) +0.254 | EV por unidad: todo +0.053 bajo +0.081 medio +0.059 alto +0.001 G1 +0.070 | inversion (alto-todo) EUR -0.133
+   gradiente EUR diario +0.307 IC90 dias inf +0.147 dias+ 27/32 sin 2 mejores +0.216 | placebo unidad p celda 0.011 maxstat 0.093 (media +0.055)
+   gradiente unidad diario +0.135 IC90 dias inf +0.050 dias+ 25/32 sin 2 mejores +0.084 | placebo unidad p celda 0.228 maxstat 0.500 (media +0.079)
+   exceso alto (EUR) total +9780 diario +305.637 IC90 dias inf +187.028 dias+ 25/32 sin 2 mejores +254.971 | EV diario G1 +0.229 IC90 inf +0.141 dias+ 25/32 sin 2 mejores +0.183
+  criterio §4 l_ef 35 ms: EXPLORATORY (media > 0 en ambas; n dias requerido hi 46, lo 50) -- sensibilidad, NO VALIDADO
+  criterio §4 l_ef 60 ms: EXPLORATORY (media > 0 en ambas; n dias requerido hi 37, lo 8) -- sensibilidad, NO VALIDADO
+
+### ALL3 CELDAS por v4: clase causal movil PURA (excluye indet y mixta) (segmento = dia x clase; placebo por unidad B=1000, max-stat sobre estas celdas)
+p35|hi: prints 19831 | unidades 9647 (6218 mercado-lado) | 11 dias, 2368 cierres
+   EV pond. EUR: todo +0.031 bajo +0.070 medio +0.006 alto +0.003 G1(bajo+medio) +0.040 | EV por unidad: todo +0.073 bajo +0.129 medio +0.038 alto +0.032 G1 +0.085 | inversion (alto-todo) EUR -0.029
+   gradiente EUR diario +0.066 IC90 dias inf -0.062 dias+ 7/11 sin 2 mejores -0.019 | placebo unidad p celda 0.508 maxstat 0.974 (media +0.066)
+   gradiente unidad diario +0.080 IC90 dias inf -0.008 dias+ 8/11 sin 2 mejores +0.037 | placebo unidad p celda 0.345 maxstat 0.961 (media +0.055)
+   exceso alto (EUR) total +133 diario +12.064 IC90 dias inf -149.302 dias+ 6/11 sin 2 mejores -91.861 | EV diario G1 +0.069 IC90 inf -0.090 dias+ 7/11 sin 2 mejores -0.017
+p35|lo: prints 53491 | unidades 27007 (17383 mercado-lado) | 33 dias, 7074 cierres
+   EV pond. EUR: todo +0.219 bajo +0.278 medio +0.191 alto +0.163 G1(bajo+medio) +0.235 | EV por unidad: todo +0.052 bajo +0.084 medio +0.054 alto -0.005 G1 +0.069 | inversion (alto-todo) EUR -0.055
+   gradiente EUR diario +0.366 IC90 dias inf -0.065 dias+ 23/33 sin 2 mejores +0.104 | placebo unidad p celda 0.019 maxstat 0.032 (media +0.173)
+   gradiente unidad diario +0.229 IC90 dias inf -0.229 dias+ 24/33 sin 2 mejores -0.031 | placebo unidad p celda 0.060 maxstat 0.075 (media +0.111)
+   exceso alto (EUR) total +5095 diario +154.389 IC90 dias inf +18.426 dias+ 21/33 sin 2 mejores +102.658 | EV diario G1 +0.410 IC90 inf +0.185 dias+ 26/33 sin 2 mejores +0.242
+p60|hi: prints 22196 | unidades 10422 (6511 mercado-lado) | 11 dias, 2391 cierres
+   EV pond. EUR: todo +0.050 bajo +0.091 medio +0.039 alto +0.009 G1(bajo+medio) +0.067 | EV por unidad: todo +0.065 bajo +0.087 medio +0.055 alto +0.057 G1 +0.072 | inversion (alto-todo) EUR -0.041
+   gradiente EUR diario +0.089 IC90 dias inf -0.066 dias+ 7/11 sin 2 mejores +0.008 | placebo unidad p celda 0.409 maxstat 0.941 (media +0.052)
+   gradiente unidad diario +0.037 IC90 dias inf -0.047 dias+ 7/11 sin 2 mejores +0.006 | placebo unidad p celda 0.752 maxstat 0.992 (media +0.081)
+   exceso alto (EUR) total +285 diario +25.912 IC90 dias inf -175.863 dias+ 5/11 sin 2 mejores -97.996 | EV diario G1 +0.088 IC90 inf -0.074 dias+ 7/11 sin 2 mejores +0.004
+p60|lo: prints 61559 | unidades 29539 (18516 mercado-lado) | 33 dias, 7170 cierres
+   EV pond. EUR: todo +0.212 bajo +0.303 medio +0.202 alto +0.094 G1(bajo+medio) +0.252 | EV por unidad: todo +0.054 bajo +0.083 medio +0.059 alto +0.000 G1 +0.071 | inversion (alto-todo) EUR -0.118
+   gradiente EUR diario +0.339 IC90 dias inf +0.177 dias+ 28/33 sin 2 mejores +0.244 | placebo unidad p celda 0.006 maxstat 0.069 (media +0.043)
+   gradiente unidad diario +0.218 IC90 dias inf -0.003 dias+ 23/33 sin 2 mejores +0.081 | placebo unidad p celda 0.013 maxstat 0.103 (media +0.094)
+   exceso alto (EUR) total +8996 diario +272.610 IC90 dias inf +158.712 dias+ 26/33 sin 2 mejores +223.963 | EV diario G1 +0.399 IC90 inf +0.180 dias+ 27/33 sin 2 mejores +0.231
+  criterio §4 l_ef 35 ms: EXPLORATORY (media > 0 en ambas; n dias requerido hi 34, lo 43) -- sensibilidad, NO VALIDADO
+  criterio §4 l_ef 60 ms: EXPLORATORY (media > 0 en ambas; n dias requerido hi 27, lo 7) -- sensibilidad, NO VALIDADO
+CONTROL de reproduccion de E2_clase_suelo_add3.json (cl_c, ALL3): OK, 4/4 celdas identicas (n prints, gradiente EUR diario, EV todo)
+
+## GRUPO BTC: dias 35/35 COMPLETE
+### BTC exclusion por clase causal v4 (tipo B; prints = rellenos poblacionales)
+  p35: prints 530006 | lo 73.3 % hi 24.7 % mixta 0.4 % indet 1.6 % (prints) | EUR: lo 74.5 hi 23.2 mixta 0.4 indet 2.0 | EXCLUIDO (mixta+indet) 2.04 % prints, 2.38 % EUR
+  p60: prints 607674 | lo 73.6 % hi 24.3 % mixta 0.4 % indet 1.7 % (prints) | EUR: lo 74.8 hi 22.9 mixta 0.4 indet 2.0 | EXCLUIDO (mixta+indet) 2.07 % prints, 2.37 % EUR
+### BTC validacion vs clase de FUTURO (5 min siguientes, tot>=100): de los prints declarados lo/hi, % con clase futura determinada y DISTINTA (contaminacion) y % futura indet
+  p35 ADD3 ventana alineada previa: lo: n 392151, contaminada 0.51 % prints / 0.50 % EUR, futura indet 0.7 % | hi: n 130915, contaminada 1.43 % prints / 1.28 % EUR, futura indet 0.1 %
+  p35 v4 causal movil pura: lo: n 388231, contaminada 0.19 % prints / 0.18 % EUR, futura indet 0.4 % | hi: n 130968, contaminada 0.86 % prints / 1.08 % EUR, futura indet 0.1 %
+  p60 ADD3 ventana alineada previa: lo: n 451686, contaminada 0.50 % prints / 0.48 % EUR, futura indet 0.7 % | hi: n 147904, contaminada 1.47 % prints / 1.30 % EUR, futura indet 0.1 %
+  p60 v4 causal movil pura: lo: n 447150, contaminada 0.19 % prints / 0.17 % EUR, futura indet 0.4 % | hi: n 147935, contaminada 0.88 % prints / 1.08 % EUR, futura indet 0.1 %
+
+### BTC CELDAS por CONTROL ADD3: clase causal de ADD3 (ventana alineada previa) (segmento = dia x clase; placebo por unidad B=1000, max-stat sobre estas celdas)
+p35|hi: prints 130915 | unidades 10196 (3327 mercado-lado) | 11 dias, 2427 cierres
+   EV pond. EUR: todo -0.028 bajo +0.016 medio -0.116 alto -0.019 G1(bajo+medio) -0.051 | EV por unidad: todo +0.010 bajo -0.077 medio +0.015 alto +0.115 G1 -0.029 | inversion (alto-todo) EUR +0.009
+   gradiente EUR diario +0.196 IC90 dias inf -0.067 dias+ 8/11 sin 2 mejores +0.025 | placebo unidad p celda 0.066 maxstat 0.301 (media +0.005)
+   gradiente unidad diario -0.211 IC90 dias inf -0.259 dias+ 0/11 sin 2 mejores -0.233 | placebo unidad p celda 0.999 maxstat 1.000 (media -0.003)
+   exceso alto (EUR) total -2858 diario -259.854 IC90 dias inf -1044.833 dias+ 7/11 sin 2 mejores -549.076 | EV diario G1 -0.002 IC90 inf -0.140 dias+ 3/11 sin 2 mejores -0.104
+p35|lo: prints 392151 | unidades 30907 (10131 mercado-lado) | 32 dias, 7362 cierres
+   EV pond. EUR: todo +0.058 bajo +0.135 medio +0.090 alto +0.039 G1(bajo+medio) +0.112 | EV por unidad: todo +0.063 bajo +0.032 medio +0.042 alto +0.140 G1 +0.037 | inversion (alto-todo) EUR -0.019
+   gradiente EUR diario -0.025 IC90 dias inf -0.213 dias+ 19/32 sin 2 mejores -0.071 | placebo unidad p celda 0.615 maxstat 0.976 (media +0.019)
+   gradiente unidad diario -0.101 IC90 dias inf -0.146 dias+ 3/32 sin 2 mejores -0.126 | placebo unidad p celda 0.920 maxstat 1.000 (media +0.007)
+   exceso alto (EUR) total +36204 diario +1131.367 IC90 dias inf +225.906 dias+ 20/32 sin 2 mejores +763.766 | EV diario G1 +0.129 IC90 inf +0.037 dias+ 19/32 sin 2 mejores +0.073
+p60|hi: prints 147904 | unidades 10213 (3332 mercado-lado) | 11 dias, 2427 cierres
+   EV pond. EUR: todo -0.026 bajo -0.013 medio -0.040 alto -0.024 G1(bajo+medio) -0.026 | EV por unidad: todo +0.020 bajo -0.058 medio +0.026 alto +0.120 G1 -0.015 | inversion (alto-todo) EUR +0.002
+   gradiente EUR diario +0.205 IC90 dias inf -0.117 dias+ 8/11 sin 2 mejores +0.006 | placebo unidad p celda 0.068 maxstat 0.266 (media +0.018)
+   gradiente unidad diario -0.187 IC90 dias inf -0.216 dias+ 0/11 sin 2 mejores -0.201 | placebo unidad p celda 0.989 maxstat 1.000 (media -0.002)
+   exceso alto (EUR) total +959 diario +87.190 IC90 dias inf -965.190 dias+ 6/11 sin 2 mejores -393.424 | EV diario G1 +0.034 IC90 inf -0.131 dias+ 6/11 sin 2 mejores -0.081
+p60|lo: prints 451686 | unidades 31239 (10152 mercado-lado) | 32 dias, 7364 cierres
+   EV pond. EUR: todo +0.050 bajo +0.126 medio +0.085 alto +0.032 G1(bajo+medio) +0.105 | EV por unidad: todo +0.064 bajo +0.019 medio +0.050 alto +0.146 G1 +0.035 | inversion (alto-todo) EUR -0.018
+   gradiente EUR diario -0.001 IC90 dias inf -0.219 dias+ 17/32 sin 2 mejores -0.080 | placebo unidad p celda 0.504 maxstat 0.954 (media -0.002)
+   gradiente unidad diario -0.127 IC90 dias inf -0.179 dias+ 2/32 sin 2 mejores -0.157 | placebo unidad p celda 0.932 maxstat 1.000 (media -0.001)
+   exceso alto (EUR) total +38830 diario +1213.444 IC90 dias inf +248.941 dias+ 20/32 sin 2 mejores +809.605 | EV diario G1 +0.110 IC90 inf +0.024 dias+ 21/32 sin 2 mejores +0.063
+  criterio §4 l_ef 35 ms: INSUFFICIENT (media hi +0.196, lo -0.025) -- sensibilidad, NO VALIDADO
+  criterio §4 l_ef 60 ms: INSUFFICIENT (media hi +0.205, lo -0.001) -- sensibilidad, NO VALIDADO
+
+### BTC CELDAS por v4: clase causal movil PURA (excluye indet y mixta) (segmento = dia x clase; placebo por unidad B=1000, max-stat sobre estas celdas)
+p35|hi: prints 130968 | unidades 10210 (3333 mercado-lado) | 11 dias, 2437 cierres
+   EV pond. EUR: todo -0.023 bajo +0.009 medio -0.110 alto -0.012 G1(bajo+medio) -0.051 | EV por unidad: todo +0.009 bajo -0.078 medio +0.018 alto +0.114 G1 -0.028 | inversion (alto-todo) EUR +0.010
+   gradiente EUR diario -0.001 IC90 dias inf -0.155 dias+ 7/11 sin 2 mejores -0.072 | placebo unidad p celda 0.446 maxstat 0.949 (media -0.010)
+   gradiente unidad diario -0.220 IC90 dias inf -0.281 dias+ 0/11 sin 2 mejores -0.242 | placebo unidad p celda 0.997 maxstat 1.000 (media -0.008)
+   exceso alto (EUR) total -3802 diario -345.623 IC90 dias inf -1108.615 dias+ 6/11 sin 2 mejores -659.587 | EV diario G1 -0.045 IC90 inf -0.135 dias+ 3/11 sin 2 mejores -0.105
+p35|lo: prints 388231 | unidades 30699 (10083 mercado-lado) | 33 dias, 7358 cierres
+   EV pond. EUR: todo +0.042 bajo +0.124 medio +0.073 alto +0.022 G1(bajo+medio) +0.099 | EV por unidad: todo +0.058 bajo +0.027 medio +0.037 alto +0.131 G1 +0.033 | inversion (alto-todo) EUR -0.020
+   gradiente EUR diario +0.041 IC90 dias inf -0.121 dias+ 19/32 sin 2 mejores -0.016 | placebo unidad p celda 0.429 maxstat 0.864 (media +0.019)
+   gradiente unidad diario -0.072 IC90 dias inf -0.153 dias+ 5/32 sin 2 mejores -0.121 | placebo unidad p celda 0.794 maxstat 1.000 (media +0.006)
+   exceso alto (EUR) total +36003 diario +1090.992 IC90 dias inf +281.457 dias+ 19/33 sin 2 mejores +762.925 | EV diario G1 +0.090 IC90 inf -0.039 dias+ 19/33 sin 2 mejores +0.018
+p60|hi: prints 147935 | unidades 10234 (3338 mercado-lado) | 11 dias, 2437 cierres
+   EV pond. EUR: todo -0.021 bajo -0.014 medio -0.036 alto -0.018 G1(bajo+medio) -0.025 | EV por unidad: todo +0.019 bajo -0.061 medio +0.028 alto +0.119 G1 -0.014 | inversion (alto-todo) EUR +0.003
+   gradiente EUR diario +0.023 IC90 dias inf -0.097 dias+ 7/11 sin 2 mejores -0.037 | placebo unidad p celda 0.426 maxstat 0.918 (media +0.004)
+   gradiente unidad diario -0.219 IC90 dias inf -0.301 dias+ 0/11 sin 2 mejores -0.240 | placebo unidad p celda 0.998 maxstat 1.000 (media +0.010)
+   exceso alto (EUR) total +419 diario +38.073 IC90 dias inf -1029.417 dias+ 5/11 sin 2 mejores -468.401 | EV diario G1 -0.022 IC90 inf -0.129 dias+ 6/11 sin 2 mejores -0.082
+p60|lo: prints 447150 | unidades 31036 (10105 mercado-lado) | 33 dias, 7362 cierres
+   EV pond. EUR: todo +0.033 bajo +0.121 medio +0.069 alto +0.013 G1(bajo+medio) +0.094 | EV por unidad: todo +0.057 bajo +0.012 medio +0.044 alto +0.139 G1 +0.028 | inversion (alto-todo) EUR -0.020
+   gradiente EUR diario +0.022 IC90 dias inf -0.134 dias+ 19/32 sin 2 mejores -0.023 | placebo unidad p celda 0.460 maxstat 0.920 (media +0.009)
+   gradiente unidad diario -0.118 IC90 dias inf -0.200 dias+ 2/32 sin 2 mejores -0.164 | placebo unidad p celda 0.885 maxstat 1.000 (media -0.000)
+   exceso alto (EUR) total +41027 diario +1243.256 IC90 dias inf +329.373 dias+ 20/33 sin 2 mejores +866.142 | EV diario G1 +0.085 IC90 inf -0.028 dias+ 22/33 sin 2 mejores +0.032
+  criterio §4 l_ef 35 ms: INSUFFICIENT (media hi -0.001, lo +0.041) -- sensibilidad, NO VALIDADO
+  criterio §4 l_ef 60 ms: EXPLORATORY (media > 0 en ambas; n dias requerido hi 247, lo 1507) -- sensibilidad, NO VALIDADO
+
+Tiempo 71 s. Limites: poblacion censurada (gradiente, no EV de regla); d_proc = 3 ms supuesto; causa de la alternancia del suelo INSUFICIENTE; el clasificador p5 detecta tarde el paso lo->hi (lag ~4,75 min); EV por EUR domina el gran tamano (comparar con EV por unidad).

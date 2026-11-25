@@ -1,0 +1,13 @@
+# HASHES_fase_b (sha256, 2026-11-19T13:27:21Z) -- FASE B tras Review 1 (9+3) + rasgos E1 L2 (CONTRATO_RASGOS_E1_L2_19nov) + D2 normal (chainlink recuperado). Fase A sellada NO tocada (ver HASHES_r1v2_eval.txt).
+c4b0e475c63646a5b2f6dc333cba923f1742a31230f73c1cc898f68d67d53ec4  replay_variantes.py
+47520c8366d4ce05f5d883d1e7aa9aee1009bcde0eadb43150e8a4c9136f7729  l2_rasgos.py
+711ffecaff9386a7c1ae473ca78340d4594548a4cb37069ea7da9018a486f142  e1_modelo.py
+71a78f5dc41d766aef26563b7d01eaf26175c37e9527bc18f1c560575bd98101  familia6.py
+7c989ce7897466c7064d559825127e2cc1e42607e86100bb8124ca5e5c656ab4  fase_b_run.py
+7e028c5b44ce783c69b5680f7d55667a80901c33e0b84cff8084466eaf8812d2  run_fase_b.sh
+45ca13536df3b634af720d49ae799aff92e01a078453026bf27d6299a4a826f5  verif_datos_b.py
+04afeaf3dd1fde8d29b9935f93ed06c0e027c794d4b24f9eb39291f1b53df2cd  test_replay_variantes.py
+c78fb2cb27340483e640bd0e66a3e0ef35cd6ad9aa58841db32b813746a8faf6  test_e1_familia6.py
+29a129dd8eb41435d92782dd8e74f9f0fe25a7437671804c299cafb1a60f0258  test_fase_b_run.py
+fd2a858fabf724dcec9ade836e9c8c1470f89bfaacf2e690290de8628f8afcc1  test_l2_rasgos.py
+# ADENDA_07 firmada: db4484e5c962cca0c83323fe084a13fad12c3004b32e0a72a44232d594f5bc80

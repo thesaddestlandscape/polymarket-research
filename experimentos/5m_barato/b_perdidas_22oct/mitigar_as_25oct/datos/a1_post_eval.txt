@@ -1,0 +1,22 @@
+== perfil de latencia (walk-forward igual que prereg; antelación respecto a la RECEPCIÓN del print)
+F5 lag   100    11445 IC90d [  411.2, 1114.8] d+ 13/15 sin2    7800 | F2     6008 IC90d [  131.4,  669.6] d+ 12/15 sin2    2665
+F5 lag   150     9268 IC90d [  281.2,  954.6] d+ 13/15 sin2    5977 | F2     5884 IC90d [  193.1,  591.5] d+ 12/15 sin2    3859
+F5 lag   200     6638 IC90d [    6.6,  878.5] d+ 11/15 sin2    3653 | F2     2587 IC90d [  -83.5,  428.5] d+  9/15 sin2     667
+F5 lag   250     2255 IC90d [ -509.5,  810.2] d+  9/15 sin2    -905 | F2      156 IC90d [ -400.2,  421.0] d+  9/15 sin2   -1973
+F5 lag   400    -2993 IC90d [ -781.0,  382.0] d+  7/15 sin2   -4807 | F2    -5476 IC90d [-1072.5,  342.4] d+  7/15 sin2   -8227
+F5 lag   700    -5311 IC90d [-1005.3,  297.1] d+  5/15 sin2   -7382 | F2    -3532 IC90d [-1007.4,  536.4] d+  8/15 sin2   -7043
+F5 lag  1000    -2307 IC90d [ -846.8,  539.3] d+  7/15 sin2   -6249 | F2    -9487 IC90d [-1093.3, -171.6] d+  5/15 sin2  -10764
+F5 lag  2000    -1990 IC90d [ -759.9,  494.6] d+  5/15 sin2   -6919 | F2    -4536 IC90d [ -688.0,   83.1] d+  6/15 sin2   -5674
+F5 lag  5000    -5179 IC90d [ -779.3,   88.8] d+  6/15 sin2   -6912 | F2     -492 IC90d [ -351.2,  285.6] d+  7/15 sin2   -2793
+== F5 lag 100 estratificado por moneda x bucket q 0,05 (placebo dentro del estrato):    13631 IC90d [  629.8, 1187.7] d+ 14/15 sin2   10122
+== F5 lag 250 estratificado:     4531 IC90d [  -94.8,  699.0] d+ 12/15 sin2    1589
+== F5 lag 1000 estratificado:     1084 IC90d [ -343.6,  488.1] d+  9/15 sin2   -2042
+== moneda ETH F5_100    11304 IC90d [  465.0, 1042.1] d+ 14/15 sin2    8025 | F5_250     3260 IC90d [ -220.7,  655.4] d+  8/15 sin2     206
+== moneda SOL F5_100     2081 IC90d [   40.7,  236.8] d+ 11/15 sin2    1094 | F5_250      580 IC90d [  -70.5,  147.9] d+  8/15 sin2    -200
+== moneda XRP F5_100      234 IC90d [   -6.0,   37.2] d+ 11/15 sin2      96 | F5_250      488 IC90d [   -0.9,   65.9] d+ 12/15 sin2     227
+== Δlog1p(ta) 1000→100 ms: media 0.154 p10/p50/p90 [-1.591  0.055  1.907]
+== Δask 1000→100 ms (fracción): baja 0.455 igual 0.296 sube 0.242
+== Δask 250→100 ms: baja 0.242 ask(100)==q(+0..)? 0.688
+tercil 0 cortes [3.43 4.62] n 110689 EV€ 0.1023 hit-q 0.014 acc medio 11.3
+tercil 1 cortes [3.43 4.62] n 104927 EV€ 0.0721 hit-q 0.0072 acc medio 11.1
+tercil 2 cortes [3.43 4.62] n 106810 EV€ -0.0099 hit-q -0.0065 acc medio 11.4

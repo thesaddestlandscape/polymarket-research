@@ -1,0 +1,120 @@
+# P-REAL analisis (prereg 5a263d50) dias 2026-10-05..2026-10-21 (17 dias con extraccion); ventanas-token 56402
+
+## Cobertura por dia (T=180, lag 250; fraccion sobre tokens 5min listados)
+            tokens   vivo  ask_ok   cruz  con_desenlace  edad_p50  edad_p90  con_print
+dia                                                                                   
+2026-10-05    1200  0.932    0.95  0.000            1.0      57.0    1025.7      0.777
+2026-10-06    3456  0.973    1.00  0.002            1.0      63.5    2159.5      0.761
+2026-10-07    3456  0.984    1.00  0.002            1.0      53.5    1554.5      0.757
+2026-10-08    3456  0.970    1.00  0.001            1.0      52.5    5335.0      0.731
+2026-10-09    3456  0.983    1.00  0.000            1.0      65.0    2197.5      0.761
+2026-10-10    3448  0.983    1.00  0.001            1.0     112.0    3088.0      0.720
+2026-10-11    3452  0.969    1.00  0.001            1.0     100.0    3498.6      0.716
+2026-10-12    3448  0.970    1.00  0.002            1.0      67.0    3883.0      0.736
+2026-10-13    3446  0.962    1.00  0.001            1.0      68.0    8319.0      0.712
+2026-10-14    3438  0.965    1.00  0.000            1.0      57.0    5789.3      0.727
+2026-10-15    3444  0.966    1.00  0.001            1.0      51.0    5479.0      0.733
+2026-10-16    3448  0.969    1.00  0.003            1.0      66.0    3890.0      0.735
+2026-10-17    3456  0.970    1.00  0.000            1.0      97.5    2105.0      0.713
+2026-10-18    3450  0.975    1.00  0.001            1.0      87.0    2411.0      0.712
+2026-10-19    3448  0.972    1.00  0.001            1.0      61.0    3567.0      0.714
+2026-10-20    3450  0.970    1.00  0.001            1.0      67.0    3562.0      0.715
+2026-10-21    3450  0.977    1.00  0.000            1.0      65.0    2063.0      0.725
+cobertura de desenlace oficial global 1.0000; ventanas sin estado vivo 0.028; libros cruzados 0.0010
+
+## U1 primaria (ask en [0,10,0,30), ETH/SOL/XRP, T=180 lag 250): n 4597, dias 17, cierres 2987, coste 892, PnL -32.7, EV/EUR -0.0367, CON 1510 CONTRA 1518 NEU 1569; ask medio 0.184
+
+## H1-REAL (primaria)
+  ASK tomador, ETH/SOL/XRP: n CON 1510 CONTRA 1518 (cierres 2172, dias 17) EV(CON) -0.159 EV(CONTRA) +0.075 Delta -0.234 IC90cierre (-0.363,-0.098) IC90dia (-0.356,-0.123)
+     placebo p 0.001 (media perm -0.027); dias Delta<0 14/17 (82 %); sin 2 dias mas negativos -0.161
+     VEREDICTO H1-REAL: SOSTENIDA
+  por dia (descriptivo):
+             nCON   nCTR  EV_CON  EV_CTR  EV_todas  Delta
+dia                                                      
+2026-10-05   33.0   21.0  -0.540  -0.508    -0.528 -0.032
+2026-10-06   79.0   91.0  -0.102   0.615     0.276 -0.716
+2026-10-07   93.0  105.0  -0.029   0.030     0.001 -0.059
+2026-10-08   97.0  104.0  -0.038   0.289     0.128 -0.327
+2026-10-09   84.0  105.0  -0.153  -0.420    -0.307  0.267
+2026-10-10   60.0   67.0  -0.417   0.117    -0.144 -0.535
+2026-10-11   63.0   73.0  -0.314  -0.024    -0.159 -0.290
+2026-10-12  101.0   91.0  -0.080   0.149     0.031 -0.230
+2026-10-13   99.0  112.0  -0.006  -0.156    -0.087  0.150
+2026-10-14  109.0   95.0  -0.255  -0.024    -0.141 -0.231
+2026-10-15  109.0   92.0  -0.293  -0.001    -0.159 -0.292
+2026-10-16   86.0  119.0  -0.183  -0.279    -0.238  0.096
+2026-10-17   70.0   80.0  -0.027   0.428     0.222 -0.455
+2026-10-18   96.0  102.0  -0.247   0.162    -0.036 -0.409
+2026-10-19  115.0   68.0  -0.213  -0.036    -0.145 -0.177
+2026-10-20  110.0   97.0   0.137   0.227     0.178 -0.090
+2026-10-21  106.0   96.0  -0.310   0.486     0.067 -0.796
+
+## H2-REAL interaccion (U1)
+  Delta | R=TREND: n CON 370 CONTRA 357 (cierres 603, dias 17) EV(CON) -0.314 EV(CONTRA) +0.007 Delta -0.321 IC90cierre (-0.585,-0.073) IC90dia (-0.570,-0.104)
+  Delta | R=MIXTO: n CON 703 CONTRA 684 (cierres 1153, dias 17) EV(CON) -0.189 EV(CONTRA) +0.171 Delta -0.360 IC90cierre (-0.556,-0.163) IC90dia (-0.541,-0.193)
+  Delta | R=REVERT: n CON 434 CONTRA 477 (cierres 768, dias 17) EV(CON) +0.015 EV(CONTRA) -0.011 Delta +0.027 IC90cierre (-0.200,+0.267) IC90dia (-0.126,+0.178)
+  I_R = Delta(TREND)-Delta(REVERT): -0.348 IC90 por cierre (-0.699,-0.009) p2 0.094 (clusters 1327)   -> CONSISTENTE
+  I_R = Delta(TREND)-Delta(REVERT): -0.348 IC90 por dia (-0.608,-0.101) p2 0.022 (clusters 17)
+
+## H3-REAL reglas congeladas (PnL por accion de las unidades SALTADAS; dP = -Sum pnl saltadas; x5 acc entre parentesis)
+  R0 CON>=7,7: n saltadas 1510 coste 291 EV saltadas -0.159 dP +46.4 (x5: +232) IC90cierre (+19.9,+72.4) placebo media +46.4 p 0.000 dias dP>0 16/17 sin 2 mejores dias +33.9
+  R1 CON & TREND: n saltadas 370 coste 71 EV saltadas -0.314 dP +22.4 (x5: +112) IC90cierre (+11.9,+33.7) placebo media +17.2 p 0.144 dias dP>0 15/17 sin 2 mejores dias +16.6
+  R2 CON & TREND|MIXTO: n saltadas 1073 coste 207 EV saltadas -0.232 dP +48.0 (x5: +240) IC90cierre (+27.5,+67.8) placebo media +37.8 p 0.044 dias dP>0 16/17 sin 2 mejores dias +36.3
+
+## Replicas (no decisorias): Delta [IC90 cierre]
+  moneda ETH: n CON 479 CONTRA 468 (cierres 947, dias 17) EV(CON) -0.128 EV(CONTRA) +0.102 Delta -0.230 IC90cierre (-0.444,-0.006) IC90dia (-0.413,-0.061)
+  moneda SOL: n CON 508 CONTRA 529 (cierres 1037, dias 17) EV(CON) -0.168 EV(CONTRA) +0.094 Delta -0.262 IC90cierre (-0.462,-0.056) IC90dia (-0.457,-0.063)
+  moneda XRP: n CON 523 CONTRA 521 (cierres 1044, dias 17) EV(CON) -0.181 EV(CONTRA) +0.031 Delta -0.212 IC90cierre (-0.408,-0.017) IC90dia (-0.372,-0.063)
+  moneda BTC: n CON 410 CONTRA 394 (cierres 804, dias 17) EV(CON) +0.043 EV(CONTRA) -0.185 Delta +0.228 IC90cierre (+0.015,+0.455) IC90dia (+0.023,+0.440)
+  moneda BNB: n CON 391 CONTRA 364 (cierres 755, dias 17) EV(CON) -0.352 EV(CONTRA) -0.072 Delta -0.280 IC90cierre (-0.500,-0.047) IC90dia (-0.561,-0.029)
+  moneda DOGE: n CON 523 CONTRA 521 (cierres 1044, dias 17) EV(CON) -0.176 EV(CONTRA) -0.023 Delta -0.153 IC90cierre (-0.348,+0.039) IC90dia (-0.317,+0.021)
+  replicas BTC/BNB/DOGE agrupadas: n CON 1324 CONTRA 1279 (cierres 1923, dias 17) EV(CON) -0.160 EV(CONTRA) -0.087 Delta -0.073 IC90cierre (-0.209,+0.064) IC90dia (-0.206,+0.069)
+     placebo p 0.126 (media perm +0.007); dias Delta<0 10/17 (59 %); sin 2 dias mas negativos -0.034
+     VEREDICTO H1-REAL: NO SOSTENIDA
+  las 6 monedas: n CON 2834 CONTRA 2797 (cierres 2871, dias 17) EV(CON) -0.160 EV(CONTRA) +0.001 Delta -0.160 IC90cierre (-0.275,-0.048) IC90dia (-0.264,-0.058)
+  mitad A (05-13): n CON 709 CONTRA 769 (cierres 1083, dias 9) EV(CON) -0.139 EV(CONTRA) +0.044 Delta -0.183 IC90cierre (-0.370,-0.007) IC90dia (-0.374,-0.011)
+  mitad B (14-21): n CON 801 CONTRA 749 (cierres 1089, dias 8) EV(CON) -0.177 EV(CONTRA) +0.106 Delta -0.283 IC90cierre (-0.474,-0.092) IC90dia (-0.448,-0.130)
+  ask [0.10,0.15): n CON 500 CONTRA 485 (cierres 876, dias 17) EV(CON) -0.448 EV(CONTRA) +0.091 Delta -0.539 IC90cierre (-0.804,-0.272) IC90dia (-0.788,-0.266)
+  ask [0.15,0.20): n CON 394 CONTRA 402 (cierres 728, dias 17) EV(CON) -0.125 EV(CONTRA) +0.143 Delta -0.268 IC90cierre (-0.536,-0.011) IC90dia (-0.580,+0.004)
+  ask [0.20,0.25): n CON 338 CONTRA 329 (cierres 619, dias 17) EV(CON) -0.144 EV(CONTRA) +0.064 Delta -0.208 IC90cierre (-0.448,+0.023) IC90dia (-0.528,+0.093)
+  ask [0.25,0.30): n CON 278 CONTRA 302 (cierres 543, dias 17) EV(CON) +0.028 EV(CONTRA) +0.017 Delta +0.011 IC90cierre (-0.209,+0.243) IC90dia (-0.200,+0.215)
+  T=180 lag=0 ask: n CON 1520 CONTRA 1540 (cierres 2190, dias 17) EV(CON) -0.177 EV(CONTRA) +0.080 Delta -0.256 IC90cierre (-0.389,-0.127) IC90dia (-0.371,-0.150)
+  T=180 lag=1000 ask: n CON 1488 CONTRA 1547 (cierres 2195, dias 17) EV(CON) -0.201 EV(CONTRA) +0.070 Delta -0.272 IC90cierre (-0.404,-0.139) IC90dia (-0.425,-0.127)
+  T=120 lag=250 ask: n CON 1870 CONTRA 2050 (cierres 2562, dias 17) EV(CON) -0.126 EV(CONTRA) +0.071 Delta -0.197 IC90cierre (-0.315,-0.077) IC90dia (-0.334,-0.063)
+  T=120 lag=0 ask: n CON 1877 CONTRA 2051 (cierres 2579, dias 17) EV(CON) -0.124 EV(CONTRA) +0.071 Delta -0.196 IC90cierre (-0.316,-0.083) IC90dia (-0.327,-0.058)
+  T=120 lag=1000 ask: n CON 1891 CONTRA 2054 (cierres 2580, dias 17) EV(CON) -0.125 EV(CONTRA) +0.024 Delta -0.149 IC90cierre (-0.265,-0.034) IC90dia (-0.288,-0.013)
+  precio = BID (cota optimista de pujar en reposo, sin condicionar al relleno): n CON 1510 CONTRA 1518 (cierres 2172, dias 17) EV(CON) -0.026 EV(CONTRA) +0.248 Delta -0.274 IC90cierre (-0.426,-0.116) IC90dia (-0.420,-0.130)
+  PRINT (primer BUY de tomador en [dec+250ms, +30 s]; unidades U1 con print): n 3939 de 4597 (86 %)
+  precio = PRINT tomador, banda definida por ASK: n CON 1280 CONTRA 1290 (cierres 1954, dias 17) EV(CON) -0.086 EV(CONTRA) +0.085 Delta -0.171 IC90cierre (-0.310,-0.034) IC90dia (-0.307,-0.036)
+  sesgo print-ask: media +0.0040, p50 +0.0000, p90 +0.1100, retraso del print p50 4472 ms; print>=ask-0,01 en 58 %, print<=bid+0,01 en 59 % (auditoria interna: BUY=tomador => debe ir cerca del ask)
+  EV a precio PRINT +0.0244 vs EV al ask de las mismas unidades +0.0431
+
+## C1 calibracion modelo q -> ask real (U2: unidades del proxy con estado real; T=180, lag 250)
+  U2 n 5108 dias 17  acuerdo proxy Binance vs oficial 0.884
+                        n      q    ask    bid  acierto  EV_modelo  EV_ask_real
+qb          cl2                                                                
+[0.1, 0.15) CON     460.0  0.125  0.111  0.096    0.087     -0.304       -0.259
+            CONTRA  414.0  0.125  0.078  0.063    0.075     -0.400       -0.094
+            NEU     453.0  0.125  0.089  0.074    0.073     -0.415       -0.226
+[0.15, 0.2) CON     441.0  0.175  0.148  0.133    0.138     -0.211       -0.110
+            CONTRA  393.0  0.175  0.113  0.097    0.097     -0.449       -0.189
+            NEU     419.0  0.175  0.130  0.115    0.155     -0.113        0.132
+[0.2, 0.25) CON     430.0  0.225  0.200  0.183    0.172     -0.234       -0.176
+            CONTRA  399.0  0.226  0.158  0.142    0.173     -0.234        0.037
+            NEU     374.0  0.226  0.175  0.161    0.184     -0.183        0.001
+[0.25, 0.3) CON     431.0  0.274  0.233  0.217    0.190     -0.306       -0.220
+            CONTRA  412.0  0.275  0.196  0.180    0.206     -0.249        0.001
+            NEU     482.0  0.275  0.224  0.208    0.220     -0.202       -0.061
+  por tramo de q:
+                  n      q    ask  desvio_ask_menos_q  acierto  EV_modelo  EV_ask
+qb                                                                               
+[0.1, 0.15)  1327.0  0.125  0.093              -0.031    0.078     -0.372  -0.205
+[0.15, 0.2)  1253.0  0.175  0.131              -0.044    0.131     -0.253  -0.051
+[0.2, 0.25)  1203.0  0.225  0.178              -0.047    0.176     -0.218  -0.059
+[0.25, 0.3)  1325.0  0.275  0.218              -0.056    0.206     -0.250  -0.099
+  C2 mismas unidades: Delta a precio de MODELO +0.047; Delta al ASK real -0.150; diferencia (real-modelo) -0.196 IC90 cierre (-0.245,-0.150); n CON 1762 CONTRA 1618
+
+## C3 (EXPLORATORIO) proxy 2025 (349 d) convertida a coste al ask real con c_hat(tramo q, clase)
+  c_hat (coste medio al ask con fee, U2) por tramo de q x clase [CON, CONTRA]: [0.1, 0.15): 0.117/0.083; [0.15, 0.2): 0.155/0.119; [0.2, 0.25): 0.209/0.167; [0.25, 0.3): 0.244/0.206
+  S_D unidades CON/CONTRA 88523 (dias 349): Delta a precio de MODELO -0.077 (R-TEND: -0,076); Delta a coste al ask real ESTIMADO -0.346 IC90 doble bootstrap dias S_D x dias U2 (-0.410,-0.285) [1000 rem.]
+  I_R estimado (TREND-REVERT) -0.106 IC90 (-0.183,-0.022); Delta(win_proxy) usa acierto Binance, no oficial (acuerdo 97,6 % en S_B)

@@ -1,0 +1,73 @@
+# T4d-C2 B virtual LAT=35 ms; dias 20 (2026-10-26..2026-11-14)
+G0 (contexto) n=6295 4691 EUR EV -0.175; F5 ok en t_dec 6292; tipoB(t_dec) n=5462; tipoB(tf-63) n=570; d_hat mediana 16.5 ms
+## REGLA B: tipo B (primaria)
+  sin guarda (todos los dias)                  n= 5459    4077 EUR EV pond. -0.158 (boot bloques-dia IC90 -0.265,-0.053) | EV diario medio -0.182 IC90 dias (-0.302,-0.062) [20 dias, dias+ 6], sin 2 mejores dias -0.236, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [coloc] LO                 n= 4940    3692 EUR EV pond. -0.202 (boot bloques-dia IC90 -0.303,-0.099) | EV diario medio -0.219 IC90 dias (-0.340,-0.097) [19 dias, dias+ 5], sin 2 mejores dias -0.279, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [coloc] NOLO               n=  519     385 EUR EV pond. +0.263 (boot bloques-dia IC90 +0.130,+0.302) | 
+  detector adoptado [cont] LO                  n= 4933    3687 EUR EV pond. -0.204 (boot bloques-dia IC90 -0.306,-0.100) | EV diario medio -0.221 IC90 dias (-0.343,-0.099) [19 dias, dias+ 5], sin 2 mejores dias -0.281, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [cont] NOLO                n=  526     390 EUR EV pond. +0.271 (boot bloques-dia IC90 +0.169,+0.302) | 
+  p5 10 min [coloc] LO                         n= 4808    3594 EUR EV pond. -0.217 (boot bloques-dia IC90 -0.316,-0.118) | EV diario medio -0.276 IC90 dias (-0.409,-0.142) [20 dias, dias+ 4], sin 2 mejores dias -0.332, dias necesarios para IC90>0 n/a (EV<=0)
+  p5 10 min [coloc] NOLO                       n=  651     483 EUR EV pond. +0.278 (boot bloques-dia IC90 -0.009,+0.548) | EV diario medio +0.429 IC90 dias (-0.444,+1.301) [15 dias, dias+ 8], sin 2 mejores dias -0.182, dias necesarios para IC90>0 ~54
+  p5 10 min [cont] LO                          n= 4807    3593 EUR EV pond. -0.217 (boot bloques-dia IC90 -0.316,-0.117) | EV diario medio -0.275 IC90 dias (-0.409,-0.142) [20 dias, dias+ 4], sin 2 mejores dias -0.331, dias necesarios para IC90>0 n/a (EV<=0)
+  p5 10 min [cont] NOLO                        n=  652     484 EUR EV pond. +0.276 (boot bloques-dia IC90 -0.018,+0.540) | EV diario medio +0.429 IC90 dias (-0.444,+1.301) [15 dias, dias+ 8], sin 2 mejores dias -0.182, dias necesarios para IC90>0 ~54
+  verdad d<30 [coloc] LO                       n= 4928    3684 EUR EV pond. -0.205 (boot bloques-dia IC90 -0.307,-0.101) | EV diario medio -0.222 IC90 dias (-0.344,-0.100) [19 dias, dias+ 5], sin 2 mejores dias -0.282, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [coloc] NOLO                     n=  531     393 EUR EV pond. +0.277 (boot bloques-dia IC90 +0.172,+0.333) | EV diario medio +1.629 IC90 dias (-2.476,+5.734) [3 dias, dias+ 3], sin 2 mejores dias +nan, dias necesarios para IC90>0 ~6
+  verdad d<30 [cont] LO                        n= 4914    3674 EUR EV pond. -0.203 (boot bloques-dia IC90 -0.305,-0.098) | EV diario medio -0.220 IC90 dias (-0.342,-0.098) [19 dias, dias+ 5], sin 2 mejores dias -0.280, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [cont] NOLO                      n=  545     403 EUR EV pond. +0.246 (boot bloques-dia IC90 -0.412,+0.307) | EV diario medio +0.130 IC90 dias (-1.326,+1.587) [7 dias, dias+ 3], sin 2 mejores dias -0.766, dias necesarios para IC90>0 ~627
+## tipo B & tercil bajo
+  sin guarda (todos los dias)                  n= 2870    2161 EUR EV pond. -0.172 (boot bloques-dia IC90 -0.286,-0.048) | EV diario medio -0.192 IC90 dias (-0.342,-0.042) [20 dias, dias+ 5], sin 2 mejores dias -0.276, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [coloc] LO                 n= 2582    1947 EUR EV pond. -0.198 (boot bloques-dia IC90 -0.328,-0.056) | EV diario medio -0.216 IC90 dias (-0.376,-0.055) [19 dias, dias+ 5], sin 2 mejores dias -0.307, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [coloc] NOLO               n=  288     214 EUR EV pond. +0.070 (boot bloques-dia IC90 -0.072,+0.470) | 
+  detector adoptado [cont] LO                  n= 2578    1944 EUR EV pond. -0.200 (boot bloques-dia IC90 -0.330,-0.057) | EV diario medio -0.217 IC90 dias (-0.378,-0.056) [19 dias, dias+ 5], sin 2 mejores dias -0.308, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [cont] NOLO                n=  292     217 EUR EV pond. +0.077 (boot bloques-dia IC90 -0.072,+0.476) | 
+  p5 10 min [coloc] LO                         n= 2522    1902 EUR EV pond. -0.216 (boot bloques-dia IC90 -0.349,-0.073) | EV diario medio -0.275 IC90 dias (-0.440,-0.110) [20 dias, dias+ 5], sin 2 mejores dias -0.370, dias necesarios para IC90>0 n/a (EV<=0)
+  p5 10 min [coloc] NOLO                       n=  348     259 EUR EV pond. +0.155 (boot bloques-dia IC90 -0.082,+0.756) | EV diario medio +0.695 IC90 dias (-0.580,+1.970) [13 dias, dias+ 5], sin 2 mejores dias -0.266, dias necesarios para IC90>0 ~37
+  p5 10 min [cont] LO                          n= 2522    1902 EUR EV pond. -0.216 (boot bloques-dia IC90 -0.349,-0.073) | EV diario medio -0.275 IC90 dias (-0.440,-0.110) [20 dias, dias+ 5], sin 2 mejores dias -0.370, dias necesarios para IC90>0 n/a (EV<=0)
+  p5 10 min [cont] NOLO                        n=  348     259 EUR EV pond. +0.155 (boot bloques-dia IC90 -0.082,+0.756) | EV diario medio +0.695 IC90 dias (-0.580,+1.970) [13 dias, dias+ 5], sin 2 mejores dias -0.266, dias necesarios para IC90>0 ~37
+  verdad d<30 [coloc] LO                       n= 2575    1943 EUR EV pond. -0.200 (boot bloques-dia IC90 -0.330,-0.057) | EV diario medio -0.217 IC90 dias (-0.378,-0.056) [19 dias, dias+ 5], sin 2 mejores dias -0.309, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [coloc] NOLO                     n=  295     219 EUR EV pond. +0.076 (boot bloques-dia IC90 -0.068,+0.478) | EV diario medio +1.879 IC90 dias (-3.078,+6.837) [3 dias, dias+ 2], sin 2 mejores dias +nan, dias necesarios para IC90>0 ~7
+  verdad d<30 [cont] LO                        n= 2565    1936 EUR EV pond. -0.197 (boot bloques-dia IC90 -0.328,-0.054) | EV diario medio -0.216 IC90 dias (-0.377,-0.055) [19 dias, dias+ 5], sin 2 mejores dias -0.307, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [cont] NOLO                      n=  305     226 EUR EV pond. +0.043 (boot bloques-dia IC90 -0.816,+0.377) | EV diario medio +0.438 IC90 dias (-1.565,+2.441) [6 dias, dias+ 2], sin 2 mejores dias -0.759, dias necesarios para IC90>0 ~84
+## tercil bajo (sin tipo B)
+  sin guarda (todos los dias)                  n= 3370    2531 EUR EV pond. -0.202 (boot bloques-dia IC90 -0.305,-0.088) | EV diario medio -0.211 IC90 dias (-0.353,-0.069) [20 dias, dias+ 3], sin 2 mejores dias -0.294, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [coloc] LO                 n= 3016    2268 EUR EV pond. -0.226 (boot bloques-dia IC90 -0.345,-0.092) | EV diario medio -0.232 IC90 dias (-0.386,-0.079) [19 dias, dias+ 3], sin 2 mejores dias -0.323, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [coloc] NOLO               n=  354     263 EUR EV pond. +0.007 (boot bloques-dia IC90 -0.128,+0.416) | 
+  detector adoptado [cont] LO                  n= 3012    2265 EUR EV pond. -0.228 (boot bloques-dia IC90 -0.347,-0.093) | EV diario medio -0.234 IC90 dias (-0.388,-0.080) [19 dias, dias+ 3], sin 2 mejores dias -0.325, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [cont] NOLO                n=  358     266 EUR EV pond. +0.013 (boot bloques-dia IC90 -0.128,+0.423) | 
+  p5 10 min [coloc] LO                         n= 2945    2216 EUR EV pond. -0.240 (boot bloques-dia IC90 -0.360,-0.105) | EV diario medio -0.283 IC90 dias (-0.444,-0.122) [20 dias, dias+ 4], sin 2 mejores dias -0.377, dias necesarios para IC90>0 n/a (EV<=0)
+  p5 10 min [coloc] NOLO                       n=  425     316 EUR EV pond. +0.063 (boot bloques-dia IC90 -0.147,+0.540) | EV diario medio +0.568 IC90 dias (-0.689,+1.825) [13 dias, dias+ 5], sin 2 mejores dias -0.416, dias necesarios para IC90>0 ~54
+  p5 10 min [cont] LO                          n= 2945    2216 EUR EV pond. -0.240 (boot bloques-dia IC90 -0.360,-0.105) | EV diario medio -0.283 IC90 dias (-0.444,-0.122) [20 dias, dias+ 4], sin 2 mejores dias -0.377, dias necesarios para IC90>0 n/a (EV<=0)
+  p5 10 min [cont] NOLO                        n=  425     316 EUR EV pond. +0.063 (boot bloques-dia IC90 -0.147,+0.540) | EV diario medio +0.568 IC90 dias (-0.689,+1.825) [13 dias, dias+ 5], sin 2 mejores dias -0.416, dias necesarios para IC90>0 ~54
+  verdad d<30 [coloc] LO                       n= 3005    2261 EUR EV pond. -0.227 (boot bloques-dia IC90 -0.346,-0.092) | EV diario medio -0.233 IC90 dias (-0.388,-0.079) [19 dias, dias+ 3], sin 2 mejores dias -0.325, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [coloc] NOLO                     n=  365     270 EUR EV pond. +0.004 (boot bloques-dia IC90 -0.490,+0.385) | EV diario medio -0.393 IC90 dias (-0.962,+0.175) [5 dias, dias+ 1], sin 2 mejores dias -0.746, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [cont] LO                        n= 2995    2254 EUR EV pond. -0.224 (boot bloques-dia IC90 -0.344,-0.090) | EV diario medio -0.232 IC90 dias (-0.386,-0.078) [19 dias, dias+ 3], sin 2 mejores dias -0.323, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [cont] NOLO                      n=  375     277 EUR EV pond. -0.021 (boot bloques-dia IC90 -0.850,+0.312) | EV diario medio -0.621 IC90 dias (-0.980,-0.262) [8 dias, dias+ 1], sin 2 mejores dias -0.867, dias necesarios para IC90>0 n/a (EV<=0)
+## G0 todos (contexto)
+  sin guarda (todos los dias)                  n= 6295    4691 EUR EV pond. -0.175 (boot bloques-dia IC90 -0.276,-0.071) | EV diario medio -0.192 IC90 dias (-0.311,-0.072) [20 dias, dias+ 5], sin 2 mejores dias -0.248, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [coloc] LO                 n= 5685    4238 EUR EV pond. -0.216 (boot bloques-dia IC90 -0.316,-0.114) | EV diario medio -0.226 IC90 dias (-0.349,-0.103) [19 dias, dias+ 4], sin 2 mejores dias -0.290, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [coloc] NOLO               n=  610     453 EUR EV pond. +0.208 (boot bloques-dia IC90 +0.086,+0.242) | 
+  detector adoptado [cont] LO                  n= 5678    4232 EUR EV pond. -0.217 (boot bloques-dia IC90 -0.319,-0.115) | EV diario medio -0.228 IC90 dias (-0.352,-0.104) [19 dias, dias+ 4], sin 2 mejores dias -0.292, dias necesarios para IC90>0 n/a (EV<=0)
+  detector adoptado [cont] NOLO                n=  617     458 EUR EV pond. +0.215 (boot bloques-dia IC90 +0.122,+0.242) | 
+  p5 10 min [coloc] LO                         n= 5533    4126 EUR EV pond. -0.231 (boot bloques-dia IC90 -0.329,-0.132) | EV diario medio -0.280 IC90 dias (-0.416,-0.144) [20 dias, dias+ 3], sin 2 mejores dias -0.343, dias necesarios para IC90>0 n/a (EV<=0)
+  p5 10 min [coloc] NOLO                       n=  762     565 EUR EV pond. +0.237 (boot bloques-dia IC90 -0.007,+0.505) | EV diario medio +0.378 IC90 dias (-0.453,+1.209) [16 dias, dias+ 9], sin 2 mejores dias -0.223, dias necesarios para IC90>0 ~68
+  p5 10 min [cont] LO                          n= 5531    4124 EUR EV pond. -0.232 (boot bloques-dia IC90 -0.329,-0.134) | EV diario medio -0.282 IC90 dias (-0.416,-0.147) [20 dias, dias+ 3], sin 2 mejores dias -0.343, dias necesarios para IC90>0 n/a (EV<=0)
+  p5 10 min [cont] NOLO                        n=  764     566 EUR EV pond. +0.242 (boot bloques-dia IC90 +0.003,+0.521) | EV diario medio +0.387 IC90 dias (-0.445,+1.219) [16 dias, dias+ 9], sin 2 mejores dias -0.212, dias necesarios para IC90>0 ~65
+  verdad d<30 [coloc] LO                       n= 5667    4225 EUR EV pond. -0.217 (boot bloques-dia IC90 -0.319,-0.115) | EV diario medio -0.228 IC90 dias (-0.352,-0.104) [19 dias, dias+ 4], sin 2 mejores dias -0.292, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [coloc] NOLO                     n=  628     466 EUR EV pond. +0.209 (boot bloques-dia IC90 -0.034,+0.252) | EV diario medio -0.310 IC90 dias (-0.947,+0.328) [6 dias, dias+ 3], sin 2 mejores dias -0.715, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [cont] LO                        n= 5652    4215 EUR EV pond. -0.215 (boot bloques-dia IC90 -0.317,-0.112) | EV diario medio -0.226 IC90 dias (-0.351,-0.102) [19 dias, dias+ 4], sin 2 mejores dias -0.290, dias necesarios para IC90>0 n/a (EV<=0)
+  verdad d<30 [cont] NOLO                      n=  643     476 EUR EV pond. +0.183 (boot bloques-dia IC90 -0.599,+0.232) | EV diario medio -0.538 IC90 dias (-0.971,-0.105) [9 dias, dias+ 3], sin 2 mejores dias -0.835, dias necesarios para IC90>0 n/a (EV<=0)
+## RELOJ: % de rellenos (regla B tipo B) cuya asignacion lo/nolo cambia al mover el relleno
+  [coloc] +1 s                     cambian 2/5459 (0.04 %)
+  [coloc] -1 s                     cambian 2/5459 (0.04 %)
+  [coloc] +d_hat (rx-ex medido)    cambian 0/5459 (0.00 %)
+  [coloc] Lc=111 ms (p90 B2)       cambian 0/5459 (0.00 %)
+  [coloc] Lc=0                     cambian 0/5459 (0.00 %)
+  [cont] +1 s                     cambian 0/5459 (0.00 %)
+  [cont] -1 s                     cambian 2/5459 (0.04 %)
+  [cont] +d_hat (rx-ex medido)    cambian 0/5459 (0.00 %)
+  [cont] Lc=111 ms (p90 B2)       cambian 0/5459 (0.00 %)
+  [cont] Lc=0                     cambian 0/5459 (0.00 %)
+  (fills de la regla a <=60 s de una transicion del detector: 382/5459; los que importan para esta prueba)
+## DECISION: convencion antigua (rasgos en tf-63) vs t_dec de colocacion (todos los dias)
+  tipo B: antigua n=566 (411 EUR, EV +0.034) | t_dec n=5459 (4077 EUR, EV -0.158) | en ambas 540; solo antigua 26 (EV +0.552); solo t_dec 4919 (EV -0.176)
+  tercil bajo: antigua n=2573 EV -0.171 | t_dec n=3370 EV -0.202 | concordancia de etiqueta 58.5 %

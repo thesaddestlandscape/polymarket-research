@@ -1,0 +1,16 @@
+2026-11-16 1324947.csv.gz q 954490 t 2769
+2026-11-16 1390096.csv.gz q 24248881 t 85166
+2026-11-16 2668831.csv.gz q 25840267 t 91072
+2026-11-16 3035871.csv.gz q 29770221 t 104246
+2026-11-16 3868191.csv.gz q 29770221 t 104246
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 102, in <module>
+    for d in sys.argv[1:]: day(d)
+                           ~~~^^^
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 88, in day
+    qt, qr, qk, qV = cat(Q, 4); tt, tr_, tk_, tV = cat(T, 3)
+                     ~~~^^^^^^
+  File "/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/ms_extract_v2.py", line 41, in cat
+    t = col(0); k = col(2); o = np.lexsort((t, k)).astype(np.int32); k = k[o]; t = t[o]      # lexsort estable: mismo orden que la clave k*1e10+t de la v1; indices int32 (memoria)
+                                ~~~~~~~~~~^^^^^^^^
+MemoryError

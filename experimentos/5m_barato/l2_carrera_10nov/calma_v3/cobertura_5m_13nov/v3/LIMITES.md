@@ -1,0 +1,16 @@
+# Limitaciones aceptadas de v3 (revision red-team 15-Nov; una linea cada una, sin arreglo previsto)
+- M2: `firma()` compara solo CLASES de excepcion (no clase+frame): un viejo y un nuevo que fallen con la misma clase por motivos distintos se tratan como "falla igual" (INCONCLUSO); comparar frames fallaria en cerrado con lineas distintas entre viejo y nuevo.
+- SINREF (log viejo sin 'N tokens'): no bloquea --activar ni el rc 0; solo avisa 'SIN REFERENCIA' (universo NO verificado).
+- Claves 15m/60m/240m: comparacion ESTRICTA contra el ULTIMO N del hijo viejo (no el maximo): posible falso REDUCIDO si el viejo imprimio un N transitoriamente alto justo antes.
+- Tolerancia 2 de 5min en universos de 1-3 tokens: el minimo se queda en max(1, max-2), asi que en universos tan pequenos casi no detecta perdidas.
+- Un `OSError` cuyo mensaje empieza por 5xx (p.ej. 'OSError: 500 lines read') casa CAP_TRANSITORIO_ERE y se excusa como transitorio (falso inconcluso, no revierte).
+- `Network is unreachable`, `No route to host`, `[Errno 24]` y `[Errno 12]` en un OSError son DURO por diseno (fail-closed); `MemoryError` es INCONCLUSO (clase de entorno).
+- Variables de entorno (P0_MARGEN_MIN, E2E_MAX_H, E2E_STAMP, E2E_N_TESTS, TESTS_MIN, MIN_GB, LOADAVG, WDLOG, BASE_*, REPO/DL/PY) relajan o redirigen guardas: lanzar el despliegue real con `env -i` y solo las variables necesarias.
+- El tmpfs de los e2e (`vol_e2e.sh`) tiene tope 12 GB (limite, no reserva de RAM).
+- `cp_atomico` puede dejar ficheros `*.deltatmp.PID` en el repo si el proceso muere por SIGKILL a mitad de la copia (limpiar a mano).
+- F2 ya cargado en memoria sigue usando el libro VIEJO hasta que se reinicie: el despliegue reinicia observadores, no F2.
+- 401/403 siguen en `CAP_HTTP_TRANSITORIO_MSG` (transitorios): DECISION PENDIENTE de Javi (podrian ser credenciales/permisos de NUESTRO request, es decir codigo/config).
+- R1: la tolerancia de 5min (`TOK_TOL_5M`=2 sobre el maximo viejo) deja pasar una caida de hasta 2 tokens frente al maximo de la ventana; el universo 15m/60m/240m es estricto.
+- R3: un DURO en el intento 1 seguido solo de intentos transitorios da INCONCLUSO (no FALLO): queda como verificacion el ciclo real de P6.
+- M3: un DURO intermitente (no se repite) da rc 4 "DESPLEGADO SIN VERIFICAR" con aviso critico: no hace marcha atras ni aplica --activar; la decision es de la sesion principal.
+- M3/--activar: `ya_activar` (--ejecutar --activar sobre YA DESPLEGADO) tambien REHUSA (rc 1, aviso critico, sin cfg) si P6 sale INTERMITENTE.

@@ -1,0 +1,1 @@
+- [EXP-1 B x F5 con relojes v3 (15-Nov)](project_exp1_b_f5_v3_15nov.md) — addendum 6fc7dba5; OOM-kill 18:24Z, supervisor+orquestador v3 con calma (load1<=8, MemAvail>=3500), 16-Oct FAILED C3 (R0 no homogenea), como reanudar

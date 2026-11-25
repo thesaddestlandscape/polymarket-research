@@ -1,0 +1,33 @@
+dias ['2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23'] fills 26774
+var           B        P2        P4       P6
+fills    8725.0    6212.0    5976.0   5861.0
+coste  177805.0  107611.0  100969.0  97729.0
+
+== EV(+reb)/EUR por dia (ponderado EUR) ==
+                 B      P2      P4      P6
+2026-10-18  0.0019 -0.0539 -0.0710 -0.0971
+2026-10-19 -0.0463  0.0082  0.0373  0.0019
+2026-10-20 -0.0502 -0.0799 -0.0413 -0.0513
+2026-10-21 -0.0623  0.0365 -0.0127 -0.0331
+2026-10-22 -0.0720 -0.1206 -0.0972 -0.0869
+2026-10-23 -0.0844 -0.0812 -0.0596 -0.0648
+B: pooled -0.0545 | media dias -0.0522 IC90 dias (-0.0769,-0.0275) | bootstrap mercados IC90 (-0.0710,-0.0397) | sin 2 mejores dias -0.0671 | dias+ 1/6 | sin rebate -0.0602 | coste 177,805 fills 8725
+P2: pooled -0.0468 | media dias -0.0485 IC90 dias (-0.0975,+0.0005) | bootstrap mercados IC90 (-0.0729,-0.0193) | sin 2 mejores dias -0.0853 | dias+ 2/6 | sin rebate -0.0538 | coste 107,611 fills 6212
+P4: pooled -0.0383 | media dias -0.0407 IC90 dias (-0.0799,-0.0016) | bootstrap mercados IC90 (-0.0672,-0.0104) | sin 2 mejores dias -0.0670 | dias+ 1/6 | sin rebate -0.0454 | coste 100,969 fills 5976
+P6: pooled -0.0529 | media dias -0.0552 IC90 dias (-0.0852,-0.0253) | bootstrap mercados IC90 (-0.0828,-0.0197) | sin 2 mejores dias -0.0737 | dias+ 1/6 | sin rebate -0.0601 | coste 97,729 fills 5861
+
+== Diferencia pareada por dia vs B ==
+P2-B: media +0.0037 IC90 dias (-0.0470,+0.0545) dias con P>B 3/6
+P4-B: media +0.0115 IC90 dias (-0.0340,+0.0570) dias con P>B 4/6
+P6-B: media -0.0030 IC90 dias (-0.0458,+0.0398) dias con P>B 3/6
+
+== Descomposicion por EUR (lock AVG/FIFO/BEST ; residuo ; rebate) y fraccion emparejada (acc) ==
+B: coste 177,805 | EV sin reb -0.0602 reb +0.0057 | lock AVG -0.0380 FIFO -0.0368 BEST -0.0153 | residuo(AVG) -0.0222 (FIFO) -0.0234 | acc emparejadas 0.77 | mercados con par 548/549
+P2: coste 107,611 | EV sin reb -0.0538 reb +0.0070 | lock AVG +0.0684 FIFO +0.0636 BEST +0.0869 | residuo(AVG) -0.1222 (FIFO) -0.1173 | acc emparejadas 0.68 | mercados con par 462/549
+P4: coste 100,969 | EV sin reb -0.0454 reb +0.0072 | lock AVG +0.0850 FIFO +0.0794 BEST +0.1020 | residuo(AVG) -0.1304 (FIFO) -0.1248 | acc emparejadas 0.67 | mercados con par 438/549
+P6: coste 97,729 | EV sin reb -0.0601 reb +0.0072 | lock AVG +0.0969 FIFO +0.0934 BEST +0.1133 | residuo(AVG) -0.1571 (FIFO) -0.1536 | acc emparejadas 0.65 | mercados con par 424/549
+
+== Placebo: B remuestreado al coste por mercado de P4 (1000 sorteos) ==
+P4: EV -0.0383 ; placebo B al mismo coste: media -0.0515 IC90 (-0.0630,-0.0405) ; p(placebo>=P) = 0.026
+P2: EV -0.0468 ; placebo B al mismo coste: media -0.0500 IC90 (-0.0611,-0.0387) ; p(placebo>=P) = 0.318
+P6: EV -0.0529 ; placebo B al mismo coste: media -0.0553 IC90 (-0.0677,-0.0432) ; p(placebo>=P) = 0.369

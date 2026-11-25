@@ -1,0 +1,119 @@
+# E3 reglas de cancelacion sobre fills reales de B (sello tm3; timing de cancelacion SIMULADO; ADDENDUM1 sha 6fc7dba5)
+Diagnostico de disparos (ordenes): {'ordenes': 3796, 'sin_q': 0, 'sin_ventana': 178, 'filas_vivas_bid_menor_L': 170, 'ordenes_con_cxb': 931, 'ordenes_con_f5': 1176, 'ordenes_nopost_f5': 328, 'cxb_dentro_200ms_del_ack': 282, 'filas_q': 2762763}
+RTT de cancelacion del ledger: n=3738 p50/p90/p95/p99 = [65.0, 133.0, 175.2, 1606.9] ms | l_ef (kappa=0,6) p50/p90/p99 = [39.0, 79.8, 964.1] ms
+Fills: 215 | con disparo CXB previo a su fill (cualquier latencia): 103 | con F5-alto previo a su fill: 98 | de ordenes no-post por F5: 33
+VALIDACION de la replica vectorizada de bid_otros: ordenes sin relleno con disparo CXB: 776 (mia) vs 776 (l_real_11nov/out/bid_sin_nosotros.json, funcion validada) -> diferencia 0.0 % OK (<= 3 %)
+
+Base (todos los fills): EV pond. -0.0724; PnL -16.02 EUR sobre 221.30 EUR; 215 fills; 202 ordenes con fill; 4 dias; 100 % R1
+
+# TABLA principal (delta=0, d_proc=3): regla x l_ef -> evitados, EV de lo evitado, EV retenido, dPnL (= -pnl evitado) con IC90 por cierre, dEV (retenido - todo) con IC90 por cierre, dias+, sin mejor dia, placebo (p = P(EV retenido al azar >= observado))
+DECISIVAS (K_B=6, alfa 0,0083): CXB60, F5C, UNION x l_ef {35,60}; el resto es descriptivo
+CXB60 l_ef=35 [DECISIVA]: evitados 94 (pnl -4.23, EV evitado -0.042) | retenido EV -0.0970 | dPnL +4.23 EUR IC90 [-30.94, 40.9] | dEV -0.0246 IC90 [-0.2394, 0.196] | dias+ 3/4 | sin mejor dia -2.93 | placebo p 0.651
+CXB60 l_ef=60 [DECISIVA]: evitados 81 (pnl -2.87, EV evitado -0.034) | retenido EV -0.0960 | dPnL +2.87 EUR IC90 [-25.44, 33.15] | dEV -0.0236 IC90 [-0.1915, 0.1653] | dias+ 3/4 | sin mejor dia -4.29 | placebo p 0.681
+CXB60 l_ef=100: evitados 56 (pnl -4.34, EV evitado -0.078) | retenido EV -0.0706 | dPnL +4.34 EUR IC90 [-21.72, 30.81] | dEV +0.0018 IC90 [-0.1365, 0.143] | dias+ 3/4 | sin mejor dia -1.47 | placebo p 0.517
+CXB60 l_ef=150: evitados 40 (pnl +0.51, EV evitado +0.013) | retenido EV -0.0911 | dPnL -0.51 EUR IC90 [-23.45, 20.96] | dEV -0.0187 IC90 [-0.1295, 0.0925] | dias+ 2/4 | sin mejor dia -4.77 | placebo p 0.667
+F5C l_ef=35 [DECISIVA]: evitados 100 (pnl +1.60, EV evitado +0.016) | retenido EV -0.1449 | dPnL -1.60 EUR IC90 [-38.76, 34.2] | dEV -0.0725 IC90 [-0.2691, 0.1391] | dias+ 2/4 | sin mejor dia -9.85 | placebo p 0.431
+F5C l_ef=60 [DECISIVA]: evitados 95 (pnl +0.60, EV evitado +0.006) | retenido EV -0.1309 | dPnL -0.60 EUR IC90 [-35.77, 34.4] | dEV -0.0585 IC90 [-0.2457, 0.1285] | dias+ 1/4 | sin mejor dia -8.85 | placebo p 0.431
+F5C l_ef=100: evitados 86 (pnl +3.49, EV evitado +0.040) | retenido EV -0.1462 | dPnL -3.49 EUR IC90 [-37.57, 30.28] | dEV -0.0738 IC90 [-0.2586, 0.1044] | dias+ 1/4 | sin mejor dia -9.03 | placebo p 0.589
+F5C l_ef=150: evitados 79 (pnl -2.69, EV evitado -0.034) | retenido EV -0.0937 | dPnL +2.69 EUR IC90 [-30.06, 33.42] | dEV -0.0213 IC90 [-0.1812, 0.1414] | dias+ 2/4 | sin mejor dia -2.70 | placebo p 0.437
+F5A l_ef=35: evitados 71 (pnl +1.58, EV evitado +0.023) | retenido EV -0.1161 | dPnL -1.58 EUR IC90 [-31.61, 28.94] | dEV -0.0437 IC90 [-0.1879, 0.1112] | dias+ 2/4 | sin mejor dia -3.95 | placebo p 0.523
+F5A l_ef=60: evitados 69 (pnl +2.94, EV evitado +0.043) | retenido EV -0.1240 | dPnL -2.94 EUR IC90 [-32.54, 26.74] | dEV -0.0516 IC90 [-0.1898, 0.104] | dias+ 1/4 | sin mejor dia -5.31 | placebo p 0.531
+F5A l_ef=100: evitados 67 (pnl +4.36, EV evitado +0.065) | retenido EV -0.1320 | dPnL -4.36 EUR IC90 [-34.25, 25.92] | dEV -0.0596 IC90 [-0.1998, 0.0915] | dias+ 1/4 | sin mejor dia -5.31 | placebo p 0.584
+F5A l_ef=150: evitados 67 (pnl +4.36, EV evitado +0.065) | retenido EV -0.1320 | dPnL -4.36 EUR IC90 [-34.25, 25.92] | dEV -0.0596 IC90 [-0.1998, 0.0915] | dias+ 1/4 | sin mejor dia -5.31 | placebo p 0.584
+UNION l_ef=35 [DECISIVA]: evitados 144 (pnl +0.64, EV evitado +0.004) | retenido EV -0.2247 | dPnL -0.64 EUR IC90 [-43.42, 43.89] | dEV -0.1523 IC90 [-0.4548, 0.1722] | dias+ 2/4 | sin mejor dia -8.52 | placebo p 0.712
+UNION l_ef=60 [DECISIVA]: evitados 132 (pnl -6.19, EV evitado -0.046) | retenido EV -0.1121 | dPnL +6.19 EUR IC90 [-30.83, 45.88] | dEV -0.0397 IC90 [-0.3037, 0.2419] | dias+ 3/4 | sin mejor dia -3.50 | placebo p 0.535
+UNION l_ef=100: evitados 112 (pnl +4.87, EV evitado +0.043) | retenido EV -0.1946 | dPnL -4.87 EUR IC90 [-41.28, 32.93] | dEV -0.1222 IC90 [-0.3369, 0.1088] | dias+ 3/4 | sin mejor dia -8.95 | placebo p 0.683
+UNION l_ef=150: evitados 95 (pnl -1.13, EV evitado -0.012) | retenido EV -0.1169 | dPnL +1.13 EUR IC90 [-32.71, 35.15] | dEV -0.0445 IC90 [-0.2195, 0.1392] | dias+ 2/4 | sin mejor dia -6.15 | placebo p 0.576
+
+# Mixtura empirica l_ef = kappa*RTT_ledger (CDF; evitado fraccional; sin placebo)
+CXB60 kappa=0.5: evitados 89.4 | retenido EV -0.0861 | dPnL +5.12 EUR IC90 [-27.41, 38.81] | dEV -0.0137 IC90 [-0.2028, 0.1905] | dias+ 3/4
+CXB60 kappa=0.6: evitados 86.5 | retenido EV -0.0795 | dPnL +5.69 EUR IC90 [-25.62, 37.66] | dEV -0.0071 IC90 [-0.1783, 0.1845] | dias+ 3/4
+CXB60 kappa=1.0: evitados 71.2 | retenido EV -0.0852 | dPnL +3.46 EUR IC90 [-21.94, 30.51] | dEV -0.0128 IC90 [-0.1565, 0.1532] | dias+ 3/4
+F5C kappa=0.5: evitados 98.4 | retenido EV -0.1311 | dPnL -0.10 EUR IC90 [-36.53, 35.4] | dEV -0.0587 IC90 [-0.2549, 0.142] | dias+ 2/4
+F5C kappa=0.6: evitados 96.8 | retenido EV -0.1218 | dPnL +0.84 EUR IC90 [-34.67, 36.63] | dEV -0.0494 IC90 [-0.2434, 0.1434] | dias+ 2/4
+F5C kappa=1.0: evitados 91.4 | retenido EV -0.1243 | dPnL -0.13 EUR IC90 [-34.53, 34.21] | dEV -0.0519 IC90 [-0.2338, 0.1293] | dias+ 1/4
+F5A kappa=0.5: evitados 70.0 | retenido EV -0.1195 | dPnL -2.18 EUR IC90 [-32.32, 27.88] | dEV -0.0471 IC90 [-0.1892, 0.1076] | dias+ 1/4
+F5A kappa=0.6: evitados 69.0 | retenido EV -0.1226 | dPnL -2.73 EUR IC90 [-32.47, 26.99] | dEV -0.0502 IC90 [-0.1887, 0.1038] | dias+ 1/4
+F5A kappa=1.0: evitados 67.9 | retenido EV -0.1261 | dPnL -3.36 EUR IC90 [-32.74, 26.29] | dEV -0.0537 IC90 [-0.1909, 0.0993] | dias+ 1/4
+UNION kappa=0.5: evitados 139.2 | retenido EV -0.1902 | dPnL +0.95 EUR IC90 [-40.09, 43.32] | dEV -0.1178 IC90 [-0.3874, 0.1733] | dias+ 2/4
+UNION kappa=0.6: evitados 136.9 | retenido EV -0.1416 | dPnL +4.44 EUR IC90 [-35.99, 45.46] | dEV -0.0692 IC90 [-0.3374, 0.2166] | dias+ 3/4
+UNION kappa=1.0: evitados 123.8 | retenido EV -0.1231 | dPnL +4.20 EUR IC90 [-31.82, 41.86] | dEV -0.0507 IC90 [-0.2858, 0.1954] | dias+ 3/4
+
+# Sensibilidades DESCRIPTIVAS (no deciden): d_proc 10/30, delta -suelo/+suelo (39,5 ms; +suelo NO decide), proyeccion R2-equivalente (+20,5 ms de holgura de deteccion: SIMULADA)
+CXB60 l_ef=35 d_proc=10: evitados 89 | EV retenido -0.0694 | dPnL +7.16 | dEV +0.0030
+CXB60 l_ef=35 d_proc=30: evitados 81 | EV retenido -0.0960 | dPnL +2.87 | dEV -0.0236
+CXB60 l_ef=35 delta=-suelo: evitados 73 | EV retenido -0.0830 | dPnL +3.90 | dEV -0.0106
+CXB60 l_ef=35 delta=+suelo (no decide): evitados 106 | EV retenido -0.0212 | dPnL +13.73 | dEV +0.0512
+CXB60 l_ef=35 R2-equivalente (+20,5 ms; SIMULADA): evitados 98 | EV retenido -0.0604 | dPnL +8.97 | dEV +0.0121
+CXB60 l_ef=60 d_proc=10: evitados 75 | EV retenido -0.1035 | dPnL +1.15 | dEV -0.0311
+CXB60 l_ef=60 d_proc=30: evitados 68 | EV retenido -0.0551 | dPnL +7.64 | dEV +0.0173
+CXB60 l_ef=60 delta=-suelo: evitados 56 | EV retenido -0.0706 | dPnL +4.34 | dEV +0.0018
+CXB60 l_ef=60 delta=+suelo (no decide): evitados 98 | EV retenido -0.0604 | dPnL +8.97 | dEV +0.0121
+CXB60 l_ef=60 R2-equivalente (+20,5 ms; SIMULADA): evitados 92 | EV retenido -0.0405 | dPnL +11.01 | dEV +0.0319
+F5C l_ef=35 d_proc=10: evitados 99 | EV retenido -0.1118 | dPnL +2.30 | dEV -0.0394
+F5C l_ef=35 d_proc=30: evitados 95 | EV retenido -0.1309 | dPnL -0.60 | dEV -0.0585
+F5C l_ef=35 delta=-suelo: evitados 93 | EV retenido -0.1079 | dPnL +2.24 | dEV -0.0355
+F5C l_ef=35 delta=+suelo (no decide): evitados 108 | EV retenido -0.1912 | dPnL -5.25 | dEV -0.1188
+F5C l_ef=35 R2-equivalente (+20,5 ms; SIMULADA): evitados 105 | EV retenido -0.1367 | dPnL +0.35 | dEV -0.0643
+F5C l_ef=60 d_proc=10: evitados 95 | EV retenido -0.1309 | dPnL -0.60 | dEV -0.0585
+F5C l_ef=60 d_proc=30: evitados 88 | EV retenido -0.1380 | dPnL -2.22 | dEV -0.0656
+F5C l_ef=60 delta=-suelo: evitados 86 | EV retenido -0.1462 | dPnL -3.49 | dEV -0.0738
+F5C l_ef=60 delta=+suelo (no decide): evitados 105 | EV retenido -0.1367 | dPnL +0.35 | dEV -0.0643
+F5C l_ef=60 R2-equivalente (+20,5 ms; SIMULADA): evitados 99 | EV retenido -0.1118 | dPnL +2.30 | dEV -0.0394
+UNION l_ef=35 d_proc=10: evitados 140 | EV retenido -0.0937 | dPnL +8.63 | dEV -0.0213
+UNION l_ef=35 d_proc=30: evitados 132 | EV retenido -0.1121 | dPnL +6.19 | dEV -0.0397
+UNION l_ef=35 delta=-suelo: evitados 127 | EV retenido -0.1156 | dPnL +5.37 | dEV -0.0432
+UNION l_ef=35 delta=+suelo (no decide): evitados 153 | EV retenido -0.0891 | dPnL +10.40 | dEV -0.0167
+UNION l_ef=35 R2-equivalente (+20,5 ms; SIMULADA): evitados 146 | EV retenido -0.2008 | dPnL +1.58 | dEV -0.1284
+UNION l_ef=60 d_proc=10: evitados 129 | EV retenido -0.1476 | dPnL +2.54 | dEV -0.0752
+UNION l_ef=60 d_proc=30: evitados 120 | EV retenido -0.1296 | dPnL +3.14 | dEV -0.0572
+UNION l_ef=60 delta=-suelo: evitados 112 | EV retenido -0.1946 | dPnL -4.87 | dEV -0.1222
+UNION l_ef=60 delta=+suelo (no decide): evitados 146 | EV retenido -0.2008 | dPnL +1.58 | dEV -0.1284
+UNION l_ef=60 R2-equivalente (+20,5 ms; SIMULADA): evitados 142 | EV retenido -0.0634 | dPnL +11.18 | dEV +0.0090
+
+H-F5-LAT: dPnL F5C l_ef=35 -1.60 EUR -> l_ef=100 -3.49 EUR (perdida +1.89 EUR; el motor da -0,086/EUR por +40 ms para CXB)
+
+CXB60 l_ef=60 por rama del sello (sig/amb/nosig/sinev/guard):
+       fills  evitados    pnl  pnl_evitado
+rama                                      
+amb       24       7.0 -12.87         1.00
+guard      5       1.0   4.45         3.90
+nosig      6       2.0  -3.67        -2.35
+sig      163      68.0  -1.50        -7.10
+sinev     17       3.0  -2.43         1.68
+
+F5C l_ef=60 por rama del sello (sig/amb/nosig/sinev/guard):
+       fills  evitados    pnl  pnl_evitado
+rama                                      
+amb       24       7.0 -12.87         2.38
+guard      5       1.0   4.45         3.90
+nosig      6       6.0  -3.67        -3.67
+sig      163      76.0  -1.50        -6.13
+sinev     17       5.0  -2.43         4.12
+
+UNION l_ef=60 por rama del sello (sig/amb/nosig/sinev/guard):
+       fills  evitados    pnl  pnl_evitado
+rama                                      
+amb       24      11.0 -12.87        -3.07
+guard      5       1.0   4.45         3.90
+nosig      6       6.0  -3.67        -3.67
+sig      163     107.0  -1.50       -10.17
+sinev     17       7.0  -2.43         6.82
+
+# Sensibilidad SOLO rama sig (163 fills; el sello sig es el mas preciso): dEV = EV retenido - EV de todos los sig; l_ef 35/60
+CXB60 l_ef=35 solo sig: evitados 80 | EV de todos los sig -0.0091 | EV retenido +0.0711 | dEV +0.0802 | dPnL +7.32 EUR
+CXB60 l_ef=60 solo sig: evitados 68 | EV de todos los sig -0.0091 | EV retenido +0.0583 | dEV +0.0674 | dPnL +7.10 EUR
+F5C l_ef=35 solo sig: evitados 80 | EV de todos los sig -0.0091 | EV retenido +0.0258 | dEV +0.0349 | dPnL +3.73 EUR
+F5C l_ef=60 solo sig: evitados 76 | EV de todos los sig -0.0091 | EV retenido +0.0511 | dEV +0.0602 | dPnL +6.13 EUR
+UNION l_ef=35 solo sig: evitados 118 | EV de todos los sig -0.0091 | EV retenido +0.0093 | dEV +0.0184 | dPnL +1.94 EUR
+UNION l_ef=60 solo sig: evitados 107 | EV de todos los sig -0.0091 | EV retenido +0.1468 | dEV +0.1559 | dPnL +10.17 EUR
+
+# C8 incondicional por orden (3796 ordenes; coste potencial 4489.1 EUR >= coste relleno 221.3 EUR). Base: P(fill) 0.0532; EV|fill -0.0724; pnl / exposicion potencial -0.00357
+CXB60 l_ef=35: colocadas 3796/3796 | P(fill) 0.0303 | EV|fill -0.0970 | pnl retenido -11.79 EUR | pnl / exposicion potencial colocada -0.00263 (base -0.00357)
+CXB60 l_ef=60: colocadas 3796/3796 | P(fill) 0.0337 | EV|fill -0.0960 | pnl retenido -13.15 EUR | pnl / exposicion potencial colocada -0.00293 (base -0.00357)
+F5C l_ef=35: colocadas 3468/3796 | P(fill) 0.0323 | EV|fill -0.1449 | pnl retenido -17.62 EUR | pnl / exposicion potencial colocada -0.00429 (base -0.00357)
+F5C l_ef=60: colocadas 3468/3796 | P(fill) 0.0337 | EV|fill -0.1309 | pnl retenido -16.62 EUR | pnl / exposicion potencial colocada -0.00405 (base -0.00357)
+UNION l_ef=35: colocadas 3468/3796 | P(fill) 0.0199 | EV|fill -0.2247 | pnl retenido -16.66 EUR | pnl / exposicion potencial colocada -0.00406 (base -0.00357)
+UNION l_ef=60: colocadas 3468/3796 | P(fill) 0.0234 | EV|fill -0.1121 | pnl retenido -9.83 EUR | pnl / exposicion potencial colocada -0.00240 (base -0.00357)
+
+LECTURA: CXB60/F5C evitan fills por reglas con timing de cancelacion simulado (MEDIDO sobre fills reales tm3, SIMULADO en la latencia); no hay ancla independiente del reloj de relleno propio; 202 unidades / 4 dias / R1: potencia baja (IC90 por cierre arriba).

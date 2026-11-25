@@ -1,0 +1,2 @@
+- [Q-C brecha de nivel de B: escalon de latencia 35-49 ms](project_qc_brecha_nivel_b_escalon_latencia_16nov.md) — 80 % solo con LO; HI ~7-50 %; sin IC util; siguiente: delta por orden desde RTT del DELETE (ADDENDUM2)
+- [Paridad contra el JSON original, no el md](reference_paridad_contra_json_original_no_md.md) — doble redondeo en md (ETH -0,0555 -> -0,056) dio falso NO_PASA

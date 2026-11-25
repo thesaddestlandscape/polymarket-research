@@ -1,0 +1,18 @@
+banda | GAN coste/dia  EV(M+T,sin reb)  EV(+reb) pnl(+reb) | CTRL coste/dia EV sin reb  EV +reb
+.01-.05  |     2,463 +0.0027 +0.0154      608 |     1,936 -0.2962 -0.2879
+.05-.10  |     4,507 +0.0451 +0.0566    4,084 |     3,629 -0.0591 -0.0488
+.10-.20  |    12,116 +0.0948 +0.1050   20,352 |     8,519 +0.0115 +0.0220
+.20-.30  |    19,518 +0.0693 +0.0780   24,354 |    12,284 +0.0388 +0.0480
+.30-.50  |    94,263 +0.0122 +0.0184   27,732 |    59,643 +0.0190 +0.0263
+.50-.70  |   154,727 -0.0067 -0.0028   -6,843 |    84,684 -0.0113 -0.0062
+.70-.90  |   161,858 -0.0020 +0.0003      823 |    99,490 -0.0112 -0.0088
+.90-.99  |    83,567 +0.0116 +0.0122   16,373 |    59,156 +0.0119 +0.0126
+
+Rebate / beneficio neto (M+T+reb) por wallet:
+0x21f4c1a1 GAN  neto   32,035 rebate inferido  13,659 (43% del neto) ; neto sin rebate   18,376; coste total 3,960,740; EV neto +reb por EUR +0.0081
+0x28cc505f CTRL neto    7,707 rebate inferido   4,452 (58% del neto) ; neto sin rebate    3,255; coste total 935,668; EV neto +reb por EUR +0.0082
+0x855e4848 CTRL neto    6,711 rebate inferido   4,427 (66% del neto) ; neto sin rebate    2,285; coste total 934,721; EV neto +reb por EUR +0.0072
+0x85a186d1 CTRL neto    3,521 rebate inferido   6,175 (175% del neto) ; neto sin rebate   -2,654; coste total 1,198,370; EV neto +reb por EUR +0.0029
+0x86b14772 GAN  neto   21,596 rebate inferido   6,749 (31% del neto) ; neto sin rebate   14,847; coste total 1,611,861; EV neto +reb por EUR +0.0134
+0x9d57c42e CTRL neto   -2,591 rebate inferido   7,501 (nan% del neto) ; neto sin rebate  -10,092; coste total 2,200,706; EV neto +reb por EUR -0.0012
+0xe29042f5 GAN  neto   33,852 rebate inferido  11,678 (34% del neto) ; neto sin rebate   22,174; coste total 2,955,695; EV neto +reb por EUR +0.0115

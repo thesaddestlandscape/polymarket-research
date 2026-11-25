@@ -1,0 +1,56 @@
+unidades validador 50154 alpha (mismos dias) 50154 interseccion 50154
+coincidencia por campo {'te': '50154/50154', 'be': '50154/50154', 'P_sh': '50154/50154', 'P_cost': '50154/50154', 'P_t1': '50154/50154', 'D_ask': '50152/50154', 'X1_rem': '50154/50154', 'X1_proc': '50154/50154'}
+muestra 50 (te,be,P_sh,P_cost identicos): 50 / 50
+   ('5668570', 'YES') 2026-10-14 val sh/cost/t1 0.0 0.0  | alpha 0.0 0.0 
+   ('5444742', 'NO') 2026-10-09 val sh/cost/t1 5.0 1.5 1791584582699.0 | alpha 5.0 1.5 1791584582699.0
+   ('5747518', 'YES') 2026-10-16 val sh/cost/t1 5.0 0.9 1792173459519.0 | alpha 5.0 0.9 1792173459519.0
+   ('6065828', 'YES') 2026-10-23 val sh/cost/t1 0.0 0.0  | alpha 0.0 0.0 
+   ('5355653', 'YES') 2026-10-07 val sh/cost/t1 0.0 0.0  | alpha 0.0 0.0 
+   ('5381809', 'NO') 2026-10-07 val sh/cost/t1 5.0 0.95 1791394877507.0 | alpha 5.0 0.95 1791394877507.0
+con desenlace 50078 sin 76 | desenlace vs ultimo mid del libro (mid>0,9/<0,1): 49649/49649 coinciden
+R1 IS                        n= 25427 EVw=+0.0004 IC90cierre(-0.023,+0.024) IC90dia(-0.024,+0.024) dias>0 8/18 sin2mejores -0.0123
+R1 OOS                       n=  5711 EVw=-0.0318 IC90cierre(-0.082,+0.020) IC90dia(-0.146,+0.090) dias>0 1/4 sin2mejores -0.1458
+R2 IS                        n= 25427 EVw=-0.2236 IC90cierre(-0.231,-0.216) IC90dia(-0.233,-0.215) dias>0 0/18 sin2mejores -0.2274
+R2 OOS                       n=  5711 EVw=-0.2254 IC90cierre(-0.239,-0.212) IC90dia(-0.244,-0.207) dias>0 0/4 sin2mejores -0.2449
+R3 IS                        n= 40369 EVw=-0.0664 IC90cierre(-0.079,-0.053) IC90dia(-0.080,-0.054) dias>0 0/18 sin2mejores -0.0736
+R3 OOS                       n=  9457 EVw=-0.1327 IC90cierre(-0.159,-0.109) IC90dia(-0.170,-0.094) dias>0 0/4 sin2mejores -0.1705
+PLACEBO bb+0,01 IS           n= 40563 EVw=+0.0612 IC90cierre(+0.047,+0.076) IC90dia(+0.043,+0.078) dias>0 17/18 sin2mejores +0.0510
+PLACEBO bb+0,01 OOS          n=  9515 EVw=+0.0830 IC90cierre(+0.051,+0.113) IC90dia(+0.074,+0.093) dias>0 4/4 sin2mejores +0.0743
+R1 cola estricta IS          n= 24002 EVw=-0.0147 IC90cierre(-0.037,+0.009) IC90dia(-0.041,+0.011) dias>0 7/18 sin2mejores -0.0282
+R1 cola estricta OOS         n=  5455 EVw=-0.0464 IC90cierre(-0.097,+0.005) IC90dia(-0.158,+0.078) dias>0 1/4 sin2mejores -0.1589
+R1 + regla C IS              n= 38721 EVw=-0.0251 IC90cierre(-0.041,-0.009) IC90dia(-0.042,-0.010) dias>0 4/18 sin2mejores -0.0333
+R1 + regla C OOS             n=  8590 EVw=-0.0672 IC90cierre(-0.102,-0.032) IC90dia(-0.126,-0.022) dias>0 1/4 sin2mejores -0.1274
+R1 sin rellenos cruzados/detras IS n= 10384 EVw=+0.0054 IC90cierre(-0.027,+0.040) IC90dia(-0.029,+0.041) dias>0 9/18 sin2mejores -0.0155
+R1 sin rellenos cruzados/detras OOS n=  2850 EVw=-0.0400 IC90cierre(-0.105,+0.026) IC90dia(-0.111,+0.062) dias>0 1/4 sin2mejores -0.1114
+PL al bid IS                 n= 40563 EVw=+0.1015 IC90cierre(+0.086,+0.117) IC90dia(+0.083,+0.119) dias>0 17/18 sin2mejores +0.0910
+PL al bid OOS                n=  9515 EVw=+0.1242 IC90cierre(+0.091,+0.156) IC90dia(+0.115,+0.134) dias>0 4/4 sin2mejores +0.1152
+PL al mid IS                 n= 40563 EVw=+0.0019 IC90cierre(-0.012,+0.016) IC90dia(-0.014,+0.017) dias>0 8/18 sin2mejores -0.0069
+PL al mid OOS                n=  9515 EVw=-0.0292 IC90cierre(-0.058,-0.003) IC90dia(-0.057,-0.006) dias>0 1/4 sin2mejores -0.0575
+PL al ask sin fee IS         n= 40563 EVw=-0.0812 IC90cierre(-0.094,-0.069) IC90dia(-0.096,-0.067) dias>0 0/18 sin2mejores -0.0894
+PL al ask sin fee OOS        n=  9515 EVw=-0.1458 IC90cierre(-0.171,-0.123) IC90dia(-0.186,-0.105) dias>0 0/4 sin2mejores -0.1876
+PL al ask+fee IS             n= 40563 EVw=-0.1226 IC90cierre(-0.134,-0.111) IC90dia(-0.137,-0.109) dias>0 0/18 sin2mejores -0.1304
+PL al ask+fee OOS            n=  9515 EVw=-0.1820 IC90cierre(-0.206,-0.160) IC90dia(-0.220,-0.144) dias>0 0/4 sin2mejores -0.2211
+rellenos R1: parciales 39516; con ba<=b' (libro ya cruzado) 35.9%; con bb_actual>=b' (no cabeza) 17.3%
+recotizaciones por unidad: mediana 5, p90 15; por segundo activo p50 0.82 p90 22.22
+   2026-10-05 acciones/seg globales p99 7 max 18, total 3379
+   2026-10-06 acciones/seg globales p99 8 max 18, total 10980
+   2026-10-07 acciones/seg globales p99 8 max 21, total 11921
+   2026-10-08 acciones/seg globales p99 9 max 23, total 12558
+   2026-10-09 acciones/seg globales p99 8 max 17, total 12023
+   2026-10-10 acciones/seg globales p99 9 max 23, total 14334
+   2026-10-11 acciones/seg globales p99 9 max 36, total 13163
+   2026-10-12 acciones/seg globales p99 9 max 20, total 11740
+   2026-10-13 acciones/seg globales p99 9 max 47, total 14133
+   2026-10-14 acciones/seg globales p99 12 max 36, total 16437
+   2026-10-15 acciones/seg globales p99 11 max 30, total 16613
+   2026-10-16 acciones/seg globales p99 10 max 22, total 15174
+   2026-10-17 acciones/seg globales p99 12 max 29, total 17247
+   2026-10-18 acciones/seg globales p99 12 max 36, total 17750
+   2026-10-19 acciones/seg globales p99 11 max 28, total 16561
+   2026-10-20 acciones/seg globales p99 10 max 23, total 16069
+   2026-10-21 acciones/seg globales p99 10 max 31, total 20657
+   2026-10-22 acciones/seg globales p99 11 max 43, total 18731
+   2026-10-23 acciones/seg globales p99 11 max 30, total 20304
+   2026-10-24 acciones/seg globales p99 12 max 41, total 25585
+   2026-10-25 acciones/seg globales p99 12 max 33, total 28905
+   2026-10-26 acciones/seg globales p99 13 max 29, total 27833

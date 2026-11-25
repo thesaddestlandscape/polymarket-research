@@ -1,0 +1,36 @@
+            proxy_modelo  maker_fill_EV  maker_hit_menos_precio  ask_real
+2026-09-25        -0.213            NaN                     NaN       NaN
+2026-09-26         0.147            NaN                     NaN       NaN
+2026-09-27         0.180            NaN                     NaN       NaN
+2026-09-28        -0.012            NaN                     NaN       NaN
+2026-09-29        -0.398            NaN                     NaN       NaN
+2026-09-30         0.088            NaN                     NaN       NaN
+2026-10-01        -0.398            NaN                     NaN       NaN
+2026-10-02        -0.129            NaN                     NaN       NaN
+2026-10-03        -0.707            NaN                     NaN       NaN
+2026-10-04         0.290            NaN                     NaN       NaN
+2026-10-05        -0.131            NaN                     NaN    -0.032
+2026-10-06         0.225            NaN                     NaN    -0.716
+2026-10-07         0.222            NaN                     NaN    -0.059
+2026-10-08        -0.839            NaN                     NaN    -0.327
+2026-10-09        -0.098          0.326                   0.323     0.267
+2026-10-10        -0.456         -0.167                  -0.164    -0.535
+2026-10-11        -0.018         -0.200                  -0.200    -0.290
+2026-10-12         0.133          0.273                   0.276    -0.230
+2026-10-13         0.043         -0.111                  -0.116     0.150
+2026-10-14         0.105         -0.294                  -0.292    -0.231
+2026-10-15        -0.112         -0.089                  -0.088    -0.292
+2026-10-16        -0.015          0.111                   0.115     0.096
+2026-10-17         0.134         -0.095                  -0.096    -0.455
+2026-10-18        -0.912         -0.310                  -0.310    -0.409
+2026-10-19        -0.405         -0.423                  -0.428    -0.177
+2026-10-20        -0.210          0.122                   0.120    -0.090
+2026-10-21        -0.790         -0.537                  -0.542    -0.796
+2026-10-22        -0.073            NaN                     NaN       NaN
+2026-10-23        -0.110            NaN                     NaN       NaN
+Spearman(proxy_modelo,maker_fill_EV) n=13 dias: +0.47 p=0.103
+Spearman(proxy_modelo,ask_real) n=17 dias: +0.21 p=0.422
+Spearman(ask_real,maker_fill_EV) n=13 dias: +0.56 p=0.046
+Spearman(proxy_modelo,maker_hit_menos_precio) n=13 dias: +0.47 p=0.103
+medias (dias comunes con maker): {'proxy_modelo': -0.2, 'maker_fill_EV': -0.107, 'maker_hit_menos_precio': -0.108, 'ask_real': -0.23}
+proxy_modelo en todo 24-Sep..22-Oct: media -0.154 sd diaria 0.334 n 29 | dias con Delta<0: 19

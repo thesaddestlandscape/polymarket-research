@@ -1,0 +1,39 @@
+# T4d-C rellenos virtuales de B (G0 passT_v4), dias con fills+seg: 18 (2026-10-26..2026-11-12); regla F5 bajo p60 con cat ok; L=35 ms
+G0 fills n=5577, cost 4154 EUR, pnl -550, EV -0.132; con F5 ok 5569; regla (bajo) n=2264; tipoB n=510
+## REGLA bajo (primaria)
+detector adoptado N=0 [opt]        lo: EV -0.160 (n=2002, 1498 EUR) | nolo: EV +0.221 (n=262, 190 EUR) | dif agregada -0.381 bootstrap-bloques-dia IC90 (-0.658,-0.220) | 
+detector adoptado N=0 [cons]       lo: EV -0.159 (n=2000, 1496 EUR) | nolo: EV +0.210 (n=264, 192 EUR) | dif agregada -0.369 bootstrap-bloques-dia IC90 (-0.603,-0.218) | 
+detector + memoria N=60 [opt]      lo: EV -0.160 (n=2002, 1498 EUR) | nolo: EV +0.221 (n=262, 190 EUR) | dif agregada -0.381 bootstrap-bloques-dia IC90 (-0.658,-0.220) | 
+detector + memoria N=60 [cons]     lo: EV -0.159 (n=2000, 1496 EUR) | nolo: EV +0.210 (n=264, 192 EUR) | dif agregada -0.369 bootstrap-bloques-dia IC90 (-0.603,-0.218) | 
+p5 10 min (v4) [opt]               lo: EV -0.181 (n=1955, 1463 EUR) | nolo: EV +0.298 (n=309, 226 EUR) | dif agregada -0.478 bootstrap-bloques-dia IC90 (-1.325,-0.290) | dif pareada media -0.914 IC90 dias (-2.167,+0.339) n_dias 11 dias+ 6; dias necesarios para IC90>0 con este efecto ~17
+p5 10 min (v4) [cons]              lo: EV -0.185 (n=1946, 1457 EUR) | nolo: EV +0.310 (n=318, 231 EUR) | dif agregada -0.495 bootstrap-bloques-dia IC90 (-1.260,-0.296) | dif pareada media -0.886 IC90 dias (-1.991,+0.219) n_dias 12 dias+ 6; dias necesarios para IC90>0 con este efecto ~16
+verdad d<30 ms (lo) [opt]          lo: EV -0.155 (n=1988, 1488 EUR) | nolo: EV +0.164 (n=276, 200 EUR) | dif agregada -0.319 bootstrap-bloques-dia IC90 (-0.460,+0.884) | dif pareada media +0.371 IC90 dias (-0.171,+0.914) n_dias 6 dias+ 5; dias necesarios para IC90>0 con este efecto ~9
+verdad d<30 ms (lo) [cons]         lo: EV -0.157 (n=1987, 1488 EUR) | nolo: EV +0.184 (n=277, 201 EUR) | dif agregada -0.341 bootstrap-bloques-dia IC90 (-0.527,+0.131) | dif pareada media -0.075 IC90 dias (-0.968,+0.818) n_dias 6 dias+ 4; dias necesarios para IC90>0 con este efecto ~572
+## regla bajo & tipoB
+detector adoptado N=0 [opt]        lo: EV +0.485 (n=115, 81 EUR) | nolo: EV +0.393 (n=26, 18 EUR) | dif agregada +0.092 bootstrap-bloques-dia IC90 (-0.438,+0.649) | 
+detector adoptado N=0 [cons]       lo: EV +0.485 (n=115, 81 EUR) | nolo: EV +0.393 (n=26, 18 EUR) | dif agregada +0.092 bootstrap-bloques-dia IC90 (-0.438,+0.649) | 
+detector + memoria N=60 [opt]      lo: EV +0.485 (n=115, 81 EUR) | nolo: EV +0.393 (n=26, 18 EUR) | dif agregada +0.092 bootstrap-bloques-dia IC90 (-0.438,+0.649) | 
+detector + memoria N=60 [cons]     lo: EV +0.485 (n=115, 81 EUR) | nolo: EV +0.393 (n=26, 18 EUR) | dif agregada +0.092 bootstrap-bloques-dia IC90 (-0.438,+0.649) | 
+p5 10 min (v4) [opt]               lo: EV +0.300 (n=110, 78 EUR) | nolo: EV +1.062 (n=31, 22 EUR) | dif agregada -0.761 bootstrap-bloques-dia IC90 (-4.250,+0.165) | dif pareada media -2.161 IC90 dias (-7.766,+3.443) n_dias 3 dias+ 1; dias necesarios para IC90>0 con este efecto ~6
+p5 10 min (v4) [cons]              lo: EV +0.300 (n=110, 78 EUR) | nolo: EV +1.062 (n=31, 22 EUR) | dif agregada -0.761 bootstrap-bloques-dia IC90 (-4.250,+0.165) | dif pareada media -2.161 IC90 dias (-7.766,+3.443) n_dias 3 dias+ 1; dias necesarios para IC90>0 con este efecto ~6
+verdad d<30 ms (lo) [opt]          lo: EV +0.485 (n=115, 81 EUR) | nolo: EV +0.393 (n=26, 18 EUR) | dif agregada +0.092 bootstrap-bloques-dia IC90 (-0.438,+0.649) | 
+verdad d<30 ms (lo) [cons]         lo: EV +0.485 (n=115, 81 EUR) | nolo: EV +0.393 (n=26, 18 EUR) | dif agregada +0.092 bootstrap-bloques-dia IC90 (-0.438,+0.649) | 
+## TODOS los fills G0
+detector adoptado N=0 [opt]        lo: EV -0.177 (n=4965, 3700 EUR) | nolo: EV +0.228 (n=612, 454 EUR) | dif agregada -0.405 bootstrap-bloques-dia IC90 (-0.505,-0.289) | 
+detector adoptado N=0 [cons]       lo: EV -0.176 (n=4960, 3696 EUR) | nolo: EV +0.216 (n=617, 458 EUR) | dif agregada -0.392 bootstrap-bloques-dia IC90 (-0.493,-0.255) | 
+detector + memoria N=60 [opt]      lo: EV -0.177 (n=4965, 3700 EUR) | nolo: EV +0.228 (n=612, 454 EUR) | dif agregada -0.405 bootstrap-bloques-dia IC90 (-0.505,-0.289) | 
+detector + memoria N=60 [cons]     lo: EV -0.176 (n=4960, 3696 EUR) | nolo: EV +0.216 (n=617, 458 EUR) | dif agregada -0.392 bootstrap-bloques-dia IC90 (-0.493,-0.255) | 
+p5 10 min (v4) [opt]               lo: EV -0.188 (n=4861, 3623 EUR) | nolo: EV +0.247 (n=716, 531 EUR) | dif agregada -0.436 bootstrap-bloques-dia IC90 (-0.780,-0.222) | dif pareada media -0.620 IC90 dias (-1.513,+0.272) n_dias 13 dias+ 6; dias necesarios para IC90>0 con este efecto ~23
+p5 10 min (v4) [cons]              lo: EV -0.189 (n=4824, 3596 EUR) | nolo: EV +0.234 (n=753, 557 EUR) | dif agregada -0.424 bootstrap-bloques-dia IC90 (-0.685,-0.164) | dif pareada media -0.444 IC90 dias (-1.131,+0.243) n_dias 14 dias+ 6; dias necesarios para IC90>0 con este efecto ~29
+verdad d<30 ms (lo) [opt]          lo: EV -0.173 (n=4944, 3686 EUR) | nolo: EV +0.190 (n=633, 468 EUR) | dif agregada -0.363 bootstrap-bloques-dia IC90 (-0.469,+0.854) | dif pareada media +0.421 IC90 dias (-0.094,+0.936) n_dias 6 dias+ 5; dias necesarios para IC90>0 con este efecto ~6
+verdad d<30 ms (lo) [cons]         lo: EV -0.174 (n=4936, 3680 EUR) | nolo: EV +0.188 (n=641, 474 EUR) | dif agregada -0.362 bootstrap-bloques-dia IC90 (-0.476,+0.456) | dif pareada media +0.180 IC90 dias (-0.578,+0.938) n_dias 8 dias+ 6; dias necesarios para IC90>0 con este efecto ~107
+## tercil ALTO (cat ok)
+detector adoptado N=0 [opt]        lo: EV -0.246 (n=985, 735 EUR) | nolo: EV +0.134 (n=107, 80 EUR) | dif agregada -0.381 bootstrap-bloques-dia IC90 (-0.545,-0.242) | 
+detector adoptado N=0 [cons]       lo: EV -0.246 (n=985, 735 EUR) | nolo: EV +0.134 (n=107, 80 EUR) | dif agregada -0.381 bootstrap-bloques-dia IC90 (-0.545,-0.242) | 
+detector + memoria N=60 [opt]      lo: EV -0.246 (n=985, 735 EUR) | nolo: EV +0.134 (n=107, 80 EUR) | dif agregada -0.381 bootstrap-bloques-dia IC90 (-0.545,-0.242) | 
+detector + memoria N=60 [cons]     lo: EV -0.246 (n=985, 735 EUR) | nolo: EV +0.134 (n=107, 80 EUR) | dif agregada -0.381 bootstrap-bloques-dia IC90 (-0.545,-0.242) | 
+p5 10 min (v4) [opt]               lo: EV -0.243 (n=962, 718 EUR) | nolo: EV +0.048 (n=130, 96 EUR) | dif agregada -0.292 bootstrap-bloques-dia IC90 (-0.522,+0.242) | dif pareada media -0.919 IC90 dias (-3.285,+1.447) n_dias 8 dias+ 4; dias necesarios para IC90>0 con este efecto ~40
+p5 10 min (v4) [cons]              lo: EV -0.238 (n=946, 706 EUR) | nolo: EV -0.022 (n=146, 109 EUR) | dif agregada -0.216 bootstrap-bloques-dia IC90 (-0.467,+0.356) | dif pareada media +0.006 IC90 dias (-0.712,+0.724) n_dias 10 dias+ 6; dias necesarios para IC90>0 con este efecto ~110499
+verdad d<30 ms (lo) [opt]          lo: EV -0.243 (n=980, 731 EUR) | nolo: EV +0.087 (n=112, 84 EUR) | dif agregada -0.329 bootstrap-bloques-dia IC90 (-0.478,+0.725) | 
+verdad d<30 ms (lo) [cons]         lo: EV -0.243 (n=980, 731 EUR) | nolo: EV +0.087 (n=112, 84 EUR) | dif agregada -0.329 bootstrap-bloques-dia IC90 (-0.478,+0.725) | 
+B virtual, regla bajo: en nolo con verdad lo (oportunidad perdida) n=0 0.0 EUR pnl +0.0; en lo con verdad hi n=0 0.0 EUR pnl +0.0

@@ -1,0 +1,282 @@
+=== (2) Banda de precio de la unidad maker (rol M), calibracion y robustez. EV=Σpnl/Σcoste; reb separado
+DESC BTC
+                coste      EV   EVreb  precio  acierto_acc         n  makers
+<.05     1.490550e+05 -0.1696 -0.1560  0.0237       0.0145  117074.0  2259.0
+.05-.10  1.190416e+05 -0.2790 -0.2661  0.0751       0.0455   32982.0  1591.0
+.10-.20  5.359256e+05 -0.4326 -0.4208  0.1564       0.0696   67440.0  2113.0
+.20-.30  1.301157e+06 -0.4446 -0.4342  0.2558       0.1101   83484.0  2167.0
+.30-.50  6.157491e+06 -0.3240 -0.3158  0.4125       0.2269  219380.0  2925.0
+.50-.70  1.154936e+07  0.0415  0.0470  0.6096       0.5537  236393.0  2951.0
+.70-.90  1.531701e+07  0.1520  0.1548  0.7956       0.8625  209360.0  2277.0
+>=.90    5.962870e+06  0.0199  0.0206  0.9556       0.9680   83078.0  1719.0
+DESC ALT
+                coste      EV   EVreb  precio  acierto_acc        n  makers
+<.05     2.771272e+04 -0.1568 -0.1432  0.0239       0.0138  77898.0  1085.0
+.05-.10  3.038912e+04  0.0478  0.0607  0.0751       0.0668  19779.0   381.0
+.10-.20  1.116447e+05 -0.2627 -0.2509  0.1539       0.0915  37650.0   467.0
+.20-.30  2.175435e+05 -0.2520 -0.2415  0.2549       0.1527  36712.0   477.0
+.30-.50  9.495413e+05 -0.1982 -0.1900  0.4129       0.2750  88629.0   681.0
+.50-.70  1.681187e+06  0.0119  0.0174  0.6065       0.5463  96458.0   701.0
+.70-.90  2.383360e+06  0.1052  0.1080  0.8010       0.8435  90607.0   523.0
+>=.90    1.001444e+06  0.0193  0.0200  0.9500       0.9642  37069.0   450.0
+HOLD BTC
+                coste      EV   EVreb  precio  acierto_acc         n  makers
+<.05     1.287785e+05 -0.1677 -0.1541  0.0240       0.0140   89830.0  2664.0
+.05-.10  9.773105e+04 -0.5285 -0.5155  0.0734       0.0281   26031.0  1323.0
+.10-.20  4.139063e+05 -0.5761 -0.5643  0.1569       0.0500   56286.0  1833.0
+.20-.30  1.073090e+06 -0.5428 -0.5324  0.2565       0.0882   75050.0  1923.0
+.30-.50  5.062384e+06 -0.3377 -0.3295  0.4145       0.2177  188657.0  2538.0
+.50-.70  9.989738e+06  0.0360  0.0415  0.6083       0.5477  213867.0  2563.0
+.70-.90  1.255256e+07  0.1670  0.1699  0.7950       0.8768  176231.0  1953.0
+>=.90    4.487795e+06  0.0341  0.0348  0.9550       0.9813   68757.0  1480.0
+HOLD ALT
+                coste      EV   EVreb  precio  acierto_acc        n  makers
+<.05     2.068054e+04 -0.1651 -0.1515  0.0248       0.0144  50197.0   824.0
+.05-.10  2.144600e+04 -0.3545 -0.3415  0.0750       0.0402  13660.0   339.0
+.10-.20  7.324862e+04 -0.4161 -0.4042  0.1533       0.0707  23962.0   430.0
+.20-.30  1.446885e+05 -0.3863 -0.3758  0.2552       0.1254  24054.0   438.0
+.30-.50  6.863515e+05 -0.2187 -0.2105  0.4150       0.2712  59581.0   587.0
+.50-.70  1.324399e+06  0.0160  0.0215  0.6063       0.5558  71824.0   627.0
+.70-.90  1.636823e+06  0.1229  0.1257  0.7983       0.8592  64007.0   476.0
+>=.90    6.850406e+05  0.0227  0.0233  0.9528       0.9701  25842.0   412.0
+--- robustez
+  BTC .50-.70 DESC: EV 0.0415 | dias+ 9/9 | IC90 por dias (0.0275,0.0562) | IC90 por cierre (0.0255,0.0554) n_cierres 2574 | sin 2 mejores dias 0.0311 | wallet top 4.0% | EV con peso wallet<=30% 0.0415 | coste/dia 1283262
+  BTC .50-.70 HOLD: EV 0.0360 | dias+ 7/8 | IC90 por dias (0.0245,0.0463) | IC90 por cierre (0.0189,0.0526) n_cierres 1999 | sin 2 mejores dias 0.0298 | wallet top 4.3% | EV con peso wallet<=30% 0.0360 | coste/dia 1248717
+  BTC .70-.90 DESC: EV 0.1520 | dias+ 9/9 | IC90 por dias (0.1422,0.1624) | IC90 por cierre (0.1381,0.1650) n_cierres 2592 | sin 2 mejores dias 0.1466 | wallet top 6.2% | EV con peso wallet<=30% 0.1520 | coste/dia 1701890
+  BTC .70-.90 HOLD: EV 0.1670 | dias+ 8/8 | IC90 por dias (0.1508,0.1829) | IC90 por cierre (0.1519,0.1823) n_cierres 2019 | sin 2 mejores dias 0.1548 | wallet top 4.2% | EV con peso wallet<=30% 0.1670 | coste/dia 1569070
+  BTC >=.90 DESC: EV 0.0199 | dias+ 8/9 | IC90 por dias (0.0120,0.0272) | IC90 por cierre (0.0135,0.0261) n_cierres 2591 | sin 2 mejores dias 0.0158 | wallet top 7.5% | EV con peso wallet<=30% 0.0199 | coste/dia 662541
+  BTC >=.90 HOLD: EV 0.0341 | dias+ 8/8 | IC90 por dias (0.0293,0.0387) | IC90 por cierre (0.0288,0.0386) n_cierres 2019 | sin 2 mejores dias 0.0328 | wallet top 5.1% | EV con peso wallet<=30% 0.0341 | coste/dia 560974
+  BTC .30-.50 DESC: EV -0.3240 | dias+ 0/9 | IC90 por dias (-0.3530,-0.2960) | IC90 por cierre (-0.3538,-0.2950) n_cierres 2570 | sin 2 mejores dias -0.3470 | wallet top 4.3% | EV con peso wallet<=30% -0.3240 | coste/dia 684166
+  BTC .05-.30 DESC: EV -0.4312 | dias+ 0/9 | IC90 por dias (-0.4727,-0.3850) | IC90 por cierre (-0.4857,-0.3804) n_cierres 2592 | sin 2 mejores dias -0.4729 | wallet top 5.1% | EV con peso wallet<=30% -0.4312 | coste/dia 217347
+  BTC .30-.50 HOLD: EV -0.3377 | dias+ 0/8 | IC90 por dias (-0.3901,-0.2974) | IC90 por cierre (-0.3724,-0.3018) n_cierres 2008 | sin 2 mejores dias -0.3483 | wallet top 4.4% | EV con peso wallet<=30% -0.3377 | coste/dia 632798
+  BTC .05-.30 HOLD: EV -0.5506 | dias+ 0/8 | IC90 por dias (-0.6067,-0.4981) | IC90 por cierre (-0.6015,-0.4947) n_cierres 2019 | sin 2 mejores dias -0.5724 | wallet top 4.0% | EV con peso wallet<=30% -0.5506 | coste/dia 198091
+  ALT .50-.70 DESC: EV 0.0119 | dias+ 7/9 | IC90 por dias (0.0010,0.0224) | IC90 por cierre (-0.0028,0.0267) n_cierres 2580 | sin 2 mejores dias 0.0048 | wallet top 5.9% | EV con peso wallet<=30% 0.0119 | coste/dia 186799
+  ALT .50-.70 HOLD: EV 0.0160 | dias+ 5/8 | IC90 por dias (-0.0073,0.0381) | IC90 por cierre (-0.0053,0.0370) n_cierres 2032 | sin 2 mejores dias -0.0041 | wallet top 7.1% | EV con peso wallet<=30% 0.0160 | coste/dia 165550
+  ALT .70-.90 DESC: EV 0.1052 | dias+ 9/9 | IC90 por dias (0.0947,0.1154) | IC90 por cierre (0.0942,0.1167) n_cierres 2593 | sin 2 mejores dias 0.1013 | wallet top 7.3% | EV con peso wallet<=30% 0.1052 | coste/dia 264818
+  ALT .70-.90 HOLD: EV 0.1229 | dias+ 8/8 | IC90 por dias (0.1076,0.1379) | IC90 por cierre (0.1109,0.1339) n_cierres 2039 | sin 2 mejores dias 0.1100 | wallet top 9.4% | EV con peso wallet<=30% 0.1229 | coste/dia 204603
+  ALT >=.90 DESC: EV 0.0193 | dias+ 8/9 | IC90 por dias (0.0129,0.0247) | IC90 por cierre (0.0120,0.0264) n_cierres 2590 | sin 2 mejores dias 0.0161 | wallet top 13.3% | EV con peso wallet<=30% 0.0193 | coste/dia 111272
+  ALT >=.90 HOLD: EV 0.0227 | dias+ 6/8 | IC90 por dias (0.0115,0.0315) | IC90 por cierre (0.0164,0.0286) n_cierres 2029 | sin 2 mejores dias 0.0164 | wallet top 14.6% | EV con peso wallet<=30% 0.0227 | coste/dia 85630
+  ALT .30-.50 DESC: EV -0.1982 | dias+ 0/9 | IC90 por dias (-0.2160,-0.1802) | IC90 por cierre (-0.2288,-0.1686) n_cierres 2584 | sin 2 mejores dias -0.2098 | wallet top 5.9% | EV con peso wallet<=30% -0.1982 | coste/dia 105505
+  ALT .05-.30 DESC: EV -0.2300 | dias+ 2/9 | IC90 por dias (-0.3279,-0.1311) | IC90 por cierre (-0.3091,-0.1493) n_cierres 2593 | sin 2 mejores dias -0.3208 | wallet top 6.2% | EV con peso wallet<=30% -0.2300 | coste/dia 39953
+  ALT .30-.50 HOLD: EV -0.2187 | dias+ 0/8 | IC90 por dias (-0.2857,-0.1522) | IC90 por cierre (-0.2598,-0.1761) n_cierres 2028 | sin 2 mejores dias -0.2412 | wallet top 10.6% | EV con peso wallet<=30% -0.2187 | coste/dia 85794
+  ALT .05-.30 HOLD: EV -0.3925 | dias+ 0/8 | IC90 por dias (-0.4723,-0.3057) | IC90 por cierre (-0.4540,-0.3299) n_cierres 2039 | sin 2 mejores dias -0.4278 | wallet top 7.7% | EV con peso wallet<=30% -0.3925 | coste/dia 29923
+--- por dia (BTC, banda .70-.90 / .50-.70 / >=.90 / .05-.30)
+     .10-.20  .20-.30  .30-.50  .50-.70  .70-.90  >=.90
+dia                                                    
+6     -0.221   -0.301   -0.242    0.031    0.124 -0.012
+7     -0.389   -0.523   -0.364    0.098    0.164  0.025
+8     -0.378   -0.305   -0.277    0.018    0.135  0.035
+9     -0.232   -0.509   -0.340    0.053    0.141  0.017
+10    -0.538   -0.474   -0.390    0.019    0.137  0.018
+11    -0.573   -0.459   -0.377    0.035    0.173  0.036
+12    -0.560   -0.428   -0.374    0.058    0.158  0.022
+13    -0.507   -0.525   -0.254    0.007    0.163  0.030
+14    -0.510   -0.482   -0.337    0.057    0.181  0.012
+15    -0.266   -0.465   -0.274    0.048    0.124  0.026
+16    -0.552   -0.449   -0.345    0.051    0.147  0.021
+17    -0.641   -0.557   -0.418   -0.006    0.165  0.047
+18    -0.595   -0.698   -0.421    0.044    0.195  0.039
+19    -0.767   -0.654   -0.445    0.053    0.204  0.033
+20    -0.598   -0.473   -0.275    0.030    0.173  0.037
+21    -0.591   -0.526   -0.262    0.024    0.168  0.037
+22    -1.000   -1.000   -0.797    0.455    0.279  0.041
+ALT
+     .10-.20  .20-.30  .30-.50  .50-.70  .70-.90  >=.90
+dia                                                    
+6     -0.368   -0.354   -0.242    0.001    0.118  0.030
+7     -0.390   -0.417   -0.220    0.041    0.117  0.012
+8      0.028   -0.190   -0.195    0.026    0.091  0.018
+9     -0.239   -0.304   -0.139    0.001    0.117  0.029
+10    -0.377   -0.343   -0.187   -0.012    0.088  0.007
+11    -0.326   -0.358   -0.230    0.030    0.100  0.023
+12    -0.155   -0.196   -0.238    0.030    0.070  0.022
+13    -0.348    0.108   -0.168    0.008    0.117  0.032
+14    -0.314   -0.219   -0.164   -0.019    0.136 -0.003
+15    -0.349   -0.284   -0.250   -0.018    0.114  0.021
+16    -0.327   -0.383   -0.186    0.024    0.108  0.027
+17    -0.250   -0.399   -0.174    0.050    0.086  0.016
+18    -0.645   -0.325   -0.194    0.013    0.137  0.034
+19    -0.543   -0.452   -0.075   -0.011    0.135  0.039
+20    -0.607   -0.538   -0.380    0.061    0.161  0.037
+21    -0.114   -0.239   -0.150   -0.032    0.105 -0.010
+22    -0.568   -0.784   -0.522    0.233    0.212 -0.028
+--- BTC banda .70-.90 y .05-.30: EV por tamano de maker (terciles de coste maker total en el periodo) y top-50
+DESC .70-.90
+              coste      EV   EVreb  makers
+tam                                        
+T1     9.569449e+02  0.0089  0.0118   149.0
+T2     2.534631e+04 -0.0323 -0.0295   748.0
+T3     4.539650e+06  0.1093  0.1121  1332.0
+top50  1.075106e+07  0.1705  0.1733    48.0
+DESC .50-.70
+              coste      EV   EVreb  makers
+tam                                        
+T1     1.790958e+03 -0.1107 -0.1047   321.0
+T2     5.167461e+04  0.0051  0.0109  1130.0
+T3     4.128937e+06  0.0261  0.0317  1452.0
+top50  7.366958e+06  0.0504  0.0558    48.0
+DESC >=.90
+              coste      EV   EVreb  makers
+tam                                        
+T1     6.067500e+02 -0.0102 -0.0097    94.0
+T2     2.464841e+04 -0.0344 -0.0338   469.0
+T3     3.542746e+06  0.0066  0.0071  1106.0
+top50  2.394868e+06  0.0403  0.0411    50.0
+DESC .05-.30
+              coste      EV   EVreb  makers
+tam                                        
+T1     1.862263e+03 -0.1329 -0.1211   574.0
+T2     2.438921e+04  0.0435  0.0550  1017.0
+T3     9.117860e+05 -0.2214 -0.2103  1389.0
+top50  1.018087e+06 -0.6311 -0.6203    48.0
+DESC .30-.50
+              coste      EV   EVreb  makers
+tam                                        
+T1     1.840986e+03 -0.1815 -0.1732   382.0
+T2     3.631543e+04 -0.1213 -0.1131  1045.0
+T3     2.588699e+06 -0.1935 -0.1852  1450.0
+top50  3.530636e+06 -0.4219 -0.4136    48.0
+HOLD .70-.90
+              coste      EV   EVreb  makers
+tam                                        
+T1     1.344442e+02 -0.0455 -0.0426    31.0
+T2     1.616263e+04 -0.0391 -0.0362   634.0
+T3     4.206374e+06  0.1320  0.1349  1241.0
+top50  8.329885e+06  0.1851  0.1879    47.0
+HOLD .50-.70
+              coste      EV   EVreb  makers
+tam                                        
+T1     5.495864e+02 -0.1274 -0.1215   142.0
+T2     2.815860e+04 -0.0669 -0.0610   995.0
+T3     3.721516e+06  0.0163  0.0218  1379.0
+top50  6.239514e+06  0.0482  0.0537    47.0
+HOLD >=.90
+              coste      EV   EVreb  makers
+tam                                        
+T1     1.284839e+02  0.0452  0.0458    34.0
+T2     1.331707e+04 -0.0139 -0.0134   410.0
+T3     2.569394e+06  0.0215  0.0221   987.0
+top50  1.904956e+06  0.0514  0.0522    49.0
+HOLD .05-.30
+            coste      EV   EVreb  makers
+tam                                      
+T1        633.076 -0.4167 -0.4050   296.0
+T2      15376.042 -0.1233 -0.1118   921.0
+T3     739184.000 -0.3745 -0.3634  1348.0
+top50  829533.875 -0.7155 -0.7047    47.0
+HOLD .30-.50
+              coste      EV   EVreb  makers
+tam                                        
+T1     5.109867e+02 -0.3566 -0.3482   162.0
+T2     2.240139e+04 -0.1064 -0.0981   948.0
+T3     2.102395e+06 -0.2206 -0.2124  1381.0
+top50  2.937077e+06 -0.4233 -0.4151    47.0
+=== (1) rasgos binarios (post-hoc): grupos fijados con DESC, EV maker HOLD ponderado por €; placebo por permutacion de makers (2000), p marginal
+FWD BTC r18_ventas >0 (vende algo) n_si 254 n_no 706 EV_si -0.0037 EV_no 0.0025 diff -0.0062 p_marg 0.051 | coste_si 4930964 wallet top_si 15.6%
+FWD BTC r19_ambos_lados >0.5 (cubre ambos lados) n_si 259 n_no 701 EV_si 0.0035 EV_no -0.0071 diff 0.0106 p_marg 0.001 | coste_si 25748946 wallet top_si 4.4%
+FWD BTC r20_taker >0.2 (taker relevante) n_si 449 n_no 511 EV_si 0.0007 EV_no 0.0019 diff -0.0012 p_marg 0.673 | coste_si 8478820 wallet top_si 13.3%
+FWD BTC r17_ord_unidad >=5 ordenes/unidad n_si 123 n_no 837 EV_si 0.0036 EV_no -0.0004 diff 0.0040 p_marg 0.346 | coste_si 15605472 wallet top_si 7.2%
+FWD ALT r12_vent_simult >1 n_si 99 n_no 81 EV_si 0.0008 EV_no 0.0043 diff -0.0035 p_marg 0.504 | coste_si 2832176 wallet top_si 9.4%
+FWD ALT r13_monedas >1 n_si 112 n_no 68 EV_si 0.0007 EV_no 0.0046 diff -0.0039 p_marg 0.486 | coste_si 2852262 wallet top_si 9.4%
+FWD ALT r18_ventas >0 (vende algo) n_si 41 n_no 139 EV_si 0.0010 EV_no 0.0023 diff -0.0013 p_marg 0.858 | coste_si 1114331 wallet top_si 15.5%
+FWD ALT r19_ambos_lados >0.5 (cubre ambos lados) n_si 36 n_no 144 EV_si 0.0050 EV_no -0.0013 diff 0.0063 p_marg 0.358 | coste_si 2137201 wallet top_si 15.8%
+FWD ALT r20_taker >0.2 (taker relevante) n_si 84 n_no 96 EV_si 0.0110 EV_no -0.0005 diff 0.0114 p_marg 0.028 | coste_si 878407 wallet top_si 30.4%
+FWD ALL r12_vent_simult >1 n_si 252 n_no 808 EV_si 0.0033 EV_no 0.0010 diff 0.0023 p_marg 0.459 | coste_si 9722830 wallet top_si 9.3%
+FWD ALL r13_monedas >1 n_si 313 n_no 747 EV_si 0.0032 EV_no 0.0011 diff 0.0021 p_marg 0.438 | coste_si 10187002 wallet top_si 8.9%
+FWD ALL r14_cuota_btc <1 (no solo BTC) n_si 334 n_no 726 EV_si 0.0032 EV_no 0.0010 diff 0.0023 p_marg 0.408 | coste_si 11076968 wallet top_si 8.2%
+FWD ALL r18_ventas >0 (vende algo) n_si 287 n_no 773 EV_si -0.0030 EV_no 0.0026 diff -0.0056 p_marg 0.058 | coste_si 6086148 wallet top_si 12.8%
+FWD ALL r19_ambos_lados >0.5 (cubre ambos lados) n_si 267 n_no 793 EV_si 0.0038 EV_no -0.0041 diff 0.0079 p_marg 0.007 | coste_si 26346356 wallet top_si 4.3%
+FWD ALL r20_taker >0.2 (taker relevante) n_si 509 n_no 551 EV_si 0.0016 EV_no 0.0017 diff -0.0001 p_marg 0.979 | coste_si 9515541 wallet top_si 11.8%
+FWD ALL r17_ord_unidad >=5 ordenes/unidad n_si 122 n_no 938 EV_si 0.0041 EV_no -0.0003 diff 0.0044 p_marg 0.303 | coste_si 16190315 wallet top_si 7.0%
+REV BTC r18_ventas >0 (vende algo) n_si 240 n_no 668 EV_si -0.0076 EV_no 0.0057 diff -0.0134 p_marg 0.001 | coste_si 5644947 wallet top_si 15.7%
+REV BTC r19_ambos_lados >0.5 (cubre ambos lados) n_si 273 n_no 635 EV_si 0.0038 EV_no 0.0035 diff 0.0003 p_marg 0.899 | coste_si 30314728 wallet top_si 6.4%
+REV BTC r20_taker >0.2 (taker relevante) n_si 395 n_no 513 EV_si 0.0025 EV_no 0.0042 diff -0.0017 p_marg 0.495 | coste_si 9508500 wallet top_si 20.4%
+REV BTC r17_ord_unidad >=5 ordenes/unidad n_si 124 n_no 784 EV_si 0.0044 EV_no 0.0031 diff 0.0013 p_marg 0.705 | coste_si 19605120 wallet top_si 9.9%
+REV ALT r12_vent_simult >1 n_si 86 n_no 85 EV_si 0.0067 EV_no 0.0038 diff 0.0029 p_marg 0.537 | coste_si 3865574 wallet top_si 8.3%
+REV ALT r13_monedas >1 n_si 101 n_no 70 EV_si 0.0065 EV_no 0.0043 diff 0.0022 p_marg 0.657 | coste_si 3877856 wallet top_si 8.3%
+REV ALT r18_ventas >0 (vende algo) n_si 36 n_no 135 EV_si -0.0018 EV_no 0.0079 diff -0.0097 p_marg 0.098 | coste_si 1209468 wallet top_si 13.7%
+REV ALT r19_ambos_lados >0.5 (cubre ambos lados) n_si 29 n_no 142 EV_si 0.0012 EV_no 0.0081 diff -0.0069 p_marg 0.265 | coste_si 1857929 wallet top_si 20.3%
+REV ALT r20_taker >0.2 (taker relevante) n_si 80 n_no 91 EV_si 0.0023 EV_no 0.0068 diff -0.0045 p_marg 0.340 | coste_si 1269159 wallet top_si 25.3%
+REV ALT r17_ord_unidad >=5 ordenes/unidad n_si 11 n_no 160 EV_si 0.0022 EV_no 0.0064 diff -0.0042 p_marg 0.634 | coste_si 762799 wallet top_si 49.4%
+REV ALL r12_vent_simult >1 n_si 207 n_no 802 EV_si 0.0081 EV_no 0.0024 diff 0.0057 p_marg 0.041 | coste_si 12060686 wallet top_si 7.9%
+REV ALL r13_monedas >1 n_si 275 n_no 734 EV_si 0.0077 EV_no 0.0025 diff 0.0052 p_marg 0.046 | coste_si 12494922 wallet top_si 7.6%
+REV ALL r14_cuota_btc <1 (no solo BTC) n_si 296 n_no 713 EV_si 0.0077 EV_no 0.0023 diff 0.0054 p_marg 0.036 | coste_si 13484732 wallet top_si 7.0%
+REV ALL r18_ventas >0 (vende algo) n_si 270 n_no 739 EV_si -0.0067 EV_no 0.0059 diff -0.0126 p_marg 0.000 | coste_si 6990900 wallet top_si 13.6%
+REV ALL r19_ambos_lados >0.5 (cubre ambos lados) n_si 277 n_no 732 EV_si 0.0036 EV_no 0.0048 diff -0.0012 p_marg 0.618 | coste_si 31377128 wallet top_si 6.2%
+REV ALL r20_taker >0.2 (taker relevante) n_si 447 n_no 562 EV_si 0.0026 EV_no 0.0044 diff -0.0018 p_marg 0.410 | coste_si 10704111 wallet top_si 18.1%
+REV ALL r17_ord_unidad >=5 ordenes/unidad n_si 129 n_no 880 EV_si 0.0035 EV_no 0.0043 diff -0.0009 p_marg 0.786 | coste_si 20304514 wallet top_si 9.5%
+=== (3) estratos: tercil de volumen (r11) x tercil de precio medio (r05) -> EV maker HOLD (rasgos de DESC)
+BTC v3 x p3
+               n         coste      EV   EVreb
+v3 p3                                         
+V1 P1bajo  162.0  8.785135e+05 -0.0231 -0.0172
+   P2       57.0  9.219016e+04 -0.0393 -0.0336
+   P3alto  101.0  1.853801e+05 -0.0120 -0.0087
+V2 P1bajo  116.0  4.448923e+05 -0.0568 -0.0491
+   P2      113.0  5.229182e+05 -0.0073 -0.0020
+   P3alto   91.0  3.633946e+05  0.0030  0.0056
+V3 P1bajo   42.0  1.275114e+06 -0.0141 -0.0077
+   P2      150.0  1.650333e+07  0.0026  0.0076
+   P3alto  128.0  1.131305e+07  0.0070  0.0105
+BTC v3 x c3
+           n         coste      EV   EVreb
+v3 c3                                     
+V1 O1  171.0  2.174088e+05 -0.0573 -0.0517
+   O2  108.0  3.895835e+05 -0.0164 -0.0105
+   O3   41.0  5.490914e+05 -0.0133 -0.0082
+V2 O1  117.0  4.037005e+05 -0.0110 -0.0058
+   O2  118.0  5.348889e+05 -0.0129 -0.0075
+   O3   85.0  3.926157e+05 -0.0423 -0.0369
+V3 O1   32.0  1.050323e+06  0.0002  0.0015
+   O2   94.0  3.036248e+06  0.0010  0.0044
+   O3  194.0  2.500493e+07  0.0040  0.0087
+BTC p3 x c3
+               n         coste      EV   EVreb
+p3     c3                                     
+P1bajo O1  135.0  3.473331e+05 -0.0640 -0.0559
+       O2  119.0  7.565118e+05 -0.0341 -0.0275
+       O3   66.0  1.494675e+06 -0.0103 -0.0044
+P2     O1   41.0  8.757281e+04  0.0538  0.0595
+       O2  117.0  8.590856e+05 -0.0032  0.0020
+       O3  162.0  1.617178e+07  0.0021  0.0070
+P3alto O1  144.0  1.236526e+06  0.0007  0.0018
+       O2   84.0  2.345122e+06  0.0078  0.0104
+       O3   92.0  8.280180e+06  0.0071  0.0111
+BTC % makers con EV HOLD>0 por tercil volumen: {'V1': 0.353, 'V2': 0.366, 'V3': 0.484}
+ALL v3 x p3
+               n         coste      EV   EVreb
+v3 p3                                         
+V1 P1bajo  184.0  9.247932e+05 -0.0241 -0.0181
+   P2       62.0  1.127016e+05 -0.0332 -0.0276
+   P3alto  108.0  1.605171e+05 -0.0099 -0.0071
+V2 P1bajo  124.0  4.296254e+05 -0.0510 -0.0433
+   P2      123.0  5.930706e+05 -0.0125 -0.0071
+   P3alto  106.0  4.818683e+05  0.0050  0.0076
+V3 P1bajo   46.0  1.717178e+06 -0.0092 -0.0030
+   P2      168.0  1.867206e+07  0.0023  0.0073
+   P3alto  139.0  1.291197e+07  0.0067  0.0102
+ALL v3 x c3
+           n         coste      EV   EVreb
+v3 c3                                     
+V1 O1  189.0  2.375591e+05 -0.0578 -0.0518
+   O2  117.0  3.971985e+05 -0.0181 -0.0123
+   O3   48.0  5.632542e+05 -0.0119 -0.0068
+V2 O1  134.0  4.883796e+05 -0.0119 -0.0071
+   O2  124.0  5.645956e+05 -0.0123 -0.0069
+   O3   95.0  4.515892e+05 -0.0313 -0.0262
+V3 O1   31.0  1.051748e+06  0.0002  0.0014
+   O2  112.0  4.533672e+06 -0.0001  0.0035
+   O3  210.0  2.771578e+07  0.0041  0.0089
+ALL p3 x c3
+               n         coste      EV   EVreb
+p3     c3                                     
+P1bajo O1  150.0  3.722516e+05 -0.0646 -0.0565
+       O2  126.0  7.862544e+05 -0.0289 -0.0223
+       O3   78.0  1.913090e+06 -0.0070 -0.0010
+P2     O1   43.0  9.257806e+04  0.0328  0.0384
+       O2  135.0  1.868675e+06 -0.0062 -0.0012
+       O3  175.0  1.741657e+07  0.0023  0.0073
+P3alto O1  161.0  1.312857e+06  0.0012  0.0024
+       O2   92.0  2.840536e+06  0.0070  0.0095
+       O3  100.0  9.400956e+06  0.0070  0.0111
+ALL % makers con EV HOLD>0 por tercil volumen: {'V1': 0.339, 'V2': 0.394, 'V3': 0.476}

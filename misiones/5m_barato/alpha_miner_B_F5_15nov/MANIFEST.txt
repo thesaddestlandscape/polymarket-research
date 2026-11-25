@@ -1,0 +1,55 @@
+# MANIFEST alpha_miner_B_F5_15nov (generado 2026-11-15T15:12:48Z). Solo lectura de insumos; salidas en esta carpeta.
+## Orden de ejecucion (nice -n 19 ionice -c3; ulimit -v 3000000): PREREG_B_F5.md (sha256 en PREREG_B_F5.sha256, escrito 14:47Z ANTES de medir) -> 00_estructura_join.py (solo cobertura) -> 01_construye_B.py -> 02_B_real_por_tercil.py -> 03_poblacion.py -> 04_curva_rezago.py -> 05_B_vs_poblacion.py -> 06_validaciones.py; lib_ev.py comun.
+## sha256 insumos
+db5cf80ab5de6040e1dcd381c7295d16498ce5ee4a89d2f5226eff8ef46c86d4  /root/polymarket-research/misiones/5m_barato/docs/reverse-engineering/casos/RE-AS-B/e02real_fills.json
+784a8fd09ff360e164a003fa6858b34ec592423873292c7b862beadbe16f7d42  /root/polymarket-research/misiones/5m_barato/docs/reverse-engineering/casos/RE-AS-B/e02real_cruce.json
+32653e4f16a2e00586154ac0406888de44d4ded60ad2ecef0020aa314b26c2c9  /root/polymarket-research-datalogs/experimento_h47_B_ledger.jsonl
+37a7fcdadf4c8eb0e5fb143a1334ac23e81ce36b141d17595d5913245dab0471  /root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/mitigar_as_25oct/forward/regla_congelada.json
+94c071f5eeffbc55da48935596ff07e07475c5adbb99baa02264b6acd70938b2  /root/polymarket-research-datalogs/mitigar_as_25oct/tokens.csv
+## sha256 salidas
+9a6e95932770ab372c5620c7c9dc95c2e92c49a50d798993a1f59b822cc2dd3b  PREREG_B_F5.md
+6e1be2ce70be385ff8827101abb2affd96292c904bd0ce785cc76e34217371ae  00_estructura_join.py
+29f31e144eca8b02702feb970a16b1cb60f98289ad51981204723b77212118a8  01_construye_B.py
+f126f1d1109252cad05a360640cfe5747a330919e0db01a775eedb5056ac421b  02_B_real_por_tercil.py
+cbda42c484d419d7781e27fdce7be415f459dc33db5d0b2d9c3552dc7ad65a6d  03_poblacion.py
+b3d25e19ce02e87c58a342031ffc728648e9378e467f01603191a3f44a5ab87b  04_curva_rezago.py
+256de9150e149e45d8764bc297cf84239619ab052206ef3bcf7da8838deea577  05_B_vs_poblacion.py
+c274ecefbfe93620d7b31a30cf30aa2e6b55cb4f96685cfa9769cfdb343e446b  06_validaciones.py
+7846eaefd75e1e8554c19e4d76b289812c0f4474b882193354179441918cc08e  lib_ev.py
+0f60baba4110c398b34cbc15034237a520882287739dc46b3f2df38ff24d2f4e  B_real_por_tercil.txt
+d6410e336404f935fff53ea6ff4f7147d55ba1508e3ccbfc19122401e29fdec0  poblacion_por_tercil.txt
+bde01cfedc327aa773fd259be8d14a856dbbe9367b4425d9147b1ad64650ad46  curva_rezago_INS.txt
+03bc576af562c567d95803a56a6795f3508d16a929a607b166bc1d4850f6ebb9  B_vs_poblacion.txt
+1566ff9c08052254c5a90d0af18f990052031506ad0386667df2bd5ac6676dc2  validaciones.txt
+## notas: 03 y 02 usan placebo_multi (vectorizado) -- la 1a version de 03 (placebo por estrato, mas lenta) se descarto sin leer resultados; la 1a ejecucion de 02 uso el placebo antiguo (p G1@250 0,039 -> 0,034 con el nuevo).
+
+## FASE 1 (15-Nov ~15:40Z, descriptivo, sin nuevos prereg; nice -n 19 ionice -c3; ulimit -v 2500000; load5 6,8 al lanzar: scripts de segundos y <0,5 GB)
+# 08_regimen_serie_diaria.py (5,7 s) -> regimen_serie_diaria.txt | 09_regimen_bloques4h.py (9,6 s) -> regimen_bloques4h.txt | 10_modelo_escalado_f1.py (<1 s, aritmetica) -> modelo_escalado_f1.txt
+0583588c49bbce36ab246d55771ee806884eaf713bff372d147fca8e4593a970  08_regimen_serie_diaria.py
+b61806aef891cfb54446fb926981fe5fa8c0a49de9ae934be74c38c08cabeac8  09_regimen_bloques4h.py
+26c2a5cf637535744a740bddefbb3fb451c464a9616f24f2ce108c801cb502a5  10_modelo_escalado_f1.py
+6017b61989b90af3e8a3155d0391d857c7dce9a92244b358d11fe3bd23cd7806  regimen_serie_diaria.txt
+ae460377a46ae239bd2ac29ebb4dc18c1008ff32468fc7442b68c6a7cc101ec0  regimen_bloques4h.txt
+62568b98363cd5e82d343402543934bf145e56b97a10100a8d0cf9cd067af1f1  modelo_escalado_f1.txt
+# Nota: 08/09 son diagnosticos de viabilidad sobre dias ya vistos (no prueban ninguna regla); PREREG_B_F5.md (9a6e9593...) intacto: los criterios nuevos van en un ADDENDUM fechado.
+
+## ADDENDUM1 (15-Nov 16:20Z, escrito antes de cualquier calculo de EXP-1)
+65c681154ae10fb29cc673e794204b94ca6c9216f6e217f3ffc460de75df519b  ADDENDUM1_B_F5.md
+PREREG_B_F5.md 9a6e9593 intacto (sha256sum -c OK)
+CORRECCION (encabezado del addendum decia 16:20Z; el primer sha 65c68115 se calculo a las 16:15:42Z): sha DEFINITIVO sellado 2026-11-15T16:15:51Z, antes de cualquier calculo de EXP-1:
+6fc7dba560f24b5f6268bfcd251b1de48a7b57a2b412a85b4b6c3bf01d457419  ADDENDUM1_B_F5.md
+
+## EXP-1 LANZADO (15-Nov 17:40:03Z; job unico por scripts/cron_pesado.sh, nice 19 ionice -c3, ulimit -v 3000000; pid del orquestador 633879; load5 7,52 y MemAvailable 4,3 GB al lanzar)
+Comando: /root/polymarket-research/scripts/cron_pesado.sh nice -n 19 ionice -c3 bash exp1/run_exp1.sh   (orden: E1 -> E3x -> E2 por dia 08-Oct..14-Nov -> e3_reglas, e7_calma, e2_agrega, e5_regimen, e6_brecha; guarda: no arranca trabajo nuevo 06:00-09:15Z ni >= 01:45Z)
+Scripts congelados al lanzamiento (sha256): run_exp1.sh e5430dfe..., lib1.py e275deb7..., e1_b_real.py b9b10779..., e2_dia.py 5702da2c..., e3_extrae.py 3108b664... (e3_reglas, e7_calma, e2_agrega, e5_regimen, e6_brecha, popdata se escribieron y probaron en humo DESPUES del lanzamiento porque se ejecutan al final; sus sha definitivos se anotan al terminar)
+Humos previos al lanzamiento (E0): C10 (tm3 - t_fill libro5_T p50 -68 ms; 208 fills libro5_T), E1 completo 215/215, extractor de poblacion en 5 dias (R0/R1/R2) con 6 M de lineas: todos los asserts C3/C5/C7 pasan.
+Humo posterior: e3_reglas.py --smoke (solo 20-Oct, 40 fills) y e7_calma.py (completo, lectura de dec2v3) sin errores; E7 reproduce lo documentado (02..12-Nov: T1-G0 +351,5 EUR, 9/11 dias+, EV abs T1 -0,073 / G0 -0,186, merito T1-PLA +190,1).
+
+## EXP-1 INCIDENTE Y RELANZAMIENTO (2026-11-15T18:36:32Z)
+18:24:17Z y 18:24:43Z: OOM-killer del kernel mato E2_2026-10-23 (python3 735 MB, adj 500), E2_2026-10-24, el orquestador bash v1 (pid 633879) y awk/gzip hijos; tambien un python de 1,43 GB adj 0 ajeno. Causa: maquina compartida sin memoria (swap 8/8 GB, MemAvailable 1,1-3 GB). Dias COMPLETE antes del corte: 2026-10-08..10-15, 10-17..10-22 (14 dias); 10-16 FAILED (assert C3, suelo p5 40 ms en 55 % de ventanas); 10-23 y siguientes pendientes.
+Directrices chief 18:35Z aplicadas en run_exp1.sh v3 y supervisor_exp1.sh: calma load1<=8 y MemAvailable>=3500 MB antes de cada fase, ulimit -v 2200000, oom_score_adj 500, sin reintento inmediato, una segunda pasada por dia muerto, no se rehacen E1/E3x/E7.
+  41e417b1aee4b807c038406c57182a279843eccab3e8fe5aac47bf91d09034ec  exp1/run_exp1.sh
+  699312c4792eb57f8d1ff340e099ff6ad0d66a239c7871e47332f5d4abd5302d  exp1/supervisor_exp1.sh
+  d29ff1b5cf9ad89dbbae786fee6fbe601d4b4a979010a001e905c9ba2fd907bd  exp1/e2_agrega.py
+  82ed755263db14a24d36db2c3ed51beaaed4728db1793d74ea7ab46bf7af9ef3  exp1/e3_reglas.py
+  c68f1053d280032238edc25bf39e2cb3585d54ab298eac359f180a13fa8d9116  exp1/e7_calma.py

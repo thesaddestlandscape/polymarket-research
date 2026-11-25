@@ -1,0 +1,30 @@
+            n  n_ord_real  npost_sim  T_sim  acc_sim
+cat                                                 
+ambos      89        8.91      14.35  209.3     3.91
+ninguno    56       12.00      26.29    NaN     0.00
+solo_real  26        9.04      33.69    NaN     0.00
+solo_sim   25       16.88      18.92  185.6     4.71
+
+n ordenes por puja: real vs sim (todas las pujas EVAL): real media 10.83 mediana 8.0 | sim media 20.91 mediana 16.0 | Spearman 0.398
+tipo de relleno sim (ambos / solo_sim):
+tipo        -   P   X
+cat                  
+ambos       0  68  21
+ninguno    56   0   0
+solo_real  26   0   0
+solo_sim    0  13  12
+
+fin_puja real por categoria:
+fin_puja   kill  relleno  t_stop  tick_cambiado
+cat                                            
+ambos         0       89       0              0
+ninguno       2        0      53              1
+solo_real     0       26       0              0
+solo_sim      0        0      25              0
+
+acuerdo por tramo de n_ord real (1, 2-3, 4+):
+         n  acuerdo  tasa_sim  tasa_real
+tr                                      
+1     16.0    0.812     0.625      0.812
+2-3   32.0    0.719     0.500      0.531
+4+   148.0    0.736     0.595      0.574

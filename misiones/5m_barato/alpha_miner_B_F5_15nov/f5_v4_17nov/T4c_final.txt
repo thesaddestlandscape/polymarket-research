@@ -1,0 +1,37 @@
+# T4c final detector W12_C30_rho0.07_n5_H1; dev 17 / hold-out 20 dias
+## 2a. Verdad T2 de futuro (cls_fut: p5 de las filas en [t, t+5 min), otra estadistica que f(d<30 ms)); confusion en segundos y retraso vs sus transiciones
+DEV      p5 10 min                concordancia 98.40 % | lo_lo 739060 lo_hi 5970 nolo_lo 17400 nolo_hi 701810 (s sin verdad 4560) | transiciones lohi 33 det 19 p50/p90 300.0/300.0 s | hilo 32 det 27 p50/p90 0.0/614.0 s
+DEV      W12_C30_rho0.07_n5_H1    concordancia 94.75 % | lo_lo 681860 lo_hi 2249 nolo_lo 74600 nolo_hi 705531 (s sin verdad 4560) | transiciones lohi 33 det 33 p50/p90 14.0/56.400000000000006 s | hilo 32 det 32 p50/p90 150.0/276.7 s
+HOLD-OUT p5 10 min                concordancia 97.25 % | lo_lo 1523110 lo_hi 1110 nolo_lo 45310 nolo_hi 116800 (s sin verdad 41670) | transiciones lohi 7 det 7 p50/p90 240.0/300.0 s | hilo 8 det 5 p50/p90 600.0/616.0 s
+HOLD-OUT W12_C30_rho0.07_n5_H1    concordancia 94.68 % | lo_lo 1478946 lo_hi 304 nolo_lo 89474 nolo_hi 117606 (s sin verdad 41670) | transiciones lohi 7 det 7 p50/p90 23.0/82.4 s | hilo 8 det 8 p50/p90 226.5/278.6 s
+TODOS    p5 10 min                concordancia 97.78 % | lo_lo 2262170 lo_hi 7080 nolo_lo 62710 nolo_hi 818610 (s sin verdad 46230) | transiciones lohi 40 det 26 p50/p90 270.0/300.0 s | hilo 40 det 32 p50/p90 600.0/619.0 s
+TODOS    W12_C30_rho0.07_n5_H1    concordancia 94.71 % | lo_lo 2160806 lo_hi 2553 nolo_lo 164074 nolo_hi 823137 (s sin verdad 46230) | transiciones lohi 40 det 40 p50/p90 15.5/61.400000000000006 s | hilo 40 det 40 p50/p90 161.0/277.6 s
+## 2b. Verdad por DESENLACE: EV realizado de la regla F5 (tercil bajo, tipo B, p60) y gradiente bajo-alto segun estado (poblacion ajena censurada; t = r_ex-83 ms)
+DEV      verdad d<30 ms         regla(bajo): EV lo +0.414 (n=14732, 64288 EUR) | nolo -0.011 (n=28044, 135948 EUR) | dias 15 | EV lo-nolo por dia IC90 (-0.198, 0.915, 0.358, 12) | gradiente bajo-alto lo (0.128, 0.884, 0.506, 12) nolo (-0.101, 0.123, 0.011, 15)
+DEV      p5 10 min              regla(bajo): EV lo +0.333 (n=21762, 93691 EUR) | nolo -0.057 (n=21014, 106546 EUR) | dias 15 | EV lo-nolo por dia IC90 (-0.21, 1.085, 0.437, 9) | gradiente bajo-alto lo (0.112, 0.638, 0.375, 13) nolo (-0.361, 0.159, -0.101, 11)
+DEV      W12_C30_rho0.07_n5_H1  regla(bajo): EV lo +0.330 (n=21136, 91722 EUR) | nolo -0.047 (n=21640, 108514 EUR) | dias 15 | EV lo-nolo por dia IC90 (-0.244, 0.958, 0.357, 13) | gradiente bajo-alto lo (-0.023, 0.656, 0.316, 13) nolo (-0.394, 0.04, -0.177, 15)
+HOLD-OUT verdad d<30 ms         regla(bajo): EV lo +0.129 (n=64432, 346806 EUR) | nolo +0.266 (n=5206, 22871 EUR) | dias 20 | EV lo-nolo por dia IC90 (0.072, 0.865, 0.469, 20) | gradiente bajo-alto lo (0.047, 0.372, 0.209, 20) nolo (-0.609, 0.211, -0.199, 20)
+HOLD-OUT p5 10 min              regla(bajo): EV lo +0.113 (n=63598, 338516 EUR) | nolo +0.407 (n=6040, 31162 EUR) | dias 20 | EV lo-nolo por dia IC90 (-0.801, 0.236, -0.282, 18) | gradiente bajo-alto lo (-0.207, 0.218, 0.005, 20) nolo (-0.434, 0.395, -0.02, 18)
+HOLD-OUT W12_C30_rho0.07_n5_H1  regla(bajo): EV lo +0.124 (n=65087, 349322 EUR) | nolo +0.364 (n=4551, 20356 EUR) | dias 20 | EV lo-nolo por dia IC90 (-1.025, 0.909, -0.058, 9) | gradiente bajo-alto lo (-0.083, 0.185, 0.051, 20) nolo (-0.22, 0.212, -0.004, 7)
+TODOS    verdad d<30 ms         regla(bajo): EV lo +0.174 (n=79164, 411095 EUR) | nolo +0.029 (n=33250, 158819 EUR) | dias 35 | EV lo-nolo por dia IC90 (0.119, 0.735, 0.427, 32) | gradiente bajo-alto lo (0.151, 0.489, 0.32, 32) nolo (-0.342, 0.124, -0.109, 35)
+TODOS    p5 10 min              regla(bajo): EV lo +0.160 (n=85360, 432206 EUR) | nolo +0.048 (n=27054, 137707 EUR) | dias 35 | EV lo-nolo por dia IC90 (-0.445, 0.36, -0.042, 27) | gradiente bajo-alto lo (-0.016, 0.318, 0.151, 33) nolo (-0.316, 0.214, -0.051, 29)
+TODOS    W12_C30_rho0.07_n5_H1  regla(bajo): EV lo +0.167 (n=86223, 441044 EUR) | nolo +0.018 (n=26191, 128869 EUR) | dias 35 | EV lo-nolo por dia IC90 (-0.307, 0.681, 0.187, 22) | gradiente bajo-alto lo (0.004, 0.308, 0.156, 33) nolo (-0.279, 0.035, -0.122, 22)
+## 3. Simulacion operativa con latencias reales (paquete_l B2/B3/B5, 13-Nov, n=313): estado desplazado L ms (alta/cancelacion ex-envio p50 ~35 ms; p90 hasta 111-147 ms en B2); tiempo del relleno = r_ex
+L= 35 ms p5 10 min                prints regla vivos con verdad hi: n=209, 898 EUR, pnl +109 (de 85360 prints vivos, 432206 EUR, pnl +69318; 35 dias)
+L= 35 ms W12_C30_rho0.07_n5_H1    prints regla vivos con verdad hi: n=6, 78 EUR, pnl -73 (de 86223 prints vivos, 441044 EUR, pnl +73631; 35 dias)
+L=110 ms p5 10 min                prints regla vivos con verdad hi: n=206, 895 EUR, pnl +113 (de 85360 prints vivos, 432206 EUR, pnl +69318; 35 dias)
+L=110 ms W12_C30_rho0.07_n5_H1    prints regla vivos con verdad hi: n=6, 78 EUR, pnl -73 (de 86221 prints vivos, 441028 EUR, pnl +73642; 35 dias)
+L=150 ms p5 10 min                prints regla vivos con verdad hi: n=206, 895 EUR, pnl +113 (de 85360 prints vivos, 432206 EUR, pnl +69318; 35 dias)
+L=150 ms W12_C30_rho0.07_n5_H1    prints regla vivos con verdad hi: n=6, 78 EUR, pnl -73 (de 86223 prints vivos, 441032 EUR, pnl +73638; 35 dias)
+cancelaciones/dia (transiciones lo->nolo, cota superior: supone orden viva en cada lo): detector 176.2 (min 0, max 877); altas/dia 176.7; p5 10 min 8.5
+## 4a. 215 rellenos reales de B (20-23 Oct, E1; tm3 = sello v4 del relleno; pnl = size*(gana-precio)); n pequeno
+L=  0 p5 10 min                lo/verdadamb n=4 4.8 EUR pnl -4.78 | nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=5 6.4 EUR pnl -6.39
+L=  0 W12_C30_rho0.07_n5_H1    lo/verdadamb n=4 4.8 EUR pnl -4.78 | nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=5 6.4 EUR pnl -6.39
+L=  0 verdad d<30              nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=9 11.2 EUR pnl -11.17
+L= 35 p5 10 min                lo/verdadamb n=4 4.8 EUR pnl -4.78 | nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=5 6.4 EUR pnl -6.39
+L= 35 W12_C30_rho0.07_n5_H1    lo/verdadamb n=4 4.8 EUR pnl -4.78 | nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=5 6.4 EUR pnl -6.39
+L= 35 verdad d<30              nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=9 11.2 EUR pnl -11.17
+L=110 p5 10 min                lo/verdadamb n=4 4.8 EUR pnl -4.78 | nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=5 6.4 EUR pnl -6.39
+L=110 W12_C30_rho0.07_n5_H1    lo/verdadamb n=4 4.8 EUR pnl -4.78 | nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=5 6.4 EUR pnl -6.39
+L=110 verdad d<30              nolo/verdadhi n=206 210.1 EUR pnl -4.85 | nolo/verdadamb n=9 11.2 EUR pnl -11.17
+B total n=215, coste 221.3 EUR, pnl -16.02

@@ -1,0 +1,34 @@
+movimientos 260 tipos {'COMPRA': 218, 'REDENCION': 41, 'DEPOSITO': 1}
+suma importes 3.412408  saldo_acum_ultimo 3.412408  saldo_onchain 3.412408
+                            sum  count
+dia        tipo                       
+2026-10-09 DEPOSITO   19.000000      1
+2026-10-15 COMPRA    -20.412750      3
+           REDENCION  21.000000      3
+2026-10-20 COMPRA    -42.994048     40
+           REDENCION  46.000000      8
+2026-10-21 COMPRA    -78.389218     77
+           REDENCION  91.244231     17
+2026-10-22 COMPRA    -83.074224     81
+           REDENCION  60.881735     12
+2026-10-23 COMPRA    -16.843318     17
+           REDENCION   7.000000      1
+posiciones maker 202 coste 221.3008 payout 205.2779 pnl -16.0229 (pnl_realizado col -16.0229)
+B total n 202 ganadoras 39 coste 221.301 payout 205.278 pnl -16.023 EV/EUR -0.0724
+20-oct n 37 ganadoras 8 coste 42.994 payout 46.000 pnl 3.006 EV/EUR 0.0699
+21-oct n 72 ganadoras 18 coste 78.389 payout 91.396 pnl 13.007 EV/EUR 0.1659
+22-oct n 77 ganadoras 12 coste 83.074 payout 60.882 pnl -22.192 EV/EUR -0.2671
+23-oct n 16 ganadoras 1 coste 16.843 payout 7.000 pnl -9.843 EV/EUR -0.5844
+F1 pnl 0.58725 ; 19 + F1 + Bpnl = 3.56432 ; saldo 3.41241 ; por redimir 0.151909
+                      mercado  acciones  payout
+194  eth-updown-5m-1792742100       7.0     7.0
+REDEEM 23-oct:
+                fecha_utc       tipo  ...                   mercado size
+249  2026-10-23T08:02:33Z  REDENCION  ...  eth-updown-5m-1792742100  7.0
+
+[1 rows x 5 columns]
+saldo acum antes de 2026-10-23T06:30:54 13.2557
+saldo acum antes de 2026-10-23T07:50:24 8.4757
+saldo acum antes de 2026-10-23T08:50:17 7.4632
+saldo acum antes de 2026-10-24 3.4124
+rebate estimado B total 2.4137 ; 23-oct 0.1849 ; r25-r27 sobre coste 23-oct 16.843

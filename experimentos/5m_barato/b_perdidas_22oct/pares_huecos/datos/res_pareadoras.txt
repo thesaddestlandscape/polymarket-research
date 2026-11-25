@@ -1,0 +1,17 @@
+PAREADORAS 17-22: residuo gana 0.287 vs precio medio pagado del lado sobrante 0.349 (pond acc; n=27973 unidades)
+ res_frac (0, 0.1): merc 11852 vol 617514 PnL/vol +0.0398 par +0.0507 res -0.0032
+ res_frac (0.1, 0.3): merc 8069 vol 543533 PnL/vol +0.0235 par +0.0672 res -0.0356
+ res_frac (0.3, 0.6): merc 6030 vol 320270 PnL/vol -0.0106 par +0.0709 res -0.0727
+ res_frac (0.6, 1.01): merc 10998 vol 269962 PnL/vol -0.1155 par +0.0231 res -0.1250
+0x43e7e4b6 DESC merc 1633 vol 100395 ev +0.0366 par +0.1083 res -0.0658 fee -0.0059 maker 0.85 | TEST merc 1340 vol 168931 ev +0.0151 par +0.0872 res -0.0677 fee -0.0043 maker 0.89 | monedas {'ETH': 1591, 'SOL': 1382} | coste par med 0.894 | res_frac med 0.39 | residuo gana 0.255 vs precio 0.334
+    por dia {'2026-10-17': 0.067, '2026-10-18': 0.0414, '2026-10-19': 0.0022, '2026-10-20': 0.0216, '2026-10-21': -0.0013, '2026-10-22': 0.0355}
+0xae68447c DESC merc 863 vol 144539 ev +0.0161 par +0.0609 res -0.0448 fee -0.0000 maker 1.00 | TEST merc 748 vol 144693 ev +0.0042 par +0.0645 res -0.0603 fee -0.0000 maker 1.00 | monedas {'ETH': 1611} | coste par med 0.921 | res_frac med 0.22 | residuo gana 0.195 vs precio 0.298
+    por dia {'2026-10-17': 0.0222, '2026-10-18': 0.0118, '2026-10-19': 0.0133, '2026-10-20': -0.0176, '2026-10-21': 0.0192, '2026-10-22': 0.0113}
+0x0ab01745 DESC merc 843 vol 29180 ev +0.0126 par +0.0269 res -0.0143 fee -0.0000 maker 1.00 | TEST merc 730 vol 37007 ev +0.0147 par +0.0406 res -0.0259 fee -0.0000 maker 1.00 | monedas {'ETH': 1573} | coste par med 0.964 | res_frac med 0.13 | residuo gana 0.333 vs precio 0.410
+    por dia {'2026-10-17': 0.0237, '2026-10-18': 0.018, '2026-10-19': -0.0043, '2026-10-20': 0.0139, '2026-10-21': 0.0123, '2026-10-22': 0.0195}
+0xf074dc84 DESC merc 856 vol 41509 ev +0.0085 par +0.0255 res -0.0170 fee -0.0000 maker 1.00 | TEST merc 473 vol 28987 ev +0.0111 par +0.0252 res -0.0141 fee -0.0000 maker 1.00 | monedas {'ETH': 1329} | coste par med 0.975 | res_frac med 0.08 | residuo gana 0.294 vs precio 0.411
+    por dia {'2026-10-17': 0.0095, '2026-10-18': 0.0185, '2026-10-19': -0.0021, '2026-10-20': 0.0127, '2026-10-21': 0.0084}
+0x31393e2f DESC merc 466 vol 20997 ev +0.0402 par +0.0311 res +0.0189 fee -0.0098 maker 0.63 | TEST merc 634 vol 26246 ev +0.0334 par +0.0502 res -0.0063 fee -0.0106 maker 0.59 | monedas {'ETH': 1100} | coste par med 0.940 | res_frac med 0.44 | residuo gana 0.447 vs precio 0.442
+    por dia {'2026-10-17': 0.079, '2026-10-18': -0.0025, '2026-10-19': 0.0607, '2026-10-20': 0.042, '2026-10-21': 0.0063, '2026-10-22': 0.0635}
+0x41e2e1cc DESC merc 1609 vol 64646 ev -0.0032 par +0.0328 res -0.0063 fee -0.0297 maker 0.00 | TEST merc 873 vol 38622 ev +0.0015 par +0.0516 res -0.0187 fee -0.0315 maker 0.00 | monedas {'ETH': 1266, 'SOL': 1216} | coste par med 0.944 | res_frac med 0.48 | residuo gana 0.387 vs precio 0.401
+    por dia {'2026-10-17': 0.0036, '2026-10-18': -0.0214, '2026-10-19': 0.0061, '2026-10-20': 0.0179, '2026-10-21': -0.0281}

@@ -1,0 +1,12 @@
+maker-dias con k individual: 1868 makers 141
+z=k*inf en [0,0.5): n=  32 makers= 20 P(pago)=0.06
+z=k*inf en [0.5,0.8): n=  22 makers= 18 P(pago)=0.14
+z=k*inf en [0.8,0.9): n=   7 makers=  7 P(pago)=0.43
+z=k*inf en [0.9,1.0): n=   6 makers=  6 P(pago)=0.17
+z=k*inf en [1.0,1.1): n=   7 makers=  7 P(pago)=1.00
+z=k*inf en [1.1,1.25): n=   5 makers=  4 P(pago)=1.00
+z=k*inf en [1.25,2): n=  30 makers= 19 P(pago)=1.00
+z=k*inf en [2,1000000000.0): n=1759 makers=141 P(pago)=1.00
+regla z>=1 -> pago: unpaid con z>=1: 0 de 1801 ; pagados con z<1: 9 de 67
+pagados con z<1 : paid min 1.0174  (todos >=1.0 -> True ) z medio 0.711
+umbral T* en z (minimiza errores) = 1.005  IC90 bootstrap por maker [0.845 1.015]

@@ -1,0 +1,2 @@
+# ADENDA A2 (19-Nov ~09:35Z), EXPLORATORIA: escrita tras ver que R1-R3 fallan y tras ver (diag) que los Delta==rem caen a rx-tm3 ~40-125 ms (~ rx del print, p50 71 ms). No confirma nada por si sola: requiere forward/dias nuevos.
+R4: Delta* = incremento positivo del nivel P con |rx - rx_pr| <= 2 ms (mismo lote WS que el print; si hay varios, el primero). Ancla A1. Acierto, placebos (tick y +-10/20/30 s, mismo +-2 ms) y criterio de aceptacion de PREREG sin cambios.

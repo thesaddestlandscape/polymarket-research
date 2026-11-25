@@ -1,0 +1,55 @@
+== FIDELIDAD (libro real, dias 17-21 Oct) mercados 4311 cotizados 4311 rellenos 3269 tasa 0.758 | B real: 72 % rellena
+acierto relleno 0.188 (B real 21.9)  no rellenadas 0.560 (B real 37.1)  precio relleno 0.220 (B real 0.215)
+EV rellenado EV -0.146 IC90d(-0.222,-0.067) sin2mejoresdias -0.226 dias+ 0/5 n=3269 €=3600
+EV de todas las cotizadas (sin seleccion) +0.114  => AS = 0.259 por EUR
+overshoot: <=3.5c n=1639 EV -0.025 | >3.5c n=1630 EV -0.262
+por moneda: {'ETH': np.float64(-0.168), 'SOL': np.float64(-0.096), 'XRP': np.float64(-0.175)} n {'ETH': 1237, 'SOL': 1087, 'XRP': 945}
+top bid size bs (acc) mediana de rellenos 20.0 spread mediana 0.010000005 depth_t media 1.3784032329465674
+N disc/hold 1957 1312 EV disc -0.226 hold -0.026 max-null q95 3.85
+                      regla  evg_d  evb_d    t_d    ng_d   p_fw  valid  evg_h  evb_h    t_h    ng_h    nb_h
+93     f_lvl15<=0.03(q0.25)  0.038 -0.316  3.758   490.0  0.063   True  0.154 -0.087  1.967   330.0   982.0
+103    f_gap15<=0.01(q0.25)  0.033 -0.315  3.704   492.0  0.066   True  0.143 -0.084  1.866   333.0   979.0
+91     f_lvl15<=-0.16(q0.1)  0.139 -0.272  3.040   196.0  0.219   True  0.193 -0.056  1.514   141.0  1171.0
+101    f_gap15<=-0.18(q0.1)  0.121 -0.271  2.933   199.0  0.302   True  0.201 -0.057  1.562   140.0  1172.0
+205            T<=220(q0.5) -0.133 -0.320  2.441  1025.0  0.728   True -0.094  0.043 -1.338   684.0   628.0
+191    f_lastage<=0.4(q0.1)  0.057 -0.263  2.397   220.0  0.761   True -0.033 -0.025 -0.053   129.0  1183.0
+198  f_lastage>=17.34(q0.9)  0.014 -0.252  1.867   196.0  0.993   True  0.053 -0.033  0.441   118.0  1194.0
+15          f_as_<=30(q0.5) -0.157 -0.300  1.866   994.0  0.993   True -0.021 -0.030  0.086   642.0   670.0
+53     f_dbb5<=-0.07(q0.25) -0.112 -0.267  1.726   510.0  0.997   True -0.061 -0.012 -0.432   354.0   958.0
+57         f_dbb5<=0(q0.75) -0.194 -0.344  1.689  1544.0  1.000   True -0.028 -0.019 -0.075  1005.0   307.0
+134     f_dp30>=-0.13(q0.5) -0.167 -0.291  1.629  1013.0  1.000   True  0.049 -0.111  1.565   699.0   613.0
+207           T<=260(q0.75) -0.192 -0.327  1.600  1488.0  1.000   True -0.020 -0.043  0.193  1013.0   299.0
+11           f_as_<=6(q0.1) -0.036 -0.248  1.568   197.0  1.000   True  0.142 -0.042  0.987   115.0  1197.0
+97     f_lvl15<=0.26(q0.75) -0.193 -0.326  1.553  1468.0  1.000   True -0.007 -0.075  0.611   949.0   363.0
+95      f_lvl15<=0.13(q0.5) -0.176 -0.285  1.422  1013.0  1.000   True  0.025 -0.085  1.078   679.0   633.0
+107    f_gap15<=0.25(q0.75) -0.197 -0.317  1.392  1474.0  1.000   True -0.001 -0.090  0.794   953.0   359.0
+p_fw<0.10: 2 de 221
+
+== PROFUNDIDAD DE LA PUJA con libro real: k ticks bajo el top (k=0 = unirse al top) para todas las monedas igual
+k=0 quoted 4311 fills 3493 (0.81) acierto relleno 0.205 precio 0.239 | EV -0.142 IC90d(-0.219,-0.060) disc/hold -0.223/-0.021
+k=1 quoted 4311 fills 3314 (0.77) acierto relleno 0.192 precio 0.226 | EV -0.149 IC90d(-0.220,-0.076) disc/hold -0.224/-0.038
+k=2 quoted 4311 fills 3052 (0.71) acierto relleno 0.184 precio 0.214 | EV -0.140 IC90d(-0.218,-0.061) disc/hold -0.221/-0.020
+k=3 quoted 4310 fills 2731 (0.63) acierto relleno 0.170 precio 0.205 | EV -0.173 IC90d(-0.230,-0.109) disc/hold -0.237/-0.079
+k=4 quoted 4308 fills 2412 (0.56) acierto relleno 0.161 precio 0.195 | EV -0.174 IC90d(-0.228,-0.115) disc/hold -0.235/-0.084
+k=6 quoted 4291 fills 1673 (0.39) acierto relleno 0.149 precio 0.181 | EV -0.172 IC90d(-0.245,-0.090) disc/hold -0.235/-0.077
+
+== DISENOS (re-simulacion con puerta; EV de lo rellenado; todos los dias 17-21 / disc / hold)
+base B-like libro real             n= 3269 EV -0.146 IC90d(-0.222,-0.067) | disc -0.226 n=1957 | hold -0.026 n=1312 | fr 0.76
+R1 (sh30>=26 & hora>=4)            n= 2312 EV -0.108 IC90d(-0.192,-0.016) | disc -0.200 n=1390 | hold +0.030 n=922 | fr 0.69
+confirmacion: bid sube vs 5 s      n= 1605 EV -0.239 IC90d(-0.322,-0.158) | disc -0.324 n=909 | hold -0.128 n=696 | fr 0.43
+confirmacion: bid no baja 5 s      n= 2121 EV -0.221 IC90d(-0.314,-0.124) | disc -0.323 n=1247 | hold -0.076 n=874 | fr 0.54
+confirmacion: bid no baja 30 s     n= 1264 EV -0.239 IC90d(-0.312,-0.172) | disc -0.299 n=733 | hold -0.158 n=531 | fr 0.45
+cancelar si bid15 baja 5 s         n= 2463 EV -0.199 IC90d(-0.276,-0.116) | disc -0.278 n=1474 | hold -0.080 n=989 | fr 0.61
+cancelar si bid15 baja 30 s        n= 1719 EV -0.222 IC90d(-0.291,-0.141) | disc -0.294 n=1033 | hold -0.114 n=686 | fr 0.53
+top bid size >= 100                n=  657 EV -0.203 IC90d(-0.283,-0.099) | disc -0.241 n=394 | hold -0.143 n=263 | fr 0.35
+top bid size >= 300                n=  271 EV -0.294 IC90d(-0.516,-0.075) | disc -0.204 n=210 | hold -0.642 n=61 | fr 0.31
+spread <= 0.01                     n= 2599 EV -0.168 IC90d(-0.237,-0.098) | disc -0.233 n=1542 | hold -0.071 n=1057 | fr 0.63
+spread >= 0.02                     n= 1574 EV -0.120 IC90d(-0.246,-0.003) | disc -0.211 n=906 | hold +0.002 n=668 | fr 0.44
+imb >= 0.5                         n= 2017 EV -0.129 IC90d(-0.200,-0.056) | disc -0.201 n=1180 | hold -0.026 n=837 | fr 0.49
+R1 + top>=100 + bid15 no baja      n=  347 EV -0.240 IC90d(-0.338,-0.135) | disc -0.205 n=208 | hold -0.298 n=139 | fr 0.31
+
+== SCALP/COBERTURA (lado contrario a 1-p-m tras el relleno), base B-like
+m=0.01 P(cobertura rellena)=0.587 EV EV -0.336 IC90d(-0.367,-0.306) sin2mejoresdias -0.362 dias+ 0/5 n=3269 €=3600 | base -0.146
+m=0.02 P(cobertura rellena)=0.557 EV EV -0.341 IC90d(-0.369,-0.311) sin2mejoresdias -0.365 dias+ 0/5 n=3269 €=3600 | base -0.146
+m=0.03 P(cobertura rellena)=0.532 EV EV -0.341 IC90d(-0.369,-0.310) sin2mejoresdias -0.368 dias+ 0/5 n=3269 €=3600 | base -0.146
+m=0.05 P(cobertura rellena)=0.488 EV EV -0.337 IC90d(-0.366,-0.303) sin2mejoresdias -0.369 dias+ 0/5 n=3269 €=3600 | base -0.146

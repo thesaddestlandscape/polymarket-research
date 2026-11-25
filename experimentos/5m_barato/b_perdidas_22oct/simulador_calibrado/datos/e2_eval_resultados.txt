@@ -1,0 +1,64 @@
+
+################ EVAL var=base cad=0.5 dobs=100 dias=['2026-10-21', '2026-10-22']  pujas reales 246; con puja en el sim 207; mismo lado 201
+B0 lado coincide 0.817 (sobre todas las reales) | 0.971 (sobre las que el sim abre)
+ORDEN: n_pujas=198 ord_sim=14.232 ord_real=10.652 spearman=0.484 vida_sim_med=0.470 vida_real_med=0.663 n_vida=(2729, 2069) ks=0.382 haz_sim=0.035 haz_real=0.056 fills=(100, 119) ordenes=(2818, 2109) hazs_sim=0.027 hazs_real=0.043 o4_precio=0.389 o4_t=0.475 o4_n=198
+B1 tasa sim 0.502 real 0.592 diff -0.090 IC90 [-0.149 -0.03 ]
+B2 exactitud 0.701 kappa 0.402 IC90 [0.291 0.504] recall 0.672 precision 0.792 (11=80 10=21 01=39 00=61)
+B3 edad sim n=101 med 1.38s | real n=99 med 0.99s | KS D=0.085 p=0.825 |dmed|=0.38s | pares n=67 |dt|<=1s 0.642
+B4 EV sim -0.008 (coste 99.2) | real on-chain -0.092 (coste 120.9) | diff +0.084 IC90 [-0.182  0.347]
+   cuotas coste sim {'C1': 0.396, 'C2': 0.22, 'C3': 0.385} | on-chain {'C1': 0.205, 'C2': 0.3, 'C3': 0.495} | |d| {'C1': np.float64(0.191), 'C2': np.float64(0.081), 'C3': np.float64(0.11)}
+   ambos     n= 80 EV -0.086
+   solo sim  n= 21 EV +0.273
+   solo real n= 39 EV -0.063
+   B5 ETH: n=67 tasa sim 0.642 real 0.642 EV sim +0.132 real -0.165 dEV +0.296 IC90 [-0.085  0.768] -> FALLA
+   B5 SOL: n=66 tasa sim 0.470 real 0.591 EV sim -0.226 real -0.003 dEV -0.223 IC90 [-0.685  0.245] -> FALLA
+   B5 XRP: n=68 tasa sim 0.397 real 0.544 EV sim +0.019 real -0.104 dEV +0.122 IC90 [-0.36   0.683] -> FALLA
+CRITERIOS: {'O1': 'FALLA', 'O2': 'FALLA', 'O3': 'FALLA', 'O4': 'FALLA', 'B0': 'PASA', 'B1': 'FALLA', 'B2': 'FALLA', 'B3': 'FALLA', 'B4': 'FALLA', 'B5': 'FALLA'}
+
+################ EVAL var=lo cad=0.5 dobs=100 dias=['2026-10-21', '2026-10-22']  pujas reales 246; con puja en el sim 206; mismo lado 200
+B0 lado coincide 0.813 (sobre todas las reales) | 0.971 (sobre las que el sim abre)
+ORDEN: n_pujas=197 ord_sim=16.056 ord_real=10.701 spearman=0.389 vida_sim_med=0.470 vida_real_med=0.663 n_vida=(3092, 2068) ks=0.382 haz_sim=0.025 haz_real=0.056 fills=(78, 119) ordenes=(3163, 2108) hazs_sim=0.019 hazs_real=0.044 o4_precio=0.391 o4_t=0.477 o4_n=197
+B1 tasa sim 0.395 real 0.595 diff -0.200 IC90 [-0.275 -0.13 ]
+B2 exactitud 0.590 kappa 0.211 IC90 [0.106 0.312] recall 0.487 precision 0.734 (11=58 10=21 01=61 00=60)
+B3 edad sim n=79 med 1.14s | real n=99 med 0.99s | KS D=0.135 p=0.362 |dmed|=0.15s | pares n=46 |dt|<=1s 0.435
+B4 EV sim +0.059 (coste 79.1) | real on-chain -0.092 (coste 120.9) | diff +0.152 IC90 [-0.187  0.506]
+   cuotas coste sim {'C1': 0.556, 'C2': 0.144, 'C3': 0.3} | on-chain {'C1': 0.205, 'C2': 0.3, 'C3': 0.495} | |d| {'C1': np.float64(0.351), 'C2': np.float64(0.156), 'C3': np.float64(0.195)}
+   ambos     n= 58 EV -0.049
+   solo sim  n= 21 EV +0.390
+   solo real n= 61 EV -0.189
+   B5 ETH: n=67 tasa sim 0.478 real 0.642 EV sim +0.225 real -0.165 dEV +0.389 IC90 [-0.126  0.948] -> FALLA
+   B5 SOL: n=65 tasa sim 0.323 real 0.600 EV sim -0.031 real -0.003 dEV -0.028 IC90 [-0.664  0.666] -> PASA
+   B5 XRP: n=68 tasa sim 0.382 real 0.544 EV sim -0.096 real -0.104 dEV +0.007 IC90 [-0.454  0.482] -> PASA
+CRITERIOS: {'O1': 'FALLA', 'O2': 'FALLA', 'O3': 'FALLA', 'O4': 'FALLA', 'B0': 'PASA', 'B1': 'FALLA', 'B2': 'FALLA', 'B3': 'FALLA', 'B4': 'FALLA', 'B5': 'FALLA'}
+
+################ EVAL var=hi cad=0.5 dobs=100 dias=['2026-10-21', '2026-10-22']  pujas reales 246; con puja en el sim 207; mismo lado 201
+B0 lado coincide 0.817 (sobre todas las reales) | 0.971 (sobre las que el sim abre)
+ORDEN: n_pujas=198 ord_sim=14.141 ord_real=10.652 spearman=0.476 vida_sim_med=0.470 vida_real_med=0.663 n_vida=(2708, 2069) ks=0.382 haz_sim=0.036 haz_real=0.056 fills=(102, 119) ordenes=(2800, 2109) hazs_sim=0.028 hazs_real=0.043 o4_precio=0.389 o4_t=0.475 o4_n=198
+B1 tasa sim 0.512 real 0.592 diff -0.080 IC90 [-0.144 -0.015]
+B2 exactitud 0.701 kappa 0.400 IC90 [0.295 0.498] recall 0.681 precision 0.786 (11=81 10=22 01=38 00=60)
+B3 edad sim n=103 med 1.30s | real n=99 med 0.99s | KS D=0.078 p=0.879 |dmed|=0.30s | pares n=68 |dt|<=1s 0.632
+B4 EV sim +0.028 (coste 108.7) | real on-chain -0.092 (coste 120.9) | diff +0.120 IC90 [-0.142  0.394]
+   cuotas coste sim {'C1': 0.354, 'C2': 0.231, 'C3': 0.415} | on-chain {'C1': 0.205, 'C2': 0.3, 'C3': 0.495} | |d| {'C1': np.float64(0.15), 'C2': np.float64(0.069), 'C3': np.float64(0.08)}
+   ambos     n= 81 EV -0.095
+   solo sim  n= 22 EV +0.515
+   solo real n= 38 EV -0.044
+   B5 ETH: n=67 tasa sim 0.672 real 0.642 EV sim +0.261 real -0.165 dEV +0.426 IC90 [0.073 0.867] -> FALLA
+   B5 SOL: n=66 tasa sim 0.470 real 0.591 EV sim -0.300 real -0.003 dEV -0.297 IC90 [-0.741  0.144] -> FALLA
+   B5 XRP: n=68 tasa sim 0.397 real 0.544 EV sim +0.035 real -0.104 dEV +0.138 IC90 [-0.4   0.68] -> FALLA
+CRITERIOS: {'O1': 'FALLA', 'O2': 'FALLA', 'O3': 'FALLA', 'O4': 'FALLA', 'B0': 'PASA', 'B1': 'FALLA', 'B2': 'FALLA', 'B3': 'FALLA', 'B4': 'FALLA', 'B5': 'FALLA'}
+
+################ EVAL var=inf cad=0.5 dobs=100 dias=['2026-10-21', '2026-10-22']  pujas reales 246; con puja en el sim 212; mismo lado 202
+B0 lado coincide 0.821 (sobre todas las reales) | 0.953 (sobre las que el sim abre)
+ORDEN: n_pujas=199 ord_sim=16.286 ord_real=10.668 spearman=0.431 vida_sim_med=0.470 vida_real_med=0.664 n_vida=(3137, 2083) ks=0.381 haz_sim=0.036 haz_real=0.056 fills=(118, 118) ordenes=(3241, 2123) hazs_sim=0.027 hazs_real=0.043 o4_precio=0.317 o4_t=0.382 o4_n=199
+B1 tasa sim 0.589 real 0.584 diff +0.005 IC90 [-0.059  0.064]
+B2 exactitud 0.708 kappa 0.398 IC90 [0.288 0.502] recall 0.754 precision 0.748 (11=89 10=30 01=29 00=54)
+B3 edad sim n=119 med 1.27s | real n=98 med 1.00s | KS D=0.091 p=0.720 |dmed|=0.27s | pares n=75 |dt|<=1s 0.533
+B4 EV sim -0.102 (coste 116.8) | real on-chain -0.071 (coste 118.1) | diff -0.032 IC90 [-0.27   0.221]
+   cuotas coste sim {'C1': 0.496, 'C2': 0.181, 'C3': 0.322} | on-chain {'C1': 0.21, 'C2': 0.284, 'C3': 0.506} | |d| {'C1': np.float64(0.287), 'C2': np.float64(0.103), 'C3': np.float64(0.184)}
+   ambos     n= 89 EV -0.108
+   solo sim  n= 30 EV -0.086
+   solo real n= 29 EV +0.021
+   B5 ETH: n=67 tasa sim 0.687 real 0.642 EV sim +0.047 real -0.138 dEV +0.185 IC90 [-0.165  0.588] -> FALLA
+   B5 SOL: n=68 tasa sim 0.588 real 0.574 EV sim -0.348 real -0.001 dEV -0.346 IC90 [-0.782  0.059] -> FALLA
+   B5 XRP: n=67 tasa sim 0.493 real 0.537 EV sim -0.034 real -0.068 dEV +0.034 IC90 [-0.433  0.452] -> PASA
+CRITERIOS: {'O1': 'FALLA', 'O2': 'FALLA', 'O3': 'FALLA', 'O4': 'FALLA', 'B0': 'PASA', 'B1': 'PASA', 'B2': 'FALLA', 'B3': 'FALLA', 'B4': 'FALLA', 'B5': 'FALLA'}

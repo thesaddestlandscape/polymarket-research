@@ -1,0 +1,10 @@
+stale>0,05: 0.05 | Spearman R1~stale -0.273 | R1~nx 0.515
+stale medio por tercil R1: {'bajo': 0.014, 'medio': 0.007, 'alto': 0.003}
+TODAS: ventanas 15840 | R1 walk-forward EXCESO +15719 dPnL +8484 | dias >0 13/16 | sin 2 mejores +5876
+   ETH EV por tercil propio de R1 (descriptivo): [np.float64(-0.024), np.float64(-0.041), np.float64(0.209)]
+   SOL EV por tercil propio de R1 (descriptivo): [np.float64(-0.019), np.float64(0.069), np.float64(0.101)]
+   XRP EV por tercil propio de R1 (descriptivo): [np.float64(0.006), np.float64(0.012), np.float64(0.0)]
+stale<=0,05: ventanas 15055 | R1 walk-forward EXCESO +14902 dPnL +7472 | dias >0 12/16 | sin 2 mejores +5564
+   ETH EV por tercil propio de R1 (descriptivo): [np.float64(-0.01), np.float64(-0.039), np.float64(0.206)]
+   SOL EV por tercil propio de R1 (descriptivo): [np.float64(-0.019), np.float64(0.055), np.float64(0.108)]
+   XRP EV por tercil propio de R1 (descriptivo): [np.float64(-0.022), np.float64(0.084), np.float64(-0.021)]

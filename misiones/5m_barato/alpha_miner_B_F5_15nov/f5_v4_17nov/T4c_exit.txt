@@ -1,0 +1,8 @@
+# T4c salida confirmada Y (entrada X) en W12_C30_rho0.07_n5_H1
+X=1 Y=1: DEV score 1455 lo_en_hi 520 nolo_en_lo 935 cancel/dia 216.3 lohi p50/p90 14.0/135.4 miss 0 | HO score 2810 lo_en_hi 81 nolo_en_lo 2729 cancel/dia 142.2 lohi p50/p90 10.0/15.0 miss 0
+X=1 Y=2: DEV score 1490 lo_en_hi 623 nolo_en_lo 867 cancel/dia 185.1 lohi p50/p90 15.0/136.4 miss 0 | HO score 2689 lo_en_hi 96 nolo_en_lo 2593 cancel/dia 131.9 lohi p50/p90 11.0/16.0 miss 0
+X=1 Y=3: DEV score 1538 lo_en_hi 728 nolo_en_lo 810 cancel/dia 165.8 lohi p50/p90 16.0/154.4000000000001 miss 0 | HO score 2592 lo_en_hi 112 nolo_en_lo 2480 cancel/dia 124.5 lohi p50/p90 12.0/17.0 miss 0
+X=1 Y=5: DEV score 1686 lo_en_hi 954 nolo_en_lo 732 cancel/dia 142.5 lohi p50/p90 20.0/174.0 miss 0 | HO score 2435 lo_en_hi 144 nolo_en_lo 2291 cancel/dia 113.3 lohi p50/p90 14.0/19.0 miss 0
+X=1 Y=10: DEV score 2203 lo_en_hi 1608 nolo_en_lo 595 cancel/dia 108.2 lohi p50/p90 41.0/216.60000000000002 miss 0 | HO score 2111 lo_en_hi 226 nolo_en_lo 1885 cancel/dia 90.5 lohi p50/p90 21.0/34.199999999999996 miss 0
+X=3 Y=5: DEV score 2168 lo_en_hi 947 nolo_en_lo 1221 cancel/dia 136.6 lohi p50/p90 20.0/174.0 miss 0 | HO score 3907 lo_en_hi 144 nolo_en_lo 3763 cancel/dia 112.5 lohi p50/p90 14.0/19.0 miss 0
+X=5 Y=10: DEV score 3005 lo_en_hi 1572 nolo_en_lo 1433 cancel/dia 101.8 lohi p50/p90 41.0/216.60000000000002 miss 0 | HO score 4695 lo_en_hi 226 nolo_en_lo 4469 cancel/dia 90.0 lohi p50/p90 21.0/34.199999999999996 miss 0

@@ -1,0 +1,60 @@
+dias ['2026-10-18', '2026-10-22', '2026-10-23'] mercados validos 262 por dia {'2026-10-18': 70, '2026-10-22': 96, '2026-10-23': 96}
+
+[C0/BASE] mercados con relleno 252 coste 16263.2$ EV(+reb)/€ -0.0553 | IC90 dias (-0.1121,-0.0043) p1 0.956 | boot merc (-0.0745,-0.0365) | sin2mejores -0.0919 | dias+ 0/3 | EV dias>21 -0.0408 (n merc 186)
+   EV por dia {'2026-10-18': -0.0919, '2026-10-22': -0.0283, '2026-10-23': -0.0543}
+   descomposicion por €: lock -0.0143 resid -0.0476 reb +0.0066 | completado acc_par/acc 0.850 | merc con resid>=5acc 0.829 | acc/merc 127.9
+   pata rezagada M>=0.015 completar: fills 2171 coste 5139.0 EV(pnl)/€ +0.0510 (= valor de salir vs mantener)  acierto 0.562 precio medio 0.531
+   pata rezagada 0<M<0.015 perseguir: fills 450 coste 1083.0 EV(pnl)/€ +0.0050 (= valor de salir vs mantener)  acierto 0.536 precio medio 0.536
+   pata rezagada M=0 salir a coste: fills 184 coste 460.2 EV(pnl)/€ +0.0709 (= valor de salir vs mantener)  acierto 0.554 precio medio 0.523
+   senal ex ante flag=0: merc 98 EV/€ -0.0305 resid/€ -0.0235
+   senal ex ante flag=1: merc 151 EV/€ -0.0729 resid/€ -0.0646
+
+[C0/OPT] mercados con relleno 254 coste 21497.0$ EV(+reb)/€ -0.0365 | IC90 dias (-0.0981,+0.0197) p1 0.904 | boot merc (-0.0554,-0.0186) | sin2mejores -0.0751 | dias+ 0/3 | EV dias>21 -0.0208 (n merc 187)
+   EV por dia {'2026-10-18': -0.0751, '2026-10-22': -0.0052, '2026-10-23': -0.0374}
+   descomposicion por €: lock -0.0148 resid -0.0283 reb +0.0065 | completado acc_par/acc 0.861 | merc con resid>=5acc 0.854 | acc/merc 167.4
+   pata rezagada M>=0.015 completar: fills 4076 coste 6704.6 EV(pnl)/€ +0.0292 (= valor de salir vs mantener)  acierto 0.521 precio medio 0.519
+   pata rezagada 0<M<0.015 perseguir: fills 1143 coste 1287.5 EV(pnl)/€ -0.0366 (= valor de salir vs mantener)  acierto 0.651 precio medio 0.531
+   pata rezagada M=0 salir a coste: fills 382 coste 577.4 EV(pnl)/€ +0.0456 (= valor de salir vs mantener)  acierto 0.654 precio medio 0.513
+   senal ex ante flag=0: merc 116 EV/€ -0.0162 resid/€ -0.0077
+   senal ex ante flag=1: merc 133 EV/€ -0.0552 resid/€ -0.0473
+
+[C0/PES] mercados con relleno 251 coste 13091.9$ EV(+reb)/€ -0.0654 | IC90 dias (-0.1082,-0.0266) p1 0.980 | boot merc (-0.0867,-0.0442) | sin2mejores -0.0941 | dias+ 0/3 | EV dias>21 -0.0537 (n merc 185)
+   EV por dia {'2026-10-18': -0.0941, '2026-10-22': -0.0469, '2026-10-23': -0.0612}
+   descomposicion por €: lock -0.0156 resid -0.0563 reb +0.0065 | completado acc_par/acc 0.845 | merc con resid>=5acc 0.865 | acc/merc 103.0
+   pata rezagada M>=0.015 completar: fills 1666 coste 4416.9 EV(pnl)/€ -0.0219 (= valor de salir vs mantener)  acierto 0.519 precio medio 0.530
+   pata rezagada 0<M<0.015 perseguir: fills 356 coste 927.0 EV(pnl)/€ -0.0884 (= valor de salir vs mantener)  acierto 0.475 precio medio 0.521
+   pata rezagada M=0 salir a coste: fills 163 coste 437.4 EV(pnl)/€ +0.0061 (= valor de salir vs mantener)  acierto 0.540 precio medio 0.537
+   senal ex ante flag=0: merc 84 EV/€ -0.0287 resid/€ -0.0193
+   senal ex ante flag=1: merc 167 EV/€ -0.0864 resid/€ -0.0775
+
+[SM/BASE] mercados con relleno 252 coste 6444.7$ EV(+reb)/€ -0.0831 | IC90 dias (-0.1217,-0.0430) p1 0.987 | boot merc (-0.1085,-0.0605) | sin2mejores -0.1093 | dias+ 0/3 | EV dias>21 -0.0880 (n merc 186)
+   EV por dia {'2026-10-18': -0.0694, '2026-10-22': -0.0683, '2026-10-23': -0.1093}
+   descomposicion por €: lock +0.0494 resid -0.1394 reb +0.0069 | completado acc_par/acc 0.827 | merc con resid>=5acc 0.675 | acc/merc 54.1
+   pata rezagada M>=0.015 completar: fills 937 coste 1692.6 EV(pnl)/€ -0.0563 (= valor de salir vs mantener)  acierto 0.398 precio medio 0.426
+   pata rezagada 0<M<0.015 perseguir: fills 176 coste 333.4 EV(pnl)/€ -0.1236 (= valor de salir vs mantener)  acierto 0.386 precio medio 0.413
+   pata rezagada M=0 salir a coste: fills 68 coste 136.5 EV(pnl)/€ -0.3038 (= valor de salir vs mantener)  acierto 0.279 precio medio 0.421
+   senal ex ante flag=0: merc 98 EV/€ -0.0883 resid/€ -0.1424
+   senal ex ante flag=1: merc 151 EV/€ -0.0797 resid/€ -0.1375
+
+[SM/OPT] mercados con relleno 254 coste 8194.1$ EV(+reb)/€ -0.0487 | IC90 dias (-0.0664,-0.0299) p1 0.992 | boot merc (-0.0690,-0.0311) | sin2mejores -0.0604 | dias+ 0/3 | EV dias>21 -0.0520 (n merc 187)
+   EV por dia {'2026-10-18': -0.0399, '2026-10-22': -0.0442, '2026-10-23': -0.0604}
+   descomposicion por €: lock +0.0441 resid -0.0997 reb +0.0069 | completado acc_par/acc 0.864 | merc con resid>=5acc 0.638 | acc/merc 67.6
+   pata rezagada M>=0.015 completar: fills 1636 coste 2149.6 EV(pnl)/€ -0.1056 (= valor de salir vs mantener)  acierto 0.377 precio medio 0.412
+   pata rezagada 0<M<0.015 perseguir: fills 270 coste 358.8 EV(pnl)/€ -0.1277 (= valor de salir vs mantener)  acierto 0.504 precio medio 0.434
+   pata rezagada M=0 salir a coste: fills 92 coste 153.2 EV(pnl)/€ -0.1508 (= valor de salir vs mantener)  acierto 0.380 precio medio 0.417
+   senal ex ante flag=0: merc 116 EV/€ -0.0488 resid/€ -0.0998
+   senal ex ante flag=1: merc 133 EV/€ -0.0486 resid/€ -0.0997
+
+[SM/PES] mercados con relleno 251 coste 5165.2$ EV(+reb)/€ -0.1044 | IC90 dias (-0.1362,-0.0765) p1 0.995 | boot merc (-0.1307,-0.0796) | sin2mejores -0.1170 | dias+ 0/3 | EV dias>21 -0.1002 (n merc 185)
+   EV por dia {'2026-10-18': -0.117, '2026-10-22': -0.0859, '2026-10-23': -0.1161}
+   descomposicion por €: lock +0.0548 resid -0.1662 reb +0.0070 | completado acc_par/acc 0.817 | merc con resid>=5acc 0.729 | acc/merc 43.8
+   pata rezagada M>=0.015 completar: fills 685 coste 1465.2 EV(pnl)/€ -0.0821 (= valor de salir vs mantener)  acierto 0.393 precio medio 0.428
+   pata rezagada 0<M<0.015 perseguir: fills 148 coste 315.6 EV(pnl)/€ -0.0336 (= valor de salir vs mantener)  acierto 0.412 precio medio 0.426
+   pata rezagada M=0 salir a coste: fills 66 coste 130.6 EV(pnl)/€ -0.3106 (= valor de salir vs mantener)  acierto 0.273 precio medio 0.396
+   senal ex ante flag=0: merc 84 EV/€ -0.0859 resid/€ -0.1454
+   senal ex ante flag=1: merc 167 EV/€ -0.1142 resid/€ -0.1772
+
+== SM - C0 por dia (mismo instrumento) ==
+BASE: media -0.0241 IC90 (-0.0935,+0.0452) p1 0.792 dias+ 1/3
+PES: media -0.0390 IC90 (-0.0659,-0.0121) p1 0.974 dias+ 0/3
+OPT: media -0.0089 IC90 (-0.0747,+0.0569) p1 0.635 dias+ 1/3

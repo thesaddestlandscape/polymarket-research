@@ -1,0 +1,1 @@
+- [Trampas out_v3 del motor v3 (16-Nov)](project_trampas_out_v3_motor_16nov.md) — A sin tiempo (clase solo en G0), 20 placebos (p≥0,048), tamaño≤5 exacto, SEGT pre-arreglo tf, cola BASE conservadora

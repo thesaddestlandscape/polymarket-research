@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/huerfana_exante/scripts/ps_run.py", line 58, in <module>
+    exec(compile(head, 'f6_sim_head_patched', 'exec'), ns)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "f6_sim_head_patched", line 20, in <module>
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/reshape/concat.py", line 466, in concat
+    result = _get_result(
+        objs,
+    ...<9 lines>...
+        axis,
+    )
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/reshape/concat.py", line 657, in _get_result
+    new_data = concatenate_managers(
+        mgrs_indexers, result_axes, concat_axis=bm_axis, copy=False
+    )
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/concat.py", line 133, in concatenate_managers
+    values = np.concatenate(vals, axis=1)  # type: ignore[arg-type]
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 63.3 MiB for an array with shape (1, 16605586) and data type float32

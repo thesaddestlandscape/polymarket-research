@@ -1,0 +1,2 @@
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s2_eval.py:67: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  sh = Pm.groupby(["act", "dia", "band", "cl"]).c.sum().unstack(fill_value=0); sh = sh.div(sh.sum(1), axis=0)

@@ -1,0 +1,67 @@
+
+######## 0x43e7e4b6a5dc71663d12cbf16b28468095a5472a  rellenos 46055  mercados 2973  dias 6
+rol (por USD): {'M': 0.874, 'T': 0.126} | side (0 compra,1 venta) filas: {0: 46055}
+T restante del relleno (s) cuantiles 0/10/25/50/75/90/100: [-3.0, 33.0, 61.0, 136.0, 234.0, 283.0, 297.0]
+precio efectivo pagado por fase (mediana) y % USD: {'0-60': {'px': 0.28, 'usd': 0.214}, '60-120': {'px': 0.35, 'usd': 0.226}, '120-180': {'px': 0.4, 'usd': 0.179}, '180-240': {'px': 0.41, 'usd': 0.153}, '240-300': {'px': 0.45, 'usd': 0.228}}
+acc por relleno cuantiles 10/50/90: [1.79, 9.43, 40.0] | px_ef bandas: {Interval(0.0, 0.1, closed='right'): 0.083, Interval(0.1, 0.3, closed='right'): 0.293, Interval(0.3, 0.5, closed='right'): 0.307, Interval(0.5, 0.7, closed='right'): 0.177, Interval(0.7, 0.9, closed='right'): 0.109, Interval(0.9, 1.0, closed='right'): 0.031}
+inventario: max|I| mediana 56.0 acc (p90 194.0); final |I|/acc total mediana 0.39; rellenos/mercado mediana 10
+reequilibrado: P(siguiente relleno reduce |I|) = 0.432 (n=43042) frente a azar ~0,5 (YES 0.50)
+retraso entre la 1a pata de cada lado (s): mediana 64.5 p25 25.8 p75 118.5 (n=2381, mismo bloque 0.01)
+rango en cola dentro del nivel (0=primero,1=ultimo): media 0.39 (azar 0,50), primero 0.54, n niveles 5307
+por moneda: rellenos {'ETH': 34570, 'SOL': 11485}
+
+######## 0xae68447c01fc86864fd0e5e58aae986eeb8abf83  rellenos 43110  mercados 1611  dias 6
+rol (por USD): {'M': 1.0} | side (0 compra,1 venta) filas: {0: 43110}
+T restante del relleno (s) cuantiles 0/10/25/50/75/90/100: [26.0, 49.0, 78.0, 138.0, 219.0, 276.0, 358.0]
+precio efectivo pagado por fase (mediana) y % USD: {'0-60': {'px': 0.1, 'usd': 0.133}, '60-120': {'px': 0.19, 'usd': 0.255}, '120-180': {'px': 0.32, 'usd': 0.223}, '180-240': {'px': 0.46, 'usd': 0.193}, '240-300': {'px': 0.5, 'usd': 0.196}}
+acc por relleno cuantiles 10/50/90: [1.78, 9.2, 50.0] | px_ef bandas: {Interval(0.0, 0.1, closed='right'): 0.273, Interval(0.1, 0.3, closed='right'): 0.199, Interval(0.3, 0.5, closed='right'): 0.156, Interval(0.5, 0.7, closed='right'): 0.175, Interval(0.7, 0.9, closed='right'): 0.142, Interval(0.9, 1.0, closed='right'): 0.054}
+inventario: max|I| mediana 109.8 acc (p90 211.3); final |I|/acc total mediana 0.22; rellenos/mercado mediana 24
+reequilibrado: P(siguiente relleno reduce |I|) = 0.483 (n=41471) frente a azar ~0,5 (YES 0.49)
+retraso entre la 1a pata de cada lado (s): mediana 40.4 p25 17.8 p75 73.8 (n=1599, mismo bloque 0.01)
+rango en cola dentro del nivel (0=primero,1=ultimo): media 0.76 (azar 0,50), primero 0.18, n niveles 6186
+por moneda: rellenos {'ETH': 43110}
+
+######## 0x0ab017457876f72dd704bc3f6298b96135f34dd3  rellenos 20132  mercados 1573  dias 6
+rol (por USD): {'M': 1.0} | side (0 compra,1 venta) filas: {1: 20132}
+T restante del relleno (s) cuantiles 0/10/25/50/75/90/100: [-0.0, 57.0, 96.0, 163.0, 236.0, 277.0, 298.0]
+precio efectivo pagado por fase (mediana) y % USD: {'0-60': {'px': 0.31, 'usd': 0.119}, '60-120': {'px': 0.37, 'usd': 0.241}, '120-180': {'px': 0.42, 'usd': 0.209}, '180-240': {'px': 0.46, 'usd': 0.209}, '240-300': {'px': 0.48, 'usd': 0.222}}
+acc por relleno cuantiles 10/50/90: [1.57, 5.0, 15.0] | px_ef bandas: {Interval(0.0, 0.1, closed='right'): 0.137, Interval(0.1, 0.3, closed='right'): 0.196, Interval(0.3, 0.5, closed='right'): 0.247, Interval(0.5, 0.7, closed='right'): 0.222, Interval(0.7, 0.9, closed='right'): 0.155, Interval(0.9, 1.0, closed='right'): 0.044}
+inventario: max|I| mediana 17.5 acc (p90 31.7); final |I|/acc total mediana 0.13; rellenos/mercado mediana 10
+reequilibrado: P(siguiente relleno reduce |I|) = 0.545 (n=18497) frente a azar ~0,5 (YES 0.51)
+retraso entre la 1a pata de cada lado (s): mediana 26.7 p25 10.0 p75 60.0 (n=1481, mismo bloque 0.03)
+rango en cola dentro del nivel (0=primero,1=ultimo): media 0.64 (azar 0,50), primero 0.35, n niveles 2825
+por moneda: rellenos {'ETH': 20132}
+
+######## 0xf074dc84e438e22488da4e078fad1be62ede723b  rellenos 23016  mercados 1329  dias 5
+rol (por USD): {'M': 1.0} | side (0 compra,1 venta) filas: {1: 23016}
+T restante del relleno (s) cuantiles 0/10/25/50/75/90/100: [-3.0, 49.0, 92.0, 166.0, 237.0, 278.0, 298.0]
+precio efectivo pagado por fase (mediana) y % USD: {'0-60': {'px': 0.38, 'usd': 0.172}, '60-120': {'px': 0.38, 'usd': 0.211}, '120-180': {'px': 0.4, 'usd': 0.197}, '180-240': {'px': 0.44, 'usd': 0.204}, '240-300': {'px': 0.48, 'usd': 0.216}}
+acc por relleno cuantiles 10/50/90: [1.65, 5.0, 10.0] | px_ef bandas: {Interval(0.0, 0.1, closed='right'): 0.151, Interval(0.1, 0.3, closed='right'): 0.2, Interval(0.3, 0.5, closed='right'): 0.219, Interval(0.5, 0.7, closed='right'): 0.198, Interval(0.7, 0.9, closed='right'): 0.155, Interval(0.9, 1.0, closed='right'): 0.076}
+inventario: max|I| mediana 13.9 acc (p90 22.8); final |I|/acc total mediana 0.08; rellenos/mercado mediana 15
+reequilibrado: P(siguiente relleno reduce |I|) = 0.639 (n=21469) frente a azar ~0,5 (YES 0.51)
+retraso entre la 1a pata de cada lado (s): mediana 16.4 p25 6.0 p75 41.8 (n=1297, mismo bloque 0.05)
+rango en cola dentro del nivel (0=primero,1=ultimo): media 0.29 (azar 0,50), primero 0.70, n niveles 2901
+por moneda: rellenos {'ETH': 23016}
+
+######## 0x41e2e1ccf1e4940029af02259a31c6b89b9fa354  rellenos 13072  mercados 2482  dias 5
+rol (por USD): {'T': 1.0} | side (0 compra,1 venta) filas: {0: 13072}
+T restante del relleno (s) cuantiles 0/10/25/50/75/90/100: [7.0, 51.0, 84.0, 154.0, 237.0, 273.0, 289.0]
+precio efectivo pagado por fase (mediana) y % USD: {'0-60': {'px': 0.61, 'usd': 0.229}, '60-120': {'px': 0.46, 'usd': 0.279}, '120-180': {'px': 0.44, 'usd': 0.167}, '180-240': {'px': 0.41, 'usd': 0.141}, '240-300': {'px': 0.41, 'usd': 0.184}}
+acc por relleno cuantiles 10/50/90: [5.0, 13.76, 33.0] | px_ef bandas: {Interval(0.0, 0.1, closed='right'): 0.045, Interval(0.1, 0.3, closed='right'): 0.239, Interval(0.3, 0.5, closed='right'): 0.3, Interval(0.5, 0.7, closed='right'): 0.241, Interval(0.7, 0.9, closed='right'): 0.162, Interval(0.9, 1.0, closed='right'): 0.014}
+inventario: max|I| mediana 40.0 acc (p90 69.7); final |I|/acc total mediana 0.48; rellenos/mercado mediana 4
+reequilibrado: P(siguiente relleno reduce |I|) = 0.545 (n=10413) frente a azar ~0,5 (YES 0.51)
+retraso entre la 1a pata de cada lado (s): mediana 57.0 p25 22.8 p75 108.1 (n=1744, mismo bloque 0.01)
+por moneda: rellenos {'ETH': 6921, 'SOL': 6151}
+
+######## 0x31393e2f8333d4a6e2e31ca6424defe8b6cb9e2e  rellenos 18476  mercados 1100  dias 6
+rol (por USD): {'M': 0.608, 'T': 0.392} | side (0 compra,1 venta) filas: {0: 18476}
+T restante del relleno (s) cuantiles 0/10/25/50/75/90/100: [54.0, 96.0, 136.0, 204.0, 261.0, 286.0, 297.0]
+precio efectivo pagado por fase (mediana) y % USD: {'0-60': {'px': 0.25, 'usd': 0.005}, '60-120': {'px': 0.27, 'usd': 0.127}, '120-180': {'px': 0.37, 'usd': 0.195}, '180-240': {'px': 0.47, 'usd': 0.266}, '240-300': {'px': 0.52, 'usd': 0.406}}
+acc por relleno cuantiles 10/50/90: [1.98, 5.0, 12.0] | px_ef bandas: {Interval(0.0, 0.1, closed='right'): 0.114, Interval(0.1, 0.3, closed='right'): 0.209, Interval(0.3, 0.5, closed='right'): 0.252, Interval(0.5, 0.7, closed='right'): 0.23, Interval(0.7, 0.9, closed='right'): 0.178, Interval(0.9, 1.0, closed='right'): 0.016}
+inventario: max|I| mediana 30.0 acc (p90 95.5); final |I|/acc total mediana 0.44; rellenos/mercado mediana 13
+reequilibrado: P(siguiente relleno reduce |I|) = 0.351 (n=17127) frente a azar ~0,5 (YES 0.48)
+retraso entre la 1a pata de cada lado (s): mediana 40.3 p25 16.7 p75 73.4 (n=841, mismo bloque 0.01)
+rango en cola dentro del nivel (0=primero,1=ultimo): media 0.32 (azar 0,50), primero 0.58, n niveles 5022
+por moneda: rellenos {'ETH': 18476}
+
+[exited with code 0]

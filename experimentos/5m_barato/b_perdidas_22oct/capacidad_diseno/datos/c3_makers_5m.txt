@@ -1,0 +1,22 @@
+5min makers totales 8877 con >=2000 EUR DESC 702
+EV DESC (con rebate)   top  5% n= 35 OOS EV(+reb)=+0.0529 IC90 makers=(-0.087,+0.232) placebo med=-0.0068 p(placebo>=)=0.014 vol OOS/dia top=18,227 pnlOOS/dia=965  pool OOS EV=+0.0082
+EV DESC (con rebate)   top 10% n= 70 OOS EV(+reb)=+0.0247 IC90 makers=(-0.022,+0.084) placebo med=-0.0056 p(placebo>=)=0.034 vol OOS/dia top=60,433 pnlOOS/dia=1,493  pool OOS EV=+0.0082
+EV DESC (con rebate)   top 25% n=175 OOS EV(+reb)=+0.0127 IC90 makers=(+0.008,+0.017) placebo med=+0.0082 p(placebo>=)=0.014 vol OOS/dia top=1,147,653 pnlOOS/dia=14,602  pool OOS EV=+0.0082
+PnL DESC absoluto      top  5% n= 35 OOS EV(+reb)=+0.0131 IC90 makers=(+0.010,+0.017) placebo med=+0.0093 p(placebo>=)=0.092 vol OOS/dia top=1,736,250 pnlOOS/dia=22,688  pool OOS EV=+0.0082
+PnL DESC absoluto      top 10% n= 70 OOS EV(+reb)=+0.0127 IC90 makers=(+0.010,+0.016) placebo med=+0.0093 p(placebo>=)=0.044 vol OOS/dia top=2,087,565 pnlOOS/dia=26,542  pool OOS EV=+0.0082
+PnL DESC absoluto      top 25% n=175 OOS EV(+reb)=+0.0117 IC90 makers=(+0.009,+0.014) placebo med=+0.0092 p(placebo>=)=0.014 vol OOS/dia top=2,934,455 pnlOOS/dia=34,363  pool OOS EV=+0.0082
+TOP 12 ex-post por PnL total 16 d (descriptivo): maker, vol/dia, pnl_DESC, pnl_OOS(+reb), EV_total, dias activos desc/oos, monedas por volumen
+0x21f4c1a1 vol/d=  166,714 pnlD=   14,157 pnlO=   27,800 EV=+0.0157 dias=8/8 BTC:100%
+0xe29042f5 vol/d=  103,850 pnlD=   12,246 pnlO=   16,517 EV=+0.0173 dias=6/8 BTC:100%
+0x86b14772 vol/d=   86,398 pnlD=   14,903 pnlO=   13,431 EV=+0.0205 dias=8/8 BTC:100%
+0xee65685d vol/d=    2,275 pnlD=   13,599 pnlO=   11,998 EV=+0.7031 dias=8/8 BTC:75% ETH:13% SOL:5%
+0x32ed2e54 vol/d=   40,431 pnlD=   19,005 pnlO=    5,316 EV=+0.0376 dias=8/8 BTC:92% ETH:6% SOL:1%
+0xf9b7876b vol/d=   82,770 pnlD=    5,816 pnlO=   15,256 EV=+0.0159 dias=8/8 BTC:100%
+0x764fd57b vol/d=   92,563 pnlD=    3,372 pnlO=   15,693 EV=+0.0129 dias=8/8 BTC:94% ETH:4% SOL:1%
+0x568b0798 vol/d=   70,637 pnlD=    8,690 pnlO=   10,078 EV=+0.0166 dias=8/8 BTC:100%
+0x18c18e0c vol/d=   75,967 pnlD=    8,738 pnlO=    9,064 EV=+0.0146 dias=8/8 BTC:100%
+0x56f609c6 vol/d=   62,533 pnlD=    1,146 pnlO=   15,286 EV=+0.0164 dias=8/8 BTC:100%
+0xc2ad03f7 vol/d=   35,803 pnlD=   13,365 pnlO=    1,793 EV=+0.0265 dias=8/8 BTC:91% ETH:6% SOL:1%
+0x4c949794 vol/d=   81,097 pnlD=    3,868 pnlO=   10,093 EV=+0.0108 dias=8/8 BTC:100%
+suma PnL total makers con >=2000 DESC: 507266  vol total 68744296  EV pond 0.0074
+makers con PnL total>0: 318 de 702

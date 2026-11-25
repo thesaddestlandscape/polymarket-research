@@ -1,0 +1,40 @@
+13:02:16 agg dia 5 cobertura desenlace (filas) 1.0
+13:02:16 agg dia 6 cobertura desenlace (filas) 1.0
+13:02:17 agg dia 7 cobertura desenlace (filas) 1.0
+13:02:17 agg dia 8 cobertura desenlace (filas) 1.0
+13:02:18 agg dia 9 cobertura desenlace (filas) 1.0
+13:02:18 agg dia 10 cobertura desenlace (filas) 1.0
+13:02:18 agg dia 11 cobertura desenlace (filas) 1.0
+13:02:19 agg dia 12 cobertura desenlace (filas) 1.0
+13:02:19 agg dia 13 cobertura desenlace (filas) 1.0
+13:02:20 agg dia 14 cobertura desenlace (filas) 1.0
+13:02:20 agg dia 15 cobertura desenlace (filas) 1.0
+13:02:20 agg dia 16 cobertura desenlace (filas) 1.0
+13:02:21 agg dia 17 cobertura desenlace (filas) 1.0
+13:02:21 agg dia 18 cobertura desenlace (filas) 1.0
+13:02:21 agg dia 19 cobertura desenlace (filas) 1.0
+13:02:22 agg dia 20 cobertura desenlace (filas) 1.0
+13:02:22 agg dia 21 cobertura desenlace (filas) 1.0
+13:02:23 agg dia 22 cobertura desenlace (filas) 0.9989
+13:02:23 agg dia 23 cobertura desenlace (filas) 1.0
+13:02:23 agg dia 24 cobertura desenlace (filas) 1.0
+13:02:24 dia 12 {'roster': 360, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 99374, 'ts_max_utc': '2026-10-12 23:59', 'ts_min_utc': '2026-10-12 00:00'}
+13:02:24 dia 13 {'roster': 428, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 103843, 'ts_max_utc': '2026-10-13 23:59', 'ts_min_utc': '2026-10-13 00:00'}
+13:02:25 dia 14 {'roster': 384, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 102491, 'ts_max_utc': '2026-10-14 23:59', 'ts_min_utc': '2026-10-14 00:00'}
+13:02:26 dia 15 {'roster': 422, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 117134, 'ts_max_utc': '2026-10-15 23:59', 'ts_min_utc': '2026-10-15 00:00'}
+13:02:26 dia 16 {'roster': 461, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 110202, 'ts_max_utc': '2026-10-16 23:59', 'ts_min_utc': '2026-10-16 00:00'}
+13:02:26 dia 17 {'roster': 446, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 87604, 'ts_max_utc': '2026-10-17 23:59', 'ts_min_utc': '2026-10-17 00:00'}
+13:02:27 dia 18 {'roster': 426, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 92598, 'ts_max_utc': '2026-10-18 23:59', 'ts_min_utc': '2026-10-18 00:00'}
+13:02:27 dia 19 {'roster': 426, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 90432, 'ts_max_utc': '2026-10-19 23:59', 'ts_min_utc': '2026-10-19 00:00'}
+13:02:28 dia 20 {'roster': 400, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 103990, 'ts_max_utc': '2026-10-20 23:59', 'ts_min_utc': '2026-10-20 00:00'}
+13:02:29 dia 21 {'roster': 428, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 96833, 'ts_max_utc': '2026-10-21 23:59', 'ts_min_utc': '2026-10-21 00:00'}
+13:02:29 dia 22 {'roster': 396, 'cov_ev_cap': 0.9999878537215545, 'cov_noev_cap': 0.9935211593056362, 'n_uni': 97073, 'ts_max_utc': '2026-10-22 23:59', 'ts_min_utc': '2026-10-22 00:00'}
+13:02:30 dia 23 {'roster': 377, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 94378, 'ts_max_utc': '2026-10-23 23:59', 'ts_min_utc': '2026-10-23 00:00'}
+13:02:30 dia 24 {'roster': 360, 'cov_ev_cap': 1.0, 'cov_noev_cap': 1.0, 'n_uni': 86670, 'ts_max_utc': '2026-10-24 23:59', 'ts_min_utc': '2026-10-24 00:00'}
+13:02:30 clusters 3744 dias 13 bootstraps 2000
+13:02:30 == variantes reales
+13:02:32 primario {'excess': np.float64(0.3006), 'cap_matched': np.float64(990895.353), 'abs_ev': np.float64(0.0021), 'cap_total': np.float64(10263912.267), 'cov': np.float64(0.0965), 'ic_cierre': (0.264925810227286, 0.3346206393943247), 'ic_dia': (0.2045567298620513, 0.38200721219604733), 'abs_ic_cierre': (-0.008982783493972689, 0.012608184398855232), 'abs_ic_dia': (-0.010209158814938703, 0.013983109156217508), 'eventos': 14762, 'eventos_con_fill': 11952}
+13:02:34 pre {'excess': np.float64(0.2417), 'cap_matched': np.float64(336784.3266), 'abs_ev': np.float64(0.0509), 'cap_total': np.float64(753511.9942), 'cov': np.float64(0.447), 'ic_cierre': (0.20650494239434297, 0.2764160642474683), 'ic_dia': (0.18739558921770652, 0.29566305555988925), 'abs_ic_cierre': (0.02445612904414239, 0.07755414763175707), 'abs_ic_dia': (0.03100276116966234, 0.07039990749900094), 'eventos': 14762, 'eventos_con_fill': 7049}
+13:02:36 post {'excess': np.float64(0.0442), 'cap_matched': np.float64(555291.302), 'abs_ev': np.float64(-0.003), 'cap_total': np.float64(7717959.5884), 'cov': np.float64(0.0719), 'ic_cierre': (0.017776672378839335, 0.06823705064552267), 'ic_dia': (-0.01154459562597985, 0.09416141811035926), 'abs_ic_cierre': (-0.014678192685090782, 0.008665339451515692), 'abs_ic_dia': (-0.010223980986063077, 0.004470599692523281), 'eventos': 14762, 'eventos_con_fill': 8394}
+13:02:38 ini10 {'excess': np.float64(0.2649), 'cap_matched': np.float64(850064.0266), 'abs_ev': np.float64(0.0004), 'cap_total': np.float64(9119398.4941), 'cov': np.float64(0.0932), 'ic_cierre': (0.22821723067335803, 0.3005059812446809), 'ic_dia': (0.17564966617086933, 0.3413367152606837), 'abs_ic_cierre': (-0.010806402681418213, 0.01133227699659638), 'abs_ic_dia': (-0.012575507817254186, 0.01327048840928658), 'eventos': 14762, 'eventos_con_fill': 11409}
+13:02:40 ini15 {'excess': np.float64(0.2408), 'cap_matched': np.float64(729315.8334), 'abs_ev': np.float64(0.0021), 'cap_total': np.float64(7951654.1011), 'cov': np.float64(0.0917), 'ic_cierre': (0.20304598973096935, 0.2757670839135166), 'ic_dia': (0.15501921494847146, 0.31425492276688144), 'abs_ic_cierre': (-0.009399206198711044, 0.013210947417852621), 'abs_ic_dia': (-0.011545116808954066, 0.015799564635964103), 'eventos': 14762, 'eventos_con_fill': 10858}

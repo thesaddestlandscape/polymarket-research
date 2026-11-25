@@ -1,0 +1,14 @@
+# T1(a) grep de dependencias del motor (17-Nov)
+## experimentos/5m_barato/b_perdidas_22oct/mitigar_as_25oct/forward/forward_a1.py: imports de engine*/passT*/stamp*/l2_carrera: 0 ; menciones 'l2_carrera|engine_v|passT': 0
+## experimentos/5m_barato/b_perdidas_22oct/mitigar_as_25oct/forward/forward_v2.py: imports de engine*/passT*/stamp*/l2_carrera: 0 ; menciones 'l2_carrera|engine_v|passT': 0
+## misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia_add3.py: imports de engine*/passT*/stamp*/l2_carrera: 0 ; menciones 'l2_carrera|engine_v|passT': 0
+## misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/lib1.py: imports de engine*/passT*/stamp*/l2_carrera: 0 ; menciones 'l2_carrera|engine_v|passT': 1
+9:L2 = '/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/'
+## misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/popdata.py: imports de engine*/passT*/stamp*/l2_carrera: 0 ; menciones 'l2_carrera|engine_v|passT': 0
+## misiones/5m_barato/alpha_miner_B_F5_15nov/lib_ev.py: imports de engine*/passT*/stamp*/l2_carrera: 0 ; menciones 'l2_carrera|engine_v|passT': 0
+## e2_agrega_add3.py (solo comentario de reloj, sin import):
+7:import os, sys, time, json, hashlib; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+8:from popdata import *
+4:Reloj: sello r_v3 = t_ev(EX) - 19 - 1 (passT_v3, rama constante); decision con estado q de RX <= t_dec; clase causal = ventana RX de 10 min cerrada antes de r_ex - 200 ms.
+## lib1.py: L2 = ruta l2_carrera usada para:
+misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/lib1.py:9:L2 = '/root/polymarket-research/experimentos/5m_barato/l2_carrera_10nov/'

@@ -1,0 +1,45 @@
+fills 5100265 cob 1.0
+feats 99091
+
+######## WF
+test poblacional (dia, elegibles, z>=2, z<=-2, esperado H0 por cola): [('2026-10-13', 1894, 36, 108, 43.2), ('2026-10-14', 1937, 25, 131, 44.2), ('2026-10-15', 1939, 34, 119, 44.2), ('2026-10-16', 1938, 22, 133, 44.2), ('2026-10-17', 1943, 32, 118, 44.3), ('2026-10-18', 1958, 39, 121, 44.6), ('2026-10-19', 1945, 23, 157, 44.3), ('2026-10-20', 1899, 10, 195, 43.3), ('2026-10-21', 1900, 9, 222, 43.3)]
+  roster R: EV€ +0.0247 IC90d (-0.0629, 0.1038) sin2 -0.0302 días+ 7/9 n_unid 28939 coste 217204 pnl +5360
+  roster T: EV€ +0.0655 IC90d (-0.027, 0.1532) sin2 +0.0002 días+ 6/9 n_unid 21959 coste 153648 pnl +10060
+  roster INV: EV€ -0.1961 IC90d (-0.259, -0.123) sin2 -0.2243 días+ 0/9 n_unid 24927 coste 211315 pnl -41440
+  placebo (mismo tamaño que R): media -0.0177 p95 +0.0783 p(plac>=R) 0.230; top1 wallet R 0.108 (0x41e2e1cc)
+  rol acumulador_pares   (wallet-días 71): EV€ +0.0029 IC90d (-0.1045, 0.1515) sin2 -0.0750 días+ 7/9 n_unid 9949 coste 93956 pnl +269
+  rol gestor_salidas     (wallet-días 23): EV€ +0.0753 IC90d (0.0257, 0.131) sin2 +0.0432 días+ 7/9 n_unid 5934 coste 19946 pnl +1502
+  rol holder_longshots   (wallet-días 12): EV€ +0.3741 IC90d (0.1858, 0.4464) sin2 +0.1774 días+ 4/7 n_unid 328 coste 1623 pnl +607
+  rol maker_ambos_lados  (wallet-días 40): EV€ +0.0521 IC90d (-0.0051, 0.1037) sin2 +0.0099 días+ 4/9 n_unid 7017 coste 46905 pnl +2442
+  rol maker_pasivo       (wallet-días 23): EV€ +0.0641 IC90d (-0.0821, 0.3288) sin2 -0.0794 días+ 6/8 n_unid 1845 coste 10464 pnl +671
+  rol tomador_sniper     (wallet-días 48): EV€ -0.0030 IC90d (-0.1339, 0.0688) sin2 -0.1295 días+ 4/9 n_unid 3866 coste 44309 pnl -132
+
+######## SPLIT
+test poblacional (dia, elegibles, z>=2, z<=-2, esperado H0 por cola): [('2026-10-14', 2110, 42, 131, 48.1), ('2026-10-15', 2110, 42, 131, 48.1), ('2026-10-16', 2110, 42, 131, 48.1), ('2026-10-17', 2110, 42, 131, 48.1), ('2026-10-18', 2110, 42, 131, 48.1), ('2026-10-19', 2110, 42, 131, 48.1), ('2026-10-20', 2110, 42, 131, 48.1), ('2026-10-21', 2110, 42, 131, 48.1)]
+  roster R: EV€ +0.0245 IC90d (-0.0586, 0.1032) sin2 -0.0214 días+ 5/8 n_unid 46961 coste 687426 pnl +16824
+  roster T: EV€ +0.0425 IC90d (-0.0385, 0.1112) sin2 -0.0022 días+ 6/8 n_unid 25020 coste 294200 pnl +12495
+  roster INV: EV€ -0.1760 IC90d (-0.2536, -0.1087) sin2 -0.2386 días+ 1/8 n_unid 13196 coste 146374 pnl -25756
+  placebo (mismo tamaño que R): media -0.0049 p95 +0.0881 p(plac>=R) 0.325; top1 wallet R 0.286 (0x41e2e1cc)
+  rol acumulador_pares   (wallet-días 64): EV€ +0.0487 IC90d (-0.0439, 0.1345) sin2 +0.0005 días+ 6/8 n_unid 8843 coste 128951 pnl +6277
+  rol gestor_salidas     (wallet-días 40): EV€ +0.0053 IC90d (-0.0735, 0.0875) sin2 -0.0495 días+ 5/8 n_unid 10838 coste 36165 pnl +190
+  rol holder_longshots   (wallet-días 32): EV€ +0.1073 IC90d (-0.1875, 0.425) sin2 -0.1110 días+ 4/8 n_unid 1123 coste 5550 pnl +596
+  rol maker_ambos_lados  (wallet-días 72): EV€ +0.0363 IC90d (-0.0495, 0.1233) sin2 -0.0268 días+ 4/8 n_unid 11400 coste 93374 pnl +3386
+  rol maker_pasivo       (wallet-días 48): EV€ +0.1941 IC90d (0.0172, 0.3669) sin2 +0.0709 días+ 6/8 n_unid 3051 coste 23381 pnl +4538
+  rol tomador_sniper     (wallet-días 56): EV€ +0.0046 IC90d (-0.0835, 0.0854) sin2 -0.0422 días+ 5/8 n_unid 11706 coste 400005 pnl +1837
+
+######## S3 relaciones (roster R walk-forward, días 13-21)
+R2 celdas maker (pobl. en celdas roster vs toda banda maker): EV€ A +0.0563 (coste 1707422) vs B +0.0217 (coste 3453195) Δ +0.0346 IC90d (+0.0043,+0.0622) Δ sin2 +0.0094 días Δ>0 5/9
+R3 celdas tomador: EV€ A -0.0559 (coste 1497710) vs B -0.0742 (coste 3979798) Δ +0.0183 IC90d (-0.0212,+0.0539) Δ sin2 -0.0048 días Δ>0 9/9
+skill maker roster vs pobl. mismas celdas: EV roster +0.0366 vs esperado celdas +0.0236 (coste 179952); por día [np.float32(0.016), np.float32(0.089), np.float32(-0.065), np.float32(0.068), np.float32(0.101), np.float32(-0.025), np.float32(-0.003), np.float32(0.068), np.float32(0.048)]
+skill tomador roster vs pobl. mismas celdas: EV roster -0.0327 vs esperado celdas -0.0954 (coste 37253); por día [np.float32(0.083), np.float32(-0.075), np.float32(0.058), np.float32(0.051), np.float32(-0.064), np.float32(-0.084), np.float32(0.08), np.float32(0.628), np.float32(-0.064)]
+R4 maker pobl. con roster-maker previo mismo lado (A) vs sin (B): EV€ A +0.0153 (coste 2100298) vs B +0.0316 (coste 1352897) Δ -0.0164 IC90d (-0.0989,+0.0710) Δ sin2 -0.0658 días Δ>0 5/9
+R5 regla cancelar si roster-maker previo lado opuesto: mantener (A=sin opuesto) vs todo (B): EV€ A +0.0297 (coste 633846) vs B +0.0217 (coste 3453195) Δ +0.0081 IC90d (-0.1039,+0.1168) Δ sin2 -0.0719 días Δ>0 3/9
+R5b con opuesto (A) vs sin opuesto (B): EV€ A +0.0297 (coste 633846) vs B +0.0199 (coste 2819349) Δ +0.0099 IC90d (-0.1240,+0.1444) Δ sin2 -0.0876 días Δ>0 3/9
+R1 copia tomador: unidades roster 3213 con print siguiente 2398 | EV roster (sus fills) -0.0820 | EV copia print>=2s -0.0868 IC90d (-0.2199, 0.0448) coste copia 9837
+
+######## S4 ballenas_timing_history (ts<2026-10-14, 5m, precio 0,05-0,30)
+filas 0 rango nan nan
+BH_pre 0 wallets (de 0 con n>=20; 0 en on-chain)
+  BH_pre on-chain 14-21 sin datos
+  placebo media +0.0000 p95 +0.0000 p 1.000
+solape roster WF (89 wallets únicas) con wallet_edge_score 5m (3120): 33 [CIRCULAR, descriptivo]

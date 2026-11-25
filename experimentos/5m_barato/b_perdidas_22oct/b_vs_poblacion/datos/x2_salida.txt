@@ -1,0 +1,37 @@
+B rellenos totales 198 por dia {'10-20': 40, '10-21': 77, '10-22': 81} monedas {1: 80, 2: 65, 3: 53}
+B pc {'count': 198.0, 'mean': 0.213, 'std': 0.052, 'min': 0.11, '25%': 0.17, '50%': 0.22, '75%': 0.26, 'max': 0.29}
+cobertura desenlace (coste) P+B 1.0000  B 1.0000; B fuera de banda/sec: 0
+
+B: n=198 coste=204.5 pnl=-6.18 EV=-0.0302 | P: n=91383 coste=135100 EV=-0.0446 wallets=425
+EV P por dia {'10-20': -0.3227, '10-21': 0.165, '10-22': 0.1744}  B por dia {'10-20': 0.07, '10-21': 0.166, '10-22': -0.267} {'10-20': 40, '10-21': 77, '10-22': 81}
+EV P por moneda {1: -0.1048, 2: 0.0887, 3: 0.1584}  B {1: 0.014, 2: -0.006, 3: -0.124} {1: 80, 2: 65, 3: 53}
+SWEEP: B €0.199 filas0.182 | P €0.206 filas0.132
+MULTI: B €0.139 filas0.141 | P €0.367 filas0.279
+B MULTI n=28 P(ULT)=0.214 P(PRI)=0.714 nmk medio 2.32
+P MULTI n=25460 P(ULT)=0.420 P(PRI)=0.423 nmk medio 2.57
+  B EV SWEEP=1 -0.1136 (n=36) SWEEP=0 -0.0096 (n=162)
+  B EV MULTI=1 +0.0876 (n=28) MULTI=0 -0.0493 (n=170)
+  B MULTI: ULT +0.7059 (n=6) PRI -0.3239 (n=20)
+  P EV SWEEP=1 -0.0134 (n=12079) SWEEP=0 -0.0527 (n=79304)
+  P EV MULTI=1 -0.0722 (n=25460) MULTI=0 -0.0286 (n=65923)
+  P MULTI: ULT -0.0255 (n=10689) PRI -0.0599 (n=10777)
+
+Emparejado M60: B con pareja 196/198; EV_B (con pareja) -0.0285; EV M60 por € de B -0.0210; unión -0.1970 (n=3726)
+M60L (nivel ±1c): con pareja 156; EV_B -0.0049 vs M60L -0.0021
+
+estratos B 57, cubiertos en P 57 (€ 1.000)
+  solo moneda: EV_P reponderado +0.0285 (Δ vs EV_P +0.0731)
+  solo precio: EV_P reponderado -0.0644 (Δ vs EV_P -0.0198)
+  solo T: EV_P reponderado -0.0547 (Δ vs EV_P -0.0101)
+  solo tamaño: EV_P reponderado +0.0363 (Δ vs EV_P +0.0810)
+G=EV_B-REF=-0.0567 = (a) periodo+moneda -0.0711 + (b) composición +0.1047 + (c) mercado-momento -0.0811 + (d) residuo precio/cola -0.0092
+B y P por tamaño/T/precio (EV, n):
+  zb B {0: (np.float64(-0.153), 143), 1: (np.float64(0.287), 55)} P {0: np.float64(0.0205), 1: np.float64(0.0774), 2: np.float64(-0.1136)}
+  tb B {0: (np.float64(-0.143), 51), 1: (np.float64(-0.014), 63), 2: (np.float64(-0.021), 61), 3: (np.float64(0.166), 23)} P {0: np.float64(-0.0044), 1: np.float64(-0.0992), 2: np.float64(-0.0108), 3: np.float64(-0.1575), 4: np.float64(0.1328)}
+  pcb B {2: (np.float64(0.489), 34), 3: (np.float64(0.074), 39), 4: (np.float64(0.183), 63), 5: (np.float64(-0.445), 62)} P {1: np.float64(0.025), 2: np.float64(0.1655), 3: np.float64(-0.1141), 4: np.float64(-0.0837), 5: np.float64(-0.1106)}
+IC90 por fin (n=863): EV_B (-0.3035,+0.2500); EV_P (-0.1497,+0.0669); (b)comp (+0.0221,+0.1887); (c)merc-mom (-0.3475,+0.1917); (d)residuo (-0.0851,+0.0602); EV_B-EV_P (-0.2606,+0.3003); ΔP(SWEEP)€ (-0.0558,+0.0415)
+IC90 por dia (n=3): EV_B (-0.1979,+0.1453); EV_P (-0.2090,+0.1709); (b)comp (-0.0413,+0.2221); (c)merc-mom (-0.2823,+0.1384); (d)residuo (-0.0534,+0.0291); EV_B-EV_P (-0.2992,+0.3110); ΔP(SWEEP)€ (-0.0216,+0.0097)
+
+Contrafactual EV_B con mezcla SWEEP de P: -0.0309 (EV_B -0.0302; cierra -0.01 de (c)+(d))
+placebo pseudo-B (estratos iguales, n=198): EV media +0.0597 p5 -0.2063 p95 +0.3462; P(EV<=EV_B)=0.322 | SWEEP€ media 0.152 p95 0.201 P(>=B)=0.060
+EV_B sin 2 mejores días -0.2671 | EV_P mismos días 0.1744

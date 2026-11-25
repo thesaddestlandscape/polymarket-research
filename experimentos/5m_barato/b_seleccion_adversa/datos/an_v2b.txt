@@ -1,0 +1,38 @@
+POBLACION 17-21 Oct con libro: unidades 36125 EUR 34560 EV -0.041 | disc -0.055 hold -0.013
+cobertura 15m 0.961; vol30ws vs vol30 on-chain: corr log 0.800 ; acuerdo del umbral 26: 0.906
+max-null q95 3.59
+                     regla  evg_d  evb_d    t_d     ng_d   p_fw  valid  evg_h  evb_h    t_h     ng_h     nb_h
+174     d_open>=0.25(q0.5)  0.079 -0.161  9.436  11694.0  0.003   True  0.062 -0.074  3.774   6070.0   6136.0
+227        T<=244.4(q0.75)  0.007 -0.223  8.615  17970.0  0.003   True -0.011 -0.019  0.190   9361.0   2845.0
+172    d_open>=0.17(q0.25)  0.009 -0.203  8.151  17510.0  0.003   True  0.052 -0.158  5.646   8867.0   3339.0
+176    d_open>=0.34(q0.75)  0.152 -0.108  7.820   5837.0  0.003   True  0.203 -0.070  5.875   3081.0   9125.0
+170     d_open>=0.09(q0.1) -0.022 -0.260  7.192  21044.0  0.003   True  0.042 -0.342  8.672  10708.0   1498.0
+121   cl_dev<=-175.6(q0.1)  0.236 -0.086  6.947   2380.0  0.003   True  0.046 -0.040  2.190   3765.0   8441.0
+229         T<=275.8(q0.9) -0.030 -0.257  6.179  21543.0  0.003   True -0.015  0.004 -0.321  11091.0   1115.0
+225         T<=190.4(q0.5)  0.024 -0.127  6.017  11997.0  0.003   True -0.031  0.003 -0.966   6154.0   6052.0
+221          T<=92.6(q0.1)  0.192 -0.081  5.898   2404.0  0.003   True -0.102 -0.003 -1.725   1288.0  10918.0
+106  vol30ws>=301.2(q0.75)  0.069 -0.099  5.715   5982.0  0.003   True -0.082  0.021 -2.718   3803.0   8403.0
+93         gap15<=0(q0.25)  0.053 -0.093  4.981   5865.0  0.003   True  0.159 -0.068  5.204   2819.0   9387.0
+248                  hb!=5 -0.029 -0.178  4.759  19693.0  0.003   True -0.005 -0.073  1.290  10744.0   1462.0
+204       z>=-0.5422(q0.5) -0.006 -0.121  4.585  11960.0  0.003   True -0.042  0.020 -1.706   5552.0   6654.0
+129    cl_dev<=167.3(q0.9) -0.037 -0.208  4.556  21319.0  0.003   True  0.023 -0.095  3.104   8481.0   3725.0
+p_fw<0.10: 27 de 245
+poblacion lvl15<=0.03 disc EV +0.042 IC90d(+0.004,+0.084) sin2mejoresdias -0.015 dias+ 2/3 n=5969 €=5932
+poblacion lvl15<=0.03 hold EV +0.147 IC90d(+0.100,+0.296) sin2mejoresdias +nan dias+ 2/2 n=2826 €=2790
+poblacion lvl15 NaN disc EV +0.104 IC90d(-0.281,+0.698) sin2mejoresdias -0.540 dias+ 2/3 n=910 €=841
+poblacion lvl15 NaN hold EV +0.176 IC90d(+0.127,+0.192) sin2mejoresdias +nan dias+ 2/2 n=498 €=450
+poblacion lvl15>0.03 disc EV -0.099 IC90d(-0.133,-0.061) sin2mejoresdias -0.153 dias+ 0/3 n=17040 €=16178
+poblacion lvl15>0.03 hold EV -0.077 IC90d(-0.095,-0.031) sin2mejoresdias +nan dias+ 0/2 n=8882 €=8369
+
+== SIMULADOR con libro real: regla lvl15 (cotizar solo si bid15 - puja <= x) sola y con R1; dias 17-21 / disc / hold / por dia
+base                       n=3269 fr 0.76 EV -0.146 IC90d(-0.222,-0.067) sin2 -0.226 | disc -0.226 hold -0.026 | por dia {'17': np.float64(-0.192), '18': np.float64(-0.238), '19': np.float64(-0.247), '20': np.float64(-0.018), '21': np.float64(-0.033)} | EV_cotizadas +0.114
+lvl15<=0.03                n= 870 fr 0.67 EV +0.068 IC90d(-0.042,+0.153) sin2 +0.008 | disc +0.008 hold +0.160 | por dia {'17': np.float64(0.059), '18': np.float64(-0.177), '19': np.float64(0.142), '20': np.float64(0.158), '21': np.float64(0.162)} | EV_cotizadas +0.307
+lvl15<=0.05                n= 907 fr 0.68 EV +0.061 IC90d(-0.054,+0.146) sin2 +0.001 | disc +0.001 hold +0.151 | por dia {'17': np.float64(0.053), '18': np.float64(-0.194), '19': np.float64(0.143), '20': np.float64(0.131), '21': np.float64(0.173)} | EV_cotizadas +0.287
+lvl15<=0.10                n=1182 fr 0.55 EV -0.032 IC90d(-0.164,+0.053) sin2 -0.096 | disc -0.096 hold +0.063 | por dia {'17': np.float64(0.02), '18': np.float64(-0.317), '19': np.float64(0.012), '20': np.float64(0.056), '21': np.float64(0.069)} | EV_cotizadas +0.178
+lvl15<=0.03 & R1           n= 622 fr 0.63 EV +0.123 IC90d(+0.070,+0.179) sin2 +0.064 | disc +0.064 hold +0.209 | por dia {'17': np.float64(0.105), '18': np.float64(0.054), '19': np.float64(0.03), '20': np.float64(0.201), '21': np.float64(0.216)} | EV_cotizadas +0.370
+lvl15<=0.05 & R1           n= 649 fr 0.63 EV +0.116 IC90d(+0.063,+0.170) sin2 +0.059 | disc +0.059 hold +0.197 | por dia {'17': np.float64(0.088), '18': np.float64(0.049), '19': np.float64(0.036), '20': np.float64(0.185), '21': np.float64(0.209)} | EV_cotizadas +0.338
+lvl15<=0.03 | lvl15 NaN    n= 948 fr 0.72 EV +0.050 IC90d(-0.093,+0.151) sin2 -0.026 | disc -0.026 hold +0.165 | por dia {'17': np.float64(0.095), '18': np.float64(-0.257), '19': np.float64(0.1), '20': np.float64(0.169), '21': np.float64(0.161)} | EV_cotizadas +0.310
+lvl15<=0 (15m no mayor)    n= 801 fr 0.67 EV +0.094 IC90d(-0.001,+0.166) sin2 +0.037 | disc +0.037 hold +0.176 | por dia {'17': np.float64(0.122), '18': np.float64(-0.125), '19': np.float64(0.114), '20': np.float64(0.204), '21': np.float64(0.148)} | EV_cotizadas +0.322
+  lvl15<=0.03 ETH EV +0.028 IC90d(-0.069,+0.107) sin2mejoresdias -0.042 dias+ 4/5 n=341 €=389
+  lvl15<=0.03 SOL EV +0.097 IC90d(-0.092,+0.325) sin2mejoresdias -0.097 dias+ 3/5 n=275 €=305
+  lvl15<=0.03 XRP EV +0.092 IC90d(-0.155,+0.305) sin2mejoresdias -0.070 dias+ 4/5 n=254 €=279

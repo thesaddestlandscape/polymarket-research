@@ -1,0 +1,15 @@
+S_A (129 d): dias 129  D=-0.1018 IC90(-0.1471,-0.0563) p2=0.001 | DT=-0.1929 IC90(-0.2930,-0.0947) p2=0.004 | DR=-0.0967 IC90(-0.1652,-0.0262) p2=0.026 | I=-0.0962 IC90(-0.2110,+0.0210) p2=0.164 | 
+   Spearman(X_otros,Dp)=-0.079 p=0.3748; Spearman(X_total,Dp)=-0.590; Dp>0 en 0.860 dias; Dp medio dias Xo<mediana +4.98 vs >= +4.59
+S_D (2025): dias 349  D=-0.0763 IC90(-0.1024,-0.0513) p2=0.000 | DT=-0.1123 IC90(-0.1627,-0.0608) p2=0.000 | DR=-0.0437 IC90(-0.0841,-0.0043) p2=0.068 | I=-0.0686 IC90(-0.1287,-0.0068) p2=0.068 | 
+   Spearman(X_otros,Dp)=-0.061 p=0.2529; Spearman(X_total,Dp)=-0.647; Dp>0 en 0.837 dias; Dp medio dias Xo<mediana +5.42 vs >= +4.32
+S_A+S_D: dias 478  D=-0.0820 IC90(-0.1038,-0.0599) p2=0.000 | DT=-0.1289 IC90(-0.1739,-0.0840) p2=0.000 | DR=-0.0555 IC90(-0.0900,-0.0199) p2=0.009 | I=-0.0734 IC90(-0.1271,-0.0198) p2=0.025 | 
+   Spearman(X_otros,Dp)=-0.063 p=0.1672; Spearman(X_total,Dp)=-0.633; Dp>0 en 0.843 dias; Dp medio dias Xo<mediana +5.28 vs >= +4.41
+S_B oficial: dias 40  D=-0.1656 IC90(-0.2451,-0.0883) p2=0.000 | DT=-0.2095 IC90(-0.4007,-0.0378) p2=0.043 | DR=-0.1891 IC90(-0.3021,-0.0705) p2=0.009 | I=-0.0204 IC90(-0.2713,+0.1947) p2=0.890 | 
+   Spearman(X_otros,Dp)=-0.031 p=0.8505; Spearman(X_total,Dp)=-0.507; Dp>0 en 0.925 dias; Dp medio dias Xo<mediana +5.87 vs >= +6.04
+S_A+S_D+S_Bproxy: dias 520  D=-0.0885 IC90(-0.1109,-0.0675) p2=0.000 | DT=-0.1357 IC90(-0.1803,-0.0912) p2=0.000 | DR=-0.0646 IC90(-0.0980,-0.0315) p2=0.002 | I=-0.0710 IC90(-0.1246,-0.0188) p2=0.025 | 
+   Spearman(X_otros,Dp)=-0.071 p=0.1041; Spearman(X_total,Dp)=-0.629; Dp>0 en 0.856 dias; Dp medio dias Xo<mediana +5.41 vs >= +4.51
+S_D BTC: dias 349  D=-0.0679 IC90(-0.1110,-0.0259) p2=0.012 | DT=-0.0987 IC90(-0.1876,-0.0087) p2=0.075 | DR=-0.0404 IC90(-0.1163,+0.0335) p2=0.370 | I=-0.0583 IC90(-0.1723,+0.0587) p2=0.414 | 
+   Spearman(X_otros,Dp)=+0.013 p=0.8025; Spearman(X_total,Dp)=-0.510; Dp>0 en 0.748 dias; Dp medio dias Xo<mediana +1.23 vs >= +1.21
+S_D R=TREND: n 23094 Delta -0.1123
+S_D R=MIXTO: n 52632 Delta -0.0816
+S_D R=REVERT: n 35312 Delta -0.0437

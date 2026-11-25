@@ -1,0 +1,17 @@
+== W1 relleno explicado por prints L2 (nivel +-0,005 en [ts-6 s, ts+1 s]); missing = sin fichero de libro
+0xf074dc84     real         n= 346 (missing 52)  frac=0.945  IC90 mercados (0.925,0.965)
+0xf074dc84     placebo+90s  n= 346 (missing 52)  frac=0.020  IC90 mercados (0.009,0.035)
+0xf074dc84     placebo-90s  n= 346 (missing 52)  frac=0.003  IC90 mercados (0.000,0.009)
+0x0ab01745     real         n= 467 (missing 43)  frac=0.955  IC90 mercados (0.937,0.972)
+0x0ab01745     placebo+90s  n= 467 (missing 43)  frac=0.021  IC90 mercados (0.011,0.032)
+0x0ab01745     placebo-90s  n= 467 (missing 43)  frac=0.000  IC90 mercados (0.000,0.000)
+B_0x659a40ff   real         n= 183 (missing 0)  frac=0.814  IC90 mercados (0.765,0.858)
+B_0x659a40ff   placebo+90s  n= 183 (missing 0)  frac=0.011  IC90 mercados (0.000,0.027)
+B_0x659a40ff   placebo-90s  n= 183 (missing 0)  frac=0.000  IC90 mercados (0.000,0.000)
+
+== W2 volumen en banda (0,10-0,30], T<=300 s: L2 (prints normalizados) vs on-chain maker (todas wallets)
+mercados con libro 4507  unidades (mercado,lado) 9011
+ETH    sum_l2=    701816 sum_oc=    701907 razon_oc/l2=1.000 spearman=0.990 n=3010
+SOL    sum_l2=    196425 sum_oc=    193667 razon_oc/l2=0.986 spearman=0.988 n=3018
+XRP    sum_l2=     80969 sum_oc=     79012 razon_oc/l2=0.976 spearman=0.982 n=2983
+TODOS  sum_l2=    979210 sum_oc=    974585 razon_oc/l2=0.995 spearman=0.989 n=9011

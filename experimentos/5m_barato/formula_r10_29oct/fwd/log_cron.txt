@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/formula_r10_29oct/r10fwd.py", line 70, in <module>
+    assert CHK or d > D0, 'solo dias posteriores al congelado (%s)' % D0
+           ^^^^^^^^^^^^^
+AssertionError: solo dias posteriores al congelado (2026-10-29)

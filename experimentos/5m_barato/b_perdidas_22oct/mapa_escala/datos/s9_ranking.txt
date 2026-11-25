@@ -1,0 +1,51 @@
+TOP por score (facil>=2, score>0): 5
+marco coin     banda       clase     cap_oos     ev  ic_lo_dias  ev_oos  ev_oos_lo  ev_estres  pool_pnl_dia  capt_req_200k  expo_p95   top1  facil    score
+ 5min  ALL 0.90-0.99 PERSISTENTE 861533.2800 0.0069      0.0008  0.0120     0.0032    -0.0410    10315.6596         0.0531 7144.4330 0.0385      2 665.0908
+15min ALT3 0.90-0.99 PERSISTENTE  48355.1662 0.0205      0.0135  0.0175     0.0065    -0.0355      848.2233         0.6460  988.9239 0.0859      2 313.3967
+15min  ETH 0.90-0.99 PERSISTENTE  31651.6774 0.0246      0.0154  0.0236     0.0098    -0.0294      746.7202         0.7338  693.6595 0.1342      2 311.7171
+15min  ETH 0.70-0.90 PERSISTENTE  49558.3101 0.0266      0.0155  0.0172     0.0005    -0.0358      851.1896         0.6437  930.5090 0.1519      2  27.1794
+ 5min  BTC 0.90-0.99 PERSISTENTE 766649.8577 0.0069      0.0000  0.0122     0.0032    -0.0408     9383.0884         0.0584 6519.6918 0.0439      2  11.6982
+
+Niches con ev_estres (EV_oos - 0.053) > 0:
+marco coin     banda       clase    cap_oos     ev  ic_lo_dias  ev_oos  ev_oos_lo  ev_estres  pool_pnl_dia  capt_req_200k  expo_p95   top1  facil  score
+15min  BTC 0.05-0.10      FRAGIL 10072.1113 0.0376     -0.1922  0.2167    -0.1370     0.1637     2182.3098         0.2511  203.4919 0.0884      2    0.0
+15min  ALL 0.05-0.10      FRAGIL 13031.4705 0.0061     -0.1908  0.1566    -0.1367     0.1036     2040.5973         0.2685  248.9775 0.0707      2    0.0
+ 5min  SOL 0.20-0.30 PERSISTENTE  3773.7681 0.0797      0.0036  0.0792    -0.0120     0.0262      298.7439         1.8342   46.0589 0.1090      3    0.0
+ 5min  XRP 0.01-0.05      FRAGIL   407.9380 0.0888     -0.2689  0.6385     0.0004     0.5855      260.4796         2.1036    3.9225 0.2016      2    0.0
+ 5min  SOL 0.01-0.05      FRAGIL   624.9046 0.0333     -0.2203  0.4031     0.1122     0.3501      251.8933         2.1753    6.0242 0.0813      2    0.0
+15min  BNB 0.30-0.50      FRAGIL  2818.7194 0.0405     -0.0067  0.0573     0.0041     0.0043      161.4432         3.3940   64.6636 0.1934      2    0.0
+15min  BNB 0.05-0.10      FRAGIL   223.4594 0.3038     -0.0988  0.6474     0.2048     0.5944      144.6595         3.7878    4.4469 0.1057      2    0.0
+15min  BNB 0.10-0.20      FRAGIL   563.0830 0.1608     -0.0747  0.2416     0.0301     0.1886      136.0238         4.0283   11.9167 0.1343      2    0.0
+15min  XRP 0.10-0.20      FRAGIL   976.3870 0.1075     -0.0461  0.0920    -0.0267     0.0390       89.8414         6.0990   28.4040 0.1079      2    0.0
+ 5min DOGE 0.20-0.30      FRAGIL   666.8591 0.0377     -0.0632  0.1317    -0.0620     0.0787       87.8127         6.2399   10.7724 0.1072      3    0.0
+
+B-core 5m 0.10-0.30:
+ALT3 vol_dia 33904 ev 0.0509 desc 0.1343 oos -0.0488 expo_p95 271
+BTC vol_dia 268978 ev 0.0554 desc 0.0859 oos 0.0245 expo_p95 2104
+ALL vol_dia 305147 ev 0.0548 desc 0.0912 oos 0.0173 expo_p95 2293
+PERSISTENTE moneda n 7 cons 10610 base 53985 opt 321341 opt_reb 368509 pool_pnl_dia 17608
+PERS+FRAGIL moneda n 42 cons 10610 base 84483 opt 502876 opt_reb 697469 pool_pnl_dia 27555
+sin bandas>=0.70: cons 5807 base 36292 opt 216024 opt_reb 388891
+sin bandas>=0.70 y sin BTC: cons 170 base 7649 opt 45528
+estres base 8285
+estres opt 49317
+
+volumen total por marco (€/dia, cap_oos, todas bandas, ALL):
+marco
+15min     1764812.0
+240min      40460.0
+24h        118500.0
+5min      4606252.0
+60min      349924.0
+
+Conteo clases por marco/banda (moneda):
+clase      FRAGIL  NEGATIVO/CERO  PERSISTENTE  SOLO_DESCRIPTIVO(<10d)
+banda                                                                
+0.01-0.05       4              8            0                      15
+0.05-0.10       3              9            0                      15
+0.10-0.20       8              4            0                      15
+0.20-0.30       4              6            2                      15
+0.30-0.50       7              4            1                      15
+0.50-0.70       1             11            0                      15
+0.70-0.90       3              8            1                      15
+0.90-0.99       5              4            3                      15

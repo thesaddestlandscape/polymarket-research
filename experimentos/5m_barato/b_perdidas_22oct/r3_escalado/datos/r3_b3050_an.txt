@@ -1,0 +1,85 @@
+# R3 capacidad y escalado -- simulador CONS de E1 a ms (ETH/SOL/XRP 5m, 17-22 Oct; 22 hasta ~14:40Z)
+mercados con banda y desenlace: 4595 ; por dia {'2026-10-17': 830, '2026-10-18': 812, '2026-10-19': 824, '2026-10-20': 822, '2026-10-21': 832, '2026-10-22': 475}
+
+## 1. Capacidad (1 puja por mercado-lado, sin tope de 5 vivas)
+            mercados  con_r2  con_r3  rell_base  rell_r2  rell_r3  frac_t_r3  frac_t_has15
+dia                                                                                       
+2026-10-17       830     571     390        523      324      218   0.189136      0.946095
+2026-10-18       812     543     377        536      322      219   0.210492      0.923464
+2026-10-19       824     570     386        533      322      224   0.189495      0.966002
+2026-10-20       822     564     389        529      324      231   0.211910      0.971604
+2026-10-21       832     556     394        556      327      221   0.188062      0.952535
+2026-10-22       475     343     203        290      199      116   0.184714      0.976156
+media 17-21 (dias completos): mercados 824, con R3 alguna vez 387, rellenos BASE 535, R2 324, R3 223
+rellenos R3/dia por moneda (17-21): {'ETH': 98.2, 'SOL': 78.0, 'XRP': 46.4}
+rellenos R3/dia por hora UTC (17-21): {4: 11.8, 5: 11.4, 6: 11.0, 7: 10.0, 8: 10.0, 9: 12.8, 10: 13.8, 11: 13.4, 12: 11.6, 13: 11.2, 14: 12.0, 15: 12.2, 16: 11.4, 17: 8.8, 18: 11.2, 19: 8.8, 20: 11.2, 21: 12.0, 22: 7.8, 23: 10.2}
+EUR de puja rellenada R3/dia a 5 acc: 449.5 (precio medio 0.404)
+
+## 2. EV (5 acc fijas, como B y e1)
+BASE todos                   n= 2967 coste   5888.2 PnL   -953.2 EV -0.162 IC90d(-0.228,-0.070) IC90c(-0.205,-0.117) sin2 -0.222 dias+ 1/6 acierto 0.333 precio 0.397
+BASE flag R3 al rellenar     n=  852 coste   1738.2 PnL   -188.2 EV -0.108 IC90d(-0.213,+0.036) IC90c(-0.184,-0.033) sin2 -0.205 dias+ 1/6 acierto 0.364 precio 0.408
+BASE flag R3 falso           n= 2115 coste   4150.0 PnL   -765.0 EV -0.184 IC90d(-0.245,-0.116) IC90c(-0.235,-0.132) sin2 -0.230 dias+ 0/6 acierto 0.320 precio 0.392
+BASE flag R2                 n= 1611 coste   3287.9 PnL   -502.9 EV -0.153 IC90d(-0.243,-0.035) IC90c(-0.210,-0.096) sin2 -0.235 dias+ 1/6 acierto 0.346 precio 0.408
+BASE R2 falso                n= 1356 coste   2600.3 PnL   -450.3 EV -0.173 IC90d(-0.235,-0.107) IC90c(-0.239,-0.108) sin2 -0.207 dias+ 0/6 acierto 0.317 precio 0.384
+BASE sin bid15               n=   59 coste    113.0 PnL     -8.0 EV -0.070 IC90d(-0.334,+0.292) IC90c(-0.345,+0.215) sin2 -0.220 dias+ 4/6 acierto 0.356 precio 0.383
+POLITICA R2 DESC17-19  n=  968 coste   1961.5 PnL   -471.5 EV -0.240 IC90d(-0.264,-0.217) IC90c(-0.312,-0.166) sin2 -0.264 dias+ 0/3 acierto 0.308 precio 0.405
+POLITICA R2 TEST20-22  n=  850 coste   1727.8 PnL   -167.8 EV -0.097 IC90d(-0.242,+0.046) IC90c(-0.180,-0.017) sin2 -0.259 dias+ 1/3 acierto 0.367 precio 0.407
+POLITICA R2 todo       n= 1818 coste   3689.3 PnL   -639.3 EV -0.173 IC90d(-0.252,-0.060) IC90c(-0.227,-0.119) sin2 -0.245 dias+ 1/6 acierto 0.336 precio 0.406
+POLITICA R3 DESC17-19  n=  661 coste   1334.2 PnL   -354.2 EV -0.265 IC90d(-0.286,-0.245) IC90c(-0.347,-0.182) sin2 -0.299 dias+ 0/3 acierto 0.297 precio 0.404
+POLITICA R3 TEST20-22  n=  568 coste   1147.8 PnL   -122.8 EV -0.107 IC90d(-0.265,+0.055) IC90c(-0.203,-0.009) sin2 -0.300 dias+ 1/3 acierto 0.361 precio 0.404
+POLITICA R3 todo       n= 1229 coste   2482.0 PnL   -477.0 EV -0.192 IC90d(-0.276,-0.080) IC90c(-0.257,-0.128) sin2 -0.274 dias+ 1/6 acierto 0.326 precio 0.404
+POLITICA R3 solo 22-Oct (virgen para R2/R3; parcial) n=  116 coste    234.4 PnL    -29.5 EV -0.126 IC90d(+nan,+nan) IC90c(-0.335,+0.088) sin2 +nan dias+ 0/1 acierto 0.353 precio 0.404
+DIF (BASE flag R3 - no R3) = +0.076; placebo permutado dia x moneda: media -0.008, p95 +0.068, p(>=obs) 0.0350
+DIF por dia: {'2026-10-17': np.float64(-0.053), '2026-10-18': np.float64(0.136), '2026-10-19': np.float64(0.047), '2026-10-20': np.float64(-0.028), '2026-10-21': np.float64(0.282), '2026-10-22': np.float64(0.118)}
+
+## 3. Celdas de la politica R3 (EXPLORATORIO: 3 monedas + 4 bandas + 4 bloques horarios = 11 celdas, sin correccion)
+  act ETH            n=  554 coste   1107.8 PnL   -252.8 EV -0.228 IC90d(-0.312,-0.124) IC90c(-0.308,-0.150) sin2 -0.302 dias+ 1/6 acierto 0.309 precio 0.400
+  act SOL            n=  427 coste    862.2 PnL   -167.2 EV -0.194 IC90d(-0.316,-0.062) IC90c(-0.283,-0.105) sin2 -0.285 dias+ 2/6 acierto 0.326 precio 0.404
+  act XRP            n=  248 coste    512.0 PnL    -57.0 EV -0.111 IC90d(-0.307,+0.096) IC90c(-0.232,+0.009) sin2 -0.293 dias+ 2/6 acierto 0.367 precio 0.413
+  obj (0.25, 0.301]  n=   64 coste     94.0 PnL     -9.1 EV -0.096 IC90d(-0.445,+0.226) IC90c(-0.415,+0.238) sin2 -0.433 dias+ 2/6 acierto 0.266 precio 0.294
+  hora (3.5, 8.0]     n=  322 coste    654.7 PnL    -99.7 EV -0.152 IC90d(-0.221,-0.078) IC90c(-0.267,-0.040) sin2 -0.224 dias+ 0/6 acierto 0.345 precio 0.407
+  hora (8.0, 12.0]    n=  304 coste    614.9 PnL   -164.8 EV -0.268 IC90d(-0.412,-0.128) IC90c(-0.401,-0.133) sin2 -0.368 dias+ 1/6 acierto 0.296 precio 0.405
+  hora (12.0, 16.0]   n=  253 coste    510.9 PnL    -80.9 EV -0.158 IC90d(-0.278,-0.009) IC90c(-0.305,-0.012) sin2 -0.270 dias+ 2/6 acierto 0.340 precio 0.404
+  hora (16.0, 20.0]   n=  200 coste    396.5 PnL   -101.5 EV -0.256 IC90d(-0.521,+0.002) IC90c(-0.417,-0.091) sin2 -0.526 dias+ 2/5 acierto 0.295 precio 0.397
+  hora (20.0, 24.0]   n=  150 coste    305.0 PnL    -30.0 EV -0.098 IC90d(-0.195,+0.009) IC90c(-0.267,+0.078) sin2 -0.206 dias+ 2/5 acierto 0.367 precio 0.407
+
+## 4. Escalado de tamano: relleno(K) = min(K, acciones que atraviesan la puja en 1 s / 5 s desde el primer print)
+BASE V1: P(V>=5) 0.807 P(V>=10) 0.459 P(V>=20) 0.217 P(V>=50) 0.062 mediana 8.1
+BASE V5: P(V>=5) 0.857 P(V>=10) 0.585 P(V>=20) 0.335 P(V>=50) 0.116 mediana 12.0
+  BASE K= 5 V1 n= 2967 coste   5261.8 PnL   -856.3 EV -0.163 IC90d(-0.231,-0.067) IC90c(-0.208,-0.117) sin2 -0.226 dias+ 1/6 acierto 0.333 precio 0.398 | acc/dia 2205
+  BASE K=10 V1 n= 2967 coste   8456.1 PnL  -1362.8 EV -0.161 IC90d(-0.225,-0.070) IC90c(-0.206,-0.115) sin2 -0.223 dias+ 1/6 acierto 0.333 precio 0.399 | acc/dia 3536
+  BASE K=20 V1 n= 2967 coste  12042.7 PnL  -1871.8 EV -0.155 IC90d(-0.211,-0.082) IC90c(-0.204,-0.108) sin2 -0.205 dias+ 1/6 acierto 0.333 precio 0.399 | acc/dia 5027
+  BASE K=50 V1 n= 2967 coste  16027.0 PnL  -2318.0 EV -0.145 IC90d(-0.211,-0.064) IC90c(-0.201,-0.089) sin2 -0.198 dias+ 1/6 acierto 0.333 precio 0.400 | acc/dia 6670
+  BASE K= 5 V5 n= 2967 coste   5432.1 PnL   -880.3 EV -0.162 IC90d(-0.230,-0.067) IC90c(-0.207,-0.116) sin2 -0.227 dias+ 1/6 acierto 0.333 precio 0.398 | acc/dia 2277
+  BASE K=10 V5 n= 2967 coste   9306.8 PnL  -1564.7 EV -0.168 IC90d(-0.233,-0.076) IC90c(-0.214,-0.123) sin2 -0.231 dias+ 1/6 acierto 0.333 precio 0.398 | acc/dia 3900
+  BASE K=20 V5 n= 2967 coste  14418.6 PnL  -2482.8 EV -0.172 IC90d(-0.231,-0.085) IC90c(-0.219,-0.125) sin2 -0.227 dias+ 1/6 acierto 0.333 precio 0.398 | acc/dia 6036
+  BASE K=50 V5 n= 2967 coste  21327.7 PnL  -3689.3 EV -0.173 IC90d(-0.240,-0.081) IC90c(-0.226,-0.119) sin2 -0.231 dias+ 1/6 acierto 0.333 precio 0.399 | acc/dia 8913
+R3 V1: P(V>=5) 0.818 P(V>=10) 0.487 P(V>=20) 0.247 P(V>=50) 0.076 mediana 9.2
+R3 V5: P(V>=5) 0.876 P(V>=10) 0.622 P(V>=20) 0.374 P(V>=50) 0.135 mediana 13.7
+  R3 K= 5 V1 n= 1229 coste   2246.3 PnL   -422.9 EV -0.188 IC90d(-0.268,-0.080) IC90c(-0.253,-0.122) sin2 -0.269 dias+ 1/6 acierto 0.326 precio 0.405 | acc/dia 925
+  R3 K=10 V1 n= 1229 coste   3673.7 PnL   -695.4 EV -0.189 IC90d(-0.272,-0.080) IC90c(-0.257,-0.123) sin2 -0.273 dias+ 1/6 acierto 0.326 precio 0.406 | acc/dia 1507
+  R3 K=20 V1 n= 1229 coste   5351.5 PnL  -1049.9 EV -0.196 IC90d(-0.264,-0.108) IC90c(-0.268,-0.125) sin2 -0.264 dias+ 1/6 acierto 0.326 precio 0.407 | acc/dia 2193
+  R3 K=50 V1 n= 1229 coste   7370.5 PnL  -1549.5 EV -0.210 IC90d(-0.285,-0.110) IC90c(-0.293,-0.130) sin2 -0.274 dias+ 1/6 acierto 0.326 precio 0.407 | acc/dia 3018
+  R3 K= 5 V5 n= 1229 coste   2322.8 PnL   -444.3 EV -0.191 IC90d(-0.273,-0.082) IC90c(-0.257,-0.127) sin2 -0.273 dias+ 1/6 acierto 0.326 precio 0.404 | acc/dia 957
+  R3 K=10 V5 n= 1229 coste   4057.1 PnL   -789.7 EV -0.195 IC90d(-0.284,-0.071) IC90c(-0.261,-0.126) sin2 -0.283 dias+ 1/6 acierto 0.326 precio 0.405 | acc/dia 1670
+  R3 K=20 V5 n= 1229 coste   6406.2 PnL  -1274.5 EV -0.199 IC90d(-0.282,-0.091) IC90c(-0.267,-0.132) sin2 -0.278 dias+ 1/6 acierto 0.326 precio 0.405 | acc/dia 2635
+  R3 K=50 V5 n= 1229 coste   9838.7 PnL  -2172.8 EV -0.221 IC90d(-0.313,-0.097) IC90c(-0.293,-0.143) sin2 -0.303 dias+ 1/6 acierto 0.326 precio 0.405 | acc/dia 4049
+corr(tamano del barrido, acierto) y EV por tamano del barrido (R3, V1):
+  Spearman(V1, gana) = +0.006  (BASE: +0.017)
+  V1 [0.0, 5.0)     n=  224 coste    209.2 PnL    -35.8 EV -0.171 IC90d(-0.279,-0.043) IC90c(-0.322,-0.012) sin2 -0.261 dias+ 2/6 acierto 0.317 precio 0.401
+  V1 [5.0, 10.0)    n=  407 coste    817.7 PnL   -107.7 EV -0.132 IC90d(-0.232,+0.003) IC90c(-0.230,-0.031) sin2 -0.211 dias+ 1/6 acierto 0.349 precio 0.402
+  V1 [10.0, 20.0)   n=  294 coste    598.0 PnL   -148.1 EV -0.248 IC90d(-0.403,-0.079) IC90c(-0.355,-0.130) sin2 -0.391 dias+ 1/6 acierto 0.306 precio 0.407
+  V1 [20.0, 50.0)   n=  211 coste    433.5 PnL    -93.4 EV -0.216 IC90d(-0.297,-0.125) IC90c(-0.351,-0.083) sin2 -0.273 dias+ 0/6 acierto 0.322 precio 0.411
+  V1 [50.0, 1000000000.0) n=   93 coste    187.8 PnL    -37.8 EV -0.201 IC90d(-0.399,+0.074) IC90c(-0.397,+0.010) sin2 -0.408 dias+ 2/6 acierto 0.323 precio 0.404
+
+## 5. B real (unidades_b.csv, rellenos 20-22 Oct) con los mismos flags en su print (DESCRIPTIVO, n pequeno)
+todos n=  166 coste    183.4 PnL     +2.9 EV +0.016 IC90d(-0.149,+0.175) IC90c(-0.263,+0.311) sin2 -0.224 dias+ 2/3 acierto 0.217 precio 0.207
+sin print WS (missing) n=   22 coste     20.7 PnL     -8.7 EV -0.422 IC90d(-0.508,-0.356) IC90c(-0.911,+0.172) sin2 -0.392 dias+ 0/3 acierto 0.182 precio 0.206
+  R3 verdadero   n=   37 coste     42.9 PnL    +17.6 EV +0.410 IC90d(+0.102,+0.839) IC90c(-0.244,+1.247) sin2 -0.079 dias+ 2/3 acierto 0.270 precio 0.201
+  R3 falso       n=  107 coste    119.8 PnL     -6.0 EV -0.050 IC90d(-0.208,+0.093) IC90c(-0.383,+0.297) sin2 -0.242 dias+ 1/3 acierto 0.206 precio 0.209
+  R2 verdadero   n=   51 coste     60.3 PnL    +15.1 EV +0.250 IC90d(-0.058,+0.661) IC90c(-0.266,+0.883) sin2 -0.153 dias+ 2/3 acierto 0.255 precio 0.205
+  R2 falso       n=   93 coste    102.4 PnL     -3.5 EV -0.034 IC90d(-0.154,+0.097) IC90c(-0.387,+0.354) sin2 -0.224 dias+ 2/3 acierto 0.204 precio 0.208
+  sin bid15      n=    2 coste      2.3 PnL     +7.7 EV +3.255 IC90d(+3.167,+3.348) IC90c(+3.167,+3.348) sin2 +nan dias+ 2/2 acierto 1.000 precio 0.235
+B real barrido (acciones al precio de B o mejor, 1 s): P(>=10) 0.50 P(>=20) 0.22 mediana 10; estrictamente por debajo: mediana 0, P(>=5) 0.36
+  B real r3=0.0: por moneda {'ETH': (35, np.float64(-0.285)), 'SOL': (37, np.float64(0.311)), 'XRP': (35, np.float64(-0.196))}
+  B real r3=1.0: por moneda {'ETH': (20, np.float64(0.814)), 'SOL': (11, np.float64(-1.0)), 'XRP': (6, np.float64(1.664))}

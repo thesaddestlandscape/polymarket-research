@@ -1,0 +1,54 @@
+cobertura desenlace (coste) M 1.0000 T 1.0000; M fills 3671606 coste 6513625; T 8305585 coste 97326944
+S=379 pool A=3810 BAD=1810
+
+== H1 (S fijo DESC, medido HOLD) ==
+H1 S HOLD: n_unid_bandera=11101 dias=10 frac€=0.633 EV_all=+0.0265 EV_flag=+0.0205 EV_noflag=+0.0367 DELTA=-0.0162 EXCESO=+0.0103 IC90dia=(-0.0290,+0.0508) IC90cierre=(-0.0285,+0.0495) sin2=-0.0191 diasEXC>0=6/10
+H1 S HOLD BTC: n_unid_bandera=3911 dias=10 frac€=0.675 EV_all=+0.0258 EV_flag=+0.0173 EV_noflag=+0.0434 DELTA=-0.0261 EXCESO=+0.0176 IC90dia=(-0.0316,+0.0661) IC90cierre=(-0.0271,+0.0636) sin2=-0.0204 diasEXC>0=7/10
+H1 S HOLD ALT: n_unid_bandera=7190 dias=10 frac€=0.325 EV_all=+0.0313 EV_flag=+0.0693 EV_noflag=+0.0130 DELTA=+0.0563 EXCESO=-0.0183 IC90dia=(-0.0535,+0.0210) IC90cierre=(-0.0530,+0.0153) sin2=-0.0430 diasEXC>0=4/10
+H1 S DESC (in-sample, descriptivo): n_unid_bandera=5792 dias=6 frac€=0.566 EV_all=+0.0948 EV_flag=-0.0272 EV_noflag=+0.2543 DELTA=-0.2815 EXCESO=+0.1595 IC90dia=(+0.1338,+0.1854) IC90cierre=(+0.1151,+0.2074) sin2=+0.1388 diasEXC>0=6/6
+CTRL todas tomadoras F_all>0 HOLD: n_unid_bandera=19290 dias=10 frac€=0.864 EV_all=+0.0265 EV_flag=+0.0348 EV_noflag=-0.0264 DELTA=+0.0612 EXCESO=-0.0528 IC90dia=(-0.1347,+0.0355) IC90cierre=(-0.1174,+0.0117) sin2=-0.1071 diasEXC>0=4/10
+INV malas F_BAD>0 HOLD: n_unid_bandera=14999 dias=10 frac€=0.728 EV_all=+0.0265 EV_flag=+0.0274 EV_noflag=+0.0240 DELTA=+0.0033 EXCESO=-0.0024 IC90dia=(-0.0586,+0.0529) IC90cierre=(-0.0541,+0.0430) sin2=-0.0349 diasEXC>0=5/10
+placebo DELTA: media +0.0067 sd 0.0323 p5 -0.0465; obs -0.0162; p=0.242
+top S wallets por coste bandera: [('0xe29042f5', np.float64(0.333)), ('0x129246be', np.float64(0.145)), ('0x3b840769', np.float64(0.112))]
+
+== H1-WF ==
+H1-WF 09-21: n_unid_bandera=12247 dias=13 frac€=0.547 EV_all=+0.0288 EV_flag=+0.0452 EV_noflag=+0.0089 DELTA=+0.0363 EXCESO=-0.0199 IC90dia=(-0.0375,-0.0039) IC90cierre=(-0.0497,+0.0109) sin2=-0.0259 diasEXC>0=4/13
+H1-WF HOLD 12-21: n_unid_bandera=9255 dias=10 frac€=0.554 EV_all=+0.0265 EV_flag=+0.0479 EV_noflag=-0.0002 DELTA=+0.0481 EXCESO=-0.0266 IC90dia=(-0.0490,-0.0056) IC90cierre=(-0.0586,+0.0059) sin2=-0.0363 diasEXC>0=3/10
+
+== H2 nichos ==
+celdas seleccionadas DESC (q<0,10): []
+top 8 celdas DESC por p: [('DOGE/h12/0.15-0.30', np.float64(0.158), np.float64(0.0025)), ('BTC/h18/0.05-0.15', np.float64(0.294), np.float64(0.0208)), ('BTC/h12/0.15-0.30', np.float64(0.166), np.float64(0.0337)), ('BTC/h06/0.05-0.15', np.float64(0.289), np.float64(0.039)), ('XRP/h00/0.05-0.15', np.float64(0.265), np.float64(0.0413)), ('BTC/h06/0.15-0.30', np.float64(0.127), np.float64(0.0548)), ('DOGE/h18/0.05-0.15', np.float64(0.425), np.float64(0.0641)), ('ETH/h00/0.15-0.30', np.float64(0.127), np.float64(0.0744))]
+
+== H3 descriptivo moneda x lado x banda x T ==
+Spearman DESC↔HOLD 96 celdas: -0.168 (n=96)
+celdas >+0,02 en DESC y HOLD (coste HOLD>20k): [('BTC/Up/0.15-0.30/T60-120', np.float64(0.109), np.float64(0.069), 287047), ('BTC/Up/0.15-0.30/T120-240', np.float64(0.06), np.float64(0.059), 650146), ('BTC/Down/0.05-0.15/T0-60', np.float64(0.375), np.float64(0.041), 68974), ('BTC/Down/0.05-0.15/T60-120', np.float64(0.5), np.float64(0.096), 143833), ('BTC/Down/0.15-0.30/T0-60', np.float64(0.224), np.float64(0.085), 118701), ('BTC/Down/0.15-0.30/T60-120', np.float64(0.021), np.float64(0.099), 304677), ('ETH/Down/0.15-0.30/T120-240', np.float64(0.072), np.float64(0.189), 47043), ('ETH/Down/0.15-0.30/T240-300', np.float64(0.237), np.float64(0.047), 28467)]
+  BTC Up T0-60: DESC -0.0680 HOLD +0.0785 costeHOLD 192814
+  BTC Up T60-120: DESC +0.0634 HOLD +0.0481 costeHOLD 420416
+  BTC Up T120-240: DESC +0.0891 HOLD +0.0398 costeHOLD 853850
+  BTC Up T240-300: DESC -0.0333 HOLD -0.0355 costeHOLD 294624
+  BTC Down T0-60: DESC +0.2785 HOLD +0.0692 costeHOLD 187675
+  BTC Down T60-120: DESC +0.1678 HOLD +0.0982 costeHOLD 448511
+  BTC Down T120-240: DESC +0.1167 HOLD -0.0223 costeHOLD 817219
+  BTC Down T240-300: DESC +0.1658 HOLD -0.0209 costeHOLD 315118
+  ALT Up T0-60: DESC +0.1081 HOLD +0.0736 costeHOLD 38820
+  ALT Up T60-120: DESC +0.0554 HOLD -0.0562 costeHOLD 56480
+  ALT Up T120-240: DESC +0.0703 HOLD -0.0829 costeHOLD 104243
+  ALT Up T240-300: DESC +0.2522 HOLD -0.0549 costeHOLD 44185
+  ALT Down T0-60: DESC -0.1174 HOLD +0.0580 costeHOLD 39373
+  ALT Down T60-120: DESC +0.0136 HOLD +0.0849 costeHOLD 59148
+  ALT Down T120-240: DESC +0.0599 HOLD +0.1754 costeHOLD 91891
+  ALT Down T240-300: DESC +0.3031 HOLD +0.0655 costeHOLD 45094
+
+== H4 flujo de todas las tomadoras ==
+H4 ALL HOLD: EV_keep=+0.0348 EV_cancel=-0.0264 EV_all=+0.0265 EXCESO=+0.0083 IC90dia=(-0.0058,+0.0226) IC90cierre=(-0.0020,+0.0187) sin2=-0.0015 dias>0=6/10 frac€keep=0.864
+H4 BTC HOLD: EV_keep=+0.0347 EV_cancel=-0.0403 EV_all=+0.0258 EXCESO=+0.0089 IC90dia=(-0.0049,+0.0225) IC90cierre=(-0.0012,+0.0193) sin2=-0.0009 dias>0=6/10 frac€keep=0.882
+H4 ALT HOLD: EV_keep=+0.0357 EV_cancel=+0.0191 EV_all=+0.0313 EXCESO=+0.0045 IC90dia=(-0.0177,+0.0252) IC90cierre=(-0.0147,+0.0258) sin2=-0.0067 dias>0=6/10 frac€keep=0.733
+  F<0 DESC: EV=-0.0236 coste=340410 reb=+0.0108
+  F<0 HOLD: EV=-0.0262 coste=538082 reb=+0.0108
+  F=0 DESC: EV=-0.0878 coste=5192 reb=+0.0112
+  F=0 HOLD: EV=-0.0407 coste=7819 reb=+0.0112
+  F>0 DESC: EV=+0.1139 coste=2158561 reb=+0.0112
+  F>0 HOLD: EV=+0.0348 coste=3463560 reb=+0.0113
+n unidades keep HOLD 19290
+H4 placebo: media -0.0006 p95 +0.0008 obs +0.0083 p=0.000
+diario EXCESO: 10-12:+0.022 10-13:-0.023 10-14:+0.004 10-15:+0.046 10-16:+0.018 10-17:-0.039 10-18:-0.006 10-19:-0.017 10-20:+0.020 10-21:+0.048

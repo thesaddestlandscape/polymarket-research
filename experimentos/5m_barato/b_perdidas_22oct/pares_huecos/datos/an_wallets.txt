@@ -1,0 +1,50 @@
+== SELECCION POR CONDUCTA en 17-19 (sin mirar PnL): pareadoras 63 | direccionales 756 | mixtas 147
+PAREADORAS DESC 17-19: wallets 63 merc 21345 vol 876,323 $ | PnL/vol +0.0028 IC90dias (np.float64(-0.0028), np.float64(0.0088)) | par +0.0544 residuo -0.0423 comision -0.0094 | ambos 0.77 maker 0.61 | por dia {'2026-10-17': 0.0117, '2026-10-18': 0.0024, '2026-10-19': -0.0051}
+PAREADORAS TEST 20-22: wallets 51 merc 15604 vol 874,956 $ | PnL/vol +0.0003 IC90dias (np.float64(-0.0049), np.float64(0.0079)) | par +0.0561 residuo -0.0473 comision -0.0085 | ambos 0.75 maker 0.65 | por dia {'2026-10-20': -0.0035, '2026-10-21': -0.0057, '2026-10-22': 0.0201}
+DIRECCIONALES (placebo) DESC 17-19: wallets 756 merc 115144 vol 1,472,359 $ | PnL/vol -0.0028 IC90dias (np.float64(-0.0119), np.float64(0.0092)) | par +0.0021 residuo +0.0025 comision -0.0074 | ambos 0.03 maker 0.46 | por dia {'2026-10-16': -0.0001, '2026-10-17': -0.0057, '2026-10-18': -0.0119, '2026-10-19': 0.0092}
+DIRECCIONALES (placebo) TEST 20-22: wallets 626 merc 88287 vol 1,488,067 $ | PnL/vol -0.0120 IC90dias (np.float64(-0.0176), np.float64(-0.0088)) | par +0.0029 residuo -0.0073 comision -0.0076 | ambos 0.06 maker 0.46 | por dia {'2026-10-20': -0.0086, '2026-10-21': -0.0093, '2026-10-22': -0.0248}
+MIXTAS DESC 17-19: wallets 147 merc 63838 vol 1,391,699 $ | PnL/vol -0.0182 IC90dias (np.float64(-0.0297), np.float64(-0.0031)) | par -0.0070 residuo -0.0010 comision -0.0102 | ambos 0.38 maker 0.55 | por dia {'2026-10-17': -0.0185, '2026-10-18': 0.0056, '2026-10-19': -0.0339}
+MIXTAS TEST 20-22: wallets 122 merc 49497 vol 1,080,231 $ | PnL/vol -0.0095 IC90dias (np.float64(-0.0149), np.float64(0.001)) | par +0.0016 residuo -0.0032 comision -0.0078 | ambos 0.39 maker 0.67 | por dia {'2026-10-20': -0.0169, '2026-10-21': -0.0088, '2026-10-22': 0.0099}
+TODAS las wallets TEST 20-22: wallets 3058 merc 194269 vol 4,334,117 $ | PnL/vol -0.0101 IC90dias (np.float64(-0.0104), np.float64(-0.0096)) | par +0.0197 residuo -0.0197 comision -0.0101 | ambos 0.23 maker 0.50 | por dia {'2026-10-20': -0.0106, '2026-10-21': -0.0096, '2026-10-22': -0.0095}
+
+== PAREADORAS por wallet en TEST (ordenadas por vol):
+                                               n         vol       pnl        par        res       fee  ambos     ev
+wallet                                                                                                              
+0x43e7e4b6a5dc71663d12cbf16b28468095a5472a  1340  168931.080  2553.411  14723.614 -11440.737   729.467  0.786  0.015
+0xae68447c01fc86864fd0e5e58aae986eeb8abf83   748  144693.326   601.472   9326.270  -8724.798     0.000  0.991  0.004
+0x0c7c5204404e9d5402d258fedac59c7212bae4cb  1480   93958.068 -2312.276   1625.675  -2077.835  1860.116  0.720 -0.025
+0xa64552f2d51167cc34b698992aa7e78e47a3ccb2   717   67267.789   -94.070   3820.150  -3667.092   247.128  0.706 -0.001
+0xb9587c373c773d023f47c2f85a30b3d5bddcf513  1407   58532.009   365.599   5347.760  -3474.673  1507.488  0.768  0.006
+0xb55fa1296e6ec55d0ce53d93b9237389f11764d4   876   43256.138  -125.060   2391.378  -1841.344   675.094  0.882 -0.003
+0x41e2e1ccf1e4940029af02259a31c6b89b9fa354   873   38621.723    57.281   1994.348   -720.639  1216.428  0.710  0.001
+0x0ab017457876f72dd704bc3f6298b96135f34dd3   730   37007.339   543.978   1502.750   -958.771     0.000  0.925  0.015
+0x2be9dccdcc653b520caa78fc9b5ec7c5eec4508e   723   35145.645  -165.888  -2273.320   2107.433     0.000  0.640 -0.005
+0xf074dc84e438e22488da4e078fad1be62ede723b   473   28987.172   322.518    730.159   -407.641     0.000  0.964  0.011
+0x0ae4a8d6146c304d69208cdf114129e63c67fb39  1290   28235.591   192.709   4330.708  -4137.547     0.452  0.734  0.007
+0x6cc922b1dedc1b5b1c139e1c5f2593dc1b4b6274   743   28014.100   239.953   1148.301   -908.348     0.000  0.891  0.009
+0x31393e2f8333d4a6e2e31ca6424defe8b6cb9e2e   634   26246.054   875.754   1318.498   -164.163   278.582  0.708  0.033
+0x91a0b0cf8bb0ab06bcd3d6ae8dfc3dfe8b6d1257   542   15623.650    48.530    139.826    -78.807    12.489  0.930  0.003
+0x38783bea7c25350b261350585ad2b014cc9db416    76   15182.732  -732.388   1363.427  -1714.637   381.177  0.855 -0.048
+0x9d57c42e847173d06841703825d3fe2299e456ea   311   10871.411  -136.059     87.206   -176.686    46.580  0.669 -0.013
+0xe221d32c35ae6952ef5b8a74ef95e370bfb59eab   207    5774.651  -707.169   -109.241   -597.928     0.000  0.449 -0.122
+0xe803dc0a1fc4a7779481e20de58b00c9c23b6ce8   203    4583.813  -245.271    -27.856   -132.353    85.061  0.335 -0.054
+0x252b863865f43468f60e9a834fccb28b3543dfa6    63    2378.559  -105.138     17.184    -46.972    75.350  0.905 -0.044
+0xf0c86d68570414a724eee2159fca8cb52f5d6f65   242    2372.788    26.045    149.802    -96.595    27.162  0.616  0.011
+0x8ff67d216aba44a725cdcd712c55e76db8137273   133    2134.181   -45.797     89.617   -135.351     0.063  0.534 -0.021
+0xbed1a73b52f5788959c61696f89a856bd6ecb1b0   121    2122.065    47.401    124.953    -59.956    17.596  0.893  0.022
+0x0dd8d5afd111221d721aa36c872a173115ac8883    19    1852.410    55.234    149.319    -66.736    27.349  0.895  0.030
+0xcae2e2ce07d5d08c2f44209518a492141cc5da48    61    1761.502  -179.721    187.369   -307.236    59.854  0.689 -0.102
+0x96dae98cf22fabbe85f6e0d586195266853569ff    76    1368.026    -9.874     12.971    -20.997     1.849  0.895 -0.007
+pareadoras con PnL TEST > 0: 17 de 51
+PAREADORAS mitad MEJOR en DESC -> TEST: wallets 26 merc 12174 vol 797,713 $ | PnL/vol +0.0031 IC90dias (np.float64(-0.0019), np.float64(0.0105)) | par +0.0531 residuo -0.0417 comision -0.0083 | ambos 0.79 maker 0.66 | por dia {'2026-10-20': 0.0016, '2026-10-21': -0.0039, '2026-10-22': 0.0199}
+PAREADORAS mitad PEOR en DESC -> TEST: wallets 25 merc 3430 vol 77,243 $ | PnL/vol -0.0280 IC90dias (np.float64(-0.0433), np.float64(0.0005)) | par +0.0874 residuo -0.1048 comision -0.0106 | ambos 0.60 maker 0.58 | por dia {'2026-10-20': -0.0476, '2026-10-21': -0.0291, '2026-10-22': 0.023}
+
+== CASOS
+0x41e2e1cc 17-19: wallets 1 merc 1609 vol 64,646 $ | PnL/vol -0.0032 IC90dias (np.float64(-0.0121), np.float64(0.0051)) | par +0.0328 residuo -0.0063 comision -0.0297 | ambos 0.67 maker 0.00 | por dia {'2026-10-17': 0.0036, '2026-10-18': -0.0214, '2026-10-19': 0.0061}
+0x41e2e1cc 20-22: wallets 1 merc 873 vol 38,622 $ | PnL/vol +0.0015 IC90dias (np.float64(-0.0281), np.float64(0.0179)) | par +0.0516 residuo -0.0187 comision -0.0315 | ambos 0.71 maker 0.00 | por dia {'2026-10-20': 0.0179, '2026-10-21': -0.0281}
+  0x41e2e1cc: monedas {'ETH': 1266, 'SOL': 1216} | merc/dia 496 | rellenos/merc mediana 4 | acc/merc mediana 67 | coste par mediana 0.944 (p25 0.800 p75 1.060) % par>1 0.27 | residuo frac mediana 0.48
+  residuo: lado sobrante gana 0.391 (n=2326); precio medio pagado del lado sobrante 0.401
+mo-money 0x32ed2e54 17-19: wallets 1 merc 383 vol 15,923 $ | PnL/vol +0.0499 IC90dias (np.float64(-0.0179), np.float64(0.1026)) | par +0.0034 residuo +0.0486 comision -0.0021 | ambos 0.12 maker 0.91 | por dia {'2026-10-17': 0.0451, '2026-10-18': -0.0469, '2026-10-19': 0.1214}
+mo-money 0x32ed2e54 20-22: wallets 1 merc 222 vol 9,924 $ | PnL/vol -0.0294 IC90dias (np.float64(-0.0599), np.float64(0.0368)) | par -0.0354 residuo +0.0112 comision -0.0052 | ambos 0.20 maker 0.81 | por dia {'2026-10-20': -0.0456, '2026-10-21': 0.0675, '2026-10-22': -0.1322}
+  mo-money 0x32ed2e54: monedas {'ETH': 308, 'XRP': 166, 'SOL': 131} | merc/dia 101 | rellenos/merc mediana 1 | acc/merc mediana 31 | coste par mediana 1.145 (p25 0.959 p75 1.319) % par>1 0.11 | residuo frac mediana 1.00
+  residuo: lado sobrante gana 0.595 (n=573); precio medio pagado del lado sobrante 0.556

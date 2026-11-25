@@ -1,0 +1,52 @@
+## (1) Poblacion (otros makers, primeras 5 acc por maker-mercado-lado), ETH/SOL/XRP 5m banda 0,10-0,30, 17-21 Oct (21 parcial)
+R3: unidades/dia 1316; EUR/dia 1318; mercados-lado distintos/dia 211; cierres distintos/dia 111; makers distintos/dia 119
+Todo (sin regla): unidades/dia 7225; EUR/dia 6912; mercados-lado/dia 945
+         u      eur     ev
+act                       
+ETH  823.4  838.342  0.055
+SOL  333.8  331.828  0.240
+XRP  158.6  147.597  0.164
+                  u      eur     ev
+hora                               
+(3.5, 8.0]    397.4  392.768  0.270
+(8.0, 12.0]   260.0  262.593  0.301
+(12.0, 16.0]  251.2  253.359  0.118
+(16.0, 20.0]  251.6  251.873 -0.181
+(20.0, 24.0]  155.6  157.173 -0.123
+
+## (2) Techo anual de la politica R3 (1 puja por mercado, ETH/SOL/XRP, sin tope de vivas; simulador E1 dias completos 17-21)
+rellenos R3/dia 130; cierres con relleno R3/dia 89
+K  EUR/dia  | anual EV cons 0 | base +0,03 | optimista +0,11 (todo con el deterioro por K del simulador; rebate +0,011 aparte)
+ 5   136.3 |        0 |     1492 |     5472 | rebate    547
+10   215.1 |        0 |     1570 |     7852 | rebate    864
+20   317.4 |        0 |     1506 |    10774 | rebate   1274
+50   442.9 |        0 |        0 |     7112 | rebate   1778
+
+## (3) Riesgo de ruina y capital por peldano (Monte Carlo 20.000 trayectorias)
+racimo por cierre: media 1.47, P(>=2) 0.37, max 3
+K= 5 N= 300 e=-0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 0.99 P(DD>=50$) 0.48 P(DD>=100$) 0.03 | DD P90   82.7 P95   93.3 $ | PnL medio   -16.0 sd   38.8
+K= 5 N= 300 e=+0.00: P(DD>=5,12$) 1.00 P(DD>=20$) 0.97 P(DD>=50$) 0.35 P(DD>=100$) 0.01 | DD P90   72.6 P95   82.5 $ | PnL medio    -0.4 sd   39.6
+K= 5 N= 300 e=+0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 0.95 P(DD>=50$) 0.23 P(DD>=100$) 0.01 | DD P90   63.3 P95   72.6 $ | PnL medio   +15.4 sd   40.2
+K= 5 N= 300 e=+0.10: P(DD>=5,12$) 1.00 P(DD>=20$) 0.91 P(DD>=50$) 0.15 P(DD>=100$) 0.00 | DD P90   55.6 P95   64.2 $ | PnL medio   +31.2 sd   40.9
+K= 5 N=1000 e=-0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 0.96 P(DD>=100$) 0.55 | DD P90  173.4 P95  194.7 $ | PnL medio   -52.8 sd   70.5
+K= 5 N=1000 e=+0.00: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 0.88 P(DD>=100$) 0.30 | DD P90  136.3 P95  155.2 $ | PnL medio    -0.3 sd   71.9
+K= 5 N=1000 e=+0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 0.74 P(DD>=100$) 0.13 | DD P90  106.4 P95  123.4 $ | PnL medio   +52.3 sd   73.2
+K= 5 N=1000 e=+0.10: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 0.55 P(DD>=100$) 0.04 | DD P90   85.4 P95   97.7 $ | PnL medio  +104.8 sd   74.4
+K=10 N= 500 e=-0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 0.99 P(DD>=100$) 0.75 | DD P90  225.8 P95  254.3 $ | PnL medio   -53.3 sd  100.0
+K=10 N= 500 e=+0.00: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 0.98 P(DD>=100$) 0.60 | DD P90  190.5 P95  218.2 $ | PnL medio    -1.0 sd  102.0
+K=10 N= 500 e=+0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 0.96 P(DD>=100$) 0.44 | DD P90  159.4 P95  185.2 $ | PnL medio   +51.5 sd  103.6
+K=10 N= 500 e=+0.10: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 0.92 P(DD>=100$) 0.29 | DD P90  135.1 P95  156.4 $ | PnL medio  +104.2 sd  105.5
+K=25 N=1000 e=-0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 1.00 P(DD>=100$) 1.00 | DD P90  867.0 P95  973.5 $ | PnL medio  -263.9 sd  352.6
+K=25 N=1000 e=+0.00: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 1.00 P(DD>=100$) 1.00 | DD P90  681.5 P95  776.0 $ | PnL medio    -1.6 sd  359.3
+K=25 N=1000 e=+0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 1.00 P(DD>=100$) 1.00 | DD P90  532.0 P95  617.0 $ | PnL medio  +261.4 sd  365.8
+K=25 N=1000 e=+0.10: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 1.00 P(DD>=100$) 1.00 | DD P90  427.0 P95  488.5 $ | PnL medio  +524.1 sd  372.2
+K=50 N=1000 e=-0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 1.00 P(DD>=100$) 1.00 | DD P90 1734.0 P95 1947.0 $ | PnL medio  -527.9 sd  705.2
+K=50 N=1000 e=+0.00: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 1.00 P(DD>=100$) 1.00 | DD P90 1363.0 P95 1552.0 $ | PnL medio    -3.2 sd  718.5
+K=50 N=1000 e=+0.05: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 1.00 P(DD>=100$) 1.00 | DD P90 1064.0 P95 1234.0 $ | PnL medio  +522.8 sd  731.5
+K=50 N=1000 e=+0.10: P(DD>=5,12$) 1.00 P(DD>=20$) 1.00 P(DD>=50$) 1.00 P(DD>=100$) 1.00 | DD P90  854.0 P95  977.0 $ | PnL medio +1048.2 sd  744.5
+
+Potencia (aprox. normal, efecto racimo incluido): N para que el IC90 del EV excluya 0 con prob. 0,8 si EV real = e
+  e=+0.03: N ~ 29,867 rellenos (~229 dias a la capacidad R3 completa; ~807 dias al ritmo de B real ~37/dia)
+  e=+0.05: N ~ 10,752 rellenos (~82 dias a la capacidad R3 completa; ~291 dias al ritmo de B real ~37/dia)
+  e=+0.10: N ~ 2,688 rellenos (~21 dias a la capacidad R3 completa; ~73 dias al ritmo de B real ~37/dia)
+  e=+0.15: N ~ 1,195 rellenos (~9 dias a la capacidad R3 completa; ~32 dias al ritmo de B real ~37/dia)

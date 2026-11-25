@@ -1,0 +1,38 @@
+dias ['2026-10-20', '2026-10-21', '2026-10-22'] mercados validos con fill sim {'2026-10-20': 95, '2026-10-21': 96, '2026-10-22': 96} | mercados reales por wallet: {'0x21f4c1a1': 276, '0x86b14772': 276, '0xe29042f5': 281}
+REAL 0x21f4c1a1 EV(+reb)/dia {'20': np.float64(0.0596), '21': np.float64(-0.0003), '22': np.float64(0.019)} total 0.0253 fills 15361
+REAL 0x86b14772 EV(+reb)/dia {'20': np.float64(0.0494), '21': np.float64(0.0412), '22': np.float64(0.0243)} total 0.0382 fills 3505
+REAL 0xe29042f5 EV(+reb)/dia {'20': np.float64(-0.0024), '21': np.float64(-0.0157), '22': np.float64(0.0611)} total 0.0138 fills 16992
+SIM V2A EV(+reb)/dia {'20': np.float64(-0.0941), '21': np.float64(-0.1018), '22': np.float64(-0.0998)} total -0.0986 sin reb -0.1056 fills 2406 acc/mercado-lado med 200.0
+SIM V2B EV(+reb)/dia {'20': np.float64(-0.0502), '21': np.float64(-0.0623), '22': np.float64(-0.072)} total -0.0616 sin reb -0.0672 fills 4543 acc/mercado-lado med 300.0
+
+CRITERIO por variante x wallet: dias con |dEV|<=0.005 y mismo signo / dias; error medio (sim-real)
+V2A 0x21f4c1a1: error<=0.5pp+signo 0/3 ; solo signo 1/3 ; error medio -0.1247 ; |error| medio 0.1247
+V2A 0x86b14772: error<=0.5pp+signo 0/3 ; solo signo 0/3 ; error medio -0.1369 ; |error| medio 0.1369
+V2A 0xe29042f5: error<=0.5pp+signo 0/3 ; solo signo 2/3 ; error medio -0.1129 ; |error| medio 0.1129
+V2B 0x21f4c1a1: error<=0.5pp+signo 0/3 ; solo signo 1/3 ; error medio -0.0876 ; |error| medio 0.0876
+V2B 0x86b14772: error<=0.5pp+signo 0/3 ; solo signo 0/3 ; error medio -0.0998 ; |error| medio 0.0998
+V2B 0xe29042f5: error<=0.5pp+signo 0/3 ; solo signo 2/3 ; error medio -0.0758 ; |error| medio 0.0758
+MEDIA |error| (3 wallets x dias) V2A 0.1248
+MEDIA |error| (3 wallets x dias) V2B 0.0877
+
+PATA SUELTA vs EMPAREJADA (real, por wallet): EV terminal(+reb)/EUR y markout30 s del bid (Δbid/EUR)
+0x21f4c1a1 emparejada coste 89493 EV terminal 0.0618 markout30 0.0105 n 6535
+0x21f4c1a1 suelta coste 91066 EV terminal -0.0105 markout30 0.0032 n 8826
+0x86b14772 emparejada coste 22692 EV terminal 0.1897 markout30 0.0271 n 1340
+0x86b14772 suelta coste 30788 EV terminal -0.0734 markout30 -0.0024 n 2165
+0xe29042f5 emparejada coste 59939 EV terminal 0.0696 markout30 0.0206 n 6487
+0xe29042f5 suelta coste 71257 EV terminal -0.0331 markout30 -0.026 n 10505
+
+BLOQUEADO por pares vs RESIDUO (pata suelta), por EUR de coste
+REAL 0x21f4c1a1 bloqueado +0.0202/EUR residuo +0.0004/EUR rebate +0.0048
+REAL 0x86b14772 bloqueado +0.0381/EUR residuo -0.0051/EUR rebate +0.0052
+REAL 0xe29042f5 bloqueado +0.0377/EUR residuo -0.0298/EUR rebate +0.0059
+SIM V2A bloqueado +0.0327/EUR residuo -0.1382/EUR rebate +0.0069
+SIM V2B bloqueado -0.0409/EUR residuo -0.0263/EUR rebate +0.0056
+
+NIVELES (sim): distribucion del coste por distancia al precio mas alto rellenado del mercado-lado no disponible; coste por banda sim:
+V2A {'[0.1, 0.3)': 1285, '[0.3, 0.5)': 19977, '[0.5, 0.7)': 23410, '[0.7, 0.99)': 1487}
+V2B {'[0.01, 0.1)': 124, '[0.1, 0.3)': 3750, '[0.3, 0.5)': 22531, '[0.5, 0.7)': 38754, '[0.7, 0.99)': 28304}
+REAL 0x21f4c1a1 {'[0.01, 0.1)': 2970, '[0.1, 0.3)': 7591, '[0.3, 0.5)': 29501, '[0.5, 0.7)': 54005, '[0.7, 0.99)': 86492}
+REAL 0x86b14772 {'[0.01, 0.1)': 1185, '[0.1, 0.3)': 3741, '[0.3, 0.5)': 9404, '[0.5, 0.7)': 15661, '[0.7, 0.99)': 23490}
+REAL 0xe29042f5 {'[0.01, 0.1)': 1404, '[0.1, 0.3)': 11174, '[0.3, 0.5)': 30795, '[0.5, 0.7)': 46223, '[0.7, 0.99)': 41600}

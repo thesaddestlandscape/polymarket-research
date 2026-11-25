@@ -1,0 +1,15 @@
+1) retencion de coste por control (DESC / TEST)
+  D100    DESC: ret 0.866 TEST: ret 0.831
+  INV     DESC: ret 0.998 TEST: ret 0.997
+  SH-60   DESC: ret 0.983 TEST: ret 0.971
+  SH+60   DESC: ret 0.981 TEST: ret 0.974
+  SH+240  DESC: ret 1.000 TEST: ret 1.000
+2) quitados n=875 EV -0.224 acierto 0.158 | retenidos EV -0.167 | sustitutos n=447 EV -0.202 acierto 0.143
+3) R2 (bid15 mismo lado - obj <= 0,03 en r-100 ms) x S1
+  R2 si     rellenos   880 EV base -0.070 | S1 quita 0.308 dPnL +2.2 (+0.0023/EUR) | DESC -2.0 TEST +4.2
+  R2 no     rellenos  2112 EV base -0.244 | S1 quita 0.268 dPnL +113.0 (+0.0518/EUR) | DESC +48.9 TEST +64.1
+  sin bid15 rellenos   131 EV base +0.024 | S1 quita 0.290 dPnL +2.8 (+0.0216/EUR) | DESC +8.9 TEST -6.1
+4) B real (unidades_b.csv): senal S1_x2_w2000 antes del print de relleno
+  rellenos 166, con print 144 (missing 22)
+  senal=1: n 20 acierto 0.150 EV -0.439 PnL -9.75 por dia 10-20:-4.1 10-21:+5.3 10-22:-10.9
+  senal=0: n 124 acierto 0.234 EV +0.152 PnL +21.34 por dia 10-20:+10.8 10-21:+12.3 10-22:-1.7

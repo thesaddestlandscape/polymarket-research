@@ -1,0 +1,21 @@
+# NOWCAST: tokens longshot (ask real T=180+250ms en [0,10;0,30)) 9220; por moneda {'BTC': 1641, 'ETH': 1573, 'SOL': 1530, 'XRP': 1506, 'BNB': 1492, 'DOGE': 1478}; dias 17
+
+## proxy 2025 (residuo = win_proxy - q modelo; n=305741; dias 349)
+Y25 ETH N=6: n=74344 pendiente -0.0006 (IC90 dias [-0.013,+0.014]) p_perm_intradia 0.9269 (nulo p95 +0.0208)
+Y25 SOL N=6: n=73980 pendiente +0.0045 (IC90 dias [-0.008,+0.016]) p_perm_intradia 0.7309 (nulo p95 +0.0199)
+Y25 XRP N=6: n=74700 pendiente +0.0065 (IC90 dias [-0.005,+0.019]) p_perm_intradia 0.4485 (nulo p95 +0.0184)
+Y25 BTC N=6: n=72114 pendiente +0.0123 (IC90 dias [-0.000,+0.023]) p_perm_intradia 0.5050 (nulo p95 +0.0242)
+Y25 BNB sin datos en el panel
+Y25 DOGE sin datos en el panel
+Y25 ETH N=12: n=76683 pendiente +0.0086 (IC90 dias [-0.009,+0.027]) p_perm_intradia 0.8571 (nulo p95 +0.0350)
+Y25 SOL N=12: n=76379 pendiente -0.0071 (IC90 dias [-0.026,+0.009]) p_perm_intradia 0.9867 (nulo p95 +0.0333)
+Y25 XRP N=12: n=76990 pendiente +0.0158 (IC90 dias [+0.000,+0.033]) p_perm_intradia 0.4319 (nulo p95 +0.0303)
+Y25 BTC N=12: n=74879 pendiente +0.0147 (IC90 dias [-0.003,+0.034]) p_perm_intradia 0.8472 (nulo p95 +0.0415)
+Y25 BNB sin datos en el panel
+Y25 DOGE sin datos en el panel
+Y25 ETH N=24: n=76864 pendiente +0.0138 (IC90 dias [-0.011,+0.037]) p_perm_intradia 0.9734 (nulo p95 +0.0586)
+Y25 SOL N=24: n=76526 pendiente -0.0049 (IC90 dias [-0.030,+0.018]) p_perm_intradia 0.9967 (nulo p95 +0.0560)
+Y25 XRP N=24: n=77137 pendiente +0.0228 (IC90 dias [+0.001,+0.047]) p_perm_intradia 0.6744 (nulo p95 +0.0492)
+Y25 BTC N=24: n=75127 pendiente +0.0022 (IC90 dias [-0.024,+0.027]) p_perm_intradia 0.9967 (nulo p95 +0.0686)
+Y25 BNB sin datos en el panel
+Y25 DOGE sin datos en el panel

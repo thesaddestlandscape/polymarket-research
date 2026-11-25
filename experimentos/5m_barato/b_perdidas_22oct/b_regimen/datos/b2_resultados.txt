@@ -1,0 +1,48 @@
+#### (2) interruptor: no pujar si AR_w <= u (exceso de dPnL sobre nulo de permutacion por cierre)
+P1 09-16 AR3600<=-0.10: skip 30344/77558 (EUR ret 0.608) EV_ret +0.074 EV_skip +0.026 dif +0.049 IC90cierre [-0.046,+0.137] | dPnL -767 nulo -1456 EXCESO +689 p_perm 0.1154
+P1 09-16 AR3600<=+0.00: skip 38584/77558 (EUR ret 0.502) EV_ret +0.096 EV_skip +0.014 dif +0.082 IC90cierre [-0.005,+0.169] | dPnL -540 nulo -1856 EXCESO +1316 p_perm 0.0135
+P1 09-16 AR7200<=-0.10: skip 26407/77558 (EUR ret 0.658) EV_ret +0.083 EV_skip +0.003 dif +0.080 IC90cierre [-0.009,+0.171] | dPnL -73 nulo -1185 EXCESO +1113 p_perm 0.0220
+P1 09-16 AR7200<=+0.00: skip 38523/77558 (EUR ret 0.500) EV_ret +0.093 EV_skip +0.018 dif +0.075 IC90cierre [-0.017,+0.163] | dPnL -673 nulo -1840 EXCESO +1167 p_perm 0.0260
+P1 09-16 AR14400<=-0.10: skip 19217/77558 (EUR ret 0.750) EV_ret +0.051 EV_skip +0.068 dif -0.017 IC90cierre [-0.124,+0.080] | dPnL -1290 nulo -797 EXCESO -494 p_perm 0.8451
+P1 09-16 AR14400<=+0.00: skip 35430/77558 (EUR ret 0.542) EV_ret +0.060 EV_skip +0.050 dif +0.010 IC90cierre [-0.076,+0.102] | dPnL -1733 nulo -1537 EXCESO -195 p_perm 0.6372
+P2 17-21 AR3600<=-0.10: skip 16446/36094 (EUR ret 0.544) EV_ret -0.112 EV_skip +0.045 dif -0.156 IC90cierre [-0.283,-0.033] | dPnL -701 nulo +747 EXCESO -1448 p_perm 1.0000
+P2 17-21 AR3600<=+0.00: skip 21064/36094 (EUR ret 0.417) EV_ret -0.092 EV_skip -0.004 dif -0.088 IC90cierre [-0.210,+0.033] | dPnL +76 nulo +928 EXCESO -851 p_perm 0.9920
+P2 17-21 AR7200<=-0.10: skip 16497/36125 (EUR ret 0.543) EV_ret -0.021 EV_skip -0.065 dif +0.044 IC90cierre [-0.085,+0.167] | dPnL +1022 nulo +890 EXCESO +132 p_perm 0.3588
+P2 17-21 AR7200<=+0.00: skip 22017/36125 (EUR ret 0.389) EV_ret -0.029 EV_skip -0.049 dif +0.020 IC90cierre [-0.113,+0.154] | dPnL +1029 nulo +1066 EXCESO -36 p_perm 0.5382
+P2 17-21 AR14400<=-0.10: skip 14572/36125 (EUR ret 0.595) EV_ret -0.048 EV_skip -0.030 dif -0.018 IC90cierre [-0.149,+0.116] | dPnL +426 nulo +826 EXCESO -400 p_perm 0.8756
+P2 17-21 AR14400<=+0.00: skip 22282/36125 (EUR ret 0.383) EV_ret -0.047 EV_skip -0.038 dif -0.009 IC90cierre [-0.133,+0.126] | dPnL +800 nulo +1089 EXCESO -289 p_perm 0.7991
+AGRUPADO 09-21 AR3600<=-0.10: skip 46790/113652 (EUR ret 0.588) EV_ret +0.020 EV_skip +0.032 dif -0.012 IC90cierre [-0.084,+0.062] | dPnL -1468 nulo -762 EXCESO -706 p_perm 0.8581
+AGRUPADO 09-21 AR3600<=+0.00: skip 59648/113652 (EUR ret 0.475) EV_ret +0.044 EV_skip +0.008 dif +0.036 IC90cierre [-0.038,+0.106] | dPnL -464 nulo -970 EXCESO +506 p_perm 0.2169
+AGRUPADO 09-21 AR7200<=-0.10: skip 42904/113683 (EUR ret 0.621) EV_ret +0.054 EV_skip -0.023 dif +0.077 IC90cierre [+0.002,+0.151] | dPnL +950 nulo -312 EXCESO +1262 p_perm 0.0290
+AGRUPADO 09-21 AR7200<=+0.00: skip 60540/113683 (EUR ret 0.465) EV_ret +0.061 EV_skip -0.006 dif +0.067 IC90cierre [-0.006,+0.140] | dPnL +357 nulo -797 EXCESO +1154 p_perm 0.0470
+AGRUPADO 09-21 AR14400<=-0.10: skip 33789/113683 (EUR ret 0.701) EV_ret +0.025 EV_skip +0.026 dif -0.002 IC90cierre [-0.079,+0.078] | dPnL -864 nulo -2 EXCESO -862 p_perm 0.9190
+AGRUPADO 09-21 AR14400<=+0.00: skip 57712/113683 (EUR ret 0.492) EV_ret +0.034 EV_skip +0.017 dif +0.017 IC90cierre [-0.054,+0.092] | dPnL -933 nulo -463 EXCESO -470 p_perm 0.7431
+
+#### (3) EV por quintil de AR_2h (cortes del periodo)
+P1 09-16: AR2h medio por quintil -0.311 -0.126 +0.005 +0.185 +0.483 | EV de los rellenos +0.005 -0.012 +0.054 +0.060 +0.171
+    ETH: +0.001 +0.033 +0.072 +0.085 +0.156
+    SOL: +0.045 -0.066 -0.003 +0.088 +0.286
+    XRP: -0.073 -0.113 +0.023 -0.001 +0.002
+P2 17-21: AR2h medio por quintil -0.371 -0.197 -0.074 +0.063 +0.328 | EV de los rellenos -0.062 -0.031 -0.089 +0.018 -0.040
+    ETH: -0.107 -0.027 -0.192 +0.025 -0.060
+    SOL: -0.037 -0.022 +0.158 +0.008 +0.017
+    XRP: +0.162 -0.134 -0.096 -0.016 -0.083
+AGRUPADO 09-21: AR2h medio por quintil -0.333 -0.150 -0.022 +0.142 +0.444 | EV de los rellenos -0.027 -0.018 +0.010 +0.039 +0.121
+    ETH: -0.037 -0.029 +0.029 +0.051 +0.108
+    SOL: -0.009 +0.022 +0.008 +0.046 +0.215
+    XRP: -0.031 -0.064 -0.027 -0.022 -0.019
+
+#### (4) brecha CON-CONTRA por tercil de AR_2h
+P1 09-16 AR2h bajo: EV(todo) -0.012 | EV CON +0.019 (EUR 7594) CONTRA -0.038 (EUR 8740) | gap CON-CONTRA +0.057 IC90 [-0.191,+0.306]
+P1 09-16 AR2h medio: EV(todo) +0.027 | EV CON -0.089 (EUR 7954) CONTRA +0.142 (EUR 8052) | gap CON-CONTRA -0.231 IC90 [-0.482,+0.013]
+P1 09-16 AR2h alto: EV(todo) +0.134 | EV CON +0.210 (EUR 7783) CONTRA +0.063 (EUR 8385) | gap CON-CONTRA +0.148 IC90 [-0.108,+0.409]
+P2 17-21 AR2h bajo: EV(todo) -0.033 | EV CON -0.383 (EUR 3630) CONTRA +0.300 (EUR 3825) | gap CON-CONTRA -0.683 IC90 [-1.023,-0.351]
+P2 17-21 AR2h medio: EV(todo) -0.058 | EV CON -0.090 (EUR 3533) CONTRA -0.030 (EUR 3988) | gap CON-CONTRA -0.060 IC90 [-0.358,+0.241]
+P2 17-21 AR2h alto: EV(todo) +0.020 | EV CON +0.083 (EUR 3700) CONTRA -0.045 (EUR 3674) | gap CON-CONTRA +0.128 IC90 [-0.206,+0.464]
+AGRUPADO 09-21 AR2h bajo: EV(todo) -0.007 | EV CON -0.089 (EUR 11403) CONTRA +0.068 (EUR 12402) | gap CON-CONTRA -0.157 IC90 [-0.363,+0.039]
+AGRUPADO 09-21 AR2h medio: EV(todo) -0.007 | EV CON -0.071 (EUR 11238) CONTRA +0.052 (EUR 12243) | gap CON-CONTRA -0.124 IC90 [-0.320,+0.071]
+AGRUPADO 09-21 AR2h alto: EV(todo) +0.093 | EV CON +0.129 (EUR 11554) CONTRA +0.059 (EUR 12018) | gap CON-CONTRA +0.070 IC90 [-0.141,+0.257]
+
+#### (5) persistencia a escala de dia (control): EV del dia anterior vs EV del dia (13 dias)
+EV diario: 10-09:+0.094 10-10:+0.056 10-11:-0.022 10-12:+0.083 10-13:-0.019 10-14:+0.135 10-15:+0.080 10-16:+0.033 10-17:+0.012 10-18:-0.090 10-19:-0.083 10-20:-0.034 10-21:+0.044
+corr(EV_d-1, EV_d) = 0.29 (n=12 pares; sin potencia)

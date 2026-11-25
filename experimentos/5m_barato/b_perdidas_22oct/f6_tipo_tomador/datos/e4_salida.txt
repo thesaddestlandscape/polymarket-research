@@ -1,0 +1,11 @@
+K POST-HOC declarado = 10 ejes (descriptivo, no gate). dif = EV(flag) - EV(~flag); IC90 por cierre.
+ndias<=2 vs 5                              | DISC: n   6521 %EUR 10.5 EV +0.013 vs +0.060 dif -0.047 (-0.112,+0.019) | HOLD: n   6883 %EUR 12.5 EV +0.033 vs -0.017 dif +0.050 (-0.023,+0.118)
+ticket grande (>p90 DISC=26.9)             | DISC: n   5926 %EUR 10.5 EV +0.181 vs +0.040 dif +0.141 (+0.035,+0.243) | HOLD: n   5596 %EUR 11.9 EV -0.001 vs -0.012 dif +0.011 (-0.098,+0.127)
+informado previo (roi>=.02,cost>=50)       | DISC: n  10158 %EUR 16.9 EV +0.061 vs +0.054 dif +0.007 (-0.053,+0.066) | HOLD: n  10677 %EUR 21.8 EV +0.027 vs -0.022 dif +0.049 (-0.009,+0.113)
+perdedor previo (roi<=-.02,cost>=50)       | DISC: n  17104 %EUR 28.4 EV +0.086 vs +0.043 dif +0.043 (+0.002,+0.094) | HOLD: n  14263 %EUR 27.4 EV +0.006 vs -0.017 dif +0.023 (-0.040,+0.085)
+tk_n<=19                                   | DISC: n   1536 %EUR  2.5 EV +0.069 vs +0.055 dif +0.015 (-0.104,+0.128) | HOLD: n   1626 %EUR  3.0 EV +0.054 vs -0.013 dif +0.067 (-0.084,+0.223)
+tk_n 200-1999                              | DISC: n  18797 %EUR 29.9 EV +0.097 vs +0.037 dif +0.060 (+0.012,+0.108) | HOLD: n  17288 %EUR 31.7 EV -0.010 vs -0.011 dif +0.001 (-0.049,+0.052)
+tk_n>=2000                                 | DISC: n  30076 %EUR 53.3 EV +0.040 vs +0.073 dif -0.033 (-0.078,+0.010) | HOLD: n  24344 %EUR 50.6 EV -0.027 vs +0.006 dif -0.033 (-0.085,+0.025)
+tk_n>=20000                                | DISC: n  10241 %EUR 18.3 EV +0.063 vs +0.053 dif +0.010 (-0.053,+0.070) | HOLD: n   5272 %EUR 11.3 EV -0.099 vs +0.000 dif -0.099 (-0.161,-0.035)
+tk_n<=199                                  | DISC: n  10515 %EUR 16.8 EV +0.030 vs +0.060 dif -0.031 (-0.084,+0.022) | HOLD: n   9580 %EUR 17.7 EV +0.034 vs -0.021 dif +0.055 (-0.010,+0.115)
+tk_n 2000-19999                            | DISC: n  19835 %EUR 35.0 EV +0.027 vs +0.070 dif -0.043 (-0.084,+0.003) | HOLD: n  19072 %EUR 39.3 EV -0.006 vs -0.014 dif +0.008 (-0.052,+0.068)

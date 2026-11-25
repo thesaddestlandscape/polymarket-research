@@ -1,0 +1,32 @@
+== D) regla S3 (arbol d3 entrenado en IS sobre la seleccion HGB; sin modelo en uso) T200-286, m=3 (bb-3c)
+  S3                                             IS EVw+0.605 [+0.51,+0.68] n1043 d10 +10 sin2+0.54 +168.1E/d fill26% || OOS EVw+0.451 [+0.35,+0.55] n1221 d12 +12 sin2+0.40 +121.9E/d fill26%
+  complemento T200-286 & ~S3                     IS EVw-0.185 [-0.25,-0.13] n1692 d10 +0 sin2-0.22 -70.9E/d fill20% || OOS EVw-0.281 [-0.37,-0.20] n1920 d12 +1 sin2-0.34 -102.1E/d fill20%
+  SIEMPRE T200-286                               IS EVw-0.041 [-0.11,+0.02] n2137 d10 +4 sin2-0.08 -21.9E/d fill19% || OOS EVw-0.134 [-0.20,-0.07] n2483 d12 +2 sin2-0.18 -69.6E/d fill19%
+   por m (bb-1c, -2c, -3c):
+    S3 m=1 (bb-1c)                               IS EVw+0.586 [+0.53,+0.64] n1078 d10 +10 sin2+0.55 +172.2E/d fill35% || OOS EVw+0.466 [+0.36,+0.57] n1263 d12 +12 sin2+0.41 +133.5E/d fill34%
+    S3 m=2 (bb-2c)                               IS EVw+0.612 [+0.52,+0.68] n1091 d10 +10 sin2+0.55 +180.4E/d fill31% || OOS EVw+0.449 [+0.34,+0.55] n1266 d12 +12 sin2+0.39 +127.3E/d fill30%
+    S3 m=3 (bb-3c)                               IS EVw+0.605 [+0.51,+0.68] n1043 d10 +10 sin2+0.54 +168.1E/d fill26% || OOS EVw+0.451 [+0.35,+0.55] n1221 d12 +12 sin2+0.40 +121.9E/d fill26%
+== E) margen = bid15 - bb (cortes IS Q25/Q50/Q75 en T200-286: -0.040/0.120/0.210)
+  margen<Q25                                     IS EVw+0.041 [-0.15,+0.19] n575 d10 +4 sin2-0.07 +6.0E/d fill20% || OOS EVw-0.067 [-0.19,+0.06] n603 d12 +4 sin2-0.14 -8.7E/d fill20%
+  Q25-Q50                                        IS EVw-0.025 [-0.14,+0.07] n917 d10 +4 sin2-0.10 -5.7E/d fill26% || OOS EVw-0.121 [-0.20,-0.06] n1094 d12 +1 sin2-0.17 -27.9E/d fill25%
+  Q50-Q75                                        IS EVw+0.013 [-0.13,+0.17] n728 d10 +5 sin2-0.06 +2.0E/d fill22% || OOS EVw-0.170 [-0.34,-0.01] n855 d12 +3 sin2-0.27 -25.7E/d fill23%
+  margen>=Q75                                    IS EVw-0.131 [-0.35,+0.03] n571 d10 +2 sin2-0.28 -18.0E/d fill20% || OOS EVw-0.219 [-0.32,-0.12] n683 d12 +3 sin2-0.28 -30.4E/d fill19%
+  margen>=0 (bid15>=bb)                          IS EVw-0.082 [-0.21,+0.04] n1575 d10 +3 sin2-0.16 -32.3E/d fill20% || OOS EVw-0.152 [-0.21,-0.09] n1897 d12 +2 sin2-0.19 -59.6E/d fill19%
+  margen>=0.10                                   IS EVw-0.073 [-0.24,+0.07] n1307 d10 +3 sin2-0.18 -22.5E/d fill20% || OOS EVw-0.177 [-0.24,-0.11] n1585 d12 +1 sin2-0.22 -55.0E/d fill20%
+  margen>=0.20                                   IS EVw-0.139 [-0.36,+0.03] n590 d10 +3 sin2-0.28 -19.7E/d fill20% || OOS EVw-0.209 [-0.30,-0.11] n698 d12 +2 sin2-0.26 -29.5E/d fill19%
+-- regimenes de la regla S3: por banda bb / T_rem / lado complementario
+  S3 & bb<0.15                                   IS EVw+0.500 [-1.15,+3.46] n19 d10 +3 sin2-0.70 +1.0E/d fill26% || OOS EVw-0.497 [-1.27,-0.14] n19 d8 +1 sin2-1.00 -0.8E/d fill20%
+  S3 & bb 0.15-0.22                              IS EVw-0.428 [-0.85,-0.19] n111 d10 +3 sin2-0.71 -8.2E/d fill29% || OOS EVw-0.207 [-0.55,+0.32] n118 d12 +2 sin2-0.43 -3.5E/d fill26%
+  S3 & bb 0.22-0.29                              IS EVw+0.597 [+0.49,+0.71] n720 d10 +10 sin2+0.55 +106.2E/d fill31% || OOS EVw+0.400 [+0.28,+0.53] n830 d12 +11 sin2+0.36 +68.1E/d fill30%
+  S3 & bb>=0.29                                  IS EVw+0.618 [+0.54,+0.69] n812 d10 +10 sin2+0.57 +140.9E/d fill32% || OOS EVw+0.496 [+0.36,+0.63] n955 d12 +12 sin2+0.42 +110.8E/d fill32%
+  S3 & T200-220                                  IS EVw+0.436 [+0.33,+0.52] n401 d10 +10 sin2+0.38 +46.2E/d fill41% || OOS EVw+0.234 [+0.06,+0.38] n465 d12 +10 sin2+0.13 +23.7E/d fill39%
+  S3 & T220-240                                  IS EVw+0.706 [+0.47,+0.84] n404 d10 +9 sin2+0.59 +75.8E/d fill39% || OOS EVw+0.247 [+0.03,+0.44] n443 d12 +7 sin2+0.14 +23.8E/d fill36%
+  S3 & T240-260                                  IS EVw+0.639 [+0.50,+0.74] n409 d10 +10 sin2+0.55 +66.3E/d fill36% || OOS EVw+0.514 [+0.35,+0.67] n466 d12 +11 sin2+0.43 +50.9E/d fill33%
+  S3 & T260-286                                  IS EVw+0.633 [+0.46,+0.76] n421 d10 +10 sin2+0.53 +70.2E/d fill32% || OOS EVw+0.569 [+0.38,+0.75] n474 d12 +11 sin2+0.45 +58.9E/d fill30%
+  S3 & bid15>0.51                                IS EVw-0.131 [-0.37,+0.04] n479 d10 +2 sin2-0.28 -16.1E/d fill24% || OOS EVw-0.221 [-0.34,-0.09] n590 d12 +3 sin2-0.30 -28.0E/d fill24%
+  S3 & bid15<=0.51 (rama cbb>0.66)               IS EVw+1.199 [+1.10,+1.28] n580 d10 +10 sin2+1.14 +190.8E/d fill29% || OOS EVw+1.043 [+0.93,+1.14] n639 d12 +12 sin2+0.97 +152.3E/d fill28%
+  S3 & acc60 Q1                                  IS EVw+0.558 [+0.41,+0.66] n754 d10 +10 sin2+0.45 +113.9E/d fill37% || OOS EVw+0.443 [+0.32,+0.57] n881 d12 +11 sin2+0.38 +87.7E/d fill36%
+  S3 & acc60 Q2-3                                IS EVw+0.687 [+0.53,+0.83] n547 d10 +10 sin2+0.60 +94.5E/d fill31% || OOS EVw+0.443 [+0.29,+0.60] n629 d12 +11 sin2+0.35 +57.8E/d fill29%
+  S3 & acc60 Q4                                  IS EVw+0.884 [+0.65,+1.04] n179 d10 +10 sin2+0.73 +39.0E/d fill33% || OOS EVw+0.591 [+0.38,+0.80] n192 d12 +11 sin2+0.49 +23.2E/d fill29%
+== F) placebo: bid15 barajado dentro de cada dia (misma regla S3 con cortes fijos) x5
+   EVw placebo IS/OOS: +0.126/+0.005 +0.130/-0.008 +0.093/-0.009 +0.123/-0.011 +0.119/-0.004

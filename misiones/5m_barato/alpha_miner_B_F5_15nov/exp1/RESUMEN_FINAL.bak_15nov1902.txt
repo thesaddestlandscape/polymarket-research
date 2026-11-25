@@ -1,0 +1,21 @@
+EXP-1 B x F5, relojes v3 | addendum 6fc7dba5 | 2026-11-15T19:02Z | etiquetas mecanicas del addendum; NADA validado (faltan validador y red-team independientes)
+E2 dias (09-Oct..14-Nov = 37 esperados): COMPLETE 18, FAILED 3 [10-16=C3 10-24=C3 10-26=MemoryError(tope 2,2 GB)], PENDING_DESENLACE 0, sin intentar 17 | fases: E1 COMPLETE, E3x COMPLETE, E7 COMPLETE, E2agg PARTIAL, E6 PARTIAL, E3 COMPLETE, E5 PARTIAL
+(a) B real, tm3: 215 fills / 202 unidades / 112 cierres / 4 dias, 100 % R1 (20-23 Oct): EV pond. -0.0724 (PnL -16.02 EUR sobre 221.3) [MEDIDO]
+    gradiente F5 bajo-alto por l_ef: 35: -0.017 IC90cierre [-0.60,+0.60]; 60: +0.033 IC90cierre [-0.48,+0.54]; 100: -0.186 IC90cierre [-0.76,+0.36]; 150: +0.142 IC90cierre [-0.44,+0.71] -> INSUFFICIENT (el signo cambia con l_ef; IC90 cruza 0; n requerido 52k-255k unidades)
+    por rama del sello (n, pnl EUR, EV): amb 24, -12.87, -0.462; guard 5, +4.45, +0.802; nosig 6, -3.67, -0.667; sig 163, -1.50, -0.009; sinev 17, -2.43, -0.138 [EXPLORATORIA: ramas = calidad del sello, no regla ex ante]
+(a2) reglas de cancelacion sobre los 215 fills (K_B=6, p<=0,0083; latencia SIMULADA; replica de disparo CXB 0.0 % vs funcion validada):
+    CXB60: l35: dEV -0.025 IC90 [-0.24,+0.20], dPnL +4.2 EUR, evit 94, placebo p 0.65; l60: dEV -0.024 IC90 [-0.19,+0.17], dPnL +2.9 EUR, evit 81, placebo p 0.68
+    F5C: l35: dEV -0.073 IC90 [-0.27,+0.14], dPnL -1.6 EUR, evit 100, placebo p 0.43; l60: dEV -0.059 IC90 [-0.25,+0.13], dPnL -0.6 EUR, evit 95, placebo p 0.43
+    UNION: l35: dEV -0.152 IC90 [-0.45,+0.17], dPnL -0.6 EUR, evit 144, placebo p 0.71; l60: dEV -0.040 IC90 [-0.30,+0.24], dPnL +6.2 EUR, evit 132, placebo p 0.54
+    -> INSUFFICIENT: ninguna cumple (IC90 por cierre cruza 0, placebo p>=0,43, 202 unidades/4 dias); no refuta; solo rama sig (163 fills, EV base -0.009): dEV positivo en CXB60/F5C/UNION [EXPLORATORIA, ver E3_reglas.txt]
+(b) poblacion (prints bid q en (0,10;0,30], CENSURADA: gradiente, no EV de regla), celdas decisivas K_pop=4 (p<=0,0125 maxstat, >=2/3 dias+):
+    p35|R1: grad bajo-alto media diaria +0.020 IC90dias_inf -0.185, dias+ 3/7, sin 2 mejores -0.112, pooled +0.049 IC90cierre [-0.13,+0.24], maxstat p 0.51, n 15979 prints/1858 cierres -> INSUFFICIENT
+    p60|R1: grad bajo-alto media diaria +0.050 IC90dias_inf -0.169, dias+ 3/7, sin 2 mejores -0.112, pooled +0.050 IC90cierre [-0.13,+0.24], maxstat p 0.35, n 17833 prints/1871 cierres -> INSUFFICIENT
+    p35|R2: DATA_BLOCKED (< 50 prints tipo B en la celda)
+    p60|R2: DATA_BLOCKED (< 50 prints tipo B en la celda)
+(c) Calma-T1 sello v3, forward 02-14 Nov R2 (13 dias, n 2156): T1-G0 +489 EUR IC90dias [+248,+708], dias+ 11/13, sin 2 mejores +320; merito T1-PLA +288 IC90 [+62,+470]; EV abs T1 -0.124 vs G0 -0.236
+    PREREG_CALMA_T1 literal: REFUTA (EV(T1) <= 0) (EV T1 -0.124 <= 0 con 13 dias; T1>PLA en 85 % de dias; T1_c300 -0.130); puerta NO cerrada | mitigacion T1-G0: CUMPLE los criterios con sello v3 (R2 forward; falta validacion independiente)
+E5 conductores de regimen (poblacion tipo B, walk-forward desde 23-Oct, K_reg=4): D1 vol30: dEV dia n/d IC90inf n/d dias+ 1/1 -> INSUFFICIENT | D2 vol4h: dEV dia n/d IC90inf n/d dias+ 1/1 -> INSUFFICIENT | D3 EV bloque previo: dEV dia n/d IC90inf n/d dias+ 0/1 -> INSUFFICIENT | D4 EV slot: sin unidades evaluables
+E6 brecha de B: EV real -0.072 vs poblacion misma celda dia x moneda tipo B +0.213 (pond.; agrupada -0.196) -> brecha -0.285; vs todas las filas +0.085 -> -0.157 [POBLACION vs MEDIDO; 9 celdas]
+    palancas (dEV sobre B real; % de la brecha-a-poblacion cerrada): CXB60 l60 -0.024 (-8 %); F5C l60 -0.059 (-20 %); UNION l60 -0.040 (-14 %); colocacion/tamano/cola: SIN MEDIR (residuo)
+Integridad: C3 (suelo rx-ex por ventana de 10 min) alterna ~20/~40 ms DENTRO de las epocas por timestamp (16-Oct 64 % ventanas a 40; 24-Oct 62 % a 20): dias que fallan C3 excluidos y listados; la estratificacion correcta es por suelo de ventana (ADDENDUM2 pendiente, ~2 h).

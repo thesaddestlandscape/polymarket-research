@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/pata_suelta_activa/scripts/psa_sim.py", line 20, in <module>
+    T_=A[A.kk==2].drop_duplicates(['t','ix','p','q']); A=pd.concat([A[A.kk==1],T_],ignore_index=True); del T_
+                                                         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/reshape/concat.py", line 466, in concat
+    result = _get_result(
+        objs,
+    ...<9 lines>...
+        axis,
+    )
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/reshape/concat.py", line 657, in _get_result
+    new_data = concatenate_managers(
+        mgrs_indexers, result_axes, concat_axis=bm_axis, copy=False
+    )
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/concat.py", line 133, in concatenate_managers
+    values = np.concatenate(vals, axis=1)  # type: ignore[arg-type]
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 63.2 MiB for an array with shape (1, 16563012) and data type float32

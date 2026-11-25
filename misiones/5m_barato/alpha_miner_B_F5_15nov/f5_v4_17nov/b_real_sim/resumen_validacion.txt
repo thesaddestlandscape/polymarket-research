@@ -1,0 +1,6 @@
+r2_call00a35_intc33_v3d                sim  88 TP  84 FP  4 FN 118 prec 0.955 rec 0.416 rec_aj 0.672 rec_pr 0.305 +-50ms 0.54 EVtp -0.126/-0.111 EVfp -1.00 EVfn -0.041
+r2_call00a35_intc74_v3d                sim  99 TP  88 FP 11 FN 114 prec 0.889 rec 0.436 rec_aj 0.738 rec_pr 0.305 +-50ms 0.56 EVtp -0.123/-0.082 EVfp +0.19 EVfn -0.064
+r2_call00a35_legacyc33_v3d             sim  80 TP  70 FP 10 FN 132 prec 0.875 rec 0.347 rec_aj 0.738 rec_pr 0.177 +-50ms 0.73 EVtp -0.116/-0.119 EVfp -1.00 EVfn -0.045
+r2_dec0a35_intc33_v3d                  sim  88 TP  84 FP  4 FN 118 prec 0.955 rec 0.416 rec_aj 0.672 rec_pr 0.305 +-50ms 0.54 EVtp -0.126/-0.111 EVfp -1.00 EVfn -0.041
+r2_legacy0a35_intc33_v3d               sim  88 TP  84 FP  4 FN 118 prec 0.955 rec 0.416 rec_aj 0.672 rec_pr 0.305 +-50ms 0.55 EVtp -0.126/-0.111 EVfp -1.00 EVfn -0.041
+r2_legacy0a35_legacyc33_v3d            sim  80 TP  70 FP 10 FN 132 prec 0.875 rec 0.347 rec_aj 0.738 rec_pr 0.177 +-50ms 0.74 EVtp -0.116/-0.119 EVfp -1.00 EVfn -0.045

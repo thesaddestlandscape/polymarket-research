@@ -1,0 +1,20 @@
+rellenos reales localizados en L2 147 de 175 {'sin_print': 26, 'roto': 2}
+--- tau1=5 ms: exactitud 0.816
+p5  C1  C2  C3
+cl            
+C1  16   4   9
+C2   6  34   3
+C3   0   5  70
+--- tau1=25 ms: exactitud 0.816
+p25  C1  C2  C3
+cl             
+C1   17   3   9
+C2    7  33   3
+C3    1   4  70
+--- tau1=100 ms: exactitud 0.782
+p100  C1  C2  C3
+cl              
+C1    18   2   9
+C2    13  27   3
+C3     1   4  70
+cuotas on-chain {'C3': 0.51, 'C2': 0.293, 'C1': 0.197} | proxy25 {'C3': 0.558, 'C2': 0.272, 'C1': 0.17}

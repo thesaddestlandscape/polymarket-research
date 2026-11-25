@@ -1,0 +1,51 @@
+ORDENES (puja_post) 20-23 Oct n 3796 ; con relleno 194
+2026-10-20 ordenes 405 mercados-lado 53 rellenos 36 tasa relleno por orden 0.089 | por mercado-lado 0.679
+2026-10-21 ordenes 1121 mercados-lado 124 rellenos 68 tasa relleno por orden 0.061 | por mercado-lado 0.548
+2026-10-22 ordenes 1746 mercados-lado 152 rellenos 75 tasa relleno por orden 0.043 | por mercado-lado 0.493
+2026-10-23 ordenes 524 mercados-lado 35 rellenos 15 tasa relleno por orden 0.029 | por mercado-lado 0.429
+tasa de relleno por mercado-lado segun h_w1 / R (20-23, unidad = mercado-lado):
+h           0        1
+size  245.000  119.000
+mean    0.531    0.538
+R      MIXTO   NA  REVERT   TREND
+size  171.00  3.0  149.00  41.000
+mean    0.52  1.0    0.53   0.561
+clase  a_favor  en_contra  neutra
+size   176.000    185.000   3.000
+mean     0.511      0.551   0.667
+23-Oct solo:
+h          0       1
+size  23.000  12.000
+sum   11.000   4.000
+mean   0.478   0.333
+
+POBLACION 17-22 (28.8k aprox, ya vista por R-TEND/W1; DESCRIPTIVO): EV por clase R
+ R=MIXTO: n 12318 coste 11896 EV -0.0412 IC90 cierre (-0.125,+0.050) hit 0.195
+ R=NA: n 54 coste 51 EV -1.0000 IC90 cierre (-1.000,-1.000) hit 0.000
+ R=REVERT: n 9411 coste 9079 EV +0.0305 IC90 cierre (-0.080,+0.132) hit 0.211
+ R=TREND: n 5432 coste 5237 EV -0.0466 IC90 cierre (-0.180,+0.097) hit 0.194
+ por dia x R (EV):
+R           MIXTO   NA  REVERT  TREND
+dia                                  
+2026-10-17 -0.132 -1.0   0.062 -0.133
+2026-10-18 -0.285  NaN   0.022 -0.116
+2026-10-19 -0.052  NaN  -0.157 -0.169
+2026-10-20  0.057  NaN   0.010 -0.209
+2026-10-21  0.198  NaN  -0.019  0.465
+2026-10-22 -0.105 -1.0   0.261 -0.579
+ B 20-23 por dia x R (EV):
+R           MIXTO   NA  REVERT  TREND
+dia                                  
+2026-10-20  0.369  NaN  -0.587  0.214
+2026-10-21  0.260  NaN   0.310 -0.321
+2026-10-22 -0.197 -1.0  -0.260    NaN
+2026-10-23  0.350  NaN  -1.000 -1.000
+
+REGLAS POST-HOC sobre posiciones de B (Bonferroni x8):
+[23-Oct] RX1 no cotizar si R==REVERT: evaluadas 16 saltadas 8 coste 9.06 pnl_saltadas -9.06 dPnL +9.06 ganancias perdidas 0.00 p_perm 0.096 IC90 cierre (+4.18,+15.06)
+[23-Oct] RX2 no cotizar si R!=MIXTO: evaluadas 16 saltadas 10 coste 11.66 pnl_saltadas -11.66 dPnL +11.66 ganancias perdidas 0.00 p_perm 0.019 IC90 cierre (+7.22,+17.21)
+[B 20-22 (visto)] RX1 no cotizar si R==REVERT: evaluadas 183 saltadas 74 coste 81.30 pnl_saltadas -11.80 dPnL +11.80 ganancias perdidas 55.52 p_perm 0.245 IC90 cierre (-18.15,+39.02)
+[B 20-22 (visto)] RX2 no cotizar si R!=MIXTO: evaluadas 183 saltadas 95 coste 104.26 pnl_saltadas -14.77 dPnL +14.77 ganancias perdidas 70.77 p_perm 0.196 IC90 cierre (-19.31,+47.03)
+[B total] RX1 no cotizar si R==REVERT: evaluadas 199 saltadas 82 coste 90.36 pnl_saltadas -20.86 dPnL +20.86 ganancias perdidas 55.52 p_perm 0.162 IC90 cierre (-8.72,+49.86)
+[B total] RX2 no cotizar si R!=MIXTO: evaluadas 199 saltadas 105 coste 115.92 pnl_saltadas -26.43 dPnL +26.43 ganancias perdidas 70.77 p_perm 0.109 IC90 cierre (-10.24,+59.15)
+POBLACION replica RX1 (descriptiva, mismo periodo que B 20-22): saltadas 9411 de 27161 coste 9079 dPnL -277.3 EUR ; placebo (dia x moneda x cubo) p 0.988 ; EV retenido -0.0429 vs base -0.0175

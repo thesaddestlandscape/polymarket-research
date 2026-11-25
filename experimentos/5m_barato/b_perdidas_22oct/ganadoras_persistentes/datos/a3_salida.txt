@@ -1,0 +1,18 @@
+######## R6 perdedoras persistentes (INV) como filtro de B-maker (pobl. maker banda, sin INV/roster)
+fracción de fills/coste con INV previo mismo lado por día: [('10-13', np.float64(0.573), np.float32(0.546)), ('10-14', np.float64(0.695), np.float32(0.675)), ('10-15', np.float64(0.612), np.float32(0.598)), ('10-16', np.float64(0.672), np.float32(0.65)), ('10-17', np.float64(0.602), np.float32(0.562)), ('10-18', np.float64(0.725), np.float32(0.668)), ('10-19', np.float64(0.768), np.float32(0.749)), ('10-20', np.float64(0.787), np.float32(0.777)), ('10-21', np.float64(0.757), np.float32(0.757))]
+R6 mantener solo sin INV previo mismo lado (A) vs todo (B): A +0.0264 (coste 1122692) B +0.0239 (coste 3398276) Δ +0.0026 IC90d (-0.0324,+0.0407) IC98,75 (-0.0501,+0.0625) sin2 -0.0224 días Δ>0 6/9
+R6-mk (INV-makers) sin flag vs todo: A -0.0052 (coste 1794897) B +0.0239 (coste 3398276) Δ -0.0291 IC90d (-0.0765,+0.0204) IC98,75 (-0.1001,+0.0487) sin2 -0.0657 días Δ>0 3/9
+R6-tk (INV-tomadoras, solapa contrapunto) sin flag vs todo: A +0.0161 (coste 1366388) B +0.0239 (coste 3398276) Δ -0.0078 IC90d (-0.0410,+0.0247) IC98,75 (-0.0576,+0.0434) sin2 -0.0299 días Δ>0 4/9
+R6o INV previo lado OPUESTO (A) vs no (B): A -0.0023 (coste 671696) B +0.0303 (coste 2726580) Δ -0.0326 IC90d (-0.1690,+0.1150) IC98,75 (-0.2297,+0.1974) sin2 -0.1207 días Δ>0 6/9
+######## R2 controles (celdas; pobl. maker banda en celdas vs toda)
+celdas R2: A +0.0563 (coste 1707422) B +0.0217 (coste 3453195) Δ +0.0346 IC90d (+0.0037,+0.0634) IC98,75 (-0.0115,+0.0770) sin2 +0.0094 días Δ>0 5/9
+celdas pop: A +0.0425 (coste 1632616) B +0.0217 (coste 3453195) Δ +0.0208 IC90d (-0.0106,+0.0506) IC98,75 (-0.0255,+0.0673) sin2 -0.0035 días Δ>0 5/9
+celdas evpos: A +0.0569 (coste 53975) B +0.0217 (coste 3453195) Δ +0.0352 IC90d (-0.0822,+0.1880) IC98,75 (-0.1340,+0.3020) sin2 -0.0773 días Δ>0 3/9
+celdas inv: A +0.0514 (coste 1406161) B +0.0217 (coste 3453195) Δ +0.0297 IC90d (-0.0008,+0.0504) IC98,75 (-0.0204,+0.0595) sin2 +0.0116 días Δ>0 6/9
+celdas R2 (moneda*1000+min*10+bucket5c) ej. 2026-10-21: [4, 12, 13, 14, 23, 24, 32, 33, 34, 43, 44]
+perfil INV (n=222): coste 374180 fM 0.25 pc_med 0.205 sec_med 126 frac<0,10 0.09 frac_sec>=240 0.08 EV -0.4163
+perfil R (n=8): coste 22681 fM 0.86 pc_med 0.208 sec_med 168 frac<0,10 0.09 frac_sec>=240 0.23 EV +0.3307
+perfil todos_elegibles (n=1900): coste 5155364 fM 0.52 pc_med 0.205 sec_med 140 frac<0,10 0.09 frac_sec>=240 0.11 EV -0.0351
+B en elegibles ventana 14-20: no elegible | B código 20718
+perfil B on-chain banda: coste 121 fM 1.00 pc_med 0.224 sec_med 95 EV +0.1319 días [14, 15]
+ballenas_timing_history 5m: filas 387049 rango 2026-10-22T12:08:02+00:00 2026-10-25T11:25:06+00:00 banda 58269

@@ -1,0 +1,28 @@
+cobertura emparejado 0.8377 fills 146306
+ramas v3 {'sig': 65840, 'amb': 20271, 'nosig': 1889, 'guard': 1688, 'sinev': 12212} c_dia 19 n eventos 101900
+DEM eventos 1434 {'ok': 1434} resid>0 241
+DEMt elegibles (sin filas nuestras, n_aj>0, resid_t>1e-3): 0 resid S_T>1e-3 sin filas nuestras: 202 de 1434
+ok 2026-10-20 ordenes 405 real fills 37 BASE sim 17 bins 2820 {'sin_libro': 0, 'sin_bn': 0} 28.3 s
+	Command being timed: "nice -n 19 ionice -c3 python3 v9_verif_v2.py 2026-10-20"
+	User time (seconds): 24.92
+	System time (seconds): 3.33
+	Percent of CPU this job got: 96%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:29.39
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1559072
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 556
+	Minor (reclaiming a frame) page faults: 711876
+	Voluntary context switches: 2196
+	Involuntary context switches: 3067
+	Swaps: 0
+	File system inputs: 986848
+	File system outputs: 3576
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

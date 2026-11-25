@@ -1,0 +1,57 @@
+# E7 Calma-T1 con sello v3 (postproceso solo lectura; ADDENDUM1 sha 6fc7dba5)
+Sello: esc_dec2_v3.py importa stamp_v3 (ST.stamp_events) y etiqueta dec2v3 | sha stamp_v3.py fbf8be964804137a | copia huecos_fix_13nov/stamp_v3.py fbf8be964804137a
+Manifiestos del juez: 3 dias, sello_print distintos ['v3'], estados ['COMPLETE'] (dias 2026-11-12..2026-11-14)
+dec2v3: 20 dias 2026-10-26..2026-11-14, 60428 filas, variantes ['G0', 'PLA_T1', 'PLA_T2', 'T05', 'T1', 'T15', 'T1_ambos', 'T1_c1000', 'T1_c300', 'T1_none_r1000', 'T1_r0', 'T1_r2000', 'T2']
+G0: 6225 fills comunes viejo/v3; tf_v3 - tf_viejo p5/p50/p95 = [-23.0, 25.0, 307.0] ms; distintos en 98.6 % (si fuese 0 %, el pkl NO tendria sello nuevo)
+Chequeo contra lo documentado (02..12-Nov, 11 dias; memoria 13-Nov: T1-G0 +351,5 EUR IC90 (129;556) 9/11 dias+, EV abs T1 -0,073 / G0 -0,185, PLA_T1 +161 EUR, merito ~+190): T1-G0 = +351.5 EUR IC90 dias (+118.4,+551.0) 9/11 dias+ | EV abs T1 -0.073 / G0 -0.186 | T1-PLA_T1 +190.1
+Reparto de fills por epoca (tf): {'R2': 5613, 'R1': 647}
+Chequeo con datos sueltos del coordinador (EV diario T1/G0 recalculado vs citado): {'2026-11-13': (np.float64(-0.634), np.float64(-0.637), (-0.634, -0.637)), '2026-11-14': (np.float64(-0.221), np.float64(-0.378), (-0.221, -0.378))}
+
+## FORWARD 02-Nov..14-Nov (R2) -- SELLO v3  (dias 13, filas 36327)
+T1: rellenos 2156 | EUR -196.2 | EV pond. -0.124 (G0 -0.236) | dEUR vs G0 +489.1 IC90 dias (+248.0,+707.7) IC90 cierre (+305.4,+661.4) | dias+ 11/13 | sin 2 mejores +319.6 | EV medio diario -0.142 IC90 inf -0.296
+T05: rellenos 1719 | EUR -161.7 | EV pond. -0.129 (G0 -0.236) | dEUR vs G0 +523.6 IC90 dias (+238.2,+788.1) IC90 cierre (+316.4,+735.7) | dias+ 10/13 | sin 2 mejores +343.1 | EV medio diario -0.162 IC90 inf -0.312
+T1_ambos: rellenos 1862 | EUR -171.6 | EV pond. -0.125 (G0 -0.236) | dEUR vs G0 +513.7 IC90 dias (+232.4,+778.1) IC90 cierre (+306.9,+721.5) | dias+ 12/13 | sin 2 mejores +323.2 | EV medio diario -0.157 IC90 inf -0.302
+PLA_T1: rellenos 3183 | EUR -484.1 | EV pond. -0.206 (G0 -0.236) | dEUR vs G0 +201.2 IC90 dias (+135.0,+266.4) IC90 cierre (+107.7,+298.4) | dias+ 12/13 | sin 2 mejores +134.4 | EV medio diario -0.233 IC90 inf -0.407
+T1 - PLA_T1 (merito de la senal): +287.9 EUR IC90 dias (+62.3,+470.0) | dias+ 11/13 | sin 2 mejores +176.2
+## FORWARD 02-Nov..14-Nov (R2) -- sello VIEJO (NO VALIDADO, solo comparacion)  (dias 13, filas 37966)
+T1: rellenos 2378 | EUR -286.7 | EV pond. -0.164 (G0 -0.239) | dEUR vs G0 +408.7 IC90 dias (+188.7,+610.7) IC90 cierre (+239.8,+565.3) | dias+ 12/13 | sin 2 mejores +256.5 | EV medio diario -0.187 IC90 inf -0.331
+PLA_T1: rellenos 3205 | EUR -486.1 | EV pond. -0.205 (G0 -0.239) | dEUR vs G0 +209.4 IC90 dias (+145.9,+272.4) IC90 cierre (+115.6,+300.8) | dias+ 12/13 | sin 2 mejores +141.9 | EV medio diario -0.232 IC90 inf -0.407
+T1 - PLA_T1 (merito de la senal): +199.4 EUR IC90 dias (-17.6,+383.2) | dias+ 10/13 | sin 2 mejores +96.6
+
+## TODO 26-Oct..14-Nov -- SELLO v3  (dias 20, filas 60428)
+T1: rellenos 3746 | EUR -121.4 | EV pond. -0.044 (G0 -0.171) | dEUR vs G0 +674.0 IC90 dias (+420.2,+904.8) IC90 cierre (+471.2,+878.2) | dias+ 18/20 | sin 2 mejores +504.5 | EV medio diario -0.066 IC90 inf -0.194
+T05: rellenos 2829 | EUR -50.9 | EV pond. -0.025 (G0 -0.171) | dEUR vs G0 +744.5 IC90 dias (+442.8,+1041.5) IC90 cierre (+477.0,+994.2) | dias+ 16/20 | sin 2 mejores +564.0 | EV medio diario -0.053 IC90 inf -0.198
+T1_ambos: rellenos 3364 | EUR -94.2 | EV pond. -0.038 (G0 -0.171) | dEUR vs G0 +701.2 IC90 dias (+414.5,+987.6) IC90 cierre (+440.1,+954.0) | dias+ 19/20 | sin 2 mejores +510.7 | EV medio diario -0.071 IC90 inf -0.200
+PLA_T1: rellenos 5271 | EUR -515.0 | EV pond. -0.132 (G0 -0.171) | dEUR vs G0 +280.4 IC90 dias (+204.8,+355.8) IC90 cierre (+165.6,+392.4) | dias+ 18/20 | sin 2 mejores +213.7 | EV medio diario -0.153 IC90 inf -0.283
+T1 - PLA_T1 (merito de la senal): +393.5 EUR IC90 dias (+169.3,+587.4) | dias+ 17/20 | sin 2 mejores +281.8
+## TODO 26-Oct..14-Nov -- sello VIEJO (NO VALIDADO, solo comparacion)  (dias 20, filas 62856)
+T1: rellenos 4076 | EUR -203.2 | EV pond. -0.068 (G0 -0.173) | dEUR vs G0 +604.0 IC90 dias (+369.2,+823.1) IC90 cierre (+417.9,+785.2) | dias+ 19/20 | sin 2 mejores +451.8 | EV medio diario -0.093 IC90 inf -0.218
+PLA_T1: rellenos 5301 | EUR -518.7 | EV pond. -0.132 (G0 -0.173) | dEUR vs G0 +288.6 IC90 dias (+216.0,+361.4) IC90 cierre (+178.1,+396.8) | dias+ 18/20 | sin 2 mejores +221.1 | EV medio diario -0.149 IC90 inf -0.282
+T1 - PLA_T1 (merito de la senal): +315.4 EUR IC90 dias (+100.4,+511.0) | dias+ 16/20 | sin 2 mejores +212.6
+
+## R2 por timestamp de fill (tf >= 27-Oct 11:47Z) -- SELLO v3  (dias 19, filas 53797)
+T1: rellenos 3309 | EUR -253.5 | EV pond. -0.104 (G0 -0.212) | dEUR vs G0 +629.8 IC90 dias (+381.0,+854.3) IC90 cierre (+430.5,+825.5) | dias+ 17/19 | sin 2 mejores +460.4 | EV medio diario -0.109 IC90 inf -0.239
+T05: rellenos 2528 | EUR -174.4 | EV pond. -0.095 (G0 -0.212) | dEUR vs G0 +708.9 IC90 dias (+418.5,+1003.3) IC90 cierre (+460.6,+949.4) | dias+ 15/19 | sin 2 mejores +528.4 | EV medio diario -0.109 IC90 inf -0.241
+T1_ambos: rellenos 2958 | EUR -220.8 | EV pond. -0.101 (G0 -0.212) | dEUR vs G0 +662.5 IC90 dias (+377.8,+937.0) IC90 cierre (+437.9,+883.8) | dias+ 18/19 | sin 2 mejores +472.0 | EV medio diario -0.115 IC90 inf -0.246
+PLA_T1: rellenos 4694 | EUR -645.3 | EV pond. -0.186 (G0 -0.212) | dEUR vs G0 +237.9 IC90 dias (+153.7,+323.1) IC90 cierre (+129.2,+346.9) | dias+ 16/19 | sin 2 mejores +171.2 | EV medio diario -0.194 IC90 inf -0.329
+T1 - PLA_T1 (merito de la senal): +391.9 EUR IC90 dias (+157.9,+594.7) | dias+ 16/19 | sin 2 mejores +280.2
+
+## R1 por timestamp de fill (26-27 Oct antes de 11:47Z) -- SELLO v3  (dias 2, filas 6631)
+T1: rellenos 437 | EUR +132.0 | EV pond. +0.417 (G0 +0.183) | dEUR vs G0 +44.2 IC90 dias (+nan,+nan) IC90 cierre (-20.6,+102.9) | dias+ 2/2 | sin 2 mejores +0.0 | EV medio diario +nan IC90 inf +nan
+T05: rellenos 301 | EUR +123.4 | EV pond. +0.589 (G0 +0.183) | dEUR vs G0 +35.6 IC90 dias (+nan,+nan) IC90 cierre (-52.6,+118.0) | dias+ 1/2 | sin 2 mejores +0.0 | EV medio diario +nan IC90 inf +nan
+T1_ambos: rellenos 406 | EUR +126.6 | EV pond. +0.434 (G0 +0.183) | dEUR vs G0 +38.7 IC90 dias (+nan,+nan) IC90 cierre (-49.9,+114.3) | dias+ 2/2 | sin 2 mejores +0.0 | EV medio diario +nan IC90 inf +nan
+PLA_T1: rellenos 577 | EUR +130.4 | EV pond. +0.306 (G0 +0.183) | dEUR vs G0 +42.5 IC90 dias (+nan,+nan) IC90 cierre (+21.0,+61.2) | dias+ 2/2 | sin 2 mejores +0.0 | EV medio diario +nan IC90 inf +nan
+T1 - PLA_T1 (merito de la senal): +1.7 EUR IC90 dias (+nan,+nan) | dias+ 1/2 | sin 2 mejores +0.0
+
+## hole60 (excluir solo hueco +-60 s): 11 pkl; stamp_v3 copia == original por hash: True
+## hole60 -- SELLO v3 (stamp_v3 verificado por hash), dias ['2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05', '2026-11-06', '2026-11-07', '2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12']  (dias 11, filas 41034)
+T1: rellenos 2458 | EUR -224.0 | EV pond. -0.124 (G0 -0.234) | dEUR vs G0 +534.2 IC90 dias (+348.3,+699.3) IC90 cierre (+353.3,+697.2) | dias+ 10/11 | sin 2 mejores +368.5 | EV medio diario -0.137 IC90 inf -0.261
+T05: rellenos 1900 | EUR -160.0 | EV pond. -0.116 (G0 -0.234) | dEUR vs G0 +598.2 IC90 dias (+407.0,+781.8) IC90 cierre (+377.0,+811.8) | dias+ 10/11 | sin 2 mejores +393.5 | EV medio diario -0.142 IC90 inf -0.277
+T1_ambos: rellenos 2171 | EUR -176.5 | EV pond. -0.110 (G0 -0.234) | dEUR vs G0 +581.8 IC90 dias (+357.1,+786.9) IC90 cierre (+374.8,+774.3) | dias+ 10/11 | sin 2 mejores +381.2 | EV medio diario -0.123 IC90 inf -0.237
+PLA_T1: rellenos 3573 | EUR -516.3 | EV pond. -0.195 (G0 -0.234) | dEUR vs G0 +242.0 IC90 dias (+175.3,+307.5) IC90 cierre (+150.7,+333.7) | dias+ 11/11 | sin 2 mejores +162.5 | EV medio diario -0.220 IC90 inf -0.344
+T1 - PLA_T1 (merito de la senal): +292.3 EUR IC90 dias (+119.6,+452.2) | dias+ 10/11 | sin 2 mejores +159.8
+PREREG_CALMA_T1 literal [main 02..14-Nov]: 13 dias | EV(T1) -0.124, EV(PLA_T1) -0.206, EV(T1)>EV(PLA) en 85 % de los dias (>= 67 % requerido), T1_c300 EV -0.130 (si <= 0 la latencia <= 100 ms es obligatoria) -> REFUTA (EV(T1) <= 0)  [no se cierra la puerta: ver ETIQUETAS]
+PREREG_CALMA_T1 literal [hole60 02..12-Nov]: 11 dias | EV(T1) -0.124, EV(PLA_T1) -0.195, EV(T1)>EV(PLA) en 73 % de los dias (>= 67 % requerido), T1_c300 EV -0.140 (si <= 0 la latencia <= 100 ms es obligatoria) -> REFUTA (EV(T1) <= 0)  [no se cierra la puerta: ver ETIQUETAS]
+
+ETIQUETAS (forward R2, 13 dias): valor de mitigacion T1-G0 = CUMPLE los criterios con sello v3 (R2 forward; falta validacion independiente) [dEUR +489.1, IC90 dias (+248.0,+707.7), dias+ 11/13, sin 2 mejores +319.6, T1-PLA +287.9 IC90 (+62.3,+470.0)];
+EV absoluto T1 = -0.124 (G0 -0.236) -> REFUTA segun PREREG_CALMA_T1 literal (EV(T1)<=0 con >=10 dias); la puerta NO se cierra (analisis de por que T1 no neutraliza la AS: horas recuperadas/rotacion 4 h). Limites: engine legacy (reloj EX) sin dedupe; 13-14 Nov recalculados por el juez; dias con hueco libro5_tx (hole60 aparte).

@@ -1,0 +1,8 @@
+compras B 215 215 2026-10-20T11:40:24Z 2026-10-23T08:56:00Z
+falta /mnt/HC_Volume_106538179/m5_onchain/m5_onchain_2026-10-23.csv.gz
+fills B en cadena 198
+tx con >1 taker distinto: 0
+con taker 198 / 215
+informados 09-18 (roi neto>=0,02, n>=100, c>=200): 238
+S_A {'n_fills': 198, 'n_flag': 14, 'eur_flag': 0.07805015604955336, 'EV_total': -0.030224449101864642, 'EV_flag': -0.06002899246575636, 'EV_noflag': -0.02770126492237641, 'pnl_flag': -0.9579389999999994, 'pnl_noflag': -5.221676000000003}
+inf_09_18 {'n_fills': 198, 'n_flag': 28, 'eur_flag': 0.14259913393243748, 'EV_total': -0.030224449101864642, 'EV_flag': -0.4855166241411858, 'EV_noflag': 0.045497739218979615, 'pnl_flag': -14.155461000000003, 'pnl_noflag': 7.975846000000002}

@@ -1,0 +1,132 @@
+# E1 B real con sello v3 (ADDENDUM1 sha 6fc7dba5); 215 fills, 202 unidades mercado-lado, 112 cierres, dias ['2026-10-20', '2026-10-21', '2026-10-22', '2026-10-23']; epoca 100 % R1
+C1 OK: join own_D 215/215; ramas {'sig': 163, 'amb': 24, 'sinev': 17, 'nosig': 6, 'guard': 5}. C10: tm3 - t_fill(libro5 viejo) p5/p50/p95 = -235/-67/87 ms (|d|>50 ms en 99.1 % de los fills; integridad: -236/-68/-58)
+Cobertura desenlace C7: gana notna 215/215 = 1,000. EV pond. total -0.0724; PnL -16.02 EUR sobre 221.30 EUR.
+
+C5 (dropna): filas q con ask/tamano vacio por dia (el extractor viejo las descartaba y conservaba el estado anterior): {'2026-10-20': {'filas_q_tokens_de_B': 197112, 'filas_con_ask_o_tamano_vacio': 75}, '2026-10-21': {'filas_q_tokens_de_B': 374034, 'filas_con_ask_o_tamano_vacio': 155}, '2026-10-22': {'filas_q_tokens_de_B': 451711, 'filas_con_ask_o_tamano_vacio': 99}, '2026-10-23': {'filas_q_tokens_de_B': 73499, 'filas_con_ask_o_tamano_vacio': 18}}
+Categorias de estado en el primario p60: {'ok': 210, 'sin_fila': 4, 'sin_ask': 0, 'cruzado': 1} (NaN = categoria `nan`, no se descarta)
+
+# TABLA viejo (sello libro5 t_fill, F5 a t_fill-100/250) vs v3 (tm3, F5 a tm3+delta-l_ef-d_proc; delta=0, d_proc=3)
+## OLD F5@t_fill-100 (NO VALIDADO)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.160 (n=44) | medio -0.055 (n=88) | alto -0.083 (n=64) | nan +0.391 (n=6)
+G1: EV -0.090 (n=132, 64% del coste) IC90 cierre (-0.352,+0.192) | DeltaEV vs todo -0.018 IC90 (-0.181,+0.138) | sin 2 mejores cierres -0.206
+G2: EV -0.160 (n=44, 22% del coste) IC90 cierre (-0.604,+0.362) | DeltaEV vs todo -0.087 IC90 (-0.517,+0.343) | sin 2 mejores cierres -0.416
+inv: EV -0.083 (n=64, 33% del coste) IC90 cierre (-0.476,+0.336) | DeltaEV vs todo -0.011 IC90 (-0.301,+0.278) | sin 2 mejores cierres -0.311
+   gradiente bajo-alto = -0.076  IC90 cierre (-0.636,+0.524)  n_unidades requeridas para IC90>0 con este efecto: 11554
+## OLD F5@t_fill-250 (NO VALIDADO)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.228 (n=62) | medio +0.313 (n=85) | alto -0.516 (n=50) | nan -0.020 (n=5)
+G1: EV +0.080 (n=147, 72% del coste) IC90 cierre (-0.205,+0.373) | DeltaEV vs todo +0.152 IC90 (+0.028,+0.275) | sin 2 mejores cierres -0.041
+G2: EV -0.228 (n=62, 31% del coste) IC90 cierre (-0.561,+0.126) | DeltaEV vs todo -0.155 IC90 (-0.476,+0.155) | sin 2 mejores cierres -0.390
+inv: EV -0.516 (n=50, 25% del coste) IC90 cierre (-0.872,-0.105) | DeltaEV vs todo -0.443 IC90 (-0.767,-0.112) | sin 2 mejores cierres -0.780
+   gradiente bajo-alto = +0.288  IC90 cierre (-0.218,+0.772)  n_unidades requeridas para IC90>0 con este efecto: 601
+## v3 l_ef=35 (todas las ramas)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.082 (n=46) | medio -0.026 (n=93) | alto -0.065 (n=59) | nan -1.000 (n=4)
+G1: EV -0.045 (n=139, 68% del coste) IC90 cierre (-0.311,+0.234) | DeltaEV vs todo +0.028 IC90 (-0.113,+0.165) | sin 2 mejores cierres -0.159
+G2: EV -0.082 (n=46, 22% del coste) IC90 cierre (-0.516,+0.431) | DeltaEV vs todo -0.010 IC90 (-0.435,+0.424) | sin 2 mejores cierres -0.326
+inv: EV -0.065 (n=59, 30% del coste) IC90 cierre (-0.491,+0.391) | DeltaEV vs todo +0.007 IC90 (-0.310,+0.342) | sin 2 mejores cierres -0.316
+   gradiente bajo-alto = -0.017  IC90 cierre (-0.597,+0.604)  n_unidades requeridas para IC90>0 con este efecto: 255038
+   placebo G1 (permutar tercil dentro de dia, 2000): DeltaEV obs +0.028, media placebo -0.022, p=0.322
+   placebo G2 (permutar tercil dentro de dia, 2000): DeltaEV obs -0.010, media placebo -0.055, p=0.412
+## v3 l_ef=60 (todas las ramas)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.215 (n=51) | medio +0.138 (n=85) | alto -0.247 (n=61) | nan -0.020 (n=5)
+G1: EV +0.006 (n=136, 66% del coste) IC90 cierre (-0.286,+0.313) | DeltaEV vs todo +0.079 IC90 (-0.072,+0.228) | sin 2 mejores cierres -0.113
+G2: EV -0.215 (n=51, 25% del coste) IC90 cierre (-0.581,+0.201) | DeltaEV vs todo -0.142 IC90 (-0.503,+0.216) | sin 2 mejores cierres -0.420
+inv: EV -0.247 (n=61, 31% del coste) IC90 cierre (-0.619,+0.187) | DeltaEV vs todo -0.175 IC90 (-0.492,+0.161) | sin 2 mejores cierres -0.495
+   gradiente bajo-alto = +0.033  IC90 cierre (-0.480,+0.545)  n_unidades requeridas para IC90>0 con este efecto: 51882
+   placebo G1 (permutar tercil dentro de dia, 2000): DeltaEV obs +0.079, media placebo -0.026, p=0.157
+   placebo G2 (permutar tercil dentro de dia, 2000): DeltaEV obs -0.142, media placebo -0.070, p=0.621
+## v3 l_ef=100 (todas las ramas)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.306 (n=53) | medio +0.106 (n=85) | alto -0.119 (n=59) | nan -0.020 (n=5)
+G1: EV -0.054 (n=138, 67% del coste) IC90 cierre (-0.323,+0.240) | DeltaEV vs todo +0.019 IC90 (-0.132,+0.169) | sin 2 mejores cierres -0.169
+G2: EV -0.306 (n=53, 26% del coste) IC90 cierre (-0.659,+0.046) | DeltaEV vs todo -0.233 IC90 (-0.610,+0.096) | sin 2 mejores cierres -0.459
+inv: EV -0.119 (n=59, 30% del coste) IC90 cierre (-0.553,+0.321) | DeltaEV vs todo -0.047 IC90 (-0.374,+0.279) | sin 2 mejores cierres -0.370
+   gradiente bajo-alto = -0.186  IC90 cierre (-0.757,+0.365)  n_unidades requeridas para IC90>0 con este efecto: 1755
+## v3 l_ef=150 (todas las ramas)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.145 (n=62) | medio +0.119 (n=83) | alto -0.287 (n=52) | nan -0.020 (n=5)
+G1: EV +0.005 (n=145, 71% del coste) IC90 cierre (-0.266,+0.278) | DeltaEV vs todo +0.077 IC90 (-0.050,+0.202) | sin 2 mejores cierres -0.104
+G2: EV -0.145 (n=62, 31% del coste) IC90 cierre (-0.498,+0.256) | DeltaEV vs todo -0.073 IC90 (-0.401,+0.265) | sin 2 mejores cierres -0.306
+inv: EV -0.287 (n=52, 26% del coste) IC90 cierre (-0.691,+0.183) | DeltaEV vs todo -0.215 IC90 (-0.542,+0.127) | sin 2 mejores cierres -0.582
+   gradiente bajo-alto = +0.142  IC90 cierre (-0.436,+0.708)  n_unidades requeridas para IC90>0 con este efecto: 3073
+
+# Sensibilidades DESCRIPTIVAS (no deciden): d_proc 10/30 y delta -suelo/+suelo (l_ef 35 y 60)
+## v3 l_ef=35 d_proc=10  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.054 (n=49) | medio +0.016 (n=89) | alto -0.222 (n=59) | nan -0.020 (n=5)
+G1: EV -0.009 (n=138, 67% del coste) IC90 cierre (-0.291,+0.287) | DeltaEV vs todo +0.064 IC90 (-0.086,+0.208) | sin 2 mejores cierres -0.127
+G2: EV -0.054 (n=49, 24% del coste) IC90 cierre (-0.468,+0.424) | DeltaEV vs todo +0.019 IC90 (-0.383,+0.410) | sin 2 mejores cierres -0.277
+inv: EV -0.222 (n=59, 30% del coste) IC90 cierre (-0.595,+0.227) | DeltaEV vs todo -0.149 IC90 (-0.470,+0.200) | sin 2 mejores cierres -0.477
+   gradiente bajo-alto = +0.168  IC90 cierre (-0.428,+0.756)  n_unidades requeridas para IC90>0 con este efecto: 2606
+## v3 l_ef=35 d_proc=30  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.315 (n=50) | medio +0.211 (n=84) | alto -0.268 (n=63) | nan -0.020 (n=5)
+G1: EV +0.020 (n=134, 66% del coste) IC90 cierre (-0.271,+0.337) | DeltaEV vs todo +0.092 IC90 (-0.058,+0.249) | sin 2 mejores cierres -0.101
+G2: EV -0.315 (n=50, 24% del coste) IC90 cierre (-0.681,+0.075) | DeltaEV vs todo -0.243 IC90 (-0.613,+0.121) | sin 2 mejores cierres -0.504
+inv: EV -0.268 (n=63, 32% del coste) IC90 cierre (-0.626,+0.144) | DeltaEV vs todo -0.195 IC90 (-0.505,+0.116) | sin 2 mejores cierres -0.509
+   gradiente bajo-alto = -0.048  IC90 cierre (-0.558,+0.450)  n_unidades requeridas para IC90>0 con este efecto: 22552
+## v3 l_ef=35 delta=-suelo(39,5)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.165 (n=54) | medio +0.069 (n=85) | alto -0.200 (n=58) | nan -0.020 (n=5)
+G1: EV -0.021 (n=139, 68% del coste) IC90 cierre (-0.297,+0.280) | DeltaEV vs todo +0.052 IC90 (-0.093,+0.196) | sin 2 mejores cierres -0.137
+G2: EV -0.165 (n=54, 26% del coste) IC90 cierre (-0.552,+0.235) | DeltaEV vs todo -0.093 IC90 (-0.456,+0.259) | sin 2 mejores cierres -0.358
+inv: EV -0.200 (n=58, 29% del coste) IC90 cierre (-0.601,+0.242) | DeltaEV vs todo -0.127 IC90 (-0.447,+0.218) | sin 2 mejores cierres -0.462
+   gradiente bajo-alto = +0.034  IC90 cierre (-0.510,+0.570)  n_unidades requeridas para IC90>0 con este efecto: 52014
+## v3 l_ef=35 delta=+suelo (NO decide)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo +0.123 (n=50) | medio -0.208 (n=88) | alto +0.044 (n=59) | nan -1.000 (n=5)
+G1: EV -0.087 (n=138, 67% del coste) IC90 cierre (-0.337,+0.190) | DeltaEV vs todo -0.015 IC90 (-0.165,+0.133) | sin 2 mejores cierres -0.205
+G2: EV +0.123 (n=50, 24% del coste) IC90 cierre (-0.311,+0.607) | DeltaEV vs todo +0.195 IC90 (-0.196,+0.602) | sin 2 mejores cierres -0.068
+inv: EV +0.044 (n=59, 30% del coste) IC90 cierre (-0.405,+0.529) | DeltaEV vs todo +0.117 IC90 (-0.204,+0.466) | sin 2 mejores cierres -0.212
+   gradiente bajo-alto = +0.078  IC90 cierre (-0.530,+0.678)  n_unidades requeridas para IC90>0 con este efecto: 12317
+## v3 l_ef=60 d_proc=10  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.087 (n=50) | medio +0.041 (n=87) | alto -0.229 (n=60) | nan -0.020 (n=5)
+G1: EV -0.004 (n=137, 67% del coste) IC90 cierre (-0.286,+0.295) | DeltaEV vs todo +0.068 IC90 (-0.078,+0.216) | sin 2 mejores cierres -0.123
+G2: EV -0.087 (n=50, 24% del coste) IC90 cierre (-0.500,+0.348) | DeltaEV vs todo -0.015 IC90 (-0.400,+0.366) | sin 2 mejores cierres -0.294
+inv: EV -0.229 (n=60, 30% del coste) IC90 cierre (-0.603,+0.199) | DeltaEV vs todo -0.157 IC90 (-0.473,+0.180) | sin 2 mejores cierres -0.483
+   gradiente bajo-alto = +0.142  IC90 cierre (-0.422,+0.690)  n_unidades requeridas para IC90>0 con este efecto: 3091
+## v3 l_ef=60 d_proc=30  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.133 (n=57) | medio -0.006 (n=86) | alto -0.120 (n=54) | nan -0.020 (n=5)
+G1: EV -0.056 (n=143, 70% del coste) IC90 cierre (-0.329,+0.240) | DeltaEV vs todo +0.017 IC90 (-0.130,+0.164) | sin 2 mejores cierres -0.171
+G2: EV -0.133 (n=57, 28% del coste) IC90 cierre (-0.504,+0.255) | DeltaEV vs todo -0.060 IC90 (-0.419,+0.288) | sin 2 mejores cierres -0.312
+inv: EV -0.120 (n=54, 27% del coste) IC90 cierre (-0.565,+0.353) | DeltaEV vs todo -0.048 IC90 (-0.417,+0.313) | sin 2 mejores cierres -0.395
+   gradiente bajo-alto = -0.013  IC90 cierre (-0.599,+0.535)  n_unidades requeridas para IC90>0 con este efecto: 420379
+## v3 l_ef=60 delta=-suelo(39,5)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.293 (n=52) | medio +0.094 (n=86) | alto -0.119 (n=59) | nan -0.020 (n=5)
+G1: EV -0.054 (n=138, 67% del coste) IC90 cierre (-0.323,+0.240) | DeltaEV vs todo +0.019 IC90 (-0.132,+0.169) | sin 2 mejores cierres -0.169
+G2: EV -0.293 (n=52, 26% del coste) IC90 cierre (-0.651,+0.067) | DeltaEV vs todo -0.221 IC90 (-0.597,+0.113) | sin 2 mejores cierres -0.449
+inv: EV -0.119 (n=59, 30% del coste) IC90 cierre (-0.553,+0.321) | DeltaEV vs todo -0.047 IC90 (-0.374,+0.279) | sin 2 mejores cierres -0.370
+   gradiente bajo-alto = -0.174  IC90 cierre (-0.752,+0.374)  n_unidades requeridas para IC90>0 con este efecto: 2033
+## v3 l_ef=60 delta=+suelo (NO decide)  (n=202 unidades, 112 cierres, 4 dias)
+EV pond. todo -0.072 | bajo -0.001 (n=47) | medio -0.069 (n=89) | alto -0.062 (n=62) | nan -1.000 (n=4)
+G1: EV -0.045 (n=136, 66% del coste) IC90 cierre (-0.320,+0.238) | DeltaEV vs todo +0.027 IC90 (-0.115,+0.170) | sin 2 mejores cierres -0.163
+G2: EV -0.001 (n=47, 23% del coste) IC90 cierre (-0.462,+0.543) | DeltaEV vs todo +0.071 IC90 (-0.362,+0.516) | sin 2 mejores cierres -0.233
+inv: EV -0.062 (n=62, 32% del coste) IC90 cierre (-0.465,+0.359) | DeltaEV vs todo +0.010 IC90 (-0.296,+0.318) | sin 2 mejores cierres -0.294
+   gradiente bajo-alto = +0.061  IC90 cierre (-0.517,+0.664)  n_unidades requeridas para IC90>0 con este efecto: 18459
+
+# C6: solo rama `sig` (n=163 fills)
+## v3 l_ef=35 SOLO sig  (n=153 unidades, 94 cierres, 4 dias)
+EV pond. todo -0.009 | bajo -0.106 (n=31) | medio +0.151 (n=75) | alto -0.206 (n=47) | nan +nan (n=0)
+G1: EV +0.076 (n=106, 70% del coste) IC90 cierre (-0.282,+0.459) | DeltaEV vs todo +0.085 IC90 (-0.091,+0.260) | sin 2 mejores cierres -0.072
+G2: EV -0.106 (n=31, 20% del coste) IC90 cierre (-0.667,+0.548) | DeltaEV vs todo -0.097 IC90 (-0.610,+0.494) | sin 2 mejores cierres -0.477
+inv: EV -0.206 (n=47, 30% del coste) IC90 cierre (-0.700,+0.404) | DeltaEV vs todo -0.197 IC90 (-0.578,+0.237) | sin 2 mejores cierres -0.547
+   gradiente bajo-alto = +0.100  IC90 cierre (-0.677,+0.935)  n_unidades requeridas para IC90>0 con este efecto: 9481
+## v3 l_ef=60 SOLO sig  (n=153 unidades, 94 cierres, 4 dias)
+EV pond. todo -0.009 | bajo -0.161 (n=36) | medio +0.343 (n=66) | alto -0.452 (n=50) | nan +4.556 (n=1)
+G1: EV +0.163 (n=102, 67% del coste) IC90 cierre (-0.229,+0.573) | DeltaEV vs todo +0.172 IC90 (+0.001,+0.360) | sin 2 mejores cierres +0.006
+G2: EV -0.161 (n=36, 24% del coste) IC90 cierre (-0.647,+0.354) | DeltaEV vs todo -0.152 IC90 (-0.638,+0.317) | sin 2 mejores cierres -0.450
+inv: EV -0.452 (n=50, 33% del coste) IC90 cierre (-0.845,+0.010) | DeltaEV vs todo -0.443 IC90 (-0.806,-0.080) | sin 2 mejores cierres -0.778
+   gradiente bajo-alto = +0.292  IC90 cierre (-0.359,+0.921)  n_unidades requeridas para IC90>0 con este efecto: 726
+
+C6 estabilidad de etiqueta (l_ef=60; tm3 perturbado: sig +-5 ms; amb/nosig/guard -57/+3 ms (d_ex p95 76 ms vs c~19); sinev +-750 ms): fills con tercil distinto = 9.8 % del total (criterio: >20 % => INSUFFICIENT); por rama (tasa, n): {'sig': (0.043, 163), 'amb': (0.25, 24), 'nosig': (0.167, 6), 'guard': (0.0, 5), 'sinev': (0.412, 17)}
+Cruce tercil viejo F5@t_fill-100 vs v3 l_ef=35 (fills): ter_p35  alto  bajo  medio  nan | ter_100                         | alto       60     3      7    0 | bajo        0    39      7    0 | medio       5     5     83    0 | nan         1     0      1    4
+Cruce viejo F5@t_fill-100 vs v3 l_ef=100: ter_p100  alto  bajo  medio  nan | ter_100                          | alto        48     4     18    0 | bajo         6    26     14    0 | medio       10    24     58    1 | nan          1     0      1    4
+
+# Por dia (v3 l_ef=60, EV pond.):
+               n  EV_todo  EV_bajo  EV_medio  EV_alto
+dia                                                  
+2026-10-20  37.0    0.070    1.254    -0.142    0.024
+2026-10-21  72.0    0.166   -0.092     0.424   -0.141
+2026-10-22  77.0   -0.267   -0.290    -0.001   -0.622
+2026-10-23  16.0   -0.584   -1.000     0.303   -1.000
+
+# C8 incondicional por orden (3796 ordenes; sum coste_pot 4489.1 >= sum coste_relleno 221.3): F5_post (ledger, en la decision de colocacion; NO depende del sello del fill)
+          ordenes  rellenadas    coste      pnl  exposicion  P_fill  EV_pond_relleno  EV_incond_por_EUR_expuesto  pnl_por_orden
+ter_post                                                                                                                       
+alto          319          29  31.8846   7.1154      374.38  0.0909           0.2232                      0.0190         0.0223
+bajo         2203          89  94.6409 -15.2000     2615.92  0.0404          -0.1606                     -0.0058        -0.0069
+medio        1274          84  94.7753  -7.9384     1498.78  0.0659          -0.0838                     -0.0053        -0.0062
+Total: P(fill) 0.0532; EV|fill pond. -0.0724; EV incondicional por EUR expuesto -0.0036; P(fill) x EV|fill = -0.00385

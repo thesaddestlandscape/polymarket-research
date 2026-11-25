@@ -1,0 +1,9 @@
+# B real H47-B liquidadas n=202, EUR 221.3, PnL -16.02, EV -0.0724, hit 0.193; dias {'2026-10-20': 37, '2026-10-21': 72, '2026-10-22': 77, '2026-10-23': 16}; cobertura r60f 0.950 rpre 0.941
+MAP (tramo x moneda, 13 dias): {'ETH': {0: np.float64(0.132), 1: np.float64(0.1839), 2: np.float64(0.238), 3: np.float64(0.2863)}, 'SOL': {0: np.float64(0.1341), 1: np.float64(0.1849), 2: np.float64(0.2487), 3: np.float64(0.2997)}, 'XRP': {0: np.float64(0.1295), 1: np.float64(0.178), 2: np.float64(0.2293), 3: np.float64(0.2693)}}
+R_r60 (umbral DESC): skip 22/202 ret 0.896 EV_all -0.072 EV_ret -0.148 EV_skip +0.578 dPnL -13.24 IC90 cierre [-35.20,+5.95]
+R0 (CON): skip 60/202 ret 0.701 EV_all -0.072 EV_ret +0.054 EV_skip -0.368 dPnL +24.41 IC90 cierre [-1.81,+47.27]
+MAP techo m=0.0: skip 80/202 ret 0.604 EV_all -0.072 EV_ret -0.004 EV_skip -0.177 dPnL +15.49 IC90 cierre [-20.14,+47.27]
+MAP techo m=0.01: skip 126/202 ret 0.368 EV_all -0.072 EV_ret +0.047 EV_skip -0.142 dPnL +19.83 IC90 cierre [-22.71,+59.49]
+MAP techo m=0.02: skip 165/202 ret 0.176 EV_all -0.072 EV_ret +0.183 EV_skip -0.127 dPnL +23.17 IC90 cierre [-27.18,+68.98]
+MAP techo m=0.04: skip 202/202 ret 0.000 EV_all -0.072 EV_ret +nan EV_skip -0.072 dPnL +16.02 IC90 cierre [-44.62,+71.41]
+posiciones B por dia (EV): {'2026-10-20': (np.float64(0.07), 37), '2026-10-21': (np.float64(0.166), 72), '2026-10-22': (np.float64(-0.267), 77), '2026-10-23': (np.float64(-0.584), 16)}

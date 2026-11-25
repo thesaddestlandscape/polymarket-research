@@ -1,0 +1,62 @@
+Poblacion 17-22 Oct (ETH/SOL/XRP 5m, pc 0,10-0,30, T 60-300, 5 acc por maker-mercado-lado, sin B): unidades 28871 (sin desenlace excluidas: 215); coste 28716 EUR; EV global -0.0215
+              n       coste      ev     hit      pc
+pos1                                               
+ATRAS    4033.0   3880.6631 -0.0337  0.1991  0.2032
+CENTRO   1628.0   1651.6500 -0.0282  0.1972  0.2029
+FRENTE   3784.0   3898.9675  0.0003  0.2061  0.2061
+SOLO    19426.0  19284.8101 -0.0229  0.2069  0.2090
+
+EV por clase y dia (n unidades):
+dia     2026-10-17  2026-10-18  2026-10-19  2026-10-20  2026-10-21  2026-10-22
+pos1                                                                          
+ATRAS       -0.071      -0.227      -0.130      -0.007       0.188       0.097
+CENTRO       0.043       0.110      -0.313      -0.271       0.245       0.587
+FRENTE      -0.084      -0.195      -0.084       0.021       0.238       0.165
+SOLO        -0.047      -0.150      -0.093      -0.016       0.180      -0.004
+
+PRIMARIO ATRAS - FRENTE: n 4033 vs 3784; EV -0.0337 vs +0.0003; diferencia -0.0339
+   IC90 por dia (-0.050,-0.017) | por cierre (-0.092,+0.022) | sin 2 mejores dias -0.0236 | mitades 17-19 -0.0223 / 20-22 -0.0464
+   placebo dentro de mercado: p(<=obs)=0.043 p(>=obs)=0.957 (media placebo -0.0002) | dentro de (mercado,lado): p(<=)=0.224 p(>=)=0.776 (media -0.0277)
+   REGLA PRE-REGISTRADA «ATRAS es adversa»: NO CUMPLE (mismo sentido contrario, ATRAS mejor, con todos los criterios: False)
+
+ATRAS - (SOLO+FRENTE+CENTRO): n 4033 vs 24838; EV -0.0337 vs -0.0196; diferencia -0.0140
+   IC90 por dia (-0.039,+0.010) | por cierre (-0.068,+0.036) | sin 2 mejores dias -0.0252 | mitades 17-19 -0.0410 / 20-22 +0.0183
+   placebo dentro de mercado: p(<=obs)=0.767 p(>=obs)=0.233 (media placebo -0.0269) | dentro de (mercado,lado): p(<=)=0.950 p(>=)=0.050 (media -0.0248)
+
+SOLO - multi (FRENTE+CENTRO+ATRAS): n 19426 vs 9445; EV -0.0229 vs -0.0187; diferencia -0.0042
+   IC90 por dia (-0.054,+0.030) | por cierre (-0.062,+0.055) | sin 2 mejores dias +0.0263 | mitades 17-19 +0.0246 / 20-22 -0.0442
+   placebo dentro de mercado: p(<=obs)=0.004 p(>=obs)=0.996 (media placebo +0.0265) | dentro de (mercado,lado): p(<=)=0.000 p(>=)=1.000 (media +0.0170)
+
+PROFUNDIDAD de la rafaga hasta nosotros (acc con prioridad delante: mismo nivel + mejor precio):
+                            n    coste      ev    hit
+ter                                                  
+0 (primero absoluto)  20396.0  20428.0 -0.0311  0.204
+(0-20]                 6143.0   5941.0 -0.0066  0.206
+>20                    2332.0   2347.0  0.0241  0.211
+
+PROFUNDIDAD hacia DETRAS (acc despues de nosotros en la misma rafaga, nivel igual o peor):
+                                       n    coste      ev    hit
+beyond                                                          
+0 (la rafaga acaba en nosotros)  25103.0  24767.0 -0.0268  0.204
+(0-10]                            1755.0   1866.0 -0.0915  0.193
+>10                               2013.0   2083.0  0.1042  0.229
+
+B real (descriptivo, n=175 posiciones con desenlace, EV global -0.050):
+            n  coste     ev    hit
+pos1                              
+ATRAS     6.0    5.8  0.716  0.333
+CENTRO    1.0    0.9 -1.000  0.000
+FRENTE   17.0   15.3 -0.673  0.059
+SOLO    151.0  156.8 -0.012  0.225
+B por A0 al postear:
+             n  coste     ev    hit
+terA0                              
+A0=0      42.0   40.5 -0.220  0.190
+0<A0<=30  51.0   52.7  0.012  0.235
+A0>30     82.0   85.7 -0.008  0.207
+B por presencia de otros en el nivel 100 ms antes de la rafaga:
+                          n  coste     ev    hit
+sol                                             
+otros presentes        35.0   34.8  0.150  0.229
+otros<=0.5 en -100ms  106.0  110.5 -0.069  0.208
+sin dato               34.0   33.6 -0.197  0.206

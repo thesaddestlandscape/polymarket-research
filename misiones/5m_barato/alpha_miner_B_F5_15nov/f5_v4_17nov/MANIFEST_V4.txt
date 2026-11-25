@@ -1,0 +1,36 @@
+2026-11-17T09:32:44Z run_v4 arranca; sha de codigo:
+73c25e370c30a39a6ada9128e0f070dc3a03f14e487554507e3ce38625d9d1fc  run_v4.sh
+927120efaf0c39d62acbd2b497887f95e87480874069e23bef8a8b333bb2fc75  guard_v4.sh
+a14a818b9f2ad2231c424193c81eb783813918ab17e5a2c660866fc7f72ec823  t2_dia_v4.py
+cf718d33b358eee14d114bb18834c6d81f2dfd684d74c0aeb3d512abbdafdfc6  suelo_causal.py
+63b5c325c3a726bcde03ecafddd23e4bc2d8c7a104453f50f4d7c1793a1ce4f1  SPEC_F5_V4_17nov.md
+e275deb720e4d59afc78827fbb89ac8019f2c41894f0dfec7c96b27faea3498c  ../exp1/lib1.py
+7846eaefd75e1e8554c19e4d76b289812c0f4474b882193354179441918cc08e  ../lib_ev.py
+2026-11-17T09:40:11Z run_v4 arranca; sha de codigo:
+f205e445d5ef27701ef6946d03851186f20cc96bfa7a2d4cece76162ea3fdc7b  run_v4.sh
+927120efaf0c39d62acbd2b497887f95e87480874069e23bef8a8b333bb2fc75  guard_v4.sh
+258f1b9eb4ba2be9876c1d712671ad62c8c548c68e7ae4bf66d8220201c4978b  t2_dia_v4.py
+cf718d33b358eee14d114bb18834c6d81f2dfd684d74c0aeb3d512abbdafdfc6  suelo_causal.py
+63b5c325c3a726bcde03ecafddd23e4bc2d8c7a104453f50f4d7c1793a1ce4f1  SPEC_F5_V4_17nov.md
+e275deb720e4d59afc78827fbb89ac8019f2c41894f0dfec7c96b27faea3498c  ../exp1/lib1.py
+7846eaefd75e1e8554c19e4d76b289812c0f4474b882193354179441918cc08e  ../lib_ev.py
+2026-11-17T12:26:05Z [sesion principal] guard_v4: load1<=8.0 -> <=1.5*nproc (Javi OK; carga por nucleo). backup guard_v4.sh.bak_17nov
+2026-11-17T12:46:51Z [f5_v4] guard_v4.sh: nproc -> nproc --all (OMP_NUM_THREADS=1 del runner hacia nproc=1 y umbral 1,5; mantiene 1.5*nproc de la sesion principal = 12)
+2026-11-17T13:27:46Z F5-V4 FIN (COMPLETE: 38/38 dias hist, 35/35 BTC pob, paridad p5 0 dif); sha de salidas:
+63b5c325c3a726bcde03ecafddd23e4bc2d8c7a104453f50f4d7c1793a1ce4f1  SPEC_F5_V4_17nov.md
+258f1b9eb4ba2be9876c1d712671ad62c8c548c68e7ae4bf66d8220201c4978b  t2_dia_v4.py
+3d5b6cb68a5027b6dbae1c2a37f09f6af1684a9b77004237620f6d24b81c918d  t2_clases.py
+5e596a80735a1fdc768f809980120379ac927f4739f3877fab1d2d2850a6f01d  t2_agrega_v4.py
+c82dc0225889d8ecf1353894be66828ac0f15ded4c4458a3e24f8526a264eb8b  t3_v2_gate.py
+13d61b8187ef3764c62c0e402775a0f0666cf8721a9589097744456794ae28ae  t1_overlap_tf.py
+cf718d33b358eee14d114bb18834c6d81f2dfd684d74c0aeb3d512abbdafdfc6  suelo_causal.py
+50d3ea50a1ed4f1a1c35b842b64d67df0e6338943e73b67eb3dd8145cad7217e  guard_v4.sh
+f205e445d5ef27701ef6946d03851186f20cc96bfa7a2d4cece76162ea3fdc7b  run_v4.sh
+c862ae2949e63010d503685856a225edf6aa5c3658dc4d091de8e7cf395129fb  T2_clase_suelo_v4.txt
+481733fdcc4db3417fbdbf09eb67ca0a6323de46ab5798aa31ee931d43a4e204  T2_clase_suelo_v4.json
+e3892b5f927e6ed40448e0321be00d77c77ac9408e38a7af4193941d6b23162d  T1_overlap_tf.json
+38321b2c180f1e500898e60dc3d7cd58a8fd7dfe7ce18a4f1d8e651379094d25  V2_ALL3_base.json
+a3aa7361729d821b034ed1ddf70ccddca34b1bcad23e9d18066cc8f0df2c7d8b  V2_BTC_base.json
+7def7cea9c66603b075a721985be769e3ebdca1b845c3f5f3521c45d151a2d24  V2_BTC_pura.json
+508f35e394cca108227293209978a215e055d333dffbb30f8867fd9ae8a94580  V2_ETH_SOL_XRP_base.json
+ebba3aba10ee6b32d3ca8fc4c5cf90fb1a80813b69147cf4765a52cc069afc2a  V2_ETH_SOL_XRP_pura.json

@@ -1,0 +1,5 @@
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia.py:15: Pandas4Warning: Timestamp.utcnow is deprecated and will be removed in a future version. Use Timestamp.now('UTC') instead.
+  t0 = time.time(); man = dict(job='e2_dia', dia=D, estado='RUNNING', code=CODE_SHA, addendum=ADD_SHA[:8], smoke=SMOKE, inicio=pd.Timestamp.utcnow().strftime('%FT%TZ'))
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia.py:85: Pandas4Warning: Timestamp.utcnow is deprecated and will be removed in a future version. Use Timestamp.now('UTC') instead.
+  man.update(estado='COMPLETE', fin=pd.Timestamp.utcnow().strftime('%FT%TZ'), duracion_s=round(time.time() - t0), prints=len(P), por_moneda=P.coin.value_counts().to_dict(), epoca=P.epoca.value_counts().to_dict(),
+2026-11-03 COMPLETE prints 15738 cob 1.0 suelo {'R2': {'n_ventanas': 144, 'mediana_p5': 15.0}} cat_p60 {'ok': 15722, 'sin_fila': 12, 'sin_ask': 0, 'cruzado': 4} s 147

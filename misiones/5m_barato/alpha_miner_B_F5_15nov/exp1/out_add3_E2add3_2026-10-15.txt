@@ -1,0 +1,11 @@
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia_add3.py:17: Pandas4Warning: Timestamp.utcnow is deprecated and will be removed in a future version. Use Timestamp.now('UTC') instead.
+  t0 = time.time(); man = dict(job='e2_dia_add3', dia=D, estado='RUNNING', code=CODE_SHA, addendum=ADD3_SHA[:8], addendum1=ADD_SHA[:8], regla_epoca='ADD3 (= ADD2 §2): suelo medido por ventana de 10 min', smoke=SMOKE, inicio=pd.Timestamp.utcnow().strftime('%FT%TZ'))
+2026-10-15 FAILED MemoryError: Unable to allocate 24.9 MiB for an array with shape (6515036,) and data type float32
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia_add3.py", line 81, in <module>
+    QO = Q.__new__(Q); QO.K, QO.R, QO.B, QO.A, QO.TB, QO.TA = (a[fin_m] for a in (QA.K, QA.R, QA.B, QA.A, QA.TB, QA.TA)); del Qd; gc.collect()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/exp1/e2_dia_add3.py", line 81, in <genexpr>
+    QO = Q.__new__(Q); QO.K, QO.R, QO.B, QO.A, QO.TB, QO.TA = (a[fin_m] for a in (QA.K, QA.R, QA.B, QA.A, QA.TB, QA.TA)); del Qd; gc.collect()
+                                                               ~^^^^^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 24.9 MiB for an array with shape (6515036,) and data type float32

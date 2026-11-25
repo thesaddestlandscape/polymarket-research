@@ -1,0 +1,137 @@
+sanity: cobertura z240 1.0 | corr(rpre_mine, rpre tab) 1.0
+P1 09-16: n=77793 EUR=75509 EV=+0.0556 dias=8 cierres=2304
+P2 17-21: n=36125 EUR=34560 EV=-0.0411 dias=5 cierres=1272
+
+#### H-D: EV/EUR por clase de regimen x CON/NEU/CONTRA (n, EUR) por periodo
+--- P1 09-16 por reg
+                n        eur     EV
+reg cls                            
+ALC CON      2336   2284.530  0.037
+    CONTRA   2447   2365.067 -0.134
+    NEU      2028   2002.847 -0.106
+BAJ CON      3848   3695.219  0.206
+    CONTRA   4613   4400.351 -0.124
+    NEU      1715   1641.943  0.073
+LAT CON     17987  17414.057  0.018
+    CONTRA  19058  18517.098  0.118
+    NEU     23402  22813.684  0.079
+--- P1 09-16 por aln
+                    n        eur     EV
+aln     cls                            
+ALIGN   CON      4266   4119.426  0.161
+        CONTRA   2337   2220.806 -0.114
+        NEU      1775   1747.715 -0.081
+COUNTER CON      1918   1860.323  0.100
+        CONTRA   4723   4544.611 -0.135
+        NEU      1968   1897.075  0.025
+FLAT    CON     17987  17414.057  0.018
+        CONTRA  19058  18517.098  0.118
+        NEU     23402  22813.684  0.079
+--- P1 09-16 por moneda x reg x cls (EV)
+cls        CON  CONTRA     NA    NEU
+act reg                             
+ETH ALC  0.094  -0.224    NaN  0.029
+    BAJ  0.494  -0.316    NaN  0.306
+    LAT -0.066   0.217 -0.160  0.081
+SOL ALC  0.185   0.063    NaN -0.564
+    BAJ -0.022   0.058    NaN -0.263
+    LAT  0.119   0.050  1.567  0.129
+XRP ALC -0.764  -0.161    NaN -0.172
+    BAJ -0.260   0.183 -1.000 -0.029
+    LAT  0.116  -0.107  1.404 -0.028
+--- P2 17-21 por reg
+                n        eur     EV
+reg cls                            
+ALC CON      1598   1492.065 -0.359
+    CONTRA   1506   1402.790  0.101
+    NEU       909    834.948 -0.309
+BAJ CON      1330   1269.447  0.258
+    CONTRA   1398   1422.711  0.415
+    NEU       890    868.110 -0.166
+LAT CON      8540   8101.900 -0.147
+    CONTRA   9067   8660.734  0.015
+    NEU     10863  10489.893 -0.044
+--- P2 17-21 por aln
+                    n        eur     EV
+aln     cls                            
+ALIGN   CON      1993   1877.875 -0.203
+        CONTRA    851    863.174  0.177
+        NEU       811    771.650 -0.447
+COUNTER CON       935    883.637  0.195
+        CONTRA   2053   1962.328  0.295
+        NEU       988    931.408 -0.061
+FLAT    CON      8540   8101.900 -0.147
+        CONTRA   9067   8660.734  0.015
+        NEU     10863  10489.893 -0.044
+--- P2 17-21 por moneda x reg x cls (EV)
+cls        CON  CONTRA   NA    NEU
+act reg                           
+ETH ALC -0.298   0.104  NaN -0.490
+    BAJ  0.450   0.147  NaN -0.131
+    LAT -0.180  -0.011 -1.0 -0.096
+SOL ALC -0.357  -0.118  NaN -0.334
+    BAJ -0.186   1.684  NaN -0.376
+    LAT -0.105   0.044  NaN  0.147
+XRP ALC -0.634   0.434  NaN  0.676
+    BAJ -0.213   0.560  NaN  0.095
+    LAT -0.109   0.051  NaN -0.131
+
+#### Delta_dir = EV(COUNTER) - EV(ALIGN) (z240 respecto al lado), IC90 por cierre
+P1 09-16: EV COUNTER -0.046 (EUR 8302) | EV ALIGN +0.031 (EUR 8100) | FLAT +0.073 | Delta_dir -0.077 IC90 [-0.313,+0.178]
+    ETH: COUNTER -0.028 ALIGN +0.099
+    SOL: COUNTER -0.107 ALIGN +0.052
+    XRP: COUNTER +0.004 ALIGN -0.290
+P2 17-21: EV COUNTER +0.184 (EUR 3777) | EV ALIGN -0.163 (EUR 3513) | FLAT -0.057 | Delta_dir +0.347 IC90 [-0.000,+0.696]
+    ETH: COUNTER +0.107 ALIGN -0.105
+    SOL: COUNTER +0.388 ALIGN -0.372
+    XRP: COUNTER +0.249 ALIGN -0.063
+
+######## F_A (ajuste P1 -> eval P2)
+ajuste: S_R(aln)=[]  S_R2(reg)=[]  S_N=[]
+CONTROL R0 (CONTRA-only incondicional, saltar todos CON)
+R0: skip 11468/36125 ret 0.686 | EV_all -0.0411 EV_ret -0.0008 EV_skip -0.1289 | dPnL +1399.8 IC90 [+73.7,+2685.8] p_perm 0.0020 | dias+ 4/5 sin2 +160.8 haircut50 +699.9 | moneda {'ETH': 666.8, 'SOL': 454.7, 'XRP': 278.4} | GATE_FORMAL True
+V(E1) ajuste: EV top30 +0.040 vs resto +0.060 candidato=False cortes={'ETH': np.float64(0.026), 'SOL': np.float64(0.03), 'XRP': np.float64(-0.005)}
+V_E1 (cand=False): skip 8415/36125 ret 0.781 | EV_all -0.0411 EV_ret -0.0420 EV_skip -0.0376 | dPnL +285.1 IC90 [-251.7,+823.3] p_perm 0.6567 | dias+ 3/5 sin2 -145.3 haircut50 +142.5 | moneda {'ETH': 239.6, 'SOL': 64.4, 'XRP': -19.0} | GATE_FORMAL False
+   control inversion V_E1 (cola baja): skip 12923/36125 ret 0.622 | EV_all -0.0411 EV_ret -0.0537 EV_skip -0.0203 | dPnL +265.9 IC90 [-636.9,+1181.3] p_perm 0.7531 | dias+ 3/5 sin2 -103.2 haircut50 +132.9 | moneda {'ETH': 521.5, 'SOL': -221.8, 'XRP': -33.8} | GATE_FORMAL False
+V(E2) ajuste: EV top30 +0.073 vs resto +0.048 candidato=False cortes={'ETH': np.float64(0.045), 'SOL': np.float64(0.04), 'XRP': np.float64(0.04)}
+V_E2 (cand=False): skip 11211/36125 ret 0.674 | EV_all -0.0411 EV_ret -0.0522 EV_skip -0.0179 | dPnL +202.0 IC90 [-577.8,+987.5] p_perm 0.8281 | dias+ 3/5 sin2 -63.4 haircut50 +101.0 | moneda {'ETH': 311.0, 'SOL': -91.1, 'XRP': -17.9} | GATE_FORMAL False
+   control inversion V_E2 (cola baja): skip 11077/36125 ret 0.709 | EV_all -0.0411 EV_ret -0.0475 EV_skip -0.0255 | dPnL +256.0 IC90 [-552.0,+1017.2] p_perm 0.6687 | dias+ 3/5 sin2 -54.5 haircut50 +128.0 | moneda {'ETH': 440.4, 'SOL': -242.4, 'XRP': 58.1} | GATE_FORMAL False
+V(E3) ajuste: EV top30 +0.030 vs resto +0.067 candidato=True cortes={'ETH': np.float64(0.116), 'SOL': np.float64(0.11), 'XRP': np.float64(0.118)}
+V_E3 (cand=True): skip 10569/36125 ret 0.707 | EV_all -0.0411 EV_ret -0.0525 EV_skip -0.0134 | dPnL +135.9 IC90 [-775.1,+947.3] p_perm 0.8451 | dias+ 3/5 sin2 -162.3 haircut50 +67.9 | moneda {'ETH': 156.3, 'SOL': 59.1, 'XRP': -79.5} | GATE_FORMAL False
+   control inversion V_E3 (cola baja): skip 10847/36125 ret 0.703 | EV_all -0.0411 EV_ret -0.0358 EV_skip -0.0535 | dPnL +549.9 IC90 [-534.7,+1607.9] p_perm 0.3438 | dias+ 3/5 sin2 -273.4 haircut50 +274.9 | moneda {'ETH': 728.8, 'SOL': -248.6, 'XRP': 69.7} | GATE_FORMAL False
+H-N2 (AR2h<=-0,10, sin ajuste): skip 16497/36125 ret 0.543 | EV_all -0.0411 EV_ret -0.0212 EV_skip -0.0647 | dPnL +1022.1 IC90 [-397.2,+2454.6] p_perm 0.3588 | dias+ 2/5 sin2 -329.0 haircut50 +511.1 | moneda {'ETH': 1089.6, 'SOL': -68.1, 'XRP': 0.6} | GATE_FORMAL False
+(AR2h cobertura en eval: 1.000; fraccion con AR2h<=-0,10: 0.457)
+
+######## F_B (ajuste P2 -> eval P1; OOS GENUINO)
+ajuste: S_R(aln)=['ALIGN', 'FLAT']  S_R2(reg)=['ALC', 'LAT']  S_N=[('ETH', 'ALC'), ('ETH', 'LAT'), ('XRP', 'LAT')]
+CONTROL R0 (CONTRA-only incondicional, saltar todos CON)
+R0: skip 24171/77793 ret 0.690 | EV_all +0.0556 EV_ret +0.0583 EV_skip +0.0496 | dPnL -1159.9 IC90 [-3311.5,+901.6] p_perm 0.3653 | dias+ 4/8 sin2 -1724.3 haircut50 -580.0 | moneda {'ETH': -458.8, 'SOL': -748.0, 'XRP': 46.8} | GATE_FORMAL False
+H-R (CON x aln): skip 22253/77793 ret 0.715 | EV_all +0.0556 EV_ret +0.0597 EV_skip +0.0452 | dPnL -973.9 IC90 [-3067.4,+1019.8] p_perm 0.2579 | dias+ 4/8 sin2 -1619.6 haircut50 -487.0 | moneda {'ETH': -99.1, 'SOL': -800.7, 'XRP': -74.1} | GATE_FORMAL False
+H-R2 (CON x reg): skip 20323/77793 ret 0.739 | EV_all +0.0556 EV_ret +0.0681 EV_skip +0.0202 | dPnL -396.9 IC90 [-2326.4,+1455.9] p_perm 0.0645 | dias+ 5/8 sin2 -1022.2 haircut50 -198.5 | moneda {'ETH': 495.6, 'SOL': -772.2, 'XRP': -120.4} | GATE_FORMAL False
+H-N (celdas moneda x reg no pujar): skip 48886/77793 ret 0.372 | EV_all +0.0556 EV_ret +0.0573 EV_skip +0.0546 | dPnL -2589.5 IC90 [-5257.0,-151.2] p_perm 0.7641 | dias+ 2/8 sin2 -2775.0 haircut50 -1294.8 | moneda {'ETH': -2620.6, 'SOL': -0.0, 'XRP': 31.1} | GATE_FORMAL False
+V(E1) ajuste: EV top30 -0.055 vs resto -0.036 candidato=False cortes={'ETH': np.float64(0.022), 'SOL': np.float64(0.022), 'XRP': np.float64(0.006)}
+V_E1 (cand=False): skip 23409/77793 ret 0.727 | EV_all +0.0556 EV_ret +0.0590 EV_skip +0.0465 | dPnL -959.2 IC90 [-2202.9,+163.0] p_perm 0.5387 | dias+ 3/8 sin2 -1058.6 haircut50 -479.6 | moneda {'ETH': -432.4, 'SOL': -528.4, 'XRP': 1.6} | GATE_FORMAL False
+   control inversion V_E1 (cola baja): skip 18603/77793 ret 0.735 | EV_all +0.0556 EV_ret +0.0616 EV_skip +0.0390 | dPnL -779.2 IC90 [-1788.7,+192.9] p_perm 0.3063 | dias+ 2/8 sin2 -1051.1 haircut50 -389.6 | moneda {'ETH': -404.3, 'SOL': -387.3, 'XRP': 12.3} | GATE_FORMAL False
+V(E2) ajuste: EV top30 -0.011 vs resto -0.055 candidato=False cortes={'ETH': np.float64(0.045), 'SOL': np.float64(0.04), 'XRP': np.float64(0.05)}
+V_E2 (cand=False): skip 22871/77793 ret 0.693 | EV_all +0.0556 EV_ret +0.0455 EV_skip +0.0783 | dPnL -1813.7 IC90 [-3030.5,-678.8] p_perm 0.8166 | dias+ 1/8 sin2 -1826.8 haircut50 -906.9 | moneda {'ETH': -1239.2, 'SOL': -562.3, 'XRP': -12.2} | GATE_FORMAL False
+   control inversion V_E2 (cola baja): skip 24329/77793 ret 0.698 | EV_all +0.0556 EV_ret +0.0568 EV_skip +0.0528 | dPnL -1204.0 IC90 [-2491.3,-39.6] p_perm 0.4578 | dias+ 2/8 sin2 -1454.4 haircut50 -602.0 | moneda {'ETH': -790.8, 'SOL': -543.2, 'XRP': 129.9} | GATE_FORMAL False
+V(E3) ajuste: EV top30 -0.013 vs resto -0.053 candidato=False cortes={'ETH': np.float64(0.114), 'SOL': np.float64(0.107), 'XRP': np.float64(0.12)}
+V_E3 (cand=False): skip 23869/77793 ret 0.695 | EV_all +0.0556 EV_ret +0.0657 EV_skip +0.0325 | dPnL -747.9 IC90 [-2157.3,+542.9] p_perm 0.1839 | dias+ 2/8 sin2 -1353.9 haircut50 -374.0 | moneda {'ETH': -894.1, 'SOL': -126.3, 'XRP': 272.4} | GATE_FORMAL False
+   control inversion V_E3 (cola baja): skip 23327/77793 ret 0.699 | EV_all +0.0556 EV_ret +0.0384 EV_skip +0.0956 | dPnL -2171.4 IC90 [-3864.0,-596.9] p_perm 0.9655 | dias+ 0/8 sin2 -2133.1 haircut50 -1085.7 | moneda {'ETH': -1289.7, 'SOL': -743.6, 'XRP': -138.1} | GATE_FORMAL False
+H-N2 (AR2h<=-0,10, sin ajuste): skip 26407/77793 ret 0.659 | EV_all +0.0556 EV_ret +0.0829 EV_skip +0.0028 | dPnL -72.6 IC90 [-1998.8,+1765.2] p_perm 0.0210 | dias+ 3/8 sin2 -749.9 haircut50 -36.3 | moneda {'ETH': -283.4, 'SOL': -67.6, 'XRP': 278.5} | GATE_FORMAL False
+(AR2h cobertura en eval: 0.997; fraccion con AR2h<=-0,10: 0.339)
+
+#### Perfil EV por decil de cada medida de edge aparente (EUR-ponderado), por periodo
+E1 P1 09-16: EV por decil (bajo->alto) +0.006 +0.040 +0.059 +0.070 +0.109 +0.076 -0.040 +0.135 +0.002 +0.030 | E medio -0.030 -0.010 -0.003 +0.004 +0.009 +0.016 +0.022 +0.028 +0.036 +0.053
+E1 P2 17-21: EV por decil (bajo->alto) +0.000 -0.033 -0.057 -0.058 +0.027 +0.035 -0.099 -0.071 -0.078 -0.079 | E medio -0.019 -0.009 -0.004 +0.002 +0.006 +0.012 +0.017 +0.022 +0.028 +0.037
+E2 P1 09-16: EV por decil (bajo->alto) +0.086 +0.059 +0.035 -0.016 +0.055 +0.063 +0.047 +0.049 +0.029 +0.144 | E medio -0.065 -0.014 +0.002 +0.005 +0.013 +0.021 +0.033 +0.052 +0.082 +0.199
+E2 P2 17-21: EV por decil (bajo->alto) -0.001 -0.018 -0.052 -0.117 -0.036 -0.084 -0.064 +0.006 -0.073 +0.032 | E medio -0.058 -0.012 +0.002 +0.005 +0.014 +0.023 +0.036 +0.054 +0.084 +0.180
+E3 P1 09-16: EV por decil (bajo->alto) +0.146 +0.081 +0.059 +0.025 +0.066 +0.081 +0.010 -0.006 -0.003 +0.093 | E medio -0.063 -0.001 +0.026 +0.046 +0.064 +0.083 +0.103 +0.128 +0.163 +0.266
+E3 P2 17-21: EV por decil (bajo->alto) -0.023 -0.070 -0.090 -0.062 -0.031 -0.050 -0.020 -0.042 -0.011 -0.013 | E medio -0.062 -0.002 +0.025 +0.046 +0.064 +0.082 +0.102 +0.126 +0.160 +0.252
+
+######## H-C combinada (reglas con dPnL>0 y menor p en F_B, union; mismas reglas ajustadas en cada pliegue)
+reglas elegidas para H-C: [] (pasan gate formal en F_B: []) -> EXPLORATORIA
+F_A (ajuste P1 -> eval P2)
+  H-C: skip 0/36125 ret 1.000 | EV_all -0.0411 EV_ret -0.0411 EV_skip +nan | dPnL -0.0 IC90 [+0.0,+0.0] p_perm nan | dias+ 0/5 sin2 +0.0 haircut50 -0.0 | moneda {'ETH': -0.0, 'SOL': -0.0, 'XRP': -0.0} | GATE_FORMAL False
+F_B (ajuste P2 -> eval P1; OOS GENUINO)
+  H-C: skip 0/77793 ret 1.000 | EV_all +0.0556 EV_ret +0.0556 EV_skip +nan | dPnL -0.0 IC90 [+0.0,+0.0] p_perm nan | dias+ 0/8 sin2 +0.0 haircut50 -0.0 | moneda {'ETH': -0.0, 'SOL': -0.0, 'XRP': -0.0} | GATE_FORMAL False

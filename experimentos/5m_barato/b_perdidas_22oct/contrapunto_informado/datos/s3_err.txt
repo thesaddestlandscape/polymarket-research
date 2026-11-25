@@ -1,0 +1,42 @@
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:7: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  sh = P.groupby(["act", "dia", "band", "cl"]).c.sum().unstack(fill_value=0); sh = sh.div(sh.sum(1), axis=0)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:18: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  contrib = PN[cc].sum(1).values[idx].sum(1) / C.values[idx].sum(1)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:19: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  print(f"B {c:9s} cuota obs={o.sum()/C.sum():.3f} esp={e.sum()/C.sum():.3f} obs-esp IC90 cierre=({np.percentile(d,5):+.3f},{np.percentile(d,95):+.3f}) | contribucion al EV de B={PN[cc].sum(1).sum()/C.sum():+.4f} IC90=({np.percentile(contrib,5):+.3f},{np.percentile(contrib,95):+.3f})")
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:18: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  contrib = PN[cc].sum(1).values[idx].sum(1) / C.values[idx].sum(1)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:19: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  print(f"B {c:9s} cuota obs={o.sum()/C.sum():.3f} esp={e.sum()/C.sum():.3f} obs-esp IC90 cierre=({np.percentile(d,5):+.3f},{np.percentile(d,95):+.3f}) | contribucion al EV de B={PN[cc].sum(1).sum()/C.sum():+.4f} IC90=({np.percentile(contrib,5):+.3f},{np.percentile(contrib,95):+.3f})")
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:18: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  contrib = PN[cc].sum(1).values[idx].sum(1) / C.values[idx].sum(1)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:19: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  print(f"B {c:9s} cuota obs={o.sum()/C.sum():.3f} esp={e.sum()/C.sum():.3f} obs-esp IC90 cierre=({np.percentile(d,5):+.3f},{np.percentile(d,95):+.3f}) | contribucion al EV de B={PN[cc].sum(1).sum()/C.sum():+.4f} IC90=({np.percentile(contrib,5):+.3f},{np.percentile(contrib,95):+.3f})")
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:18: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  contrib = PN[cc].sum(1).values[idx].sum(1) / C.values[idx].sum(1)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:19: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  print(f"B {c:9s} cuota obs={o.sum()/C.sum():.3f} esp={e.sum()/C.sum():.3f} obs-esp IC90 cierre=({np.percentile(d,5):+.3f},{np.percentile(d,95):+.3f}) | contribucion al EV de B={PN[cc].sum(1).sum()/C.sum():+.4f} IC90=({np.percentile(contrib,5):+.3f},{np.percentile(contrib,95):+.3f})")
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:16: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  o = A[cc].sum(1).values; e = Ex[[f"e_{x}" for x in cc]].sum(1).values
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:18: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  contrib = PN[cc].sum(1).values[idx].sum(1) / C.values[idx].sum(1)
+/root/polymarket-research/experimentos/5m_barato/b_perdidas_22oct/contrapunto_informado/scripts/s3_b_extra.py:19: Pandas4Warning: Starting with pandas version 4.0 all arguments of sum will be keyword-only.
+  print(f"B {c:9s} cuota obs={o.sum()/C.sum():.3f} esp={e.sum()/C.sum():.3f} obs-esp IC90 cierre=({np.percentile(d,5):+.3f},{np.percentile(d,95):+.3f}) | contribucion al EV de B={PN[cc].sum(1).sum()/C.sum():+.4f} IC90=({np.percentile(contrib,5):+.3f},{np.percentile(contrib,95):+.3f})")
