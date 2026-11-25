@@ -428,27 +428,7 @@ bash live_switch.sh on/off/status   # o Telegram: /on /off /status
 ---
 
 ## Hipótesis — estado resumido
-Estado vivo en `data/shadow/hipotesis_auto.md` (cada postmortem).
-
-| Hipótesis | Estado | Acción / Config activa |
-|---|---|---|
-| H-REGIMEN | ❌ REFUTADA | Filtro solo 60min+ BUY_NO drift>0.7%/h |
-| H-60MIN | ✅ CONFIRMADA | Acumulando |
-| H-ORDER_FLOW-DECAY | ✅ IMPL | DELTA_MAX=0.46 |
-| H-VENTANAS-HORARIAS | ✅ IMPL | OF_BLACKLIST_HOURS |
-| H-DRIFT60-BUY_YES_15MIN | ✅ IMPL | BUY_YES #15min: drift_60min∈[0,+0.25%) |
-| H-DRIFT15-MOMENTUM | ✅ IMPL | BTC#15min: skip si drift_15min<0.3%/h |
-| H-BTC-ETH-MOMENTUM-REVERSION | 🔬 TRACKING | ETH drift<-1 → n≥20 → boost ×1.1 |
-| H-OU-5MIN | ❌ DESACTIVADA | IC=-0.229 |
-| H-5MIN-REVERSIÓN | ✅ CONF | GBM#5min desactivados |
-| H-WEEKLY-PRICE | ⏳ | esperar n≥15/par |
-| H-GBM-18H, H-KELLY-HORA, H-BLACKLIST-02H/07H | ⏳ AVISO | solo avisan por Telegram, aplicar a mano |
-| H-CROSS-ASSET | ⏳ n→20 | GBM+OF BUY_NO mismo activo → boost ×1.5 |
-| H-CUSTOM-PHOTO-FINISH-SNIPER | ❌ REFUTADA 28-Jul | — |
-| STRUCT_NO_15M | ⚠️ **NO PROMOCIONAR** | leer `idea_structno_no_replica_fills` antes de proponer whitelist |
-| LEADLAG-BTC-XRP | ⚠️ TRACKING, expectativa BAJA | revisar con n≥40 sin sesgo |
-
-**Hipótesis custom** en `data/shadow/hipotesis_custom.json` (editar sin tocar código).
+Estado vivo en `data/shadow/hipotesis_auto.md` (cada postmortem); custom en `data/shadow/hipotesis_custom.json`. Tabla histórica (H-REGIMEN, H-60MIN, STRUCT_NO_15M **NO PROMOCIONAR**, LEADLAG…) en la memoria `reference_claude_md_recorte_25nov`.
 
 ## Aprendizaje causal
 ```
