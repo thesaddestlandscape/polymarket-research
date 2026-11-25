@@ -131,8 +131,14 @@ def _shadow_pnl_fiel_subproceso() -> int:
     Mismo script, mismos argumentos por defecto. Devuelve 0/1 (carril "pesado":
     un 1 se reintenta en REINTENTO_FALLO_S)."""
     import subprocess
-    r = subprocess.run([sys.executable, str(REPO / "shadow_pnl_fiel.py")],
-                       capture_output=True, text=True, timeout=1500, cwd=str(REPO))
+    # 25-Nov (6 OOM/24 h): el pico de 1,4-1,5 GB coincidía con crons pesados
+    # (postmortem 3,8 GB, vigia_precierre_naive_twap 2,5 GB) porque este
+    # subproceso NO pasaba por el semáforo global. Ahora va por cron_pesado.sh
+    # (uno a la vez + espera MemAvailable + cgroup propio); +600 s de timeout
+    # por la espera máxima del semáforo.
+    r = subprocess.run([str(REPO / "scripts" / "cron_pesado.sh"), sys.executable,
+                        str(REPO / "shadow_pnl_fiel.py")],
+                       capture_output=True, text=True, timeout=2100, cwd=str(REPO))
     print(r.stdout[-4000:], flush=True)
     if r.returncode != 0:
         print(f"ERROR shadow_pnl_fiel.py (rc={r.returncode}): {r.stderr[-2000:]}", flush=True)
