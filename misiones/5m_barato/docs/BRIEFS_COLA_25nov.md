@@ -24,3 +24,18 @@ Motivo: la subvariante es el camino más largo al 7-Dic y no depende de la matri
 
 ## ORDEN DEFINITIVO v2 (Javi 25-Nov ~11:55Z: «lo importante es B, la subvariante puede esperar») — SUSTITUYE al anterior
 1 engineer B (actual; K6 at 01:00Z) → 2 agente de datos CONTINUADO: contrato de las métricas de la matriz de B → 3 objetivo-200k: matriz de B (brief 2, foco B) → 4 objetivo-200k CONTINUADO: plan maestro de B (brief 2b) → 5 engineer CONTINUADO: integraciones de B aprobadas por Javi (en sombra/versión siguiente) + pendientes de B (pins, cruce k_f5 y suelo con la cinta del 25-Nov ≥27-Nov) → 6 validador, una pasada (paridad B + matriz) → 7 risk-economics: kill con días forward (~28-Nov) + escalera de capital → 8 red-team → /code-review medium → 9 mirada 1 (~2-Dic) → micro-real si rechaza → 10 subvariante BTC (brief 3 + firmas con OK Javi) → 11 buscador de ineficiencias → perro de presa.
+
+## 2-AMPLIACIÓN (Javi 25-Nov ~12:00Z: «ventajas, gatillos, filtros, selección adversa, latencia, reloj, EV positivo… TODO, no te dejes NADA»)
+La matriz de B es EXHAUSTIVA. Categorías obligatorias (cada una con su lista de piezas; una categoría vacía se justifica con fuentes revisadas):
+1 VENTAJAS estructurales (maker vs tomador, rebate 20 %, recompensas de liquidez, ~145 ms maker, cola, tick, comisión 0,07·p(1−p)).
+2 GATILLOS de entrada (cuándo armar/repegar: F5, F5_0, Calma, eventos Binance, cierre 15m/bid15, estado del libro, hora/ventana).
+3 FILTROS / vetos de NO entrar (F1/F2/F3/U13, clase de suelo lo/hi/indet, régimen, volatilidad/liquidez anticipada, wallets tóxicas, libro cruzado/bloqueado, datos rancios, Binance muerto).
+4 SALIDA / CANCELACIÓN (V5=CXJ150, V6=E1b S1, cancelación por Binance P90, A3-CANCEL, L_cancel real, descarga/venta de la pata, fin de vida de la orden).
+5 SELECCIÓN ADVERSA: cada mecanismo conocido de AS (quién nos rellena y cuándo, rellenos más baratos = mala noticia, prints que atraviesan, cola, tomadores informados, pata suelta perdedora) → qué pieza lo mitiga y cuánto (medido) → AS residual.
+6 LATENCIA (paquete_l 13-Nov por clase lo/hi: alta, cancelación, RTT, taker delay; detección→decisión→envío en el ejecutor; dónde se pierde cada ms).
+7 RELOJ y sellos (rx vs ex, suelo por ventana, passT_v4, print vs casado ~20 ms, bloque on-chain ~2,4 s, TWAP60 [e−62,e−3]): qué cifras históricas quedan invalidadas.
+8 TAMAÑO y nivel (escalera L, DEEP_PEG top−k, capacidad del libro, stake, min 5 acciones/1 $).
+9 EV POSITIVO: descomposición del EV de K1-K6 por pieza (contribución marginal medida: con/sin), por moneda, por tercil F5, por clase; censura incondicional P(relleno)·EV|relleno; ponderado por €.
+10 RIESGO operativo (kill, frenos, guardas fail-closed, días INCOMPLETE por infra, RAM/disco, cambios de Polymarket/API 14-Dic).
+11 Todo lo REFUTADO o en cementerio relacionado con B (con el reloj/sello con que se refutó: si era viejo ⇒ «no validado», no cerrado).
+Además: lista de huecos (lo que NADIE ha medido aún) con la prueba mínima para cada uno.
