@@ -1,18 +1,18 @@
 {
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0196,
+  "ic_bayes_familia": 0.0198,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 68.3,
+  "pnl_fiel_combinado_eur": 66.78,
   "tuplas": [
    {
-    "k": "LIQUIDACIONES_5M#SOL#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 25.3396,
-    "n_ejecutado": 90
+    "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
+    "pnl_fiel_eur_sin_suelo": 24.325,
+    "n_ejecutado": 578
    },
    {
-    "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 24.7919,
-    "n_ejecutado": 578
+    "k": "LIQUIDACIONES_5M#SOL#5min#BUY_YES",
+    "pnl_fiel_eur_sin_suelo": 24.2896,
+    "n_ejecutado": 90
    },
    {
     "k": "LIQUIDACIONES_5M#ETH#5min#BUY_NO",
