@@ -39,3 +39,7 @@ La matriz de B es EXHAUSTIVA. Categorías obligatorias (cada una con su lista de
 10 RIESGO operativo (kill, frenos, guardas fail-closed, días INCOMPLETE por infra, RAM/disco, cambios de Polymarket/API 14-Dic).
 11 Todo lo REFUTADO o en cementerio relacionado con B (con el reloj/sello con que se refutó: si era viejo ⇒ «no validado», no cerrado).
 Además: lista de huecos (lo que NADIE ha medido aún) con la prueba mínima para cada uno.
+
+## ORDEN v3 (Javi 25-Nov ~12:00Z, feedback al informe del engineer: «que todos los agentes trabajen para que en las colas no coloquemos ni cancelemos tarde; eliminar las desalineaciones 88 ms e indet; que B sea positiva y genere 200 k»)
+K6 de día: noche_k6.sh esperando MemAvailable ≥5,5 GB (pid en out_paridad_v2_25nov/dia_k6.pid); si sale verde, `atrm 75`.
+1 agente de datos (CONTINUADO, en curso): contrato matriz B + contrato de las 3 desalineaciones → 2 polymarket-quantum-alpha-miner: diseño anti-AS del reloj de decisión (qué hacer cuando el libro cambió durante el lag: re-chequeo pre-envío, cancelación preventiva, abortar si edad del dato > umbral, priorizar eventos) con efecto medido en EV/AS → 3 engineer CONTINUADO: lag p90 266 ms (dónde se pierde, bajarlo), aplicar el diseño anti-AS, alinear ventana 88 ms e indet con el sim, meter la distribución real de lag en la simulación → 4 objetivo-200k: matriz → 5 plan maestro → 6 validador → 7 risk-economics → 8 red-team → /code-review → 9 mirada → 10 subvariante → 11 buscador → perro de presa.
