@@ -1670,5 +1670,37 @@
   "LIQUIDACIONES_15M#BNB#15min": {
     "n": 207,
     "confirmado": true
+  },
+  "GBM_LATE_60M#BNB": {
+    "n": 210,
+    "confirmado": true
+  },
+  "GBM_LATE_60M#BNB#60min": {
+    "n": 210,
+    "confirmado": true
+  },
+  "GBM_LATE_60M#DOGE": {
+    "n": 206,
+    "confirmado": true
+  },
+  "GBM_LATE_60M#DOGE#60min": {
+    "n": 206,
+    "confirmado": true
+  },
+  "GBM_LATE_60M#XRP": {
+    "n": 203,
+    "confirmado": true
+  },
+  "GBM_LATE_60M#XRP#60min": {
+    "n": 203,
+    "confirmado": true
+  },
+  "MOMENTUM_IBS_5M#BTC": {
+    "n": 200,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M#BTC#5min": {
+    "n": 200,
+    "confirmado": false
   }
 }
