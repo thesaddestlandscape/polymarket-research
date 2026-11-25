@@ -33,6 +33,8 @@ import asyncio
 import fcntl
 import gzip
 import queue
+import random
+import requests
 import collections
 import json
 import os
@@ -44,7 +46,8 @@ import threading
 import time
 from bisect import bisect_right
 from collections import deque
-from datetime import datetime, timezone
+from time import monotonic as _mono, sleep as _sleep_real
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import websockets
@@ -195,32 +198,869 @@ _HIJO = {"proc": None, "lock": threading.Lock()}
 _UNIVERSO = {"toks": None, "claves": {}, "meta": {}}
 
 
-def _tokens_universo(filtro_marcos=None):
-    import live_trade as lt
-    from fetch_libro_ambos_lados import _universo_activo
+# 13-Nov (huecos de libro5 cada 4 h): gamma-api devuelve 429 ~15 min desde xx:46 (horas 3 mod 4) y la version anterior daba de
+# baja del universo cada mercado cuya consulta /markets/{id} fallaba (sin cache, `except: continue`): el padre mandaba un
+# universo vacio/parcial y el hijo cerraba grupos (libro5 'baja'). Ahora:
+#  - cache de tokens por mercado (inmutables): gamma solo para mercados NUEVOS; un fallo NUNCA saca un mercado conocido;
+#  - la cache se PERSISTE a disco (JSON, versionado, con edt) COMPARTIDA entre procesos: flock + tmp con pid + FUSION con lo que
+#    hay en disco antes de escribir (nunca se sobrescribe con un subconjunto de marcos); se carga al arrancar y el primer universo
+#    se publica sin leer el CSV (5-30 s en frio);
+#  - un CSV de mercados parcial/vacio/ilegible NO tira lo conocido: se retiene todo mercado cuyo edt siga vigente (se re-filtra
+#    en cada publicacion);
+#  - fuentes con sesion requests PROPIA (pool pequeno, timeouts acotados por el presupuesto restante), sin live_trade ni su
+#    _SESSION: ningun proceso con ordenes reales comparte pool con esta consulta. Fallos clasificados:
+#      transporte (429/5xx/timeout/JSON roto/error en JSON/AttributeError...) -> circuito de gamma + fallback a CLOB;
+#      incompleto (mercado recien creado sin clobTokenIds/outcomes aun) -> CLOB inmediato y reintento corto, NUNCA cuarentena;
+#      incoherente (outcomes raros, tokens iguales, condition_id distinto, gamma != CLOB) -> NO se suscribe (fail-closed),
+#      cuarentena tras TOK_CUARENTENA_N seguidos (reintento cada ~60 s, log unico, contador visible);
+#  - todo mercado nuevo resuelto por gamma se CONTRASTA con CLOB: difieren -> alarma (UNA por mercado, latch) y no se suscribe;
+#    el contraste cae por transporte/incompleto -> se acepta gamma marcado 'sin_contraste'; CLOB incoherente -> dudoso, no se suscribe;
+#  - circuito de gamma con decaimiento (+1 por fallo de transporte, x0,75 por respuesta; abierto >=5: 1 sonda por refresco);
+#  - presupuesto DURO de TOK_PRESUPUESTO_S por refresco, comprobado antes de CADA llamada de red (timeout = min(timeout, restante));
+#    la red va siempre fuera de los cerrojos: pedir()/_enviar_deseados (otros hilos) nunca esperan a la ronda de red;
+#  - el universo se publica con UNA asignacion de un dict nuevo (toks+claves+meta), nunca mutado. _UNIVERSO es API PRIVADA del
+#    modulo (grep repo+dev 13-Nov: nadie lo importa por referencia); fuera usar _universo().
+# Hilo unico: solo _hilo_universo llama a _tokens_universo; _REFRESCO_LOCK (no bloqueante) lo hace seguro si hubiera otro.
+_TOK = {}                  # mid -> (yes, no): solo tokens validados
+_MKT = {}                  # mid -> (activo, marco, cid, edt): ultimo conocido (permite retener un mercado vigente)
+_TOK_FALLO = {}            # mid -> (n_fallos, proximo_intento_epoch, n_incoherentes_seguidos)
+_SIN_CONTRASTE = set()     # mids aceptados con una sola fuente
+_SC_SRC = {}               # mid -> fuente unica usada ("gamma"|"clob"|"" si viene de una cache sin dato)
+_SC_ESTADO = {}            # mid -> (n_intentos_recontraste, proximo_intento_epoch)
+_TOMB = {}                 # mid -> epoch de expiracion: tombstones conocidos (propios o leidos del disco)
+_AYER = {"clave": None, "mercados": {}}   # cache de la cola del CSV de ayer (clave = ino/size/mtime)
+_ALARMA = {}               # mid -> n de refrescos con discrepancia gamma!=clob (latch: una sola linea de log por mercado)
+_CACHE_ENTRIES = {}        # mid -> registro serializable (incremental; no se reconstruye en cada refresco)
+_TOK_LOCK = threading.Lock()          # SOLO para mutar/leer las estructuras de arriba; jamas durante la red
+_REFRESCO_LOCK = threading.Lock()     # un refresco a la vez; el que no lo coge devuelve el ultimo universo publicado
+_REFRESCO_EVT = threading.Event()     # iniciar() lo activa: marcos nuevos -> refresco inmediato
+_MARCOS_LOCK = threading.Lock()
+_MARCOS_GEN = [0]                     # generacion de _MARCOS: el hilo de universo no se duerme si cambio durante su ronda
+_GAMMA = {"score": 0.0}               # circuito con decaimiento
+_CACHE = {"cargado": False, "sucio": False, "prox_intento": 0.0, "n_err": 0, "ult_log": 0.0, "borrar": {}, "liberar": set(), "mt": None}
+_SESION = {"s": None}
+TOK_BACKOFF = {"5min": (2.0, 10.0), "15min": (4.0, 20.0)}     # marco -> (base, tope) s ; resto (10, 60)
+TOK_PRESUPUESTO_S = 20.0
+TOK_GAMMA_TIMEOUT_S, TOK_CLOB_TIMEOUT_S, TOK_MIN_RESTANTE_S = 8.0, 6.0, 0.3
+TOK_GAMMA_SCORE_MAX, TOK_GAMMA_DECAY = 5.0, 0.75
+TOK_MKT_MAX = 3000
+TOK_REFRESCO_PENDIENTES_S = 5.0
+TOK_CUARENTENA_N, TOK_CUARENTENA_S = 5, 60.0
+TOK_RECONTRASTE_MAX = 5        # re-contrastes de mercados sin_contraste por refresco (presupuesto acotado, tras los pendientes)
+TOK_RECONTRASTE_BASE_S, TOK_RECONTRASTE_TOPE_S = 10.0, 120.0
+# 13-Nov v3 (mitigacion de gamma para tokens "nmu"): los tokens sembrados desde el fichero NUNCA se re-contrastan contra gamma (el 12/12 de
+# tokens WS = gamma ya esta medido; gamma es justo lo que da 429). Su unico contraste es CLOB (otra fuente, independiente de gamma y de WS):
+# UNA vez por mercado cuando entra en la ventana de TOK_NMU_VENTANA_S (30 min) antes de su CIERRE, <= TOK_NMU_REFRESCO_MAX por refresco,
+# >= TOK_NMU_INTERVALO_S entre llamadas (0,5 req/s), cualquier fallo de transporte (429 incluido) ABORTA los contrastes nmu del refresco,
+# <= TOK_NMU_INTENTOS_MAX intentos fallidos por mercado (despues queda sin_contraste: tokens WS/capture ya validos). Gamma pausada
+# (pausa 429 compartida en universo_5m_io) -> ni los pendientes ni los re-contrastes v5 llaman a gamma; un 429 de gamma la activa.
+TOK_NMU_VENTANA_S = 1800.0
+TOK_NMU_REFRESCO_MAX = 3
+TOK_NMU_INTERVALO_S = 2.0
+TOK_NMU_INTENTOS_MAX = 3
+_NMU_ULT = [0.0]               # epoch de la ultima llamada CLOB de contraste nmu (rate limit entre refrescos)
+TOK_CACHE_VERSION = 1
+TOK_MARKETS_DIR = Path(__file__).resolve().parent / "data" / "markets"     # CSV diarios de capture_markets
+TOK_AYER_VENTANA_S = 7200.0       # tras las 00:00Z se fusiona tambien la COLA del CSV de ayer (los 5m/15m/60m listados por delante)
+TOK_CSV_VIEJO_S = 600.0           # CSV de hoy sin escrituras desde hace > N s = antiguo/parado
+TOK_AYER_COLA_BYTES = 32 * 1024 * 1024
+TOK_CACHE_LOCK_S = 3.0
+TOK_CACHE_ERR_LOG_S = 300.0
+TOK_CACHE_PATH = Path("/root/polymarket-research-datalogs/libro_tokens_cache.json")     # fuera de git
+GAMMA_MARKET_URL = "https://gamma-api.polymarket.com/markets/"
+CLOB_MARKET_URL = "https://clob.polymarket.com/markets/"
+
+
+class _ErrTransporte(Exception):
+    pass
+
+
+class _ErrIncompleto(Exception):
+    pass
+
+
+class _ErrIncoherente(Exception):
+    pass
+
+
+def _universo():
+    """Foto coherente (toks, claves, meta) del ultimo universo publicado. No mutar."""
+    return _UNIVERSO
+
+
+def _sesion_datos():
+    """Sesion requests PROPIA de esta consulta (pool pequeno, sin reintentos); no se comparte con ejecucion."""
+    if _SESION["s"] is None:
+        from requests.adapters import HTTPAdapter
+        s = requests.Session()
+        a = HTTPAdapter(pool_connections=2, pool_maxsize=4, max_retries=0)
+        s.mount("https://", a)
+        s.headers["User-Agent"] = "libro_estado_ws/universo"
+        _SESION["s"] = s
+    return _SESION["s"]
+
+
+def _gamma_429():
+    """Un 429 de gamma activa la pausa COMPARTIDA (capture_markets, listener y este proceso dejan de llamar a gamma hasta xx+1:02 / 120 s)."""
+    if _U5 is not None:
+        try:
+            _U5.marcar_429()
+        except Exception:
+            pass
+
+
+def _gamma_pausado():
+    if _U5 is None:
+        return False
+    try:
+        return _U5.pausa_activa(time.time()) > 0
+    except Exception:
+        return False
+
+
+def _get_json(sess, url, timeout):
+    try:
+        r = sess.get(url, timeout=(min(3.0, timeout), timeout))          # (connect, read) <= restante del presupuesto
+        if getattr(r, "status_code", 0) == 429 and url.startswith(GAMMA_MARKET_URL):
+            _gamma_429()
+        r.raise_for_status()                      # 429 / 5xx / 404 -> transporte
+        return r.json()                           # JSON roto -> transporte
+    except Exception as e:                        # cualquier cosa de red/HTTP/JSON (incl. AttributeError/TypeError de respuestas raras)
+        raise _ErrTransporte(f"{type(e).__name__}: {e}")
+
+
+def _lista(x):
+    """Lista desde list o string JSON; None si vacio/ausente; _ErrIncoherente si no es lista."""
+    if isinstance(x, str):
+        try:
+            x = json.loads(x) if x.strip() else None
+        except Exception:
+            raise _ErrIncompleto("json interno ilegible")
+    if x is None or x == []:
+        return None
+    if not isinstance(x, list):
+        raise _ErrIncoherente("no es lista")
+    return x
+
+
+def _mapear(tokens, outcomes):
+    """(yes, no) por etiqueta de outcome; _ErrIncompleto si falta info; _ErrIncoherente si hay algo raro."""
+    tokens, outcomes = _lista(tokens), _lista(outcomes)
+    if not tokens or not outcomes or len(tokens) < 2 or len(outcomes) < 2:
+        raise _ErrIncompleto("sin tokens/outcomes aun")
+    if len(tokens) != 2 or len(outcomes) != 2:
+        raise _ErrIncoherente("n tokens/outcomes != 2")
+    t = [str(x).strip() for x in tokens]
+    o = [str(x).strip().lower() for x in outcomes]
+    if not all(x.isdigit() for x in t) or t[0] == t[1]:
+        raise _ErrIncoherente("tokens invalidos")
+    if o[0] in ("yes", "up") and o[1] in ("no", "down"):
+        return t[0], t[1]
+    if o[0] in ("no", "down") and o[1] in ("yes", "up"):
+        return t[1], t[0]
+    raise _ErrIncoherente(f"outcomes inesperados {o}")
+
+
+def _tokens_gamma(sess, mid, cid, timeout):
+    j = _get_json(sess, GAMMA_MARKET_URL + str(mid), timeout)
+    if not isinstance(j, dict):
+        raise _ErrTransporte("respuesta no es objeto")
+    if not any(k in j for k in ("clobTokenIds", "outcomes", "conditionId")):
+        if any(k in j for k in ("error", "message", "detail", "status")):
+            raise _ErrTransporte("error en el JSON")           # 429 / mantenimiento dentro de un 200
+        raise _ErrIncompleto("objeto sin campos de mercado")
+    c = j.get("conditionId")
+    if cid and c and str(c).lower() != str(cid).lower():
+        raise _ErrIncoherente("conditionId distinto del CSV")
+    return _mapear(j.get("clobTokenIds"), j.get("outcomes"))
+
+
+def _tokens_clob(sess, cid, timeout):
+    """(yes, no) desde clob.polymarket.com/markets/<condition_id>."""
+    if not cid or not str(cid).startswith("0x"):
+        raise _ErrIncompleto("sin condition_id")
+    j = _get_json(sess, CLOB_MARKET_URL + str(cid), timeout)
+    if not isinstance(j, dict):
+        raise _ErrTransporte("respuesta no es objeto")
+    if str(j.get("condition_id", "")).lower() != str(cid).lower():
+        if any(k in j for k in ("error", "message")) and "tokens" not in j:
+            raise _ErrTransporte("error en el JSON")
+        raise _ErrIncoherente("condition_id distinto")
+    tk = j.get("tokens")
+    if not tk:
+        raise _ErrIncompleto("sin tokens")
+    if not isinstance(tk, list) or len(tk) != 2:
+        raise _ErrIncoherente("tokens != 2")
+    por = {}
+    for x in tk:
+        if not isinstance(x, dict):
+            raise _ErrIncoherente("token no es objeto")
+        o, t = str(x.get("outcome", "")).strip().lower(), str(x.get("token_id", "")).strip()
+        if not t.isdigit() or o in por:
+            raise _ErrIncoherente("token/outcome invalido")
+        por[o] = t
+    if set(por) == {"up", "down"}:
+        yes, no = por["up"], por["down"]
+    elif set(por) == {"yes", "no"}:
+        yes, no = por["yes"], por["no"]
+    else:
+        raise _ErrIncoherente(f"outcomes inesperados {sorted(por)}")
+    if yes == no:
+        raise _ErrIncoherente("tokens iguales")
+    return yes, no
+
+
+def _permitido(activo, marco):
+    p = _MARCOS.get(marco, "no")
+    return not (p == "no" or (p is not None and activo not in p))
+
+
+# 13-Nov (cobertura 5m a +24 h en el CSV): el CSV puede traer los 5m con hasta ~24 h de antelacion (288 por moneda). Solo se RESUELVEN y
+# se SUSCRIBEN los 5m cuyo inicio (cierre-300 s) cae dentro de HORIZONTE_5M_S desde ahora; el resto queda fuera del universo (ni gamma ni
+# WS, ni libro5). Sigue siendo >> la ventana de 429 de gamma (~15 min). 0 o negativo = sin limite. Solo afecta al marco 5min.
+HORIZONTE_5M_S = float(os.environ.get("LIBRO_WS_HORIZONTE_5M_S", "7200"))
+
+
+def _fuera_de_horizonte(marco, edt, ahora):
+    return HORIZONTE_5M_S > 0 and marco == "5min" and edt.timestamp() - 300 > ahora + HORIZONTE_5M_S
+
+
+# 13-Nov (siembra de tokens desde el universo new_market, SIN gamma/CLOB): capture_markets (adelanto) y new_market_universo escriben
+# datalogs/universo_5m/new_market_universo_<dia>.csv.gz con market_id, condition_id y tokens up/down (formato universo_5m_io). Aqui:
+#  - los 5m de ese fichero (hoy+ayer: cubre la medianoche) con inicio dentro de HORIZONTE_5M_S ENTRAN en el universo aunque no esten
+#    en data/markets/<dia>.csv; los 15m solo se siembran si ya vienen del CSV (no se amplian);
+#  - sus tokens se dan por validos SIN consultar gamma ni CLOB (`_poner(..., sc="nmu")`); quedan en _SIN_CONTRASTE y el contraste
+#    posterior es el de v5 (_recontrastar: <= TOK_RECONTRASTE_MAX por refresco, backoff, circuito de gamma, 429 -> abre el circuito);
+#    si discrepan se desuscriben (tombstone) como siempre;
+#  - fail-closed: fichero ausente/ilegible/sin modulo -> universo v5 intacto; el mismo mercado con tokens o condition_id distintos
+#    dentro del fichero se EXCLUYE (lo hace universo_5m_io.leer); si el condition_id del CSV difiere del del fichero no se siembra y
+#    se deja el camino v5; mercados con tombstone (discrepancia gamma!=clob previa) no se siembran. LIBRO_WS_NMU=0 lo apaga.
+try:
+    import universo_5m_io as _U5
+except Exception:                                          # pragma: no cover
+    _U5 = None
+NMU_ACTIVO = os.environ.get("LIBRO_WS_NMU", "1") != "0" and _U5 is not None
+_MARCO_NMU = {"5m": "5min", "15m": "15min"}
+
+
+def _nmu_mercados(ahora):
+    """{mid: (activo, marco, cid, edt, up, down)} vigentes y permitidos del fichero new_market_universo; {} ante cualquier fallo."""
+    if not NMU_ACTIVO:
+        return {}
+    try:
+        mk, st = _U5.leer(ahora)
+    except Exception as e:
+        if _GAMMA.get("nmu_err") != type(e).__name__:
+            _GAMMA["nmu_err"] = type(e).__name__
+            _log(f"universo: new_market_universo no utilizable ({type(e).__name__}: {e}); se usa solo el CSV")
+        return {}
+    if (st.get("conflictos") or st.get("truncados")) and _GAMMA.get("nmu_st") != (st["conflictos"], st["truncados"]):
+        _GAMMA["nmu_st"] = (st["conflictos"], st["truncados"])
+        _log(f"universo: new_market_universo con {st['conflictos']} mercados en conflicto (excluidos) y {st['truncados']} ficheros truncados")
+    out = {}
+    for mid, r in mk.items():
+        marco = _MARCO_NMU.get(r.get("marco"))
+        if marco is None or r["_cierre"] <= ahora:
+            continue
+        activo = r["activo"].upper()
+        edt = datetime.fromtimestamp(r["_cierre"], timezone.utc)
+        if not _permitido(activo, marco) or _fuera_de_horizonte(marco, edt, ahora):
+            continue
+        out[mid] = (activo, marco, r["condition_id"], edt, r["token_up"], r["token_down"])
+    return out
+
+
+def _backoff_s(marco, edt, ahora, nf):
+    base, tope = TOK_BACKOFF.get(marco, (10.0, 60.0))
+    tope = min(tope, max(1.0, (edt.timestamp() - ahora) / 4))
+    return min(tope, base * 2 ** (nf - 1)) * random.uniform(0.8, 1.2)
+
+
+def _olvidar(mid):
+    """Saca un mercado de TODAS las estructuras. Llamar con _TOK_LOCK tomado."""
+    for d in (_TOK, _MKT, _TOK_FALLO, _ALARMA, _CACHE_ENTRIES):
+        d.pop(mid, None)
+    _SIN_CONTRASTE.discard(mid)
+    _SC_SRC.pop(mid, None)
+    _SC_ESTADO.pop(mid, None)
+
+
+def _poner(mid, yes, no, activo, marco, cid, edt, sc):
+    """Alta de un mercado resuelto. Llamar con _TOK_LOCK tomado."""
+    _TOK[mid] = (yes, no)
+    _MKT[mid] = (activo, marco, cid, edt)
+    _TOK_FALLO.pop(mid, None)
+    _ALARMA.pop(mid, None)
+    _SC_ESTADO.pop(mid, None)
+    if mid in _CACHE["borrar"] or mid in _TOMB:                # re-resuelto con coherencia: se libera el tombstone (en disco tambien)
+        _CACHE["borrar"].pop(mid, None)
+        _TOMB.pop(mid, None)
+        _CACHE["liberar"].add(mid)
+    if sc:                                                     # sc = fuente unica usada ("gamma"|"clob")
+        _SIN_CONTRASTE.add(mid)
+        _SC_SRC[mid] = str(sc)
+        _SC_ESTADO[mid] = (0, time.time() + TOK_RECONTRASTE_BASE_S * random.uniform(0.8, 1.2))      # no se re-contrasta en la misma ronda
+    else:
+        _SIN_CONTRASTE.discard(mid)
+        _SC_SRC.pop(mid, None)
+    _CACHE_ENTRIES[mid] = {"yes": yes, "no": no, "activo": activo, "marco": marco, "cid": cid, "edt": edt.isoformat(), "sc": bool(sc),
+                           "src": str(sc) if sc else "", "ctr": not sc}
+    _CACHE["sucio"] = True
+
+
+def _validar_registro(mid, v, ahora):
+    """(registro normalizado, edt) o None si es invalido/vencido."""
+    try:
+        yes, no, activo, marco, cid = (str(v[k]) for k in ("yes", "no", "activo", "marco", "cid"))
+        edt = datetime.fromisoformat(str(v["edt"]))
+        if edt.tzinfo is None:
+            edt = edt.replace(tzinfo=timezone.utc)
+        if not (mid and yes.isdigit() and no.isdigit() and yes != no and activo and marco and cid.startswith("0x")):
+            return None
+    except Exception:
+        return None
+    if edt.timestamp() <= ahora:
+        return None
+    return ({"yes": yes, "no": no, "activo": activo, "marco": marco, "cid": cid, "edt": edt.isoformat(), "sc": bool(v.get("sc")),
+             "src": str(v.get("src") or ""), "ctr": bool(v.get("ctr"))}, edt)
+
+
+def _leer_disco(ahora):
+    """({mid: registro valido y vigente (sin los tombstoned)}, n_invalidos, {mid: expiracion} de tombstones vigentes).
+    FileNotFoundError -> excepcion (el llamador decide). Fichero ilegible -> excepcion."""
+    j = json.loads(TOK_CACHE_PATH.read_text())
+    if not isinstance(j, dict) or j.get("v") != TOK_CACHE_VERSION or not isinstance(j.get("mercados"), dict):
+        raise ValueError("version/estructura")
+    tomb = {}
+    tj = j.get("tombstones")
+    if isinstance(tj, dict):
+        for m, e in tj.items():
+            try:
+                if float(e) > ahora:
+                    tomb[str(m)] = float(e)
+            except (TypeError, ValueError):
+                pass
+    out, malos = {}, 0
+    for mid, v in j["mercados"].items():
+        if mid in tomb:
+            continue
+        r = _validar_registro(mid, v, ahora)
+        if r is None:
+            malos += 1
+        else:
+            out[mid] = r
+    return out, malos, tomb
+
+
+def _evictar_tombstones(tomb):
+    """Otro proceso (o nosotros) desuscribio estos mercados por discrepancia gamma!=clob: fail-closed tambien aqui."""
+    evictados = []
+    with _TOK_LOCK:
+        for mid, exp in tomb.items():
+            _TOMB[mid] = exp
+            if mid in _TOK or mid in _CACHE_ENTRIES:
+                _TOK.pop(mid, None)
+                _CACHE_ENTRIES.pop(mid, None)
+                _SIN_CONTRASTE.discard(mid)
+                _SC_SRC.pop(mid, None)
+                _SC_ESTADO.pop(mid, None)
+                _TOK_FALLO[mid] = (1, time.time() + TOK_CUARENTENA_S, TOK_CUARENTENA_N)
+                evictados.append(mid)
+        for mid in [m for m, e in _TOMB.items() if e <= time.time()]:
+            _TOMB.pop(mid, None)                               # expirados
+    for mid in evictados:
+        _log(f"tombstone de otro proceso: mercado {mid} desuscrito (discrepancia gamma!=clob detectada fuera); cuarentena")
+
+
+def _cache_sincronizar():
+    """Una vez por refresco: si el fichero de caja cambio (mtime), lee sus tombstones y desuscribe los mercados que otro proceso tumbo."""
+    try:
+        mt = TOK_CACHE_PATH.stat().st_mtime_ns
+    except OSError:
+        return
+    if mt == _CACHE["mt"]:
+        return
+    try:
+        _, _, tomb = _leer_disco(time.time())
+    except Exception:
+        return
+    _CACHE["mt"] = mt
+    _evictar_tombstones(tomb)
+
+
+def _cache_guardar():
+    """Escritura COMPARTIDA entre procesos: flock + tmp con pid + FUSION con el disco (nunca se sobrescribe con un subconjunto).
+    Un fallo solo se loguea (1 vez cada TOK_CACHE_ERR_LOG_S), cuenta en _ESTADO['cache_err'] y reintenta con backoff."""
+    ahora = time.time()
+    if ahora < _CACHE["prox_intento"]:
+        return
+    with _TOK_LOCK:
+        mias = dict(_CACHE_ENTRIES)
+        borrar = dict(_CACHE["borrar"])                        # tombstones propios: mid -> expiracion (vida del mercado)
+        liberar = set(_CACHE["liberar"])
+    fd = None
+    tmp = TOK_CACHE_PATH.with_name(f"{TOK_CACHE_PATH.name}.tmp.{os.getpid()}")
+    try:
+        fd = os.open(str(TOK_CACHE_PATH.with_name(TOK_CACHE_PATH.name + ".lock")), os.O_CREAT | os.O_RDWR, 0o644)
+        t0 = _mono()
+        while True:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except OSError:
+                if _mono() - t0 > TOK_CACHE_LOCK_S:
+                    raise TimeoutError("flock de la cache")
+                _sleep_real(0.02)
+        try:
+            disco, _, tomb = _leer_disco(ahora)
+        except FileNotFoundError:
+            disco, tomb = {}, {}
+        except Exception:
+            disco, tomb = {}, {}                               # ilegible: se reescribe con lo nuestro
+        tomb.update({m: e for m, e in borrar.items() if e > ahora})
+        for m in liberar:
+            tomb.pop(m, None)
+        for mid, v in mias.items():
+            if mid in tomb:
+                continue                                       # tumbado (por mi o por otro proceso): NO se reescribe desde memoria
+            r = _validar_registro(mid, v, ahora)
+            if r is not None:
+                disco[mid] = r
+        for m in tomb:
+            disco.pop(m, None)
+        mercados = {m: r[0] for m, r in disco.items()}
+        with open(tmp, "w") as f:
+            f.write(json.dumps({"v": TOK_CACHE_VERSION, "guardado": ahora, "mercados": mercados, "tombstones": tomb}))
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, TOK_CACHE_PATH)
+        _CACHE["sucio"] = False
+        _CACHE["n_err"] = 0
+        for m, e in borrar.items():
+            if _CACHE["borrar"].get(m) == e:
+                _CACHE["borrar"].pop(m, None)                  # ya persistido (el tombstone vive en el fichero hasta que venza el mercado)
+        _CACHE["liberar"] -= liberar
+        try:
+            _CACHE["mt"] = TOK_CACHE_PATH.stat().st_mtime_ns
+        except OSError:
+            pass
+        _evictar_tombstones(tomb)                              # lo que otro proceso tumbo y yo aun tenia en memoria
+    except Exception as e:
+        _CACHE["n_err"] += 1
+        _CACHE["prox_intento"] = ahora + min(300.0, 5.0 * 2 ** min(_CACHE["n_err"], 6))
+        _ESTADO["cache_err"] = _ESTADO.get("cache_err", 0) + 1
+        if ahora - _CACHE["ult_log"] >= TOK_CACHE_ERR_LOG_S:
+            _CACHE["ult_log"] = ahora
+            _log(f"cache de tokens: no se pudo escribir {TOK_CACHE_PATH}: {type(e).__name__}: {e} (fallo {_CACHE['n_err']}; reintento con backoff)")
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+    finally:
+        if fd is not None:
+            os.close(fd)                                       # libera el flock
+
+
+def _cache_cargar(ahora):
+    """Carga y VALIDA la cache de disco; los que vencen antes primero, tope TOK_MKT_MAX. Devuelve cuantos mercados entraron."""
+    try:
+        disco, malos, tomb = _leer_disco(ahora)
+    except FileNotFoundError:
+        return 0
+    except Exception as e:
+        _log(f"cache de tokens ilegible ({type(e).__name__}: {e}): se ignora")
+        return 0
+    n = 0
+    with _TOK_LOCK:
+        _TOMB.update(tomb)
+        for mid, (r, edt) in sorted(disco.items(), key=lambda kv: kv[1][1])[:TOK_MKT_MAX]:
+            if mid in _TOK:
+                continue
+            _TOK[mid] = (r["yes"], r["no"])
+            _MKT[mid] = (r["activo"], r["marco"], r["cid"], edt)
+            _CACHE_ENTRIES[mid] = r
+            if r["sc"]:
+                _SIN_CONTRASTE.add(mid)
+                _SC_SRC[mid] = r["src"]
+            n += 1
+    _log(f"cache de tokens cargada de disco: {n} mercados vigentes ({malos} descartados por invalidos/vencidos)")
+    return n
+
+
+def _publicar(cand):
+    """Arma toks/claves/meta de los candidatos resueltos Y VIGENTES AHORA y los publica con UNA asignacion de un dict nuevo."""
+    global _UNIVERSO
+    ahora = time.time()
     out, claves, meta = [], {}, {}
-    for mid, (activo, marco, _cid, _edt) in _universo_activo().items():
-        permitidos = _MARCOS.get(marco, "no")
-        if permitidos == "no" or (permitidos is not None and activo not in permitidos):
+    with _TOK_LOCK:
+        for mid, (activo, marco, cid, edt) in cand.items():
+            par = _TOK.get(mid)
+            if par is None or edt.timestamp() <= ahora:
+                continue
+            yes, no = par
+            out += [yes, no]
+            for t, lado in ((yes, "YES"), (no, "NO")):
+                claves[t] = f"{activo}#{marco}"
+                meta[t] = (activo, marco, str(mid), str(edt), lado)
+    _UNIVERSO = {"toks": out, "claves": claves, "meta": meta}
+    return out
+
+
+def _resolver_mercado(sess, mid, cid, est, deadline):
+    """-> (yes, no, sin_contraste, fallo). fallo: None | 'transporte' | 'incompleto' | 'incoherente' | 'discrepancia' | 'presupuesto'."""
+    g = None
+    gk = "omitido"
+    if not _gamma_pausado() and (_GAMMA["score"] < TOK_GAMMA_SCORE_MAX or not est["sonda"]):
+        est["sonda"] = est["sonda"] or _GAMMA["score"] >= TOK_GAMMA_SCORE_MAX
+        r = deadline - time.time()
+        if r < TOK_MIN_RESTANTE_S:
+            return None, None, False, "presupuesto"
+        try:
+            g = _tokens_gamma(sess, mid, cid, min(TOK_GAMMA_TIMEOUT_S, r))
+            gk = "ok"
+            _GAMMA["score"] *= TOK_GAMMA_DECAY
+        except _ErrTransporte:
+            gk = "transporte"
+            _GAMMA["score"] += 1.0
+        except _ErrIncompleto:
+            gk = "incompleto"
+            _GAMMA["score"] *= TOK_GAMMA_DECAY                 # gamma contesto: no es caida
+        except _ErrIncoherente:
+            return None, None, False, "incoherente"            # gamma dice algo raro: fail-closed, sin preguntar a CLOB
+    r = deadline - time.time()
+    if r < TOK_MIN_RESTANTE_S:
+        return (g[0], g[1], "gamma", None) if g else (None, None, False, "presupuesto")
+    try:
+        c = _tokens_clob(sess, cid, min(TOK_CLOB_TIMEOUT_S, r))
+    except _ErrIncoherente:
+        return None, None, False, "incoherente"                # CLOB incoherente: dudoso aunque gamma este bien
+    except (_ErrTransporte, _ErrIncompleto) as e:
+        if g:
+            return g[0], g[1], "gamma", None                   # contraste imposible: gamma, marcado sin_contraste
+        return None, None, False, "incompleto" if (gk == "incompleto" or isinstance(e, _ErrIncompleto)) else "transporte"
+    if g is None:
+        return c[0], c[1], "clob", None                        # fuente unica (CLOB)
+    if c != g:
+        return None, None, False, "discrepancia"
+    return g[0], g[1], False, None
+
+
+def _recontrastar(sess, cand, deadline, est):
+    """Mercados aceptados con UNA sola fuente (429 de gamma -> solo CLOB; o el contraste CLOB cayo): cuando la OTRA fuente vuelve a
+    responder se contrastan UNA vez, con presupuesto acotado (TOK_RECONTRASTE_MAX por refresco, tras los pendientes, backoff por
+    mercado). Coinciden -> 'contrastado' (sale de sin_contraste y se persiste). Difieren -> se DESUSCRIBE, ALARMA latcheada y cuarentena."""
+    ahora = time.time()
+    with _TOK_LOCK:
+        lista = sorted((m for m in _SIN_CONTRASTE if m in cand and m in _TOK), key=lambda m: cand[m][3])
+        par = {m: _TOK[m] for m in lista}
+        src = {m: _SC_SRC.get(m, "") for m in lista}
+        estm = {m: _SC_ESTADO.get(m, (0, 0.0)) for m in lista}
+    hechos = 0
+    nmu_hechos, nmu_abort = 0, False
+    for mid in lista:
+        es_nmu = src[mid] == "nmu"
+        if not es_nmu and hechos >= TOK_RECONTRASTE_MAX:
+            if nmu_abort or nmu_hechos >= TOK_NMU_REFRESCO_MAX:
+                break
+            continue
+        n, prox = estm[mid]
+        if ahora < prox:
+            continue
+        activo, marco, cid, edt = cand[mid]
+        if es_nmu:
+            # nunca gamma; solo CLOB, una vez al entrar en la ventana de 30 min, 0,5 req/s, abortando ante cualquier fallo de transporte
+            if nmu_abort or nmu_hechos >= TOK_NMU_REFRESCO_MAX or n >= TOK_NMU_INTENTOS_MAX \
+                    or edt.timestamp() - ahora > TOK_NMU_VENTANA_S:
+                continue
+            espera = TOK_NMU_INTERVALO_S - (time.time() - _NMU_ULT[0])
+            if espera > 0:
+                if deadline - time.time() < espera + TOK_MIN_RESTANTE_S:
+                    nmu_abort = True                           # sin presupuesto para respetar el ritmo: se deja al siguiente refresco
+                    continue
+                time.sleep(espera)
+            con_gamma = False
+        else:
+            con_gamma = src[mid] != "gamma"                    # la otra fuente: si se acepto por gamma -> CLOB; si no -> gamma
+            if con_gamma and (_gamma_pausado() or _GAMMA["score"] >= TOK_GAMMA_SCORE_MAX):
+                if _gamma_pausado() or est["sonda"]:
+                    continue                                   # gamma en pausa 429 / caida: no se martillea (1 sonda por refresco)
+                est["sonda"] = True
+        r = deadline - time.time()
+        if r < TOK_MIN_RESTANTE_S:
+            break
+        if es_nmu:
+            nmu_hechos += 1
+            _NMU_ULT[0] = time.time()
+        else:
+            hechos += 1
+        otra, kind = None, "ok"
+        try:
+            if con_gamma:
+                otra = _tokens_gamma(sess, mid, cid, min(TOK_GAMMA_TIMEOUT_S, r))
+                _GAMMA["score"] *= TOK_GAMMA_DECAY
+            else:
+                otra = _tokens_clob(sess, cid, min(TOK_CLOB_TIMEOUT_S, r))
+        except _ErrTransporte:
+            kind = "transporte"
+            if con_gamma:
+                _GAMMA["score"] += 1.0
+            if es_nmu:
+                nmu_abort = True                               # 429/5xx/timeout del CLOB: se aborta el resto de contrastes nmu del refresco
+        except _ErrIncompleto:
+            kind = "incompleto"
+            if con_gamma:
+                _GAMMA["score"] *= TOK_GAMMA_DECAY
+        except _ErrIncoherente:
+            kind = "incoherente"
+        t_ahora = time.time()
+        with _TOK_LOCK:
+            if mid not in _TOK or mid not in _SIN_CONTRASTE:
+                continue                                       # cambio mientras tanto
+            if kind in ("transporte", "incompleto"):
+                _SC_ESTADO[mid] = (n + 1, t_ahora + min(TOK_RECONTRASTE_TOPE_S, TOK_RECONTRASTE_BASE_S * 2 ** min(n, 5)) * random.uniform(0.8, 1.2))
+            elif kind == "ok" and otra == par[mid]:
+                _SIN_CONTRASTE.discard(mid)
+                _SC_SRC.pop(mid, None)
+                _SC_ESTADO.pop(mid, None)
+                e = _CACHE_ENTRIES.get(mid)
+                if e is not None:
+                    e["sc"], e["ctr"], e["src"] = False, True, ""
+                _CACHE["sucio"] = True
+                _ESTADO["tok_contrastados"] = _ESTADO.get("tok_contrastados", 0) + 1
+            else:                                              # difieren (o la otra fuente es incoherente): fail-closed
+                _TOK.pop(mid, None)
+                _CACHE_ENTRIES.pop(mid, None)
+                _SIN_CONTRASTE.discard(mid)
+                _SC_SRC.pop(mid, None)
+                _SC_ESTADO.pop(mid, None)
+                _CACHE["borrar"][mid] = edt.timestamp()           # tombstone persistente hasta que venza el mercado
+                _CACHE["liberar"].discard(mid)
+                _TOMB[mid] = edt.timestamp()
+                _CACHE["sucio"] = True
+                if mid not in _ALARMA:                         # latch: una alarma por mercado y episodio
+                    _log(f"ALARMA: re-contraste de {mid} ({activo}#{marco}): {src[mid] or 'cache'} y la otra fuente DISCREPAN ({kind}): se DESUSCRIBE")
+                _ALARMA[mid] = _ALARMA.get(mid, 0) + 1
+                _TOK_FALLO[mid] = (_TOK_FALLO.get(mid, (0, 0.0, 0))[0] + 1, t_ahora + TOK_CUARENTENA_S * random.uniform(0.8, 1.2), TOK_CUARENTENA_N)
+                _log(f"cuarentena: mercado {mid} ({activo}#{marco}) desuscrito por discrepancia en el re-contraste; reintento ~{TOK_CUARENTENA_S:.0f} s")
+
+
+def _leer_cola_csv(f, ahora_dt):
+    """{mid: (activo, marco, cid, edt)} de la COLA (ultimos TOK_AYER_COLA_BYTES) de un CSV de capture_markets, solo vigentes (edt > ahora).
+    Misma clasificacion que fetch_libro_ambos_lados._universo_leer_nuevas (texto de la pregunta, MARCOS_TRACKEADOS, ACTIVOS).
+    Separa por b'\\n' (como el lector original); una cola cortada a mitad de linea se descarta. Excepcion si no se puede abrir/leer."""
+    import csv as _csv
+    import fetch_libro_ambos_lados as FL
+    mercados = {}
+    with open(f, "rb") as fh:
+        cab_raw = fh.readline()
+        cab = next(_csv.reader([cab_raw.decode("utf-8", errors="replace").rstrip("\r\n")]))
+        size = os.fstat(fh.fileno()).st_size
+        ini = max(len(cab_raw), size - TOK_AYER_COLA_BYTES)
+        fh.seek(ini)
+        data = fh.read()
+    partes = data.split(b"\n")
+    if ini > len(cab_raw):
+        partes = partes[1:]                                    # primera linea probablemente cortada
+    if partes and partes[-1] == b"":
+        partes.pop()
+    elif partes:
+        partes.pop()                                           # ultima linea sin \n: incompleta
+    for raw in partes:
+        try:
+            vals = next(_csv.reader([raw.rstrip(b"\r").decode("utf-8", errors="replace")]))
+        except (_csv.Error, StopIteration):
+            continue
+        r = dict(zip(cab, vals))
+        question = r.get("question") or ""
+        tipo, vent = FL._parse_updown_tipo(question)
+        if tipo not in ("slot", "hourly") or vent not in FL.MARCOS_TRACKEADOS:
+            continue
+        activo = FL.identificar_activo(question)
+        if activo not in FL.ACTIVOS:
             continue
         try:
-            yes, no, _ = lt._get_token_ids(mid)
-        except Exception:
+            edt = datetime.fromisoformat((r.get("end_date") or "").replace("Z", "+00:00"))
+        except ValueError:
             continue
-        out += [t for t in (yes, no) if t]
-        for t, lado in ((yes, "YES"), (no, "NO")):
-            if t:
-                claves[t] = f"{activo}#{marco}"
-                meta[t] = (activo, marco, str(mid), str(_edt), lado)
-    _UNIVERSO["claves"], _UNIVERSO["meta"] = claves, meta
-    return out
+        if edt.tzinfo is None:
+            edt = edt.replace(tzinfo=timezone.utc)
+        cid = r.get("condition_id", "")
+        if edt > ahora_dt and r.get("market_id") and cid.startswith("0x"):
+            mercados[r["market_id"]] = (activo, f"{vent}min", cid, edt)
+    return mercados
+
+
+def _csv_ayer(ahora_dt):
+    """Mercados vigentes de la cola del CSV de AYER (cache por ino/size/mtime: el fichero ya no crece tras las 00:00Z)."""
+    f = TOK_MARKETS_DIR / (ahora_dt - timedelta(days=1)).strftime("%Y-%m-%d.csv")
+    st = f.stat()                                              # FileNotFoundError -> el llamador lo trata como "sin ayer"
+    clave = (str(f), st.st_ino, st.st_size, st.st_mtime_ns, TOK_AYER_COLA_BYTES)
+    if _AYER["clave"] != clave:
+        _AYER["mercados"] = _leer_cola_csv(f, datetime(1970, 1, 1, tzinfo=timezone.utc))      # todos; la vigencia se filtra abajo
+        _AYER["clave"] = clave
+    return {m: v for m, v in _AYER["mercados"].items() if v[3] > ahora_dt}
+
+
+def _universo_csv(_universo_activo, ahora):
+    """Universo del CSV de HOY, fusionado por market_id con la cola del CSV de AYER cuando hoy falta, esta parado (>TOK_CSV_VIEJO_S sin
+    escrituras), es ilegible, o estamos en las primeras TOK_AYER_VENTANA_S tras las 00:00Z (hoy es parcial o aun no existe). Hoy manda."""
+    ahora_dt = datetime.fromtimestamp(ahora, timezone.utc)
+    err = False
+    try:
+        hoy = dict(_universo_activo())
+    except Exception as e:
+        err = True
+        hoy = {}
+        _log(f"universo: no se pudo leer el CSV de mercados ({type(e).__name__}: {e}); se usa lo conocido vigente")
+    try:
+        edad = ahora - (TOK_MARKETS_DIR / ahora_dt.strftime("%Y-%m-%d.csv")).stat().st_mtime
+    except OSError:
+        edad = None
+    sec_dia = ahora - ahora_dt.replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
+    if err or edad is None or edad > TOK_CSV_VIEJO_S or sec_dia < TOK_AYER_VENTANA_S:
+        try:
+            ayer = _csv_ayer(ahora_dt)
+        except FileNotFoundError:
+            ayer = {}
+        except Exception as e:
+            ayer = {}
+            if _GAMMA.get("ayer_err") != type(e).__name__:
+                _GAMMA["ayer_err"] = type(e).__name__
+                _log(f"universo: CSV de ayer no utilizable ({type(e).__name__}: {e})")
+        n0 = len(hoy)
+        for m, v in ayer.items():
+            hoy.setdefault(m, v)
+        if len(hoy) > n0 and _GAMMA.get("ayer_log") != len(hoy) - n0:
+            _GAMMA["ayer_log"] = len(hoy) - n0
+            _log(f"universo: {len(hoy) - n0} mercados vigentes aportados por la cola del CSV de ayer (hoy: {n0})")
+    return hoy
+
+
+def _tokens_universo(filtro_marcos=None):
+    from fetch_libro_ambos_lados import _universo_activo
+    if not _REFRESCO_LOCK.acquire(blocking=False):
+        return list(_UNIVERSO["toks"] or [])
+    try:
+        ahora = time.time()
+        if not _CACHE["cargado"]:                              # arranque en frio: cache de disco, publicar YA sin leer el CSV
+            _CACHE["cargado"] = True
+            if _cache_cargar(ahora):
+                with _TOK_LOCK:
+                    cand0 = {m: i for m, i in _MKT.items() if i[3].timestamp() > ahora and _permitido(i[0], i[1])}
+                _ESTADO["tok_pendientes"] = 1                  # refresco corto: el siguiente fusiona con el CSV
+                return _publicar(cand0)
+        cand = {}                                              # mid -> (activo, marco, cid, edt)
+        vivos_csv = set()
+        _cache_sincronizar()                                   # tombstones de otros procesos
+        csv_vivos = _universo_csv(_universo_activo, ahora)     # hoy (+ cola de ayer si procede); ilegible -> se usa lo conocido
+        for mid, (activo, marco, cid, edt) in csv_vivos.items():
+            if _permitido(activo, marco) and not _fuera_de_horizonte(marco, edt, ahora):
+                cand[mid] = (activo, marco, cid, edt)
+                vivos_csv.add(mid)
+        nmu = _nmu_mercados(ahora)
+        for mid, (activo, marco, cid, edt, _up, _dn) in list(nmu.items()):
+            c0 = cand.get(mid)
+            if c0 is not None:
+                if c0[2] and c0[2] != cid:                     # el CSV y el fichero discrepan en condition_id: camino v5 (gamma/CLOB)
+                    nmu.pop(mid)
+            elif marco == "5min":                              # 5m por delante del CSV: entran (solo 5m; los 15m no se amplian)
+                cand[mid] = (activo, marco, cid, edt)
+                vivos_csv.add(mid)
+            else:
+                nmu.pop(mid)
+        with _TOK_LOCK:
+            sembrados = 0
+            for mid, (activo, marco, cid, edt, up, dn) in nmu.items():
+                if mid in cand and mid not in _TOK and mid not in _TOMB and _TOK_FALLO.get(mid, (0, 0.0, 0))[2] < TOK_CUARENTENA_N:
+                    _poner(mid, up, dn, activo, marco, cid, edt, "nmu")
+                    sembrados += 1
+            if sembrados:
+                _ESTADO["tok_sembrados"] = _ESTADO.get("tok_sembrados", 0) + sembrados
+            retenidos = 0
+            for mid, inf in _MKT.items():                      # CSV parcial/vacio: se retiene lo conocido y vigente
+                if mid not in cand and inf[3].timestamp() > ahora and _permitido(inf[0], inf[1]) \
+                        and not _fuera_de_horizonte(inf[1], inf[3], ahora):
+                    cand[mid] = inf
+                    retenidos += 1
+            if retenidos > TOK_MKT_MAX:                        # tope: se CONSERVAN los que vencen antes, se descartan los mas lejanos
+                ret = sorted((m for m in cand if m in _MKT and m not in vivos_csv), key=lambda m: cand[m][3])
+                for m in ret[TOK_MKT_MAX:]:
+                    cand.pop(m, None)
+                    _olvidar(m)
+                retenidos = TOK_MKT_MAX
+            for m in [m for m in _MKT if m not in cand and _MKT[m][3].timestamp() <= ahora]:      # poda: solo lo VENCIDO
+                _olvidar(m)                                    # (lo no permitido aun por marco se conserva)
+            for m in [m for m in _TOK_FALLO if m not in cand]:
+                _TOK_FALLO.pop(m, None)
+            for m in [m for m in _ALARMA if m not in cand]:
+                _ALARMA.pop(m, None)
+            _SIN_CONTRASTE.intersection_update(_MKT)
+            pend = [m for m in cand if m not in _TOK]
+            fallo = dict(_TOK_FALLO)
+        if retenidos and retenidos != _GAMMA.get("ret_log"):
+            _GAMMA["ret_log"] = retenidos
+            _log(f"universo parcial: {retenidos} mercados vigentes retenidos de la cache (CSV con {len(cand) - retenidos})")
+        deadline = time.time() + TOK_PRESUPUESTO_S             # presupuesto DURO de red (empieza tras leer el CSV)
+        est = {"sonda": False}
+        sin_resolver = en_cuarentena = 0
+        sess = _sesion_datos() if pend else None
+        pend.sort(key=lambda m: cand[m][3])                    # primero los que vencen antes (los vivos ya)
+        for i, mid in enumerate(pend):
+            activo, marco, cid, edt = cand[mid]
+            nf, prox, nd = fallo.get(mid, (0, 0.0, 0))
+            if ahora < prox:
+                if nd >= TOK_CUARENTENA_N:
+                    en_cuarentena += 1
+                else:
+                    sin_resolver += 1
+                continue
+            yes, no, sc, kind = _resolver_mercado(sess, mid, cid, est, deadline)
+            if kind == "presupuesto":                          # presupuesto agotado: el resto, al siguiente refresco
+                sin_resolver += len(pend) - i
+                break
+            with _TOK_LOCK:
+                if kind is None:
+                    _poner(mid, yes, no, activo, marco, cid, edt, sc)
+                    continue
+                n2 = nf + 1
+                nd2 = nd + 1 if kind in ("incoherente", "discrepancia") else 0     # cuarentena SOLO por incoherencia de datos
+                t_ahora = time.time()
+                if kind == "discrepancia":
+                    primera = mid not in _ALARMA
+                    _ALARMA[mid] = _ALARMA.get(mid, 0) + 1
+                    if primera:                                # latch: una alarma por mercado y episodio
+                        _log(f"ALARMA: gamma y clob DISCREPAN en {mid} ({activo}#{marco}): NO se suscribe")
+                if nd2 >= TOK_CUARENTENA_N:
+                    espera = min(TOK_CUARENTENA_S, max(5.0, (edt.timestamp() - t_ahora) / 4)) * random.uniform(0.8, 1.2)
+                    en_cuarentena += 1
+                    if nd2 == TOK_CUARENTENA_N:
+                        _log(f"cuarentena: mercado {mid} ({activo}#{marco}) con datos incoherentes tras {nd2} intentos; reintento cada ~{TOK_CUARENTENA_S:.0f} s")
+                else:
+                    espera = _backoff_s(marco, edt, t_ahora, n2)
+                    sin_resolver += 1
+                _TOK_FALLO[mid] = (n2, t_ahora + espera, nd2)
+        if _SIN_CONTRASTE:
+            _recontrastar(sess or _sesion_datos(), cand, deadline, est)
+            with _TOK_LOCK:                                    # los desuscritos entran en la cuenta de cuarentena
+                en_cuarentena = sum(1 for m, f in _TOK_FALLO.items() if m in cand and f[2] >= TOK_CUARENTENA_N)
+        out = _publicar(cand)
+        _ESTADO["tok_pendientes"] = sin_resolver               # solo lo NO en cuarentena acorta el refresco
+        _ESTADO["tok_cuarentena"] = en_cuarentena
+        _ESTADO["tok_sin_contraste"] = len(_SIN_CONTRASTE)
+        _ESTADO["tok_discrepancias"] = len(_ALARMA)
+        if _CACHE["sucio"]:
+            _cache_guardar()
+        return out
+    finally:
+        _REFRESCO_LOCK.release()
 
 
 def _enviar_deseados():
     """Manda al hijo el conjunto completo deseado (universo + on-demand vigentes; los on-demand primero)."""
     ahora = time.time()
     extra = [t for t, e in list(_EXTRA.items()) if e > ahora]
-    univ = _UNIVERSO["toks"]
+    u = _universo()                              # foto: _tokens_universo publica un dict nuevo de una vez
+    univ = u["toks"]
     if univ is None:
         return                                   # sin universo aún: se mandará en cuanto exista
     with _HIJO["lock"]:
@@ -228,7 +1068,7 @@ def _enviar_deseados():
         if p is None or p.poll() is not None:
             return
         try:
-            p.stdin.write(_trama(("tokens", list(univ), extra, dict(_UNIVERSO["claves"]), dict(_UNIVERSO["meta"]))))
+            p.stdin.write(_trama(("tokens", list(univ), extra, dict(u["claves"]), dict(u["meta"]))))
             p.stdin.flush()
         except (BrokenPipeError, OSError, ValueError):
             pass
@@ -244,18 +1084,21 @@ def _podar(vivos):
 
 def _hilo_universo():
     while True:
+        _REFRESCO_EVT.clear()
+        gen0 = _MARCOS_GEN[0]                    # si iniciar() cambia los marcos durante esta ronda no nos dormimos
         try:
             toks = _tokens_universo()
             ahora = time.time()
             for t in [t for t, e in list(_EXTRA.items()) if e <= ahora]:
                 _EXTRA.pop(t, None)
-            _UNIVERSO["toks"] = toks
             _ESTADO["n_tokens"] = len(set(toks) | set(_EXTRA))
             _podar(set(toks) | set(_EXTRA))
             _enviar_deseados()
         except Exception as e:
             _log(f"refresco de universo falló: {type(e).__name__}: {e}")
-        time.sleep(REFRESCO_S)
+        if _MARCOS_GEN[0] != gen0:
+            continue
+        _REFRESCO_EVT.wait(TOK_REFRESCO_PENDIENTES_S if _ESTADO.get("tok_pendientes") else REFRESCO_S)   # iniciar() lo despierta
 
 
 def _hilo_lector(proc):
@@ -308,13 +1151,18 @@ def _supervisor():
 
 def iniciar(filtro_marcos=("15min",), activos=None):
     """Idempotente y ACUMULATIVO: cada llamante añade sus marcos (activos=None -> todos)."""
-    for m in filtro_marcos:
-        if m in _MARCOS and _MARCOS[m] is None:
-            continue
-        if activos is None:
-            _MARCOS[m] = None
-        else:
-            _MARCOS[m] = set(_MARCOS.get(m) or ()) | set(activos)
+    with _MARCOS_LOCK:
+        antes = {m: (None if v is None else frozenset(v)) for m, v in _MARCOS.items()}
+        for m in filtro_marcos:
+            if m in _MARCOS and _MARCOS[m] is None:
+                continue
+            if activos is None:
+                _MARCOS[m] = None
+            else:
+                _MARCOS[m] = set(_MARCOS.get(m) or ()) | set(activos)
+        if antes != {m: (None if v is None else frozenset(v)) for m, v in _MARCOS.items()}:
+            _MARCOS_GEN[0] += 1                  # cambio de marcos o de activos de un marco: el universo debe recalcularse ya
+            _REFRESCO_EVT.set()
     if _ESTADO["iniciado"]:
         return
     _ESTADO["iniciado"] = True
