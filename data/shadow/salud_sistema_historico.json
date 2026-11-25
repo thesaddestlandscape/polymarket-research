@@ -1,101 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-09-02T19:08:36+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 153,
-      "resolve_postmortem_p50_s": 42.0,
-      "resolve_postmortem_p95_s": 2443.0,
-      "resolve_postmortem_max_s": 4793.0,
-      "n_ciclos_live_trade": 3339,
-      "hueco_live_trade_max_s": 83.0
-    },
-    "procesos_colgados": [
-      {
-        "pid": "2305971",
-        "cmd": "/bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1788370095701-vgyva8.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'tail -f -n0 logs/fast.log | grep --line-buffered \"shadow_postmortem.py:\"' < /dev/null && pwd -P >| /tmp/claude-3623-cwd",
-        "segundos_vivo": 238
-      },
-      {
-        "pid": "2305974",
-        "cmd": "/bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1788370095701-vgyva8.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'tail -f -n0 logs/fast.log | grep --line-buffered \"shadow_postmortem.py:\"' < /dev/null && pwd -P >| /tmp/claude-3623-cwd",
-        "segundos_vivo": 238
-      },
-      {
-        "pid": "2305975",
-        "cmd": "ugrep -G --ignore-files --hidden -I --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --exclude-dir=.bzr --exclude-dir=.jj --exclude-dir=.sl --line-buffered shadow_postmortem.py:",
-        "segundos_vivo": 238
-      }
-    ],
-    "deploy": {
-      "n_screens": 13,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 83.0,
-      "gb_libres": 12.49,
-      "git_gb": 0.0,
-      "data_gb": 28.81,
-      "datalogs_gb": 8.83
-    },
-    "ram": {
-      "ram_total_gb": 7.56,
-      "ram_disponible_gb": 1.96,
-      "ram_pct_libre": 25.9
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 528,
-      "n_results_total": 364395
-    },
-    "integridad_datos_sports": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 4
-    },
-    "carga_sistema": {
-      "load1": 13.36,
-      "load5": 14.26,
-      "load15": 13.69,
-      "nproc": 4,
-      "ratio5": 3.56,
-      "n_procesos_total": 234
-    },
-    "oom_kills": {
-      "n_oom_kills_24h": 3,
-      "eventos": [
-        {
-          "ts": "Sep 02 07:01:23",
-          "pid": "2155124",
-          "nombre": "python",
-          "rss_mb": 1840.4
-        },
-        {
-          "ts": "Sep 02 12:35:09",
-          "pid": "2223725",
-          "nombre": "python",
-          "rss_mb": 3499.8
-        },
-        {
-          "ts": "Sep 02 15:10:02",
-          "pid": "2257267",
-          "nombre": "python",
-          "rss_mb": 3364.0
-        }
-      ]
-    },
-    "git_push": {
-      "commits_sin_pushear": 0
-    },
-    "anomalias": [
-      "⏱️ ciclo resolve+postmortem tardó 4793s (umbral 120s)",
-      "🚨 proceso colgado: /bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1788370095701-vgyva8.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'tail -f -n0 logs/fast.log | grep --line-buffered \"shadow_postmortem.py:\"' < /dev/null && pwd -P >| /tmp/claude-3623-cwd (238s vivo)",
-      "🚨 proceso colgado: /bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1788370095701-vgyva8.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'tail -f -n0 logs/fast.log | grep --line-buffered \"shadow_postmortem.py:\"' < /dev/null && pwd -P >| /tmp/claude-3623-cwd (238s vivo)",
-      "🚨 proceso colgado: ugrep -G --ignore-files --hidden -I --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --exclude-dir=.bzr --exclude-dir=.jj --exclude-dir=.sl --line-buffered shadow_postmortem.py: (238s vivo)",
-      "🔥 CPU sobresuscrita: load5=14.26 en 4 cores (ratio=3.56x, umbral 3.0x) -- 234 procesos vivos",
-      "💀 3 OOM-kill(s) del kernel en 24h: python(pid 2155124, 1840.4MB), python(pid 2223725, 3499.8MB), python(pid 2257267, 3364.0MB)"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-09-03T10:10:00+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 240,
@@ -18442,6 +18346,183 @@
       "💀 6 OOM-kill(s) del kernel en 24h: python3(pid 1060060, 3076.8MB), python3(pid 1093264, 872.7MB), python3(pid 1582521, 2580.1MB), python3(pid 1728718, 2770.6MB), python3(pid 1758231, 3550.6MB), python3(pid 1771528, 3655.5MB)",
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket.json 161.5h (máx 2.25h)",
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket_fino.json 161.3h (máx 2.25h)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-25T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 55,
+      "resolve_postmortem_p50_s": 167.6,
+      "resolve_postmortem_p95_s": 269.9,
+      "resolve_postmortem_max_s": 828.1,
+      "resolve_postmortem_duraciones_s": [
+        176.7,
+        155.3,
+        170.2,
+        785.1,
+        156.2,
+        144.0,
+        146.9,
+        173.5,
+        179.3,
+        828.1,
+        115.8,
+        133.3,
+        151.2,
+        174.4,
+        152.1,
+        269.9,
+        229.7,
+        152.1,
+        147.9,
+        155.8,
+        163.5,
+        228.4,
+        211.4,
+        153.6,
+        131.1,
+        151.6,
+        158.3,
+        240.5,
+        196.2,
+        161.6,
+        154.1,
+        261.1,
+        234.8,
+        249.4,
+        202.6,
+        160.0,
+        146.5,
+        152.7,
+        170.5,
+        253.2,
+        208.9,
+        150.1,
+        198.0,
+        153.3,
+        169.0,
+        247.4,
+        213.0,
+        165.7,
+        159.8,
+        156.2,
+        167.6,
+        268.2,
+        202.9,
+        160.2,
+        200.7
+      ],
+      "n_ciclos_live_trade": 1890,
+      "hueco_live_trade_max_s": 63.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 25,
+      "stale": [
+        "ejeclive",
+        "walletmirror",
+        "sportsfase0"
+      ]
+    },
+    "disco": {
+      "pct_usado": 87.0,
+      "gb_libres": 9.65,
+      "git_gb": 0.0,
+      "data_gb": 14.2,
+      "datalogs_gb": 8.76
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 2.86,
+      "ram_pct_libre": 18.8
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 790,
+      "n_results_total": 1595883
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 6.04,
+      "load5": 5.95,
+      "load15": 6.97,
+      "nproc": 8,
+      "ratio5": 0.74,
+      "n_procesos_total": 394
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 6,
+      "eventos": [
+        {
+          "ts": "Nov 24 11:11:15",
+          "pid": "2802423",
+          "nombre": "python3",
+          "rss_mb": 3199.3
+        },
+        {
+          "ts": "Nov 24 12:46:28",
+          "pid": "2917678",
+          "nombre": "python3",
+          "rss_mb": 3282.0
+        },
+        {
+          "ts": "Nov 24 14:33:27",
+          "pid": "3193219",
+          "nombre": "systemd",
+          "rss_mb": 0.4
+        },
+        {
+          "ts": "Nov 24 14:33:27",
+          "pid": "3193223",
+          "nombre": "(sd-pam)",
+          "rss_mb": 0.0
+        },
+        {
+          "ts": "Nov 24 14:33:27",
+          "pid": "3054851",
+          "nombre": "python",
+          "rss_mb": 1507.1
+        },
+        {
+          "ts": "Nov 24 22:45:54",
+          "pid": "3621118",
+          "nombre": "python",
+          "rss_mb": 1366.1
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 2,
+      "gates": [
+        {
+          "gate": "wallet_mirror_gate_bucket.json",
+          "antiguedad_h": 185.5,
+          "maximo_h": 2.25
+        },
+        {
+          "gate": "wallet_mirror_gate_bucket_fino.json",
+          "antiguedad_h": 185.3,
+          "maximo_h": 2.25
+        }
+      ]
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 828s (umbral 400s)",
+      "⚠️ screens STALE (código en disco != código cargado): ejeclive, walletmirror, sportsfase0",
+      "💀 6 OOM-kill(s) del kernel en 24h: python3(pid 2802423, 3199.3MB), python3(pid 2917678, 3282.0MB), systemd(pid 3193219, 0.4MB), (sd-pam)(pid 3193223, 0.0MB), python(pid 3054851, 1507.1MB), python(pid 3621118, 1366.1MB)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket.json 185.5h (máx 2.25h)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket_fino.json 185.3h (máx 2.25h)"
     ],
     "estado": "ANOMALIA"
   }
