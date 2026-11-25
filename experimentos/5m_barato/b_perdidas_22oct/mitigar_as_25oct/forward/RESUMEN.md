@@ -1,8 +1,8 @@
-# RESUMEN forward A1/F5 (mitigar_as_25oct) -- generado 2026-11-24T11:34:32Z
+# RESUMEN forward A1/F5 (mitigar_as_25oct) -- generado 2026-11-25T11:23:32Z
 
 Pasivo, solo lectura, 0 EUR validados. Regla congelada (`regla_congelada.json`, TRAIN 06-08 Oct): marcar F5 = log1p(tamano ask propio a r-100 ms) > 4.7174. Prereg `PREREG_FWD.md`.
 
-Dias COMPLETE acumulados: **31** (2026-10-24, 2026-10-25, 2026-10-26, 2026-10-27, 2026-10-28, 2026-10-29, 2026-10-30, 2026-10-31, 2026-11-01, 2026-11-02, 2026-11-03, 2026-11-04, 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09, 2026-11-10, 2026-11-11, 2026-11-12, 2026-11-13, 2026-11-14, 2026-11-15, 2026-11-16, 2026-11-17, 2026-11-18, 2026-11-19, 2026-11-20, 2026-11-21, 2026-11-22, 2026-11-23). Gate PREREG_A1 exige >=10 dias nuevos.
+Dias COMPLETE acumulados: **32** (2026-10-24, 2026-10-25, 2026-10-26, 2026-10-27, 2026-10-28, 2026-10-29, 2026-10-30, 2026-10-31, 2026-11-01, 2026-11-02, 2026-11-03, 2026-11-04, 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09, 2026-11-10, 2026-11-11, 2026-11-12, 2026-11-13, 2026-11-14, 2026-11-15, 2026-11-16, 2026-11-17, 2026-11-18, 2026-11-19, 2026-11-20, 2026-11-21, 2026-11-22, 2026-11-23, 2026-11-24). Gate PREREG_A1 exige >=10 dias nuevos.
 
 ## Cobertura por dia (manifiestos)
 | dia | estado | rellenos banda | prints | cobertura desenlace (coste) | F5 valido | por moneda |
@@ -38,42 +38,43 @@ Dias COMPLETE acumulados: **31** (2026-10-24, 2026-10-25, 2026-10-26, 2026-10-27
 | 2026-11-21 | COMPLETE | 109653 | 109653 | 1.0 | 0.9941 | {'BTC': 89099, 'ETH': 11534, 'SOL': 4223, 'XRP': 2742, 'DOGE': 1268, 'BNB': 787} |
 | 2026-11-22 | COMPLETE | 102480 | 102480 | 1.0 | 0.9952 | {'BTC': 78179, 'ETH': 12614, 'SOL': 5401, 'XRP': 3856, 'DOGE': 1396, 'BNB': 1034} |
 | 2026-11-23 | COMPLETE | 120058 | 120058 | 1.0 | 0.9945 | {'BTC': 99083, 'ETH': 11997, 'SOL': 4660, 'XRP': 2843, 'DOGE': 817, 'BNB': 658} |
+| 2026-11-24 | COMPLETE | 122527 | 122527 | 1.0 | 0.9948 | {'BTC': 97877, 'ETH': 15489, 'SOL': 4278, 'XRP': 2691, 'DOGE': 1227, 'BNB': 965} |
 
 ## Acumulado por grupo y variante (EXCESO en USD vs placebo; IC90 y p por dias, t de una cola)
 | grupo | variante | dias | exceso acum. | IC90 dias | p | sin 2 mejores | dias + | inversion acum. | tau250 acum. | EV marc. | EV ret. | EV total |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| ALL3_ETH_SOL_XRP | global | 31 | 24325 | (584, 985)/dia | 0.0000 | 19296 | 27/31 | -2235 | 19209 | -0.096 | 0.054 | 0.024 |
-| ALL3_ETH_SOL_XRP | base_F2xmonedaxhora | 31 | 6364 | (84, 327)/dia | 0.0037 | 4505 | 22/31 | nan | nan | -0.096 | 0.054 | 0.024 |
-| ALL3_ETH_SOL_XRP | nivel_bajo_mejor_bid | 31 | 9136 | (150, 439)/dia | 0.0008 | 6296 | 21/31 | nan | nan | -0.026 | 0.157 | 0.120 |
-| ALL3_ETH_SOL_XRP | nivel_al_mejor_bid | 31 | 11652 | (254, 498)/dia | 0.0000 | 9512 | 27/31 | nan | nan | -0.125 | -0.008 | -0.035 |
-| REPLICA3_BTC_DOGE_BNB | global | 31 | 180366 | (3457, 8179)/dia | 0.0001 | 127430 | 23/31 | -83314 | 175131 | -0.021 | 0.057 | 0.003 |
-| REPLICA3_BTC_DOGE_BNB | base_F2xmonedaxhora | 31 | 26928 | (-711, 2449)/dia | 0.1791 | 1561 | 17/31 | nan | nan | -0.021 | 0.057 | 0.003 |
-| REPLICA3_BTC_DOGE_BNB | nivel_bajo_mejor_bid | 31 | 82527 | (1381, 3943)/dia | 0.0007 | 55701 | 21/31 | nan | nan | 0.003 | 0.116 | 0.039 |
-| REPLICA3_BTC_DOGE_BNB | nivel_al_mejor_bid | 31 | 66508 | (937, 3354)/dia | 0.0026 | 44744 | 21/31 | nan | nan | -0.036 | 0.014 | -0.023 |
-| ETH | global | 31 | 16996 | (352, 745)/dia | 0.0000 | 13226 | 24/31 | -3796 | 13483 | -0.088 | 0.039 | 0.006 |
-| ETH | base_F2xmonedaxhora | 31 | 5659 | (65, 300)/dia | 0.0067 | 3908 | 21/31 | nan | nan | -0.088 | 0.039 | 0.006 |
-| ETH | nivel_bajo_mejor_bid | 31 | 5515 | (42, 314)/dia | 0.0170 | 3101 | 16/31 | nan | nan | -0.018 | 0.115 | 0.081 |
-| ETH | nivel_al_mejor_bid | 31 | 9117 | (184, 404)/dia | 0.0000 | 7290 | 26/31 | nan | nan | -0.118 | -0.006 | -0.038 |
-| SOL | global | 31 | 3956 | (54, 201)/dia | 0.0031 | 2573 | 26/31 | -1755 | 2632 | -0.159 | 0.082 | 0.062 |
-| SOL | base_F2xmonedaxhora | 31 | 584 | (-0, 38)/dia | 0.0523 | 244 | 20/31 | nan | nan | -0.159 | 0.082 | 0.062 |
-| SOL | nivel_bajo_mejor_bid | 31 | 1663 | (-3, 111)/dia | 0.0603 | 700 | 25/31 | nan | nan | -0.148 | 0.257 | 0.228 |
-| SOL | nivel_al_mejor_bid | 31 | 1414 | (24, 68)/dia | 0.0007 | 1002 | 24/31 | nan | nan | -0.158 | -0.022 | -0.036 |
-| XRP | global | 31 | 679 | (11, 33)/dia | 0.0010 | 505 | 24/31 | 2233 | 519 | -0.255 | 0.080 | 0.073 |
-| XRP | base_F2xmonedaxhora | 31 | 121 | (-1, 9)/dia | 0.1065 | 46 | 21/31 | nan | nan | -0.255 | 0.080 | 0.073 |
-| XRP | nivel_bajo_mejor_bid | 31 | 23 | (-8, 9)/dia | 0.4428 | -54 | 20/31 | nan | nan | 0.124 | 0.203 | 0.202 |
-| XRP | nivel_al_mejor_bid | 31 | 578 | (12, 25)/dia | 0.0000 | 466 | 25/31 | nan | nan | -0.398 | 0.003 | -0.008 |
-| BTC | global | 31 | 175444 | (3336, 7983)/dia | 0.0001 | 123145 | 23/31 | -84756 | 170194 | -0.021 | 0.056 | 0.002 |
-| BTC | base_F2xmonedaxhora | 31 | 26806 | (-715, 2444)/dia | 0.1801 | 1439 | 17/31 | nan | nan | -0.021 | 0.056 | 0.002 |
-| BTC | nivel_bajo_mejor_bid | 31 | 79276 | (1297, 3817)/dia | 0.0009 | 53272 | 22/31 | nan | nan | 0.003 | 0.113 | 0.038 |
-| BTC | nivel_al_mejor_bid | 31 | 65670 | (926, 3311)/dia | 0.0026 | 44220 | 21/31 | nan | nan | -0.036 | 0.014 | -0.023 |
-| DOGE | global | 31 | 41 | (-5, 7)/dia | 0.3546 | -25 | 17/31 | 1151 | 57 | -0.102 | 0.080 | 0.078 |
-| DOGE | base_F2xmonedaxhora | 31 | 6 | (-1, 1)/dia | 0.3482 | -4 | 15/31 | nan | nan | -0.102 | 0.080 | 0.078 |
-| DOGE | nivel_bajo_mejor_bid | 31 | -47 | (-7, 4)/dia | 0.6782 | -78 | 11/31 | nan | nan | 0.561 | 0.290 | 0.293 |
-| DOGE | nivel_al_mejor_bid | 31 | 72 | (-0, 5)/dia | 0.0570 | 31 | 20/31 | nan | nan | -0.392 | -0.038 | -0.042 |
-| BNB | global | 31 | 315 | (1, 19)/dia | 0.0311 | 121 | 18/31 | 552 | 363 | -0.421 | 0.173 | 0.160 |
-| BNB | base_F2xmonedaxhora | 31 | 115 | (0, 7)/dia | 0.0405 | 36 | 13/31 | nan | nan | -0.421 | 0.173 | 0.160 |
-| BNB | nivel_bajo_mejor_bid | 31 | -13 | (-2, 1)/dia | 0.6703 | -26 | 10/31 | nan | nan | 0.539 | 0.463 | 0.463 |
-| BNB | nivel_al_mejor_bid | 31 | 283 | (1, 17)/dia | 0.0302 | 111 | 21/31 | nan | nan | -0.543 | 0.060 | 0.042 |
+| ALL3_ETH_SOL_XRP | global | 32 | 24768 | (579, 969)/dia | 0.0000 | 19739 | 28/32 | -2513 | 19580 | -0.092 | 0.055 | 0.026 |
+| ALL3_ETH_SOL_XRP | base_F2xmonedaxhora | 32 | 7130 | (102, 344)/dia | 0.0020 | 5270 | 23/32 | nan | nan | -0.092 | 0.055 | 0.026 |
+| ALL3_ETH_SOL_XRP | nivel_bajo_mejor_bid | 32 | 9026 | (140, 424)/dia | 0.0010 | 6186 | 21/32 | nan | nan | -0.019 | 0.156 | 0.121 |
+| ALL3_ETH_SOL_XRP | nivel_al_mejor_bid | 32 | 12108 | (261, 496)/dia | 0.0000 | 9968 | 28/32 | nan | nan | -0.122 | -0.006 | -0.033 |
+| REPLICA3_BTC_DOGE_BNB | global | 32 | 172360 | (2988, 7785)/dia | 0.0003 | 119424 | 23/32 | -78547 | 162809 | -0.018 | 0.054 | 0.004 |
+| REPLICA3_BTC_DOGE_BNB | base_F2xmonedaxhora | 32 | 25587 | (-733, 2332)/dia | 0.1916 | 221 | 17/32 | nan | nan | -0.018 | 0.054 | 0.004 |
+| REPLICA3_BTC_DOGE_BNB | nivel_bajo_mejor_bid | 32 | 76793 | (1083, 3716)/dia | 0.0021 | 49967 | 21/32 | nan | nan | 0.007 | 0.108 | 0.039 |
+| REPLICA3_BTC_DOGE_BNB | nivel_al_mejor_bid | 32 | 64529 | (828, 3206)/dia | 0.0036 | 42764 | 21/32 | nan | nan | -0.032 | 0.014 | -0.020 |
+| ETH | global | 32 | 17432 | (355, 735)/dia | 0.0000 | 13662 | 25/32 | -3935 | 13801 | -0.084 | 0.042 | 0.010 |
+| ETH | base_F2xmonedaxhora | 32 | 6413 | (82, 318)/dia | 0.0036 | 4616 | 22/32 | nan | nan | -0.084 | 0.042 | 0.010 |
+| ETH | nivel_bajo_mejor_bid | 32 | 5473 | (39, 303)/dia | 0.0178 | 3060 | 16/32 | nan | nan | -0.011 | 0.118 | 0.084 |
+| ETH | nivel_al_mejor_bid | 32 | 9466 | (189, 402)/dia | 0.0000 | 7639 | 27/32 | nan | nan | -0.115 | -0.003 | -0.036 |
+| SOL | global | 32 | 4018 | (54, 197)/dia | 0.0028 | 2635 | 27/32 | -1767 | 2719 | -0.161 | 0.078 | 0.059 |
+| SOL | base_F2xmonedaxhora | 32 | 596 | (0, 37)/dia | 0.0488 | 256 | 21/32 | nan | nan | -0.161 | 0.078 | 0.059 |
+| SOL | nivel_bajo_mejor_bid | 32 | 1660 | (-3, 107)/dia | 0.0607 | 697 | 25/32 | nan | nan | -0.147 | 0.246 | 0.218 |
+| SOL | nivel_al_mejor_bid | 32 | 1482 | (25, 68)/dia | 0.0004 | 1070 | 25/32 | nan | nan | -0.163 | -0.021 | -0.035 |
+| XRP | global | 32 | 687 | (11, 32)/dia | 0.0009 | 513 | 25/32 | 2119 | 544 | -0.256 | 0.083 | 0.076 |
+| XRP | base_F2xmonedaxhora | 32 | 122 | (-1, 9)/dia | 0.1041 | 47 | 22/32 | nan | nan | -0.256 | 0.083 | 0.076 |
+| XRP | nivel_bajo_mejor_bid | 32 | 19 | (-8, 9)/dia | 0.4531 | -58 | 20/32 | nan | nan | 0.133 | 0.200 | 0.199 |
+| XRP | nivel_al_mejor_bid | 32 | 590 | (12, 25)/dia | 0.0000 | 477 | 26/32 | nan | nan | -0.402 | 0.008 | -0.003 |
+| BTC | global | 32 | 167894 | (2893, 7600)/dia | 0.0003 | 115595 | 23/32 | -79944 | 158307 | -0.018 | 0.053 | 0.004 |
+| BTC | base_F2xmonedaxhora | 32 | 25471 | (-736, 2328)/dia | 0.1926 | 104 | 17/32 | nan | nan | -0.018 | 0.053 | 0.004 |
+| BTC | nivel_bajo_mejor_bid | 32 | 73633 | (1007, 3595)/dia | 0.0025 | 47629 | 22/32 | nan | nan | 0.007 | 0.104 | 0.038 |
+| BTC | nivel_al_mejor_bid | 32 | 64098 | (833, 3173)/dia | 0.0034 | 42648 | 21/32 | nan | nan | -0.032 | 0.015 | -0.020 |
+| DOGE | global | 32 | 35 | (-5, 7)/dia | 0.3774 | -32 | 17/32 | 1163 | 64 | -0.089 | 0.071 | 0.070 |
+| DOGE | base_F2xmonedaxhora | 32 | -2 | (-1, 1)/dia | 0.5526 | -12 | 15/32 | nan | nan | -0.089 | 0.071 | 0.070 |
+| DOGE | nivel_bajo_mejor_bid | 32 | -47 | (-7, 4)/dia | 0.6783 | -78 | 11/32 | nan | nan | 0.561 | 0.278 | 0.281 |
+| DOGE | nivel_al_mejor_bid | 32 | 61 | (-1, 4)/dia | 0.0947 | 21 | 20/32 | nan | nan | -0.349 | -0.044 | -0.047 |
+| BNB | global | 32 | 319 | (1, 19)/dia | 0.0294 | 125 | 19/32 | 552 | 368 | -0.427 | 0.150 | 0.137 |
+| BNB | base_F2xmonedaxhora | 32 | 118 | (0, 7)/dia | 0.0366 | 39 | 14/32 | nan | nan | -0.427 | 0.150 | 0.137 |
+| BNB | nivel_bajo_mejor_bid | 32 | -13 | (-2, 1)/dia | 0.6704 | -26 | 10/32 | nan | nan | 0.539 | 0.436 | 0.437 |
+| BNB | nivel_al_mejor_bid | 32 | 286 | (1, 17)/dia | 0.0288 | 114 | 22/32 | nan | nan | -0.548 | 0.039 | 0.021 |
 
 ## Por dia, grupo ALL3 (ETH/SOL/XRP), variante global
 | dia | n | coste | EV total | exceso | frac EUR marcada | EV marc. | EV ret. | inversion | tau250 | disparo control / pre-relleno |
@@ -109,6 +110,7 @@ Dias COMPLETE acumulados: **31** (2026-10-24, 2026-10-25, 2026-10-26, 2026-10-27
 | 2026-11-21 | 18499 | 38903 | -0.079 | 821 | 0.13 | -0.247 | -0.055 | 382 | -53 | 0.13 / 0.15 |
 | 2026-11-22 | 21871 | 46963 | -0.079 | 570 | 0.13 | -0.172 | -0.065 | -869 | 642 | 0.12 / 0.14 |
 | 2026-11-23 | 19500 | 41764 | 0.016 | 591 | 0.15 | -0.076 | 0.033 | 462 | 592 | 0.14 / 0.17 |
+| 2026-11-24 | 22458 | 44189 | 0.067 | 442 | 0.16 | 0.007 | 0.079 | -278 | 371 | 0.15 / 0.18 |
 
 ## Gate PREREG_A1 adaptado al forward (ver PREREG_FWD.md), grupo ALL3 / global
 - 1_exceso>0 e IC90 dias inferior>0: SI
@@ -120,7 +122,7 @@ Dias COMPLETE acumulados: **31** (2026-10-24, 2026-10-25, 2026-10-26, 2026-10-27
 - 6_IC90 cierre inferior>0: SI
 - 7_EV ret - total, IC90 dias inferior>0: SI
 - RT_base F2xmonedaxhora exceso>0 e IC90 inferior>0: SI
-- IC90 cierre (bootstrap 1000, semilla 20261026): (17961, 30554); EV ret - total IC90 dias (0.0235, 0.0414)
+- IC90 cierre (bootstrap 1000, semilla 20261026): (18477, 30426); EV ret - total IC90 dias (0.0231, 0.0405)
 **VEREDICTO forward: PASA 7/7 + base RT (CONFIRMADO-forward en poblacion; NO es capacidad de B)**
 
 Limites: unidad = print poblacional (no orden con cola); placebo sustractivo; EUR validados 0; exige reaccion <=100-150 ms desde recepcion + cancelacion 60 ms (sin medir con ordenes propias).

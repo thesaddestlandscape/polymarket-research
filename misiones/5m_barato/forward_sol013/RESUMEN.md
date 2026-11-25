@@ -1,4 +1,4 @@
-# RESUMEN H-Q11-SOL013 (generado 2026-11-24T12:50:04Z)
+# RESUMEN H-Q11-SOL013 (generado 2026-11-25T12:50:04Z)
 Prereg PREREG_Q11_SOL013.md + ADDENDUM2/3 (no modificar). Rango: 2026-11-06..9999-12-31. Fuente: /root/polymarket-research-dev/misiones/5m_barato/sonda1/p2/A3_guarda/ret_cinta_corregida/descomp/out/
 
 Dias validos (dec2+dec3s100): 10 2026-11-06..2026-11-15; con rellenos T1: 10; nd_validos(T1,PLA_T1)=10; nd_validos(T1,G0)=10

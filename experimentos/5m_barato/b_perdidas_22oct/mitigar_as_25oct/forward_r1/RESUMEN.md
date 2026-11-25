@@ -1,6 +1,6 @@
-# RESUMEN forward R1 (E1D, reparado) -- 2026-11-24T11:34:41Z
+# RESUMEN forward R1 (E1D, reparado) -- 2026-11-25T11:23:42Z
 
-Pasivo, solo lectura, 0 EUR validados. Dias nuevos con extractor COMPLETE: **31** (2026-10-24, 2026-10-25, 2026-10-26, 2026-10-27, 2026-10-28, 2026-10-29, 2026-10-30, 2026-10-31, 2026-11-01, 2026-11-02, 2026-11-03, 2026-11-04, 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09, 2026-11-10, 2026-11-11, 2026-11-12, 2026-11-13, 2026-11-14, 2026-11-15, 2026-11-16, 2026-11-17, 2026-11-18, 2026-11-19, 2026-11-20, 2026-11-21, 2026-11-22, 2026-11-23). Gate: >=10 dias (~03-Nov).
+Pasivo, solo lectura, 0 EUR validados. Dias nuevos con extractor COMPLETE: **32** (2026-10-24, 2026-10-25, 2026-10-26, 2026-10-27, 2026-10-28, 2026-10-29, 2026-10-30, 2026-10-31, 2026-11-01, 2026-11-02, 2026-11-03, 2026-11-04, 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09, 2026-11-10, 2026-11-11, 2026-11-12, 2026-11-13, 2026-11-14, 2026-11-15, 2026-11-16, 2026-11-17, 2026-11-18, 2026-11-19, 2026-11-20, 2026-11-21, 2026-11-22, 2026-11-23, 2026-11-24). Gate: >=10 dias (~03-Nov).
 
 | dia | lab | ventanas | saltadas | sin corte | pnl operar siempre | dPnL | exceso vs azar | p dia | EV saltadas | EV resto | inversion exceso |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -35,8 +35,9 @@ Pasivo, solo lectura, 0 EUR validados. Dias nuevos con extractor COMPLETE: **31*
 | 2026-11-21 | 0 | 863 | 5 | 0 | -3033 | 16 | -2 | 0.639 | -0.275 | -0.078 | 902 |
 | 2026-11-22 | 0 | 862 | 17 | 0 | -3809 | 97 | 21 | 0.541 | -0.180 | -0.080 | -14 |
 | 2026-11-23 | 1 | 864 | 54 | 0 | 884 | 784 | 839 | 0.130 | -0.337 | 0.043 | 2625 |
+| 2026-11-24 | 1 | 864 | 27 | 0 | 3111 | -877 | -779 | 0.880 | 0.661 | 0.052 | 4365 |
 
-Acumulado (31 d): dPnL vs operar siempre **-10801 $**; exceso vs azar -3887 $ (IC90 dias (-487,236)/dia, p dias 0.7198, IC90 cierre inferior -13129); dias exceso>0: 16/31; inversion 14513 $; peor dia operar-siempre 2026-11-08; mejor dPnL 2026-11-08.
+Acumulado (32 d): dPnL vs operar siempre **-11677 $**; exceso vs azar -4666 $ (IC90 dias (-497,205)/dia, p dias 0.7566, IC90 cierre inferior -14390); dias exceso>0: 16/32; inversion 18878 $; peor dia operar-siempre 2026-11-08; mejor dPnL 2026-11-08.
 
 ## Gate (PREREG_FWD_R1)
 - 1_exceso>0, p<0,05 (placebo por dias), IC90 cierre inferior>0: no
@@ -49,13 +50,13 @@ Acumulado (31 d): dPnL vs operar siempre **-10801 $**; exceso vs azar -3887 $ (I
 - 2g_inversion<0: no
 - 3_sin ventanas con >5% huecos: exceso>0 y dPnL>0: no
 - 4_ETH: EV saltadas < EV resto (coste ponderado): no
-- 4_SOL: EV saltadas < EV resto (coste ponderado): no
+- 4_SOL: EV saltadas < EV resto (coste ponderado): SI
 - 5_solo laborables: exceso>0 y dPnL>0: no
 **VEREDICTO: NO PASA**
 
 ## Por moneda (acumulado)
 | moneda | saltadas/ventanas | dPnL | exceso | EV saltadas (pond. EUR) | EV resto (pond. EUR) |
 |---|---|---|---|---|---|
-| ETH | 1720/8903 | -5370 | -2709 | 0.042 | -0.001 |
-| SOL | 1796/8903 | -2410 | -506 | 0.064 | 0.062 |
-| XRP | 1525/8870 | -3020 | -1093 | 0.192 | 0.048 |
+| ETH | 1724/9191 | -5774 | -3074 | 0.045 | 0.003 |
+| SOL | 1801/9191 | -2180 | -280 | 0.057 | 0.059 |
+| XRP | 1543/9158 | -3723 | -1759 | 0.230 | 0.045 |
