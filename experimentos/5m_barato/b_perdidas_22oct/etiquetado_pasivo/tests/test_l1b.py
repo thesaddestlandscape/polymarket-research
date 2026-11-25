@@ -33,3 +33,15 @@ def test_poblacion_idempotente_y_una_fuente_por_dia(tmp_path):
     n, dias, _ = m.etiquetar('2026-10-17'); assert n == 1 and dias == ['2026-10-20']
     n2, _, _ = m.etiquetar('2026-10-17'); assert n2 == 0
     x = m.leer_dia('2026-10-20'); assert len(x) == 1 and x.forward.iloc[0] == 0 and x.clase_rpre.iloc[0] == 'missing'    # sin bookTicker -> missing, nunca en_contra
+
+
+def test_dias_no_completos_fuera_del_gate(tmp_path):
+    # 25-Nov: dias PARTIAL (pausa libro5 por disco) o sin JSON no cuentan como forward
+    (tmp_path / 'dias').mkdir()
+    for d in ('2026-11-22', '2026-11-23', '2026-11-24'):
+        (tmp_path / f'ret_{d}.csv.gz').write_bytes(b'')
+    (tmp_path / 'dias' / '2026-11-23.json').write_text(json.dumps({'estado': 'PARTIAL', 'cobertura': {'con_libro': 609, 'mercados_esperados': 864}}))
+    (tmp_path / 'dias' / '2026-11-24.json').write_text(json.dumps({'estado': 'COMPLETE', 'cobertura': {}}))
+    ev = cargar('evaluar_retirada', {'L1B_RET_OUT': str(tmp_path)})
+    m = ev.dias_no_completos()
+    assert set(m) == {'2026-11-22', '2026-11-23'} and m['2026-11-23'].startswith('PARTIAL')

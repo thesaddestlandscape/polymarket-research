@@ -15,6 +15,21 @@ def cargar():
     return L
 
 
+def dias_no_completos():
+    """Dias cuyo dias/DIA.json no es COMPLETE (p. ej. PARTIAL por pausa de libro5 con volumen <10 GB, 19-23 Nov):
+    cobertura sesgada a unas horas -> fuera del gate (fail-closed: sin JSON = no completo). 25-Nov."""
+    import json
+    malos = {}
+    for d in sorted(set(glob.glob(os.path.join(OUT, 'ret_*.csv.gz')))):
+        dia = os.path.basename(d)[4:14]; j = os.path.join(OUT, 'dias', dia + '.json')
+        try:
+            x = json.load(open(j)); est = x.get('estado'); c = x.get('cobertura', {})
+            if est != 'COMPLETE': malos[dia] = f"{est} {c.get('con_libro')}/{c.get('mercados_esperados')}"
+        except Exception as ex:
+            malos[dia] = f'sin_json ({type(ex).__name__})'
+    return malos
+
+
 def estratos(E, tau):
     T3 = np.where(E['T'] < 120, 0, np.where(E['T'] < 200, 1, 2)); s = E[f's{tau}'].values; S3 = np.where(s < 15, 0, np.where(s < 50, 1, 2))
     return (E.act.astype(str) + '|' + (E.q / 50).round().astype(int).astype(str) + '|' + pd.Series(T3, index=E.index).astype(str) + '|' + pd.Series(S3, index=E.index).astype(str)).values
@@ -67,6 +82,10 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--banda', default='A'); a = ap.parse_args()
     L = cargar(); E = L[(L.grp == 'E') & (L.banda == a.banda)]; C = L[(L.grp == 'C') & (L.banda == a.banda)]
     print(f'filas: E={len(E)} C={len(C)} (banda {a.banda}); dias={sorted(L.dia.unique())}; sin desenlace E: {int((E.resuelto != 1).sum())}')
+    malos = dias_no_completos()
+    if malos:
+        print(f'EXCLUIDOS del forward por cobertura incompleta (dias/DIA.json != COMPLETE): {malos}')
+        E = E[~E.dia.isin(malos)]; C = C[~C.dia.isin(malos)]
     for nom, fw in (('BACKFILL 20-22 Oct (forward=0, DESCRIPTIVO; los tau 150/300 ya los vio S1)', 0), ('FORWARD >= 2026-10-23 (decide)', 1)):
         e = E[E.forward == fw]; c = C[C.forward == fw]
         print(f'\n--- {nom}: dias={e.dia.nunique()} prints={len(e)}')
