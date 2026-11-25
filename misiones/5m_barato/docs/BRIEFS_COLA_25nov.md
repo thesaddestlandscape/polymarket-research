@@ -46,3 +46,11 @@ K6 de día: noche_k6.sh esperando MemAvailable ≥5,5 GB (pid en out_paridad_v2_
 
 ## ORDEN v4 (Javi 25-Nov ~13:50Z: «explotar el 100 % de lo, todo lo positivo hasta la frontera»; validar la enmienda de banda lo relativa)
 1 alpha-miner (LANZADO 13:50Z): revisión de la ronda del engineer + diseño de la versión siguiente del simulador (t_arr 34 + clase causal) + «100 % de lo» + plan de validación de la enmienda (5 pruebas, especialista por prueba) → docs/REVISION_ALPHA_B_25nov.md → feedback Javi → 2 ejecutar las 5 pruebas con el especialista que asigne (uno a la vez) → 3 validador + red-team sobre la enmienda → firma (OK Javi, sello nuevo) → 4 objetivo-200k: matriz → 5 plan maestro → 6 risk-economics (kill, ~28-Nov) → 7 /code-review → 8 mirada ~2-Dic → 9 subvariante → 10 buscador → perro de presa.
+
+## DECISIONES JAVI 25-Nov ~14:20Z (sobre docs/REVISION_ALPHA_B_25nov.md) y ARRANQUE de la siguiente sesión
+- D1 = abrir la banda lo POR ABAJO (suelo de cordura 5 ms, techo 24,25 firmado) para que el vivo opere las mismas ventanas que evalúa v3.3. NO la banda relativa.
+- D2 = SÍ medir la RTT real de órdenes al suelo actual antes del micro-real (pocas órdenes sin riesgo, coste ≤0,15 $) → resuelve «reloj o ruta».
+- D3 = modo del ejecutor A vs B: que lo REVISE el agente de datos y elija el más adecuado, sin puertas abiertas.
+- D4 = SÍ a SIM-L (evaluador secundario precintado; firmar antes del 27-Nov 12:30Z; EV abierto solo tras la mirada 1).
+COLA siguiente sesión (uno a la vez, especialista adecuado, «claro, sencillo, simple»):
+1 agente de datos (continuado ae006116…): D3 (A vs B) + contrato de SIM-L y de P1a/P1b (RTT al suelo actual) → 2 execution-engineer (continuado a7273ff…): (a) enmienda D1 en GuardaSuelo (límite inferior 5 ms) con tests P3/P4/P5 y paridad vivo==batch; (b) SIM-L según el prereg; (c) P1a pinger pasivo; (d) preparar P1b (≤0,15 $, wallet dedicada) → 3 statistical-validator + red-team: enmienda D1 + SIM-L → 4 chief firma (OK Javi dado para D1 y D4; texto y HASHES con sello nuevo) ANTES del 27-Nov 12:30Z → 5 P1b real: /code-review medium del script + lo opera SOLO la sesión principal con OK final de Javi → 6 P2 (K1/K6 en días de suelo 15-16) → 7 matriz → plan maestro → risk-economics (kill) → /code-review → mirada ~2-Dic.
