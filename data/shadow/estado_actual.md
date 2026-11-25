@@ -1,4 +1,4 @@
-# Estado del bot — 2026-11-25 08:24 UTC
+# Estado del bot — 2026-11-25 08:30 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +222488.64 $ (ficción Kelly: +874562% s/ operativo) |
 | P&L sim hoy (2026-11-25) | 🟢 +715.37 $ |
 | Operaciones resueltas | 1596873 (913717 WIN / 683156 LOSS) — 57.2% |
-| Señales abiertas | 207644 |
+| Señales abiertas | 208259 |
 
 ## Estrategias (visión global)
 
@@ -51,7 +51,7 @@
 | LIQUIDACIONES_15M | 1965 | 51.6% | +0.016 | 📈 madura (+0.06) (últ. 1000) | +101.73$ | 0.50$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M_BUYNO_DEPTH_FASE0 | 1496 | 47.1% | -0.029 | 📉 agota (-0.05) (últ. 1000) | +52.57$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_MOM_5M | 12190 | 51.1% | +0.011 | ➡️ estable (últ. 1000) | +34.95$ | 0.50$ | ✅ activa |
-| UPDOWN_GBM_ETH_15M_HORA7 | 415 | 55.4% | +0.054 | 📈 madura (+0.05) | +34.76$ | 0.60$ | ✅ activa |
+| UPDOWN_GBM_ETH_15M_HORA7 | 415 | 55.4% | +0.054 | 📈 madura (+0.05) | +34.76$ | 0.58$ | ✅ activa |
 | STRUCT_NO_15M | 14185 | 51.9% | +0.019 | ➡️ estable (últ. 1000) | +14.16$ | 0.50$ | ✅ activa |
 | STREAK_FADE_60M | 155 | 51.6% | +0.016 | 📈 madura (+0.12) | +1.10$ | 0.50$ | ✅ activa |
 | MOMENTUM_IBS_5M | 3388 | 50.3% | +0.003 | ➡️ estable (últ. 1000) | +0.03$ | 0.50$ | ✅ activa |
@@ -91,22 +91,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-11-25T08:24 UTC | rechazos 1h: 5 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-11-25T08:30 UTC | rechazos 1h: 5 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $58,827.76 | 0.2min |  |
-| ✅ ETH | $1,638.56 | 0.2min |  |
-| ✅ SOL | $67.93 | 0.2min |  |
+| ✅ BTC | $58,891.81 | 0.2min |  |
+| ✅ ETH | $1,641.29 | 0.2min |  |
+| ✅ SOL | $68.06 | 0.2min |  |
 | ✅ XRP | $0.92 | 0.2min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $58,830.60 | consenso |  |
-| ETH | $1,638.56 | consenso |  |
-| SOL | $67.75 | consenso |  |
+| BTC | $58,891.81 | consenso |  |
+| ETH | $1,641.29 | consenso |  |
+| SOL | $67.88 | consenso |  |
 | XRP | $0.92 | consenso |  |
 
 **Alertas activas:**
