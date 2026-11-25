@@ -47,10 +47,10 @@
    "ultimo_aviso": 1795148583.103255
   },
   "archivo": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1795576983.5014026,
-   "ultimo_aviso": 1795576983.5014026
+   "ok": false,
+   "detalle": "RechazoPolitica: HTTP 403",
+   "desde": 1795587783.5987027,
+   "ultimo_aviso": 1795587783.5987027
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-25T05:23:08+00:00"
+ "_actualizado_utc": "2026-11-25T06:23:03+00:00"
 }
