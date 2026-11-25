@@ -3523,9 +3523,71 @@ def _debe_correr_patrones_causales() -> bool:
     try:
         data = json.loads(PATRONES_CAUSALES_STATE_PATH.read_text(encoding="utf-8"))
         ultimo = datetime.fromisoformat(data["ultimo_run_utc"])
-        return (datetime.now(timezone.utc) - ultimo).total_seconds() >= PATRONES_CAUSALES_MIN_INTERVAL_S
+        transcurrido = (datetime.now(timezone.utc) - ultimo).total_seconds()
     except Exception:
         return True
+    if transcurrido < PATRONES_CAUSALES_MIN_INTERVAL_S:
+        return False
+    if transcurrido >= PATRONES_CAUSALES_MAX_APLAZAMIENTO_S:
+        _tomar_semaforo_pesados()  # mejor esfuerzo: corre igual aunque esté ocupado
+        return True
+    return _hay_hueco_para_ciclo_causal()
+
+
+# 25-Nov (6 OOM-kill/24 h; pico del ciclo causal 3,8 GB): el ciclo causal se
+# APLAZA (los filtros vigentes se preservan, igual que en un ciclo saltado por
+# throttle) si hay poca RAM libre o un job pesado de cron_pesado.sh en marcha.
+# Mientras corre, retiene el semáforo global, así que ningún job pesado arranca
+# a la vez. Tope de aplazamiento: 3 h; pasado ese tiempo corre siempre.
+# Fail-open: si no se puede medir la RAM o el semáforo, corre.
+PATRONES_CAUSALES_MAX_APLAZAMIENTO_S = 3 * 3600
+PATRONES_CAUSALES_MEM_MIN_MB = 4500
+_SEMAFORO_PESADOS_PATH = "/tmp/cron_pesado.lock"
+_semaforo_pesados_fd = None
+
+
+def _mem_available_mb():
+    try:
+        with open("/proc/meminfo") as f:
+            for linea in f:
+                if linea.startswith("MemAvailable:"):
+                    return int(linea.split()[1]) // 1024
+    except Exception:
+        return None
+    return None
+
+
+def _tomar_semaforo_pesados() -> bool:
+    """flock no bloqueante sobre el semáforo de cron_pesado.sh; se retiene hasta
+    que termina el proceso (el fd queda abierto en una global)."""
+    global _semaforo_pesados_fd
+    if _semaforo_pesados_fd is not None:
+        return True
+    try:
+        import fcntl
+        fd = open(_SEMAFORO_PESADOS_PATH, "a")
+        try:
+            fcntl.flock(fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            fd.close()
+            return False
+        _semaforo_pesados_fd = fd
+        return True
+    except Exception:
+        return True
+
+
+def _hay_hueco_para_ciclo_causal() -> bool:
+    mem = _mem_available_mb()
+    if mem is not None and mem < PATRONES_CAUSALES_MEM_MIN_MB:
+        print(f"  Aprendizaje causal: APLAZADO (MemAvailable {mem} MB < "
+              f"{PATRONES_CAUSALES_MEM_MIN_MB}); filtros vigentes se preservan", flush=True)
+        return False
+    if not _tomar_semaforo_pesados():
+        print("  Aprendizaje causal: APLAZADO (job pesado en curso en cron_pesado); "
+              "filtros vigentes se preservan", flush=True)
+        return False
+    return True
 
 
 def _marcar_patrones_causales_ejecutado() -> None:
