@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-11-25T22:34:10+00:00",
+ "generado_utc": "2026-11-25T22:39:21+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -42,8 +42,8 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 30091.12,
-   "n": 3,
+   "usd_short": 21295.6,
+   "n": 1,
    "imbalance": 1.0
   },
   "60min": {
@@ -125,10 +125,10 @@
    "imbalance": null
   },
   "60min": {
-   "usd_long": 441.51,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 2,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   }
  },
  "XRP": {
