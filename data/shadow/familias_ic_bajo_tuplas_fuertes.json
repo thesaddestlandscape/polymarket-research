@@ -39,19 +39,19 @@
   ]
  },
  "STREAK_FADE_15M": {
-  "ic_bayes_familia": 0.0403,
+  "ic_bayes_familia": 0.0412,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 20.64,
+  "pnl_fiel_combinado_eur": 22.33,
   "tuplas": [
    {
     "k": "STREAK_FADE_15M#ETH#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 20.6365,
+    "pnl_fiel_eur_sin_suelo": 22.3328,
     "n_ejecutado": 27
    }
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0595,
+  "ic_bayes_familia": 0.0596,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 19.31,
   "tuplas": [
