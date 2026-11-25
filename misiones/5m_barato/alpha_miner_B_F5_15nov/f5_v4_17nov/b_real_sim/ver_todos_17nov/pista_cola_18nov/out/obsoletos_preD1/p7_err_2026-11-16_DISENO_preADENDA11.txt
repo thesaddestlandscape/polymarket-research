@@ -1,0 +1,960 @@
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p7_ipw_balance.py:76: RuntimeWarning: divide by zero encountered in log
+  def dual(l): a = zW @ l; mx = a.max(); return np.log((base * np.exp(a - mx)).sum()) + mx - l @ tgt
+/usr/local/lib/python3.14/dist-packages/scipy/optimize/_numdiff.py:710: RuntimeWarning: invalid value encountered in subtract
+  df = [f_eval - f0 for f_eval in f_evals]

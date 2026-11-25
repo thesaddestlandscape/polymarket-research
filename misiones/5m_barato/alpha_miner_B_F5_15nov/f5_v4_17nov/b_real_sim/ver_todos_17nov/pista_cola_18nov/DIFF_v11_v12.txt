@@ -1,0 +1,184 @@
+--- p7_ipw_balance.py	2026-11-19 07:29:21.051602092 +0000
++++ p7_ipw_balance_v12.py	2026-11-19 12:16:32.638143881 +0000
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""p7_ipw_balance.py v11 (ADENDA_11_19nov: completitud por FICHEROS libro5, small exploratorio fuera de dia_valido_E, n_eff_ctrl_kish + n_eff_contraste, E de c1all informativo; hereda v9/ADENDA_09: igualdad EXACTA de rango desde el top + escalera de soporte). RE-B-COLA-CANCELA, MECANISMO, NO EV.
++"""p7_ipw_balance.py v12 (ADENDA_12_19nov: cola contra el ultimo cierre del universo Sonda1 + E3 informativo [IC90 por cluster de mercado, SMD act2 winsorizado p99]; COPIA de v11 con cambios minimos, el resto igual) / v11 (ADENDA_11_19nov: completitud por FICHEROS libro5, small exploratorio fuera de dia_valido_E, n_eff_ctrl_kish + n_eff_contraste, E de c1all informativo; hereda v9/ADENDA_09: igualdad EXACTA de rango desde el top + escalera de soporte). RE-B-COLA-CANCELA, MECANISMO, NO EV.
+ SOLO BALANCE / PESOS / SOPORTE: NO lee ninguna columna de desenlace (f_*, C*, F*, *_c, *_sal, evap0, bn0, dec_eq*, jm, jnc, mk): lista blanca de columnas, el resto se descarta al cargar y se asierta en el informe.
+ Uso: p7_ipw_balance.py <pkl p1 v7> [informe.json] [pesos.pkl]        (una ejecucion por DIA y moneda; fit SEPARADO por clase de suelo lo/hi/indet)
+ Universos: prim (n_mk==1, C1, sin propios; test confirmatorio) y c1all (C1 sin restringir n_mk; solo F1). Controles: 'vec' (primario) y 'propio' (sensibilidad: solo nb=False).
+@@ -27,7 +27,7 @@
+     assert not bad_, (nm_, bad_)
+ SUELO_W = {int(w): v[0] for w, v in d['suelo'].items()}
+ CP['suelo'] = (CP.t // 300000).map(SUELO_W).fillna('indet')
+-R = dict(version='p7_v11_ADENDA11', fuente=SRC, dia=d['D'], coin=d['coin'], nota=os.environ.get('P7_NOTE', ''), columnas_usadas=dict(EV=EVC, PW=PWC, CP=CPC), aserto_sin_columnas_de_desenlace=True)
++R = dict(version='p7_v12_ADENDA12', fuente=SRC, dia=d['D'], coin=d['coin'], nota=os.environ.get('P7_NOTE', ''), columnas_usadas=dict(EV=EVC, PW=PWC, CP=CPC), aserto_sin_columnas_de_desenlace=True)
+ E = E[~E.own.astype(bool)].copy(); E['lvk'] = E.D + '|' + E.X.str[-10:] + '|' + E.p.astype(str)
+ # ---------- utilidades
+ def wm(x, w): return float((x * w).sum() / w.sum())
+@@ -215,13 +215,34 @@
+     info = dict(n_universo=int(len(U0)), excl_i_covariable_faltante=int(bad.sum()), n_dist_nan_estrato_nand=int((U.st == 'nand').sum()), faltante_detalle=dict(WA_q_nan=int((~(U0.WA_q >= 0)).sum()), absr5_nan=int(U0.absr5.isna().sum()), act2_nan=int(U0.act2.isna().sum()), dist_ticks_nan=int(U0.dist_ticks.isna().sum()), WA_q_cero_incluidos=int((U0.WA_q == 0).sum())))
+     return U0, U, info
+ # ---------- E3 (propio vs vecino) y E1 (emparejado simple 1:1 Mahalanobis restringido al rango, ADENDA_09 §4)
+-def e3_calc(Ws):
++def e3_informativo(wo, wn, cov7, reps=400, seed=20261119):
++    """ADENDA_12 §3 (SOLO INFORMATIVO, no entra en ninguna condicion): SMD de act2 winsorizado al p99 de la union e IC90 bootstrap por CLUSTER de mercado (`end`) del max|SMD pond| de cov7. Generador local (no toca estado global)."""
++    out = {}; a2o, a2n = wo.act2.astype(float).values, wn.act2.astype(float).values
++    cut = float(np.nanquantile(np.concatenate([a2o, a2n]), 0.99)); out['act2_wins_corte_p99'] = round(cut, 3)
++    out['SMD_act2_wins_p99'] = smd(np.minimum(a2o, cut), np.minimum(a2n, cut), wn.om.values, wo.om.values)
++    fo = {k: np.asarray(f(wo), float) for k, f in cov7.items() if np.nanstd(f(wo)) > 0 or np.nanstd(f(wn)) > 0}      # ADENDA_13 §4: MISMO filtro (nanstd>0) que SMD_pond_om / max_abs_pond
++    fnn = {k: np.asarray(f(wn), float) for k, f in cov7.items() if k in fo}; omo, omn = wo.om.values, wn.om.values
++    out['cov_usadas'] = sorted(fo); out['n_finitos_por_cov'] = {k: [int(np.isfinite(fo[k]).sum()), int(np.isfinite(fnn[k]).sum())] for k in fo}; out['n_filas_sin_end'] = [int(wo.end.isna().sum()), int(wn.end.isna().sum())]      # filas sin end no se remuestrean
++    go = pd.Series(np.arange(len(wo))).groupby(wo.end.values).indices; gn = pd.Series(np.arange(len(wn))).groupby(wn.end.values).indices
++    cl = np.array(sorted(set(go) | set(gn))); rng = np.random.default_rng(seed); vals = []; descartadas = 0
++    for _ in range(reps):
++        ch = cl[rng.integers(0, len(cl), len(cl))]
++        io = np.concatenate([go[c] for c in ch if c in go] or [np.zeros(0, int)]); inn = np.concatenate([gn[c] for c in ch if c in gn] or [np.zeros(0, int)])
++        if len(io) < 2 or len(inn) < 2: descartadas += 1; continue
++        ss = [smd(fo[k][io], fnn[k][inn], omn[inn], omo[io]) for k in fo]; ss = [abs(x) for x in ss if x is not None]
++        if not ss: descartadas += 1; continue
++        vals.append(max(ss))
++    out['E3_IC90_cluster_mercado'] = dict(lo=round(float(np.percentile(vals, 5)), 3), hi=round(float(np.percentile(vals, 95)), 3), n_validas=len(vals)) if len(vals) >= 20 else dict(lo=None, hi=None, n_validas=len(vals))
++    out['E3_IC90_cluster_mercado'].update(reps=reps, descartadas=descartadas, n_clusters=int(len(cl)), semilla=seed)
++    return out
++def e3_calc(Ws, informativo=False):
+     wo, wn = Ws[~Ws.nb], Ws[Ws.nb]; e3 = dict(n_propio=int(len(wo)), n_vecino=int(len(wn)))
+     if len(wo) >= 30 and len(wn) >= 30:
+         cov7 = dict(la=lambda x: np.log1p(x.act2.astype(float)), lq=lambda x: np.log1p(x.WA_q.astype(float)), tt=lambda x: x.ttc / 60000.0, lr=lambda x: np.log1p(1e4 * x.absr5.astype(float)), a2=COV['act2'], q=COV['WA_q_raw'], r=COV['absr5_bp'], dist_ticks=COV['dist_ticks'], edad_nivel=COV['edad_nivel'])
+         e3['SMD_pond_om'] = {k: smd(fn(wo), fn(wn), wn.om.values, wo.om.values) for k, fn in cov7.items() if np.nanstd(fn(wo)) > 0 or np.nanstd(fn(wn)) > 0}
+         e3['SMD_sin_ponderar'] = {k: smd(fn(wo), fn(wn)) for k, fn in cov7.items() if np.nanstd(fn(wo)) > 0 or np.nanstd(fn(wn)) > 0}
+         e3['max_abs_pond'] = round(max([abs(v) for v in e3['SMD_pond_om'].values() if v is not None], default=0), 3); e3['evaluable'] = True
++        if informativo: e3.update(e3_informativo(wo, wn, cov7))      # ADENDA_12 §3: solo informativo
+     else: e3['evaluable'] = False
+     return e3
+ def XM(df, ed=False):
+@@ -317,7 +338,7 @@
+             if ty == 'small' and small_solo:
+                 e3 = dict(evaluable=False, nota='small en modo solo_propio por la regla 2.2 de ADENDA_09 (E3 pase 1 >0,10): sin vecinos no hay contraste', pase1=MODO_SMALL.get(key, {}).get('pass1', {}).get('E3_small'))
+             else:
+-                e3 = e3_calc(Ws)
++                e3 = e3_calc(Ws, informativo=True)
+                 if e3.get('evaluable'):
+                     if eg['gating'] and e3['max_abs_pond'] > 0.10: fallos.append(f'E3 {ty} max|SMD| propio-vecino={e3["max_abs_pond"]} >0,10')
+                 elif eg['gating']: fallos.append(f'E3 {ty} no evaluable (<30 controles de algun tipo) con n>=100 (fail-closed)')
+@@ -344,19 +365,40 @@
+ R['F1'] = dict(n_nmk_nan=int(len(a)), n_unidos=int(len(b)), SMD=F1, max_abs=round(max([abs(v) for v in F1.values() if v is not None], default=0), 3))
+ R['F1']['activar_veredicto_c1all'] = bool(R['F1']['max_abs'] > 0.15)
+ R['E4_fallos'] = fallos; R['dia_valido_E'] = bool(len(fallos) == 0)
+-# completitud por FICHEROS libro5 (ADENDA_11 §2): cabecera <= t0+120 s, cola >= t1-120 s, hueco entre ficheros <= 300 s (cover_fich); onchain_fills y m5_registro de D y D+1
++def completitud(cf, t0, t1, cierre_max):
++    """ADENDA_12 §2: cabecera <= t0+120 s; cola >= cierre_max_universo+120 s (v11: t1-120 s, solo informativo en `cola_v11_ok`); hueco entre ficheros <= 300 s. Fail-closed."""
++    okf = sorted([c_ for c_ in cf if c_.get('n', 0) > 0 and c_.get('min') is not None], key=lambda c_: c_['min']); gap = 0; reach = None
++    for c_ in okf:
++        if reach is not None: gap = max(gap, c_['min'] - reach)
++        reach = c_['max'] if reach is None else max(reach, c_['max'])
++    base = bool(okf and len(okf) == len(cf)); req = None if cierre_max is None else min(int(cierre_max) + 120000, int(t1) - 1000)      # ADENDA_13b §1: los libro5 acaban ~9 ms antes de t1 y B para en T-60 s
++    cab = bool(base and okf[0]['min'] <= t0 + 120000); cola = bool(base and req is not None and reach >= req); cola11 = bool(base and reach >= t1 - 120000)
++    return dict(okf=okf, gap=gap, reach=reach, cabecera_ok=cab, cola_ok=cola, cola_requerida=req, cola_v11_ok=cola11, cobertura_ok=bool(cab and cola and gap <= 300000))
++def sonda1_fns(D, base='/root/polymarket-research-datalogs/sonda1/pasivo'):
++    d0_ = pd.Timestamp(D); return [f'{base}/sonda1_fotos_l2_{(d0_ + pd.Timedelta(days=k)).date()}.csv.gz' for k in (-1, 0, 1)]
++def cierre_max_universo(D, coin, t0, t1, base='/root/polymarket-research-datalogs/sonda1/pasivo'):
++    """ADENDA_13 §3: MISMOS 3 ficheros Sonda1 (D-1, D, D+1) y misma regla que p1_dia.py (mercado = slug con roles tok y comp EN EL MISMO fichero); max END con t0 < END <= t1. Falta el fichero de D o no hay mercados -> None (fail-closed); D-1/D+1 ausentes se toleran como en p1."""
++    fns = sonda1_fns(D, base)
++    if not os.path.exists(fns[1]): return None
++    ends = []
++    for fn in fns:
++        if not os.path.exists(fn): continue
++        roles = {}
++        for ch in pd.read_csv(fn, usecols=['slug', 'rol'], dtype=str, chunksize=300000):
++            ch = ch[ch.slug.str.startswith(f'{coin}-updown-5m')].drop_duplicates(['slug', 'rol'])
++            for s_, r_ in zip(ch.slug, ch.rol): roles.setdefault(s_, set()).add(r_)
++        ends += [(int(s_.rsplit('-', 1)[1]) + 300) * 1000 for s_, rr in roles.items() if 'tok' in rr and 'comp' in rr and s_.rsplit('-', 1)[1].isdigit()]
++    ends = [e for e in ends if t0 < e <= t1]
++    return max(ends) if ends else None
++# completitud por FICHEROS libro5 (ADENDA_11 §2; la cola pasa a ADENDA_12 §2): cabecera <= t0+120 s, cola >= t1-120 s, hueco entre ficheros <= 300 s (cover_fich); onchain_fills y m5_registro de D y D+1
+ from datetime import datetime, timezone, timedelta
+ d0 = datetime.strptime(d['D'], '%Y-%m-%d').replace(tzinfo=timezone.utc); t0, t1 = int(d0.timestamp() * 1000), int((d0 + timedelta(days=1)).timestamp() * 1000)
+-cf = list(d.get('cover_fich') or []); okf = sorted([c_ for c_ in cf if c_.get('n', 0) > 0 and c_.get('min') is not None], key=lambda c_: c_['min']); gap = 0; reach = None
+-for c_ in okf:
+-    if reach is not None: gap = max(gap, c_['min'] - reach)
+-    reach = c_['max'] if reach is None else max(reach, c_['max'])
+-ok_cov = bool(okf and len(okf) == len(cf) and okf[0]['min'] <= t0 + 120000 and reach >= t1 - 120000 and gap <= 300000)
++cf = list(d.get('cover_fich') or []); CMU = cierre_max_universo(d['D'], d['coin'], t0, t1); CV = completitud(cf, t0, t1, CMU); okf, gap, reach, ok_cov = CV['okf'], CV['gap'], CV['reach'], CV['cobertura_ok']      # ADENDA_12 §2
+ need = [f'/root/polymarket-research-datalogs/onchain_fills_{(d0 + timedelta(days=k)).date()}.csv.gz' for k in (0, 1)] + [f'/mnt/HC_Volume_106538179/m5_registro/m5_registro_{(d0 + timedelta(days=k)).date()}.csv.gz' for k in (0, 1)]
+ have = {i_['path']: i_.get('size') for i_ in (d.get('inputs') or [])}; falt = [p_ for p_ in need if not have.get(p_)]
+ ok_in = bool(not falt and okf)
+-R['dia_completo'] = dict(ok=bool(ok_cov and ok_in), cobertura_ok=ok_cov, mayor_hueco_ficheros_s=round(gap / 1000, 1), inputs_ok=ok_in, inputs_faltantes=falt, cover_fich=cf)
++R['dia_completo'] = dict(ok=bool(ok_cov and ok_in), cobertura_ok=ok_cov, mayor_hueco_ficheros_s=round(gap / 1000, 1), cierre_max_universo_ms=CMU, sonda1_ficheros=[fn_ for fn_ in sonda1_fns(d['D']) if os.path.exists(fn_)], cola_requerida_ms=CV['cola_requerida'], cola_ok=CV['cola_ok'], cola_v11_ok=CV['cola_v11_ok'], cabecera_ok=CV['cabecera_ok'], inputs_ok=ok_in, inputs_faltantes=falt, cover_fich=cf)
+ R['SHA256_codigo'] = hashlib.sha256(open(os.path.abspath(__file__), 'rb').read()).hexdigest(); R['SHA256_pkl_p1'] = hashlib.sha256(open(SRC, 'rb').read()).hexdigest()
+ print(json.dumps({k: R[k] for k in ('dia', 'dia_valido_E', 'E4_fallos', 'E4_fallos_c1all', 'dia_completo', 'D3_NaN_SMD_leq_010', 'F1') if k in R}, indent=1, default=str))
+ if OUT: json.dump(R, open(OUT, 'w'), indent=1, default=str)
+-if WOUT: pickle.dump(dict(dia=d['D'], coin=d['coin'], version='p7w_v11', pesos=WOUTD, dia_valido_E=R['dia_valido_E'], dia_completo=R['dia_completo']['ok'], SHA256_codigo=R['SHA256_codigo'], SHA256_pkl_p1=R['SHA256_pkl_p1']), open(WOUT, 'wb'))
++if WOUT: pickle.dump(dict(dia=d['D'], coin=d['coin'], version='p7w_v12', pesos=WOUTD, dia_valido_E=R['dia_valido_E'], dia_completo=R['dia_completo']['ok'], SHA256_codigo=R['SHA256_codigo'], SHA256_pkl_p1=R['SHA256_pkl_p1']), open(WOUT, 'wb'))
+--- p3_agrega.py	2026-11-19 07:30:25.366706624 +0000
++++ p3_agrega_v12.py	2026-11-19 12:16:32.638456589 +0000
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""p3_agrega.py v6 (ADENDA_06 + ADENDA_07_18nov + ADENDA_11_19nov: z0+normal, Holm x2, small EXPLORATORIO, dia incompleto se excluye, 4d F1) (RE-B-COLA-CANCELA, MECANISMO, NO EV).
++"""p3_agrega_v12.py = v7 (ADENDA_12_19nov: lee p7v12/p7wv12, REQ v12; copia de v6 sin otro cambio) / v6 (ADENDA_06 + ADENDA_07_18nov + ADENDA_11_19nov: z0+normal, Holm x2, small EXPLORATORIO, dia incompleto se excluye, 4d F1) (RE-B-COLA-CANCELA, MECANISMO, NO EV).
+ PARTE CONFIRMATORIA (nueva): test unico B1 = V1 pooled, IPW+EB (pesos de p7 por dia), clase lo, universo primario n_mk=1 C1 sin propios; unidad = DIA (C1 t de Student df=dias-1, media simple),
+ C2 bootstrap por mercado, C3 permutacion con signo por mercado sobre d_m con max-estadistico V1..V7, Holm x2 en estratos {z0, normal} (small EXPLORATORIO), C5 (<=35 %/dia, leave-one-day-out), veredicto B4' (ADENDA_07 D1).
+ PARTE EXPLORATORIA (heredada de v3: emparejado por placebo, tablas por ventana, M1/M2, hueco b/c, H-ACT): etiquetada EXPLORATORIO en el JSON.
+@@ -13,12 +13,12 @@
+ VERDICT_DAYS = ['2026-11-13', '2026-11-14', '2026-11-15', '2026-11-17', '2026-11-18', '2026-11-19']; DESIGN_DAYS = ['2026-11-12', '2026-11-16']
+ DAYS = DESIGN_DAYS if DISENO else VERDICT_DAYS
+ if not DISENO: assert SUF == '', 'en modo veredicto PISTA_SUF debe ser vacio'
+-OUTJ = f'{H}/out/p3_{COIN}_{ACT}{SUF}{"_DISENO" if DISENO and "DISENO" not in SUF else ""}.json'
++OUTJ = f'{H}/out/p3v12_{COIN}_{ACT}{SUF}{"_DISENO" if DISENO and "DISENO" not in SUF else ""}.json'
+ def sha(fn): return hashlib.sha256(open(fn, 'rb').read()).hexdigest()
+ def blocked(msg, extra=None):
+     json.dump(dict(estado='BLOCKED', motivo=msg, extra=extra or {}, dias_lista=DAYS), open(OUTJ.replace('.json', '_BLOCKED.json'), 'w'), indent=1, default=str); print('BLOCKED:', msg); sys.exit(2)
+ # ---- 1. hashes congelados (H1/H25)
+-REQ = ['p1_dia.py', 'p3_agrega.py', 'p7_ipw_balance.py', 'p5_control_sin_relleno.py', 'run_p1.sh', 'ADENDA_07_18nov.md', 'ADENDA_09_18nov.md', 'ADENDA_10_19nov.md', 'ADENDA_11_19nov.md']; HASHOK = {}
++REQ = ['p1_dia.py', 'p3_agrega_v12.py', 'p7_ipw_balance_v12.py', 'p5_control_sin_relleno.py', 'run_p1.sh', 'ADENDA_07_18nov.md', 'ADENDA_09_18nov.md', 'ADENDA_10_19nov.md', 'ADENDA_11_19nov.md', 'ADENDA_12_19nov.md', 'ADENDA_13_19nov.md', 'ADENDA_13b_19nov.md']; HASHOK = {}
+ if not DISENO:
+     hf = f'{H}/HASHES_CODIGO.txt'; last = {}
+     for ln in open(hf):
+@@ -28,14 +28,19 @@
+         if nm not in last: blocked(f'{nm} sin hash en HASHES_CODIGO.txt')
+         if sha(f'{H}/{nm}') != last[nm]: blocked(f'hash de {nm} en disco != HASHES_CODIGO.txt (codigo modificado tras congelar)')
+         HASHOK[nm] = last[nm]
++P7SHA = sha(f'{H}/p7_ipw_balance_v12.py')      # ADENDA_13 §5: el informe y los pesos deben venir de ESTE p7 v12 (en veredicto == hash congelado, ya verificado arriba)
+ # ---- 2. dias: pkl, informe de balance E, completo
+ CAND = []; PEND = []; EXCL = {}; EXCL_INC = {}; ERR = {}
+ for D_ in DAYS:
+     f1 = f'{H}/out/p1_{COIN}_{D_}{SUF}.pkl'
+     if not os.path.exists(f1): PEND.append(D_); continue
+-    jp, wp = f'{H}/out/p7_{COIN}_{D_}{SUF}.json', f'{H}/out/p7w_{COIN}_{D_}{SUF}.pkl'
++    jp, wp = f'{H}/out/p7v12_{COIN}_{D_}{SUF}.json', f'{H}/out/p7wv12_{COIN}_{D_}{SUF}.pkl'
+     if not (os.path.exists(jp) and os.path.exists(wp)): blocked(f'falta el informe de balance E (p7) del dia {D_}')
+     rj = json.load(open(jp))
++    if rj.get('version') != 'p7_v12_ADENDA12' or rj.get('SHA256_codigo') != P7SHA: blocked(f'el informe p7 del dia {D_} no es de p7_ipw_balance_v12.py en disco (version {rj.get("version")}, SHA256_codigo distinto)')
++    w_ = pickle.load(open(wp, 'rb'))
++    if w_.get('version') != 'p7w_v12' or w_.get('SHA256_codigo') != P7SHA or w_.get('SHA256_pkl_p1') != sha(f1): blocked(f'los pesos p7w del dia {D_} no son de p7_ipw_balance_v12.py en disco / no corresponden al pkl de p1')
++    del w_
+     if rj.get('SHA256_pkl_p1') != sha(f1): blocked(f'el informe p7 del dia {D_} no corresponde al pkl de p1 en disco')
+     if not DISENO:       # ADENDA_11 §7.1 (4a): el dia incompleto se EXCLUYE y se lista (cuenta contra >=5 dias validos), ya no bloquea
+         if not rj['dia_completo']['ok']: EXCL_INC[D_] = rj['dia_completo']
+@@ -127,7 +132,7 @@
+         fl = rng.integers(2, size=nm)[mk] * 2 - 1; mx.append(((A - Bm) * fl[:, None]).mean(0).max())
+     mx = np.array(mx); return {v + suf: dict(dif=round(float(obs[i]), 4), p_maxstat=round(float((mx >= obs[i]).mean()), 4)) for i, v in enumerate(VV)}
+ COLS = ['CW1', 'CW2', 'CW3', 'CWA', 'CS250_WA', 'CS250_W3'] + ['F' + v for v in V] + ['F90_V1', 'F90c111_V1', 'F90c46_V1'] + ['F' + v + '_e250' for v in ('V1', 'V2', 'V3', 'V4', 'V5', 'V7')]
+-R = {'version': 'p3_v6_ADENDA11', 'ETIQUETA': 'DISENO' if DISENO else 'VEREDICTO', 'dias_usados': CAND, 'dias_pendientes': PEND, 'dias_excluidos_E4': EXCL, 'dias_excluidos_incompletos': EXCL_INC, 'hashes_verificados': HASHOK, 'seccion_heredada_v3': 'EXPLORATORIO', 'n_eventos_propios_excluidos': N_OWN, 'ficheros': [os.path.basename(f) for f in fs], 'act_emparejado': ACT, 'n_eventos': len(E), 'n_placebo_cand': len(P),
++R = {'version': 'p3_v7_ADENDA12', 'ETIQUETA': 'DISENO' if DISENO else 'VEREDICTO', 'dias_usados': CAND, 'dias_pendientes': PEND, 'dias_excluidos_E4': EXCL, 'dias_excluidos_incompletos': EXCL_INC, 'hashes_verificados': HASHOK, 'seccion_heredada_v3': 'EXPLORATORIO', 'n_eventos_propios_excluidos': N_OWN, 'ficheros': [os.path.basename(f) for f in fs], 'act_emparejado': ACT, 'n_eventos': len(E), 'n_placebo_cand': len(P),
+      'emparejado': E.mtype.value_counts().to_dict(), 'JN': dict(JN), 'OCN': dict(OCN)}
+ R['union_T1'] = round((JN['T1_tot'] - JN['T1_None']) / max(1, JN['T1_tot']), 4); R['union_Trow'] = round(JN['Trow_ok'] / max(1, JN['Trow_tot']), 4)
+ R['union_falsos_pm60s'] = round((JN['T1_falso_-60000'] + JN['T1_falso_60000']) / 2 / max(1, JN['T1_tot']), 4)
+@@ -209,7 +214,7 @@
+ VAR7 = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7']; VAR250 = ['V1_e250', 'V2_e250', 'V3_e250', 'V4_e250', 'V5_e250', 'V7_e250']; VARS = VAR7 + VAR250
+ EVI = E.set_index('evid')
+ def weights_for(D_):
+-    w = pickle.load(open(f'{H}/out/p7w_{COIN}_{D_}{SUF}.pkl', 'rb')); assert w['dia'] == D_ and w['version'] == 'p7w_v11'; return w['pesos']
++    w = pickle.load(open(f'{H}/out/p7wv12_{COIN}_{D_}{SUF}.pkl', 'rb')); assert w['dia'] == D_ and w['version'] == 'p7w_v12' and w.get('SHA256_codigo') == P7SHA; return w['pesos']
+ WGT = {D_: weights_for(D_) for D_ in CAND}
+ PRIM_ST = ('z0', 'normal')        # ADENDA_11 §3 (B1): estratos del test confirmatorio; small es EXPLORATORIO
+ def tabs(key, cl, estratos=PRIM_ST):
+@@ -326,7 +331,7 @@
+         a_ = analiza(esm, csm, 'V1', B=500); nev_, sw_, sF_, swF_ = mkt_arrays(esm, csm, ['V1']); T_, mx_, one_ = perm_T(nev_, sw_, sF_, swF_, 2000); a_['p_perm_V1_sin_corregir'] = round(float((one_[:, 0] >= T_[0]).mean()), 4)
+     else: a_ = dict(n_eventos=int(len(esm)), nota='sin datos')
+     a_['etiqueta'] = 'EXPLORATORIO (ADENDA_11 B1: fuera del veredicto y de dia_valido_E)'; CONF['small_EXPLORATORIO'] = a_
+-    rj_all = {D_: json.load(open(f'{H}/out/p7_{COIN}_{D_}{SUF}.json')) for D_ in CAND}; f1 = {D_: v['F1'] for D_, v in rj_all.items()}
++    rj_all = {D_: json.load(open(f'{H}/out/p7v12_{COIN}_{D_}{SUF}.json')) for D_ in CAND}; f1 = {D_: v['F1'] for D_, v in rj_all.items()}
+     CONF['c1all_balance_E_por_dia'] = {D_: dict(fallos=v.get('E4_fallos_c1all'), pooled_z0_normal=(v.get('E_c1all', {}).get('pooled', {}) or {}).get('primario_z0_normal'),
+                                                 estratos={t_: {k_: e_.get(k_) for k_ in ('n_soporte', 'n_eff_contraste', 'E1_SMD_max_abs', 'E2_KS')} for t_, e_ in (v.get('E_c1all', {}).get('estratos', {}) or {}).items()}) for D_, v in rj_all.items()}      # 4d: publicado
+     CONF['F1_por_dia'] = {D_: dict(max_abs_SMD=v['max_abs'], activar=v['activar_veredicto_c1all']) for D_, v in f1.items()}

@@ -13,7 +13,7 @@ SUF = '_fxM1'; d1 = pickle.load(open(f'{O}/p1_btc_2026-11-12{SUF}.pkl', 'rb')); 
 r7 = json.load(open(f'{O}/p7_btc_2026-11-12{SUF}.json')); p3 = json.load(open(f'{O}/p3_btc_act{SUF}_DISENO.json')) if os.path.exists(f'{O}/p3_btc_act{SUF}_DISENO.json') else None
 DF = ['dist_ticks', 'SQ_mej', 'act2_mej', 'spread', 'dp_signed', 'sg', 'edad_nivel']
 # ---- H1 / H25 (solo --final)
-REQ = ['p1_dia.py', 'p3_agrega.py', 'p7_ipw_balance.py', 'p5_control_sin_relleno.py', 'run_p1.sh', 'ADENDA_07_18nov.md', 'ADENDA_09_18nov.md']
+REQ = ['p1_dia.py', 'p3_agrega.py', 'p7_ipw_balance.py', 'p5_control_sin_relleno.py', 'run_p1.sh', 'ADENDA_07_18nov.md', 'ADENDA_09_18nov.md', 'ADENDA_10_19nov.md']
 if FINAL:
     last = {}
     for ln in open(P + '/HASHES_CODIGO.txt'):

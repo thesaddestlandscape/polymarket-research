@@ -1,0 +1,118 @@
+{
+ "1": {
+  "estado": "pendiente",
+  "detalle": "se escribe al congelar (paso 4); se verifica con --final"
+ },
+ "25": {
+  "estado": "pendiente",
+  "detalle": "idem (hash y mtime) con --final"
+ },
+ "2": {
+  "estado": "cumple",
+  "detalle": "p3 en modo veredicto con pkl de 12 y 16-Nov presentes: rc=2, lista=['2026-11-13', '2026-11-14', '2026-11-15', '2026-11-17', '2026-11-18', '2026-11-19'], motivo=ningun dia valido (completo y con balance E superado); el codigo falla (assert) si el pkl trae un dia fuera de la lista"
+ },
+ "3": {
+  "estado": "cumple",
+  "detalle": "ADENDA_11 4a: BLOCKED sin leer tasas si falta informe E (falta el informe de balance E (p7) del dia 2026-11-13) o hash alterado (hash de p7_ipw_balance.py en disco != HASHES_CODIGO.txt (codigo modificado tras congelar)); el dia INCOMPLETO ya no bloquea: se EXCLUYE y se lista (dict_keys(['2026-11-13']); solo bloquea si no queda ningun dia valido); dia con E fallido se excluye y se lista: {'pendientes': ['2026-11-14', '2026-11-15', '2026-11-17', '2026-11-18', '2026-11-19'], 'excluidos_E': {'2026-11-13': ['E1 simulado']}, 'excluidos_incompletos': {}}"
+ },
+ "15": {
+  "estado": "cumple",
+  "detalle": "p7 escribe dia_valido_E=False y E4_fallos (1); p3 excluye automaticamente el dia que falla E (prueba aislada arriba, excluidos_E=['2026-11-13'])"
+ },
+ "4": {
+  "estado": "cumple",
+  "detalle": "campos D en EV/PL/PW (misma funcion dfields): {'EV': True, 'PL': True, 'PW': True}; ademas dist_ticks/edad en CP=True; n EV=4929, PL=9777, PW=10558; NaN EV={'dist_ticks': 0, 'SQ_mej': 0, 'act2_mej': 0, 'spread': 0, 'dp_signed': 0, 'sg': 0, 'edad_nivel': 0}"
+ },
+ "5": {
+  "estado": "cumple",
+  "detalle": "D_maxrx y absr5_rx<=t-1000 en el 100 % de las filas (violaciones {'EV': 0, 'PL': 0, 'PW': 0}, filas {'EV': 4929, 'PL': 9777, 'PW': 10558}); absr5/absr5_rx recalculados con codigo independiente (m5_registro col 7): {'EV_n': 400, 'EV_ok': 400, 'PL_n': 400, 'PL_ok': 400, 'PW_n': 400, 'PW_ok': 400} discrepancias=[]; p1 asierta ademas en ejecucion; recomputo independiente (replay propio de las lineas crudas) de 40 eventos: dist_ticks: 40/40, spread: 40/40, dp_signed: 40/40, edad: 39/40"
+ },
+ "6": {
+  "estado": "cumple",
+  "detalle": "SMD del indicador NaN evento vs control: {\"dist_ticks\": 0.0, \"SQ_mej\": 0.0, \"spread\": -0.014, \"dp_signed\": -0.024, \"edad_nivel\": 0.0}; dist_ticks NaN = estrato propio nand (ADENDA_09 \u00a76): n eventos nand=0, viable=sin eventos nand en la clase lo"
+ },
+ "7": {
+  "estado": "cumple",
+  "detalle": "igualdad EXACTA de rango (ADENDA_09, declarada PRIMARIA): escalera R1-R4/R1-R2 con reclamacion exclusiva, controles duplicados en los pesos={'prim|vec': 0, 'prim|propio': 0, 'c1all|vec': 0}; eventos por peldano {'z0': {'R1': 334, 'R2': 5}, 'small': {'R1': 6}, 'normal': {'R3': 334, 'R4': 72, 'R1': 9, 'R2': 1}}; KS ponderado de dist_ticks por estrato {'z0': 0.003, 'normal': 0.008}; E1 simple restringido al rango (frac sin pareja 0.6623); version estricta (k exacto sin bins) frac_sin_pareja=0.6706"
+ },
+ "8": {
+  "estado": "cumple",
+  "detalle": "KS(edad_nivel) por estrato n>=100: {'z0': {'n_ev': 409, 'KS': 0.0}, 'small': {'n_ev': 304, 'KS': 0.293}, 'normal': {'n_ev': 1570, 'KS': 0.143}}; usa_edad_EB=True (automatico, escrito en informe)"
+ },
+ "9": {
+  "estado": "cumple",
+  "detalle": "fit separado por clase: {'lo': 2283, 'hi': 0, 'indet': 0} (hi/indet sin eventos en el fixture: estructura implementada, no ejercitada con datos)"
+ },
+ "10": {
+  "estado": "cumple",
+  "detalle": "solo nivel propio: {\"n_soporte\": 559, \"n_eff_ctrl_kish_pooled\": 547.9, \"n_eff_contraste_pooled\": 276.7, \"n_eff_ctrl_kish_por_estrato\": {\"z0\": 517.3, \"small\": 5.0, \"normal\": 188.9}}"
+ },
+ "11": {
+  "estado": "cumple",
+  "detalle": "pooled z0+normal (primario) n=755 kish=1362.0 n_eff_contraste=485.7; normal sola n=416; con small (exploratorio) n=761"
+ },
+ "12": {
+  "estado": "cumple",
+  "detalle": "E1 implementado (tope 0,15 / marca 0,10 por estrato n>=100): (n, max|SMD|) por estrato {'z0': (285, 0.052), 'small': (3, 2.264), 'normal': (483, 0.142)}; fixture: supera E1"
+ },
+ "13": {
+  "estado": "cumple",
+  "detalle": "E2 KS ponderado en las 5 variables y n_eff_ctrl_kish / n_eff_contraste por estrato implementado; fixture: supera (ver fallos)"
+ },
+ "14": {
+  "estado": "cumple",
+  "detalle": "E3 (propio vs vecino, z0 y small) calculado con lista blanca de columnas (aserto en p7: ninguna f_*, C*, F*); fixture: {'z0': 0.162, 'small': None} (umbral 0,10)"
+ },
+ "16": {
+  "estado": "cumple",
+  "detalle": "test confirmatorio V1 pooled IPW+EB clase lo: max-estadistico sobre V1..V7, 2.000 permutaciones con signo por mercado sobre d_m (ejecutado en el fixture DISENO, sin veredicto)"
+ },
+ "17": {
+  "estado": "cumple",
+  "detalle": "ADENDA_11 B1: Holm x2 en estratos [('z0', 0.013), ('normal', 0.0)]; small fuera de Holm (EXPLORATORIO, p sin corregir 0.2505); secciones EXPLORATORIO marcadas en JSON"
+ },
+ "18": {
+  "estado": "cumple",
+  "detalle": "t de Student df=n-1 verificada (ic_t=[0.1493,0.4507] frente a scipy 0.4507), Holm verificado, bootstrap por mercado C2 presente, IC decisivo = el mas ancho (cual=C2)"
+ },
+ "19": {
+  "estado": "cumple",
+  "detalle": "gates 0,02 (NO SOPORTADA: limite superior<+0,02, ADENDA_07 D1) / 0,03 (SOPORTADA); gate small 0,06 ELIMINADO (ADENDA_11 B1); 4a (dia incompleto cuenta contra >=5 dias) y 4d (F1: signo solo para SOPORTADA, IC superior c1all<0,02 para NO SOPORTADA); tabla de 23 casos sinteticos de decidir(): 23/23 correctos []; small EXPLORATORIO p sin corregir en el fixture: 0.2505"
+ },
+ "20": {
+  "estado": "cumple",
+  "detalle": "C5 probada con datos sinteticos: 6 dias iguales (max frac 0.167) -> cumple; un dia con >35 % (0.762) -> no; un dia que invierte el signo en LODO -> signos_iguales=False; LODO y fraccion por dia en el JSON del fixture"
+ },
+ "21": {
+  "estado": "cumple",
+  "detalle": "F1 por dia: max|SMD| n_mk NaN vs unido = 0.219 (activar_c1all=True, n NaN=873, unidos=2870); p3 calcula c1all; F1: discrepancia de signo bloquea SOPORTADA, IC superior c1all<+0,02 exigido a NO SOPORTADA (probado con decidir, tabla de H19)"
+ },
+ "22": {
+  "estado": "cumple",
+  "detalle": "p5 v3 (humo con 40 ficheros L2; no es dia de veredicto): bins fijos 555/1839 y 354/997 asertados contra los datos de diseno, vida-dt>=500, exclusion +-300 ms de repegado (496 anclas), estratos moneda x dt x vida (2 estratos), fraccion cubierta (pujas 0.04, rellenos 1.0), M3_estado=DESCRIPTIVO "
+ },
+ "23": {
+  "estado": "cumple",
+  "detalle": "decidir() solo devuelve ['INSUFFICIENT', 'NO SOPORTADA'] en 40 casos aleatorios; en DISENO el JSON emite NO_APLICA_DISENO (no veredicto)"
+ },
+ "24": {
+  "estado": "cumple",
+  "detalle": "JSON confirmatorio incluye ['n_eventos', 'dias', 'mercados', 'n_eff_ctrl_kish', 'n_eff_contraste', 'n_mercados_ev', 'sin_2_mejores_dias', 'C1', 'C2'] para V1 y V1_e250; n_eventos_primarios=755"
+ },
+ "X1_cover_fich": {
+  "estado": "cumple",
+  "detalle": "cover_fich del fixture [{'fichero': 'fx3h.csv.gz', 'min': 1794453646652, 'max': 1794467949814, 'n': 27929375}] == recuento independiente (min 1794453646652, max 1794467949814, n 27929375); p7 usa cover_fich (dia_completo del fixture: ok=False, cobertura_ok=False, inputs_ok=True: el fixture dura 3 h); reglas de completitud de p7 (cabecera 120 s, cola 120 s, hueco 300/301 s, n=0, onchain/m5_registro de D y D+1 ausentes, solape) = 10/10 casos sinteticos sobre el codigo real de p7"
+ },
+ "X2_B1_small_exploratorio": {
+  "estado": "cumple",
+  "detalle": "small n_univ=304: gating=False exploratorio=True; fallos E4 ['E3 z0 max|SMD| propio-vecino=0.162 >0,10']; dia_valido_E=False; p3: estratos_holm=['z0', 'normal'], small_EXPLORATORIO presente=True"
+ },
+ "X3_n_eff_contraste": {
+  "estado": "cumple",
+  "detalle": "fixture (n_soporte, Kish, n_eff_contraste, n_mercados_ev) por estrato {'z0': (339, 1463.6, 275.2, 34), 'small': (6, 18.0, 4.5, 3), 'normal': (416, 509.0, 228.9, 33)}; con los p7 antiguos de 12/16-Nov: {'12': {'small': 46.8, 'normal': 797.2}, '16': {'small': 53.5, 'normal': 2057.6}} (esperado {'12': {'small': 46.8, 'normal': 797.2}, '16': {'small': 53.5, 'normal': 2057.6}})"
+ },
+ "X4_E_c1all": {
+  "estado": "cumple",
+  "detalle": "E_c1all pooled z0+normal=1230 eventos, fallos c1all informativos=['E3 z0 max|SMD| propio-vecino=0.127 >0,10']; p3 publica c1all_balance_E_por_dia=['2026-11-12']"
+ }
+}

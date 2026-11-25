@@ -1,0 +1,44 @@
+2026-11-18T22:47:08Z inicio p1 2026-11-16_DISENO sha=f6ab6a464404729e
+[     10s] tokens 1668
+[     25s] binance 2415372
+[     52s] onchain agregados 93019 filas bid 134450
+[     52s] fichero libro5_ms_2026-11-16_3035871.csv.gz
+[    522s] eventos 5604 placebo 11195 lineas_malas {}
+[    522s] fichero libro5_ms_2026-11-16_1324947.csv.gz
+[    660s] eventos 1278 placebo 2370 lineas_malas {}
+[    660s] fichero libro5_ms_2026-11-16_1390096.csv.gz
+[   4377s] eventos 30217 placebo 60046 lineas_malas {}
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p1_dia.py", line 542, in <module>
+    EVD.append(pd.DataFrame(EV)); PLD.append(pd.DataFrame(PL)); EV.clear(); PL.clear()
+               ~~~~~~~~~~~~^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/frame.py", line 845, in __init__
+    mgr = arrays_to_mgr(
+        arrays,
+    ...<2 lines>...
+        dtype=dtype,
+    )
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/construction.py", line 150, in arrays_to_mgr
+    return create_block_manager_from_column_arrays(
+        arrays, axes, consolidate=consolidate, refs=refs
+    )
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/managers.py", line 2342, in create_block_manager_from_column_arrays
+    mgr._consolidate_inplace()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/managers.py", line 1964, in _consolidate_inplace
+    self.blocks = _consolidate(self.blocks)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/managers.py", line 2467, in _consolidate
+    merged_blocks, _ = _merge_blocks(
+                       ~~~~~~~~~~~~~^
+        list(group_blocks), dtype=dtype, can_consolidate=_can_consolidate
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/managers.py", line 2492, in _merge_blocks
+    new_values = np.vstack([b.values for b in blocks])  # type: ignore[misc]
+  File "/usr/local/lib/python3.14/dist-packages/numpy/_core/shape_base.py", line 290, in vstack
+    return _nx.concatenate(arrs, 0, dtype=dtype, casting=casting)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 10.6 MiB for an array with shape (46, 30217) and data type float64
+2026-11-19T00:00:08Z fin p1 rc=0

@@ -1,0 +1,41 @@
+[     10s] tokens 1664
+[     26s] binance 2548287
+[     55s] onchain agregados 84757 filas bid 117566
+[     55s] fichero libro5_ms_2026-11-12_629469.csv.gz
+[    316s] eventos 5245 placebo 10392 lineas_malas {}
+[    316s] fichero libro5_ms_2026-11-12_769915.csv.gz
+[    851s] eventos 6253 placebo 12580 lineas_malas {}
+[    851s] fichero libro5_ms_2026-11-12_847237.csv.gz
+[    852s] eventos 6 placebo 2 lineas_malas {}
+[    852s] fichero libro5_ms_2026-11-12_847623.csv.gz
+[    887s] eventos 319 placebo 680 lineas_malas {}
+[    887s] fichero libro5_ms_2026-11-12_852243.csv.gz
+[     10s] tokens 1664
+[     26s] binance 2548287
+[     55s] onchain agregados 84757 filas bid 117566
+[     55s] fichero libro5_ms_2026-11-12_629469.csv.gz
+[    319s] eventos 5245 placebo 10392 lineas_malas {}
+[    319s] fichero libro5_ms_2026-11-12_769915.csv.gz
+[    866s] eventos 6253 placebo 12580 lineas_malas {}
+[    866s] fichero libro5_ms_2026-11-12_847237.csv.gz
+[    866s] eventos 6 placebo 2 lineas_malas {}
+[    866s] fichero libro5_ms_2026-11-12_847623.csv.gz
+[    902s] eventos 319 placebo 680 lineas_malas {}
+[    902s] fichero libro5_ms_2026-11-12_852243.csv.gz
+[     10s] tokens 1664
+[     23s] binance 2548287
+[     52s] onchain agregados 84757 filas bid 117566
+[     52s] fichero libro5_ms_2026-11-12_629469.csv.gz
+[    315s] eventos 5245 placebo 10392 lineas_malas {}
+[    315s] fichero libro5_ms_2026-11-12_769915.csv.gz
+[    865s] eventos 6253 placebo 12580 lineas_malas {}
+[    865s] fichero libro5_ms_2026-11-12_847237.csv.gz
+[    865s] eventos 6 placebo 2 lineas_malas {}
+[    865s] fichero libro5_ms_2026-11-12_847623.csv.gz
+[    900s] eventos 319 placebo 680 lineas_malas {}
+[    900s] fichero libro5_ms_2026-11-12_852243.csv.gz
+[   3169s] eventos 21150 placebo 41275 lineas_malas {'linea_corta_o_token': 1}
+[   3169s] fichero libro5_ms_2026-11-12_1124981.csv.gz
+[   3511s] eventos 3191 placebo 6895 lineas_malas {'linea_corta_o_token': 1}
+[   3511s] chequeo D y absr5 (rx<=t-1000, sg estructural) en el 100 % de las filas {'EV': {'n': 36164, 'viol_rx_gt_t_menos_1000': 0, 'viol_absr5_rx_gt_t_menos_1000': 0, 'nan': {'dist_ticks': 13, 'SQ_mej': 6, 'act2_mej': 6, 'spread': 13, 'dp_signed': 25, 'sg': 0, 'edad_nivel': 6, 'absr5': 69}, 'sg_no_estructural': 0}, 'PL': {'n': 71824, 'viol_rx_gt_t_menos_1000': 0, 'viol_absr5_rx_gt_t_menos_1000': 0, 'nan': {'dist_ticks': 0, 'SQ_mej': 0, 'act2_mej': 0, 'spread': 205, 'dp_signed': 10, 'sg': 0, 'edad_nivel': 0, 'absr5': 82}, 'sg_no_estructural': 0}, 'PW': {'n': 69668, 'viol_rx_gt_t_menos_1000': 0, 'viol_absr5_rx_gt_t_menos_1000': 0, 'nan': {'dist_ticks': 0, 'SQ_mej': 0, 'act2_mej': 0, 'spread': 65, 'dp_signed': 21, 'sg': 0, 'edad_nivel': 0, 'absr5': 125}, 'sg_no_estructural': 0}}
+[   3512s] FIN /root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/out/p1_btc_2026-11-12_DISENO.pkl 36164 71824 {'T1_tot': 36164, 'T1_None': 9870, 'T1_unico': 21720, 'T1_falso_-60000': 207, 'T1_falso_60000': 233, 'Trow_tot': 92919, 'Trow_ok': 72556, 'T1_agg_bid': 23276, 'T1_agg_bid_ask': 2867, 'T1_fila': 151} {'linea_corta_o_token': 1}

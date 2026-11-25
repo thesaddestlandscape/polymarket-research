@@ -1,0 +1,44 @@
+Traceback (most recent call last):
+  File "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/p3_agrega_v12.py", line 208, in <module>
+    S, Q = pairs(E[U['prim_nmk1_C1']]); R['hueco_c'] = dict(evento=lead(S), placebo=lead(Q),
+                 ~^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/frame.py", line 4369, in __getitem__
+    return self._getitem_bool_array(key)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/frame.py", line 4431, in _getitem_bool_array
+    return self.take(indexer, axis=0)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/generic.py", line 4101, in take
+    
+    ...<3 lines>...
+    )
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/managers.py", line 1077, in take
+    return self.reindex_indexer(
+           ~~~~~~~~~~~~~~~~~~~~^
+        new_axis=new_labels,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        allow_dups=True,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/managers.py", line 866, in reindex_indexer
+    blk.take_nd(
+    ~~~~~~~~~~~^
+        indexer,
+        ^^^^^^^^
+    ...<3 lines>...
+        ),
+        ^^
+    )
+    ^
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/internals/blocks.py", line 1015, in take_nd
+    new_values = algos.take_nd(
+        values, indexer, axis=axis, allow_fill=allow_fill, fill_value=fill_value
+    )
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/array_algos/take.py", line 115, in take_nd
+    return _take_nd_ndarray(arr, indexer, axis, fill_value, allow_fill)
+  File "/usr/local/lib/python3.14/dist-packages/pandas/core/array_algos/take.py", line 155, in _take_nd_ndarray
+    out = np.empty(out_shape, dtype=dtype)
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 270. KiB for an array with shape (34524, 1) and data type float64
+p3 OK /root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/out/p3v12_btc_act_DISENO.json etiqueta DISENO dias ['2026-11-12', '2026-11-16']

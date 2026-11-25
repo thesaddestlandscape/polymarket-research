@@ -59,3 +59,45 @@ b797b7f54d2a6d49d5175046edc38ff6083eac2b2913538e2a4e256ac5bb14a3  ADENDA_06_18no
 ce049b5d19b383a1d8b692b318d0f3ee7354ff0c3e1037e0fe17cde8c0ef34b9  ADENDA_07_18nov.md
 c2ddc0e33c4d33866bf3cbb53798f4ef2ddbfea80e8f3d44e9a36912cc8f8c37  ADENDA_08_18nov.md
 92bd430962fc8a1ba720252ba984a4697e8fc9922032e36c4161d9f90ec79fa6  ADENDA_09_18nov.md
+# v10 ADENDA_10 19-Nov (p1: EV/PL a DataFrame por trozos + malloc_trim, solo memoria; equivalencia valor a valor con fixture fxM2 comprobada: EV, PL, PW, CP, cover, JN, OCN, BAD, OWNR identicos). p3, p5, p7, run_p1.sh sin cambios respecto a v9. p1 v7 previa en out/obsoletos_preD1/p1_dia_v7_adenda07.py.
+4d84b124cf0be0349cf20c0d8612e09fd02764f655abebca583dc1ebb320342a  p1_dia.py
+5e803380c7564f239534ef0633f6ff4c5075f64faff93f409f74e7d7a58e141f  p3_agrega.py
+bd15af3fb6d7e04fe5a9961842c45ef2a88f43c669d3a170297ac28a043a67dc  p7_ipw_balance.py
+25be0c238a99125091d742d98828bf6ab14b049d29149adbb50fc1dd0e3e386d  p5_control_sin_relleno.py
+ca76dc11b6b8cb79433557f2a5d384b55a956f78648bfe59a7dac0bb2669e765  run_p1.sh
+003e99b398e82e3a11e640227557bf1a88a8e79888d124102656c1aafda1b403  prio_pista.sh
+805129a0ba64f1c20cfc5067b446558b87bc70273e96eed34c6689cbc964eba6  ADENDA_10_19nov.md
+# v11 ADENDA_11 19-Nov (p1: cover_fich por fichero en la tuberia zcat + absr5_at <=t-1000 + absr5_rx en DCHK, version p1_v11_ADENDA11; p7: completitud por ficheros, small exploratorio fuera de dia_valido_E, n_eff_ctrl_kish + n_eff_contraste + n_mercados_ev, E de c1all informativo, p7w_v11; p3: z0+normal, Holm x2, small EXPLORATORIO, dia incompleto se excluye, decidir 4d, REQ con ADENDA_10/11). p5, run_p1.sh, prio_pista.sh sin cambios. Versiones previas en out/obsoletos_preD1/ (p1_dia_v10_adenda10.py, p3_agrega_v5_adenda09.py, p7_ipw_balance_v9_adenda09.py). Sin procesar dias de veredicto.
+eed3a41d80f05cd6ffdd2fd6fe0057a3b7fb439ad0275b1fd9e0c68bc2f5b960  p1_dia.py
+245c333b148a42005f413b154ed91e8fa74cd93f02e06ab58486b62c9989408c  p3_agrega.py
+7239a5b69a1b6c4ecc5dba03b438b85232f506b2c6c49f43b1ef93b77fea45ef  p7_ipw_balance.py
+25be0c238a99125091d742d98828bf6ab14b049d29149adbb50fc1dd0e3e386d  p5_control_sin_relleno.py
+ca76dc11b6b8cb79433557f2a5d384b55a956f78648bfe59a7dac0bb2669e765  run_p1.sh
+003e99b398e82e3a11e640227557bf1a88a8e79888d124102656c1aafda1b403  prio_pista.sh
+ce049b5d19b383a1d8b692b318d0f3ee7354ff0c3e1037e0fe17cde8c0ef34b9  ADENDA_07_18nov.md
+92bd430962fc8a1ba720252ba984a4697e8fc9922032e36c4161d9f90ec79fa6  ADENDA_09_18nov.md
+805129a0ba64f1c20cfc5067b446558b87bc70273e96eed34c6689cbc964eba6  ADENDA_10_19nov.md
+a49c31ca4ee58d0c511398098e03c206accdb678e7804030d6cb9481f71d9d10  ADENDA_11_19nov.md
+# v12 ADENDA_12 19-Nov (COPIAS de p7/p3 v11 con cambios minimos: p7 cola vs ultimo cierre del universo Sonda1 + E3 informativo [IC90 por cluster de mercado, SMD act2 winsor p99]; p3 lee p7v12/p7wv12 y REQ v12; cmp_p7_v11_v12.py; run_v12_post.sh [no lanzado]; tests_v12/test_v12.py; DIFF_v11_v12.txt). Los ficheros v11 NO se tocan (cadena v11 en curso). p1_dia.py/p5/run_p1.sh/ADENDA_07,09,10,11 siguen con el hash del bloque v11. Sin procesar dias de veredicto.
+6e9138518fba263212ef6fecdcf50c0328ce965fc60ae5fe2cd49ee80179e317  p3_agrega_v12.py
+2ce3e348f933a77cfa32587bf5db662ee164819dab700b57e044f5cff09036ba  p7_ipw_balance_v12.py
+4647837cf4bb2732dd8e770353597c92d41fa972f6d23cdede35214588b4a73b  cmp_p7_v11_v12.py
+856da1e89adae10477d71f8a72ac2e866fe4eb5e5bdac62b89678233ff0f93f3  run_v12_post.sh
+5ebbdba7feaca34fdce18f5fb1df9bd8bf4e7344d95b6967a851eb62d1a586c3  ADENDA_12_19nov.md
+# v12b ADENDA_13 19-Nov (correcciones del /code-review medium sobre v12: cola min(cierre+120 s,t1), 3 ficheros Sonda1, bootstrap E3 con mismo filtro de covariables, p3 comprueba version+SHA256_codigo en JSON y pkl de p7, REQ con ADENDA_13, run_v12_post: nota fixture y BLOCKED_P3; tests_v12 ampliado). Sustituye el bloque v12 anterior. v11 sin tocar. Sin procesar dias de veredicto.
+23a5f271d62a25e8d4f3886173c33bf6afd9de967a6429baedb5bbd6429d1b33  p3_agrega_v12.py
+d4afe39c5879036b7283006d247faf1cb75d7dc2573ef9dc46d80b564e75d746  p7_ipw_balance_v12.py
+4647837cf4bb2732dd8e770353597c92d41fa972f6d23cdede35214588b4a73b  cmp_p7_v11_v12.py
+2a53e257c9e51f1aaeef38dbb8813635b2d6e36530e778e491bd4415353980a9  run_v12_post.sh
+5ebbdba7feaca34fdce18f5fb1df9bd8bf4e7344d95b6967a851eb62d1a586c3  ADENDA_12_19nov.md
+8fb6fecec365c2f92e10d1021d6b02f54675b09581df89399573754f7d7ec3ee  ADENDA_13_19nov.md
+# v12c ADENDA_13b 19-Nov (2a revision del /code-review: cola min(cierre+120 s, t1-1000 ms); run_v12_post: ya_hecho con pkl p7wv12, p3run borra salida y exige mtime/version, WAITING_ROTACION con 3 sonda1, --wait con tope 6 h y PID de chain.pid; p3 REQ con ADENDA_13b; so2 quita oid sin resto fiable). Sustituye v12b. v11 sin tocar. Sin procesar dias de veredicto.
+f16c945acb81ec959395d9034eb6036ab6389d88a5061970bb0995389c890c7a  p3_agrega_v12.py
+5785d060591a2e0c65a9dc168bdb84f89692f999acf9616cb7a1729839be27d7  p7_ipw_balance_v12.py
+4647837cf4bb2732dd8e770353597c92d41fa972f6d23cdede35214588b4a73b  cmp_p7_v11_v12.py
+aceaae286e34d834e47dcb23b82f3dffbcfa4894d94ccf342a81871e545ae893  run_v12_post.sh
+5ebbdba7feaca34fdce18f5fb1df9bd8bf4e7344d95b6967a851eb62d1a586c3  ADENDA_12_19nov.md
+8fb6fecec365c2f92e10d1021d6b02f54675b09581df89399573754f7d7ec3ee  ADENDA_13_19nov.md
+b1ab47c283c79de4fdb5b6faad7243b855488a9f626a638efb09f09af40b10f6  ADENDA_13b_19nov.md
+2f8359fd793ecd7400967a5a39ac4439f02e885c4f6b07b1404c3609e5c9e3e1  run_v12_post.sh
+# 23-Nov ADENDA_06b: run_v12_post.sh ulimit 5 GB + /usr/bin/time -v en p3 (antes aceaae28...)

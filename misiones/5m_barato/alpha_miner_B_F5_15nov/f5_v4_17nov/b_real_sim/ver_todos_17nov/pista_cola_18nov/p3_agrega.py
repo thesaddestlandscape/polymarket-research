@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""p3_agrega.py v4 (ADENDA_06 + ADENDA_07_18nov) (RE-B-COLA-CANCELA, MECANISMO, NO EV).
+"""p3_agrega.py v6 (ADENDA_06 + ADENDA_07_18nov + ADENDA_11_19nov: z0+normal, Holm x2, small EXPLORATORIO, dia incompleto se excluye, 4d F1) (RE-B-COLA-CANCELA, MECANISMO, NO EV).
 PARTE CONFIRMATORIA (nueva): test unico B1 = V1 pooled, IPW+EB (pesos de p7 por dia), clase lo, universo primario n_mk=1 C1 sin propios; unidad = DIA (C1 t de Student df=dias-1, media simple),
-C2 bootstrap por mercado, C3 permutacion con signo por mercado sobre d_m con max-estadistico V1..V7, Holm x3 en estratos, C5 (<=35 %/dia, leave-one-day-out), veredicto B4' (ADENDA_07 D1).
+C2 bootstrap por mercado, C3 permutacion con signo por mercado sobre d_m con max-estadistico V1..V7, Holm x2 en estratos {z0, normal} (small EXPLORATORIO), C5 (<=35 %/dia, leave-one-day-out), veredicto B4' (ADENDA_07 D1).
 PARTE EXPLORATORIA (heredada de v3: emparejado por placebo, tablas por ventana, M1/M2, hueco b/c, H-ACT): etiquetada EXPLORATORIO en el JSON.
 Dias: lista del veredicto {13,14,15,17,18,19-Nov}; 12 y 16-Nov SOLO con P3_DISENO=1 (salida *_DISENO, sin veredicto). No lee ninguna columna f_* antes de pasar: hashes de HASHES_CODIGO.txt, informe de balance E por dia (p7),
 dia completo y balance valido; si falta algo -> estado BLOCKED sin imprimir tasas. Uso: p3_agrega.py [coin=btc] [act|act2]"""
@@ -18,7 +18,7 @@ def sha(fn): return hashlib.sha256(open(fn, 'rb').read()).hexdigest()
 def blocked(msg, extra=None):
     json.dump(dict(estado='BLOCKED', motivo=msg, extra=extra or {}, dias_lista=DAYS), open(OUTJ.replace('.json', '_BLOCKED.json'), 'w'), indent=1, default=str); print('BLOCKED:', msg); sys.exit(2)
 # ---- 1. hashes congelados (H1/H25)
-REQ = ['p1_dia.py', 'p3_agrega.py', 'p7_ipw_balance.py', 'p5_control_sin_relleno.py', 'run_p1.sh', 'ADENDA_07_18nov.md', 'ADENDA_09_18nov.md']; HASHOK = {}
+REQ = ['p1_dia.py', 'p3_agrega.py', 'p7_ipw_balance.py', 'p5_control_sin_relleno.py', 'run_p1.sh', 'ADENDA_07_18nov.md', 'ADENDA_09_18nov.md', 'ADENDA_10_19nov.md', 'ADENDA_11_19nov.md']; HASHOK = {}
 if not DISENO:
     hf = f'{H}/HASHES_CODIGO.txt'; last = {}
     for ln in open(hf):
@@ -29,7 +29,7 @@ if not DISENO:
         if sha(f'{H}/{nm}') != last[nm]: blocked(f'hash de {nm} en disco != HASHES_CODIGO.txt (codigo modificado tras congelar)')
         HASHOK[nm] = last[nm]
 # ---- 2. dias: pkl, informe de balance E, completo
-CAND = []; PEND = []; EXCL = {}; ERR = {}
+CAND = []; PEND = []; EXCL = {}; EXCL_INC = {}; ERR = {}
 for D_ in DAYS:
     f1 = f'{H}/out/p1_{COIN}_{D_}{SUF}.pkl'
     if not os.path.exists(f1): PEND.append(D_); continue
@@ -37,15 +37,18 @@ for D_ in DAYS:
     if not (os.path.exists(jp) and os.path.exists(wp)): blocked(f'falta el informe de balance E (p7) del dia {D_}')
     rj = json.load(open(jp))
     if rj.get('SHA256_pkl_p1') != sha(f1): blocked(f'el informe p7 del dia {D_} no corresponde al pkl de p1 en disco')
-    if not rj['dia_completo']['ok'] and not DISENO: blocked(f'dia incompleto en la lista: {D_}', rj['dia_completo'])
-    if not rj['dia_valido_E'] and not DISENO: EXCL[D_] = rj['E4_fallos']; continue
+    if not DISENO:       # ADENDA_11 §7.1 (4a): el dia incompleto se EXCLUYE y se lista (cuenta contra >=5 dias validos), ya no bloquea
+        if not rj['dia_completo']['ok']: EXCL_INC[D_] = rj['dia_completo']
+        if not rj['dia_valido_E']: EXCL[D_] = rj['E4_fallos']
+        if D_ in EXCL_INC or D_ in EXCL: continue
     CAND.append(D_)
-if not DISENO and not CAND: blocked('ningun dia valido (completo y con balance E superado)', dict(pendientes=PEND, excluidos_E=EXCL))
+if not DISENO and not CAND: blocked('ningun dia valido (completo y con balance E superado)', dict(pendientes=PEND, excluidos_E=EXCL, excluidos_incompletos=EXCL_INC))
 fs = [f'{H}/out/p1_{COIN}_{D_}{SUF}.pkl' for D_ in CAND]; Es, Ps, PWs, JN, OCN = [], [], {}, collections.Counter(), collections.Counter()
 for f, D_ in zip(fs, CAND):
-    d = pickle.load(open(f, 'rb')); assert d['D'] == D_ and D_ in DAYS; Es.append(d['EV']); Ps.append(d['PL']); PWs[D_] = d['PW']; JN.update(d['JN']); OCN.update(d['OCN'])
+    d = pickle.load(open(f, 'rb')); assert d['D'] == D_ and D_ in DAYS and d.get('version') == 'p1_v11_ADENDA11', (D_, d.get('version')); Es.append(d['EV']); Ps.append(d['PL']); PWs[D_] = d['PW']; JN.update(d['JN']); OCN.update(d['OCN'])
 E = pd.concat(Es, ignore_index=True); P = pd.concat(Ps, ignore_index=True)
 assert set(E.D.unique()) <= set(DAYS), 'dia fuera de la lista'
+for nm_, X_ in (('EV', E), ('PL', P), *[('PW' + k_, v_) for k_, v_ in PWs.items()]): assert int((X_.absr5_rx > X_.t - 1000).sum()) == 0, ('absr5 usa rx posterior a t-1000', nm_)      # ADENDA_11 §5.3
 N_OWN = int(E.own.astype(bool).sum()); E = E[~E.own.astype(bool)].reset_index(drop=True)      # ADENDA fix 5: fuera los casados de nuestra wallet
 V = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7']
 for X in (E, P):
@@ -124,7 +127,7 @@ def maxstat(S, B=2000, suf=''):
         fl = rng.integers(2, size=nm)[mk] * 2 - 1; mx.append(((A - Bm) * fl[:, None]).mean(0).max())
     mx = np.array(mx); return {v + suf: dict(dif=round(float(obs[i]), 4), p_maxstat=round(float((mx >= obs[i]).mean()), 4)) for i, v in enumerate(VV)}
 COLS = ['CW1', 'CW2', 'CW3', 'CWA', 'CS250_WA', 'CS250_W3'] + ['F' + v for v in V] + ['F90_V1', 'F90c111_V1', 'F90c46_V1'] + ['F' + v + '_e250' for v in ('V1', 'V2', 'V3', 'V4', 'V5', 'V7')]
-R = {'version': 'p3_v5_ADENDA09', 'ETIQUETA': 'DISENO' if DISENO else 'VEREDICTO', 'dias_usados': CAND, 'dias_pendientes': PEND, 'dias_excluidos_E4': EXCL, 'hashes_verificados': HASHOK, 'seccion_heredada_v3': 'EXPLORATORIO', 'n_eventos_propios_excluidos': N_OWN, 'ficheros': [os.path.basename(f) for f in fs], 'act_emparejado': ACT, 'n_eventos': len(E), 'n_placebo_cand': len(P),
+R = {'version': 'p3_v6_ADENDA11', 'ETIQUETA': 'DISENO' if DISENO else 'VEREDICTO', 'dias_usados': CAND, 'dias_pendientes': PEND, 'dias_excluidos_E4': EXCL, 'dias_excluidos_incompletos': EXCL_INC, 'hashes_verificados': HASHOK, 'seccion_heredada_v3': 'EXPLORATORIO', 'n_eventos_propios_excluidos': N_OWN, 'ficheros': [os.path.basename(f) for f in fs], 'act_emparejado': ACT, 'n_eventos': len(E), 'n_placebo_cand': len(P),
      'emparejado': E.mtype.value_counts().to_dict(), 'JN': dict(JN), 'OCN': dict(OCN)}
 R['union_T1'] = round((JN['T1_tot'] - JN['T1_None']) / max(1, JN['T1_tot']), 4); R['union_Trow'] = round(JN['Trow_ok'] / max(1, JN['Trow_tot']), 4)
 R['union_falsos_pm60s'] = round((JN['T1_falso_-60000'] + JN['T1_falso_60000']) / 2 / max(1, JN['T1_tot']), 4)
@@ -206,15 +209,16 @@ rg = np.random.default_rng(20261118)
 VAR7 = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7']; VAR250 = ['V1_e250', 'V2_e250', 'V3_e250', 'V4_e250', 'V5_e250', 'V7_e250']; VARS = VAR7 + VAR250
 EVI = E.set_index('evid')
 def weights_for(D_):
-    w = pickle.load(open(f'{H}/out/p7w_{COIN}_{D_}{SUF}.pkl', 'rb')); assert w['dia'] == D_ and w['version'] == 'p7w_v9'; return w['pesos']
+    w = pickle.load(open(f'{H}/out/p7w_{COIN}_{D_}{SUF}.pkl', 'rb')); assert w['dia'] == D_ and w['version'] == 'p7w_v11'; return w['pesos']
 WGT = {D_: weights_for(D_) for D_ in CAND}
-def tabs(key, cl):
-    """eventos soportados y controles ponderados de la clase cl (todos los dias usados). F = el disparo existe (f_* no nulo)."""
+PRIM_ST = ('z0', 'normal')        # ADENDA_11 §3 (B1): estratos del test confirmatorio; small es EXPLORATORIO
+def tabs(key, cl, estratos=PRIM_ST):
+    """eventos soportados y controles ponderados de la clase cl y de los estratos dados (todos los dias usados). F = el disparo existe (f_* no nulo)."""
     ev, ct = [], []
     for D_ in CAND:
         wk = WGT[D_].get(key)
         if wk is None or len(wk['S']) == 0: continue
-        S_ = wk['S'][wk['S'].cl == cl]; W_ = wk['W'][wk['W'].cl == cl]
+        S_ = wk['S'][(wk['S'].cl == cl) & wk['S'].st.isin(estratos)]; W_ = wk['W'][(wk['W'].cl == cl) & wk['W'].st.isin(estratos)]
         if len(S_) == 0: continue
         e_ = EVI.loc[S_.evid.values]; c_ = PWs[D_].loc[W_.index.values]
         a = S_[['evid', 'st', 'D', 'end']].reset_index(drop=True); b = W_[['st', 'om', 'D', 'end']].reset_index(drop=True)
@@ -250,7 +254,9 @@ def perm_T(nev, sw, sF, swF, B=2000):
     return T, mx, one
 def analiza(ev, ct, var='V1', B=2000):
     """C1 (dias, t), C2 (mercado), semiancho, LODO, C5, LR, sin 2 mejores dias, Kish."""
-    pdv = per_day(ev, ct, var); o = dict(n_eventos=int(len(ev)), dias=int(len(pdv)), mercados=int(ev.end.nunique()), n_eff_controles_Kish=round(float(ct.om.sum() ** 2 / (ct.om ** 2).sum()), 1) if len(ct) else None)
+    kc = float(ct.om.sum() ** 2 / (ct.om ** 2).sum()) if len(ct) else None
+    pdv = per_day(ev, ct, var); o = dict(n_eventos=int(len(ev)), dias=int(len(pdv)), mercados=int(ev.end.nunique()), n_mercados_ev=int(ev.end.nunique()), n_eff_ctrl_kish=round(kc, 1) if kc else None,
+                                         n_eff_contraste=round(1.0 / (1.0 / len(ev) + 1.0 / kc), 1) if kc and len(ev) else None)      # ADENDA_11 §4.2 (C6)
     if len(pdv) == 0: o['nota'] = 'sin dias'; return o
     d = pdv.d.values; c1 = ic_t(d); o['C1'] = dict(dif_media_dias=round(float(d.mean()), 4), ic90=[round(x, 4) for x in c1], semiancho=round((c1[1] - c1[0]) / 2, 4) if np.isfinite(c1[0]) else None, por_dia={r.D: round(r.d, 4) for r in pdv.itertuples()})
     o['C1_secundaria_ponderada_por_eventos'] = round(float((pdv.n * pdv.d).sum() / pdv.n.sum()), 4)
@@ -281,21 +287,25 @@ def holm(ps):
     k = sorted(ps, key=lambda x: ps[x]); m = len(k); adj = {}; run = 0.0
     for i, x in enumerate(k): run = max(run, min(1.0, (m - i) * ps[x])); adj[x] = round(run, 4)
     return adj
-def decidir(dif, low1, up, hs, pmx, c5_cumple, LR, ddv, n_dias, n_ev, f1_activado=False, dif_c1all=None):
-    """B4' (ADENDA_07 D1, literal). dif = C1 media simple de dias; low1 = limite inferior IC90 C1; up/hs = limite superior y semiancho del IC90 MAS ANCHO (C1/C2); pmx = p_maxstat(V1); ddv = exceso n_mk=1 - n_mk>=2."""
+def decidir(dif, low1, up, hs, pmx, c5_cumple, LR, ddv, n_dias, n_ev, f1_activado=False, dif_c1all=None, up_c1all=None):
+    """B4' (ADENDA_07 D1) + ADENDA_11 4d. dif = C1 media simple de dias; low1 = limite inferior IC90 C1; up/hs = limite superior y semiancho del IC90 MAS ANCHO (C1/C2); pmx = p_maxstat(V1); ddv = exceso n_mk=1 - n_mk>=2;
+    F1 activo: SOPORTADA exige mismo signo en c1all; NO SOPORTADA exige limite superior del IC90 mas ancho de c1all < +0,02 (la igualdad de signo NO se exige)."""
     fin = lambda x: x is not None and np.isfinite(x)
     cond = dict(dif_mayor_0=bool(fin(dif) and dif > 0), p_maxstat_V1_lt_005=bool(fin(pmx) and pmx < 0.05), IC90_dias_C1_inferior_gt_0=bool(fin(low1) and low1 > 0), semiancho_decisivo_leq_003=bool(fin(hs) and hs <= 0.03), C5_cumple=bool(c5_cumple),
                 LR_V1_geq_15=bool(LR is not None and LR >= 1.5), exceso_nmk1_geq_nmk2=bool(fin(ddv) and ddv >= 0))
     razones = []
     if n_dias < 5: razones.append(f'<5 dias validos ({n_dias})')
     if n_ev < 300: razones.append(f'n eventos primarios {n_ev} <300')
-    if f1_activado and (not fin(dif_c1all) or not fin(dif) or np.sign(dif_c1all) != np.sign(dif)): razones.append('F1: discrepancia de signo entre universo primario y c1all')
-    if all(cond.values()) and not razones: return 'SOPORTADA', cond, razones
-    if n_dias >= 5 and n_ev >= 300 and fin(up) and up < 0.02 and not razones: return 'NO SOPORTADA', cond, razones
+    sig_ok = (not f1_activado) or bool(fin(dif_c1all) and fin(dif) and np.sign(dif_c1all) == np.sign(dif))
+    up_ok = (not f1_activado) or bool(fin(up_c1all) and up_c1all < 0.02)
+    if all(cond.values()) and not razones and sig_ok: return 'SOPORTADA', cond, razones
+    if n_dias >= 5 and n_ev >= 300 and fin(up) and up < 0.02 and up_ok: return 'NO SOPORTADA', cond, razones
+    if not sig_ok: razones.append('F1: signo distinto (o no medido) entre universo primario y c1all (bloquea SOPORTADA)')
+    if not up_ok: razones.append('F1: limite superior del IC90 mas ancho de c1all >= +0,02 o no medido (bloquea NO SOPORTADA)')
     if not cond['exceso_nmk1_geq_nmk2']: razones.append('H-ACT: exceso n_mk=1 < exceso n_mk>=2 (o sin medir)')
     razones += [f'no cumple {k}' for k, v in cond.items() if not v]
     return 'INSUFFICIENT', cond, razones
-CONF = dict(etiqueta='CONFIRMATORIO', hipotesis='V1 pooled, IPW+EB, clase lo, universo primario n_mk=1 C1 sin propios; unidad = dia', dias_usados=CAND, n_dias_validos=len(CAND), dias_pendientes=PEND, dias_excluidos_E4=EXCL)
+CONF = dict(etiqueta='CONFIRMATORIO', hipotesis='V1 pooled, IPW+EB, clase lo, estratos z0+normal (ADENDA_11 B1), universo primario n_mk=1 C1 sin propios; unidad = dia', dias_usados=CAND, n_dias_validos=len(CAND), dias_pendientes=PEND, dias_excluidos_E4=EXCL, dias_excluidos_incompletos=EXCL_INC)
 CONF.update(B_permutaciones=2000, B_bootstrap_mercado=2000, nivel_IC=0.90, IC_C1='t de Student df=dias-1 sobre d_D (media simple)', IC_C2='bootstrap por mercado (percentiles 5/95)')
 ev, ct = tabs('prim|vec', 'lo'); CONF['n_eventos_primarios'] = int(len(ev))
 if len(ev) == 0:
@@ -304,16 +314,22 @@ else:
     CONF['V1'] = analiza(ev, ct, 'V1'); CONF['V1_e250'] = analiza(ev, ct, 'V1_e250')
     CONF['maxstat_V1_V7'] = maxstat_block(ev, ct, VAR7); CONF['maxstat_e250'] = maxstat_block(ev, ct, VAR250)
     pst, est = {}, {}
-    for st_ in ('z0', 'small', 'normal'):
+    for st_ in PRIM_ST:
         e2, c2_ = ev[ev.st == st_], ct[ct.st == st_]
         if len(e2) < 2 or len(c2_) < 2: est[st_] = dict(n_eventos=int(len(e2)), nota='sin datos'); continue
         a_ = analiza(e2, c2_, 'V1', B=1000); nev_, sw_, sF_, swF_ = mkt_arrays(e2, c2_, ['V1']); T_, mx_, one_ = perm_T(nev_, sw_, sF_, swF_, 2000); a_['p_perm_V1'] = round(float((one_[:, 0] >= T_[0]).mean()), 4); pst[st_] = a_['p_perm_V1']; est[st_] = a_
-    adj = holm(pst)
-    for k_, v_ in adj.items(): est[k_]['p_holm_x3'] = v_
-    if 'small' in est and est['small'].get('IC_mas_ancho'):
-        est['small']['semiancho_leq_006'] = bool((est['small']['IC_mas_ancho'].get('semiancho') or 9) <= 0.06); est['small']['etiqueta_estrato'] = 'INSUFFICIENT (semiancho>0,06)' if not est['small']['semiancho_leq_006'] else 'evaluable'
+    adj = holm(pst)          # ADENDA_11 §3.3: Holm x2 sobre {z0, normal}
+    for k_, v_ in adj.items(): est[k_]['p_holm_x2'] = v_
     CONF['estratos_holm'] = est
-    f1 = {D_: json.load(open(f'{H}/out/p7_{COIN}_{D_}{SUF}.json'))['F1'] for D_ in CAND}; CONF['F1_por_dia'] = {D_: dict(max_abs_SMD=v['max_abs'], activar=v['activar_veredicto_c1all']) for D_, v in f1.items()}
+    esm, csm = tabs('prim|vec', 'lo', ('small',))          # small: EXPLORATORIO, p SIN corregir, fuera del veredicto
+    if len(esm) >= 2 and len(csm) >= 2:
+        a_ = analiza(esm, csm, 'V1', B=500); nev_, sw_, sF_, swF_ = mkt_arrays(esm, csm, ['V1']); T_, mx_, one_ = perm_T(nev_, sw_, sF_, swF_, 2000); a_['p_perm_V1_sin_corregir'] = round(float((one_[:, 0] >= T_[0]).mean()), 4)
+    else: a_ = dict(n_eventos=int(len(esm)), nota='sin datos')
+    a_['etiqueta'] = 'EXPLORATORIO (ADENDA_11 B1: fuera del veredicto y de dia_valido_E)'; CONF['small_EXPLORATORIO'] = a_
+    rj_all = {D_: json.load(open(f'{H}/out/p7_{COIN}_{D_}{SUF}.json')) for D_ in CAND}; f1 = {D_: v['F1'] for D_, v in rj_all.items()}
+    CONF['c1all_balance_E_por_dia'] = {D_: dict(fallos=v.get('E4_fallos_c1all'), pooled_z0_normal=(v.get('E_c1all', {}).get('pooled', {}) or {}).get('primario_z0_normal'),
+                                                estratos={t_: {k_: e_.get(k_) for k_ in ('n_soporte', 'n_eff_contraste', 'E1_SMD_max_abs', 'E2_KS')} for t_, e_ in (v.get('E_c1all', {}).get('estratos', {}) or {}).items()}) for D_, v in rj_all.items()}      # 4d: publicado
+    CONF['F1_por_dia'] = {D_: dict(max_abs_SMD=v['max_abs'], activar=v['activar_veredicto_c1all']) for D_, v in f1.items()}
     CONF['F1_activado'] = bool(any(v['activar_veredicto_c1all'] for v in f1.values()))
     evc, ctc = tabs('c1all|vec', 'lo'); CONF['c1all_V1'] = analiza(evc, ctc, 'V1', B=1000) if len(evc) else dict(nota='sin eventos'); CONF['c1all_V1']['etiqueta'] = 'CONFIRMATORIO si F1_activado, si no EXPLORATORIO'
     CONF['H_ACT_dd_nmk1_menos_nmk2_FV1'] = R.get('dd_nmk1_menos_nmk2_FV1')
@@ -321,10 +337,11 @@ else:
     v1 = CONF['V1']; wid = v1.get('IC_mas_ancho', {}); up = wid.get('ic90', [np.nan, np.nan])[1]; low1 = v1['C1']['ic90'][0]; dif = v1['C1']['dif_media_dias']; hs = wid.get('semiancho')
     pmx = CONF['maxstat_V1_V7']['V1']['p_maxstat']; ddv = (R.get('dd_nmk1_menos_nmk2_FV1') or {}).get('dd')
     sc = CONF['c1all_V1'].get('C1', {}).get('dif_media_dias') if CONF['F1_activado'] else None
-    ver, cond, razones = decidir(dif, low1, up, hs, pmx, v1['C5']['cumple'], v1.get('LR'), ddv, len(CAND), CONF['n_eventos_primarios'], CONF['F1_activado'], sc)
+    upc = (CONF['c1all_V1'].get('IC_mas_ancho') or {}).get('ic90', [np.nan, np.nan])[1] if CONF['F1_activado'] else None; CONF['limite_superior_IC_mas_ancho_c1all'] = round(float(upc), 4) if upc is not None and np.isfinite(upc) else None
+    ver, cond, razones = decidir(dif, low1, up, hs, pmx, v1['C5']['cumple'], v1.get('LR'), ddv, len(CAND), CONF['n_eventos_primarios'], CONF['F1_activado'], sc, upc)
     if DISENO: ver = 'NO_APLICA_DISENO'
     CONF['condiciones_SOPORTADA'] = cond; CONF['limite_superior_IC_mas_ancho'] = round(float(up), 4) if np.isfinite(up) else None; CONF['veredicto'] = ver; CONF['razones'] = razones
-    CONF['reglas'] = 'B4 reescrita por ADENDA_07 D1: NO SOPORTADA = n>=300, >=5 dias validos, limite superior del IC90 mas ancho (C1/C2) < +0,02'
+    CONF['reglas'] = 'B4 reescrita por ADENDA_07 D1: NO SOPORTADA = n>=300, >=5 dias validos, limite superior del IC90 mas ancho (C1/C2) < +0,02; ADENDA_11 4d: con F1 activo tambien c1all (limite superior < +0,02); signo igual solo para SOPORTADA'
     EXPL = dict(etiqueta='EXPLORATORIO')
     for v in ('V2', 'V3', 'V4', 'V5', 'V6', 'V7'): EXPL['variante_' + v] = analiza(ev, ct, v, B=500)
     for cl_ in ('hi', 'indet'):

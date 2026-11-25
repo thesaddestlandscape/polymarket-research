@@ -1,0 +1,99 @@
+{
+ "job": "p1_dia",
+ "version": "p1_v7_ADENDA07",
+ "coin": "btc",
+ "dia": "2026-11-12",
+ "code_sha256": "a0e7d0821d07de544dc592346a0b487ea00a899222a0a162968a4823632031d4",
+ "params": {
+  "NPL": 8,
+  "NPOOL": 400,
+  "NPOOL3": 1500,
+  "PISTA_FILES": "/tmp/claude-0/-root-polymarket-research/5055698c-f1c6-493f-8e00-51095bf98a56/scratchpad/fx3h/fx3h.csv.gz",
+  "PISTA_SUF": "_fxM2"
+ },
+ "inputs": [
+  {
+   "path": "/tmp/claude-0/-root-polymarket-research/5055698c-f1c6-493f-8e00-51095bf98a56/scratchpad/fx3h/fx3h.csv.gz",
+   "size": 434693753,
+   "mtime": 1795018061
+  },
+  {
+   "path": "/root/polymarket-research-datalogs/onchain_fills_2026-11-12.csv.gz",
+   "size": 264986907,
+   "mtime": 1794528305
+  },
+  {
+   "path": "/root/polymarket-research-datalogs/onchain_fills_2026-11-13.csv.gz",
+   "size": 259024744,
+   "mtime": 1794614704
+  },
+  {
+   "path": "/mnt/HC_Volume_106538179/m5_registro/m5_registro_2026-11-12.csv.gz",
+   "size": 329711931,
+   "mtime": 1794542638
+  },
+  {
+   "path": "/mnt/HC_Volume_106538179/m5_registro/m5_registro_2026-11-13.csv.gz",
+   "size": 378248024,
+   "mtime": 1794629106
+  }
+ ],
+ "start_utc": "2026-11-18T17:51:22Z",
+ "end_utc": "2026-11-18T17:59:08Z",
+ "status": "COMPLETE",
+ "out": "/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/out/p1_btc_2026-11-12_fxM2.pkl",
+ "n_eventos": 4929,
+ "n_placebo": 9777,
+ "n_pw": 10558,
+ "cover": [
+  [
+   1794453646652,
+   1794464446678
+  ]
+ ],
+ "BAD": {},
+ "DCHK": {
+  "EV": {
+   "n": 4929,
+   "viol_rx_gt_t_menos_1000": 0,
+   "nan": {
+    "dist_ticks": 0,
+    "SQ_mej": 0,
+    "act2_mej": 0,
+    "spread": 0,
+    "dp_signed": 0,
+    "sg": 0,
+    "edad_nivel": 0
+   },
+   "sg_no_estructural": 0
+  },
+  "PL": {
+   "n": 9777,
+   "viol_rx_gt_t_menos_1000": 0,
+   "nan": {
+    "dist_ticks": 0,
+    "SQ_mej": 0,
+    "act2_mej": 0,
+    "spread": 11,
+    "dp_signed": 4,
+    "sg": 0,
+    "edad_nivel": 0
+   },
+   "sg_no_estructural": 0
+  },
+  "PW": {
+   "n": 10558,
+   "viol_rx_gt_t_menos_1000": 0,
+   "nan": {
+    "dist_ticks": 0,
+    "SQ_mej": 0,
+    "act2_mej": 0,
+    "spread": 1,
+    "dp_signed": 3,
+    "sg": 0,
+    "edad_nivel": 0
+   },
+   "sg_no_estructural": 0
+  }
+ }
+}

@@ -1,0 +1,54 @@
+{
+ "dia": "2026-11-16",
+ "dia_valido_E": false,
+ "E4_fallos": [
+  "E1 small |SMD|=0.196 >0,15",
+  "E2 small KS act2=0.167 >0,10",
+  "E2 small KS WA_q=0.24 >0,10",
+  "E2 small KS ttc=0.15 >0,10",
+  "E2 small KS absr5=0.109 >0,10"
+ ],
+ "dia_completo": {
+  "ok": false,
+  "cobertura_ok": false,
+  "mayor_hueco_ficheros_s": 45.0,
+  "inputs_ok": true,
+  "cover": [
+   [
+    1794787330965,
+    1794799204775
+   ],
+   [
+    1794799247130,
+    1794802416351
+   ],
+   [
+    1794802458216,
+    1794867602853
+   ],
+   [
+    1794867647860,
+    1794873146492
+   ]
+  ]
+ },
+ "D3_NaN_SMD_leq_010": true,
+ "F1": {
+  "n_nmk_nan": 6545,
+  "n_unidos": 22241,
+  "SMD": {
+   "act2": -0.015,
+   "log1p_WA_q": 0.136,
+   "WA_q_raw": 0.03,
+   "z0_cola_nueva": -0.161,
+   "ttc_min": -0.045,
+   "absr5_bp": -0.004,
+   "dist_ticks": 0.155,
+   "edad_nivel": 0.039,
+   "suelo_lo": 0.0,
+   "ty_mint": 0.066
+  },
+  "max_abs": 0.161,
+  "activar_veredicto_c1all": true
+ }
+}

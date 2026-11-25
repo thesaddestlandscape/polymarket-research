@@ -1,0 +1,38 @@
+{
+ "job": "pista_cola_v12_post",
+ "params": {
+  "chain_gate": "out/verif_adenda11/chain.status=COMPLETE",
+  "veredicto": "0",
+  "horas_prohibidas": "06:00-09:00Z,22:15-22:30Z",
+  "ulimit_v_kb": 3000000
+ },
+ "start_utc": "2026-11-19T14:45:10Z",
+ "codigo_sha256": {
+  "p3_agrega_v12.py": "f16c945acb81ec959395d9034eb6036ab6389d88a5061970bb0995389c890c7a",
+  "p7_ipw_balance_v12.py": "5785d060591a2e0c65a9dc168bdb84f89692f999acf9616cb7a1729839be27d7",
+  "cmp_p7_v11_v12.py": "4647837cf4bb2732dd8e770353597c92d41fa972f6d23cdede35214588b4a73b",
+  "run_v12_post.sh": "2f8359fd793ecd7400967a5a39ac4439f02e885c4f6b07b1404c3609e5c9e3e1",
+  "ADENDA_12_19nov.md": "5ebbdba7feaca34fdce18f5fb1df9bd8bf4e7344d95b6967a851eb62d1a586c3",
+  "ADENDA_13_19nov.md": "8fb6fecec365c2f92e10d1021d6b02f54675b09581df89399573754f7d7ec3ee",
+  "ADENDA_13b_19nov.md": "b1ab47c283c79de4fdb5b6faad7243b855488a9f626a638efb09f09af40b10f6",
+  "p1_dia.py": "eed3a41d80f05cd6ffdd2fd6fe0057a3b7fb439ad0275b1fd9e0c68bc2f5b960"
+ },
+ "dias_previstos": {
+  "fixture": "2026-11-12_fxP1",
+  "DISENO": [
+   "2026-11-12",
+   "2026-11-16"
+  ],
+  "veredicto_si_existe_p1": [
+   "2026-11-13",
+   "2026-11-14",
+   "2026-11-15",
+   "2026-11-17",
+   "2026-11-18",
+   "2026-11-19"
+  ]
+ },
+ "estado": "COMPLETE_V12",
+ "ultima_actualizacion_utc": "2026-11-23T16:38:12Z",
+ "end_utc": "2026-11-23T16:38:12Z"
+}

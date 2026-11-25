@@ -1,0 +1,193 @@
+{
+ "fuente": "out/p1_btc_2026-11-12_fxI.pkl",
+ "universo": {
+  "prim": 350,
+  "excl_covariable_faltante": 0,
+  "faltante_detalle": {
+   "WA_q_nan": 0,
+   "absr5_nan": 0,
+   "act2_nan": 0,
+   "WA_q_cero_incluidos": 56
+  }
+ },
+ "controles": {
+  "full_total": 3731,
+  "full_elegibles": 2864,
+  "pool_barato": 198895,
+  "niveles_respaldo_normal": 8
+ },
+ "estratos": {
+  "z0": {
+   "n_univ": 56,
+   "n_soporte": 54,
+   "sin_soporte": 2,
+   "por_e": 0,
+   "por_rango": 0,
+   "por_nivel_sin_control": 2,
+   "n_controles": 962,
+   "n_eff": 301.4,
+   "peso_max_rel": 10.0,
+   "peso_max_pct_masa": 1.04,
+   "peso_max_rel_EB_sin_recorte": 17.71,
+   "peso_max_rel_IPW": 8.84,
+   "masa_en_vecinos": 0.697,
+   "iter_recorte": 60,
+   "WA_q_mediana_eventos": 0.0,
+   "SMD": {
+    "act2": 0.0,
+    "ttc_min": 0.0,
+    "absr5_bp": -0.0
+   },
+   "SMD_IPW_solo": {
+    "act2": 0.159,
+    "ttc_min": -0.109,
+    "absr5_bp": -0.109
+   }
+  },
+  "small": {
+   "n_univ": 63,
+   "n_soporte": 39,
+   "sin_soporte": 24,
+   "por_e": 0,
+   "por_rango": 1,
+   "por_nivel_sin_control": 23,
+   "n_controles": 105,
+   "n_eff": 17.4,
+   "peso_max_rel": 10.0,
+   "peso_max_pct_masa": 9.93,
+   "peso_max_rel_EB_sin_recorte": 17.8,
+   "peso_max_rel_IPW": 8.08,
+   "masa_en_vecinos": 0.788,
+   "iter_recorte": 60,
+   "WA_q_mediana_eventos": 38.5,
+   "SMD": {
+    "act2": 0.066,
+    "log1p_WA_q": 0.04,
+    "WA_q_raw": 0.044,
+    "ttc_min": 0.047,
+    "absr5_bp": -0.034
+   },
+   "SMD_IPW_solo": {
+    "act2": -0.041,
+    "log1p_WA_q": -0.262,
+    "WA_q_raw": -0.239,
+    "ttc_min": 0.35,
+    "absr5_bp": -0.414
+   }
+  },
+  "normal": {
+   "n_univ": 231,
+   "n_soporte": 221,
+   "sin_soporte": 10,
+   "por_e": 0,
+   "por_rango": 6,
+   "por_nivel_sin_control": 4,
+   "n_controles": 639,
+   "n_eff": 101.0,
+   "peso_max_rel": 10.0,
+   "peso_max_pct_masa": 1.61,
+   "peso_max_rel_EB_sin_recorte": 19.58,
+   "peso_max_rel_IPW": 23.13,
+   "masa_en_vecinos": 0.057,
+   "iter_recorte": 60,
+   "WA_q_mediana_eventos": 389.5,
+   "SMD": {
+    "act2": -0.01,
+    "log1p_WA_q": 0.014,
+    "WA_q_raw": 0.013,
+    "ttc_min": -0.007,
+    "absr5_bp": -0.009
+   },
+   "SMD_IPW_solo": {
+    "act2": 0.212,
+    "log1p_WA_q": -0.316,
+    "WA_q_raw": -0.186,
+    "ttc_min": -0.106,
+    "absr5_bp": -0.188
+   }
+  }
+ },
+ "exclusion_total": {
+  "prim": 350,
+  "faltante": 0,
+  "sin_soporte": 36,
+  "sin_soporte_por_e": 0,
+  "sin_soporte_fuera_rango": 7,
+  "sin_soporte_nivel_sin_control": 29,
+  "total_excluidos": 36,
+  "frac_total": 0.1029,
+  "n_analizables": 314
+ },
+ "primario": {
+  "n_eventos": 314,
+  "n_eff": 171.5,
+  "peso_max_rel_por_estrato_max": 10.0,
+  "peso_max_pct_masa_total": 1.21,
+  "peso_max_rel_pooled_vs_media_global": 20.69,
+  "SMD_pooled": {
+   "act2": 0.004,
+   "log1p_WA_q": 0.013,
+   "WA_q_raw": 0.012,
+   "z0_cola_nueva": -0.011,
+   "ttc_min": 0.0,
+   "absr5_bp": -0.009
+  },
+  "WA_q_mediana_eventos_vs_controles_ponderados": [
+   271.8,
+   256.7
+  ],
+  "SMD_todos_leq_015": true
+ },
+ "causa_peso": {
+  "IPW_recortado_renorm": 23.13,
+  "EB_sin_recorte": 19.58,
+  "final": 10.0
+ },
+ "simple": {
+  "metodo": "1:3 con reemplazo, calibre d2<=4.0, mismo nivel (vecinos en tiny/respaldo)",
+  "n_eventos_con_pareja": 161,
+  "frac_sin_pareja_sobre_universo_prim": 0.54,
+  "frac_sin_pareja_sobre_analizables_sin_faltante": 0.54,
+  "n_eff_controles": 290.7,
+  "SMD": {
+   "act2": 0.009,
+   "log1p_WA_q": -0.013,
+   "WA_q_raw": -0.012,
+   "z0_cola_nueva": 0.0,
+   "ttc_min": 0.012,
+   "absr5_bp": 0.034
+  },
+  "WA_q_mediana_eventos_pareados": 295.6,
+  "por_estrato": {
+   "z0": {
+    "n": 46,
+    "SMD": {
+     "act2": 0.028,
+     "ttc_min": 0.035,
+     "absr5_bp": -0.023
+    }
+   },
+   "small": {
+    "n": 15,
+    "SMD": {
+     "act2": 0.026,
+     "log1p_WA_q": -0.08,
+     "WA_q_raw": -0.066,
+     "ttc_min": 0.022,
+     "absr5_bp": -0.257
+    }
+   },
+   "normal": {
+    "n": 100,
+    "SMD": {
+     "act2": 0.007,
+     "log1p_WA_q": -0.099,
+     "WA_q_raw": -0.023,
+     "ttc_min": 0.001,
+     "absr5_bp": 0.128
+    }
+   }
+  },
+  "SMD_todos_leq_015": true
+ }
+}

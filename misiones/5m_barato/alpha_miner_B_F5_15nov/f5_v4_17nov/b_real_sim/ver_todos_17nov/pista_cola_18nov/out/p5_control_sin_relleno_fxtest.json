@@ -1,0 +1,176 @@
+{
+ "cobertura": {
+  "pujas": 3796,
+  "rellenos": 202,
+  "rellenos_con_tm3": 202,
+  "sin_L2_token": 601,
+  "anclas_excl_repegado_300ms": 496,
+  "vida_menor_que_todo_dt": 143,
+  "relleno_excl_vida_menos_dt_lt_500": 25,
+  "ficheros_leidos": 40,
+  "filas_ancla": 511,
+  "pujas_con_ancla_valida": 150,
+  "rellenos_retenidos": 7,
+  "no_rellenos_retenidos_pujas": 143,
+  "fraccion_pujas_cubierta": 0.04
+ },
+ "post_estratificado_global": {
+  "estratos": {
+   "eth|2|3": {
+    "n_fill": 5,
+    "n_nofill_anclas": 201
+   },
+   "eth|3|3": {
+    "n_fill": 2,
+    "n_nofill_anclas": 46
+   }
+  },
+  "n_fill_en_estratos_con_control": 7,
+  "fraccion_rellenos_cubiertos": 1.0,
+  "SMD_post_estrato": {
+   "dt": 0.423,
+   "vida": -0.221
+  },
+  "SMD_sin_estratificar": {
+   "dt": 0.737,
+   "vida": 0.177
+  },
+  "LR_post_estrato": {
+   "F50": 1.97,
+   "F90": 2.11
+  },
+  "F_post_estrato": {
+   "F50": {
+    "fill": 0.8571,
+    "nofill_std": 0.4348
+   },
+   "F90": {
+    "fill": 0.8571,
+    "nofill_std": 0.4054
+   }
+  },
+  "M3_estado": "DESCRIPTIVO (no citar como evidencia de discriminacion; ADENDA_06 G4)"
+ },
+ "post_estratificado_por_coin": {
+  "eth": {
+   "estratos": {
+    "eth|2|3": {
+     "n_fill": 5,
+     "n_nofill_anclas": 201
+    },
+    "eth|3|3": {
+     "n_fill": 2,
+     "n_nofill_anclas": 46
+    }
+   },
+   "n_fill_en_estratos_con_control": 7,
+   "fraccion_rellenos_cubiertos": 1.0,
+   "SMD_post_estrato": {
+    "dt": 0.423,
+    "vida": -0.221
+   },
+   "SMD_sin_estratificar": {
+    "dt": 0.737,
+    "vida": 0.177
+   },
+   "LR_post_estrato": {
+    "F50": 1.97,
+    "F90": 2.11
+   },
+   "F_post_estrato": {
+    "F50": {
+     "fill": 0.8571,
+     "nofill_std": 0.4348
+    },
+    "F90": {
+     "fill": 0.8571,
+     "nofill_std": 0.4054
+    }
+   },
+   "M3_estado": "DESCRIPTIVO (no citar como evidencia de discriminacion; ADENDA_06 G4)"
+  }
+ },
+ "global": {
+  "n_fill": 7,
+  "n_nofill_pujas": 143,
+  "n_nofill_anclas": 504,
+  "F50": {
+   "fill": 0.8571,
+   "nofill": 0.4935,
+   "LR": 1.74
+  },
+  "F90": {
+   "fill": 0.8571,
+   "nofill": 0.4383,
+   "LR": 1.96
+  },
+  "LR_F50_ic90_dias": [
+   0.91,
+   2.29
+  ]
+ },
+ "por_coin": {
+  "eth": {
+   "n_fill": 7,
+   "n_nofill_pujas": 143,
+   "n_nofill_anclas": 504,
+   "F50": {
+    "fill": 0.8571,
+    "nofill": 0.4935,
+    "LR": 1.74
+   },
+   "F90": {
+    "fill": 0.8571,
+    "nofill": 0.4383,
+    "LR": 1.96
+   },
+   "LR_F50_ic90_dias": [
+    0.91,
+    2.29
+   ]
+  }
+ },
+ "por_cola": {
+  "False": {
+   "n_fill": 0,
+   "n_nofill_pujas": 5,
+   "nota": "INSUFFICIENT"
+  },
+  "True": {
+   "n_fill": 7,
+   "n_nofill_pujas": 138,
+   "n_nofill_anclas": 488,
+   "F50": {
+    "fill": 0.8571,
+    "nofill": 0.4938,
+    "LR": 1.74
+   },
+   "F90": {
+    "fill": 0.8571,
+    "nofill": 0.4367,
+    "LR": 1.96
+   },
+   "LR_F50_ic90_dias": [
+    0.9,
+    2.31
+   ]
+  }
+ },
+ "balance_dt_ms_mediana": {
+  "fill": 1204.0,
+  "nofill": 554.940673828125
+ },
+ "bins_fijos_ADENDA_07": {
+  "dt_ms": [
+   555,
+   1839
+  ],
+  "vida_ms": [
+   354,
+   997
+  ],
+  "vida_menos_dt_min_ms": 500,
+  "repegado_excl_ms": 300
+ },
+ "nota": "Ventanas identicas, ancla relativa a la colocacion y vida condicionada. LR~F(fill)/F(nofill): si ~1 la regla R1 no discrimina rellenos de no rellenos. MECANISMO, no EV. tc de relleno = real_tm3 (casado observado)."
+}

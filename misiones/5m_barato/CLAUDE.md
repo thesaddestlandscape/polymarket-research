@@ -136,7 +136,7 @@ Caja altcoin (10 días, cifras comunicadas: XRP +$703, DOGE +$203, BNB +$53, BTC
 `REJECTED`, `DATA_BLOCKED`, `EXPLORATORY`, `PROMISING`, `DRY_RUN_VALIDATED`. La etiqueta `DRY_RUN_VALIDATED` no autoriza trading live. Ningún agente puede declarar 200k alcanzables sin modelo de contribución, capacidad, capital, solapamiento, incertidumbre y pruebas empíricas.
 
 ## 7. Reglas de ejecución para TODOS los agentes de la misión
-- Bash solo para leer y consultar, salvo `cheap5m-execution-engineer`. Nada de `pgrep/pkill -f` con patrones propios (se encuentran a sí mismos).
+- Bash solo para leer y consultar, salvo `cheap5m-execution-engineer`. Nada de `pgrep/pkill -f` con patrones propios (se encuentran a sí mismos): al lanzar algo en background guardar su PID (`nohup … & echo $! > X.pid`) y parar con `kill $(cat X.pid)`; si hay que buscar, `pgrep -f "[p]atron"` (el corchete evita el autoencuentro).
 - Análisis pesados: UNO en toda la máquina (lo asigna el chief), `nice -n 19 ionice -c3`, `ulimit -v 1500000` (2-3 GB solo con permiso del chief), nunca 06:00-09:15Z ni 22:15-22:30Z; antes de lanzar, MemAvailable > 2,5 GB y load < 16 (guard_ram reinicia observadores con <900 MB libres: pasó 3 veces el 17-Oct).
 - No editar `ejecutor_rapido.py` sin `/code-review` en MEDIUM + tests: lo usa `medir_camino_caliente.py`, que envía órdenes reales.
 - Cuota: máximo 3 subagentes a la vez; opus para objetivo-200k, validador y red-team cuando haya cuota, si no `model: sonnet` al lanzar; si un agente se corta por cuota, reanudarlo (SendMessage) o relanzarlo con el mismo encargo.

@@ -1,0 +1,7 @@
+[      9s] tokens 1664
+[     24s] binance 2548287
+[     54s] onchain agregados 84757 filas bid 117566
+[     54s] fichero fx3h.csv.gz
+[    474s] eventos 4929 placebo 9777 lineas_malas {}
+[    475s] chequeo D (rx<=t-1000, sg estructural) en el 100 % de las filas {'EV': {'n': 4929, 'viol_rx_gt_t_menos_1000': 0, 'nan': {'dist_ticks': 0, 'SQ_mej': 0, 'act2_mej': 0, 'spread': 0, 'dp_signed': 0, 'sg': 0, 'edad_nivel': 0}, 'sg_no_estructural': 0}, 'PL': {'n': 9777, 'viol_rx_gt_t_menos_1000': 0, 'nan': {'dist_ticks': 0, 'SQ_mej': 0, 'act2_mej': 0, 'spread': 11, 'dp_signed': 4, 'sg': 0, 'edad_nivel': 0}, 'sg_no_estructural': 0}, 'PW': {'n': 10558, 'viol_rx_gt_t_menos_1000': 0, 'nan': {'dist_ticks': 0, 'SQ_mej': 0, 'act2_mej': 0, 'spread': 1, 'dp_signed': 3, 'sg': 0, 'edad_nivel': 0}, 'sg_no_estructural': 0}}
+[    475s] FIN /root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/out/p1_btc_2026-11-12_fxM1.pkl 4929 9777 {'T1_tot': 4929, 'T1_agg_bid': 3169, 'T1_unico': 3034, 'T1_falso_-60000': 29, 'T1_falso_60000': 19, 'Trow_tot': 11124, 'Trow_ok': 8618, 'T1_None': 1312, 'T1_agg_bid_ask': 426, 'T1_fila': 22} {}

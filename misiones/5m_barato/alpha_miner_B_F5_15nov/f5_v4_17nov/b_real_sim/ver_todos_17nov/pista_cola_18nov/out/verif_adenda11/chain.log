@@ -1,0 +1,45 @@
+2026-11-19T07:34:55Z cadena ADENDA_11 inicio (pid 2523845)
+# 19-Nov 07:45Z chief (OK Javi): orden 16-Nov antes que 12-Nov, inicio 09:00Z, marca LISTO_PARA_VALIDADOR; sin cambio de código analítico
+2026-11-19T07:56:29Z cadena ADENDA_11 inicio (pid 2547989)
+2026-11-19T09:00:30Z inicio p1_fxP1
+2026-11-19T09:11:06Z fin p1_fxP1 rc=0
+2026-11-19T09:11:07Z fixture identico a fxN1 salvo absr5/r5/absr5_rx (cmp_fx_p1.json)
+2026-11-19T09:11:07Z inicio p7_fxP1
+2026-11-19T09:13:44Z fin p7_fxP1 rc=0
+2026-11-19T09:13:44Z inicio p3_fxP1
+2026-11-19T09:14:23Z fin p3_fxP1 rc=0
+2026-11-19T09:14:23Z inicio checks_H
+2026-11-19T09:15:40Z fin checks_H rc=1
+2026-11-19T09:15:40Z FALLO en checks_H
+# 19-Nov 09:18Z chief: FAILED_checks_H por ruta (H22 busca out/p5_control_sin_relleno_fxtest.json; existe en out/verif_adenda07/fx_artefactos/, p5 sin cambios en v11). Copiado con cp -p + cmp OK; sin cambio de código ni hashes. Relanzada la cadena (idempotente).
+2026-11-19T09:16:29Z cadena ADENDA_11 inicio (pid 2644753)
+2026-11-19T09:16:30Z fixture identico a fxN1 salvo absr5/r5/absr5_rx (cmp_fx_p1.json)
+2026-11-19T09:16:30Z inicio checks_H
+2026-11-19T09:18:16Z fin checks_H rc=0
+2026-11-19T09:18:16Z inicio p1_2026-11-16
+2026-11-19T10:37:33Z fin p1_2026-11-16 rc=0
+2026-11-19T10:37:33Z inicio p7_2026-11-16
+2026-11-19T10:41:48Z fin p7_2026-11-16 rc=0
+2026-11-19T10:41:48Z LISTO_PARA_VALIDADOR fixture+16-Nov
+2026-11-19T10:41:48Z inicio p1_2026-11-12
+2026-11-19T11:23:14Z fin p1_2026-11-12 rc=137
+2026-11-19T11:23:14Z FALLO en p1_2026-11-12
+2026-11-19T12:14:57Z cadena ADENDA_11 inicio (pid 2879172)
+2026-11-19T12:14:58Z fixture identico a fxN1 salvo absr5/r5/absr5_rx (cmp_fx_p1.json)
+2026-11-19T12:14:58Z inicio checks_H
+2026-11-19T12:38:20Z fin checks_H rc=0
+2026-11-19T12:38:20Z LISTO_PARA_VALIDADOR fixture+16-Nov
+2026-11-19T12:38:20Z inicio p1_2026-11-12
+2026-11-19T13:35:05Z cadena ADENDA_11 inicio (pid 2980443)
+2026-11-19T13:35:06Z fixture identico a fxN1 salvo absr5/r5/absr5_rx (cmp_fx_p1.json)
+2026-11-19T13:35:06Z inicio checks_H
+2026-11-19T13:36:35Z fin checks_H rc=0
+2026-11-19T13:36:35Z LISTO_PARA_VALIDADOR fixture+16-Nov
+2026-11-19T13:36:35Z inicio p1_2026-11-12
+2026-11-19T14:35:08Z fin p1_2026-11-12 rc=0
+2026-11-19T14:35:08Z inicio p7_2026-11-12
+2026-11-19T14:42:05Z fin p7_2026-11-12 rc=0
+2026-11-19T14:42:06Z inicio checks_H_final
+2026-11-19T14:44:47Z fin checks_H_final rc=0
+2026-11-19T14:44:47Z checks_H --final rc=0 (ver checks_H_final.json)
+2026-11-19T14:44:47Z cadena COMPLETE

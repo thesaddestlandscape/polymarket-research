@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""p1_dia.py v7 (ADENDA_07_18nov: campos D dist_ticks/SQ_mej/act2_mej/spread/dp_signed/sg/edad_nivel con rx<=t-1000, manifiesto, cobertura; hereda ADENDA_01-06) (RE-B-COLA-CANCELA, 18-Nov, MECANISMO, NO EV). Prereg PREREG_PISTA_COLA_18nov.md (sha 654a655d...).
+"""p1_dia.py v11 (ADENDA_11_19nov: cover_fich = cobertura por FICHERO libro5 en la misma tuberia zcat; absr5/r5 con datos <= t-1000 via absr5_at; hereda ADENDA_01-10: campos D con rx<=t-1000, manifiesto) (RE-B-COLA-CANCELA, MECANISMO, NO EV). Prereg PREREG_PISTA_COLA_18nov.md (sha 654a655d...).
 Por dia D y moneda: replay L2 de libro5_ms (reloj RECEPCION), eventos = clusters de T en bids (X,p) 0,10-0,30, candidatos placebo
 en los mismos niveles, rasgos por ventana, disparo de las 7 variantes, union con on-chain (hueco a), salto Binance (hueco c).
 Salida: out/p1_<coin>_<D>.pkl (idempotente: si existe, sale). Uso: p1_dia.py D [coin=btc]"""
-import sys, os, gzip, json, bisect, random, collections, subprocess, heapq, glob, time, pickle, hashlib
+import sys, os, gzip, json, bisect, random, collections, subprocess, heapq, glob, time, pickle, hashlib, ctypes
 import numpy as np, pandas as pd
 D = sys.argv[1]; COIN = sys.argv[2] if len(sys.argv) > 2 else 'btc'
 H0 = os.path.dirname(os.path.abspath(__file__)); OUT = f'{H0}/out/p1_{COIN}_{D}{os.environ.get("PISTA_SUF","")}.pkl'
@@ -40,9 +40,16 @@ for dd in (d0, d0 + pd.Timedelta(days=1)):
         p = l.split(','); bx.append(int(p[7])); bp.append(float(p[3]))
 o = np.argsort(bx, kind='stable'); bx = np.array(bx, dtype=np.int64)[o]; bp = np.array(bp)[o]
 log('binance', len(bx))
-def bprice(t):
+def bprice(t):      # solo para V6 (disparo por salto de Binance); la covariable absr5/r5 usa absr5_at
     i = np.searchsorted(bx, t, 'right') - 1
     return bp[i] if i >= 0 and t - bx[i] < 5000 else np.nan
+def absr5_at(t):
+    """ADENDA_11 §5 (helper unico): retorno Binance entre t-6000 y t-1000 por RECEPCION (regla rancio <5000 ms en cada extremo, mismo par).
+    Devuelve (ret=b1/b0-1 | NaN, rx_usada=bx[i1] | -1)."""
+    i1 = int(np.searchsorted(bx, t - 1000, 'right')) - 1; i0 = int(np.searchsorted(bx, t - 6000, 'right')) - 1
+    if i1 < 0 or i0 < 0 or (t - 1000) - bx[i1] >= 5000 or (t - 6000) - bx[i0] >= 5000: return np.nan, -1
+    assert bx[i1] <= t - 1000 and bx[i0] <= t - 6000, ('absr5 usa rx posterior a t-1000', int(bx[i1]), int(bx[i0]), t)
+    return float(bp[i1] / bp[i0] - 1), int(bx[i1])
 # ---- on-chain del dia (y vecino para cubrir bordes)
 oc = []; own_tx = set(); OWNR = collections.Counter()
 for dd in (d0, d0 + pd.Timedelta(days=1)):
@@ -156,6 +163,15 @@ def flush_cp():
     for c_ in ('act2', 'WA_q', 'ttc', 'absr5', 'pi', 'dist_ticks', 'edad_nivel'): f_[c_] = f_[c_].astype('float32')
     f_['lvk'] = f_['lvk'].astype('category'); f_['D'] = f_['D'].astype('category'); CPD.append(f_)
 NPOOL3 = int(os.environ.get('PISTA_NPOOL3', '1500'))
+NEVF = [0, 0]
+def flush_ev():
+    """ADENDA_10 (19-Nov): EV/PL pasan a DataFrame por trozos (solo memoria; entre pares: evs = EV[n_ev0:] se usa dentro de un par). No cambia ningun calculo."""
+    NEVF[0] += len(EV); NEVF[1] += len(PL)
+    if EV: EVD.append(pd.DataFrame(EV))
+    if PL: PLD.append(pd.DataFrame(PL))
+    EV.clear(); PL.clear()
+    try: ctypes.CDLL('libc.so.6').malloc_trim(0)
+    except Exception: pass
 MI = set(); EV, PL, JN = [], [], collections.Counter(); OCN = collections.Counter(); seen = set(); cover = []
 NPL = int(os.environ.get('PISTA_NPL', '8')); BAD = collections.Counter()
 TAUS = {'V1': (300, .5), 'V2': (150, .5), 'V3': (1000, .5), 'V4': (300, .25)}
@@ -303,8 +319,7 @@ def proc_pair(sts, tok):
             o.update(dfields(px, t))
             o['act'] = sum(1 for (r, q, dl) in chg[bisect.bisect_left(chr_, t - 1000):bisect.bisect_left(chr_, t - 50)] if q == px)
             o['act2'] = sum(1 for (r, q, dl) in chg[bisect.bisect_left(chr_, t - 3000):bisect.bisect_left(chr_, t - 1000)] if q == px)
-            b1, b0 = bprice(t - 50), bprice(t - 5050); o['r5'] = (b1 / b0 - 1) * sg if (b1 == b1 and b0 == b0 and sg) else np.nan
-            o['absr5'] = abs(b1 / b0 - 1) if (b1 == b1 and b0 == b0) else np.nan
+            ret5, o['absr5_rx'] = absr5_at(t); o['r5'] = ret5 * sg if (ret5 == ret5 and sg) else np.nan; o['absr5'] = abs(ret5)     # ADENDA_11 §5: ventana (t-6000, t-1000]
             for nm, (a, b) in {'W1': (-1000, -300), 'W2': (-300, -150), 'W3': (-150, -50), 'WA': (-1000, -50)}.items():
                 qa, cm, sal = canc(px, t + a, t + b, szs)
                 o[nm + '_q'] = qa; o[nm + '_c'] = cm; o[nm + '_sal'] = sal
@@ -413,8 +428,7 @@ def proc_pair(sts, tok):
                     if not q or q <= 0: continue
                     q0 = size_at(stX, pc, t - 1000)
                     if q0 is None: continue
-                    b1_, b0_ = bprice(t - 50), bprice(t - 5050)
-                    rows3.append((t, cheap_act_(t, pc), q0, end - t, abs(b1_ / b0_ - 1) if (b1_ == b1_ and b0_ == b0_) else np.nan, pc, dsub(pc, t)[0]))
+                    rows3.append((t, cheap_act_(t, pc), q0, end - t, abs(absr5_at(t)[0]), pc, dsub(pc, t)[0]))
                 if rows3:
                     ea_ = np.array([(e_['act2'], e_['WA_q'], e_['ttc']) for e_ in ev3], float); ar = np.array(rows3, float)[:, :5]; d_d = dk(np.array(rows3, float)[:, 6], [e_['dist_ticks'] for e_ in ev3])
                     d_a = (np.log1p(ar[:, 1])[:, None] - np.log1p(ea_[:, 0])[None]) / 0.4; d_q = (np.log1p(ar[:, 2])[:, None] - np.log1p(ea_[:, 1])[None]) / 0.35; d_t = (ar[:, 3][:, None] - ea_[:, 2][None]) / 60000.0
@@ -443,8 +457,7 @@ def proc_pair(sts, tok):
                         if not (a0 <= t <= a1) or printed(pc, t - 1000, t + 1000) > 0: continue
                         q = size_at(stX, pc, t - 150); q0 = size_at(stX, pc, t - 1000)
                         if not q or q <= 0 or q0 != 0: continue
-                        b1_, b0_ = bprice(t - 50), bprice(t - 5050)
-                        rowsz.append((t, cheap_act_(t, pc), 0.0, end - t, abs(b1_ / b0_ - 1) if (b1_ == b1_ and b0_ == b0_) else np.nan, pc, dsub(pc, t)[0]))
+                        rowsz.append((t, cheap_act_(t, pc), 0.0, end - t, abs(absr5_at(t)[0]), pc, dsub(pc, t)[0]))
                     if rowsz:
                         ez = np.array([(e_['act2'], e_['ttc']) for e_ in evz], float); az = np.array(rowsz, float)[:, :4]; dzz = dk(np.array(rowsz, float)[:, 6], [e_['dist_ticks'] for e_ in evz])
                         kz = np.exp(-0.5 * (((np.log1p(az[:, 1])[:, None] - np.log1p(ez[:, 0])[None]) / 0.4) ** 2 + ((az[:, 3][:, None] - ez[:, 1][None]) / 60000.0) ** 2 + dzz ** 2)).max(1); cz = min(0.25, 30.0 / max(kz.sum(), 1e-9)); piz = np.minimum(1.0, cz * kz)
@@ -467,8 +480,7 @@ def proc_pair(sts, tok):
                         if not (a0 <= t <= a1) or printed(pc, t - 1000, t + 1000) > 0: continue
                         q = size_at(stX, pc, t - 150); q0 = size_at(stX, pc, t - 1000)
                         if not q or q <= 0 or q0 is None or not (0 < q0 < 100): continue
-                        b1_, b0_ = bprice(t - 50), bprice(t - 5050)
-                        rowss.append((t, cheap_act_(t, pc), q0, end - t, abs(b1_ / b0_ - 1) if (b1_ == b1_ and b0_ == b0_) else np.nan, pc, dsub(pc, t)[0]))
+                        rowss.append((t, cheap_act_(t, pc), q0, end - t, abs(absr5_at(t)[0]), pc, dsub(pc, t)[0]))
                     if rowss:
                         es_ = np.array([(e_['act2'], e_['WA_q'], e_['ttc']) for e_ in evs_], float); as_ = np.array(rowss, float)[:, :5]; dss = dk(np.array(rowss, float)[:, 6], [e_['dist_ticks'] for e_ in evs_])
                         ks = np.exp(-0.5 * (((np.log1p(as_[:, 1])[:, None] - np.log1p(es_[:, 0])[None]) / 0.4) ** 2 + ((np.log1p(as_[:, 2])[:, None] - np.log1p(es_[:, 1])[None]) / 0.35) ** 2 + ((as_[:, 3][:, None] - es_[:, 2][None]) / 60000.0) ** 2 + dss ** 2)).max(1)
@@ -481,10 +493,25 @@ def proc_pair(sts, tok):
                                 if f is None: continue
                                 f.update(dict(X=X, p=rw[5], pev=px, nb=bool(abs(rw[5] - px) > 1e-9), t=rw[0], D=D, coin=COIN, end=end, lvk=lvk, pi=float(pis[j]), zp=False)); PW.append(f)
     flush_cp()
+    if len(EV) + len(PL) > 6000: flush_ev()
+CF = []     # ADENDA_11 §2: cover_fich = [dict(fichero, min, max, n)] sobre TODAS las lineas B/d/T (>=8 campos) del fichero, recepcion p[6]
+AWK_COV = r"""($1=="B"||$1=="d"||$1=="T") && NF>=8 && length($7)==13 && $7 ~ /^1[0-9]+$/ {r=$7+0; if(n==0||r<mn)mn=r; if(r>mx)mx=r; n++} END{printf "%.0f %.0f %d\n", mn, mx, n}"""
+def read_cov(covf, tmo=300):
+    """salida de la rama awk de la tuberia (la escribe en su END, puede llegar unos ms despues de que acabe el grep). Fallo -> n=0 (dia incompleto, fail-closed)."""
+    t_end = time.time() + tmo
+    while time.time() < t_end:
+        try: x = open(covf).read().split()
+        except OSError: x = []
+        if len(x) == 3 and all(s_.isdigit() for s_ in x):
+            os.remove(covf); return dict(min=int(x[0]), max=int(x[1]), n=int(x[2]))
+        time.sleep(1)
+    return dict(min=None, max=None, n=0, error='sin salida de awk')
 def run_file(fn):
     sts = {}; hp = []; known = set(); last = 0; t_first = None
-    cmd = f"zcat {fn} 2>/dev/null | grep -F -f {tokfile}"
-    pr = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, text=True, bufsize=1 << 20)
+    covf = f'{H0}/out/.cov_{COIN}_{D}{os.environ.get("PISTA_SUF","")}_{os.path.basename(fn)}.txt'
+    if os.path.exists(covf): os.remove(covf)
+    cmd = f"zcat {fn} 2>/dev/null | tee >(mawk -F, '{AWK_COV}' > {covf}) | grep -F -f {tokfile}"        # un solo descomprimido (ADENDA_11 §2.1)
+    pr = subprocess.Popen(cmd, shell=True, executable='/bin/bash', stdout=subprocess.PIPE, text=True, bufsize=1 << 20)
     for n, l in enumerate(pr.stdout):
         p = l.rstrip('\n').split(','); t = p[0]
         if t not in ('B', 'd', 'T'): continue
@@ -535,32 +562,32 @@ def run_file(fn):
         if tk2 in sts:
             pair = {x: sts.pop(x) for x in (tk2, comp[tk2]) if x in sts}; proc_pair(pair, tk2)
     if t_first: cover.append((t_first, last))
+    CF.append(dict(fichero=os.path.basename(fn), **read_cov(covf)))
 EVD, PLD = [], []
 files = sorted(glob.glob(os.environ.get('PISTA_FILES') or f'/mnt/HC_Volume_106538179/libro5_ms_prot/libro5_ms_{D}_*.csv.gz'), key=lambda f_: (os.path.getmtime(f_), f_))
 for fn in files:
-    log('fichero', os.path.basename(fn)); run_file(fn); log('eventos', len(EV), 'placebo', len(PL), 'lineas_malas', dict(BAD))
-    EVD.append(pd.DataFrame(EV)); PLD.append(pd.DataFrame(PL)); EV.clear(); PL.clear()
+    log('fichero', os.path.basename(fn)); NEVF[0] = NEVF[1] = 0; run_file(fn); flush_ev(); log('eventos', NEVF[0], 'placebo', NEVF[1], 'lineas_malas', dict(BAD))
 # tasa de union centrada en on-chain (agregados (tx,X,p) con casado dentro de la cobertura)
 for r in AG.itertuples():
     ts = r.ts * 1000
     if any(a + 5000 <= ts - 2300 <= b - 5000 for a, b in cover): OCN['agg_en_cobertura'] += 1; OCN['agg_n_mk1'] += (r.n_mk == 1); OCN['agg_unidos'] += (r.Index in MI); OCN['agg_unidos_nmk1'] += (r.Index in MI and r.n_mk == 1)
 flush_cp(); EVA, PLA, PWA = pd.concat(EVD, ignore_index=True), pd.concat(PLD, ignore_index=True), (pd.concat(PWD, ignore_index=True) if PWD else pd.DataFrame())
-DF = ['dist_ticks', 'SQ_mej', 'act2_mej', 'spread', 'dp_signed', 'sg', 'edad_nivel']
+DF = ['dist_ticks', 'SQ_mej', 'act2_mej', 'spread', 'dp_signed', 'sg', 'edad_nivel', 'absr5']
 def dchk(X):
     if len(X) == 0 or 'D_maxrx' not in X.columns: return dict(n=int(len(X)))
-    return dict(n=int(len(X)), viol_rx_gt_t_menos_1000=int((X.D_maxrx > X.t - 1000).sum()), nan={c: int(X[c].isna().sum()) for c in DF}, sg_no_estructural=int((~X.sg.isin([1, -1])).sum()))
-DCHK = dict(EV=dchk(EVA), PL=dchk(PLA), PW=dchk(PWA)); assert all(v.get('viol_rx_gt_t_menos_1000', 0) == 0 and v.get('sg_no_estructural', 0) == 0 for v in DCHK.values()), DCHK
-log('chequeo D (rx<=t-1000, sg estructural) en el 100 % de las filas', DCHK)
+    return dict(n=int(len(X)), viol_rx_gt_t_menos_1000=int((X.D_maxrx > X.t - 1000).sum()), viol_absr5_rx_gt_t_menos_1000=int((X.absr5_rx > X.t - 1000).sum()), nan={c: int(X[c].isna().sum()) for c in DF}, sg_no_estructural=int((~X.sg.isin([1, -1])).sum()))
+DCHK = dict(EV=dchk(EVA), PL=dchk(PLA), PW=dchk(PWA)); assert all(v.get('viol_rx_gt_t_menos_1000', 0) == 0 and v.get('viol_absr5_rx_gt_t_menos_1000', 0) == 0 and v.get('sg_no_estructural', 0) == 0 for v in DCHK.values()), DCHK
+log('chequeo D y absr5 (rx<=t-1000, sg estructural) en el 100 % de las filas', DCHK)
 def finfo(f_): 
     try: st_ = os.stat(f_); return dict(path=f_, size=st_.st_size, mtime=int(st_.st_mtime))
     except OSError: return dict(path=f_, size=None, mtime=None)
 INPUTS = [finfo(f_) for f_ in files] + [finfo(f'/root/polymarket-research-datalogs/onchain_fills_{dd.date()}.csv.gz') for dd in (d0, d0 + pd.Timedelta(days=1))] + \
          [finfo(f'/mnt/HC_Volume_106538179/m5_registro/m5_registro_{dd.date()}.csv.gz') for dd in (d0, d0 + pd.Timedelta(days=1))]
 flush_cp(); CPA = pd.concat(CPD, ignore_index=True) if CPD else pd.DataFrame(columns=CPCOLS)
-pickle.dump(dict(CP=CPA, PW=PWA, EV=EVA, PL=PLA, BAD=dict(BAD), JN=dict(JN), OCN=dict(OCN), OWNR=dict(OWNR), version='p1_v7_ADENDA07', cover=cover, files=files, D=D, coin=COIN, inputs=INPUTS, DCHK=DCHK, sg_estructural=True,
+pickle.dump(dict(CP=CPA, PW=PWA, EV=EVA, PL=PLA, BAD=dict(BAD), JN=dict(JN), OCN=dict(OCN), OWNR=dict(OWNR), version='p1_v11_ADENDA11', cover=cover, cover_fich=CF, files=files, D=D, coin=COIN, inputs=INPUTS, DCHK=DCHK, sg_estructural=True,
                  suelo={int(w): clase_suelo(w) for w in SU}), open(OUT + '.tmp', 'wb'))
 os.replace(OUT + '.tmp', OUT)
-man = dict(job='p1_dia', version='p1_v7_ADENDA07', coin=COIN, dia=D, code_sha256=hashlib.sha256(open(os.path.abspath(__file__), 'rb').read()).hexdigest(), params=dict(NPL=NPL, NPOOL=NPOOL, NPOOL3=NPOOL3, PISTA_FILES=os.environ.get('PISTA_FILES'), PISTA_SUF=os.environ.get('PISTA_SUF', '')),
-           inputs=INPUTS, start_utc=time.strftime('%FT%TZ', time.gmtime(T0)), end_utc=time.strftime('%FT%TZ', time.gmtime()), status='COMPLETE', out=OUT, n_eventos=int(len(EVA)), n_placebo=int(len(PLA)), n_pw=int(len(PWA)), cover=cover, BAD=dict(BAD), DCHK=DCHK)
+man = dict(job='p1_dia', version='p1_v11_ADENDA11', coin=COIN, dia=D, code_sha256=hashlib.sha256(open(os.path.abspath(__file__), 'rb').read()).hexdigest(), params=dict(NPL=NPL, NPOOL=NPOOL, NPOOL3=NPOOL3, PISTA_FILES=os.environ.get('PISTA_FILES'), PISTA_SUF=os.environ.get('PISTA_SUF', '')),
+           inputs=INPUTS, start_utc=time.strftime('%FT%TZ', time.gmtime(T0)), end_utc=time.strftime('%FT%TZ', time.gmtime()), status='COMPLETE', out=OUT, n_eventos=int(len(EVA)), n_placebo=int(len(PLA)), n_pw=int(len(PWA)), cover=cover, cover_fich=CF, BAD=dict(BAD), DCHK=DCHK)
 json.dump(man, open(OUT.replace('.pkl', '.manifest.json'), 'w'), indent=1, default=str)
 log('FIN', OUT, len(EVA), len(PLA), dict(JN), dict(BAD))

@@ -1,0 +1,41 @@
+2026-11-19T12:18:37Z esperando cadena v11 (estado RUNNING); tope 6 h
+2026-11-19T13:35:09Z esperando cadena v11 (estado RUNNING); tope 6 h
+2026-11-19T14:45:10Z cadena v11 COMPLETE; inicio post v12 (pid 2980589)
+2026-11-19T14:45:24Z inicio p7v12_2026-11-12_fxP1
+2026-11-19T14:46:17Z fin p7v12_2026-11-12_fxP1 rc=0
+2026-11-19T14:46:18Z cmp_p7_v11_v12 fixture rc=0
+2026-11-19T14:46:18Z inicio p7v12_2026-11-16_DISENO
+2026-11-19T14:48:35Z fin p7v12_2026-11-16_DISENO rc=0
+2026-11-19T14:48:36Z inicio p7v12_2026-11-12_DISENO
+2026-11-19T14:51:08Z fin p7v12_2026-11-12_DISENO rc=0
+2026-11-19T14:51:09Z sin out/p1_btc_2026-11-13.pkl: se omite
+2026-11-19T14:51:09Z sin out/p1_btc_2026-11-14.pkl: se omite
+2026-11-19T14:51:09Z sin out/p1_btc_2026-11-15.pkl: se omite
+2026-11-19T14:51:09Z sin out/p1_btc_2026-11-17.pkl: se omite
+2026-11-19T14:51:09Z sin out/p1_btc_2026-11-18.pkl: se omite
+2026-11-19T14:51:09Z sin out/p1_btc_2026-11-19.pkl: se omite
+2026-11-19T14:51:09Z inicio p3v12_fxP1
+2026-11-19T14:51:54Z fin p3v12_fxP1 rc=0
+2026-11-19T14:51:54Z p3v12_fxP1 rc=0
+2026-11-19T14:51:55Z inicio p3v12_DISENO
+2026-11-19T14:56:58Z fin p3v12_DISENO rc=1
+2026-11-19T14:56:58Z p3v12_DISENO rc=1
+2026-11-19T14:56:58Z FALLO en p3v12_DISENO
+2026-11-23T16:35:03Z cadena v11 COMPLETE; inicio post v12 (pid 1441015)
+2026-11-23T16:35:17Z p7 v12 2026-11-12_fxP1 ya hecho
+2026-11-23T16:35:17Z cmp_p7_v11_v12 fixture rc=0
+2026-11-23T16:35:18Z p7 v12 2026-11-16_DISENO ya hecho
+2026-11-23T16:35:19Z p7 v12 2026-11-12_DISENO ya hecho
+2026-11-23T16:35:19Z sin out/p1_btc_2026-11-13.pkl: se omite
+2026-11-23T16:35:19Z sin out/p1_btc_2026-11-14.pkl: se omite
+2026-11-23T16:35:19Z sin out/p1_btc_2026-11-15.pkl: se omite
+2026-11-23T16:35:19Z sin out/p1_btc_2026-11-17.pkl: se omite
+2026-11-23T16:35:19Z sin out/p1_btc_2026-11-18.pkl: se omite
+2026-11-23T16:35:19Z sin out/p1_btc_2026-11-19.pkl: se omite
+2026-11-23T16:35:19Z inicio p3v12_fxP1
+2026-11-23T16:35:56Z fin p3v12_fxP1 rc=0
+2026-11-23T16:35:56Z p3v12_fxP1 rc=0
+2026-11-23T16:35:56Z inicio p3v12_DISENO
+2026-11-23T16:38:12Z fin p3v12_DISENO rc=0
+2026-11-23T16:38:12Z p3v12_DISENO rc=0
+2026-11-23T16:38:12Z post v12 COMPLETE

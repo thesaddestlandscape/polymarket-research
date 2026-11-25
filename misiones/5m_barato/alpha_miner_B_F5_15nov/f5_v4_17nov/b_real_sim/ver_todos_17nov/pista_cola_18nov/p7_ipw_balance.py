@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""p7_ipw_balance.py v9 (ADENDA_09_18nov: igualdad EXACTA de rango desde el top + escalera de soporte; hereda v8/ADENDA_07-08). RE-B-COLA-CANCELA, MECANISMO, NO EV.
+"""p7_ipw_balance.py v11 (ADENDA_11_19nov: completitud por FICHEROS libro5, small exploratorio fuera de dia_valido_E, n_eff_ctrl_kish + n_eff_contraste, E de c1all informativo; hereda v9/ADENDA_09: igualdad EXACTA de rango desde el top + escalera de soporte). RE-B-COLA-CANCELA, MECANISMO, NO EV.
 SOLO BALANCE / PESOS / SOPORTE: NO lee ninguna columna de desenlace (f_*, C*, F*, *_c, *_sal, evap0, bn0, dec_eq*, jm, jnc, mk): lista blanca de columnas, el resto se descarta al cargar y se asierta en el informe.
 Uso: p7_ipw_balance.py <pkl p1 v7> [informe.json] [pesos.pkl]        (una ejecucion por DIA y moneda; fit SEPARADO por clase de suelo lo/hi/indet)
 Universos: prim (n_mk==1, C1, sin propios; test confirmatorio) y c1all (C1 sin restringir n_mk; solo F1). Controles: 'vec' (primario) y 'propio' (sensibilidad: solo nb=False).
@@ -13,9 +13,9 @@ from sklearn.linear_model import LogisticRegression
 from scipy.optimize import minimize
 from scipy.stats import ks_2samp
 SRC = sys.argv[1]; OUT = sys.argv[2] if len(sys.argv) > 2 else None; WOUT = sys.argv[3] if len(sys.argv) > 3 else None
-d = pickle.load(open(SRC, 'rb')); assert d.get('version') == 'p1_v7_ADENDA07', ('pickle de p1 de otra version', d.get('version'))
+d = pickle.load(open(SRC, 'rb')); assert d.get('version') == 'p1_v11_ADENDA11', ('pickle de p1 de otra version', d.get('version'))
 CAP = 10.0; TQ = 100.0; MCAP = float(os.environ.get('P7_MCAP', '0.02')); STR = ('z0', 'small', 'normal'); CLS = ('lo', 'hi', 'indet')
-LOWL = 'lo'; NMIN_STRATO = 100; KMAX_ED = 0.10; NC_MIN = 5; NEB_MIN = 60; NAND_MIN = 30; STRF = ('z0', 'small', 'normal', 'nand'); NCP_MAX = int(os.environ.get('P7_NCP_MAX', '300000'))
+LOWL = 'lo'; PRIM_ST = ('z0', 'normal'); NMIN_STRATO = 100; KMAX_ED = 0.10; NC_MIN = 5; NEB_MIN = 60; NAND_MIN = 30; STRF = ('z0', 'small', 'normal', 'nand'); NCP_MAX = int(os.environ.get('P7_NCP_MAX', '300000'))
 # ---- lista blanca (D3/E3 sin leer f_*)
 EVC = ['evid', 'D', 'X', 'p', 't', 'end', 'S', 'ty', 'nT', 'own', 'n_mk', 'q150', 'WA_q', 'act2', 'ttc', 'absr5', 'suelo', 'dist_ticks', 'SQ_mej', 'act2_mej', 'spread', 'dp_signed', 'sg', 'edad_nivel', 'edad_cens', 'D_maxrx']
 PWC = ['lvk', 'X', 'p', 'pev', 'nb', 't', 'D', 'end', 'pi', 'zp', 'q150', 'WA_q', 'act2', 'ttc', 'absr5', 'suelo', 'dist_ticks', 'SQ_mej', 'act2_mej', 'spread', 'dp_signed', 'sg', 'edad_nivel', 'edad_cens', 'D_maxrx']
@@ -27,7 +27,7 @@ for nm_, df_ in (('EV', E), ('PW', PW), ('CP', CP)):
     assert not bad_, (nm_, bad_)
 SUELO_W = {int(w): v[0] for w, v in d['suelo'].items()}
 CP['suelo'] = (CP.t // 300000).map(SUELO_W).fillna('indet')
-R = dict(version='p7_v9_ADENDA09', fuente=SRC, dia=d['D'], coin=d['coin'], nota=os.environ.get('P7_NOTE', ''), columnas_usadas=dict(EV=EVC, PW=PWC, CP=CPC), aserto_sin_columnas_de_desenlace=True)
+R = dict(version='p7_v11_ADENDA11', fuente=SRC, dia=d['D'], coin=d['coin'], nota=os.environ.get('P7_NOTE', ''), columnas_usadas=dict(EV=EVC, PW=PWC, CP=CPC), aserto_sin_columnas_de_desenlace=True)
 E = E[~E.own.astype(bool)].copy(); E['lvk'] = E.D + '|' + E.X.str[-10:] + '|' + E.p.astype(str)
 # ---------- utilidades
 def wm(x, w): return float((x * w).sum() / w.sum())
@@ -44,6 +44,12 @@ def wks(xe, xc, wc):
     g = np.unique(np.concatenate([xe, xc])); Fe = np.searchsorted(np.sort(xe), g, 'right') / len(xe)
     o = np.argsort(xc); cs = np.cumsum(wc[o]) / wc.sum(); ix = np.searchsorted(xc[o], g, 'right') - 1; Fc = np.where(ix >= 0, cs[np.clip(ix, 0, None)], 0.0)
     return round(float(np.abs(Fe - Fc).max()), 3)
+def nec(n, k): return round(1.0 / (1.0 / n + 1.0 / k), 1) if n > 0 and k > 0 else 0.0
+def effs(S_, W_, suf=''):
+    """ADENDA_11 §4: Kish de los controles (antes n_eff), tamano efectivo del contraste 1/(1/n_soporte+1/Kish) y n de mercados distintos de los eventos soportados."""
+    k = kish(W_.om.values) if len(W_) else 0.0
+    return {'n_eff_ctrl_kish' + suf: k, 'n_eff_contraste' + suf: nec(len(S_), k), 'n_mercados_ev' + suf: int(S_.end.nunique()) if len(S_) else 0}
+def ks5(S_, W_): return {k: wks(fn(S_), fn(W_), W_.om.values) for k, fn in (('act2', COV['act2']), ('WA_q', COV['WA_q_raw']), ('ttc', COV['ttc_min']), ('absr5', COV['absr5_bp']), ('dist_ticks', COV['dist_ticks']))}
 def pxl(l): return float(l.split('|')[-1])
 def DT(df): return np.clip(df.dist_ticks.astype(float), -5, 40)
 # ---- ADENDA_09 §1: rango exacto k=round(dist_ticks) y bins fijos (|k|<=3 exacto; 4-5, 6-8, 9-12, >12; espejo para k<0)
@@ -169,7 +175,7 @@ def fit_class(U, Wc, CPc, own_only, small_own=False):
         if ty == 'nand':
             Ua = Ua.copy(); Ua['sup'] = True; Wa['w'] = 1.0 / Wa.pi.values; nevc = Ua.groupby('cell').size(); Wa = Wa[Wa.cell.isin(nevc.index)].copy()
             Wa['om'] = Wa.w / Wa.groupby('cell').w.transform('sum') * Wa.cell.map(nevc); S = Ua; Wp_ = Wa
-            strat[ty] = dict(base_st, n_soporte=int(len(S)), pct_excl=round(1 - len(S) / len(Us), 4), n_controles=int(len(Wp_)), n_eff=kish(Wp_.om), viable=True, modo='IPW 1/pi por token (sin EB; EXPLORATORIO)')
+            strat[ty] = dict(base_st, n_soporte=int(len(S)), pct_excl=round(1 - len(S) / len(Us), 4), n_controles=int(len(Wp_)), **effs(S, Wp_), viable=True, modo='IPW 1/pi por token (sin EB; EXPLORATORIO)')
             out_S.append(S); out_W.append(Wp_); supp[ty] = Us.assign(sup=Us.cell.notna()); continue
         Cs = CPc[(CPc.st == ty) & ((~CPc.nb) if (own_req or ty == 'normal') else True)]
         if len(Cs) == 0: strat[ty] = dict(base_st, n_soporte=0, pct_excl=1.0, nota='sin pool barato CP'); supp[ty] = Us.assign(sup=False); continue
@@ -194,7 +200,7 @@ def fit_class(U, Wc, CPc, own_only, small_own=False):
             om, inf = solve_rc(S[mS], Wa[mW], len(S), use_ed, nevc); Wa.loc[mW, 'om'] = om; cell_info[str(lab)] = inf
         n_eb = sum(1 for v in cell_info.values() if v['eb']); ev_eb = sum(v['n_ev'] for v in cell_info.values() if v['eb']); conv = [v['eb_conv'] for v in cell_info.values() if v['eb']]
         rung_ev = S.rung.value_counts().to_dict(); rung_mass = (Wa.assign(r=Wa.cell.str.split('|').str[0]).groupby('r').om.sum() / Wa.om.sum()).round(3).to_dict()
-        strat[ty] = dict(base_st, n_soporte=int(len(S)), pct_excl=round(1 - len(S) / len(Us), 4), n_controles=int(len(Wa)), n_eff=kish(Wa.om), peso_max_pct_masa=round(float(100 * Wa.om.max() / Wa.om.sum()), 2), n_controles_sobre_2pct=int((Wa.om / Wa.om.sum() > 0.0201).sum()),
+        strat[ty] = dict(base_st, n_soporte=int(len(S)), pct_excl=round(1 - len(S) / len(Us), 4), n_controles=int(len(Wa)), **effs(S, Wa), peso_max_pct_masa=round(float(100 * Wa.om.max() / Wa.om.sum()), 2), n_controles_sobre_2pct=int((Wa.om / Wa.om.sum() > 0.0201).sum()),
             masa_en_vecinos=round(float(Wa.om[Wa.nb].sum() / Wa.om.sum()), 3), tope_masa_cumplido=bool(100 * Wa.om.max() / Wa.om.sum() <= 100 * MCAP + 0.01), usa_edad_EB=bool(use_ed), WA_q_mediana_eventos=round(float(S.WA_q.median()), 1),
             soporte_por_peldano_eventos=rung_ev, masa_por_peldano=rung_mass, celdas_rango=len(cell_info), celdas_EB=int(n_eb), eventos_en_celdas_EB=int(ev_eb), eventos_en_celdas_IPW_puro=int(len(S) - ev_eb), celdas_EB_convergidas=int(sum(1 for c_ in conv if c_)), modo_controles='solo_propio' if own_req else 'vecinos+propio',
             SMD={k: smd(fn(S), fn(Wa), Wa.om.values) for k, fn in COV.items() if fn(S).std() > 0})
@@ -264,13 +270,13 @@ def run(univ, own_only):
             if e3s.get('evaluable') and e3s['max_abs_pond'] > 0.10:
                 pass1 = dict(E3_small=e3s, estrato_small=strat['small']); S, Wp, strat, Uall, Wf, edi = fit_class(Uc, Wc, CPc, own_only, small_own=True); modo = 'solo_propio'
             else: pass1 = dict(E3_small=e3s)
-        if cl == LOWL and not own_only and univ == 'prim': MODO_SMALL['modo'] = modo; MODO_SMALL['pass1'] = pass1
+        if cl == LOWL and not own_only: MODO_SMALL[key] = dict(modo=modo, pass1=pass1)
         S_nand = int((S.st == 'nand').sum()) if len(S) else 0; S = S[S.st != 'nand']; Wp = Wp[Wp.st != 'nand']          # ADENDA_09 §6: nand no entra en el test confirmatorio ni en E; se reporta aparte
         FITS[(key, cl)] = (S, Wp, strat, Uall, Wf); FITS_ED[(key, cl)] = edi['usa_edad_EB']
         exc = dict(n_universo_clase=int(len(U0c)), excl_i_covariable_faltante=int(len(U0c) - len(Uc)), excl_ii_dist_nan_estrato_nand_fuera_del_test=int(sum(v.get('n_univ', 0) for k_, v in strat.items() if k_ == 'nand')), nand_analizables_exploratorio=int(S_nand),
                    excl_iii_sin_control_igual_rango=int(sum(v.get('excl_iii_sin_rango', 0) for k_, v in strat.items() if k_ != 'nand')), excl_iv_propension=int(sum(v.get('excl_iv_e', 0) for v in strat.values())), excl_v_rango_covariables=int(sum(v.get('excl_v_rango_cov', 0) for v in strat.values())), n_soporte=int(len(S)))
         exc['pct_excl_global'] = round(1 - exc['n_soporte'] / max(1, exc['n_universo_clase']), 4); exc['pct_excl_estratificados'] = round(1 - exc['n_soporte'] / max(1, len(Uc)), 4)
-        res['por_clase'][cl] = dict(n_univ=int(len(Uc)), n_soporte=int(len(S)), n_eff_pooled=kish(Wp.om) if len(Wp) else 0.0, estratos=strat, exclusion=exc, small_modo=modo, **edi)
+        res['por_clase'][cl] = dict(n_univ=int(len(Uc)), n_soporte=int(len(S)), **effs(S, Wp, '_pooled'), **effs(S[S.st.isin(PRIM_ST)], Wp[Wp.st.isin(PRIM_ST)], '_pooled_z0_normal'), estratos=strat, exclusion=exc, small_modo=modo, **edi)
         if pass1: res['por_clase'][cl]['small_pase1'] = pass1
         if len(S): Sx.append(S.assign(cl=cl)[['evid', 'st', 'cl', 'D', 'end', 'n_mk']]); Wx.append(Wp.assign(cl=cl)[['st', 'cl', 'om', 'end', 'X', 'nb', 'D']])
     WOUTD[key] = dict(S=pd.concat(Sx) if Sx else pd.DataFrame(), W=pd.concat(Wx) if Wx else pd.DataFrame())
@@ -278,23 +284,25 @@ def run(univ, own_only):
 for univ, own_only in (('prim', False), ('prim', True), ('c1all', False)):
     r_, U0_, U_ = run(univ, own_only); R[f'{univ}|{"propio" if own_only else "vec"}'] = r_
     if univ == 'prim' and not own_only: U0p, Up = U0_, U_
-R['small_modo_clase_lo'] = MODO_SMALL
-# ---- E por clase lo (universo prim, vec)
-E_ = dict(clase_test=LOWL, estratos={}); fallos = []
-S, Wp, strat, Uall, Wf = FITS.get(('prim|vec', LOWL), (None,) * 5)
-if S is None or len(S) == 0:
-    fallos.append('clase lo sin eventos soportados'); R['E'] = E_
-else:
-    use_ed_lo = bool(FITS_ED.get(('prim|vec', LOWL), False)); covs = {k: v for k, v in COV.items() if k != 'edad_nivel' or use_ed_lo}
+R['small_modo_clase_lo'] = MODO_SMALL.get('prim|vec', {})
+# ---- E por clase lo (ADENDA_11 §3/§6): UNA funcion; universo prim = decide dia_valido_E (condiciones solo en z0 y normal: B1), universo c1all = balance informativo (4d)
+def pool_stats(S_, W_):
+    if len(S_) == 0 or len(W_) == 0: return dict(n=int(len(S_)), nota='sin soporte', **effs(S_, W_))
+    return dict(n=int(len(S_)), **effs(S_, W_), SMD={k: smd(fn(S_), fn(W_), W_.om.values) for k, fn in COV.items() if fn(S_).std() > 0}, KS=ks5(S_, W_))
+def e_block(key, primary):
+    E_ = dict(clase_test=LOWL, estratos={}, estratos_condicion_de_fallo=list(PRIM_ST)); fallos = []; extra = {}
+    S, Wp, strat, Uall, Wf = FITS.get((key, LOWL), (None,) * 5)
+    if S is None or len(S) == 0: fallos.append('clase lo sin eventos soportados'); return E_, fallos, extra
+    use_ed_lo = bool(FITS_ED.get((key, LOWL), False)); covs = {k: v for k, v in COV.items() if k != 'edad_nivel' or use_ed_lo}
     Ua = Uall[Uall.cell.notna()]
     sim = simple(Ua, Wf, len(Uall), ed=use_ed_lo, covs=covs); E_['E1_simple'] = sim; E_['E1_covariables'] = list(covs); E_['edad_en_EB_y_simple'] = use_ed_lo
-    simx = simple(Ua, Wf, len(Uall), exact_rank=True, ed=use_ed_lo, covs=covs); R['sens_igualdad_exacta_dist_ticks'] = simx
-    small_solo = MODO_SMALL.get('modo') == 'solo_propio'
+    if primary: extra['sens_igualdad_exacta_dist_ticks'] = simple(Ua, Wf, len(Uall), exact_rank=True, ed=use_ed_lo, covs=covs)
+    small_solo = MODO_SMALL.get(key, {}).get('modo') == 'solo_propio'
     for ty in STR:
-        Ss, Ws = S[S.st == ty], Wp[Wp.st == ty]; nu = strat.get(ty, {}).get('n_univ', 0); eg = dict(n_univ=int(nu), n_soporte=int(len(Ss)), n_eff=kish(Ws.om) if len(Ws) else 0.0, pct_excl=strat.get(ty, {}).get('pct_excl'), gating=bool(nu >= NMIN_STRATO))
+        Ss, Ws = S[S.st == ty], Wp[Wp.st == ty]; nu = strat.get(ty, {}).get('n_univ', 0); ctl = ty in PRIM_ST
+        eg = dict(n_univ=int(nu), n_soporte=int(len(Ss)), **effs(Ss, Ws), pct_excl=strat.get(ty, {}).get('pct_excl'), n_geq_100=bool(nu >= NMIN_STRATO), gating=bool(nu >= NMIN_STRATO and ctl), exploratorio=bool(not ctl))
         if len(Ss) and len(Ws):
-            eg['E2_KS'] = {k: wks(fn(Ss), fn(Ws), Ws.om.values) for k, fn in (('act2', COV['act2']), ('WA_q', COV['WA_q_raw']), ('ttc', COV['ttc_min']), ('absr5', COV['absr5_bp']), ('dist_ticks', COV['dist_ticks']))}
-            eg['E2_KS_edad_nivel'] = wks(Ss.edad_nivel, Ws.edad_nivel, Ws.om.values)
+            eg['E2_KS'] = ks5(Ss, Ws); eg['E2_KS_edad_nivel'] = wks(Ss.edad_nivel, Ws.edad_nivel, Ws.om.values)
         e1 = (sim.get('por_estrato', {}).get(ty, {}) or {}).get('SMD', {})
         eg['E1_SMD_max_abs'] = round(max([abs(v) for v in e1.values() if v is not None], default=0), 3) if e1 else None
         if eg['gating']:
@@ -307,7 +315,7 @@ else:
         eg['E1_marca_leq_010'] = bool(eg['E1_SMD_max_abs'] is not None and eg['E1_SMD_max_abs'] <= 0.10)
         if ty in ('z0', 'small'):
             if ty == 'small' and small_solo:
-                e3 = dict(evaluable=False, nota='small en modo solo_propio por la regla 2.2 de ADENDA_09 (E3 pase 1 >0,10): sin vecinos no hay contraste; NO cuenta como fallo', pase1=MODO_SMALL.get('pass1', {}).get('E3_small'))
+                e3 = dict(evaluable=False, nota='small en modo solo_propio por la regla 2.2 de ADENDA_09 (E3 pase 1 >0,10): sin vecinos no hay contraste', pase1=MODO_SMALL.get(key, {}).get('pass1', {}).get('E3_small'))
             else:
                 e3 = e3_calc(Ws)
                 if e3.get('evaluable'):
@@ -315,29 +323,40 @@ else:
                 elif eg['gating']: fallos.append(f'E3 {ty} no evaluable (<30 controles de algun tipo) con n>=100 (fail-closed)')
             eg['E3_propio_vs_vecino'] = e3
         E_['estratos'][ty] = eg
-    E_['pooled'] = dict(con_z0=dict(n=int(len(S)), n_eff=kish(Wp.om), SMD={k: smd(fn(S), fn(Wp), Wp.om.values) for k, fn in COV.items() if fn(S).std() > 0}, KS={k: wks(fn(S), fn(Wp), Wp.om.values) for k, fn in (('act2', COV['act2']), ('WA_q', COV['WA_q_raw']), ('ttc', COV['ttc_min']), ('absr5', COV['absr5_bp']), ('dist_ticks', COV['dist_ticks']))}))
-    Sn, Wn = S[S.st != 'z0'], Wp[Wp.st != 'z0']
-    if len(Sn) and len(Wn): E_['pooled']['sin_z0'] = dict(n=int(len(Sn)), n_eff=kish(Wn.om), SMD={k: smd(fn(Sn), fn(Wn), Wn.om.values) for k, fn in COV.items() if fn(Sn).std() > 0})
-    if not any(v['gating'] for v in E_['estratos'].values()): fallos.append('ningun estrato de la clase lo con n>=100 (sin evidencia de balance)')
-    E_['n_eff_por_estrato'] = {ty: v['n_eff'] for ty, v in E_['estratos'].items()}
+    SP, WP = S[S.st.isin(PRIM_ST)], Wp[Wp.st.isin(PRIM_ST)]
+    E_['pooled'] = dict(primario_z0_normal=pool_stats(SP, WP), con_small_EXPLORATORIO=pool_stats(S, Wp))
+    Sn, Wn = S[S.st == 'normal'], Wp[Wp.st == 'normal']
+    if len(Sn) and len(Wn): E_['pooled']['sin_z0_normal'] = pool_stats(Sn, Wn)
+    ksP = E_['pooled']['primario_z0_normal'].get('KS')
+    if not ksP: fallos.append('E2 pooled z0+normal sin soporte evaluable')
+    for k_, v_ in (ksP or {}).items():
+        if v_ is None or v_ > 0.10: fallos.append(f'E2 pooled z0+normal KS {k_}={v_} >0,10')
+    if not any(v['gating'] for v in E_['estratos'].values()): fallos.append('ningun estrato (z0/normal) de la clase lo con n>=100 (sin evidencia de balance)')
+    E_['n_eff_ctrl_kish_por_estrato'] = {ty: v['n_eff_ctrl_kish'] for ty, v in E_['estratos'].items()}; E_['n_eff_contraste_por_estrato'] = {ty: v['n_eff_contraste'] for ty, v in E_['estratos'].items()}
     sp = FITS.get(('prim|propio', LOWL))
-    if sp is not None and len(sp[0]): R['sens_solo_nivel_propio'] = dict(n_soporte=int(len(sp[0])), n_eff_pooled=kish(sp[1].om), n_eff_por_estrato={t_: v.get('n_eff') for t_, v in sp[2].items()}, SMD_pooled={k: smd(fn(sp[0]), fn(sp[1]), sp[1].om.values) for k, fn in COV.items() if fn(sp[0]).std() > 0})
-    R['E'] = E_
+    if primary and sp is not None and len(sp[0]): extra['sens_solo_nivel_propio'] = dict(n_soporte=int(len(sp[0])), **effs(sp[0], sp[1], '_pooled'), n_eff_ctrl_kish_por_estrato={t_: v.get('n_eff_ctrl_kish') for t_, v in sp[2].items()}, n_eff_contraste_por_estrato={t_: v.get('n_eff_contraste') for t_, v in sp[2].items()}, SMD_pooled={k: smd(fn(sp[0]), fn(sp[1]), sp[1].om.values) for k, fn in COV.items() if fn(sp[0]).std() > 0})
+    return E_, fallos, extra
+E_, fallos, ex_ = e_block('prim|vec', True); R['E'] = E_; R.update(ex_)
+R['E_c1all'], R['E4_fallos_c1all'], _ = e_block('c1all|vec', False)          # 4d: balance E de c1all publicado; NO interviene en dia_valido_E
 # F1: union on-chain (eventos C1, n_mk NaN vs unidos), SMD por covariable pre-ventana
 C1 = E[(E.q150 - E.S > 1e-9)]; a, b = C1[C1.n_mk.isna()], C1[C1.n_mk.notna()]
 F1 = {k: smd(fn(a), fn(b)) for k, fn in COV.items()}; F1['suelo_lo'] = smd((a.suelo == 'lo').astype(float), (b.suelo == 'lo').astype(float)); F1['ty_mint'] = smd((a.ty == 'mint').astype(float), (b.ty == 'mint').astype(float))
 R['F1'] = dict(n_nmk_nan=int(len(a)), n_unidos=int(len(b)), SMD=F1, max_abs=round(max([abs(v) for v in F1.values() if v is not None], default=0), 3))
 R['F1']['activar_veredicto_c1all'] = bool(R['F1']['max_abs'] > 0.15)
 R['E4_fallos'] = fallos; R['dia_valido_E'] = bool(len(fallos) == 0)
-# completitud (ADENDA_07 C)
+# completitud por FICHEROS libro5 (ADENDA_11 §2): cabecera <= t0+120 s, cola >= t1-120 s, hueco entre ficheros <= 300 s (cover_fich); onchain_fills y m5_registro de D y D+1
 from datetime import datetime, timezone, timedelta
 d0 = datetime.strptime(d['D'], '%Y-%m-%d').replace(tzinfo=timezone.utc); t0, t1 = int(d0.timestamp() * 1000), int((d0 + timedelta(days=1)).timestamp() * 1000)
-cv = sorted(d.get('cover') or []); gap = 0
-for i in range(1, len(cv)): gap = max(gap, cv[i][0] - cv[i - 1][1])
-ok_cov = bool(cv and min(c[0] for c in cv) <= t0 + 120000 and max(c[1] for c in cv) >= t1 - 120000 and gap <= 300000)
-inp = d.get('inputs') or []; ok_in = bool(inp) and all(i_.get('size') for i_ in inp if ('onchain_fills' in i_['path'] or 'm5_registro' in i_['path'] or 'libro5' in i_['path']))
-R['dia_completo'] = dict(ok=bool(ok_cov and ok_in), cobertura_ok=ok_cov, mayor_hueco_ficheros_s=round(gap / 1000, 1), inputs_ok=ok_in, cover=cv)
+cf = list(d.get('cover_fich') or []); okf = sorted([c_ for c_ in cf if c_.get('n', 0) > 0 and c_.get('min') is not None], key=lambda c_: c_['min']); gap = 0; reach = None
+for c_ in okf:
+    if reach is not None: gap = max(gap, c_['min'] - reach)
+    reach = c_['max'] if reach is None else max(reach, c_['max'])
+ok_cov = bool(okf and len(okf) == len(cf) and okf[0]['min'] <= t0 + 120000 and reach >= t1 - 120000 and gap <= 300000)
+need = [f'/root/polymarket-research-datalogs/onchain_fills_{(d0 + timedelta(days=k)).date()}.csv.gz' for k in (0, 1)] + [f'/mnt/HC_Volume_106538179/m5_registro/m5_registro_{(d0 + timedelta(days=k)).date()}.csv.gz' for k in (0, 1)]
+have = {i_['path']: i_.get('size') for i_ in (d.get('inputs') or [])}; falt = [p_ for p_ in need if not have.get(p_)]
+ok_in = bool(not falt and okf)
+R['dia_completo'] = dict(ok=bool(ok_cov and ok_in), cobertura_ok=ok_cov, mayor_hueco_ficheros_s=round(gap / 1000, 1), inputs_ok=ok_in, inputs_faltantes=falt, cover_fich=cf)
 R['SHA256_codigo'] = hashlib.sha256(open(os.path.abspath(__file__), 'rb').read()).hexdigest(); R['SHA256_pkl_p1'] = hashlib.sha256(open(SRC, 'rb').read()).hexdigest()
-print(json.dumps({k: R[k] for k in ('dia', 'dia_valido_E', 'E4_fallos', 'dia_completo', 'D3_NaN_SMD_leq_010', 'F1') if k in R}, indent=1, default=str))
+print(json.dumps({k: R[k] for k in ('dia', 'dia_valido_E', 'E4_fallos', 'E4_fallos_c1all', 'dia_completo', 'D3_NaN_SMD_leq_010', 'F1') if k in R}, indent=1, default=str))
 if OUT: json.dump(R, open(OUT, 'w'), indent=1, default=str)
-if WOUT: pickle.dump(dict(dia=d['D'], coin=d['coin'], version='p7w_v9', pesos=WOUTD, dia_valido_E=R['dia_valido_E'], dia_completo=R['dia_completo']['ok'], SHA256_codigo=R['SHA256_codigo'], SHA256_pkl_p1=R['SHA256_pkl_p1']), open(WOUT, 'wb'))
+if WOUT: pickle.dump(dict(dia=d['D'], coin=d['coin'], version='p7w_v11', pesos=WOUTD, dia_valido_E=R['dia_valido_E'], dia_completo=R['dia_completo']['ok'], SHA256_codigo=R['SHA256_codigo'], SHA256_pkl_p1=R['SHA256_pkl_p1']), open(WOUT, 'wb'))

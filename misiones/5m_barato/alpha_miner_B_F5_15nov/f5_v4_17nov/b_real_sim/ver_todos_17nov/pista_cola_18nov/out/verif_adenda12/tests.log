@@ -1,0 +1,92 @@
+test_cierre_max_universo (__main__.T.test_cierre_max_universo) ... ok
+test_cola_contra_cierre_universo (__main__.T.test_cola_contra_cierre_universo) ... ok
+test_e3_igual_a_v11_y_determinista (__main__.T.test_e3_igual_a_v11_y_determinista) ... ok
+test_estado_global_rng_intacto (__main__.T.test_estado_global_rng_intacto) ... ok
+test_no_evaluable_no_agrega (__main__.T.test_no_evaluable_no_agrega) ... ok
+test_p3_v12_patrones_y_v11_intacto (__main__.T.test_p3_v12_patrones_y_v11_intacto) ... ok
+test_winsor_reduce_outlier (__main__.T.test_winsor_reduce_outlier) ... ok
+test1_nota_fixture_y_estado_p3 (__main__.T2.test1_nota_fixture_y_estado_p3) ... ok
+test2_cola_min_t1_menos_1s (__main__.T2.test2_cola_min_t1_menos_1s) ... ok
+test2b_cover_fich_real_16nov (__main__.T2.test2b_cover_fich_real_16nov) ... ok
+test3_tres_ficheros_sonda1 (__main__.T2.test3_tres_ficheros_sonda1) ... ok
+test4_p3_comprueba_json_y_pkl_de_este_p7 (__main__.T2.test4_p3_comprueba_json_y_pkl_de_este_p7) ... /root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:113: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmp1oy008nj/out/p1_btc_2026-11-12_x.pkl'>
+  os.makedirs(td + '/out'); f1 = td + '/out/p1_btc_2026-11-12_x.pkl'; open(f1, 'wb').write(b'x'); sp1 = hashlib.sha256(b'x').hexdigest(); p7sha = hashlib.sha256(pathlib.Path(f'{td}/p7_ipw_balance_v12.py').read_bytes()).hexdigest()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:114: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp1oy008nj/out/p7v12_btc_2026-11-12_x.json' mode='w' encoding='UTF-8'>
+  json.dump(dict(version='p7_v12_ADENDA12', SHA256_codigo=p7sha if json_sha else 'mal', SHA256_pkl_p1=sp1, dia_completo=dict(ok=True), dia_valido_E=True, E4_fallos=[]), open(td + '/out/p7v12_btc_2026-11-12_x.json', 'w'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:115: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmp1oy008nj/out/p7wv12_btc_2026-11-12_x.pkl'>
+  pickle.dump(dict(dia='2026-11-12', version=pkl_version, SHA256_codigo=p7sha, SHA256_pkl_p1=sp1, pesos={}), open(td + '/out/p7wv12_btc_2026-11-12_x.pkl', 'wb'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:118: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp1oy008nj/out/p3v12_btc_act_x_DISENO_BLOCKED.json' mode='r' encoding='UTF-8'>
+  import glob; bj = glob.glob(td + '/out/*BLOCKED.json'); return r, (json.load(open(bj[0])) if bj else None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:113: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmpyq4mk36s/out/p1_btc_2026-11-12_x.pkl'>
+  os.makedirs(td + '/out'); f1 = td + '/out/p1_btc_2026-11-12_x.pkl'; open(f1, 'wb').write(b'x'); sp1 = hashlib.sha256(b'x').hexdigest(); p7sha = hashlib.sha256(pathlib.Path(f'{td}/p7_ipw_balance_v12.py').read_bytes()).hexdigest()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:114: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpyq4mk36s/out/p7v12_btc_2026-11-12_x.json' mode='w' encoding='UTF-8'>
+  json.dump(dict(version='p7_v12_ADENDA12', SHA256_codigo=p7sha if json_sha else 'mal', SHA256_pkl_p1=sp1, dia_completo=dict(ok=True), dia_valido_E=True, E4_fallos=[]), open(td + '/out/p7v12_btc_2026-11-12_x.json', 'w'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:115: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmpyq4mk36s/out/p7wv12_btc_2026-11-12_x.pkl'>
+  pickle.dump(dict(dia='2026-11-12', version=pkl_version, SHA256_codigo=p7sha, SHA256_pkl_p1=sp1, pesos={}), open(td + '/out/p7wv12_btc_2026-11-12_x.pkl', 'wb'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:118: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpyq4mk36s/out/p3v12_btc_act_x_DISENO_BLOCKED.json' mode='r' encoding='UTF-8'>
+  import glob; bj = glob.glob(td + '/out/*BLOCKED.json'); return r, (json.load(open(bj[0])) if bj else None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test7_bootstrap_mismo_filtro_y_filas_sin_end (__main__.T2.test7_bootstrap_mismo_filtro_y_filas_sin_end) ... ok
+test_run_v12_post_revision2 (__main__.T2.test_run_v12_post_revision2) ... ok
+test_so_docstrings_y_so2_quita_oid (__main__.T2.test_so_docstrings_y_so2_quita_oid) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 12.837s
+
+OK
+
+[info 16-Nov real] cierre_max 1794873000000 reach 1794873599991 t1-reach ms 9 hueco s 44.995
+test_cierre_max_universo (__main__.T.test_cierre_max_universo) ... ok
+test_cola_contra_cierre_universo (__main__.T.test_cola_contra_cierre_universo) ... ok
+test_e3_igual_a_v11_y_determinista (__main__.T.test_e3_igual_a_v11_y_determinista) ... ok
+test_estado_global_rng_intacto (__main__.T.test_estado_global_rng_intacto) ... ok
+test_no_evaluable_no_agrega (__main__.T.test_no_evaluable_no_agrega) ... ok
+test_p3_v12_patrones_y_v11_intacto (__main__.T.test_p3_v12_patrones_y_v11_intacto) ... ok
+test_winsor_reduce_outlier (__main__.T.test_winsor_reduce_outlier) ... ok
+test1_nota_fixture_y_estado_p3 (__main__.T2.test1_nota_fixture_y_estado_p3) ... ok
+test2_cola_min_t1_menos_1s (__main__.T2.test2_cola_min_t1_menos_1s) ... ok
+test2b_cover_fich_real_16nov (__main__.T2.test2b_cover_fich_real_16nov) ... ok
+test3_tres_ficheros_sonda1 (__main__.T2.test3_tres_ficheros_sonda1) ... ok
+test4_p3_comprueba_json_y_pkl_de_este_p7 (__main__.T2.test4_p3_comprueba_json_y_pkl_de_este_p7) ... /root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:113: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmp13697fac/out/p1_btc_2026-11-12_x.pkl'>
+  os.makedirs(td + '/out'); f1 = td + '/out/p1_btc_2026-11-12_x.pkl'; open(f1, 'wb').write(b'x'); sp1 = hashlib.sha256(b'x').hexdigest(); p7sha = hashlib.sha256(pathlib.Path(f'{td}/p7_ipw_balance_v12.py').read_bytes()).hexdigest()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:114: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp13697fac/out/p7v12_btc_2026-11-12_x.json' mode='w' encoding='UTF-8'>
+  json.dump(dict(version='p7_v12_ADENDA12', SHA256_codigo=p7sha if json_sha else 'mal', SHA256_pkl_p1=sp1, dia_completo=dict(ok=True), dia_valido_E=True, E4_fallos=[]), open(td + '/out/p7v12_btc_2026-11-12_x.json', 'w'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:115: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmp13697fac/out/p7wv12_btc_2026-11-12_x.pkl'>
+  pickle.dump(dict(dia='2026-11-12', version=pkl_version, SHA256_codigo=p7sha, SHA256_pkl_p1=sp1, pesos={}), open(td + '/out/p7wv12_btc_2026-11-12_x.pkl', 'wb'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:118: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp13697fac/out/p3v12_btc_act_x_DISENO_BLOCKED.json' mode='r' encoding='UTF-8'>
+  import glob; bj = glob.glob(td + '/out/*BLOCKED.json'); return r, (json.load(open(bj[0])) if bj else None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:113: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmpjo7f9ppx/out/p1_btc_2026-11-12_x.pkl'>
+  os.makedirs(td + '/out'); f1 = td + '/out/p1_btc_2026-11-12_x.pkl'; open(f1, 'wb').write(b'x'); sp1 = hashlib.sha256(b'x').hexdigest(); p7sha = hashlib.sha256(pathlib.Path(f'{td}/p7_ipw_balance_v12.py').read_bytes()).hexdigest()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:114: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpjo7f9ppx/out/p7v12_btc_2026-11-12_x.json' mode='w' encoding='UTF-8'>
+  json.dump(dict(version='p7_v12_ADENDA12', SHA256_codigo=p7sha if json_sha else 'mal', SHA256_pkl_p1=sp1, dia_completo=dict(ok=True), dia_valido_E=True, E4_fallos=[]), open(td + '/out/p7v12_btc_2026-11-12_x.json', 'w'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:115: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmpjo7f9ppx/out/p7wv12_btc_2026-11-12_x.pkl'>
+  pickle.dump(dict(dia='2026-11-12', version=pkl_version, SHA256_codigo=p7sha, SHA256_pkl_p1=sp1, pesos={}), open(td + '/out/p7wv12_btc_2026-11-12_x.pkl', 'wb'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/root/polymarket-research/misiones/5m_barato/alpha_miner_B_F5_15nov/f5_v4_17nov/b_real_sim/ver_todos_17nov/pista_cola_18nov/tests_v12/test_v12.py:118: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpjo7f9ppx/out/p3v12_btc_act_x_DISENO_BLOCKED.json' mode='r' encoding='UTF-8'>
+  import glob; bj = glob.glob(td + '/out/*BLOCKED.json'); return r, (json.load(open(bj[0])) if bj else None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test7_bootstrap_mismo_filtro_y_filas_sin_end (__main__.T2.test7_bootstrap_mismo_filtro_y_filas_sin_end) ... ok
+test_run_v12_post_revision2 (__main__.T2.test_run_v12_post_revision2) ... ok
+test_so_docstrings_y_so2_quita_oid (__main__.T2.test_so_docstrings_y_so2_quita_oid) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 11.831s
+
+OK
+
+[info 16-Nov real] cierre_max 1794873000000 reach 1794873599991 t1-reach ms 9 hueco s 44.995

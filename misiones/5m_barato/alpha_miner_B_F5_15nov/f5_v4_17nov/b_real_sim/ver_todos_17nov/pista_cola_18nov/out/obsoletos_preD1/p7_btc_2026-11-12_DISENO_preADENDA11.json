@@ -1,0 +1,1262 @@
+{
+ "version": "p7_v9_ADENDA09",
+ "fuente": "out/p1_btc_2026-11-12_DISENO.pkl",
+ "dia": "2026-11-12",
+ "coin": "btc",
+ "nota": "",
+ "columnas_usadas": {
+  "EV": [
+   "evid",
+   "D",
+   "X",
+   "p",
+   "t",
+   "end",
+   "S",
+   "ty",
+   "nT",
+   "own",
+   "n_mk",
+   "q150",
+   "WA_q",
+   "act2",
+   "ttc",
+   "absr5",
+   "suelo",
+   "dist_ticks",
+   "SQ_mej",
+   "act2_mej",
+   "spread",
+   "dp_signed",
+   "sg",
+   "edad_nivel",
+   "edad_cens",
+   "D_maxrx"
+  ],
+  "PW": [
+   "lvk",
+   "X",
+   "p",
+   "pev",
+   "nb",
+   "t",
+   "D",
+   "end",
+   "pi",
+   "zp",
+   "q150",
+   "WA_q",
+   "act2",
+   "ttc",
+   "absr5",
+   "suelo",
+   "dist_ticks",
+   "SQ_mej",
+   "act2_mej",
+   "spread",
+   "dp_signed",
+   "sg",
+   "edad_nivel",
+   "edad_cens",
+   "D_maxrx"
+  ],
+  "CP": [
+   "lvk",
+   "D",
+   "t",
+   "act2",
+   "WA_q",
+   "ttc",
+   "absr5",
+   "pi",
+   "sel",
+   "pxc",
+   "zp",
+   "dist_ticks",
+   "edad_nivel",
+   "edad_cens"
+  ]
+ },
+ "aserto_sin_columnas_de_desenlace": true,
+ "controles_excl_faltante": {
+  "pw_total": 69668,
+  "pw_usables_cov_basicas": 69557,
+  "pw_sin_dist_ticks": 0,
+  "cp_sin_dist_ticks": 533
+ },
+ "D3_indicador_NaN": {
+  "dist_ticks": {
+   "frac_eventos": 0.0004,
+   "frac_controles": 0.0,
+   "SMD_indicador": 0.027
+  },
+  "SQ_mej": {
+   "frac_eventos": 0.0002,
+   "frac_controles": 0.0,
+   "SMD_indicador": 0.018
+  },
+  "spread": {
+   "frac_eventos": 0.0004,
+   "frac_controles": 0.0009,
+   "SMD_indicador": -0.023
+  },
+  "dp_signed": {
+   "frac_eventos": 0.0007,
+   "frac_controles": 0.0003,
+   "SMD_indicador": 0.018
+  },
+  "edad_nivel": {
+   "frac_eventos": 0.0002,
+   "frac_controles": 0.0,
+   "SMD_indicador": 0.018
+  }
+ },
+ "D3_NaN_SMD_leq_010": true,
+ "prim|vec": {
+  "universo": {
+   "n_universo": 16304,
+   "excl_i_covariable_faltante": 30,
+   "n_dist_nan_estrato_nand": 1,
+   "faltante_detalle": {
+    "WA_q_nan": 4,
+    "absr5_nan": 26,
+    "act2_nan": 0,
+    "dist_ticks_nan": 5,
+    "WA_q_cero_incluidos": 2959
+   }
+  },
+  "por_clase": {
+   "lo": {
+    "n_univ": 16274,
+    "n_soporte": 7798,
+    "n_eff_pooled": 2001.4,
+    "estratos": {
+     "nand": {
+      "n_univ": 1,
+      "n_con_celda": 0,
+      "excl_ii_dist_nan": 1,
+      "excl_iii_sin_rango": 0,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 0,
+      "n_controles_elegibles": 0,
+      "viable": false,
+      "nota": "estrato dist NaN NO viable (>= 30 eventos y >= 30 controles): los eventos quedan en el universo con motivo (ii)",
+      "n_soporte": 0,
+      "pct_excl": 1.0
+     },
+     "z0": {
+      "n_univ": 2954,
+      "n_con_celda": 2502,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 452,
+      "excl_iv_e": 67,
+      "excl_v_rango_cov": 3,
+      "n_soporte": 2432,
+      "pct_excl": 0.1767,
+      "n_controles": 33583,
+      "n_eff": 10009.5,
+      "peso_max_pct_masa": 0.03,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.611,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 0.0,
+      "soporte_por_peldano_eventos": {
+       "R1": 2406,
+       "R2": 26
+      },
+      "masa_por_peldano": {
+       "R1": 0.989,
+       "R2": 0.011
+      },
+      "celdas_rango": 24,
+      "celdas_EB": 5,
+      "eventos_en_celdas_EB": 2312,
+      "eventos_en_celdas_IPW_puro": 120,
+      "celdas_EB_convergidas": 3,
+      "modo_controles": "vecinos+propio",
+      "SMD": {
+       "act2": 0.007,
+       "ttc_min": 0.001,
+       "absr5_bp": -0.02,
+       "dist_ticks": -0.003
+      }
+     },
+     "small": {
+      "n_univ": 1931,
+      "n_con_celda": 89,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 1842,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 6,
+      "n_soporte": 83,
+      "pct_excl": 0.957,
+      "n_controles": 275,
+      "n_eff": 107.1,
+      "peso_max_pct_masa": 2.0,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.0,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 40.7,
+      "soporte_por_peldano_eventos": {
+       "R1": 58,
+       "R2": 25
+      },
+      "masa_por_peldano": {
+       "R1": 0.699,
+       "R2": 0.301
+      },
+      "celdas_rango": 12,
+      "celdas_EB": 0,
+      "eventos_en_celdas_EB": 0,
+      "eventos_en_celdas_IPW_puro": 83,
+      "celdas_EB_convergidas": 0,
+      "modo_controles": "solo_propio",
+      "SMD": {
+       "act2": -0.011,
+       "log1p_WA_q": -0.145,
+       "WA_q_raw": -0.032,
+       "ttc_min": 0.021,
+       "absr5_bp": 0.426,
+       "dist_ticks": -0.041,
+       "edad_nivel": -0.011
+      }
+     },
+     "normal": {
+      "n_univ": 11388,
+      "n_con_celda": 5312,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 6076,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 29,
+      "n_soporte": 5283,
+      "pct_excl": 0.5361,
+      "n_controles": 13123,
+      "n_eff": 938.9,
+      "peso_max_pct_masa": 0.87,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.473,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 521.8,
+      "soporte_por_peldano_eventos": {
+       "R3": 4617,
+       "R4": 563,
+       "R1": 64,
+       "R2": 39
+      },
+      "masa_por_peldano": {
+       "R1": 0.012,
+       "R2": 0.006,
+       "R3": 0.874,
+       "R4": 0.108
+      },
+      "celdas_rango": 21,
+      "celdas_EB": 12,
+      "eventos_en_celdas_EB": 5168,
+      "eventos_en_celdas_IPW_puro": 115,
+      "celdas_EB_convergidas": 8,
+      "modo_controles": "vecinos+propio",
+      "SMD": {
+       "act2": 0.003,
+       "log1p_WA_q": 0.004,
+       "WA_q_raw": 0.009,
+       "ttc_min": -0.002,
+       "absr5_bp": 0.028,
+       "dist_ticks": -0.014,
+       "edad_nivel": 0.019
+      }
+     }
+    },
+    "exclusion": {
+     "n_universo_clase": 16304,
+     "excl_i_covariable_faltante": 30,
+     "excl_ii_dist_nan_estrato_nand_fuera_del_test": 1,
+     "nand_analizables_exploratorio": 0,
+     "excl_iii_sin_control_igual_rango": 8370,
+     "excl_iv_propension": 67,
+     "excl_v_rango_covariables": 38,
+     "n_soporte": 7798,
+     "pct_excl_global": 0.5217,
+     "pct_excl_estratificados": 0.5208
+    },
+    "small_modo": "solo_propio",
+    "edad_KS": {
+     "z0": {
+      "n_ev": 2954,
+      "KS": 0.0
+     },
+     "small": {
+      "n_ev": 1931,
+      "KS": 0.102
+     },
+     "normal": {
+      "n_ev": 11388,
+      "KS": 0.118
+     }
+    },
+    "usa_edad_EB": true,
+    "small_pase1": {
+     "E3_small": {
+      "n_propio": 348,
+      "n_vecino": 277,
+      "SMD_pond_om": {
+       "la": 0.215,
+       "lq": -1.059,
+       "tt": -0.326,
+       "lr": -1.076,
+       "a2": 0.457,
+       "q": -0.976,
+       "r": -0.837,
+       "dist_ticks": 0.066,
+       "edad_nivel": 1.333
+      },
+      "SMD_sin_ponderar": {
+       "la": -0.049,
+       "lq": -0.018,
+       "tt": -0.224,
+       "lr": -0.247,
+       "a2": -0.016,
+       "q": 0.043,
+       "r": -0.265,
+       "dist_ticks": 0.086,
+       "edad_nivel": 0.032
+      },
+      "max_abs_pond": 1.333,
+      "evaluable": true
+     },
+     "estrato_small": {
+      "n_univ": 1931,
+      "n_con_celda": 207,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 1724,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 5,
+      "n_soporte": 202,
+      "pct_excl": 0.8954,
+      "n_controles": 625,
+      "n_eff": 15.4,
+      "peso_max_pct_masa": 13.67,
+      "n_controles_sobre_2pct": 4,
+      "masa_en_vecinos": 0.512,
+      "tope_masa_cumplido": false,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 42.1,
+      "soporte_por_peldano_eventos": {
+       "R1": 175,
+       "R2": 27
+      },
+      "masa_por_peldano": {
+       "R1": 0.866,
+       "R2": 0.134
+      },
+      "celdas_rango": 15,
+      "celdas_EB": 1,
+      "eventos_en_celdas_EB": 100,
+      "eventos_en_celdas_IPW_puro": 102,
+      "celdas_EB_convergidas": 0,
+      "modo_controles": "vecinos+propio",
+      "SMD": {
+       "act2": -0.401,
+       "log1p_WA_q": 0.147,
+       "WA_q_raw": 0.039,
+       "ttc_min": 0.303,
+       "absr5_bp": 0.328,
+       "dist_ticks": -0.037,
+       "edad_nivel": -0.661
+      }
+     }
+    }
+   },
+   "hi": {
+    "n_univ": 0,
+    "nota": "sin eventos de esta clase de suelo"
+   },
+   "indet": {
+    "n_univ": 0,
+    "nota": "sin eventos de esta clase de suelo"
+   }
+  }
+ },
+ "prim|propio": {
+  "universo": {
+   "n_universo": 16304,
+   "excl_i_covariable_faltante": 30,
+   "n_dist_nan_estrato_nand": 1,
+   "faltante_detalle": {
+    "WA_q_nan": 4,
+    "absr5_nan": 26,
+    "act2_nan": 0,
+    "dist_ticks_nan": 5,
+    "WA_q_cero_incluidos": 2959
+   }
+  },
+  "por_clase": {
+   "lo": {
+    "n_univ": 16274,
+    "n_soporte": 5379,
+    "n_eff_pooled": 2715.8,
+    "estratos": {
+     "nand": {
+      "n_univ": 1,
+      "n_con_celda": 0,
+      "excl_ii_dist_nan": 1,
+      "excl_iii_sin_rango": 0,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 0,
+      "n_controles_elegibles": 0,
+      "viable": false,
+      "nota": "estrato dist NaN NO viable (>= 30 eventos y >= 30 controles): los eventos quedan en el universo con motivo (ii)",
+      "n_soporte": 0,
+      "pct_excl": 1.0
+     },
+     "z0": {
+      "n_univ": 2954,
+      "n_con_celda": 2062,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 892,
+      "excl_iv_e": 57,
+      "excl_v_rango_cov": 1,
+      "n_soporte": 2004,
+      "pct_excl": 0.3216,
+      "n_controles": 12568,
+      "n_eff": 3739.7,
+      "peso_max_pct_masa": 0.09,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.0,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 0.0,
+      "soporte_por_peldano_eventos": {
+       "R1": 1968,
+       "R2": 36
+      },
+      "masa_por_peldano": {
+       "R1": 0.982,
+       "R2": 0.018
+      },
+      "celdas_rango": 17,
+      "celdas_EB": 4,
+      "eventos_en_celdas_EB": 1877,
+      "eventos_en_celdas_IPW_puro": 127,
+      "celdas_EB_convergidas": 3,
+      "modo_controles": "solo_propio",
+      "SMD": {
+       "act2": 0.007,
+       "ttc_min": 0.004,
+       "absr5_bp": -0.023,
+       "dist_ticks": -0.003
+      }
+     },
+     "small": {
+      "n_univ": 1931,
+      "n_con_celda": 89,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 1842,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 6,
+      "n_soporte": 83,
+      "pct_excl": 0.957,
+      "n_controles": 275,
+      "n_eff": 107.1,
+      "peso_max_pct_masa": 2.0,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.0,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 40.7,
+      "soporte_por_peldano_eventos": {
+       "R1": 58,
+       "R2": 25
+      },
+      "masa_por_peldano": {
+       "R1": 0.699,
+       "R2": 0.301
+      },
+      "celdas_rango": 12,
+      "celdas_EB": 0,
+      "eventos_en_celdas_EB": 0,
+      "eventos_en_celdas_IPW_puro": 83,
+      "celdas_EB_convergidas": 0,
+      "modo_controles": "solo_propio",
+      "SMD": {
+       "act2": -0.011,
+       "log1p_WA_q": -0.145,
+       "WA_q_raw": -0.032,
+       "ttc_min": 0.021,
+       "absr5_bp": 0.426,
+       "dist_ticks": -0.041,
+       "edad_nivel": -0.011
+      }
+     },
+     "normal": {
+      "n_univ": 11388,
+      "n_con_celda": 3313,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 8075,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 21,
+      "n_soporte": 3292,
+      "pct_excl": 0.7109,
+      "n_controles": 5704,
+      "n_eff": 1138.9,
+      "peso_max_pct_masa": 0.47,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.0,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 530.2,
+      "soporte_por_peldano_eventos": {
+       "R3": 2615,
+       "R4": 574,
+       "R1": 64,
+       "R2": 39
+      },
+      "masa_por_peldano": {
+       "R1": 0.019,
+       "R2": 0.013,
+       "R3": 0.795,
+       "R4": 0.174
+      },
+      "celdas_rango": 17,
+      "celdas_EB": 9,
+      "eventos_en_celdas_EB": 3040,
+      "eventos_en_celdas_IPW_puro": 252,
+      "celdas_EB_convergidas": 7,
+      "modo_controles": "solo_propio",
+      "SMD": {
+       "act2": -0.008,
+       "log1p_WA_q": -0.003,
+       "WA_q_raw": -0.004,
+       "ttc_min": -0.011,
+       "absr5_bp": 0.023,
+       "dist_ticks": -0.019,
+       "edad_nivel": 0.017
+      }
+     }
+    },
+    "exclusion": {
+     "n_universo_clase": 16304,
+     "excl_i_covariable_faltante": 30,
+     "excl_ii_dist_nan_estrato_nand_fuera_del_test": 1,
+     "nand_analizables_exploratorio": 0,
+     "excl_iii_sin_control_igual_rango": 10809,
+     "excl_iv_propension": 57,
+     "excl_v_rango_covariables": 28,
+     "n_soporte": 5379,
+     "pct_excl_global": 0.6701,
+     "pct_excl_estratificados": 0.6695
+    },
+    "small_modo": "vecinos",
+    "edad_KS": {
+     "z0": {
+      "n_ev": 2954,
+      "KS": 0.0
+     },
+     "small": {
+      "n_ev": 1931,
+      "KS": 0.102
+     },
+     "normal": {
+      "n_ev": 11388,
+      "KS": 0.099
+     }
+    },
+    "usa_edad_EB": true
+   },
+   "hi": {
+    "n_univ": 0,
+    "nota": "sin eventos de esta clase de suelo"
+   },
+   "indet": {
+    "n_univ": 0,
+    "nota": "sin eventos de esta clase de suelo"
+   }
+  }
+ },
+ "c1all|vec": {
+  "universo": {
+   "n_universo": 26884,
+   "excl_i_covariable_faltante": 54,
+   "n_dist_nan_estrato_nand": 2,
+   "faltante_detalle": {
+    "WA_q_nan": 5,
+    "absr5_nan": 49,
+    "act2_nan": 0,
+    "dist_ticks_nan": 7,
+    "WA_q_cero_incluidos": 4365
+   }
+  },
+  "por_clase": {
+   "lo": {
+    "n_univ": 26830,
+    "n_soporte": 13040,
+    "n_eff_pooled": 2773.2,
+    "estratos": {
+     "nand": {
+      "n_univ": 2,
+      "n_con_celda": 0,
+      "excl_ii_dist_nan": 2,
+      "excl_iii_sin_rango": 0,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 0,
+      "n_controles_elegibles": 0,
+      "viable": false,
+      "nota": "estrato dist NaN NO viable (>= 30 eventos y >= 30 controles): los eventos quedan en el universo con motivo (ii)",
+      "n_soporte": 0,
+      "pct_excl": 1.0
+     },
+     "z0": {
+      "n_univ": 4356,
+      "n_con_celda": 3708,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 648,
+      "excl_iv_e": 97,
+      "excl_v_rango_cov": 4,
+      "n_soporte": 3607,
+      "pct_excl": 0.1719,
+      "n_controles": 37042,
+      "n_eff": 11177.3,
+      "peso_max_pct_masa": 0.04,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.607,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 0.0,
+      "soporte_por_peldano_eventos": {
+       "R1": 3568,
+       "R2": 39
+      },
+      "masa_por_peldano": {
+       "R1": 0.989,
+       "R2": 0.011
+      },
+      "celdas_rango": 25,
+      "celdas_EB": 5,
+      "eventos_en_celdas_EB": 3421,
+      "eventos_en_celdas_IPW_puro": 186,
+      "celdas_EB_convergidas": 3,
+      "modo_controles": "vecinos+propio",
+      "SMD": {
+       "act2": 0.008,
+       "ttc_min": 0.002,
+       "absr5_bp": -0.013,
+       "dist_ticks": -0.004
+      }
+     },
+     "small": {
+      "n_univ": 3183,
+      "n_con_celda": 151,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 3032,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 12,
+      "n_soporte": 139,
+      "pct_excl": 0.9563,
+      "n_controles": 312,
+      "n_eff": 112.6,
+      "peso_max_pct_masa": 2.0,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.0,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 40.7,
+      "soporte_por_peldano_eventos": {
+       "R1": 103,
+       "R2": 36
+      },
+      "masa_por_peldano": {
+       "R1": 0.741,
+       "R2": 0.259
+      },
+      "celdas_rango": 13,
+      "celdas_EB": 0,
+      "eventos_en_celdas_EB": 0,
+      "eventos_en_celdas_IPW_puro": 139,
+      "celdas_EB_convergidas": 0,
+      "modo_controles": "solo_propio",
+      "SMD": {
+       "act2": -0.1,
+       "log1p_WA_q": -0.149,
+       "WA_q_raw": -0.03,
+       "ttc_min": 0.095,
+       "absr5_bp": 0.336,
+       "dist_ticks": -0.041,
+       "edad_nivel": 0.042
+      }
+     },
+     "normal": {
+      "n_univ": 19289,
+      "n_con_celda": 9336,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 9953,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 42,
+      "n_soporte": 9294,
+      "pct_excl": 0.5182,
+      "n_controles": 14743,
+      "n_eff": 1440.1,
+      "peso_max_pct_masa": 0.76,
+      "n_controles_sobre_2pct": 0,
+      "masa_en_vecinos": 0.477,
+      "tope_masa_cumplido": true,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 536.2,
+      "soporte_por_peldano_eventos": {
+       "R3": 8111,
+       "R4": 997,
+       "R1": 113,
+       "R2": 73
+      },
+      "masa_por_peldano": {
+       "R1": 0.012,
+       "R2": 0.007,
+       "R3": 0.873,
+       "R4": 0.108
+      },
+      "celdas_rango": 22,
+      "celdas_EB": 13,
+      "eventos_en_celdas_EB": 9185,
+      "eventos_en_celdas_IPW_puro": 109,
+      "celdas_EB_convergidas": 10,
+      "modo_controles": "vecinos+propio",
+      "SMD": {
+       "act2": -0.001,
+       "log1p_WA_q": 0.001,
+       "WA_q_raw": 0.001,
+       "ttc_min": -0.003,
+       "absr5_bp": 0.02,
+       "dist_ticks": -0.012,
+       "edad_nivel": 0.019
+      }
+     }
+    },
+    "exclusion": {
+     "n_universo_clase": 26884,
+     "excl_i_covariable_faltante": 54,
+     "excl_ii_dist_nan_estrato_nand_fuera_del_test": 2,
+     "nand_analizables_exploratorio": 0,
+     "excl_iii_sin_control_igual_rango": 13633,
+     "excl_iv_propension": 97,
+     "excl_v_rango_covariables": 58,
+     "n_soporte": 13040,
+     "pct_excl_global": 0.515,
+     "pct_excl_estratificados": 0.514
+    },
+    "small_modo": "solo_propio",
+    "edad_KS": {
+     "z0": {
+      "n_ev": 4356,
+      "KS": 0.0
+     },
+     "small": {
+      "n_ev": 3183,
+      "KS": 0.085
+     },
+     "normal": {
+      "n_ev": 19289,
+      "KS": 0.111
+     }
+    },
+    "usa_edad_EB": true,
+    "small_pase1": {
+     "E3_small": {
+      "n_propio": 389,
+      "n_vecino": 322,
+      "SMD_pond_om": {
+       "la": -0.187,
+       "lq": 1.023,
+       "tt": -0.643,
+       "lr": 0.319,
+       "a2": -0.333,
+       "q": 1.156,
+       "r": 0.284,
+       "dist_ticks": 0.318,
+       "edad_nivel": -0.4
+      },
+      "SMD_sin_ponderar": {
+       "la": 0.028,
+       "lq": -0.068,
+       "tt": -0.098,
+       "lr": -0.277,
+       "a2": 0.023,
+       "q": -0.02,
+       "r": -0.28,
+       "dist_ticks": -0.081,
+       "edad_nivel": 0.037
+      },
+      "max_abs_pond": 1.156,
+      "evaluable": true
+     },
+     "estrato_small": {
+      "n_univ": 3183,
+      "n_con_celda": 344,
+      "excl_ii_dist_nan": 0,
+      "excl_iii_sin_rango": 2839,
+      "excl_iv_e": 0,
+      "excl_v_rango_cov": 8,
+      "n_soporte": 336,
+      "pct_excl": 0.8944,
+      "n_controles": 711,
+      "n_eff": 14.1,
+      "peso_max_pct_masa": 14.65,
+      "n_controles_sobre_2pct": 4,
+      "masa_en_vecinos": 0.692,
+      "tope_masa_cumplido": false,
+      "usa_edad_EB": true,
+      "WA_q_mediana_eventos": 40.5,
+      "soporte_por_peldano_eventos": {
+       "R1": 298,
+       "R2": 38
+      },
+      "masa_por_peldano": {
+       "R1": 0.887,
+       "R2": 0.113
+      },
+      "celdas_rango": 15,
+      "celdas_EB": 1,
+      "eventos_en_celdas_EB": 176,
+      "eventos_en_celdas_IPW_puro": 160,
+      "celdas_EB_convergidas": 0,
+      "modo_controles": "vecinos+propio",
+      "SMD": {
+       "act2": 0.214,
+       "log1p_WA_q": -0.068,
+       "WA_q_raw": 0.008,
+       "ttc_min": 0.022,
+       "absr5_bp": 0.015,
+       "dist_ticks": -0.036,
+       "edad_nivel": -0.173
+      }
+     }
+    }
+   },
+   "hi": {
+    "n_univ": 0,
+    "nota": "sin eventos de esta clase de suelo"
+   },
+   "indet": {
+    "n_univ": 0,
+    "nota": "sin eventos de esta clase de suelo"
+   }
+  }
+ },
+ "small_modo_clase_lo": {
+  "modo": "solo_propio",
+  "pass1": {
+   "E3_small": {
+    "n_propio": 348,
+    "n_vecino": 277,
+    "SMD_pond_om": {
+     "la": 0.215,
+     "lq": -1.059,
+     "tt": -0.326,
+     "lr": -1.076,
+     "a2": 0.457,
+     "q": -0.976,
+     "r": -0.837,
+     "dist_ticks": 0.066,
+     "edad_nivel": 1.333
+    },
+    "SMD_sin_ponderar": {
+     "la": -0.049,
+     "lq": -0.018,
+     "tt": -0.224,
+     "lr": -0.247,
+     "a2": -0.016,
+     "q": 0.043,
+     "r": -0.265,
+     "dist_ticks": 0.086,
+     "edad_nivel": 0.032
+    },
+    "max_abs_pond": 1.333,
+    "evaluable": true
+   },
+   "estrato_small": {
+    "n_univ": 1931,
+    "n_con_celda": 207,
+    "excl_ii_dist_nan": 0,
+    "excl_iii_sin_rango": 1724,
+    "excl_iv_e": 0,
+    "excl_v_rango_cov": 5,
+    "n_soporte": 202,
+    "pct_excl": 0.8954,
+    "n_controles": 625,
+    "n_eff": 15.4,
+    "peso_max_pct_masa": 13.67,
+    "n_controles_sobre_2pct": 4,
+    "masa_en_vecinos": 0.512,
+    "tope_masa_cumplido": false,
+    "usa_edad_EB": true,
+    "WA_q_mediana_eventos": 42.1,
+    "soporte_por_peldano_eventos": {
+     "R1": 175,
+     "R2": 27
+    },
+    "masa_por_peldano": {
+     "R1": 0.866,
+     "R2": 0.134
+    },
+    "celdas_rango": 15,
+    "celdas_EB": 1,
+    "eventos_en_celdas_EB": 100,
+    "eventos_en_celdas_IPW_puro": 102,
+    "celdas_EB_convergidas": 0,
+    "modo_controles": "vecinos+propio",
+    "SMD": {
+     "act2": -0.401,
+     "log1p_WA_q": 0.147,
+     "WA_q_raw": 0.039,
+     "ttc_min": 0.303,
+     "absr5_bp": 0.328,
+     "dist_ticks": -0.037,
+     "edad_nivel": -0.661
+    }
+   }
+  }
+ },
+ "sens_igualdad_exacta_dist_ticks": {
+  "metodo": "1:1 con reemplazo, Mahalanobis por estrato, calibre d2<=9.0, mismo token, restringido a la etiqueta de rango de la celda (k EXACTO estricto, sin bins)",
+  "n_eventos_con_pareja": 5563,
+  "frac_sin_pareja_sobre_universo": 0.6582,
+  "n_eff_controles": 5563.0,
+  "SMD": {
+   "act2": -0.009,
+   "log1p_WA_q": -0.017,
+   "WA_q_raw": -0.043,
+   "z0_cola_nueva": 0.0,
+   "ttc_min": -0.005,
+   "absr5_bp": 0.071,
+   "dist_ticks": 0.0,
+   "edad_nivel": 0.026
+  },
+  "por_estrato": {
+   "z0": {
+    "n": 2055,
+    "SMD": {
+     "act2": 0.008,
+     "ttc_min": 0.023,
+     "absr5_bp": -0.071,
+     "dist_ticks": 0.0
+    }
+   },
+   "small": {
+    "n": 34,
+    "SMD": {
+     "act2": -0.068,
+     "log1p_WA_q": -0.119,
+     "WA_q_raw": -0.038,
+     "ttc_min": 0.019,
+     "absr5_bp": -0.07,
+     "dist_ticks": 0.0,
+     "edad_nivel": 0.062
+    }
+   },
+   "normal": {
+    "n": 3474,
+    "SMD": {
+     "act2": -0.017,
+     "log1p_WA_q": -0.149,
+     "WA_q_raw": -0.078,
+     "ttc_min": -0.024,
+     "absr5_bp": 0.175,
+     "dist_ticks": 0.0,
+     "edad_nivel": 0.037
+    }
+   }
+  }
+ },
+ "sens_solo_nivel_propio": {
+  "n_soporte": 5379,
+  "n_eff_pooled": 2715.8,
+  "n_eff_por_estrato": {
+   "nand": null,
+   "z0": 3739.7,
+   "small": 107.1,
+   "normal": 1138.9
+  },
+  "SMD_pooled": {
+   "act2": -0.003,
+   "log1p_WA_q": -0.001,
+   "WA_q_raw": -0.002,
+   "z0_cola_nueva": 0.0,
+   "ttc_min": -0.005,
+   "absr5_bp": 0.013,
+   "dist_ticks": -0.013,
+   "edad_nivel": 0.011
+  }
+ },
+ "E": {
+  "clase_test": "lo",
+  "estratos": {
+   "z0": {
+    "n_univ": 2954,
+    "n_soporte": 2432,
+    "n_eff": 10009.5,
+    "pct_excl": 0.1767,
+    "gating": true,
+    "E2_KS": {
+     "act2": 0.014,
+     "WA_q": 0.0,
+     "ttc": 0.021,
+     "absr5": 0.023,
+     "dist_ticks": 0.001
+    },
+    "E2_KS_edad_nivel": 0.0,
+    "E1_SMD_max_abs": 0.071,
+    "E1_marca_leq_010": true,
+    "E3_propio_vs_vecino": {
+     "n_propio": 12848,
+     "n_vecino": 20735,
+     "SMD_pond_om": {
+      "la": 0.054,
+      "tt": -0.015,
+      "lr": -0.022,
+      "a2": 0.088,
+      "r": -0.046,
+      "dist_ticks": 0.028
+     },
+     "SMD_sin_ponderar": {
+      "la": 0.056,
+      "tt": -0.008,
+      "lr": -0.051,
+      "a2": 0.063,
+      "r": -0.054,
+      "dist_ticks": 0.007
+     },
+     "max_abs_pond": 0.088,
+     "evaluable": true
+    }
+   },
+   "small": {
+    "n_univ": 1931,
+    "n_soporte": 83,
+    "n_eff": 107.1,
+    "pct_excl": 0.957,
+    "gating": true,
+    "E2_KS": {
+     "act2": 0.088,
+     "WA_q": 0.162,
+     "ttc": 0.107,
+     "absr5": 0.276,
+     "dist_ticks": 0.041
+    },
+    "E2_KS_edad_nivel": 0.34,
+    "E1_SMD_max_abs": 0.125,
+    "E1_marca_leq_010": false,
+    "E3_propio_vs_vecino": {
+     "evaluable": false,
+     "nota": "small en modo solo_propio por la regla 2.2 de ADENDA_09 (E3 pase 1 >0,10): sin vecinos no hay contraste; NO cuenta como fallo",
+     "pase1": {
+      "n_propio": 348,
+      "n_vecino": 277,
+      "SMD_pond_om": {
+       "la": 0.215,
+       "lq": -1.059,
+       "tt": -0.326,
+       "lr": -1.076,
+       "a2": 0.457,
+       "q": -0.976,
+       "r": -0.837,
+       "dist_ticks": 0.066,
+       "edad_nivel": 1.333
+      },
+      "SMD_sin_ponderar": {
+       "la": -0.049,
+       "lq": -0.018,
+       "tt": -0.224,
+       "lr": -0.247,
+       "a2": -0.016,
+       "q": 0.043,
+       "r": -0.265,
+       "dist_ticks": 0.086,
+       "edad_nivel": 0.032
+      },
+      "max_abs_pond": 1.333,
+      "evaluable": true
+     }
+    }
+   },
+   "normal": {
+    "n_univ": 11388,
+    "n_soporte": 5283,
+    "n_eff": 938.9,
+    "pct_excl": 0.5361,
+    "gating": true,
+    "E2_KS": {
+     "act2": 0.028,
+     "WA_q": 0.015,
+     "ttc": 0.023,
+     "absr5": 0.03,
+     "dist_ticks": 0.002
+    },
+    "E2_KS_edad_nivel": 0.025,
+    "E1_SMD_max_abs": 0.178,
+    "E1_marca_leq_010": false
+   }
+  },
+  "E1_simple": {
+   "metodo": "1:1 con reemplazo, Mahalanobis por estrato, calibre d2<=9.0, mismo token, restringido a la etiqueta de rango de la celda (k exacto o bin fijo de la celda)",
+   "n_eventos_con_pareja": 5711,
+   "frac_sin_pareja_sobre_universo": 0.6491,
+   "n_eff_controles": 5711.0,
+   "SMD": {
+    "act2": -0.008,
+    "log1p_WA_q": -0.017,
+    "WA_q_raw": -0.044,
+    "z0_cola_nueva": 0.0,
+    "ttc_min": -0.008,
+    "absr5_bp": 0.077,
+    "dist_ticks": -0.006,
+    "edad_nivel": 0.028
+   },
+   "por_estrato": {
+    "z0": {
+     "n": 2061,
+     "SMD": {
+      "act2": 0.008,
+      "ttc_min": 0.023,
+      "absr5_bp": -0.071,
+      "dist_ticks": -0.003
+     }
+    },
+    "small": {
+     "n": 46,
+     "SMD": {
+      "act2": -0.019,
+      "log1p_WA_q": -0.084,
+      "WA_q_raw": -0.037,
+      "ttc_min": -0.015,
+      "absr5_bp": 0.125,
+      "dist_ticks": -0.02,
+      "edad_nivel": 0.06
+     }
+    },
+    "normal": {
+     "n": 3604,
+     "SMD": {
+      "act2": -0.015,
+      "log1p_WA_q": -0.147,
+      "WA_q_raw": -0.078,
+      "ttc_min": -0.027,
+      "absr5_bp": 0.178,
+      "dist_ticks": -0.008,
+      "edad_nivel": 0.04
+     }
+    }
+   }
+  },
+  "E1_covariables": [
+   "act2",
+   "log1p_WA_q",
+   "WA_q_raw",
+   "z0_cola_nueva",
+   "ttc_min",
+   "absr5_bp",
+   "dist_ticks",
+   "edad_nivel"
+  ],
+  "edad_en_EB_y_simple": true,
+  "pooled": {
+   "con_z0": {
+    "n": 7798,
+    "n_eff": 2001.4,
+    "SMD": {
+     "act2": 0.003,
+     "log1p_WA_q": 0.0,
+     "WA_q_raw": 0.006,
+     "z0_cola_nueva": 0.0,
+     "ttc_min": -0.001,
+     "absr5_bp": 0.017,
+     "dist_ticks": -0.011,
+     "edad_nivel": 0.014
+    },
+    "KS": {
+     "act2": 0.017,
+     "WA_q": 0.01,
+     "ttc": 0.019,
+     "absr5": 0.024,
+     "dist_ticks": 0.002
+    }
+   },
+   "sin_z0": {
+    "n": 5366,
+    "n_eff": 966.5,
+    "SMD": {
+     "act2": 0.003,
+     "log1p_WA_q": 0.002,
+     "WA_q_raw": 0.008,
+     "ttc_min": -0.002,
+     "absr5_bp": 0.032,
+     "dist_ticks": -0.015,
+     "edad_nivel": 0.019
+    }
+   }
+  },
+  "n_eff_por_estrato": {
+   "z0": 10009.5,
+   "small": 107.1,
+   "normal": 938.9
+  }
+ },
+ "F1": {
+  "n_nmk_nan": 6649,
+  "n_unidos": 20235,
+  "SMD": {
+   "act2": -0.036,
+   "log1p_WA_q": 0.153,
+   "WA_q_raw": 0.021,
+   "z0_cola_nueva": -0.162,
+   "ttc_min": -0.037,
+   "absr5_bp": -0.01,
+   "dist_ticks": 0.184,
+   "edad_nivel": 0.078,
+   "suelo_lo": 0.0,
+   "ty_mint": 0.02
+  },
+  "max_abs": 0.184,
+  "activar_veredicto_c1all": true
+ },
+ "E4_fallos": [
+  "E2 small KS WA_q=0.162 >0,10",
+  "E2 small KS ttc=0.107 >0,10",
+  "E2 small KS absr5=0.276 >0,10",
+  "E1 normal |SMD|=0.178 >0,15"
+ ],
+ "dia_valido_E": false,
+ "dia_completo": {
+  "ok": false,
+  "cobertura_ok": false,
+  "mayor_hueco_ficheros_s": 100.4,
+  "inputs_ok": true,
+  "cover": [
+   [
+    1794441600005,
+    1794453602511
+   ],
+   [
+    1794453646652,
+    1794468312226
+   ],
+   [
+    1794468357766,
+    1794468362749
+   ],
+   [
+    1794468406012,
+    1794469006579
+   ],
+   [
+    1794469049052,
+    1794519965157
+   ],
+   [
+    1794520065606,
+    1794527543188
+   ]
+  ]
+ },
+ "SHA256_codigo": "bd15af3fb6d7e04fe5a9961842c45ef2a88f43c669d3a170297ac28a043a67dc",
+ "SHA256_pkl_p1": "113d1909d0bf5d7fafe404653aff837dba39b3639926a9a04be0967fbf3a6bb1"
+}
