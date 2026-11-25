@@ -232,3 +232,37 @@ data/shadow/perps_klines_1h/
 # updown diario v2 (19-Nov regla TWAP60): logger append-only fuera de git
 data/shadow/updown_diario_fase0_v2.csv
 data/shadow/updown_diario_ref_twap_cache.json
+
+# 25-Nov: CSV/JSON de datos >5 MB que crecen y se commiteaban ~225 veces/día (~1 GB/h de packs en sdb). Siguen en disco, fuera de git.
+data/shadow/edge_quirurgico_historial.jsonl
+data/shadow/momentum_ibs_reactivo_fase0.csv
+data/shadow/degradacion_candidatas.csv
+data/shadow/gbm_late_imbalance_fase0.csv
+data/shadow/resolution_sniper_precierre_executor_v2.csv
+data/shadow/maker_sim.csv
+data/shadow/penny_clipper_fase0.csv
+data/shadow/smart_money_wallets.json
+data/shadow/dq_events.jsonl
+data/shadow/mean_reversion_reactivo_fase0.csv
+data/shadow/candidata9_bot_consenso_reactivo_fase0.csv
+data/shadow/candidata9_bot_consenso_executor.csv
+data/shadow/ballenas_timing_procesados.json
+data/shadow/wallet_first_buy_longshot_executor_dryrun.csv
+data/shadow/momentum_ibs_ballena_reactivo_fase0.csv
+data/shadow/candidatas_sin_fillability_depth_fase0.csv
+data/shadow/desfase_twap_apertura_fase0.csv
+data/shadow/cluster_wallets_fillability_fase0.csv
+data/shadow/gbm_late_reactivo_fase0.csv
+data/shadow/ballenas_5min_dry_run.csv
+data/shadow/wallet_edge_forward_state.json
+data/shadow/market_id_condition_id_map.json
+data/shadow/sniper_listados_fase0_eventos.csv
+data/shadow/ballenas_confirmadas_15m_diagnostico.json
+data/shadow/wallets_nuevas_fase0_seguimiento.csv
+data/shadow/pnl_fiel_por_estrategia.json
+data/shadow/favorito_confirmado_depth_fase0.csv
+data/shadow/bot_consenso_amplio_fase0.csv
+data/shadow/resolution_sniper_precierre_depth_fase0.csv
+data/shadow/bot_wallets_gate_bucket_historico.csv
+data/prices/chainlink_*.csv
+data/prices/kalshi_*.csv
