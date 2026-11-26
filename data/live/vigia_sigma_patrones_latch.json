@@ -399,6 +399,7 @@
   "RESOLUTION_SNIPER#BTC#sniper|patron|sigma_h|lt|BUY_NO",
   "RESOLUTION_SNIPER#SOL#sniper|patron|sigma_h|gt|BUY_NO",
   "RESOLUTION_SNIPER#SOL#sniper|patron|sigma_h|lt|BUY_NO",
+  "RESOLUTION_SNIPER#SOL#sniper|patron|sigma_h|lt|BUY_YES",
   "RESOLUTION_SNIPER|patron|sigma_h|gt|BUY_NO",
   "RESOLUTION_SNIPER|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM#15min|filtro|sigma_ewma_delta_pct|gt|BUY_NO",
