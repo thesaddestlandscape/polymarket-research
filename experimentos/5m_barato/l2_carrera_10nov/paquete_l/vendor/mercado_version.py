@@ -19,7 +19,7 @@ NEG_RISK_EXCHANGE_V2 = '0xe2222d279d744050d28e00520010520000310F59'
 DOMINIO_V1, DOMINIO_V2 = '2', '3'          # version del dominio EIP-712 de cada familia de mercado (v1 -> "2", v2 -> "3")
 SDK = 'py_clob_client_v2'
 SDK_VERSION = '1.2.2'
-TTL_S = 30.0
+TTL_S = 60.0
 
 
 class ErrVersion(Exception):
@@ -119,17 +119,22 @@ class Selector:
         except Exception as e: raise ErrVersion(f'clob_markets_fallo:{type(e).__name__}')
         verificar_clob(info, cm); self._guardar(info); return info
 
-    def por_token(self, tok):
-        """InfoMercado del token (cache vigente; si no, gamma `/markets?clob_token_ids=` + CLOB). Token desconocido, sin mercado o ambiguo => ErrVersion."""
+    def por_token(self, tok, refrescar=False):
+        """InfoMercado del token (cache vigente; si no, o con `refrescar=True`, gamma `/markets?clob_token_ids=` + CLOB). Token desconocido, sin mercado o ambiguo => ErrVersion.
+        `refrescar=True` lo usa quien prepara el envio FUERA del camino caliente (para que la firma encuentre la cache vigente y no haga red)."""
         tok = str(tok).strip()
         with self._lk: cond = self._por_tok.get(tok); c = self._c.get(cond) if cond else None
-        if c and self._vigente(c[0]): return c[1]
+        if c and not refrescar and self._vigente(c[0]): return c[1]
         try: r = self.get(f'{GAMMA}/markets', {'clob_token_ids': tok})
         except Exception as e: raise ErrVersion(f'gamma_por_token_fallo:{type(e).__name__}')
         if not isinstance(r, list) or len(r) != 1: raise ErrVersion(f'gamma_por_token:{len(r) if isinstance(r, list) else type(r).__name__}_mercados')
+        if refrescar: self.invalidar_cond(str(r[0].get('conditionId')))
         info = self.resolver(r[0])
         if tok not in info.tokens: raise ErrVersion('token_no_pertenece_al_mercado')
         return info
+
+    def invalidar_cond(self, cond):
+        with self._lk: self._c.pop(cond, None)
 
     def invalidar(self):
         with self._lk: self._c.clear(); self._por_tok.clear()
@@ -138,9 +143,9 @@ class Selector:
 _GLOBAL = [None]
 
 
-def selector_global(get=None):
-    """Instancia unica del proceso (la comparten el escaneo de mercados y la firma). `get` solo se usa al crearla (tests la sustituyen con `_GLOBAL[0] = Selector(...)`)."""
-    if _GLOBAL[0] is None: _GLOBAL[0] = Selector(get=get)
+def selector_global(get=None, ttl_s=None):
+    """Instancia unica del proceso (la comparten el escaneo de mercados y la firma). `get`/`ttl_s` solo se usan al crearla (tests la sustituyen con `_GLOBAL[0] = Selector(...)`)."""
+    if _GLOBAL[0] is None: _GLOBAL[0] = Selector(get=get, ttl_s=(TTL_S if ttl_s is None else ttl_s))
     return _GLOBAL[0]
 
 

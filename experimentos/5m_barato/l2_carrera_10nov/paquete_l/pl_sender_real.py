@@ -89,6 +89,10 @@ class SenderReal:
 
     def preparar(self, tok):
         """Resuelve el conditionId del token y espera (hasta espera_gate_s) a que el canal de usuario este suscrito al mercado ANTES de firmar/enviar. False => no se envia (fail-closed)."""
+        sel = getattr(self.env, '_selector', None)
+        if sel is not None:                                                                                      # 26-Nov: la version de firma se REFRESCA aqui (0 vivas, fuera del camino caliente): la firma de `colocar` encuentra la cache vigente y no hace red; sin version verificable => no se envia
+            try: sel().por_token(tok, refrescar=True)
+            except Exception: return False
         try: self.res.pedir(tok)
         except Exception: pass
         ok, motivo = self.reg.gate_envio(tok, self.env, espera_s=self.espera_gate_s, fase='paquete_l')

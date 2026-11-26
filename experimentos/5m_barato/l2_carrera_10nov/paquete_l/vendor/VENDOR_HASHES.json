@@ -85,7 +85,7 @@
   },
   "mercado_version.py": {
    "origen": "escrito para el paquete (selector de version por mercado + carga aislada del SDK); copia identica en b-k",
-   "sha256_copia": "35080c451cd524da4efad009eb9fa725ada72e712e579130da9234ccb1bb6d74"
+   "sha256_copia": "711c4e05f106961d289316ac0b7893ec27e056590f5c179fbb61d2f350e786e2"
   },
   "sdk122/LICENSE": {
    "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
@@ -252,5 +252,5 @@
    "sha256_copia": "cca58cd949fada89eab0508c8a451953319d7bba9311a104c827494749a800a6"
   }
  },
- "sdk122_actualizado_utc": "2026-11-26T11:25:09Z"
+ "sdk122_actualizado_utc": "2026-11-26T11:29:22Z"
 }

@@ -2348,7 +2348,7 @@ def test_v22_selector_fail_closed_cache_y_por_token():
     n = len(llam); assert sel.resolver(_gm()) == i and len(llam) == n                                          # cache vigente: 0 GET
     assert sel.por_token('222') is i and len(llam) == n                                                          # por token: misma cache
     t[0] += 31; assert sel.por_token('111') == i and len(llam) == n + 2                                         # caducada: vuelve a gamma + CLOB (la migracion sigue en curso)
-    v1 = sel.resolver(_gm(version='v1', pos=None, cond='0x' + '12' * 16, toks=('333', '444')), None) if False else None
+    n = len(llam); sel.por_token('111'); assert len(llam) == n; sel.por_token('111', refrescar=True); assert len(llam) == n + 2                    # `refrescar` fuerza gamma+CLOB aunque la cache este vigente (lo usa `preparar`, fuera del camino caliente)
     GET_CM.update(v='v1', toks=('333', '444'), c='0x' + '12' * 16); i1 = sel.resolver(_gm(version='v1', pos=None, cond='0x' + '12' * 16, toks=('333', '444'))); assert i1.version == 'v1' and i1.exchange == MV.EXCHANGE_V2 and i1.dominio_version == '2' and not i1.usa_position_id
     GET_CM.update(toks=('333', '444')); inr = sel.resolver(_gm(version='v1', pos=None, neg=True, cond='0x' + '12' * 16, toks=('333', '444'))); assert inr.exchange == MV.NEG_RISK_EXCHANGE_V2 and inr.neg_risk
     # --- fail-closed: cada caso lanza ErrVersion (y NO deja nada en cache)
@@ -2407,6 +2407,11 @@ def test_v22_mercadosreal_rechaza_version_dudosa_y_poner_sin_selector_no_firma()
     try: e.poner('111', 0.01, 5.0, 'k', neg_risk=False, expira_s=200); assert False
     except MV.ErrVersion: pass
     assert not llamadas
+    # preparar() refresca la version (0 vivas, fuera del camino caliente) y, si no se puede verificar, NO prepara => no se envia
+    class RegOk:
+        def gate_envio(s, tok, env, espera_s=0, fase=''): return True, 'ok'
+    for sel_fn, esperado in ((lambda: SelCae(), False), (lambda: types.SimpleNamespace(por_token=lambda tok, refrescar=False: refrescar or (_ for _ in ()).throw(AssertionError('sin refrescar'))), True)):
+        sr = R.SenderReal(types.SimpleNamespace(_selector=sel_fn), RegOk(), types.SimpleNamespace(pedir=lambda tok: None), None, os.path.join(TMP, 'evid_prep')); assert sr.preparar('111') is esperado
     # verificar_mercado_gamma (dry-run compartido) rechaza positionIds != clobTokenIds
     ev = gamma_ev('SOL', ini, version='v2'); ev['markets'][0]['positionIds'] = ['x', 'y']; ok, why, *_ = C.verificar_mercado_gamma('SOL', ini, ev); assert not ok and 'positionIds' in why
     print('T135 ok [v22]: MercadosReal rechaza el mercado si CLOB/gamma discrepan, falta `v`/positionIds o positionIds != clobTokenIds; BTC/ETH v1 sin positionIds pasan; sin version no se firma ni se llama al cliente')
