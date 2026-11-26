@@ -1,63 +1,62 @@
 {
- "generado_utc": "2026-11-25T09:58:34+00:00",
+ "generado_utc": "2026-11-26T09:58:39+00:00",
  "corte": "2026-09-30T19:30:00",
  "secciones": {
   "#4 PRECIERRE banda alta": {
    "A 15m z>=1 ask 0,80-0,95": {
-    "n": 1104,
-    "dias": 57,
-    "ev": -0.0102,
+    "n": 1130,
+    "dias": 58,
+    "ev": -0.0084,
     "ic90": [
-     -0.0265,
-     0.0055
+     -0.0245,
+     0.0074
     ],
-    "dias_positivos": 25
+    "dias_positivos": 26
    },
    "B 5m z>=1,8 ask 0,80-0,95": {
-    "n": 1277,
-    "dias": 57,
-    "ev": -0.0131,
+    "n": 1295,
+    "dias": 58,
+    "ev": -0.0117,
     "ic90": [
-     -0.0295,
-     0.003
+     -0.0281,
+     0.0037
     ],
-    "dias_positivos": 27
+    "dias_positivos": 29
    }
   },
   "#5 PRECIERRE veto recotización +0,5 s": {
    "V1 no bajó (compra a +0,5 s)": {
-    "n": 3156,
+    "n": 3172,
     "dias": 31,
-    "ev": -0.0351,
+    "ev": -0.0355,
     "ic90": [
-     -0.0527,
-     -0.0162
+     -0.0523,
+     -0.0178
     ],
-    "dias_positivos": 10
+    "dias_positivos": 9
    },
    "V2 bajó (vetado)": {
-    "n": 2046,
+    "n": 2063,
     "dias": 31,
-    "ev": -0.0502,
+    "ev": -0.0465,
     "ic90": [
-     -0.0817,
-     -0.0184
+     -0.0771,
+     -0.0161
     ],
     "dias_positivos": 9
    }
   },
   "#6 maker con cancelación ms": {
-   "cabecera": "45950 mercados con película, 45950 con desenlace, días: ['2026-10-26', '2026-10-27', '2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01', '2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05', '2026-11-06', '2026-11-07', '2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16', '2026-11-17', '2026-11-18', '2026-11-19', '2026-11-20', '2026-11-21', '2026-11-22', '2026-11-23', '2026-11-24', '2026-11-25'] (ok)",
+   "cabecera": "45944 mercados con película, 45944 con desenlace, días: ['2026-10-27', '2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01', '2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05', '2026-11-06', '2026-11-07', '2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16', '2026-11-17', '2026-11-18', '2026-11-19', '2026-11-20', '2026-11-21', '2026-11-22', '2026-11-23', '2026-11-24', '2026-11-25', '2026-11-26'] (ok)",
    "celdas": 48,
    "top3": [
-    "15min  T-30     4c  [0.55,0.80)       209    22.0%           69.6%              77.3%   0.681       +0.011  (-0.151,+0.178)          +0.0024  14/26",
-    "15min  T-30     4c  [0.80,0.95)       375    18.9%           88.7%              91.1%   0.887       -0.002  (-0.079,+0.064)          -0.0003  21/28",
-    "15min  T-30     1c  [0.55,0.80)       209    18.2%           68.4%              77.2%   0.681       -0.003  (-0.191,+0.178)          -0.0005  14/24"
+    "15min  T-30     4c  [0.55,0.80)       208    22.1%           71.7%              77.2%   0.679       +0.044  (-0.135,+0.201)          +0.0098  14/25",
+    "15min  T-30     1c  [0.55,0.80)       208    18.3%           71.1%              77.1%   0.680       +0.038  (-0.150,+0.207)          +0.0069  14/23",
+    "15min  T-30     2c  [0.55,0.80)       208    20.7%           69.8%              77.6%   0.676       +0.020  (-0.170,+0.193)          +0.0042  14/25"
    ]
   },
   "#7 maker protegido por líderes": {
    "dias": [
-    "2026-10-26",
     "2026-10-27",
     "2026-10-28",
     "2026-10-29",
@@ -86,703 +85,704 @@
     "2026-11-21",
     "2026-11-22",
     "2026-11-23",
-    "2026-11-24"
+    "2026-11-24",
+    "2026-11-25"
    ],
    "exploratorio": false,
    "celdas": {
     "15min|T-30|cancel -|fav 0.55-0.80": {
      "BASE": {
-      "rellenos": 95,
-      "acierto_relleno": 0.621,
-      "ev_por_eur_relleno": -0.0717,
+      "rellenos": 100,
+      "acierto_relleno": 0.64,
+      "ev_por_eur_relleno": -0.0413,
       "ic90": [
-       -0.2043,
-       0.0509
+       -0.158,
+       0.0738
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 67,
-      "acierto_relleno": 0.612,
-      "ev_por_eur_relleno": -0.087,
+      "rellenos": 72,
+      "acierto_relleno": 0.639,
+      "ev_por_eur_relleno": -0.0437,
       "ic90": [
-       -0.2286,
-       0.056
+       -0.1843,
+       0.0998
       ]
      },
      "CONTROL": {
-      "rellenos": 75,
-      "acierto_relleno": 0.64,
-      "ev_por_eur_relleno": -0.0439,
+      "rellenos": 78,
+      "acierto_relleno": 0.654,
+      "ev_por_eur_relleno": -0.0211,
       "ic90": [
-       -0.1862,
-       0.1022
+       -0.1591,
+       0.1173
       ]
      }
     },
     "15min|T-30|cancel -|fav 0.80-0.95": {
      "BASE": {
-      "rellenos": 118,
-      "acierto_relleno": 0.788,
-      "ev_por_eur_relleno": -0.1064,
+      "rellenos": 123,
+      "acierto_relleno": 0.78,
+      "ev_por_eur_relleno": -0.1151,
       "ic90": [
-       -0.1787,
-       -0.0402
+       -0.1867,
+       -0.0484
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 84,
+      "rellenos": 89,
       "acierto_relleno": 0.798,
-      "ev_por_eur_relleno": -0.0938,
+      "ev_por_eur_relleno": -0.0928,
       "ic90": [
-       -0.1759,
-       -0.0067
+       -0.177,
+       -0.0183
       ]
      },
      "CONTROL": {
-      "rellenos": 88,
-      "acierto_relleno": 0.795,
-      "ev_por_eur_relleno": -0.1002,
+      "rellenos": 91,
+      "acierto_relleno": 0.791,
+      "ev_por_eur_relleno": -0.1036,
       "ic90": [
-       -0.1803,
-       -0.0245
+       -0.1842,
+       -0.0269
       ]
      }
     },
     "15min|T-30|cancel -|fav 0.95-1": {
      "BASE": {
-      "rellenos": 101,
-      "acierto_relleno": 0.931,
-      "ev_por_eur_relleno": -0.0401,
+      "rellenos": 99,
+      "acierto_relleno": 0.939,
+      "ev_por_eur_relleno": -0.0315,
       "ic90": [
-       -0.0888,
-       0.0019
+       -0.0757,
+       0.0094
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 73,
-      "acierto_relleno": 0.945,
-      "ev_por_eur_relleno": -0.0251,
+      "rellenos": 71,
+      "acierto_relleno": 0.958,
+      "ev_por_eur_relleno": -0.0128,
       "ic90": [
-       -0.0805,
-       0.0179
+       -0.0583,
+       0.0196
       ]
      },
      "CONTROL": {
-      "rellenos": 84,
-      "acierto_relleno": 0.952,
-      "ev_por_eur_relleno": -0.0186,
+      "rellenos": 82,
+      "acierto_relleno": 0.963,
+      "ev_por_eur_relleno": -0.0075,
       "ic90": [
-       -0.0566,
-       0.019
+       -0.0447,
+       0.0205
       ]
      }
     },
     "15min|T-30|cancel 2c|fav 0.55-0.80": {
      "BASE": {
-      "rellenos": 42,
-      "acierto_relleno": 0.667,
-      "ev_por_eur_relleno": -0.025,
+      "rellenos": 43,
+      "acierto_relleno": 0.698,
+      "ev_por_eur_relleno": 0.0204,
       "ic90": [
-       -0.2123,
-       0.1639
+       -0.1481,
+       0.1958
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 36,
-      "acierto_relleno": 0.639,
-      "ev_por_eur_relleno": -0.0644,
+      "rellenos": 37,
+      "acierto_relleno": 0.676,
+      "ev_por_eur_relleno": -0.0105,
       "ic90": [
-       -0.2825,
-       0.1168
+       -0.2045,
+       0.1777
       ]
      },
      "CONTROL": {
-      "rellenos": 38,
-      "acierto_relleno": 0.658,
-      "ev_por_eur_relleno": -0.0368,
+      "rellenos": 39,
+      "acierto_relleno": 0.692,
+      "ev_por_eur_relleno": 0.0136,
       "ic90": [
-       -0.2373,
-       0.1458
+       -0.1676,
+       0.1958
       ]
      }
     },
     "15min|T-30|cancel 2c|fav 0.80-0.95": {
      "BASE": {
-      "rellenos": 58,
-      "acierto_relleno": 0.879,
-      "ev_por_eur_relleno": -0.0104,
+      "rellenos": 60,
+      "acierto_relleno": 0.867,
+      "ev_por_eur_relleno": -0.0279,
       "ic90": [
-       -0.0929,
-       0.0656
+       -0.119,
+       0.0516
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 46,
-      "acierto_relleno": 0.891,
-      "ev_por_eur_relleno": 0.0061,
+      "rellenos": 47,
+      "acierto_relleno": 0.872,
+      "ev_por_eur_relleno": -0.0184,
       "ic90": [
-       -0.0911,
-       0.0839
+       -0.1106,
+       0.0678
       ]
      },
      "CONTROL": {
       "rellenos": 46,
-      "acierto_relleno": 0.87,
-      "ev_por_eur_relleno": -0.0183,
+      "acierto_relleno": 0.848,
+      "ev_por_eur_relleno": -0.0449,
       "ic90": [
-       -0.1169,
-       0.0637
+       -0.1421,
+       0.0499
       ]
      }
     },
     "15min|T-30|cancel 2c|fav 0.95-1": {
      "BASE": {
-      "rellenos": 74,
-      "acierto_relleno": 0.932,
-      "ev_por_eur_relleno": -0.0407,
+      "rellenos": 73,
+      "acierto_relleno": 0.945,
+      "ev_por_eur_relleno": -0.0274,
       "ic90": [
-       -0.0946,
-       0.0027
+       -0.073,
+       0.0144
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 57,
-      "acierto_relleno": 0.93,
-      "ev_por_eur_relleno": -0.0441,
+      "rellenos": 55,
+      "acierto_relleno": 0.945,
+      "ev_por_eur_relleno": -0.0283,
       "ic90": [
-       -0.0994,
-       0.0107
+       -0.0847,
+       0.0125
       ]
      },
      "CONTROL": {
-      "rellenos": 62,
-      "acierto_relleno": 0.935,
-      "ev_por_eur_relleno": -0.0389,
+      "rellenos": 61,
+      "acierto_relleno": 0.951,
+      "ev_por_eur_relleno": -0.023,
       "ic90": [
-       -0.1035,
-       0.0098
+       -0.0742,
+       0.0248
       ]
      }
     },
     "15min|T-60|cancel -|fav 0.55-0.80": {
      "BASE": {
-      "rellenos": 424,
-      "acierto_relleno": 0.481,
-      "ev_por_eur_relleno": -0.2977,
+      "rellenos": 440,
+      "acierto_relleno": 0.482,
+      "ev_por_eur_relleno": -0.2982,
       "ic90": [
-       -0.3591,
-       -0.2372
+       -0.3587,
+       -0.2438
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 286,
-      "acierto_relleno": 0.493,
-      "ev_por_eur_relleno": -0.2738,
+      "rellenos": 302,
+      "acierto_relleno": 0.483,
+      "ev_por_eur_relleno": -0.2901,
       "ic90": [
-       -0.3493,
-       -0.2049
+       -0.3556,
+       -0.2196
       ]
      },
      "CONTROL": {
-      "rellenos": 331,
-      "acierto_relleno": 0.498,
-      "ev_por_eur_relleno": -0.2731,
+      "rellenos": 341,
+      "acierto_relleno": 0.496,
+      "ev_por_eur_relleno": -0.2799,
       "ic90": [
-       -0.341,
-       -0.2131
+       -0.3438,
+       -0.2169
       ]
      }
     },
     "15min|T-60|cancel -|fav 0.80-0.95": {
      "BASE": {
-      "rellenos": 501,
-      "acierto_relleno": 0.723,
-      "ev_por_eur_relleno": -0.1807,
+      "rellenos": 517,
+      "acierto_relleno": 0.733,
+      "ev_por_eur_relleno": -0.1695,
       "ic90": [
-       -0.2193,
-       -0.1447
+       -0.2086,
+       -0.1347
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 350,
-      "acierto_relleno": 0.749,
-      "ev_por_eur_relleno": -0.1504,
+      "rellenos": 372,
+      "acierto_relleno": 0.761,
+      "ev_por_eur_relleno": -0.1376,
       "ic90": [
-       -0.1932,
-       -0.1082
+       -0.1817,
+       -0.0965
       ]
      },
      "CONTROL": {
-      "rellenos": 403,
-      "acierto_relleno": 0.722,
-      "ev_por_eur_relleno": -0.1792,
+      "rellenos": 421,
+      "acierto_relleno": 0.736,
+      "ev_por_eur_relleno": -0.1642,
       "ic90": [
-       -0.2227,
-       -0.1355
+       -0.2038,
+       -0.1274
       ]
      }
     },
     "15min|T-60|cancel -|fav 0.95-1": {
      "BASE": {
-      "rellenos": 314,
-      "acierto_relleno": 0.895,
-      "ev_por_eur_relleno": -0.0795,
+      "rellenos": 317,
+      "acierto_relleno": 0.899,
+      "ev_por_eur_relleno": -0.0751,
       "ic90": [
-       -0.1088,
+       -0.1043,
        -0.0486
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 247,
-      "acierto_relleno": 0.915,
-      "ev_por_eur_relleno": -0.0587,
+      "rellenos": 252,
+      "acierto_relleno": 0.921,
+      "ev_por_eur_relleno": -0.0527,
       "ic90": [
-       -0.0917,
-       -0.03
+       -0.0852,
+       -0.0242
       ]
      },
      "CONTROL": {
-      "rellenos": 272,
-      "acierto_relleno": 0.901,
-      "ev_por_eur_relleno": -0.0739,
+      "rellenos": 274,
+      "acierto_relleno": 0.905,
+      "ev_por_eur_relleno": -0.0692,
       "ic90": [
-       -0.1032,
-       -0.0437
+       -0.1002,
+       -0.0398
       ]
      }
     },
     "15min|T-60|cancel 2c|fav 0.55-0.80": {
      "BASE": {
-      "rellenos": 171,
-      "acierto_relleno": 0.526,
-      "ev_por_eur_relleno": -0.2316,
+      "rellenos": 179,
+      "acierto_relleno": 0.536,
+      "ev_por_eur_relleno": -0.2145,
       "ic90": [
-       -0.3232,
-       -0.1378
+       -0.3059,
+       -0.1323
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 144,
-      "acierto_relleno": 0.535,
-      "ev_por_eur_relleno": -0.2116,
+      "rellenos": 153,
+      "acierto_relleno": 0.536,
+      "ev_por_eur_relleno": -0.207,
       "ic90": [
-       -0.3152,
-       -0.1102
+       -0.3095,
+       -0.106
       ]
      },
      "CONTROL": {
-      "rellenos": 145,
-      "acierto_relleno": 0.552,
-      "ev_por_eur_relleno": -0.1892,
+      "rellenos": 152,
+      "acierto_relleno": 0.553,
+      "ev_por_eur_relleno": -0.1838,
       "ic90": [
-       -0.2917,
-       -0.0812
+       -0.2735,
+       -0.0865
       ]
      }
     },
     "15min|T-60|cancel 2c|fav 0.80-0.95": {
      "BASE": {
-      "rellenos": 221,
+      "rellenos": 232,
       "acierto_relleno": 0.828,
-      "ev_por_eur_relleno": -0.0649,
+      "ev_por_eur_relleno": -0.065,
       "ic90": [
-       -0.1147,
-       -0.0195
+       -0.1123,
+       -0.0169
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 188,
-      "acierto_relleno": 0.846,
-      "ev_por_eur_relleno": -0.0436,
+      "rellenos": 200,
+      "acierto_relleno": 0.845,
+      "ev_por_eur_relleno": -0.0442,
       "ic90": [
-       -0.0926,
-       0.0076
+       -0.0923,
+       0.004
       ]
      },
      "CONTROL": {
-      "rellenos": 195,
-      "acierto_relleno": 0.821,
-      "ev_por_eur_relleno": -0.072,
+      "rellenos": 208,
+      "acierto_relleno": 0.822,
+      "ev_por_eur_relleno": -0.0697,
       "ic90": [
-       -0.1266,
-       -0.0182
+       -0.1168,
+       -0.0213
       ]
      }
     },
     "15min|T-60|cancel 2c|fav 0.95-1": {
      "BASE": {
-      "rellenos": 178,
-      "acierto_relleno": 0.938,
-      "ev_por_eur_relleno": -0.0378,
+      "rellenos": 176,
+      "acierto_relleno": 0.943,
+      "ev_por_eur_relleno": -0.0323,
       "ic90": [
-       -0.0704,
-       -0.0092
+       -0.0633,
+       -0.003
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 150,
-      "acierto_relleno": 0.933,
-      "ev_por_eur_relleno": -0.0424,
+      "rellenos": 149,
+      "acierto_relleno": 0.94,
+      "ev_por_eur_relleno": -0.0356,
       "ic90": [
-       -0.0771,
-       -0.0092
+       -0.0698,
+       -0.0012
       ]
      },
      "CONTROL": {
-      "rellenos": 159,
-      "acierto_relleno": 0.931,
-      "ev_por_eur_relleno": -0.046,
+      "rellenos": 156,
+      "acierto_relleno": 0.936,
+      "ev_por_eur_relleno": -0.0404,
       "ic90": [
-       -0.0792,
-       -0.014
+       -0.076,
+       -0.0085
       ]
      }
     },
     "5min|T-30|cancel -|fav 0.55-0.80": {
      "BASE": {
-      "rellenos": 650,
-      "acierto_relleno": 0.548,
-      "ev_por_eur_relleno": -0.1916,
+      "rellenos": 656,
+      "acierto_relleno": 0.544,
+      "ev_por_eur_relleno": -0.1974,
       "ic90": [
-       -0.2428,
-       -0.1424
+       -0.2402,
+       -0.152
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 488,
-      "acierto_relleno": 0.547,
-      "ev_por_eur_relleno": -0.1874,
+      "rellenos": 496,
+      "acierto_relleno": 0.546,
+      "ev_por_eur_relleno": -0.1903,
       "ic90": [
-       -0.247,
-       -0.1337
+       -0.243,
+       -0.1362
       ]
      },
      "CONTROL": {
-      "rellenos": 523,
+      "rellenos": 530,
       "acierto_relleno": 0.545,
-      "ev_por_eur_relleno": -0.1933,
+      "ev_por_eur_relleno": -0.1942,
       "ic90": [
        -0.245,
-       -0.139
+       -0.1398
       ]
      }
     },
     "5min|T-30|cancel -|fav 0.80-0.95": {
      "BASE": {
-      "rellenos": 818,
-      "acierto_relleno": 0.781,
-      "ev_por_eur_relleno": -0.1099,
+      "rellenos": 830,
+      "acierto_relleno": 0.787,
+      "ev_por_eur_relleno": -0.1038,
       "ic90": [
-       -0.1378,
-       -0.0832
+       -0.1296,
+       -0.0763
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 595,
-      "acierto_relleno": 0.787,
-      "ev_por_eur_relleno": -0.1034,
+      "rellenos": 611,
+      "acierto_relleno": 0.791,
+      "ev_por_eur_relleno": -0.0991,
       "ic90": [
-       -0.137,
-       -0.0737
+       -0.1322,
+       -0.0681
       ]
      },
      "CONTROL": {
-      "rellenos": 674,
-      "acierto_relleno": 0.774,
-      "ev_por_eur_relleno": -0.1194,
+      "rellenos": 679,
+      "acierto_relleno": 0.778,
+      "ev_por_eur_relleno": -0.1158,
       "ic90": [
-       -0.1506,
-       -0.0907
+       -0.1455,
+       -0.0858
       ]
      }
     },
     "5min|T-30|cancel -|fav 0.95-1": {
      "BASE": {
-      "rellenos": 699,
-      "acierto_relleno": 0.921,
-      "ev_por_eur_relleno": -0.0513,
+      "rellenos": 710,
+      "acierto_relleno": 0.918,
+      "ev_por_eur_relleno": -0.0543,
       "ic90": [
-       -0.0685,
-       -0.0357
+       -0.0729,
+       -0.038
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 537,
-      "acierto_relleno": 0.931,
-      "ev_por_eur_relleno": -0.0416,
+      "rellenos": 542,
+      "acierto_relleno": 0.924,
+      "ev_por_eur_relleno": -0.0484,
       "ic90": [
-       -0.0611,
-       -0.0232
+       -0.0678,
+       -0.0302
       ]
      },
      "CONTROL": {
       "rellenos": 579,
-      "acierto_relleno": 0.922,
-      "ev_por_eur_relleno": -0.0505,
+      "acierto_relleno": 0.921,
+      "ev_por_eur_relleno": -0.0521,
       "ic90": [
-       -0.0697,
-       -0.0326
+       -0.0713,
+       -0.0337
       ]
      }
     },
     "5min|T-30|cancel 2c|fav 0.55-0.80": {
      "BASE": {
-      "rellenos": 293,
-      "acierto_relleno": 0.635,
-      "ev_por_eur_relleno": -0.0562,
+      "rellenos": 294,
+      "acierto_relleno": 0.633,
+      "ev_por_eur_relleno": -0.0576,
       "ic90": [
-       -0.1193,
-       0.0164
+       -0.1302,
+       0.0158
       ]
      },
      "PROTEGIDO": {
       "rellenos": 243,
       "acierto_relleno": 0.626,
-      "ev_por_eur_relleno": -0.0674,
+      "ev_por_eur_relleno": -0.0652,
       "ic90": [
-       -0.1497,
-       0.0127
+       -0.1389,
+       0.0147
       ]
      },
      "CONTROL": {
-      "rellenos": 255,
-      "acierto_relleno": 0.631,
-      "ev_por_eur_relleno": -0.0594,
+      "rellenos": 256,
+      "acierto_relleno": 0.633,
+      "ev_por_eur_relleno": -0.0557,
       "ic90": [
-       -0.1324,
-       0.0237
+       -0.1314,
+       0.0123
       ]
      }
     },
     "5min|T-30|cancel 2c|fav 0.80-0.95": {
      "BASE": {
-      "rellenos": 456,
-      "acierto_relleno": 0.838,
-      "ev_por_eur_relleno": -0.0482,
+      "rellenos": 465,
+      "acierto_relleno": 0.841,
+      "ev_por_eur_relleno": -0.0448,
       "ic90": [
-       -0.0816,
-       -0.0163
+       -0.078,
+       -0.0162
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 359,
-      "acierto_relleno": 0.838,
-      "ev_por_eur_relleno": -0.0466,
+      "rellenos": 367,
+      "acierto_relleno": 0.837,
+      "ev_por_eur_relleno": -0.0486,
       "ic90": [
-       -0.0834,
-       -0.012
+       -0.0847,
+       -0.0131
       ]
      },
      "CONTROL": {
-      "rellenos": 398,
+      "rellenos": 404,
       "acierto_relleno": 0.832,
       "ev_por_eur_relleno": -0.0557,
       "ic90": [
-       -0.0933,
-       -0.0183
+       -0.0912,
+       -0.0222
       ]
      }
     },
     "5min|T-30|cancel 2c|fav 0.95-1": {
      "BASE": {
-      "rellenos": 527,
-      "acierto_relleno": 0.954,
-      "ev_por_eur_relleno": -0.018,
+      "rellenos": 531,
+      "acierto_relleno": 0.957,
+      "ev_por_eur_relleno": -0.0156,
       "ic90": [
-       -0.0336,
-       -0.0027
+       -0.031,
+       -0.002
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 415,
-      "acierto_relleno": 0.957,
-      "ev_por_eur_relleno": -0.0161,
+      "rellenos": 413,
+      "acierto_relleno": 0.959,
+      "ev_por_eur_relleno": -0.0137,
       "ic90": [
-       -0.0346,
-       -0.0013
+       -0.0312,
+       0.0015
       ]
      },
      "CONTROL": {
-      "rellenos": 441,
-      "acierto_relleno": 0.959,
-      "ev_por_eur_relleno": -0.0133,
+      "rellenos": 438,
+      "acierto_relleno": 0.961,
+      "ev_por_eur_relleno": -0.0111,
       "ic90": [
-       -0.0279,
-       0.0012
+       -0.0275,
+       0.0033
       ]
      }
     },
     "5min|T-60|cancel -|fav 0.55-0.80": {
      "BASE": {
-      "rellenos": 2699,
-      "acierto_relleno": 0.499,
-      "ev_por_eur_relleno": -0.266,
+      "rellenos": 2703,
+      "acierto_relleno": 0.504,
+      "ev_por_eur_relleno": -0.2592,
       "ic90": [
-       -0.2887,
-       -0.2416
+       -0.284,
+       -0.2375
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 1908,
-      "acierto_relleno": 0.516,
-      "ev_por_eur_relleno": -0.2401,
+      "rellenos": 1918,
+      "acierto_relleno": 0.523,
+      "ev_por_eur_relleno": -0.2291,
       "ic90": [
-       -0.2688,
-       -0.2138
+       -0.2555,
+       -0.2018
       ]
      },
      "CONTROL": {
-      "rellenos": 2151,
-      "acierto_relleno": 0.512,
-      "ev_por_eur_relleno": -0.2471,
+      "rellenos": 2148,
+      "acierto_relleno": 0.519,
+      "ev_por_eur_relleno": -0.2366,
       "ic90": [
-       -0.275,
-       -0.2208
+       -0.2626,
+       -0.2107
       ]
      }
     },
     "5min|T-60|cancel -|fav 0.80-0.95": {
      "BASE": {
-      "rellenos": 2779,
-      "acierto_relleno": 0.764,
-      "ev_por_eur_relleno": -0.1314,
+      "rellenos": 2784,
+      "acierto_relleno": 0.766,
+      "ev_por_eur_relleno": -0.1287,
       "ic90": [
-       -0.1471,
-       -0.117
+       -0.143,
+       -0.1131
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 2040,
-      "acierto_relleno": 0.758,
-      "ev_por_eur_relleno": -0.138,
+      "rellenos": 2083,
+      "acierto_relleno": 0.76,
+      "ev_por_eur_relleno": -0.1352,
       "ic90": [
-       -0.1559,
-       -0.1196
+       -0.1528,
+       -0.1195
       ]
      },
      "CONTROL": {
-      "rellenos": 2290,
-      "acierto_relleno": 0.758,
-      "ev_por_eur_relleno": -0.1379,
+      "rellenos": 2309,
+      "acierto_relleno": 0.76,
+      "ev_por_eur_relleno": -0.1353,
       "ic90": [
-       -0.1559,
-       -0.1228
+       -0.1515,
+       -0.119
       ]
      }
     },
     "5min|T-60|cancel -|fav 0.95-1": {
      "BASE": {
-      "rellenos": 1850,
-      "acierto_relleno": 0.923,
-      "ev_por_eur_relleno": -0.0496,
+      "rellenos": 1856,
+      "acierto_relleno": 0.921,
+      "ev_por_eur_relleno": -0.0514,
       "ic90": [
-       -0.0594,
-       -0.0389
+       -0.0616,
+       -0.0405
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 1306,
-      "acierto_relleno": 0.925,
-      "ev_por_eur_relleno": -0.048,
+      "rellenos": 1308,
+      "acierto_relleno": 0.922,
+      "ev_por_eur_relleno": -0.051,
       "ic90": [
-       -0.0609,
-       -0.0355
+       -0.0647,
+       -0.039
       ]
      },
      "CONTROL": {
-      "rellenos": 1517,
+      "rellenos": 1519,
       "acierto_relleno": 0.916,
-      "ev_por_eur_relleno": -0.0567,
+      "ev_por_eur_relleno": -0.0573,
       "ic90": [
-       -0.0691,
-       -0.0438
+       -0.0693,
+       -0.0449
       ]
      }
     },
     "5min|T-60|cancel 2c|fav 0.55-0.80": {
      "BASE": {
-      "rellenos": 1021,
-      "acierto_relleno": 0.611,
-      "ev_por_eur_relleno": -0.1008,
+      "rellenos": 1030,
+      "acierto_relleno": 0.612,
+      "ev_por_eur_relleno": -0.1001,
       "ic90": [
-       -0.1364,
-       -0.0619
+       -0.1352,
+       -0.0623
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 810,
-      "acierto_relleno": 0.625,
-      "ev_por_eur_relleno": -0.0769,
+      "rellenos": 817,
+      "acierto_relleno": 0.624,
+      "ev_por_eur_relleno": -0.0773,
       "ic90": [
-       -0.1208,
-       -0.0382
+       -0.1194,
+       -0.0362
       ]
      },
      "CONTROL": {
-      "rellenos": 867,
+      "rellenos": 875,
       "acierto_relleno": 0.631,
-      "ev_por_eur_relleno": -0.0715,
+      "ev_por_eur_relleno": -0.0717,
       "ic90": [
-       -0.1134,
-       -0.0315
+       -0.1106,
+       -0.0335
       ]
      }
     },
     "5min|T-60|cancel 2c|fav 0.80-0.95": {
      "BASE": {
-      "rellenos": 1409,
-      "acierto_relleno": 0.828,
-      "ev_por_eur_relleno": -0.0578,
+      "rellenos": 1428,
+      "acierto_relleno": 0.826,
+      "ev_por_eur_relleno": -0.0605,
       "ic90": [
-       -0.0764,
-       -0.0393
+       -0.0788,
+       -0.0424
       ]
      },
      "PROTEGIDO": {
-      "rellenos": 1087,
-      "acierto_relleno": 0.826,
-      "ev_por_eur_relleno": -0.06,
+      "rellenos": 1125,
+      "acierto_relleno": 0.823,
+      "ev_por_eur_relleno": -0.0634,
       "ic90": [
-       -0.0809,
-       -0.0386
+       -0.0849,
+       -0.0411
       ]
      },
      "CONTROL": {
-      "rellenos": 1174,
-      "acierto_relleno": 0.82,
-      "ev_por_eur_relleno": -0.0663,
+      "rellenos": 1205,
+      "acierto_relleno": 0.817,
+      "ev_por_eur_relleno": -0.0702,
       "ic90": [
-       -0.0884,
-       -0.0461
+       -0.0914,
+       -0.0505
       ]
      }
     },
     "5min|T-60|cancel 2c|fav 0.95-1": {
      "BASE": {
-      "rellenos": 1246,
-      "acierto_relleno": 0.951,
-      "ev_por_eur_relleno": -0.0225,
+      "rellenos": 1247,
+      "acierto_relleno": 0.95,
+      "ev_por_eur_relleno": -0.0232,
       "ic90": [
-       -0.0338,
-       -0.013
+       -0.034,
+       -0.0128
       ]
      },
      "PROTEGIDO": {
       "rellenos": 911,
       "acierto_relleno": 0.948,
-      "ev_por_eur_relleno": -0.0258,
+      "ev_por_eur_relleno": -0.0256,
       "ic90": [
-       -0.039,
-       -0.0127
+       -0.0395,
+       -0.0139
       ]
      },
      "CONTROL": {
-      "rellenos": 1016,
-      "acierto_relleno": 0.946,
-      "ev_por_eur_relleno": -0.028,
+      "rellenos": 1015,
+      "acierto_relleno": 0.947,
+      "ev_por_eur_relleno": -0.027,
       "ic90": [
-       -0.0404,
-       -0.0162
+       -0.0388,
+       -0.0155
       ]
      }
     }
@@ -816,47 +816,47 @@
   },
   "#11 Penny Clipper rápido (WS)": {
    "entrada +0.0 s": {
-    "n": 34942,
+    "n": 35005,
     "dias": 31,
-    "ev": -0.0788,
+    "ev": -0.0789,
     "ic90": [
      -0.0902,
-     -0.0674
+     -0.0675
     ],
     "dias_positivos": 0
    },
    "entrada +0.5 s": {
-    "n": 35021,
+    "n": 35153,
     "dias": 31,
-    "ev": -0.0664,
+    "ev": -0.0668,
     "ic90": [
-     -0.0786,
-     -0.053
+     -0.079,
+     -0.0537
     ],
     "dias_positivos": 3
    },
    "entrada +1.0 s": {
-    "n": 35217,
+    "n": 35419,
     "dias": 31,
-    "ev": -0.0641,
+    "ev": -0.0638,
     "ic90": [
-     -0.0756,
+     -0.0752,
      -0.0519
     ],
     "dias_positivos": 3
    },
    "entrada +2.0 s": {
-    "n": 35671,
+    "n": 35725,
     "dias": 31,
-    "ev": -0.0605,
+    "ev": -0.0617,
     "ic90": [
-     -0.072,
-     -0.0487
+     -0.0729,
+     -0.0501
     ],
-    "dias_positivos": 2
+    "dias_positivos": 1
    },
    "latencia_deteccion_p50_ms": 106,
-   "disparos": 56829
+   "disparos": 56913
   }
  }
 }
