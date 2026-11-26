@@ -21,7 +21,15 @@ CLOB = 'https://clob.polymarket.com'
 class MercadosReal:
     """Mercados 5m de las 4 monedas (slug {coin}-updown-5m-{ini}) por gamma publico, con cache de TTL corto. Solo lectura. `get` inyectable (tests)."""
     def __init__(self, coins=('BTC', 'ETH', 'SOL', 'XRP'), get=None, ttl_s=15.0, reloj=time.time):
-        self.coins = coins; self.get = get; self.ttl = ttl_s; self.reloj = reloj; self.cache = {}; self.libros = {}; self.rechazados = {}
+        self.coins = coins; self.get = get; self.ttl = ttl_s; self.reloj = reloj; self.cache = {}; self.libros = {}; self.rechazados = {}; self._sel = None
+
+    @property
+    def sel(self):
+        """26-Nov (Protocol V2 por mercado): selector de version de firma. En produccion del paquete es el global del proceso (lo comparte `EnvioPaquete.poner`); con `get` inyectado (tests) uno privado que usa ese `get`."""
+        if self._sel is None:
+            MV = C.cargar_vendor('mercado_version', HERE)
+            self._sel = MV.Selector(get=lambda u, p: self._get(u, p)) if self.get else MV.selector_global()
+        return self._sel
 
     def _get(self, url, params, timeout=2.5):                      # v4 (hallazgo 9): timeout acotado (la seleccion de mercado ocurre con 0 vivas, pero no debe colgarse)
         if self.get: return self.get(url, params)
@@ -34,9 +42,11 @@ class MercadosReal:
         r = None
         try:
             ev = self._get(f'{GAMMA}/events', {'slug': slug}); ok, why, toks, neg = C.verificar_mercado_gamma(coin, ini, ev[0] if ev else None)
-            if ok: r = (toks, neg)
+            if ok:
+                self.sel.resolver(ev[0]['markets'][0], ev[0])                                   # 26-Nov: version por mercado (gamma `version`/`positionIds` + CLOB `/clob-markets` `v`); ausente/discrepante => mercado RECHAZADO (no se firma)
+                r = (toks, neg)
             else: self.rechazados[slug] = why
-        except Exception as e: self.rechazados[slug] = f'gamma:{type(e).__name__}'
+        except Exception as e: self.rechazados[slug] = f'gamma:{type(e).__name__}' if type(e).__name__ != 'ErrVersion' else f'version:{str(e)[:80]}'
         self.cache[slug] = (t, r); return r
 
     def mercados(self, coin=None):
@@ -136,15 +146,26 @@ def clase_envio(ER):
     en el exchange; en el struct EIP-712 V2 la expiracion NO entra, asi que el orderID local no cambia); (c) `enviar` manda SIEMPRE GTD post-only: v6, sin modo GTC (sin expiracion `poner` y `enviar` lanzan). NO verificado contra el CLOB real: si rechazara GTD+post-only
     saldria 'rechazo' => BLOCKED tras 2 rechazos y SIN gasto (fail-safe)."""
     class EnvioPaquete(ER.EnvioReal):
+        def _selector(self):
+            """26-Nov: el selector de version (el MISMO que usa `MercadosReal`); en tests se inyecta como `_sel`."""
+            return self.__dict__.get('_sel') or C.cargar_vendor('mercado_version', HERE).selector_global()
+
         def poner(self, tok, precio, size, clave, neg_risk=None, expira_s=None):
             from py_clob_client_v2 import OrderArgsV2, PartialCreateOrderOptions
+            MV = C.cargar_vendor('mercado_version', HERE)
             if neg_risk is None: raise RuntimeError('neg_risk de gamma ausente: no firmo')
-            nr = self._neg_risk(tok)
-            if bool(neg_risk) != bool(nr): raise RuntimeError(f'neg_risk del mercado (gamma {bool(neg_risk)}) != cliente ({bool(nr)}): no firmo')
             if not expira_s: raise RuntimeError('sin expiracion GTD: no firmo (v6: no existe modo GTC)')
+            info = self._selector().por_token(tok)                                                        # 26-Nov: version del MERCADO (ErrVersion = falta/error/discrepancia => no firmo)
+            if bool(neg_risk) != info.neg_risk: raise RuntimeError(f'neg_risk de gamma ({bool(neg_risk)}) != selector de version ({info.neg_risk}): no firmo')
+            if info.version == 'v1':
+                nr = self._neg_risk(tok)                                                                  # v1: comportamiento anterior (neg_risk del cliente contrastado con gamma)
+                if bool(neg_risk) != bool(nr): raise RuntimeError(f'neg_risk del mercado (gamma {bool(neg_risk)}) != cliente ({bool(nr)}): no firmo')
+            else: nr = False                                                                              # v2: ExchangeV3, sin variante neg-risk (el selector ya rechazo v2+negRisk)
             exp = int(time.time()) + int(expira_s)                                                        # el orquestador exige chrony legible y |offset| <= 1 s ANTES de cada lote (v4, hallazgo 4)
-            signed = self.cli.create_order(OrderArgsV2(token_id=tok, price=precio, size=size, side='BUY', expiration=exp), PartialCreateOrderOptions(neg_risk=bool(nr)))
-            return self.M.hash_orden(signed, bool(nr)), signed
+            signed = self.cli.create_order(MV.args_orden(info, OrderArgsV2, tok, precio, size, 'BUY', expiration=exp), PartialCreateOrderOptions(neg_risk=bool(nr)))
+            if info.version == 'v1': return self.M.hash_orden(signed, bool(nr)), signed
+            if str(getattr(signed, 'tokenId', '')) != str(tok): raise RuntimeError('la orden firmada no lleva el position_id del mercado v2: no envio')
+            return MV.hash_orden(signed, info), signed                                                    # v2: hash contra ExchangeV3 / dominio "3"
 
         def enviar(self, signed, gtd=False):
             from py_clob_client_v2 import OrderType
@@ -177,6 +198,7 @@ def cargar_env(cfg):
     o si comparte credenciales con produccion) y wallet del cliente == cfg.wallet. Devuelve (env, CE). TODO se carga de vendor/ con `C.cargar_vendor` (sys.path intacto); jamas de dev ni de main."""
     ok, mal = C.verificar_vendor(HERE)
     if not ok: sys.exit(f'vendor/ alterado o incompleto ({mal}): NO envio (regenerar con vendor/regenerar_vendor.py y re-revisar)')
+    MV = C.cargar_vendor('mercado_version', HERE); MV.cargar_sdk(VENDOR + 'sdk122', C.hashes_sdk(HERE))                      # 26-Nov: py_clob_client_v2 1.2.2 vendorizado (hash verificado, aislado del venv de produccion) ANTES de que nada importe el SDK
     V = C.cargar_vendor('vendor_main', HERE); ER = C.cargar_vendor('envio_real', HERE); CE = C.cargar_vendor('cancel_evidencia', HERE); C.cargar_vendor('plan_paquete_l', HERE)
     if V.WALLET_DEDICADA.lower() != cfg.wallet.lower(): sys.exit('vendor_main.WALLET_DEDICADA != cfg.wallet: NO envio')
     env = clase_envio(ER)()
@@ -318,13 +340,15 @@ def preflight(cfg, autenticado=True, get=None, env_factory=None, chrony=None, ah
        NOTA (v5, hallazgo 8): el hash EIP-712 local NO se valida aqui contra nada independiente (recalcularlo con la misma funcion seria tautologico): solo se comprueba su FORMATO (32 bytes). Se valida de verdad en el 1.er POST real: el orderID que devuelve el servidor debe ser el hash local (si no, alarma + BLOCKED, hallazgo 7 v4).
     Devuelve dict `ok` + secciones; solo booleanos/cifras/ids publicos (ninguna clave, secreto ni firma)."""
     R = dict(ok=False, version=C.VERSION, ts_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(ahora())), monedas={}, autenticado=None, errores=[])
-    mk = MercadosReal(get=get, reloj=ahora); fallos = R['errores']; tokens = []; neg_de = {}
+    mk = MercadosReal(get=get, reloj=ahora); fallos = R['errores']; tokens = []; neg_de = {}; vinfo_de = {}
     for c in C.COINS:
         info = dict(mercado=None, tokens=[], ok=False)
         try: ms = mk.mercados(c)
         except Exception as e: ms = []; fallos.append(f'{c}: gamma {type(e).__name__}')
         if not ms: fallos.append(f'{c}: sin mercado 5m verificado ({list(mk.rechazados.values())[-2:]})'); R['monedas'][c] = info; continue
-        slug, coin, fin, toks, neg = max(ms, key=lambda m: m[2]); info['mercado'] = slug; info['neg_risk_gamma'] = neg; ok_c = True                  # el de MAS vida (el 5m actual puede estar ya decidido: ask 0,01 sin bids)
+        slug, coin, fin, toks, neg = max(ms, key=lambda m: m[2]); info['mercado'] = slug; info['neg_risk_gamma'] = neg; ok_c = True
+        try: vinfo = mk.sel.por_token(toks[0]); info.update(version=vinfo.version, version_clob=vinfo.version, exchange=vinfo.exchange, dominio_version=vinfo.dominio_version, usa_position_id=vinfo.usa_position_id, position_ids_son_los_token_ids=(vinfo.usa_position_id or None))        # 26-Nov: ya verificadas (gamma version/positionIds + CLOB v) al aceptar el mercado
+        except Exception as e: vinfo = None; ok_c = False; fallos.append(f'{c}: version de firma no verificable ({type(e).__name__}: {str(e)[:80]})')                  # el de MAS vida (el 5m actual puede estar ya decidido: ask 0,01 sin bids)
         for lado, tok in zip(('Up', 'Down'), toks):
             t = dict(lado=lado, token_fin=str(tok)[-8:])
             try:
@@ -332,10 +356,13 @@ def preflight(cfg, autenticado=True, get=None, env_factory=None, chrony=None, ah
                 bids = [float(x['price']) for x in r.get('bids', [])]; asks = [float(x['price']) for x in r.get('asks', [])]
                 t.update(tick_size=str(r.get('tick_size')), min_order_size=str(r.get('min_order_size')), neg_risk_book=r.get('neg_risk'), version=r.get('version'), n_bids=len(bids), n_asks=len(asks), mejor_ask=(min(asks) if asks else None), mejor_bid=(max(bids) if bids else None))
                 t['ok'] = (abs(float(r.get('tick_size')) - 0.01) < 1e-9 and float(r.get('min_order_size')) <= cfg.size + 1e-9 and isinstance(r.get('neg_risk'), bool) and r.get('neg_risk') == neg)                      # DURO: tick/minsize/neg_risk. El estado del libro es INFORMATIVO (operable_ahora): cambia cada segundo
+                if vinfo is not None:
+                    ok_vl, mot_vl = C.cargar_vendor('mercado_version', HERE).comprobar_libro(vinfo, r); t['version_libro'] = r.get('version'); t['version_libro_ok'] = ok_vl
+                    t['ok'] = bool(t['ok'] and ok_vl)                                                            # 26-Nov: el libro de un token v2 debe declarar version v2 (y uno v1 no declarar otra)
                 t['operable_ahora'] = bool(asks) and min(asks) >= cfg.ask_min - 1e-9 and bool(bids) and max(bids) >= cfg.bid_min_lejos - 1e-9
             except Exception as e: t['ok'] = False; t['error'] = f'{type(e).__name__}: {str(e)[:80]}'
             if not t['ok']: fallos.append(f'{c} {lado}: libro/tick/minsize/neg_risk no valido {t}'); ok_c = False
-            info['tokens'].append(t); tokens.append((c, lado, tok)); neg_de[tok] = neg
+            info['tokens'].append(t); tokens.append((c, lado, tok)); neg_de[tok] = neg; vinfo_de[tok] = vinfo
         info['ok'] = ok_c; R['monedas'][c] = info
     pub_ok = all(v.get('ok') for v in R['monedas'].values()) and len(R['monedas']) == len(C.COINS)
     if not autenticado: R['ok'] = bool(pub_ok); return R
@@ -364,11 +391,20 @@ def preflight(cfg, autenticado=True, get=None, env_factory=None, chrony=None, ah
             oid, signed = env.poner(tok, cfg.precio, cfg.size, 'preflight', neg_risk=nr, expira_s=cfg.gtd_expira_s)
             A['orden_firmada_local'] = comprobar_orden_firmada(signed, oid, _esperado_orden(cfg.precio, cfg.size, tok, cfg.wallet, cfg.gtd_expira_s, t0))
         except Exception as e: A['orden_firmada_local'] = dict(error=f'{type(e).__name__}: {str(e)[:120]}')
-    f = A.get('orden_firmada_local') or {}
+    v2t = [t for t in tokens if (vinfo_de.get(t[2]) is not None and vinfo_de[t[2]].version == 'v2')][:1]                       # 26-Nov: ademas de la primera orden de prueba, UNA firmada en local de un mercado v2 (si lo hay): dominio ExchangeV3/"3" y position_id
+    if v2t:
+        tok2 = v2t[0][2]; vi2 = vinfo_de[tok2]; t0 = ahora()
+        try:
+            oid2, signed2 = env.poner(tok2, cfg.precio, cfg.size, 'preflight_v2', neg_risk=neg_de[tok2], expira_s=cfg.gtd_expira_s)
+            comp2 = comprobar_orden_firmada(signed2, oid2, _esperado_orden(cfg.precio, cfg.size, tok2, cfg.wallet, cfg.gtd_expira_s, t0)); MV = C.cargar_vendor('mercado_version', HERE); td = MV.typed_data(signed2, vi2)['domain']
+            comp2['dominio_exchange_v3_version_3'] = bool(td['verifyingContract'].lower() == MV.EXCHANGE_V3.lower() and td['version'] == '3'); comp2['hash_local_coincide_con_dominio_v3'] = bool(oid2 == MV.hash_orden(signed2, vi2))
+            A['orden_firmada_local_v2'] = comp2
+        except Exception as e: A['orden_firmada_local_v2'] = dict(error=f'{type(e).__name__}: {str(e)[:120]}')
+    f = A.get('orden_firmada_local') or {}; f2 = A.get('orden_firmada_local_v2', True)
     if canal_check:                                                                               # v18 (C): canal de usuario REAL suscrito, directorio de evidencia escribible y escritor que vuelca (SOLO LECTURA, sin POST)
         A['canal'] = _verificar_canal(cfg, env, ce or (ce_box[0] if ce_box else None), [t for t in tokens if t[1] == 'Up'], evid_dir or os.path.join(C.OUT_BASE, 'preflight', 'cancel_evid_' + time.strftime('%Y%m%dT%H%M%SZ', time.gmtime(ahora())) + f'_{time.time_ns()}'), canal_timeout_s)
     if canal_check and (A.get('canal') or {}).get('cierre_error'): fallos.extend(f'canal.cierre: {x}' for x in A['canal']['cierre_error'])
-    A['ok'] = bool(A['wallet_es_la_dedicada'] and A.get('api_creds_derivadas_coinciden') and A.get('saldo_dentro_de_lo_autorizado') and A['open_orders_legibles_y_vacias'] and A['reloj_ok'] and f and all(v is True for v in f.values()) and (not canal_check or (A.get('canal') or {}).get('ok') is True))
+    A['ok'] = bool(A['wallet_es_la_dedicada'] and A.get('api_creds_derivadas_coinciden') and A.get('saldo_dentro_de_lo_autorizado') and A['open_orders_legibles_y_vacias'] and A['reloj_ok'] and f and all(v is True for v in f.values()) and (f2 is True or (isinstance(f2, dict) and all(v is True for v in f2.values()))) and (not canal_check or (A.get('canal') or {}).get('ok') is True))
     for k, v in list(A.items()):
         if v is False: fallos.append(f'autenticado.{k} = False')
     R['ok'] = bool(pub_ok and A['ok']); return R

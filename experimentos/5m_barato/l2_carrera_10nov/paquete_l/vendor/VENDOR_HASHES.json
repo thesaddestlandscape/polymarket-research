@@ -82,6 +82,175 @@
     }
    ],
    "sha256_regenerar": "72bb9d3d671dc62e5229ed2cd502cf48a7a13529684b8e5e3f44928bb3746115"
+  },
+  "mercado_version.py": {
+   "origen": "escrito para el paquete (selector de version por mercado + carga aislada del SDK); copia identica en b-k",
+   "sha256_copia": "35080c451cd524da4efad009eb9fa725ada72e712e579130da9234ccb1bb6d74"
+  },
+  "sdk122/LICENSE": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "1579b08d05547bc573b4cf032a4c252850e1af16d84270dd08ee3924ae5ccf0e"
+  },
+  "sdk122/py_clob_client_v2/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "c185dc9860c5f98d211fac8380ca43fb0f68dca6c46cf8448a023552180474e8"
+  },
+  "sdk122/py_clob_client_v2/client.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "8e81187bd84ed83609799ccb5cdbbc77fb799ef17279a913a5656e259752f7e4"
+  },
+  "sdk122/py_clob_client_v2/clob_types.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "a8e109eba6911e68e819b0e3cfa9626226884003e065f6f53c18312df8ab2a64"
+  },
+  "sdk122/py_clob_client_v2/config.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "788b5c16f74f6324ac8a831ec4b7a3c51d4928057b76c6b34b3367ef92b54185"
+  },
+  "sdk122/py_clob_client_v2/constants.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "f0fe967703ed3e78d38e3eabe8ce546fe1c0074b2d74a599fd0d76d659075df8"
+  },
+  "sdk122/py_clob_client_v2/endpoints.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "f75a6ea6fdd22b7b327556ea24e028976d0e1f5b4c57739bb25546218e2d40dc"
+  },
+  "sdk122/py_clob_client_v2/exceptions.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "de8eec61c1ad1b41de0fb642236395b130fc71424d0642ef75c65f5eeb051d30"
+  },
+  "sdk122/py_clob_client_v2/fees.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "f121783c0492cd2ea3c68dd9e765ae37885b53c5662c02668c22f8f6a64df591"
+  },
+  "sdk122/py_clob_client_v2/headers/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "0bcd0c8a9d8bfe4d22391690f5a5a8b0bccfa48c905127dc457e0b9f6df089db"
+  },
+  "sdk122/py_clob_client_v2/headers/headers.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "247ed046706cdb5407116297b9d676b81326c1b4cfa81dc76029096d7eaead0d"
+  },
+  "sdk122/py_clob_client_v2/http_helpers/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "8deb526d1c3e1955b9352aa47d93ba980fd643120a84815e681d4598c2a74912"
+  },
+  "sdk122/py_clob_client_v2/http_helpers/helpers.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "7192a252e73d9d3e6daf0d45c003e237191e9b9cbfad4fb6797d86b2ce98bfe9"
+  },
+  "sdk122/py_clob_client_v2/order_builder/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "9582323b342ffc4f3f14ff4491de469d5f5b1f2d0c0cb79267f4c11edd99e02c"
+  },
+  "sdk122/py_clob_client_v2/order_builder/builder.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "c47f78451640cf005badb203859d296586de36a9fce886ccbbe2c2682542b2a1"
+  },
+  "sdk122/py_clob_client_v2/order_builder/constants.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "1c3fa98bc87c944650b463be961e3504d7fda3ee1b8d4e3dea37ec73649fe33a"
+  },
+  "sdk122/py_clob_client_v2/order_builder/helpers.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "35570bb5aa01c982ed58642563e3c4c716c9f4e1b5cdfbda9e7e22f5d7cc617f"
+  },
+  "sdk122/py_clob_client_v2/order_utils/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "67022a95dcd02a6a865c6fd7537a81555a09f56afee04aec9a7614a56f2a512c"
+  },
+  "sdk122/py_clob_client_v2/order_utils/abi/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "sdk122/py_clob_client_v2/order_utils/abi/abis.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "48c337056274d7c193f8c00a598d0b89b6a1afe586f48836982cfd638e0f1fc8"
+  },
+  "sdk122/py_clob_client_v2/order_utils/exchange_order_builder_v1.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "658f8b5f3da2c37f96acb35a879890edaccd61a8cc2355e9172196149accf246"
+  },
+  "sdk122/py_clob_client_v2/order_utils/exchange_order_builder_v2.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "9bb13209c190513a1eb4d2cce15ee2ebdddb0e9eb63acad0e38bb1a916ffe3eb"
+  },
+  "sdk122/py_clob_client_v2/order_utils/model/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "99381ba715bf84619d0aa1b8a0933ff300c1a0f736014d2c708d00dc1cb258ef"
+  },
+  "sdk122/py_clob_client_v2/order_utils/model/ctf_exchange_v1_typed_data.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "f9f93910f955fb460ae6deed0eae2bd816feab28ededd0bcff9bb448888db911"
+  },
+  "sdk122/py_clob_client_v2/order_utils/model/ctf_exchange_v2_typed_data.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "f44400ec80d946bea28bb1a86eb36783bee4eaf27556e1430a6c96e8ad024b9c"
+  },
+  "sdk122/py_clob_client_v2/order_utils/model/order_data_v1.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "ca375fa94bb2fbb84027be28338e4c27bc01a4e843fc51a7611e0e77bb135170"
+  },
+  "sdk122/py_clob_client_v2/order_utils/model/order_data_v2.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "30de6da40c7e859bab404c7df4ef7b25d0145d01a013d6d510d96cce78b6dfe9"
+  },
+  "sdk122/py_clob_client_v2/order_utils/model/side.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "e80ca422674b7474a11dd3355789cea0ddbdf0a43b67b5fac74cce8f55318a75"
+  },
+  "sdk122/py_clob_client_v2/order_utils/model/signature_type_v1.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "a2c5049d075ad08d935017a9009e1fe43aa0ace166650e6a90636ef5372cfe9f"
+  },
+  "sdk122/py_clob_client_v2/order_utils/model/signature_type_v2.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "d3fdff84053c32d1bdf124c5878df13702fd514cadc0154246cb9e89c67ec95f"
+  },
+  "sdk122/py_clob_client_v2/order_utils/utils.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "688e680bbf583b2eeb83d3be4df3046e06d6a5ecc917b2d361a2313a652b413c"
+  },
+  "sdk122/py_clob_client_v2/rfq/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "2b1b93c3ad398b385e26b781f0042d492ea9af3c64e00b72fe79d7304c6b54ad"
+  },
+  "sdk122/py_clob_client_v2/rfq/rfq_client.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "c54b4451ead2865653453991b220fa5354ec6eca65c8bf745caa38dd0d6c564e"
+  },
+  "sdk122/py_clob_client_v2/rfq/rfq_helpers.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "61370002373d0315e71e5c5d24eed63f73f1cc348204bfc1cf60306d77166b60"
+  },
+  "sdk122/py_clob_client_v2/rfq/rfq_types.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "b1755af6f6de468258a29bebea99874bba42c7441a3f29290c8cea184b5c1400"
+  },
+  "sdk122/py_clob_client_v2/signer.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "f88744ae444648dc453cd3b30034ed83361f881787710ec215cd7a21f83e793d"
+  },
+  "sdk122/py_clob_client_v2/signing/__init__.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "ef6dd71de75f1d2444ca0dd1f7e5a99442101f9e1fc147eeb2d78e775032ab61"
+  },
+  "sdk122/py_clob_client_v2/signing/eip712.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "1b90239be1e465635361117eca2bfccc8f441ce8da65d6d67c5dc6277720b829"
+  },
+  "sdk122/py_clob_client_v2/signing/hmac.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "c5f05f5e89e9472f5f42281385b68985a0f9018763383d94f66d30e1c63b84e4"
+  },
+  "sdk122/py_clob_client_v2/signing/model.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "b227794f9b9878183658efc482ee3f33a295bd04624c52a7b875332c119421ea"
+  },
+  "sdk122/py_clob_client_v2/utilities.py": {
+   "origen": "PyPI py_clob_client_v2 1.2.2 wheel sha256 c7291a450b77cb04a7531865edb5a1adfb1cc528a4514a94dd5f25a665024e8f",
+   "sha256_copia": "cca58cd949fada89eab0508c8a451953319d7bba9311a104c827494749a800a6"
   }
- }
+ },
+ "sdk122_actualizado_utc": "2026-11-26T11:25:09Z"
 }

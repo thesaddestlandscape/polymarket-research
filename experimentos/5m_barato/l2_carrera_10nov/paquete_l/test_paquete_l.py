@@ -4,6 +4,7 @@ import os, sys, json, shutil, tempfile, subprocess, re, types, threading
 H = os.path.dirname(os.path.abspath(__file__)) + '/'; sys.path.insert(0, H)
 import pl_core as C, paquete_l as PL
 from pl_sender import RelojVirtual, SenderSim, MercadosSim, ErrHTTP
+C.cargar_vendor('mercado_version').cargar_sdk(H + 'vendor/sdk122', C.hashes_sdk(H))                                                    # 26-Nov: TODOS los tests usan el SDK 1.2.2 VENDORIZADO (el de site-packages, 1.0.1, no se toca)
 TMP = tempfile.mkdtemp(prefix='paquete_l_test_'); C.LOCK_DIR = TMP                                                   # v7: los locks de instancia unica de los tests van al TMP (no chocan con un run real)
 import atexit; atexit.register(shutil.rmtree, TMP, True)
 
@@ -293,10 +294,27 @@ def test_contar_anclas():
     print('T20 ok: anclas directas = alta + PLACEMENT + CANCELLATION + cancel_try; linea cortada tolerada; por moneda')
 
 
+_CM = {}
+
+
+class FakeSel:
+    """Selector de version simulado: devuelve una InfoMercado fija para cualquier token (los tests de firma con doble de cliente no hacen red)."""
+    def __init__(self, version='v1', neg=False, toks=('T', 'U')):
+        MV = C.cargar_vendor('mercado_version'); self.info = MV.InfoMercado(version, '0x' + 'ab' * 8, tuple(toks), neg, (MV.EXCHANGE_V3 if version == 'v2' else MV.NEG_RISK_EXCHANGE_V2 if neg else MV.EXCHANGE_V2), '3' if version == 'v2' else '2', version == 'v2')
+    def por_token(self, tok): return self.info
+
+
+def cm_de(url):
+    """Respuesta simulada de CLOB /clob-markets/{conditionId} (la registra gamma_ev)."""
+    return _CM[url.rsplit('/', 1)[1]]
+
+
 def gamma_ev(coin, ini, outcomes=('Up', 'Down'), toks=None, fin=None, tick='0.01', minsize=5, slug=None, titulo=None, **mk):
     import datetime as _d
     s = slug or f'{coin.lower()}-updown-5m-{ini}'; fin = ini + 300 if fin is None else fin; toks = toks or [s + 'A', s + 'B']
-    m = dict(outcomes=json.dumps(list(outcomes)), clobTokenIds=json.dumps(toks), endDate=_d.datetime.fromtimestamp(fin, _d.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), closed=False, active=True, acceptingOrders=True, orderPriceMinTickSize=tick, orderMinSize=minsize, negRisk=False); m.update(mk)
+    ver = mk.pop('version', 'v1'); cond = mk.pop('conditionId', '0x' + s.encode().hex())
+    _CM[cond] = dict(v=ver, c=cond, t=[dict(t=x, o='x') for x in toks])                                          # 26-Nov: /clob-markets simulado (version por mercado)
+    m = dict(version=ver, conditionId=cond, outcomes=json.dumps(list(outcomes)), clobTokenIds=json.dumps(toks), endDate=_d.datetime.fromtimestamp(fin, _d.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), closed=False, active=True, acceptingOrders=True, orderPriceMinTickSize=tick, orderMinSize=minsize, negRisk=False); m.update(mk)
     return dict(slug=s, title=titulo or f'{C.NOMBRE_MONEDA[coin].capitalize()} Up or Down - November 12', markets=[m])
 
 
@@ -317,6 +335,7 @@ def test_mercados_real_con_fake():
     llam = []; ini0 = 1_790_000_100 // 300 * 300
     def get(url, params):
         llam.append((url, params))
+        if 'clob-markets' in url: return cm_de(url)
         if 'events' in url:
             slug = params['slug']; coin = slug.split('-')[0].upper(); ini = int(slug.rsplit('-', 1)[1])
             if coin == 'BTC': return [gamma_ev('BTC', ini)]
@@ -343,7 +362,7 @@ def test_vendor_y_hash():
         t = open(H + fn).read(); assert 'import sonda1' not in t and 'sys.path.insert(0, SONDA_DIR)' not in t, fn
     assert 'polymarket-research-dev' not in open(H + 'pl_sender_real.py').read().split('"""', 2)[2] and 'SONDA_DIR' not in open(H + 'pl_core.py').read()
     a = C.sha_codigo(); b = C.sha_codigo(d + '/'); assert a != b
-    h = json.load(open(H + 'vendor/VENDOR_HASHES.json'))['copias']; assert set(h) == {'vendor_main.py', 'cancel_evidencia.py', 'envio_real.py', 'plan_paquete_l.py'} and all(v['sha256_copia'] for v in h.values())
+    h = json.load(open(H + 'vendor/VENDOR_HASHES.json'))['copias']; assert {k for k in h if not k.startswith('sdk122/')} == {'vendor_main.py', 'cancel_evidencia.py', 'envio_real.py', 'plan_paquete_l.py', 'mercado_version.py'} and sum(k.startswith('sdk122/py_clob_client_v2/') for k in h) >= 40 and all(v['sha256_copia'] for v in h.values())
     print('T29 ok: vendor/ verificado por hash (alterar un byte o quitar VENDOR_HASHES => no ok); sin imports de dev; el vendor entra en codigo_sha')
 
 
@@ -701,7 +720,7 @@ def test_h10_neg_risk_y_gamma_explicitos():
     class Cli:
         def create_order(s, args, opts): llamadas.append(('create', args, opts)); return types.SimpleNamespace(expiration=str(args.expiration))
         def post_order(s, signed, tipo, post_only=False): llamadas.append(('post', tipo, post_only)); return {'success': True}
-    e.cli = Cli(); e.M = types.SimpleNamespace(hash_orden=lambda signed, nr: '0xhash'); e._neg_risk = lambda tok: True
+    e.cli = Cli(); e.M = types.SimpleNamespace(hash_orden=lambda signed, nr: '0xhash'); e._neg_risk = lambda tok: True; e._sel = FakeSel('v1', True)
     for malo in (None, False):
         try: e.poner('T', 0.01, 5.0, 'k', neg_risk=malo, expira_s=75); assert False, malo
         except RuntimeError: pass
@@ -958,9 +977,10 @@ def test_r1_preflight_solo_lectura():
     T0 = 1_790_000_100.0; ini0 = int(T0) // 300 * 300; cfg = C.Config()
     def mk_get(tick='0.01', minsize='5', neg=False, asks=((0.45, 20),), gamma_neg=False):
         def get(url, params):
+            if 'clob-markets' in url: return cm_de(url)
             if 'events' in url:
                 slug = params['slug']; coin = slug.split('-')[0].upper(); ini = int(slug.rsplit('-', 1)[1]); ev = gamma_ev(coin, ini); ev['markets'][0]['negRisk'] = gamma_neg; return [ev]
-            return dict(version='v2', bids=[dict(price='0.40', size='10')], asks=[dict(price=str(p), size=str(q)) for p, q in asks], min_order_size=minsize, tick_size=tick, neg_risk=neg)
+            return dict(bids=[dict(price='0.40', size='10')], asks=[dict(price=str(p), size=str(q)) for p, q in asks], min_order_size=minsize, tick_size=tick, neg_risk=neg)
         return get
     class Firmada:                                                                 # forma de SignedOrderV2 (solo los campos que se comparan)
         def __init__(s, tok, maker=cfg.wallet, mk='50000', tk='5000000', exp=None): s.makerAmount, s.takerAmount, s.tokenId, s.maker, s.side, s.signatureType, s.signature, s.expiration = mk, tk, tok, maker, 'BUY', 3, '0xfirma', str(exp if exp is not None else int(T0) + cfg.gtd_expira_s)
@@ -1946,8 +1966,9 @@ def _preflight_dobles(suscribir='todos', vuelca=True, evid_dir=None, **cek):
     import pl_sender_real as R2
     T0 = 1_790_000_100.0; cfg = C.Config()
     def get(url, params):
+        if 'clob-markets' in url: return cm_de(url)
         if 'events' in url: slug = params['slug']; coin = slug.split('-')[0].upper(); ini = int(slug.rsplit('-', 1)[1]); return [gamma_ev(coin, ini)]
-        return dict(version='v2', bids=[dict(price='0.40', size='10')], asks=[dict(price='0.45', size='20')], min_order_size='5', tick_size='0.01', neg_risk=False)
+        return dict(bids=[dict(price='0.40', size='10')], asks=[dict(price='0.45', size='20')], min_order_size='5', tick_size='0.01', neg_risk=False)
     class Firmada:
         def __init__(s, tok): s.makerAmount, s.takerAmount, s.tokenId, s.maker, s.side, s.signatureType, s.signature, s.expiration = '50000', '5000000', tok, cfg.wallet, 'BUY', 3, '0xf', str(int(T0) + cfg.gtd_expira_s)
     class Cred:
@@ -2018,7 +2039,7 @@ def test_r15c_contrato_senderreal_contra_servidor_http_local():
     srv = http.server.ThreadingHTTPServer(('127.0.0.1', 0), H); threading.Thread(target=srv.serve_forever, daemon=True).start()
     cli = ClobClient(host=f'http://127.0.0.1:{srv.server_address[1]}', chain_id=137, key=Account.create().key.hex(), creds=ApiCreds(api_key='00000000-0000-0000-0000-000000000001', api_secret=base64.urlsafe_b64encode(b'secreto' * 4).decode(), api_passphrase='pp'))
     C.cargar_vendor('vendor_main'); ER = C.cargar_vendor('envio_real')
-    env = R2.clase_envio(ER).__new__(R2.clase_envio(ER)); env.M = ER.V; env.cli = cli; env.wallet = C.Config().wallet; env._cache_lock = threading.Lock()
+    env = R2.clase_envio(ER).__new__(R2.clase_envio(ER)); env.M = ER.V; env.cli = cli; env.wallet = C.Config().wallet; env._cache_lock = threading.Lock(); env._sel = FakeSel('v1', False, ('123456', '7'))
     altas = []; TLns = threading.local()
     reg = types.SimpleNamespace(alta=lambda p: altas.append(p), avisar=None); ce = types.SimpleNamespace(_TL=TLns); sender = R2.SenderReal(env, reg, types.SimpleNamespace(pedir=lambda tok: None), ce, os.path.join(TMP, 'r15c_contrato'))
     sender.env.enviar_orig = None
@@ -2186,6 +2207,267 @@ def test_r21_lote_con_kill_no_gira_en_caliente_y_lecturas_de_estado_ampliadas():
     P4._due = lambda v: P4.r.now_ns() if (P4.kill and v.get('cx') is None) else v['deadline_ns']                                           # el bug ORIGINAL reinyectado: la red de seguridad (lote_kill_max_s) tiene que sacar al lote del bucle sin progreso
     th4 = threading.Thread(target=lambda: P4.correr(), daemon=True); th4.start(); th4.join(40); assert not th4.is_alive() and not P4.vivas and P4.cnt['lote_sin_progreso'] >= 1, (P4.vivas, dict(P4.cnt))
     print('T130 ok [v21]: _due estable (0 con kill), lote sin giro caliente con reloj que avanza y estado ilegible, 0 vivas; 8 lecturas de estado tras cancel')
+
+
+# ====================================================================================================== v22 (26-Nov): Protocol V2 POR MERCADO (SOL/XRP/BNB/DOGE/HYPE = v2 -> ExchangeV3 + position_id; BTC/ETH = v1). 0 red, 0 ordenes, clave EFIMERA
+def _cliente_offline(neg_defecto=False):
+    """ClobClient REAL (SDK 1.2.2 vendorizado) con clave efimera y TODAS las lecturas de red sustituidas: firma en local, ni siquiera abre un socket."""
+    from py_clob_client_v2 import ClobClient, ApiCreds
+    from eth_account import Account
+    class Cli(ClobClient):
+        def get_tick_size(self, tok): return '0.01'
+        def get_neg_risk(self, tok): return neg_defecto
+        def get_version(self, *a, **k): return 2
+    return Cli(host='http://127.0.0.1:9', chain_id=137, key=Account.create().key.hex(), creds=ApiCreds(api_key='00000000-0000-0000-0000-000000000001', api_secret='c2VjcmV0c2VjcmV0c2VjcmV0c2VjcmV0', api_passphrase='pp'), signature_type=3, funder=C.WALLET_DEDICADA)
+
+
+def _env_real(cli, sel):
+    import pl_sender_real as R2
+    C.cargar_vendor('vendor_main'); ER = C.cargar_vendor('envio_real'); E = R2.clase_envio(ER); e = object.__new__(E)
+    e.M = ER.V; e.cli = cli; e.wallet = C.WALLET_DEDICADA; e._cache_lock = threading.Lock(); e._sel = sel; return e
+
+
+def test_v22_firma_v2_exchange_v3_posicion_y_v1_exchange_v2():
+    MV = C.cargar_vendor('mercado_version'); TOK2 = '760796952291461483474976008205874557820563377012439155484853465636659003392'; TOK1 = '58780799662024926590541468129714199482400624934641804631714062588511334565070'
+    assert MV.EXCHANGE_V3 == '0xe3333700cA9d93003F00f0F71f8515005F6c00Aa' and MV.EXCHANGE_V2 == '0xE111180000d2663C0091e4f400237545B87B996B' and MV.NEG_RISK_EXCHANGE_V2 == '0xe2222d279d744050d28e00520010520000310F59'
+    from py_clob_client_v2.config import get_contract_config
+    cc = get_contract_config(137); assert (cc.exchange_v3, cc.exchange_v2, cc.neg_risk_exchange_v2) == (MV.EXCHANGE_V3, MV.EXCHANGE_V2, MV.NEG_RISK_EXCHANGE_V2)               # las constantes del selector == las del SDK vendorizado
+    # v2 (SOL/XRP/...): position_id -> ExchangeV3, dominio "3"
+    e2 = _env_real(_cliente_offline(), FakeSel('v2', False, (TOK2, TOK2[:-1] + '3'))); oid2, sg2 = e2.poner(TOK2, 0.01, 5.0, 'k', neg_risk=False, expira_s=200)
+    i2 = e2._sel.info; td2 = MV.typed_data(sg2, i2); assert td2['domain']['verifyingContract'] == '0xe3333700cA9d93003F00f0F71f8515005F6c00Aa' and td2['domain']['version'] == '3' and td2['domain']['name'] == 'Polymarket CTF Exchange' and td2['domain']['chainId'] == 137
+    assert str(sg2.tokenId) == TOK2 and int(sg2.signatureType) == 3 and sg2.maker.lower() == C.WALLET_DEDICADA.lower() and oid2 == MV.hash_orden(sg2, i2) and re.fullmatch(r'0x[0-9a-f]{64}', oid2)
+    from eth_account.messages import encode_typed_data, _hash_eip191_message
+    assert oid2 == '0x' + _hash_eip191_message(encode_typed_data(full_message=td2)).hex()                                                          # hash independiente (eth_account) del mismo typed data
+    # v1 (BTC/ETH): token_id -> ExchangeV2 / dominio "2"; el hash coincide con el del vendor_main verbatim (comportamiento anterior intacto)
+    e1 = _env_real(_cliente_offline(False), FakeSel('v1', False, (TOK1, TOK1[:-1] + '1'))); oid1, sg1 = e1.poner(TOK1, 0.01, 5.0, 'k', neg_risk=False, expira_s=200)
+    td1 = MV.typed_data(sg1, e1._sel.info); assert td1['domain']['verifyingContract'] == '0xE111180000d2663C0091e4f400237545B87B996B' and td1['domain']['version'] == '2' and oid1 == e1.M.hash_orden(sg1, False) == MV.hash_orden(sg1, e1._sel.info)
+    # v1 neg_risk -> 0xe2222...
+    e3 = _env_real(_cliente_offline(True), FakeSel('v1', True, (TOK1, TOK1[:-1] + '1'))); oid3, sg3 = e3.poner(TOK1, 0.01, 5.0, 'k', neg_risk=True, expira_s=200)
+    assert MV.typed_data(sg3, e3._sel.info)['domain']['verifyingContract'] == '0xe2222d279d744050d28e00520010520000310F59' and oid3 == e3.M.hash_orden(sg3, True)
+    # el MISMO orden firmado tiene hash distinto segun el contrato/version de dominio (no es un detalle)
+    assert MV.hash_orden(sg2, i2) != MV.hash_orden(sg2, FakeSel('v1', False, (TOK2, 'x')).info)
+    # v2 con un cliente que NO pone el position_id (p. ej. un SDK viejo) no sale: la orden firmada debe llevar el id del mercado
+    class Viejo:
+        def create_order(s, args, opts): return types.SimpleNamespace(tokenId='999', expiration='1')
+    ev = _env_real(Viejo(), FakeSel('v2', False, (TOK2, TOK2[:-1] + '3')))
+    try: ev.poner(TOK2, 0.01, 5.0, 'k', neg_risk=False, expira_s=200); assert False
+    except RuntimeError as x: assert 'position_id' in str(x)
+    print('T131 ok [v22]: v2 -> typed data ExchangeV3 0xe3333700.. version "3" + position_id (hash == eth_account independiente); v1 -> 0xE111.. "2" (hash == vendor_main verbatim); neg_risk v1 -> 0xe2222..; cliente sin position_id no firma')
+
+
+def test_v22_regresion_sdk_1_0_1_firma_otro_hash_para_el_token_v2():
+    """Con el SDK 1.0.1 de produccion (site-packages, SIN vendor) la misma orden de un token v2 se firma contra el exchange v2: hash DISTINTO del de 1.2.2/ExchangeV3 (el origen del `400 invalid POLY_1271 signature`)."""
+    prog = r"""
+import sys, json
+sys.path.insert(0, %r); import pl_core as C
+modo = sys.argv[1]
+if modo == 'nuevo': C.cargar_vendor('mercado_version').cargar_sdk(%r, C.hashes_sdk(%r))
+from py_clob_client_v2.config import get_contract_config
+from py_clob_client_v2.order_utils.exchange_order_builder_v2 import ExchangeOrderBuilderV2
+from py_clob_client_v2.order_utils.model.order_data_v2 import OrderDataV2
+from py_clob_client_v2.signer import Signer
+cc = get_contract_config(137); TOK = '760796952291461483474976008205874557820563377012439155484853465636659003392'
+od = OrderDataV2(maker='0x659a40FF9920fEBc5a66836213040924343d297F', tokenId=TOK, makerAmount='50000', takerAmount='5000000', side=0, signer='0x659a40FF9920fEBc5a66836213040924343d297F', signatureType=3, timestamp='1795691947343', expiration='1795692147')
+sg = Signer('0x' + '11' * 32, 137)
+if modo == 'nuevo': b = ExchangeOrderBuilderV2(cc.exchange_v3, 137, sg, generate_salt=lambda: '42', domain_version='3')
+else: b = ExchangeOrderBuilderV2(cc.exchange_v2, 137, sg, generate_salt=lambda: '42')
+o = b.build_order(od); h = b.build_order_hash(b.build_order_typed_data(o))
+import importlib.metadata as md
+try: from py_clob_client_v2.clob_types import OrderArgsV2; OrderArgsV2(position_id=TOK, price=0.01, size=5, side='BUY'); acepta = True
+except TypeError: acepta = False
+print(json.dumps(dict(hash=h, tiene_v3=hasattr(cc, 'exchange_v3'), position_id=acepta, file=sys.modules['py_clob_client_v2'].__file__)))
+""" % (H, H + 'vendor/sdk122', H)
+    r = {}
+    for modo in ('viejo', 'nuevo'):
+        o = subprocess.run([sys.executable, '-I', '-c', prog, modo], capture_output=True, text=True, timeout=60); assert o.returncode == 0, o.stdout + o.stderr[-800:]; r[modo] = json.loads(o.stdout.strip().splitlines()[-1])
+    assert r['viejo']['hash'] != r['nuevo']['hash'] and r['viejo']['position_id'] is False and r['nuevo']['position_id'] is True and r['viejo']['tiene_v3'] is False and r['nuevo']['tiene_v3'] is True, r
+    assert 'site-packages' in r['viejo']['file'] and r['nuevo']['file'].startswith(H + 'vendor/sdk122/'), r
+    print('T132 ok [v22]: regresion: con 1.0.1 (site-packages) el hash del token v2 difiere del de 1.2.2/ExchangeV3 y OrderArgsV2 no admite position_id; el nuevo carga SOLO el vendorizado')
+
+
+def test_v22_sdk_vendorizado_aislado_y_con_hash():
+    MV = C.cargar_vendor('mercado_version'); hs = C.hashes_sdk(H)
+    prog = r"""
+import sys, os, json, shutil
+sys.path.insert(0, %r); import pl_core as C
+MV = C.cargar_vendor('mercado_version'); hs = C.hashes_sdk(%r); res = {}
+# (a) ya cargado el 1.0.1 de site-packages => NO se mezcla
+import py_clob_client_v2
+try: MV.cargar_sdk(%r, hs); res['mezcla'] = 'CARGO'
+except MV.ErrVersion as e: res['mezcla'] = 'rechazado'
+print(json.dumps(res))
+""" % (H, H, H + 'vendor/sdk122')
+    o = subprocess.run([sys.executable, '-I', '-c', prog], capture_output=True, text=True, timeout=60); assert json.loads(o.stdout.strip().splitlines()[-1]) == {'mezcla': 'rechazado'}, o.stdout + o.stderr[-500:]
+    d = os.path.join(TMP, 'sdk_alterado'); shutil.copytree(H + 'vendor/sdk122', d)
+    prog2 = r"""
+import sys, json
+sys.path.insert(0, %r); import pl_core as C
+MV = C.cargar_vendor('mercado_version'); hs = C.hashes_sdk(%r); res = {}
+f = %r + '/py_clob_client_v2/config.py'
+open(f, 'a').write('\n# alterado\n')
+try: MV.cargar_sdk(%r, hs); res['alterado'] = 'CARGO'
+except MV.ErrVersion as e: res['alterado'] = 'rechazado'
+print(json.dumps(res), 'py_clob_client_v2' in sys.modules)
+""" % (H, H, d, d)
+    o = subprocess.run([sys.executable, '-I', '-c', prog2], capture_output=True, text=True, timeout=60); assert o.stdout.strip().splitlines()[-1] == '{"alterado": "rechazado"} False', o.stdout + o.stderr[-500:]      # un byte distinto: nada se importa
+    d2 = os.path.join(TMP, 'sdk_sobra'); shutil.copytree(H + 'vendor/sdk122', d2); open(d2 + '/py_clob_client_v2/extra_malicioso.py', 'w').write('x=1\n')
+    prog3 = prog2.replace(d, d2).replace("open(f, 'a').write('\\n# alterado\\n')", "pass").replace("'alterado'", "'sobra'")
+    o = subprocess.run([sys.executable, '-I', '-c', prog3], capture_output=True, text=True, timeout=60); assert o.stdout.strip().splitlines()[-1] == '{"sobra": "rechazado"} False', o.stdout + o.stderr[-500:]                       # un .py sin hash tampoco
+    prog4 = r"""
+import sys, json, importlib.metadata as md
+sys.path.insert(0, %r); import pl_core as C
+C.cargar_vendor('mercado_version').cargar_sdk(%r, C.hashes_sdk(%r))
+import py_clob_client_v2, py_clob_client_v2.client as cl
+print(json.dumps(dict(f=py_clob_client_v2.__file__, cl=cl.__file__, meta=md.version('py_clob_client_v2'), sp=[p for p in sys.path if 'vendor' in p])))
+""" % (H, H + 'vendor/sdk122', H)
+    o = subprocess.run([sys.executable, '-I', '-c', prog4], capture_output=True, text=True, timeout=60); j = json.loads(o.stdout.strip().splitlines()[-1]); assert j['f'].startswith(H + 'vendor/sdk122/') and j['cl'].startswith(H + 'vendor/sdk122/') and j['meta'] == '1.0.1' and j['sp'] == [], (j, o.stderr[-300:])   # metadata del venv intacta (1.0.1), sys.path intacto
+    assert all(k.startswith('py_clob_client_v2/') or k == 'LICENSE' for k in hs) and len(hs) >= 40 and MV.SDK_VERSION == '1.2.2'
+    # `_resolve_transactions_hashes` (sondeo de hasta 30 s DENTRO de post_order en 1.2.2) neutralizado: la latencia del POST no depende de el
+    from py_clob_client_v2.client import ClobClient; r = {'tradeIDs': ['a']}; assert ClobClient._resolve_transactions_hashes(object(), r) is r
+    print('T133 ok [v22]: SDK 1.2.2 vendorizado: se rechaza si ya hay otro SDK cargado, si un byte cambia o si sobra un .py; no toca sys.path ni la metadata del venv (1.0.1); sondeo de hashes post_order neutralizado')
+
+
+def _gm(version='v2', pos='igual', neg=False, cond='0x01ae988759404be53ceb7a3b008bca69c9000000000000000000000000000000', toks=('111', '222'), **extra):
+    m = dict(conditionId=cond, clobTokenIds=json.dumps(list(toks)), negRisk=neg)
+    if version is not None: m['version'] = version
+    if pos == 'igual': m['positionIds'] = list(toks)
+    elif pos == 'distintos': m['positionIds'] = ['111', '999']
+    m.update(extra); return m
+
+
+def test_v22_selector_fail_closed_cache_y_por_token():
+    MV = C.cargar_vendor('mercado_version'); cm_ok = lambda v='v2', toks=('111', '222'), c='0x01ae988759404be53ceb7a3b008bca69c9000000000000000000000000000000': dict(v=v, c=c, t=[dict(t=x, o='Up') for x in toks])
+    t = [100.0]; llam = []
+    def get(url, params):
+        llam.append((url, params))
+        if 'clob-markets' in url: return cm_ok(**GET_CM)
+        if 'gamma' in url and 'markets' in url: return [_gm(toks=('111', '222'))] if params['clob_token_ids'] in ('111', '222') else []
+        raise AssertionError(url)
+    GET_CM = {}; sel = MV.Selector(get=get, ttl_s=30, reloj=lambda: t[0])
+    i = sel.resolver(_gm()); assert i.version == 'v2' and i.exchange == MV.EXCHANGE_V3 and i.dominio_version == '3' and i.usa_position_id and i.neg_risk is False
+    n = len(llam); assert sel.resolver(_gm()) == i and len(llam) == n                                          # cache vigente: 0 GET
+    assert sel.por_token('222') is i and len(llam) == n                                                          # por token: misma cache
+    t[0] += 31; assert sel.por_token('111') == i and len(llam) == n + 2                                         # caducada: vuelve a gamma + CLOB (la migracion sigue en curso)
+    v1 = sel.resolver(_gm(version='v1', pos=None, cond='0x' + '12' * 16, toks=('333', '444')), None) if False else None
+    GET_CM.update(v='v1', toks=('333', '444'), c='0x' + '12' * 16); i1 = sel.resolver(_gm(version='v1', pos=None, cond='0x' + '12' * 16, toks=('333', '444'))); assert i1.version == 'v1' and i1.exchange == MV.EXCHANGE_V2 and i1.dominio_version == '2' and not i1.usa_position_id
+    GET_CM.update(toks=('333', '444')); inr = sel.resolver(_gm(version='v1', pos=None, neg=True, cond='0x' + '12' * 16, toks=('333', '444'))); assert inr.exchange == MV.NEG_RISK_EXCHANGE_V2 and inr.neg_risk
+    # --- fail-closed: cada caso lanza ErrVersion (y NO deja nada en cache)
+    malos = {'sin_version': (_gm(version=None), {}), 'version_rara': (_gm(version='v3'), {}), 'version_no_str': (_gm(version=2), {}), 'sin_conditionId': (_gm(cond=None), {}), 'tokens_no_2': (_gm(toks=('1', '2', '3')), {}),
+             'v2_sin_positionIds': (_gm(pos=None), {}), 'positionIds_distintos': (_gm(pos='distintos'), {}), 'v2_neg_risk': (_gm(neg=True), {}), 'negRisk_no_bool': (_gm(negRisk='false'), {}),
+             'v1_con_positionIds_distintos': (_gm(version='v1', pos='distintos'), dict(v='v1')), 'clob_dice_v1_gamma_v2': (_gm(), dict(v='v1')), 'clob_dice_v2_gamma_v1': (_gm(version='v1', pos=None), dict(v='v2')),
+             'clob_sin_v': (_gm(), dict(v=None)), 'clob_tokens_distintos': (_gm(), dict(toks=('111', '555'))), 'clob_condition_distinto': (_gm(), dict(c='0xdeadbeefdeadbeefdeadbeef'))}
+    for k, (m, cm) in malos.items():
+        sel2 = MV.Selector(get=lambda url, params, cm=cm: dict(cm_ok(), **{x: y for x, y in cm.items() if x in ('v', 'c')}, **({'t': [dict(t=z) for z in cm['toks']]} if 'toks' in cm else {})), reloj=lambda: 0.0)
+        try: sel2.resolver(m); assert False, k
+        except MV.ErrVersion: pass
+        assert not sel2._c, k
+    def cae(url, params): raise TimeoutError('red')
+    for f in (lambda s: s.resolver(_gm()), lambda s: s.por_token('111')):
+        try: f(MV.Selector(get=cae)); assert False
+        except MV.ErrVersion: pass                                                                             # un fallo de red NO deja firmar
+    try: sel.por_token('999'); assert False                                                                    # token desconocido (gamma devuelve 0 mercados)
+    except MV.ErrVersion: pass
+    ev_dif = lambda: MV.info_de_gamma(_gm(), dict(version='v1'))
+    try: ev_dif(); assert False
+    except MV.ErrVersion: pass                                                                                  # evento y mercado discrepan
+    # args_orden: v2 -> position_id; v1 -> token_id; token ajeno => no
+    from py_clob_client_v2 import OrderArgsV2
+    a2 = MV.args_orden(i, OrderArgsV2, '111', 0.01, 5, 'BUY', expiration=7); assert a2.position_id == '111' and a2.token_id is None and a2.expiration == 7
+    a1 = MV.args_orden(i1, OrderArgsV2, '333', 0.01, 5, 'BUY'); assert a1.token_id == '333' and a1.position_id is None
+    try: MV.args_orden(i, OrderArgsV2, '333', 0.01, 5, 'BUY'); assert False
+    except MV.ErrVersion: pass
+    # libro: v2 => version v2; v1 => ausente o v1
+    assert MV.comprobar_libro(i, dict(version='v2'))[0] and not MV.comprobar_libro(i, dict())[0] and not MV.comprobar_libro(i, dict(version='v1'))[0]
+    assert MV.comprobar_libro(i1, dict())[0] and MV.comprobar_libro(i1, dict(version='v1'))[0] and not MV.comprobar_libro(i1, dict(version='v2'))[0] and not MV.comprobar_libro(i1, None)[0]
+    print('T134 ok [v22]: selector: v2->ExchangeV3/"3"/position_id, v1->0xE111../"2" (neg_risk 0xe2222..); cache TTL 30 s; 15 casos fail-closed (version ausente/rara, positionIds, v2+negRisk, discrepancia gamma/CLOB/evento, red caida, token ajeno)')
+
+
+def test_v22_mercadosreal_rechaza_version_dudosa_y_poner_sin_selector_no_firma():
+    sys.path.insert(0, H); import pl_sender_real as R; MV = C.cargar_vendor('mercado_version'); ini = 1_790_000_100 // 300 * 300
+    def mk(ver_gamma='v2', ver_clob='v2', pos='ok'):
+        def get(url, params):
+            if 'clob-markets' in url: return dict(cm_de(url), v=ver_clob) if ver_clob else {k: v for k, v in cm_de(url).items() if k != 'v'}
+            slug = params['slug']; coin = slug.split('-')[0].upper(); i = int(slug.rsplit('-', 1)[1]); ev = gamma_ev(coin, i, version=ver_gamma)
+            if ver_gamma == 'v2' and pos == 'ok': ev['markets'][0]['positionIds'] = json.loads(ev['markets'][0]['clobTokenIds'])
+            elif pos == 'mal': ev['markets'][0]['positionIds'] = ['1', '2']
+            return [ev]
+        return get
+    M = R.MercadosReal(get=mk(), reloj=lambda: float(ini), coins=('SOL',)); ms = M.mercados(); assert len(ms) == 2 and all(m[1] == 'SOL' for m in ms)                                   # v2 coherente: acepta
+    for nombre, kw in (('clob_discrepa', dict(ver_clob='v1')), ('clob_sin_v', dict(ver_clob=None)), ('v2_sin_positionIds', dict(pos='no')), ('positionIds_distintos', dict(pos='mal')), ('gamma_sin_version', dict(ver_gamma=None))):
+        M2 = R.MercadosReal(get=mk(**kw), reloj=lambda: float(ini), coins=('SOL',)); assert M2.mercados() == [] and M2.rechazados, nombre
+    # BTC/ETH v1 sin positionIds: acepta
+    M3 = R.MercadosReal(get=mk('v1', 'v1'), reloj=lambda: float(ini), coins=('BTC',)); assert len(M3.mercados()) == 2
+    # poner SIN info de version (selector falla) => no firma y no llama al cliente
+    class SelCae:
+        def por_token(s, tok): raise MV.ErrVersion('sin_version')
+    llamadas = []
+    class Cli:
+        def create_order(s, *a): llamadas.append(a); return None
+    e = _env_real(Cli(), SelCae())
+    try: e.poner('111', 0.01, 5.0, 'k', neg_risk=False, expira_s=200); assert False
+    except MV.ErrVersion: pass
+    assert not llamadas
+    # verificar_mercado_gamma (dry-run compartido) rechaza positionIds != clobTokenIds
+    ev = gamma_ev('SOL', ini, version='v2'); ev['markets'][0]['positionIds'] = ['x', 'y']; ok, why, *_ = C.verificar_mercado_gamma('SOL', ini, ev); assert not ok and 'positionIds' in why
+    print('T135 ok [v22]: MercadosReal rechaza el mercado si CLOB/gamma discrepan, falta `v`/positionIds o positionIds != clobTokenIds; BTC/ETH v1 sin positionIds pasan; sin version no se firma ni se llama al cliente')
+
+
+def test_v22_preflight_publico_comprueba_version_positionids_y_libro():
+    import pl_sender_real as R2; T0 = 1_790_000_100.0; cfg = C.Config()
+    def mk_get(v_libro_sol='v2', v_clob_sol='v2'):
+        def get(url, params):
+            if 'clob-markets' in url:
+                cm = dict(cm_de(url)); 
+                if cm['c'].startswith('0x' + 'sol-updown'.encode().hex()): cm['v'] = v_clob_sol
+                return cm
+            if 'events' in url:
+                slug = params['slug']; coin = slug.split('-')[0].upper(); ini = int(slug.rsplit('-', 1)[1]); v2 = coin in ('SOL', 'XRP'); ev = gamma_ev(coin, ini, version='v2' if v2 else 'v1')
+                if v2: ev['markets'][0]['positionIds'] = json.loads(ev['markets'][0]['clobTokenIds'])
+                return [ev]
+            tok = params['token_id']; d = dict(bids=[dict(price='0.40', size='10')], asks=[dict(price='0.45', size='20')], min_order_size='5', tick_size='0.01', neg_risk=False)
+            if 'sol-updown' in tok: d['version'] = v_libro_sol
+            elif 'xrp-updown' in tok: d['version'] = 'v2'
+            return d
+        return get
+    r = R2.preflight(cfg, False, get=mk_get(), ahora=lambda: T0); assert r['ok'] is True, r['errores']
+    m = r['monedas']; assert m['SOL']['version'] == 'v2' and m['SOL']['version_clob'] == 'v2' and m['SOL']['exchange'].lower().startswith('0xe3333700') and m['SOL']['usa_position_id'] is True and m['SOL']['position_ids_son_los_token_ids'] is True
+    assert m['BTC']['version'] == 'v1' and m['BTC']['exchange'].lower().startswith('0xe1111800') and all(t['version_libro_ok'] for t in m['BTC']['tokens']) and all(t['version_libro'] == 'v2' and t['version_libro_ok'] for t in m['SOL']['tokens'])
+    r2 = R2.preflight(cfg, False, get=mk_get(v_libro_sol=None), ahora=lambda: T0); assert r2['ok'] is False and any('SOL' in e for e in r2['errores'])                                 # libro de un token v2 sin version v2 => no ok
+    r3 = R2.preflight(cfg, False, get=mk_get(v_clob_sol='v1'), ahora=lambda: T0); assert r3['ok'] is False                                                                   # CLOB dice v1, gamma v2 => mercado rechazado
+    print('T136 ok [v22]: --preflight-publico informa version gamma/CLOB, exchange, positionIds==clobTokenIds y version del libro; discrepancia => ok False')
+
+
+def test_v22_preflight_autenticado_firma_en_local_una_orden_v2_contra_exchange_v3():
+    """Preflight autenticado con el SDK 1.2.2 REAL y clave efimera (sin red, sin POST): se firma una orden de un mercado v2 en local y se comprueba dominio ExchangeV3/"3" y hash coherente."""
+    import pl_sender_real as R2; MV = C.cargar_vendor('mercado_version'); T0 = time.time(); cfg = C.Config(); ids = {}                                       # reloj REAL: la expiracion GTD de la orden firmada usa time.time()
+    def toks(coin, ini): return [str(10 ** 20 + hash_estable(coin, ini, k)) for k in (0, 1)]
+    def hash_estable(coin, ini, k): return int.from_bytes(__import__('hashlib').sha256(f'{coin}{ini}{k}'.encode()).digest()[:8], 'big')
+    def ev_de(coin, ini):
+        v2 = coin in ('SOL', 'XRP'); ev = gamma_ev(coin, ini, toks=toks(coin, ini), version='v2' if v2 else 'v1')
+        if v2: ev['markets'][0]['positionIds'] = json.loads(ev['markets'][0]['clobTokenIds'])
+        return ev
+    def get(url, params):
+        if 'clob-markets' in url: return cm_de(url)
+        if 'events' in url: slug = params['slug']; return [ev_de(slug.split('-')[0].upper(), int(slug.rsplit('-', 1)[1]))]
+        if url.endswith('/markets'):
+            tok = params['clob_token_ids']
+            for coin in C.COINS:
+                for ini in (int(T0) // 300 * 300, int(T0) // 300 * 300 + 300):
+                    if tok in toks(coin, ini): return [ev_de(coin, ini)['markets'][0]]
+            return []
+        tok = params['token_id']; d = dict(bids=[dict(price='0.40', size='10')], asks=[dict(price='0.45', size='20')], min_order_size='5', tick_size='0.01', neg_risk=False)
+        if any(tok in toks(c, i) for c in ('SOL', 'XRP') for i in (int(T0) // 300 * 300, int(T0) // 300 * 300 + 300)): d['version'] = 'v2'
+        return d
+    class Cred:
+        api_key = 'K'; api_secret = 'S'; api_passphrase = 'P'
+    cli = _cliente_offline(); env = _env_real(cli, MV.Selector(get=get)); cr = Cred(); cli.derive_api_key = lambda: cr; cli.creds = cr
+    env.saldo = lambda: 0.612681; env.abiertas_todas = lambda: []
+    chr_ok = lambda: dict(system_time_s=0.05, last_offset_s=0.01, stratum=2, ref_id='65D8456C', leap='Normal', root_dispersion_s=0.001, root_delay_s=0.04)
+    r = R2.preflight(cfg, True, canal_check=False, get=get, env_factory=lambda c: env, chrony=chr_ok, ahora=time.time)
+    A = r['autenticado']; assert r['ok'] is True, (r['errores'], A); assert A['orden_firmada_local_v2']['dominio_exchange_v3_version_3'] is True and A['orden_firmada_local_v2']['hash_local_coincide_con_dominio_v3'] is True and all(v is True for v in A['orden_firmada_local_v2'].values())
+    assert all(v is True for v in A['orden_firmada_local'].values())                                                                                 # la primera (BTC, v1) sigue firmandose como antes
+    assert 'v2' in json.dumps(r['monedas']['SOL']) and r['monedas']['SOL']['exchange'] == MV.EXCHANGE_V3 and r['monedas']['BTC']['exchange'] == MV.EXCHANGE_V2
+    print('T137 ok [v22]: preflight autenticado (SDK 1.2.2 real, clave efimera): BTC v1 firma como antes y un mercado v2 (SOL/XRP) se firma en local contra ExchangeV3/"3" con hash coherente; 0 POST')
 
 if __name__ == '__main__':
     try:

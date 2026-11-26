@@ -17,7 +17,7 @@ def exigir(cond, msg):
     if not cond: raise Invariante(msg)
 
 
-VERSION = 'paquete_l_v21'                                 # v16 (13-Nov): 14o /code-review (3 hallazgos + pasada corta); invalida cualquier confirmacion escrita para v2..v15
+VERSION = 'paquete_l_v22'                                 # v16 (13-Nov): 14o /code-review (3 hallazgos + pasada corta); invalida cualquier confirmacion escrita para v2..v15
 WALLET_DEDICADA = '0x659a40FF9920fEBc5a66836213040924343d297F'
 COINS = ('BTC', 'ETH', 'SOL', 'XRP')
 FALLBACK_DIR = '/tmp'                                       # v4 (hallazgo 10): si el informe final no se puede escribir en el out, se deja aqui (y en stderr)
@@ -96,8 +96,8 @@ class Config:
 
 
 FICHEROS_CODIGO = ('pl_core.py', 'pl_sender.py', 'pl_sender_real.py', 'paquete_l.py')
-FICHEROS_VENDOR = ('vendor/vendor_main.py', 'vendor/cancel_evidencia.py', 'vendor/envio_real.py', 'vendor/plan_paquete_l.py', 'vendor/VENDOR_HASHES.json')     # TODO lo ejecutable del paquete esta en estos ficheros (entra en codigo_sha)
-NOMBRES_VENDOR = ('vendor_main', 'cancel_evidencia', 'envio_real', 'plan_paquete_l')
+FICHEROS_VENDOR = ('vendor/vendor_main.py', 'vendor/cancel_evidencia.py', 'vendor/envio_real.py', 'vendor/plan_paquete_l.py', 'vendor/mercado_version.py', 'vendor/VENDOR_HASHES.json')     # TODO lo ejecutable del paquete esta en estos ficheros (entra en codigo_sha)
+NOMBRES_VENDOR = ('vendor_main', 'cancel_evidencia', 'envio_real', 'plan_paquete_l', 'mercado_version')
 PERMITIDOS_EN_DIR = FICHEROS_CODIGO + ('test_paquete_l.py',)
 
 
@@ -107,6 +107,11 @@ def verificar_vendor(base=HERE):
     except (OSError, ValueError, KeyError): return False, ['VENDOR_HASHES.json']
     mal = [f for f, v in h.items() if not os.path.exists(base + 'vendor/' + f) or hashlib.sha256(open(base + 'vendor/' + f, 'rb').read()).hexdigest() != v.get('sha256_copia')]
     mal += [n + '.py' for n in NOMBRES_VENDOR if n + '.py' not in h]; return not mal, mal
+
+
+def hashes_sdk(base=HERE):
+    """26-Nov: {ruta relativa a vendor/sdk122/: sha256} de los ficheros del SDK vendorizado, tal como los fija VENDOR_HASHES.json (los verifica `mercado_version.cargar_sdk` antes de importar nada)."""
+    h = json.load(open(base + 'vendor/VENDOR_HASHES.json'))['copias']; return {k[len('sdk122/'):]: v['sha256_copia'] for k, v in h.items() if k.startswith('sdk122/')}
 
 
 def cargar_vendor(nombre, base=HERE):
@@ -492,6 +497,7 @@ def verificar_mercado_gamma(coin, ini, ev):
         outs = json.loads(m['outcomes']) if isinstance(m.get('outcomes'), str) else list(m.get('outcomes') or [])
     except (ValueError, TypeError): return False, 'tokens_u_outcomes_ilegibles', None, None
     if len(toks) != 2 or len(outs) != 2 or sorted(str(o).strip().lower() for o in outs) != ['down', 'up']: return False, f'outcomes={outs}', None, None
+    if m.get('positionIds') not in (None, [], '') and [str(x) for x in (json.loads(m['positionIds']) if isinstance(m['positionIds'], str) else m['positionIds'])] != [str(x) for x in toks]: return False, 'positionIds_distintos_de_clobTokenIds', None, None          # 26-Nov (Protocol V2 por mercado): en v2 el id firmado es el positionId; si difiere del clobTokenId del libro no se opera
     mp = {str(o).strip().lower(): str(t) for o, t in zip(outs, toks)}
     import datetime as dt
     try: fin = dt.datetime.fromisoformat(str(m.get('endDate') or ev.get('endDate')).replace('Z', '+00:00')).timestamp()

@@ -1006,7 +1006,9 @@ def _liquidar(run_dir, get):
         try: ev = get('https://gamma-api.polymarket.com/events', {'slug': slug}); m = ev[0]['markets'][0]
         except Exception: continue
         if not m.get('closed'): continue
-        toks = json.loads(m['clobTokenIds']) if isinstance(m['clobTokenIds'], str) else m['clobTokenIds']; pr = json.loads(m['outcomePrices']) if isinstance(m['outcomePrices'], str) else m['outcomePrices']
+        toks = json.loads(m['clobTokenIds']) if isinstance(m['clobTokenIds'], str) else m['clobTokenIds']
+        if m.get('positionIds') and [str(x) for x in m['positionIds']] != [str(x) for x in toks]: continue                                      # 26-Nov (Protocol V2): si positionIds difiere de clobTokenIds no se atribuye desenlace (missing != 0)
+        pr = json.loads(m['outcomePrices']) if isinstance(m['outcomePrices'], str) else m['outcomePrices']
         if r['tok'] in toks and len(pr) == len(toks) and sorted(float(x) for x in pr) == [0.0, 1.0]: ganador[r['tok']] = float(pr[toks.index(r['tok'])]) == 1.0
     out = dict(run_dir=run_dir, residuales=C.valor_residual(res, ganador), cobertura_desenlace=(sum(1 for g in ganador.values() if g is not None), len(ganador)), nota='redencion de ganadoras MANUAL; perdedoras valen 0 y no requieren accion')
     C.escribir_atomico(os.path.join(run_dir, 'liquidacion_residuales.json'), out); return out
@@ -1016,7 +1018,8 @@ def verificar_mercados():
     """Solo GET a gamma publico: valida los mercados 5m vigentes de las 4 monedas con las MISMAS comprobaciones que el envio real (slug, outcomes<->tokens por etiqueta, endDate, tick, minsize). No envia nada."""
     import pl_sender_real as R
     m = R.MercadosReal(); vistos = m.mercados(); por = collections.Counter(x[1] for x in vistos)
-    for x in vistos: print('OK', x[0], 'fin', x[2], 'tokens[Up,Down]=[..%s, ..%s]' % (x[3][0][-6:], x[3][1][-6:]), 'neg_risk', x[4])
+    for x in vistos:
+        vi = m.sel.por_token(x[3][0]); print('OK', x[0], 'fin', x[2], 'tokens[Up,Down]=[..%s, ..%s]' % (x[3][0][-6:], x[3][1][-6:]), 'neg_risk', x[4], 'version', vi.version, 'exchange', vi.exchange)           # 26-Nov: version de firma por mercado
     for sl, why in m.rechazados.items():
         if m.cache.get(sl, (0, None))[1] is None: print('RECHAZADO', sl, why)
     print('monedas con mercado verificado:', dict(por)); return 0 if set(por) == set(C.COINS) else 2
