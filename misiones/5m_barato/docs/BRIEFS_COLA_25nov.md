@@ -151,3 +151,7 @@ Condicionales (al dispararse): prueba (b) regla del par (episodios >1 % ≥2 dí
 Subvariante BTC (tras la mirada): sim B base BTC · C1/C3 BTC 03-17 Nov · adenda p20/p80 BTC (firma) · contrato E1b BTC (firma) · guarda BTC par común + N1 (mitigar si V1 falla) · verificador 6/10, backfill 21/21.
 Infra/riesgos: PRECIERRE/ejeclive firma V2 (más adelante; recordar ejeclive antes 14-Dic) · RAM ~11/15,6 GB (ampliar = Javi) · suelo de reloj al límite (vigía) · sniper tras B · test flaky test_cliente_dedicado_exige_sdk_vendorizado_si_hay_otro_cargado.
 Decisiones de Javi próximas: firma enmienda lo (tras 6) · piezas de la matriz · criterio de kill · OK micro-real · resultado P1b (2 franjas COMPLETE).
+
+## ACTUALIZACIÓN COLA (26-Nov ~17:40Z)
+Hecho: L3b/sello SIM-L (dev-bk e55ace0a4ae..f51fb441d9b, main 65dc5db1484) · punto 3 guarda_intra adelantado (840e84f193e; ws obligatorio) · punto 4 seco V3 programado at 92 22:35Z · punto 11 matriz escrita (techo 11 % RETIRADO, CONTRATO_CAPACIDAD_B_26nov.md).
+Siguiente: (a) OK Javi → engineer veto libro cruzado (desviación Anexo PREREG_SIML) + corregir C08 · (b) 27-Nov ≥03:10Z market-data-engineer: punto 2 + piloto capacidad M1/M4 · (c) revisar P1b/KS/V3/py-spy 429 · (d) M2/M3 engineer → plan maestro (2b) con capacidad medida · luego puntos 5-16.
