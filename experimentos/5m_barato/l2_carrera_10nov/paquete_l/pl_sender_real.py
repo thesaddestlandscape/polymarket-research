@@ -98,6 +98,18 @@ class SenderReal:
         ok, motivo = self.reg.gate_envio(tok, self.env, espera_s=self.espera_gate_s, fase='paquete_l')
         return ok
 
+    def version_firma(self, tok):
+        """27-Nov (L3b de SIM-L): (gamma_version, clob_v) del mercado del token, LEIDOS DE LA CACHE del selector que YA firmo la orden (`colocar` -> `por_token`): 0 llamadas de red, no toca envio/kill/firma. El selector solo guarda un InfoMercado tras contrastar gamma `version`
+        con CLOB `/clob-markets` `v` (discrepancia => ErrVersion => no se firma), asi que ambos valen lo mismo por construccion; no se re-consultan por separado (eso seria una llamada nueva). Cualquier ausencia/error => (None, None): el slot simplemente no cuenta en L3b."""
+        try:
+            sel = getattr(self.env, '_selector', None)
+            s = sel() if sel is not None else None
+            if s is None: return None, None
+            with s._lk: cond = s._por_tok.get(str(tok).strip()); c = s._c.get(cond) if cond else None
+            v = getattr(c[1], 'version', None) if c else None
+            return (v, v) if v in ('v1', 'v2') else (None, None)
+        except Exception: return None, None
+
     def colocar(self, tok, precio, size, clave, neg_risk=None, expira_s=None):
         """Firma local (NO envia). v3: el neg_risk de gamma es OBLIGATORIO (el cliente lo contrasta y se niega a firmar si difiere) y `expira_s` fija la expiracion dura GTD."""
         if neg_risk is None: raise RuntimeError('neg_risk de gamma ausente: no firmo')

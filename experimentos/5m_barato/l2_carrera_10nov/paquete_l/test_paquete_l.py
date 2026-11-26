@@ -2509,6 +2509,45 @@ def test_v22_preflight_autenticado_firma_en_local_una_orden_v2_contra_exchange_v
     assert 'v2' in json.dumps(r['monedas']['SOL']) and r['monedas']['SOL']['exchange'] == MV.EXCHANGE_V3 and r['monedas']['BTC']['exchange'] == MV.EXCHANGE_V2
     print('T137 ok [v22]: preflight autenticado (SDK 1.2.2 real, clave efimera): BTC v1 firma como antes y un mercado v2 (SOL/XRP) se firma en local contra ExchangeV3/"3" con hash coherente; 0 POST')
 
+def test_v24_intencion_lleva_gamma_version_y_clob_v_sin_tocar_envio():
+    """27-Nov (L3b de SIM-L): la fila `intencion` lleva gamma_version/clob_v tal como los da el sender (cache del selector que ya firmo); sin sender que los de, o si falla, van a None y el run NO se bloquea."""
+    # (a) sender con version_firma: todas las intenciones la llevan; el resto del ledger (post, cancel) no cambia
+    class SV(SenderSim):
+        def version_firma(self, tok): return ('v2', 'v2')
+    P, S, R, M, out = montar('v24_a', sender=SV(RelojVirtual())); assert P.correr() == 'COMPLETE'
+    ints = rows(out, 'intencion'); assert ints and all(r['gamma_version'] == 'v2' and r['clob_v'] == 'v2' for r in ints)
+    posts = rows(out, 'post'); assert len(posts) == len(ints) and all(set(p) >= {'t_send_ns', 't_ack_ns', 'clase', 'error', 'oid_local'} and 'gamma_version' not in p for p in posts)
+    # (b) SenderSim sin el metodo: None (el slot no cuenta), COMPLETE igual
+    P, S, R, M, out = montar('v24_b'); assert P.correr() == 'COMPLETE'
+    ints = rows(out, 'intencion'); assert ints and all(r['gamma_version'] is None and r['clob_v'] is None for r in ints)
+    # (c) version_firma que lanza o devuelve basura: None y sin bloqueo
+    class SX(SenderSim):
+        def version_firma(self, tok): raise RuntimeError('boom')
+    P, S, R, M, out = montar('v24_c', sender=SX(RelojVirtual())); assert P.correr() == 'COMPLETE' and all(r['clob_v'] is None for r in rows(out, 'intencion'))
+    class SY(SenderSim):
+        def version_firma(self, tok): return 'v2'
+    P, S, R, M, out = montar('v24_d', sender=SY(RelojVirtual())); assert P.correr() == 'COMPLETE' and all(r['gamma_version'] is None for r in rows(out, 'intencion'))
+    print('T138 ok [v24]: intencion con gamma_version/clob_v (o None sin bloquear); post/cancel intactos')
+
+
+def test_v24_senderreal_version_firma_solo_cache_sin_red():
+    import pl_sender_real as R2
+    MV = C.cargar_vendor('mercado_version'); llam = []
+    def get(url, params):
+        llam.append(url)
+        if 'clob-markets' in url: return dict(v='v2', c=_gm()['conditionId'], t=[dict(t=x, o='Up') for x in ('111', '222')])
+        return [_gm()]
+    sel = MV.Selector(get=get, ttl_s=30, reloj=lambda: 0.0)
+    env = types.SimpleNamespace(_selector=lambda: sel); sr = R2.SenderReal(env, None, None, None, os.path.join(TMP, 'evid_v24'))
+    assert sr.version_firma('111') == (None, None) and llam == []                                      # cache vacia: None y 0 red
+    sel.resolver(_gm()); n = len(llam)
+    assert sr.version_firma('111') == ('v2', 'v2') and sr.version_firma(' 222 ') == ('v2', 'v2') and sr.version_firma('999') == (None, None) and len(llam) == n   # solo lee la cache: 0 GET nuevos
+    sel.invalidar(); assert sr.version_firma('111') == (None, None)
+    assert R2.SenderReal(types.SimpleNamespace(), None, None, None, os.path.join(TMP, 'evid_v24b')).version_firma('111') == (None, None)               # env sin _selector
+    assert R2.SenderReal(types.SimpleNamespace(_selector=lambda: (_ for _ in ()).throw(ImportError('x'))), None, None, None, os.path.join(TMP, 'evid_v24c')).version_firma('111') == (None, None)
+    print('T139 ok [v24]: SenderReal.version_firma lee la cache del selector (0 red), None si falta')
+
+
 if __name__ == '__main__':
     try:
         filtro = sys.argv[1] if len(sys.argv) > 1 else ''                                              # `python3 -I test_paquete_l.py r2h5` ejecuta solo los tests cuyo nombre lo contiene (pruebas de mutacion)

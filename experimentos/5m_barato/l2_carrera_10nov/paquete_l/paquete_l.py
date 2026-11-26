@@ -407,6 +407,14 @@ class Paquete:
         rest = fin - self.r.now_ns() / 1e9; self.cnt['saltados_mercado_caducado'] += 1
         self.led.add('saltado', clave, 0, slot=slot.i, coin=slot.coin, motivo=f'vida_minima_al_post:{rest:.0f}s<{self._vida_req(slot):.0f}s', t_ns=self.r.now_ns()); return 'saltado'
 
+    def _version_firma(self, tok):
+        """(gamma_version, clob_v) o (None, None). Nunca lanza ni bloquea: solo lee lo que el sender ya resolvio para firmar."""
+        try:
+            f = getattr(self.s, 'version_firma', None)
+            r = f(tok) if callable(f) else (None, None)
+            return (r[0], r[1]) if isinstance(r, (tuple, list)) and len(r) == 2 else (None, None)
+        except Exception: return None, None
+
     def post_slot(self, slot, sel):
         o_prev = self.ordenes.get(f'{self.run_id}|s{slot.i}')
         if o_prev is not None: self.cnt['slot_ya_en_ledger'] += 1; return None
@@ -427,7 +435,8 @@ class Paquete:
         if self.vivas and min(v['deadline_ns'] for v in self.vivas.values()) <= self.r.now_ns(): self.cnt['post_diferido_por_cancelacion_vencida'] += 1; return 'diferido'     # la lectura del libro se comio el hold de otra: primero cancelar
         if not self._vida_ok(slot, fin): return self._saltar_vida(slot, clave, fin)                          # tras firmar y leer el libro: la ultima comprobacion antes de dejar rastro (intencion)
         info = info2
-        self.led.add('intencion', clave, 0, slot=slot.i, coin=slot.coin, slug=slug, tok=tok, modo=slot.modo, precio=cfg.precio, size=cfg.size, hold_s=slot.hold_s, oid_local=oid_local, t_decision_ns=t_dec, libro=info, fin_s=fin, neg_risk=neg, expira_s=(cfg.gtd_expira_s or None))
+        gv, cv = self._version_firma(tok)                                                  # 27-Nov: version de firma del mercado (cache del selector, 0 red; None si no disponible: el slot no cuenta para L3b de SIM-L, el run NO se bloquea)
+        self.led.add('intencion', clave, 0, slot=slot.i, coin=slot.coin, slug=slug, tok=tok, modo=slot.modo, precio=cfg.precio, size=cfg.size, hold_s=slot.hold_s, oid_local=oid_local, t_decision_ns=t_dec, libro=info, fin_s=fin, neg_risk=neg, expira_s=(cfg.gtd_expira_s or None), gamma_version=gv, clob_v=cv)
         o = C.Orden(clave=clave, slot=slot.i, coin=slot.coin, tok=tok, modo=slot.modo, precio=cfg.precio, size=cfg.size, oid=oid_local); o.t_intencion_ns = t_dec; self.ordenes[clave] = o; self.cnt['intenciones'] += 1
         self._req(); t_send = self.r.now_ns(); resp = None; clase = None; err = None
         try: resp = self.s.enviar(handle); t_ack = self.r.now_ns(); clase = C.clasificar_post(resp)
