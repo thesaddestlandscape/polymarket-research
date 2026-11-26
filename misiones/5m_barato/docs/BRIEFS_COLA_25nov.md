@@ -126,3 +126,28 @@ En paralelo sin coste: seco modo A esta noche (at 76, 22:35Z); P1a corriendo (cr
 - (26-Nov ~14:40Z) CONTRATO_L1B_V2_26nov.md escrito (sin firmar): ΔEV incondicional por orden, passT_v4, clase lo/hi, latencia paquete_l+P1b, 4 celdas congeladas con max-stat/BH-FDR y 3 placebos, PASA ≥10 días ≥300 órdenes/clase IC90>0; riesgo INSUFFICIENT inicial por retención libro5 ~3 d → evidencia del forward 6c. Pendiente OK Javi.
 - (26-Nov ~15:05Z) Contrato L1b-v2 FIRMADO (530db82e589, sha 9c290dcf…; correcciones chief: franjas 22:15-02:45Z/KS, copias keep y pausa 19-23N declaradas). Pruebas (a)/(b) de la regla del par = apuntadas en ENMIENDA_LO_DECISIONES_26nov.md, se lanzan solo al dispararse. alpha-miner EN CURSO: diseño detector intraventana (31/35 hi dentro) + regla del par para BTC (≤1 %). Siguiente: engineer 6c L1b-v2 (re-extracción + forward) cuando toque.
 - (26-Nov ~15:30Z) alpha-miner guarda intraventana: PROMISING (diseño). Literal (cancelar hasta fin de ventana) incumple §7(j) (2,9-6,5 %) → N1 suspensión ≤2 s + N2 par en continuo; BTC = par solo por causa común + N1 (1,18 % 13-25N, 0,49 % 17-25N). Sin re-firma de L5 (módulo nuevo guarda_intra.py tras flag). PREREG_GUARDA_INTRA_26nov.md borrador (+T10 caída WS Polymarket: FEED solo cubre Binance) → pendiente OK Javi; luego V1/V2 en P4(iii) 27-Nov.
+
+## COLA CONSOLIDADA (26-Nov ~16:00Z, tras feedback de Javi) — SUSTITUYE a las anteriores
+Hecho hoy: PREREG_SIML firmado · firma Protocol V2 (probada en real) · minors V2 · P1b v23 · P2/P3/P5 · regla del par MANTENER · contrato L1b-v2 FIRMADO · PREREG_GUARDA_INTRA FIRMADO (BTC: mitigar antes de excluir; T10 guarda WS Polymarket a AÑADIR).
+Automático 27-Nov: 03:00 disco (at 77) · 03:10 npz/manifest_suelo 26-Nov · 11:05 P1b A (at 88) · 14:00 KS SIM-L vs seco (at 85; PASA ⇒ siml_run --l4-ks) · 15:15 P1b B (at 89). Hoy 15:44 captura 429 gamma (at 90).
+Agentes, uno a uno:
+ 1 429 gamma: leer captura → responsable → arreglo mínimo (si toca producción compartida, OK Javi).
+ 2 market-data-engineer (27-Nov ≥03:10Z): P4(iii) + detector ≤2 s/deriva/oscilación con datos reales + V1/V2 de la guarda intra (npz de bandas por segundo 13-26 Nov, BTC incluido).
+ 3 execution-engineer: guarda_intra.py N1/N2/BTC + T1-T10 (incl. guarda caída WS Polymarket).
+ 4 seco con --guarda-intra --registrar-q (V3).
+ 5 P1a veredicto ≥29-Nov (+ prueba (a) de la regla del par).
+ 6 statistical-validator + red-team de enmienda lo + guarda → firma de la enmienda (Javi).
+ 7 Re-simular días con SIM-L (tras KS; EV precintado hasta mirada 1).
+ 8 Cruces k_f5 y clase de suelo con la cinta del 25-Nov (≥27-Nov).
+ 9 Puerta oficial de días válidos (6 días para la mirada 1).
+10 L1b-v2 6c engineer: re-extracción + forward (contrato firmado).
+11 objetivo-200k: matriz 11 categorías → plan maestro 200 k.
+12 engineer: integra en sombra las piezas aprobadas.
+13 risk-economics (~28-Nov): criterio de kill con días forward, b_k_kill_dimensionado.json, escalera de capital.
+14 statistical-validator → red-team → único /code-review medium.
+15 Mirada 1 (~2-Dic) → micro-real el mismo día si rechaza (OK Javi).
+16 Buscador de ineficiencias → perro de presa (versión siguiente).
+Condicionales (al dispararse): prueba (b) regla del par (episodios >1 % ≥2 días).
+Subvariante BTC (tras la mirada): sim B base BTC · C1/C3 BTC 03-17 Nov · adenda p20/p80 BTC (firma) · contrato E1b BTC (firma) · guarda BTC par común + N1 (mitigar si V1 falla) · verificador 6/10, backfill 21/21.
+Infra/riesgos: PRECIERRE/ejeclive firma V2 (más adelante; recordar ejeclive antes 14-Dic) · RAM ~11/15,6 GB (ampliar = Javi) · suelo de reloj al límite (vigía) · sniper tras B · test flaky test_cliente_dedicado_exige_sdk_vendorizado_si_hay_otro_cargado.
+Decisiones de Javi próximas: firma enmienda lo (tras 6) · piezas de la matriz · criterio de kill · OK micro-real · resultado P1b (2 franjas COMPLETE).

@@ -10,8 +10,8 @@ Diseño: alpha-miner 26-Nov (dev-bk enmienda_lo/regla_par/intra/, commit en dev-
 - V1 coste: N1 ≤0,5 % y par+N1+N2 ≤1 % del tiempo lo, por moneda, ≥3 días, IC90 por días.
 - V2 detección: N1 dispara dentro de los 20 s de ≥90 % de los pares hi, latencia mediana ≤10 s (episodios reales 13-16 Nov en registro ms crudo + picos breves de BTC).
 - V3 paridad: vivo == batch sobre el QLog (0 diferencias con entradas idénticas).
-- Respaldo: falla V1 o V2 ⇒ solo N2. BTC: falla V1 de BTC a 1 s con días nuevos ⇒ BTC fuera. Nada se re-ajusta con los mismos días.
-- Cable a cerrar por el engineer (T10): la guarda FEED solo cubre Binance muerto; verificar que existe guarda de caída del WS de Polymarket (sin filas q por WS caído ≠ hi) o añadirla fail-closed.
+- Respaldo: falla V1 o V2 ⇒ solo N2. BTC: si falla V1 de BTC a 1 s con días nuevos, NO se deja fuera sin más (Javi 26-Nov): se mitiga todo lo posible (variantes fijadas antes de mirar, p.ej. N1 con re-armado más exigente, par común ampliado, suspensión por franja con más picos) y BTC queda fuera solo si ninguna mitigación cumple ≤1 % y fail-closed. Nada se re-ajusta con los mismos días.
+- Cable a cerrar por el engineer (T10, OK Javi «solucionalo»): la guarda FEED solo cubre Binance muerto (experimento_maker_bk.py:288-296). El engineer verifica si existe guarda de caída del WS de Polymarket y, si no, la AÑADE fail-closed (WS sin mensajes/latido > umbral ⇒ cancelar todo y no armar; distinguir de «sin filas q en banda»).
 
 ## Tests T1-T10
 T1 lo→hi sintético a 10/20/50 filas/s detectado ≤2 s (+1 s alineación) · T2 n<20 nunca dispara · T3 hueco de tráfico mantiene bloqueo · T4 N2 bloquea hasta w0+300 s · T5 excepción bloquea · T6 flag apagado ⇒ E0 (K1 8.272/26, K6 5.291/20) y shas firmados iguales · T7 paridad vivo/batch con QLog 25-Nov · T8 BTC par común/aislado/moneda ausente · T9 INTRA cancela todo y no re-publica · T10 caída del WS de Polymarket.
@@ -22,4 +22,4 @@ Brazo G de sensibilidad (solo N2 desde npz), declarado antes de E2; N1 no simula
 ## Orden
 1 firma de este prereg (Javi) → 2 market-data-engineer V1/V2 (P4(iii)) → 3 engineer guarda_intra.py + T1-T10 → 4 seco con --guarda-intra --registrar-q (V3) → 5 validador + red-team → /code-review medium (único, al cierre) → OK Javi para encender en ETH/SOL/XRP → 6 BTC con la subvariante.
 
-Firma (OK Javi): ______________________  Fecha: ____________
+Firma (OK Javi): OK en sesión con 2 cambios (BTC mitigar antes de excluir; T10 solucionar)  Fecha: 2026-11-26T16:00Z
