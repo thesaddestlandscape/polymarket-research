@@ -17,7 +17,7 @@ def exigir(cond, msg):
     if not cond: raise Invariante(msg)
 
 
-VERSION = 'paquete_l_v22'                                 # v16 (13-Nov): 14o /code-review (3 hallazgos + pasada corta); invalida cualquier confirmacion escrita para v2..v15
+VERSION = 'paquete_l_v23'                                 # v16 (13-Nov): 14o /code-review (3 hallazgos + pasada corta); invalida cualquier confirmacion escrita para v2..v15
 WALLET_DEDICADA = '0x659a40FF9920fEBc5a66836213040924343d297F'
 COINS = ('BTC', 'ETH', 'SOL', 'XRP')
 FALLBACK_DIR = '/tmp'                                       # v4 (hallazgo 10): si el informe final no se puede escribir en el out, se deja aqui (y en stderr)
@@ -58,7 +58,8 @@ class Config:
     kill_429_seguidos: int = 3
     backoff_429_s: tuple = (2.0, 4.0, 8.0)
     kill_rechazos_seguidos: int = 2
-    ack_max_ms: int = 1000                      # ack > 1 s => anomalia (kill), como plan_paquete_l
+    ack_max_ms: int = 1000                      # ack > 1 s => anomalia; v23 (26-Nov, OK Javi): mata con 2 acks SEGUIDOS > ack_max_ms (un ack lento suelto solo se registra)
+    ack_max_duro_ms: int = 3000                 # v23: un solo ack > 3 s mata siempre
     fase_b_max_rellenos: int = 0                # 0 = fase B DESACTIVADA (solo modo 'lejos'). >0: ordenes 'top' que pueden rellenarse (parciales); exige campo en la confirmacion
     fase_b_tope_usd: float = 0.15
     fase_b_ordenes: int = 12

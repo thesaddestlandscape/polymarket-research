@@ -57,7 +57,7 @@ class Paquete:
         self.cfg, self.s, self.m, self.dir, self.r, self.run_id, self.real = cfg, sender, mercados, dir_out, reloj, run_id, real
         self.libro = libro or (mercados.libro if hasattr(mercados, 'libro') else None); self.anclas_fn = anclas_fn; self.evid = evid_patron; self.params = params or {}; self.stdout = stdout
         os.makedirs(dir_out, exist_ok=True); self.P = lambda n: os.path.join(dir_out, n)
-        self.lim = Limitador(reloj, cfg.req_por_s); self._t_kill_ns = None; self.kill = None; self.kill_status = None; self.kill_sev = -1; self.exc = []; self.cnt = collections.Counter(); self.seguidos_429 = 0; self.seguidos_rech = 0; self.saldo_ileg = 0
+        self.lim = Limitador(reloj, cfg.req_por_s); self._t_kill_ns = None; self.kill = None; self.kill_status = None; self.kill_sev = -1; self.exc = []; self.cnt = collections.Counter(); self.seguidos_429 = 0; self.seguidos_rech = 0; self.seguidos_ack_lentos = 0; self.acks_lentos_ms = []; self.saldo_ileg = 0
         self.t_inicio_ns = reloj.now_ns(); self.logf = None; self.vivas = {}                      # vivas: clave -> dict(oid, tok, deadline_ns, slot, modo, hold_s)
         self.slots = C.plan_slots(cfg, n=cfg.max_ordenes + 100); self.fase = 'A'; self.sin_mercado = 0
         self.pres = None; self.led = None; self.ordenes = {}; self.senal = None; self.post_no_antes_ns = 0; self.ilegibles = []; self.abiertas_res = False; self.fills_b = 0; self.gasto_b = 0.0; self.t_ini_iso = dt.datetime.now(dt.timezone.utc).isoformat()
@@ -452,7 +452,12 @@ class Paquete:
             if self.seguidos_rech >= cfg.kill_rechazos_seguidos: self._matar(f'rechazos_seguidos; ultimo rechazo literal del CLOB: {self.ultimo_rechazo}', 'BLOCKED')           # v5 (hallazgo 2): sin caida de modo: BLOCKED (sin gasto: una orden rechazada no esta en el libro) con el literal
             return 'rechazo'
         self.seguidos_rech = 0
-        if (t_ack - t_send) / 1e6 > cfg.ack_max_ms: self._matar(f'ack_lento_{(t_ack - t_send) / 1e6:.0f}ms', 'BLOCKED')
+        ack_ms = (t_ack - t_send) / 1e6
+        if ack_ms > cfg.ack_max_ms:                                                       # v23 (26-Nov, OK Javi): un ack lento suelto se registra (acks_lentos + log con su ms); matan 2 SEGUIDOS > ack_max_ms o uno > ack_max_duro_ms
+            self.cnt['acks_lentos'] += 1; self.seguidos_ack_lentos += 1; self.acks_lentos_ms.append(round(ack_ms)); self.log(f'ack lento {ack_ms:.0f} ms en {clave} ({self.seguidos_ack_lentos} seguidos; ack_max {cfg.ack_max_ms} ms, duro {cfg.ack_max_duro_ms} ms)', err=True)
+            if ack_ms > cfg.ack_max_duro_ms: self._matar(f'ack_lento_duro_{ack_ms:.0f}ms', 'BLOCKED')
+            elif self.seguidos_ack_lentos >= 2: self._matar(f'ack_lento_seguidos_{ack_ms:.0f}ms', 'BLOCKED')
+        else: self.seguidos_ack_lentos = 0
         if clase == 'ambiguo':
             self.cnt['ambiguos'] += 1; self.vivas[clave] = dict(oid=oid, tok=tok, deadline_ns=self.r.now_ns(), slot=slot.i, modo=slot.modo, hold_s=0.0, t_ack_ns=t_ack, trig='ambiguo'); return 'ambiguo'
         hold_ns = int(slot.hold_s * 1e9); self.vivas[clave] = dict(oid=oid, tok=tok, deadline_ns=t_ack + hold_ns, slot=slot.i, modo=slot.modo, hold_s=slot.hold_s, t_ack_ns=t_ack, trig='hold', next_poll_ns=(t_ack + int(1e9)) if slot.modo == 'top' else None)
@@ -929,7 +934,7 @@ class Paquete:
         fase_b = dict(activada=cfg_b(cfg), ordenes=sum(1 for o in O.values() if o.modo == 'top'), rellenos=self.fills_b, gasto_usd=self.gasto_b, fin=(self.fase_b_fin or (self.kill if self.fase == 'B' else None)))
         inf = dict(status=status, motivo=motivo, run_id=self.run_id, cobertura=cob, fase_b=fase_b, presupuesto=dict(saldo_inicial=self.pres.s0, saldo_final=self.pres.saldo, suelo=self.pres.suelo, gasto=self.pres.gasto, perdida_dura=cfg.perdida_dura, toco_suelo=self.pres.toca_suelo()),
                    latencias=C.d_proc_stats(self.led.filas), relojes=dict(local='time.time_ns alineado a time.monotonic_ns desde el arranque (inmune a steps)', chrony=getattr(self, 'chrony', None), vs_exchange=C.reloj_stats(ev)), anclas_detalle=self._anclas_detalle(),
-                   residuales=dict(posiciones=C.residuales(self.led.filas), nota='una posicion no se elimina sin vender; acotada por cfg.fase_b_* y top_ask_max; valor final con `--liquidar-informe RUN_DIR` (desenlace oficial por gamma publico; la redencion de ganadoras es MANUAL, este codigo no firma redenciones)'), excepciones=self.exc, lecturas_ilegibles=self.ilegibles, alertas=self.alertas, kills_resueltos=self.kills_resueltos, evid_ilegibles=self.evid_ilegibles, signal=self.senal, senales_recibidas=self.n_senales, gtd_expira_s=cfg.gtd_expira_s, ultimo_rechazo=self.ultimo_rechazo, escrituras_fallidas=dict(ledger=self.led.fallos_escritura, otros=self.io_fallos), viva_al_final=len(self.vivas), fin_utc=dt.datetime.now(dt.timezone.utc).isoformat(), repro=self._repro())
+                   residuales=dict(posiciones=C.residuales(self.led.filas), nota='una posicion no se elimina sin vender; acotada por cfg.fase_b_* y top_ask_max; valor final con `--liquidar-informe RUN_DIR` (desenlace oficial por gamma publico; la redencion de ganadoras es MANUAL, este codigo no firma redenciones)'), excepciones=self.exc, lecturas_ilegibles=self.ilegibles, alertas=self.alertas, kills_resueltos=self.kills_resueltos, evid_ilegibles=self.evid_ilegibles, signal=self.senal, senales_recibidas=self.n_senales, gtd_expira_s=cfg.gtd_expira_s, ultimo_rechazo=self.ultimo_rechazo, acks_lentos_ms=self.acks_lentos_ms, escrituras_fallidas=dict(ledger=self.led.fallos_escritura, otros=self.io_fallos), viva_al_final=len(self.vivas), fin_utc=dt.datetime.now(dt.timezone.utc).isoformat(), repro=self._repro())
         ruta = self.P('informe_final.json')
         if os.path.exists(ruta):                                                     # v7 (hallazgo 5): el informe de un proceso anterior NO se pierde (traceback/alertas): se conserva con marca de tiempo
             try: os.replace(ruta, self.P('informe_final.previo_%s_%d.json' % (dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%f'), os.getpid())))

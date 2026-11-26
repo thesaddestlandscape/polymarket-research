@@ -100,6 +100,41 @@ def test_rechazos_seguidos():
     print('T8 ok: 2 rechazos seguidos -> BLOCKED')
 
 
+class SenderAckLento(SenderSim):
+    """v23: latencia de POST por llamada {n_post: ms}; el resto 60 ms."""
+    def __init__(self, reloj, lats=None, **kw): super().__init__(reloj, **kw); self.lats = dict(lats or {})
+    def enviar(self, handle): self.lat_post = self.lats.get(self.n_post + 1, 60.0); return super().enviar(handle)
+
+
+def _ack(nombre, lats):
+    reloj = RelojVirtual(); return montar(nombre, sender=SenderAckLento(reloj, lats), reloj=reloj)
+
+
+def test_v23_ack_lento_suelto_no_mata():
+    P, S, R, M, out = _ack('ack1', {3: 1410.0}); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
+    assert st == 'COMPLETE' and inf['status'] == 'COMPLETE' and P.cnt['acks_lentos'] == 1 and len(inf['acks_lentos_ms']) == 1 and 1300 < inf['acks_lentos_ms'][0] < 1500 and P.kill is None, (st, inf['motivo'], P.cnt['acks_lentos'])
+    assert any('ack lento' in l for l in open(out + '/run.log'))
+    print('T-v23a ok: un ack de ~1410 ms suelto se registra y NO mata')
+
+
+def test_v23_dos_acks_lentos_seguidos_matan():
+    P, S, R, M, out = _ack('ack2', {3: 1410.0, 4: 1200.0}); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
+    assert st == 'BLOCKED' and 'ack_lento_seguidos' in inf['motivo'] and P.cnt['acks_lentos'] == 2, (st, inf['motivo'])
+    print('T-v23b ok: 2 acks > 1000 ms seguidos -> BLOCKED')
+
+
+def test_v23_ack_duro_mata():
+    P, S, R, M, out = _ack('ack3', {3: 3500.0}); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
+    assert st == 'BLOCKED' and 'ack_lento_duro' in inf['motivo'] and P.cnt['acks_lentos'] == 1, (st, inf['motivo'])
+    print('T-v23c ok: un ack > 3000 ms -> BLOCKED')
+
+
+def test_v23_ack_normal_resetea_seguidos():
+    P, S, R, M, out = _ack('ack4', {3: 1410.0, 5: 1300.0}); st = P.correr(); inf = json.load(open(out + '/informe_final.json'))
+    assert st == 'COMPLETE' and P.cnt['acks_lentos'] == 2 and P.seguidos_ack_lentos == 0 and len(inf['acks_lentos_ms']) == 2, (st, inf['motivo'], P.cnt['acks_lentos'])
+    print('T-v23d ok: lento, normal, lento -> el normal resetea; no mata')
+
+
 def test_cancel_pendiente_reintenta():
     P, S, R, M, out = montar('pend', sender_kw=dict(cancel_pendiente={2})); st = P.correr(); assert st == 'COMPLETE', st
     c = rows(out, 'cancel'); assert any(x['error'] and 'pending' in x['error'] for x in c) and any(x['intento'] == 2 and x['ok'] for x in c)
