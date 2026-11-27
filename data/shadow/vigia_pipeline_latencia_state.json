@@ -1,18 +1,19 @@
 {
-  "ultimo_check": "2026-11-26T23:08:12.790085+00:00",
+  "ultimo_check": "2026-11-27T00:07:32.157993+00:00",
   "ultimo_resultado": {
     "n_ciclos": 5,
     "duraciones_s": [
-      177.9,
-      176.8,
-      773.8,
-      164.2,
-      175.1
+      168.3,
+      174.9,
+      281.8,
+      326.6,
+      244.0
     ],
     "outliers_s": [
-      773.8
+      281.8,
+      326.6
     ],
-    "n_outliers": 1
+    "n_outliers": 2
   },
-  "ultima_hora_avisada": "2026-11-26T16"
+  "ultima_hora_avisada": "2026-11-27T00"
 }
