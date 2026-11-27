@@ -47,10 +47,10 @@
    "ultimo_aviso": 1795148583.103255
   },
   "archivo": {
-   "ok": true,
-   "detalle": "",
-   "desde": 1795782188.0855882,
-   "ultimo_aviso": 1795782188.0855882
+   "ok": false,
+   "detalle": "HTTPError: 410 Client Error: Gone for url: https://1rpc.io/matic",
+   "desde": 1795807388.5081077,
+   "ultimo_aviso": 1795807388.5081077
   },
   "latest": {
    "ok": true,
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-11-27T18:23:13+00:00"
+ "_actualizado_utc": "2026-11-27T19:23:08+00:00"
 }
