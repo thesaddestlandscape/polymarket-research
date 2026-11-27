@@ -40,11 +40,11 @@ exec 200>data/shadow/git_ops.lock
 if ! flock -w 600 200; then log "REPACK ABORTADO: git_ops.lock ocupado"; exit 0; fi
 antes=$(du -sBG "$GITDIR/objects/pack" | cut -f1)
 log "REPACK inicio packs=$(ls "$GITDIR"/objects/pack/*.pack | wc -l) tam=$antes libre=$(libre_gb)G"
-timeout -k 30 9000 nice -n 19 ionice -c3 git -c pack.windowMemory=512m -c pack.threads=1 -c pack.deltaCacheSize=256m \
+setsid timeout -k 30 9000 nice -n 19 ionice -c3 git -c pack.windowMemory=512m -c pack.threads=1 -c pack.deltaCacheSize=256m \
   repack -a -d --max-pack-size=2g >> "$LOG" 2>&1 &
 RP=$!
 while kill -0 $RP 2>/dev/null; do
-  if [ "$(libre_gb)" -lt 15 ]; then log "GUARDA DISCO <15G: se mata el repack"; pkill -TERM -P $RP; kill -TERM $RP; break; fi
+  if [ "$(libre_gb)" -lt 15 ]; then log "GUARDA DISCO <15G: se mata el repack"; kill -TERM -- -$RP; break; fi
   sleep 30
 done
 wait $RP; rc=$?

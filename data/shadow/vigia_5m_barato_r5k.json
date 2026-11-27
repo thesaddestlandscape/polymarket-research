@@ -1,22 +1,22 @@
 {
- "actualizado_utc": "2026-11-26T09:32:12+00:00",
+ "actualizado_utc": "2026-11-27T09:34:44+00:00",
  "regla": "H43 R5K congelada 17-Oct",
- "n_unidades": 2822,
- "dias": 25,
- "coste_usd": 25702.38,
- "pnl_usd": 1130.55,
- "ev_eur_ponderado": 0.044,
- "ev_por_unidad": 0.0587,
+ "n_unidades": 2953,
+ "dias": 26,
+ "coste_usd": 26914.53,
+ "pnl_usd": 1218.4,
+ "ev_eur_ponderado": 0.0453,
+ "ev_por_unidad": 0.0589,
  "ic90_cierre": [
-  -0.019,
-  0.109
+  -0.017,
+  0.108
  ],
  "ic90_dias": [
-  -0.021,
-  0.114
+  -0.017,
+  0.111
  ],
- "ev_sin_2_mejores_dias": 0.0119,
- "ev_sin_top20_unidades": 0.0094,
+ "ev_sin_2_mejores_dias": 0.0149,
+ "ev_sin_top20_unidades": 0.0122,
  "precio_medio": 0.184,
  "por_dia": {
   "2026-11-01": {
@@ -118,6 +118,10 @@
   "2026-11-25": {
    "coste": 1227.75,
    "ev": -0.0043
+  },
+  "2026-11-26": {
+   "coste": 1212.15,
+   "ev": 0.0725
   }
  },
  "cobertura": {
@@ -269,6 +273,12 @@
    "mercados": 288,
    "con_desenlace": 288,
    "unidades": 133,
+   "unidades_sin_desenlace": 0
+  },
+  "2026-11-26": {
+   "mercados": 288,
+   "con_desenlace": 288,
+   "unidades": 131,
    "unidades_sin_desenlace": 0
   }
  },

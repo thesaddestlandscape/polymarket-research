@@ -1,77 +1,5 @@
 [
   {
-    "timestamp_utc": "2026-09-03T10:57:15+00:00",
-    "pipeline": {
-      "n_ciclos_resolve_postmortem": 242,
-      "resolve_postmortem_p50_s": 43.0,
-      "resolve_postmortem_p95_s": 1234.0,
-      "resolve_postmortem_max_s": 4793.0,
-      "n_ciclos_live_trade": 4647,
-      "hueco_live_trade_max_s": 83.0
-    },
-    "procesos_colgados": [],
-    "deploy": {
-      "n_screens": 13,
-      "stale": []
-    },
-    "disco": {
-      "pct_usado": 84.0,
-      "gb_libres": 11.78,
-      "git_gb": 0.0,
-      "data_gb": 29.34,
-      "datalogs_gb": 8.69
-    },
-    "ram": {
-      "ram_total_gb": 7.56,
-      "ram_disponible_gb": 5.01,
-      "ram_pct_libre": 66.3
-    },
-    "integridad_datos": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 531,
-      "n_results_total": 374094
-    },
-    "integridad_datos_sports": {
-      "trades_abiertos_atascados": [],
-      "n_trades_total": 5
-    },
-    "carga_sistema": {
-      "load1": 11.81,
-      "load5": 12.39,
-      "load15": 12.15,
-      "nproc": 4,
-      "ratio5": 3.1,
-      "n_procesos_total": 220
-    },
-    "oom_kills": {
-      "n_oom_kills_24h": 2,
-      "eventos": [
-        {
-          "ts": "Sep 02 12:35:09",
-          "pid": "2223725",
-          "nombre": "python",
-          "rss_mb": 3499.8
-        },
-        {
-          "ts": "Sep 02 15:10:02",
-          "pid": "2257267",
-          "nombre": "python",
-          "rss_mb": 3364.0
-        }
-      ]
-    },
-    "git_push": {
-      "commits_sin_pushear": 128
-    },
-    "anomalias": [
-      "⏱️ ciclo resolve+postmortem tardó 4793s (umbral 120s)",
-      "🔥 CPU sobresuscrita: load5=12.39 en 4 cores (ratio=3.1x, umbral 3.0x) -- 220 procesos vivos",
-      "💀 2 OOM-kill(s) del kernel en 24h: python(pid 2223725, 3499.8MB), python(pid 2257267, 3364.0MB)",
-      "📡 git push atascado: 128 commits locales sin llegar a GitHub (umbral 15) -- riesgo de pérdida si el VPS cae"
-    ],
-    "estado": "ANOMALIA"
-  },
-  {
     "timestamp_utc": "2026-09-04T07:08:01+00:00",
     "pipeline": {
       "n_ciclos_resolve_postmortem": 336,
@@ -18743,6 +18671,262 @@
       "💀 12 OOM-kill(s) del kernel en 24h: python(pid 50787, 2458.1MB), python(pid 154337, 2958.3MB), python(pid 212357, 3050.8MB), python3(pid 241739, 2291.8MB), python3(pid 260696, 2526.9MB), systemd(pid 4158214, 1.8MB), (sd-pam)(pid 4158216, 1.3MB), python(pid 274240, 1137.5MB), python(pid 285820, 2066.3MB), python3(pid 276547, 2522.2MB), python3(pid 1642314, 2432.9MB), python3(pid 1648921, 3403.6MB)",
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket.json 209.5h (máx 2.25h)",
       "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket_fino.json 209.3h (máx 2.25h)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-11-27T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 134,
+      "resolve_postmortem_p50_s": 177.5,
+      "resolve_postmortem_p95_s": 423.4,
+      "resolve_postmortem_max_s": 826.9,
+      "resolve_postmortem_duraciones_s": [
+        253.9,
+        193.3,
+        163.9,
+        171.4,
+        155.7,
+        160.4,
+        180.5,
+        769.0,
+        175.1,
+        171.9,
+        177.0,
+        159.0,
+        162.9,
+        174.9,
+        826.9,
+        126.5,
+        175.8,
+        174.6,
+        185.6,
+        179.2,
+        267.9,
+        355.4,
+        148.0,
+        185.3,
+        160.5,
+        173.2,
+        166.8,
+        254.0,
+        172.8,
+        252.8,
+        165.9,
+        156.6,
+        162.4,
+        237.5,
+        198.1,
+        262.6,
+        175.2,
+        178.9,
+        162.1,
+        229.9,
+        182.9,
+        178.7,
+        283.4,
+        186.2,
+        423.4,
+        258.3,
+        177.7,
+        181.5,
+        304.6,
+        176.0,
+        184.8,
+        225.4,
+        178.2,
+        173.7,
+        163.0,
+        271.7,
+        170.2,
+        219.4,
+        173.1,
+        163.4,
+        170.9,
+        183.6,
+        259.1,
+        235.4,
+        169.2,
+        174.0,
+        167.3,
+        250.1,
+        163.0,
+        711.2,
+        179.0,
+        170.4,
+        158.7,
+        182.2,
+        202.6,
+        254.0,
+        215.3,
+        166.3,
+        185.3,
+        230.6,
+        177.9,
+        176.8,
+        773.8,
+        164.2,
+        175.1,
+        183.4,
+        168.3,
+        174.9,
+        281.8,
+        326.6,
+        244.0,
+        176.2,
+        166.2,
+        165.2,
+        271.5,
+        262.2,
+        165.4,
+        174.4,
+        182.2,
+        152.9,
+        171.4,
+        820.1,
+        150.4,
+        168.0,
+        156.9,
+        162.1,
+        158.8,
+        175.6,
+        218.3,
+        166.0,
+        168.7,
+        290.1,
+        202.0,
+        178.3,
+        733.6,
+        157.7,
+        170.0,
+        175.2,
+        173.1,
+        175.2,
+        257.1,
+        222.9,
+        174.8,
+        163.4,
+        182.2,
+        169.3,
+        256.7,
+        214.7,
+        183.2,
+        177.5,
+        170.6,
+        255.5,
+        176.2,
+        339.7
+      ],
+      "n_ciclos_live_trade": 4074,
+      "hueco_live_trade_max_s": 81.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 25,
+      "stale": [
+        "ejeclive",
+        "walletmirror",
+        "sportsfase0"
+      ]
+    },
+    "disco": {
+      "pct_usado": 88.0,
+      "gb_libres": 8.74,
+      "git_gb": 0.0,
+      "data_gb": 14.33,
+      "datalogs_gb": 9.08
+    },
+    "ram": {
+      "ram_total_gb": 15.24,
+      "ram_disponible_gb": 2.94,
+      "ram_pct_libre": 19.3
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 791,
+      "n_results_total": 1620668
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 56
+    },
+    "carga_sistema": {
+      "load1": 6.61,
+      "load5": 6.89,
+      "load15": 7.76,
+      "nproc": 8,
+      "ratio5": 0.86,
+      "n_procesos_total": 356
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 6,
+      "eventos": [
+        {
+          "ts": "Nov 26 14:15:52",
+          "pid": "2351918",
+          "nombre": "python3",
+          "rss_mb": 3291.5
+        },
+        {
+          "ts": "Nov 27 00:45:42",
+          "pid": "687487",
+          "nombre": "systemd",
+          "rss_mb": 1.0
+        },
+        {
+          "ts": "Nov 27 00:45:42",
+          "pid": "687489",
+          "nombre": "(sd-pam)",
+          "rss_mb": 0.1
+        },
+        {
+          "ts": "Nov 27 00:45:42",
+          "pid": "3111805",
+          "nombre": "python",
+          "rss_mb": 1492.5
+        },
+        {
+          "ts": "Nov 27 02:00:49",
+          "pid": "3199159",
+          "nombre": "python",
+          "rss_mb": 770.8
+        },
+        {
+          "ts": "Nov 27 07:55:34",
+          "pid": "3604336",
+          "nombre": "python",
+          "rss_mb": 3522.7
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 2,
+      "gates": [
+        {
+          "gate": "wallet_mirror_gate_bucket.json",
+          "antiguedad_h": 233.5,
+          "maximo_h": 2.25
+        },
+        {
+          "gate": "wallet_mirror_gate_bucket_fino.json",
+          "antiguedad_h": 233.3,
+          "maximo_h": 2.25
+        }
+      ]
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 827s (umbral 400s)",
+      "⚠️ screens STALE (código en disco != código cargado): ejeclive, walletmirror, sportsfase0",
+      "💀 6 OOM-kill(s) del kernel en 24h: python3(pid 2351918, 3291.5MB), systemd(pid 687487, 1.0MB), (sd-pam)(pid 687489, 0.1MB), python(pid 3111805, 1492.5MB), python(pid 3199159, 770.8MB), python(pid 3604336, 3522.7MB)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket.json 233.5h (máx 2.25h)",
+      "⛔ gate OBSOLETO (el ejecutor real NO opera con él): wallet_mirror_gate_bucket_fino.json 233.3h (máx 2.25h)"
     ],
     "estado": "ANOMALIA"
   }
