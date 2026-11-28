@@ -155,3 +155,115 @@ Decisiones de Javi próximas: firma enmienda lo (tras 6) · piezas de la matriz 
 ## ACTUALIZACIÓN COLA (26-Nov ~17:40Z)
 Hecho: L3b/sello SIM-L (dev-bk e55ace0a4ae..f51fb441d9b, main 65dc5db1484) · punto 3 guarda_intra adelantado (840e84f193e; ws obligatorio) · punto 4 seco V3 programado at 92 22:35Z · punto 11 matriz escrita (techo 11 % RETIRADO, CONTRATO_CAPACIDAD_B_26nov.md).
 Siguiente: (a) OK Javi → engineer veto libro cruzado (desviación Anexo PREREG_SIML) + corregir C08 · (b) 27-Nov ≥03:10Z market-data-engineer: punto 2 + piloto capacidad M1/M4 · (c) revisar P1b/KS/V3/py-spy 429 · (d) M2/M3 engineer → plan maestro (2b) con capacidad medida · luego puntos 5-16.
+
+## COLA REESTRUCTURADA (27-Nov ~10:30Z, Javi: «estructúrala como mejor sea») — SUSTITUYE a las anteriores
+Meta: B + subvariante operando ≤7-Dic, EV>0 con AS mitigada → 200 k€/año. Regla: 1 agente a la vez, especialista por paso, feedback de Javi por salida; lo mecánico lo hace el chief.
+Hecho 27-Nov: contrato datos veto+capacidad · guarda libro_cruzado/libro_sin_dato + C08a/b + anexo SIML (dev-bk, sin commit: git roto) · clases lo/hi 25/26 · RT_v3dd 25-Nov + run_v4_dias.sh · vigía candidatos 3 GB→425 MB · RF5_RAM_MIN=3000.
+FASE A — hoy 27-Nov (datos y veredictos listos)
+ A1 [en curso] execution-engineer: piloto M1/M4/libro cruzado 25-Nov + backfill ms2/RT 15,16,19-24 (solo días cobertura ≥0,90).
+ A2 chief (mecánico): P1b A 11:05 · py-spy 429 11:45 · RT_v3dd 26-Nov 12:45 · KS 14:00 · P1b B 15:15 · commits cuando git sano.
+ A3 data-authority: contrato de la MIRADA 1 de CXB60 (contador 13/10 días válidos «ya procede») + puerta oficial de días válidos (antiguo 9), sello passT_v4 (CONTRATO_CXB60_REEVAL_PASST_V4_v2).
+ A4 chief corre forward_gates.py --mirada 1 → statistical-validator revisa (G3 vs GEO1; BTC solo si H1=PASS).
+ A5 market-data-engineer (1 pasada): revisa A1 contra contrato + restos del antiguo 2 (P4(iii), detector ≤2 s/deriva/oscilación, V1/V2 guarda intra con BTC, npz 13-26 Nov).
+FASE B — 28-29 Nov (B completo simulado con datos vigentes)
+ B1 execution-engineer: SIM-L re-sim (tras KS; EV precintado hasta mirada) + M2/M3 + cruces k_f5/clase de suelo (antiguos 7, 8) + 26-Nov en el piloto.
+ B2 execution-engineer (mismo agente, SendMessage): L1b-v2 6c re-extracción + forward (antiguo 10).
+ B3 P1a veredicto ≥29-Nov + statistical-validator/red-team enmienda lo + guarda → FIRMA Javi (antiguos 5, 6).
+ B4 risk-economics: kill dimensionado + escalera de capital con días forward (antiguo 13).
+FASE C — 30-Nov..2-Dic (integrar y decidir)
+ C1 objetivo-200k: plan maestro con capacidad medida (M1-M5) + veredicto CXB60 + matriz (antiguo 11).
+ C2 execution-engineer: integra en sombra las piezas aprobadas (antiguo 12).
+ C3 statistical-validator → red-team → ÚNICO /code-review medium (incluye guarda libro cruzado) (antiguo 14).
+ C4 Decisiones Javi: piezas de la matriz · kill · OK micro-real.
+FASE D — 3..7-Dic: micro-real (antiguo 15) → B operando.
+SUBVARIANTE BTC (tras la mirada, solo si H1=PASS): sim B base BTC · C1/C3 BTC 03-17 Nov · adenda p20/p80 BTC (firma) · contrato E1b BTC (firma) · guarda BTC par común + N1 (mitigar antes de excluir) · verificador 6/10, backfill 21/21. Al crear su ejecutor: conectar guarda libro_cruzado (hoy H23 y pares_cola_15m vetan sin contador; H23_OK con sha h47 nuevo).
+DESPUÉS de B operando: buscador de ineficiencias → perro de presa · potenciar sniper · PRECIERRE/ejeclive firma V2 (antes 14-Dic) · test flaky SDK.
+Condicionales: prueba (b) regla del par (episodios >1 % ≥2 días) · 429 gamma si py-spy lo localiza (arreglo OK Javi: semáforo 4 + Retry-After).
+### Corrección COLA REESTRUCTURADA (27-Nov ~10:45Z, Javi: faltaban piezas de la cola de 12)
+Mapa cola de 12 → fases: 1 feedback alpha-miner = HECHO (D1-D4, 25-Nov) · 2 simulador v-next = SIM-L: prereg+sello+OK HECHOS (PREREG_SIML 75d847fa6c5); falta KS 14:00 hoy (A2) y re-simular días (B1, EV PRECINTADO hasta la mirada 1) · 3 enmienda banda lo: P2/P3/P5 HECHAS; P4(iii) en A5; P1a ≥29-Nov en B3; luego validador → red-team → firma Javi (B3) · 4 cruces k_f5/clase suelo cinta 25-Nov → ADELANTADO a A5/A1 (insumos ya existen: RT_v3dd 25 + clases) · 5 puerta oficial de días válidos (6 para la mirada 1) = A3 · 6 matriz 11 categorías HECHA (MATRIZ_B_SUBVARIANTE_25nov.md) → plan maestro C1 · 7 integrar en sombra = C2 · 8 risk-economics kill/b_k_kill_dimensionado.json/escalera = B4 · 9 pins b_k_pins.json HECHOS (26-Nov; regenerados 27-Nov con la guarda; vigia_bk_pins en cron) → re-pin final en C2 antes de C3 · 10 validador → red-team → /code-review medium = C3 · 11 MIRADA 1 (~2-Dic, micro-real el mismo día si la mirada rechaza, OK Javi) = FASE D; ⚠ el «13/10 ya procede» del vigía CXB60 NO es la puerta oficial: A3 decide si la mirada se adelanta o sigue ~2-Dic · 12 buscador ineficiencias → perro de presa = DESPUÉS.
+### Barrido de memorias y scripts (27-Nov ~11:00Z): lo que faltaba en la tabla de 12
+Ya cubierto por la MATRIZ (entra vía C1→C2, comprobar que el plan maestro lo trata explícitamente): F5 + juez Calma v4 (K6) + E1b S1 masterizados (mandato 19-Nov) · AS de ráfagas C2: cancelar Y vender rellenos malos (mandato 09-Nov) · comprar ambos lados/descargar perdedor (27-Oct) · L2 carrera/cancelar cuando el bid cae bajo L (16-Nov) · rebate maker 20 % · CXB60+F5 combinados y F5 event-driven l=35-60 ms (15-Nov) · revisión de REJECTED/INSUFFICIENT con info nueva (03-Nov).
+AÑADIDOS a la tabla:
+ 13 T10 (guarda caída WS Polymarket): umbral 5 s PROVISIONAL → calibrarlo con el QLog del seco V3 (PARIDAD 26-Nov) — A5 market-data mide, B1 engineer fija (antes de C3).
+ 14 M1 BTC con libro5_ms (retirada neta de nivel, 03-Nov; NO está en la matriz) → subvariante BTC, junto a M1 de capacidad.
+ 15 Perro de presa (polymarket-generador-estrategias-ev): primer encargo fichas B + subvariante + E1b en sombra → tras C1 (antes del 12).
+ 16 Commits pendientes (git roto): guarda libro_cruzado dev-bk, vigía candidatos, run_v4_dias.sh, rf5_cortes firmado → A2 al sanar git; luego repack/vigía de packs (infra, sin tocar cadena del seco).
+ 17 Disco sdb 97 %: verificar que baja tras el refetch; si no, prioridad infra antes de Fase B (libro5 pausa <10 GB = datos de B perdidos).
+
+## ⭐ COLA ÚNICA B + SUBVARIANTE (27-Nov ~11:10Z, Javi: «todo unido de una vez») — SUSTITUYE A TODAS LAS ANTERIORES
+| Prio | Pieza | Quién | Cuándo | Depende de | Estado |
+|---|---|---|---|---|---|
+| 1 | Piloto M1/M4 + libro cruzado 25-Nov + backfill motor 15,16,19-24 | execution-engineer | hoy | — | EN CURSO |
+| 2 | Automáticos de hoy: P1b A 11:05 · py-spy 429 11:45 · motor 26-Nov 12:45 · KS SIM-L 14:00 · P1b B 15:15 | chief | hoy | — | programados |
+| 3 | Git sano + commits (guarda dev-bk, vigía candidatos, run_v4_dias, firma RF5) + volumen sdb baja | chief | hoy | refetch | esperando |
+| 4 | Contrato mirada 1 + puerta oficial de días válidos (6) | data-authority | hoy | — | siguiente agente |
+| 5 | Revisión del piloto vs contrato + P4(iii) + detector ≤2 s + V1/V2 guarda intra (BTC) + medir T10 con QLog del seco + cruces k_f5/clase suelo 25-Nov | market-data-engineer | hoy/28 | 1, 4 | cola |
+| 6 | SIM-L re-sim de días (EV precintado) + M2/M3 + 26-Nov en piloto + fijar T10 | execution-engineer | 28 | KS, P1b (L3b), 5 | cola |
+| 7 | L1b-v2 6c re-extracción + forward | execution-engineer (mismo) | 28 | 6 | cola |
+| 8 | Kill dimensionado + b_k_kill_dimensionado.json + escalera de capital | risk-economics | 28 | 6 | cola |
+| 9 | Enmienda banda lo: P1a (≥29) → validador → red-team → FIRMA Javi | validator/red-team | 29 | P1a | cola |
+| 10 | Plan maestro 200 k con capacidad medida (M1-M5) + matriz completa (F5, Calma v4, E1b S1, AS ráfagas cancelar+vender, ambos lados, L2 carrera, rebate, CXB60+F5, REJECTED revisados) | objetivo-200k | 30 | 5-9 | cola |
+| 11 | Perro de presa: fichas B + subvariante + E1b en sombra | generador-estrategias-ev | 30 | 10 | cola |
+| 12 | Integrar en sombra lo aprobado + re-pin final | execution-engineer | 1-Dic | 10, Javi | cola |
+| 13 | Validador → red-team → ÚNICO /code-review medium | validator/red-team/chief | 1-2 Dic | 12 | cola |
+| 14 | Decisiones Javi: piezas matriz · kill · OK micro-real | Javi | 2-Dic | 13 | — |
+| 15 | Mirada 1 → micro-real el mismo día si rechaza (OK Javi) → B operando ≤7-Dic | chief | ~2-Dic | 4, 13, 14 | — |
+| 16 | Subvariante BTC (solo si H1=PASS): sim base BTC · C1/C3 · adenda p20/p80 · contrato E1b BTC · guarda par común+N1 · verificador 6/10 · backfill 21/21 · M1 BTC libro5_ms · guarda libro_cruzado en su ejecutor | varios | tras 15 | H1 | cola |
+| 17 | Después: buscador de ineficiencias → perro de presa v-siguiente · potenciar sniper · PRECIERRE/ejeclive firma V2 (antes 14-Dic) · repack/vigía git · test flaky SDK | varios | ≥7-Dic | B operando | — |
+Condicionales: prueba (b) regla del par (episodios >1 % ≥2 días) · arreglo 429 gamma (semáforo 4 + Retry-After) si py-spy lo localiza · infra disco si sdb no baja (sube a prio 3).
+### Actualización COLA ÚNICA (27-Nov ~11:20Z, tras piloto M1/M4 25-Nov; Javi OK)
+Decisión Javi: cobertura del join medida POR CASADO (tx) 0,956 cumple el ≥0,90 (por tx×ficha 0,54 = artefacto del WS).
+Piloto: B rellena 5 de 730 pujas (0,29 % de mercados-lado elegibles; todo ETH); ETH 99 % a 2 ticks bajo el top (cola p50 136); SOL/XRP en el top 8-9 %. Javi: «B casi no rellena → resolverlo para los 200 k».
+ Prio 4 (data-authority) +: sello paridad_lib a5161ce9 vs rf5_cortes 0f30230f (¿afecta K6/SIM-L/KS?) → diagnóstico + arreglo (tras 22:35Z si toca pins) · semántica del campo side de T en libro5_ms · contrato del SUSTITUTO de M4 (validar la cola/relleno sin rellenos propios).
+ Prio 5 (market-data-engineer) +: resolver discrepancia motor 5 vs FIFO 1-11 rellenos.
+ Prio 5b NUEVA (polymarket-quantum-alpha-miner): CAPACIDAD DE RELLENO de B = palanca central: posicionamiento (top vs 2 ticks, ETH), cola delante, tamaño, monedas, horas, repegado, rebate; diseño falsable de las mejoras con AS mitigada; tras 5.
+ Prio 6 (engineer) +: tests que escriben mocks en el ledger de producción BK → aislarlos (tras 22:35Z) + limpiar 12 filas mock del 25-Nov (marcar, no borrar).
+ Prio 10 (objetivo-200k): capacidad de relleno = palanca central del plan.
+### Prio 4 HECHA (27-Nov ~11:50Z) — contrato datalogs/capacidad_b_27nov/contrato_prio4_27nov.md
+- Mirada 1: DOS contadores. (a) prereg CXB60 engine_v3 (maker_ms; 13 días 13..25) → procede formalmente; (b) reeval passT_v4 (contrato v2 (c), días ≥18-Nov con libro5_tx): hoy 18 y 24 COMPLETE, 19-23 BLOCKED, 25/26 pendientes → ~10 días hacia 3-Dic. «6 días ~2-Dic» no reproducible. Mirada única: NO ejecutar sin validador; etiquetar engine_v3; para B real manda la reeval passT_v4. No abrir EV en cxb60_forward_cron.log.
+- Sello: mismo concepto; SELLO_FIRMADO dev-bk a5161ce9 desfasado por re-firma de cortes (→0f30230f). K6/RF5 sello dinámico OK; KS no afectado; nulo_inc corrió 09:20Z rc=0 COMPLETO tras la re-firma (chief verificó). Arreglo tras 22:35Z: SELLO_FIRMADO=0f30230f + acta + pins/HASHES (prio 6).
+- side de T = lado del TOMADOR (on-chain, 0,014 % discordante; 10,3 % sin M en ficha sin verificar). Relleno de bid B en X = T(X,SELL) ≤bid o T(comp,BUY) ≥1−bid.
+- Sustituto M4 contratado: makers AJENOS on-chain mismo nivel/ficha, cola por log_index, población completa, IC por días; + 2×2 de 27 puja_post del seco.
+Siguiente: prio 5 = execution-engineer (re-correr FIFO con regla explícita + implementar sustituto M4, varios días 10-18/24/25) → market-data revisa · validador: decide mirada 1 engine_v3 · prio 5b alpha-miner capacidad.
+### Feedback Javi a prio 4 (27-Nov ~12:00Z)
+- Mirada 1 / CXB60: «se planteó con sellos antiguos → recalcular con los nuevos»; que la autoridad de datos (o el pertinente) lo revise a fondo y decida, junto con el validador: cuál es la forma más útil (gastar la mirada engine_v3 ahora, esperar a la reeval passT_v4 ~3-Dic, o ambas etiquetadas), atendiendo a los objetivos de B → paso «M1-decisión» tras prio 5 (data-authority CONTINUADO + statistical-validator en una sola pasada: data-authority decide el contador y el sello; el validador revisa).
+- AS de B: el sustituto de M4 no mide la AS propia; Javi: «los agentes tienen que solucionar, como sea, la selección adversa de B» → prio 5b alpha-miner = CAPACIDAD + AS JUNTAS (más relleno en el top = más exposición; diseñar ambas con la matriz: cancelar Y vender rellenos malos, guarda intra, F5, Calma, E1b, L2 carrera).
+- Prio 5 LANZADA (engineer continuado): FIFO con regla del tomador + sustituto M4 (10-18, 24, 25).
+### 27-Nov ~11:35Z
+- Prio 5 parcial: motor 5/5 respaldado on-chain, FIFO 4/11 → manda el motor. Abiertos (Javi: «resolver causas no identificadas y cables sueltos»): origen de los 7 FP de la FIFO, 2 posibles FN del motor (#3017, #2272), gz truncado pid 2744946, offset 40/60 ms → prio 5-bis (engineer continuado, tras P1b B 15:30Z y antes 22:00Z) junto con el sustituto M4 multi-día (10-18, 24, 25).
+- s.py huérfano (4,3 GB) matado con OK Javi → MemAvailable 4,7 GB.
+- P1b A 11:05Z BLOCKED ack_lento_duro_3330ms (0 gasto). PRIORIDAD: engineer diagnostica local/remoto + preflight fail-closed RAM/PSI + prioridad del proceso antes de P1b B 15:15Z (sin relajar kill ni presupuesto).
+### 27-Nov ~11:45Z — Javi: «EL MOTOR TIENE QUE VER TODOS LOS RELLENOS PARA MINAR EV POSITIVO»
+Prio 5-bis pasa a OBJETIVO «FN del motor = 0 contra la cadena», en 3 pasos (uno a uno):
+ a) execution-engineer (continuado, tras P1b B 15:30Z): auditoría SISTEMÁTICA motor vs on-chain en TODOS los días con RT_v3dd (10-18, 24, 25; 26 al salir): cada relleno on-chain de maker ajeno al nivel/ficha de una orden virtual de B en [t_arr, t_end] que el motor no rellena = FN; tasa FN/FP por moneda×día×causa (barrido parcial <5 acc, casado cruzado BUY complementario, borde temporal/offset 40-60 ms, gz truncado, cola mal estimada, repegado). Incluye los 7 FP de la FIFO y #3017/#2272.
+ b) polymarket-data-integrity-authority: valida las causas y fija la definición de «relleno» y el reloj.
+ c) execution-engineer: corrige el motor en VERSIÓN NUEVA (passT_v5 + sello nuevo + test bit a bit contra v4 en lo no afectado; v4 queda intacto y vigente hasta firmar v5 con OK Javi; re-simular con el mismo motor todo lo que se compare, regla 17-Nov).
+ Gate de cierre: FN residual 0 (o cada FN restante explicado y fuera de la política de B) con IC por días.
+- 27-Nov 12:20Z Javi: F2 dry-run (pids ETH-SOL-XRP-DOGE-BNB y BTC) NO se para; pendiente MEDIRLO con el sello vigente passT_v4 → entra en prio 5-bis/6 (engineer) tras el informe del agente RAM.
+### Orden inmediato (27-Nov ~12:50Z, Javi: «no perder de vista las prioridades de B, listo asap»)
+1 engineer RAM: reinicio shadows (segundos) + PSI 15 [en curso] → 2 engineer (mismo, corto): RF5 25-Nov MemoryError (ulimit 5 GB virtual, sin tocar sellados) → 3 chief: KS 14:00 + P1b B 15:15 → 4 engineer piloto (prio 5-bis, ≥15:30Z): FN=0 motor vs cadena multi-día + M4 sustituto multi-día + medir F2 con passT_v4 → 5 data-authority + validator: decisión mirada 1 CXB60 con sello vigente → 6 alpha-miner (5b): capacidad de relleno + AS juntas → 7 prio 6 SIM-L/M2/M3 (tras KS + L3b de P1b) → camino crítico de la COLA ÚNICA.
+- 27-Nov 13:10Z: 41 huérfanos de observadores matados (swap 8,1→5,4 GB). PENDIENTE engineer: causa raíz (cada reinicio de observadores deja un hijo de 3 hilos libro_estado_ws/libro_ws_universo con ppid 1) + vigía. P1b sábado 28: at 96 03:35Z (reintento B si hoy no COMPLETE) y at 97 11:05Z (A), automáticos.
+- 27-Nov 13:20Z FIRMA Javi: mirada 1 CXB60 APLAZADA hasta reeval passT_v4 con 10 días ≥18-Nov (~3-4 Dic), comando forward_gates.py --mirada 1 --hasta 2026-11-22; precintado EV forward/SIM-L/reeval. Disco sdb = camino crítico (libro5 <10 GB pausa): engineer liberando ≥20 GB.
+### 27-Nov ~14:00Z — prio 5b alpha-miner HECHO (DISENO_CAPACIDAD_AS_B_27nov.md, PROMISING solo diseño)
+Hallazgo raíz: B no rellena porque las reglas K (V5/V6/Calma) CIERRAN el lado para siempre al primer disparo (81 % de lados, mediana 6,6 s; presencia en libro 1,86 % de la ventana); B base H35 rellenaba 55 % (EV −0,072). Capacidad y AS = mismo problema (cotización rancia en barridos) → semántica de ESTADO, no de camino.
+Avisos para el validador: RF5 frac_cancel 0,56 (17-N K1) y 0,81 (25-N K6) > 0,5 → PREREG_RF5 l.26 «solo no operar»: aclarar si cuenta vidas o lados. Calma en K6 ≠ Calma-T1 (K6 cierra, T1 rearma a 1.000 ms) → corregir fila B05 de la matriz.
+Siguiente (tras 5-bis FN=0): EXP-5b-REARME-K6 (K6 / K6R τ=0 / K6R30 / placebo; etapa A 13-17 Nov exploratoria; etapa B días ciegos junto a mirada RF5, prereg con sha antes) → data-authority (contrato) → execution-engineer (bandera+tests+etapa A) → validator + red-team. Palancas P2-P8 en el fichero. B sola no cierra 200 k (techo estructural ~17-35 k€/año a EV +0,05/+0,10): objetivo-200k debe sumar subestrategias.
+
+## ⭐ CIERRE 27-Nov ~14:10Z — FEEDBACK JAVI (retomar desde aquí)
+- Reglas K = la clave: protección contra AS por ESTADO (fuera del libro mientras dura lo tóxico, dentro cuando vuelve la calma), nunca «primer disparo → mercado cerrado». Objetivo: AS COMPLETAMENTE mitigada Y EV>0 Y no perder NINGÚN relleno («ir a todos y ganarlos»).
+- OK EXP-5b-REARME-K6 (K6 / K6R τ=0 / K6R30 / placebo; etapa A 13-17 Nov; etapa B ciega con prereg sha) con los mejores agentes, tras 5-bis FN=0.
+- Agentes aclaran: RF5 frac_cancel >0,5 (¿vidas u órdenes/lados?) y corrigen fila B05 de la matriz (Calma K6 ≠ Calma-T1).
+- 200 k = INTERÉS COMPUESTO: el agente de escalado (risk-economics, escalera de capital, prio 8) escala stakes con los beneficios de B. B = B + SUBVARIANTE BTC: ahí está el nicho (no tratar BTC como accesorio).
+ORDEN AL RETOMAR: (1) revisar automáticos (lista en memoria project_checkpoint_27nov_cierre_feedback_automatizados) → (2) engineer 5-bis FN=0 multi-día + M4 sustituto + F2 con passT_v4 → (3) data-authority: contrato EXP-5b + RF5 frac_cancel + B05 → (4) engineer EXP-5b etapa A → (5) validator + red-team → (6) prio 6 SIM-L/M2/M3 (KS + L3b) → (7) risk-economics escalera compuesta + objetivo-200k plan (B + BTC) → resto COLA ÚNICA.
+
+## COLA V2/MOTOR 27-Nov 17:00Z (Javi: «todo el equipo a solucionarlo»; PRECIERRE se queda como está)
+Un agente a la vez; cada salida → feedback Javi → siguiente.
+1. data-authority (continúa su contrato CONTRATO_5BIS_EXP5B_27nov): esquema de eventos ExchangeV3 0xe3333700 (OrderFilled/positionIds, maker/taker, fee) y mapa token→moneda; reloj de los 12 FN dudosos (≤100 ms) → veredicto FN real/no; COMPLETE POR MONEDA (definición + qué días se reclasifican); contrato de calibración exacta de P(relleno) (objetivo sesgo ≈0 con IC por días, no «subestima menos»); contrato F2 completo (adaptador 5a + BTC en el motor). Anexo al contrato con sha.
+2. engineer (cheap5m-execution-engineer): indexador on-chain con V2+V3 (en dev, copia a main de una vez) + backfill desde 24-Nov + COMPLETE por moneda en manifests.
+2b. (Javi 27-Nov 16:50Z) data-authority: (i) diagnóstico KS FALLA (sim +1,5 ms p50; L3b fallback_59) y camino LEGÍTIMO para que SIM-L pase (corregir el modelo + validar en noche NUEVA con prereg nuevo; nunca re-correr la misma KS para R); (ii) criterio «sin mapear» acotado a monedas/marcos usados; (iii) qué consumidores de onchain_fills entran en la medición. Anexo 2 con sha.
+3. engineer: motor — arreglar lo que dictamine el punto 1 para los FN (ver TODOS los rellenos), calibración M4 a sesgo 0, adaptador reeval passT_v4 (5a) + BTC; re-correr con ≥3 días válidos por moneda (18-N + backfill).
+4. statistical-validator + red-team sobre 2-3.
+5. Sigue la cola anterior: EXP-5b rearme etapa A → validator/red-team → SIM-L M2/M3 → risk-economics escalera compuesta + plan 200 k (B+BTC).
+APARCADO (Javi 27-Nov, «más adelante», fuera de la cola): firma V2 por mercado en el SNIPER (PRECIERRE/NAIVE).
+ACTA 2026-11-27T18:25Z: PREREG_SIML_V2_27nov.md firmado con enmiendas del validador §9 (APROBADO CON CAMBIOS), sha256 d74a1fc71a1d107cb493af4a279b9e8c59c943e3584e50677e872c0ecdbef467 (v1 e5ad61ed… sustituido). Validación: seco A at 98 (out_seco_a_2026-11-27); KS v2 29-Nov 03:15-06:00Z; un intento.
+ORDEN AL RETOMAR (27-Nov 18:35Z, OK Javi a todo): ver memoria project_checkpoint_27nov_noche_v3_simlv2 → (0) revisar seco at 98 / P1b 28-N / KS v2 at 99 / cron v3 / git → (1) engineer paso 3 completo → (2) validator+red-team → (3) cola anterior.

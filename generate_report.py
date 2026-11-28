@@ -1096,6 +1096,16 @@ def hoja_abiertas(wb, shadow_ab, live_ab):
 def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] === Generando informe Excel unificado ===")
+    # 27-Nov (OOM-kills del kernel 00:45 y 02:00: este proceso, 0,8-1,5 GB, con swap 8/8 GB):
+    # carga results.csv entero (1,5 GB, 1,6 M filas). Es solo un informe: si no hay RAM, se
+    # salta este ciclo (el slow lo reintenta en ~23 min) en vez de empujar al kernel a un OOM global.
+    try:
+        disp_mb = next(int(l.split()[1]) for l in open("/proc/meminfo") if l.startswith("MemAvailable")) // 1024
+    except Exception:
+        disp_mb = None
+    if disp_mb is not None and disp_mb < 3000:
+        print(f"[{ts}] SALTADO: MemAvailable={disp_mb} MB < 3000 MB (evita OOM global)")
+        return
 
     init_live_csvs()
 

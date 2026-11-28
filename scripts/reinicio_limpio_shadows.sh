@@ -9,7 +9,7 @@
 # Uso: reinicio_limpio_shadows.sh [--forzar]     (--forzar ignora el umbral)
 set -u
 REPO=/root/polymarket-research
-UMBRAL_MB=450
+UMBRAL_MB=${UMBRAL_MB:-450}   # 27-Nov: sobreescribible por entorno (restart manual con umbral menor)
 FORZAR=${1:-}
 LOG=$REPO/logs/reinicio_limpio_shadows.log
 exec 8>/tmp/reinicio_limpio_shadows.lock; flock -n 8 || exit 0
@@ -38,7 +38,7 @@ shadow() {  # $1 screen, $2 script, $3 periodo, $4 fase_min, $5 fase_max
   esperar_fase "$3" "$4" "$5" || { log "$1: ventana no alcanzada, no toco"; return 0; }
   parar "$pid" || { log "$1 pid=$pid NO sale con TERM: no relanzo (lo hara el watchdog si muere)"; return 0; }
   sleep 0.5
-  if screen -ls | grep -q "\.$1[[:space:]]"; then log "$1: la screen ya existe (watchdog), no relanzo"; else screen -dmS "$1" bash -c "$cmd"; fi
+  if screen -ls | grep -q "\.$1[[:space:]]"; then log "$1: la screen ya existe (watchdog), no relanzo"; else screen -dmS "$1" bash -c "$cmd" 8>&-; fi   # 27-Nov: 8>&- = el hijo NO hereda el flock (f2 alt lo retuvo del 14-Nov y el cron salia en silencio)
   log "$1 reiniciado en ventana (pid $pid, RSS+swap ${m} MB)"
 }
 
@@ -47,7 +47,7 @@ f2() {  # $1 = btc|alt
   local pid; pid=$(cat "$pf"); [ -r "/proc/$pid/status" ] || return 0
   local m; m=$(mem_mb "$pid"); [ -n "$FORZAR" ] || [ "${m:-0}" -gt $UMBRAL_MB ] || return 0
   esperar_fase 900 60 280 || { log "f2 $1: ventana no alcanzada, no toco"; return 0; }
-  "$REPO/scripts/f2_5m_barato_lanzar.sh" "$1" >/dev/null 2>&1
+  "$REPO/scripts/f2_5m_barato_lanzar.sh" "$1" >/dev/null 2>&1 8>&-   # 27-Nov: idem (nohup hereda el fd 8)
   log "f2 $1 reiniciado en ventana (pid $pid, RSS+swap ${m} MB)"
 }
 

@@ -399,7 +399,8 @@ def check_screens() -> dict[str, bool]:
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "vigiasfreq", "precierre",  # walletmirror pausado 17-Nov (Javi): no se reinicia; reponer aqui para reactivar
                               # sportsfase0/dash-weather/weather-mirror/weather-ws pausados 17-Nov (Javi): reponer para reactivar
-                              "freezeestado", "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "curvacierre", "r3shadow", "logl2", "bnreg", "cxb60dry"]}
+                              # freezeestado y curvacierre PAUSADO-27NOV-RAM (OK Javi 27-Nov): reponer ambos aqui para reactivar; ver misiones/5m_barato/docs/PAUSA_RAM_27nov.md
+                              "dryrunmc", "multivenue", "a6shadow", "h23shadow", "h23shadowv3", "dash5m", "r3shadow", "logl2", "bnreg", "cxb60dry"]}
     except Exception:
         return {}
 

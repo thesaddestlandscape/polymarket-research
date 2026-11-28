@@ -40,12 +40,37 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from analisis_gate_riguroso import (  # noqa: E402
-    cargar_candidatos, cargar_filas, gate, benjamini_hochberg,
+    cargar_candidatos, gate, benjamini_hochberg, RES,
 )
 from shadow_digest import enviar_telegram  # noqa: E402
 
 OUT = REPO / "data" / "shadow" / "candidatos_evaluacion_live_gate_riguroso.json"
 LATCH = REPO / "data" / "live" / "vigia_candidatos_evaluacion_live_latch.json"
+
+
+def cargar_filas(claves):
+    """27-Nov: misma semantica que analisis_gate_riguroso.cargar_filas (filas con `acierto`
+    resuelto de las claves buscadas) pero conservando SOLO las columnas que usa gate()
+    (acierto, pnl_neto). El original guardaba el DictReader completo (features JSON, question):
+    ~3 GB sobre 1,5 GB de results.csv, y bajo el MemoryHigh del cgroup de cron_pesado se atascaba 1 h.
+    No se edita analisis_gate_riguroso.py: lo importa wallet_mirror_tracker (cadena de observadores)."""
+    import csv
+    csv.field_size_limit(1 << 27)
+    wanted = {(s, sub, d) for _, s, sub, d in claves}
+    filas = {}
+    with open(RES, newline="") as f:
+        rd = csv.reader(f)
+        cab = next(rd)
+        i_s, i_sub, i_d = cab.index("strategy"), cab.index("subtype"), cab.index("decision")
+        i_a, i_p = cab.index("acierto"), cab.index("pnl_neto")
+        mx = max(i_s, i_sub, i_d, i_a, i_p)
+        for r in rd:
+            if len(r) <= mx or r[i_a] == "":
+                continue
+            k = (r[i_s], r[i_sub], r[i_d])
+            if k in wanted:
+                filas.setdefault(k, []).append({"acierto": r[i_a], "pnl_neto": r[i_p]})
+    return filas
 
 
 def _cargar_latch() -> dict:

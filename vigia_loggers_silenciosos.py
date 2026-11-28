@@ -62,6 +62,12 @@ EVENTOS = {"/root/polymarket-research-datalogs/arbitraje_anidado_dryrun.csv": RE
 _LATIDO = re.compile(r"^\[([^\]]+)\] (\d+) eventos en la última hora")
 
 
+# 27-Nov (OK Javi): loggers PAUSADOS a proposito (screens freezeestado/curvacierre paradas por RAM; ver misiones/5m_barato/docs/PAUSA_RAM_27nov.md).
+# Su silencio es correcto: no avisar. Reactivar la screen = vaciar este conjunto.
+PAUSADOS_RAM_27NOV = {str(REPO / "data/shadow/resolution_sniper_freeze_estado_fase0.csv"),
+                      str(REPO / "data/shadow/resolution_sniper_precierre_curva_cierre_fase0.csv")}
+
+
 def _libro5_en_pausa(clave) -> bool:
     """17-Oct: libro5 apagado a mano (interruptor) no es un logger roto; una pausa por volumen bajo se silencia solo
     sus primeras 3 h (después hay que actuar). Si está muerto o el estado es viejo (> 10 min), sí se avisa."""
@@ -296,7 +302,7 @@ def main() -> int:
                 est[clave] = {"primera_vez": ahora, "ultimo_mtime": mt, "gap_max_h": 0.0, "avisado": False,
                               "escrituras": False}
             continue
-        if (clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave])) or _compuerta_cerrada(clave) or _libro5_en_pausa(clave):
+        if (clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave])) or _compuerta_cerrada(clave) or _libro5_en_pausa(clave) or clave in PAUSADOS_RAM_27NOV:
             e["ultimo_mtime"] = max(e["ultimo_mtime"], mt, ahora)   # sin posiciones: callar es lo correcto
             e["avisado"] = False
             e["escrituras"] = True                 # 09-Oct: logger real (log compañero vivo / condicional): se vigila

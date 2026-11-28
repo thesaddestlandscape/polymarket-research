@@ -269,7 +269,8 @@ data/prices/kalshi_*.csv
 # 25-Nov (2.ª pasada): ficheros de datos >2 MB que crecen
 data/live/balance_history.csv
 data/live/vigia_zonas_validadas_externas_latch.json
-data/prices/chainlink_2026-11-21.csv.gz
+# 27-Nov: los .gz diarios de chainlink (6,6 MB) crecian .git en sdb
+data/prices/chainlink_*.csv.gz
 data/shadow/ballenas_15min_dry_run.csv
 data/shadow/binance_jump_leadlag_outcomes.json
 data/shadow/candidata9_10_gate_bucket_historico.csv
