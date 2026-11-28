@@ -1,0 +1,102 @@
+{
+ "TODAS": {
+  "alta_mercado_ex_menos_envio": {
+   "n": 106,
+   "p10": -0.3,
+   "p50": 40.5,
+   "p90": 102.4
+  },
+  "cancel_mercado_ex_menos_envio": {
+   "n": 113,
+   "p10": 17.1,
+   "p50": 35.2,
+   "p90": 119.3
+  },
+  "cancel_mercado_rx_menos_envio": {
+   "n": 113,
+   "p10": 42.3,
+   "p50": 59.2,
+   "p90": 160.5
+  }
+ },
+ "ETH": {
+  "alta_mercado_ex_menos_envio": {
+   "n": 21,
+   "p10": 32.2,
+   "p50": 54.8,
+   "p90": 102.4
+  },
+  "cancel_mercado_ex_menos_envio": {
+   "n": 22,
+   "p10": 30.8,
+   "p50": 37.1,
+   "p90": 81.0
+  },
+  "cancel_mercado_rx_menos_envio": {
+   "n": 22,
+   "p10": 50.1,
+   "p50": 61.5,
+   "p90": 114.0
+  }
+ },
+ "BTC": {
+  "alta_mercado_ex_menos_envio": {
+   "n": 45,
+   "p10": -9.1,
+   "p50": 32.2,
+   "p90": 320.0
+  },
+  "cancel_mercado_ex_menos_envio": {
+   "n": 46,
+   "p10": 0.1,
+   "p50": 34.0,
+   "p90": 359.8
+  },
+  "cancel_mercado_rx_menos_envio": {
+   "n": 46,
+   "p10": 17.1,
+   "p50": 56.4,
+   "p90": 463.1
+  }
+ },
+ "SOL": {
+  "alta_mercado_ex_menos_envio": {
+   "n": 20,
+   "p10": 37.7,
+   "p50": 44.9,
+   "p90": 81.9
+  },
+  "cancel_mercado_ex_menos_envio": {
+   "n": 22,
+   "p10": 32.2,
+   "p50": 36.4,
+   "p90": 62.3
+  },
+  "cancel_mercado_rx_menos_envio": {
+   "n": 22,
+   "p10": 50.4,
+   "p50": 57.9,
+   "p90": 99.3
+  }
+ },
+ "XRP": {
+  "cancel_mercado_ex_menos_envio": {
+   "n": 23,
+   "p10": 32.5,
+   "p50": 35.4,
+   "p90": 58.8
+  },
+  "cancel_mercado_rx_menos_envio": {
+   "n": 23,
+   "p10": 51.7,
+   "p50": 62.6,
+   "p90": 105.7
+  },
+  "alta_mercado_ex_menos_envio": {
+   "n": 20,
+   "p10": 37.2,
+   "p50": 43.2,
+   "p90": 72.8
+  }
+ }
+}

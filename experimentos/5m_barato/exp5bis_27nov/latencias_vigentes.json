@@ -1,0 +1,715 @@
+{
+ "D_det_a_DELETE": {
+  "n": 207,
+  "origen": "ledger P1b: cancel.t_send - cancel.t_trig_rx del disparo PROGRAMADO (hold): cota inferior del motor real (no incluye deteccion); el motor la medira cuando exista",
+  "p50": 0.01,
+  "p90": 0.015
+ },
+ "D_post": {
+  "n": 207,
+  "origen": "ledger P1b: t_send - t_decision (decision -> envio del POST), todas las monedas, runs de las fuentes",
+  "p50": 74.446,
+  "p90": 87.728
+ },
+ "L_alta_central": {
+  "BTC": {
+   "calidad": "no_medido",
+   "ex_ms": null,
+   "n": 27,
+   "rx_ms": null
+  },
+  "ETH": {
+   "calidad": "PROVISIONAL (censura 51% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+   "ex_ms": 44.478,
+   "n": 20,
+   "rx_ms": 66.995
+  },
+  "SOL": {
+   "calidad": "PROVISIONAL (censura 20% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+   "ex_ms": 43.746,
+   "n": 32,
+   "rx_ms": 72.134
+  },
+  "XRP": {
+   "calidad": "PROVISIONAL (censura 19% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+   "ex_ms": 43.196,
+   "n": 34,
+   "rx_ms": 65.631
+  }
+ },
+ "L_cancel_central": {
+  "BTC": {
+   "calidad": "no_medido (BTC: ancla no unica; esperar al ensayo con firma de tamano)",
+   "ex_ms": null,
+   "n": 28,
+   "rx_ms": null
+  },
+  "ETH": {
+   "calidad": "PROVISIONAL (censura 46% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+   "ex_ms": 35.023,
+   "n": 22,
+   "rx_ms": 58.889
+  },
+  "SOL": {
+   "calidad": "PROVISIONAL (censura 15% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+   "ex_ms": 36.484,
+   "n": 34,
+   "rx_ms": 59.176
+  },
+  "XRP": {
+   "calidad": "ACEPTADA",
+   "ex_ms": 36.479,
+   "n": 40,
+   "rx_ms": 62.622
+  }
+ },
+ "anexos": [
+  {
+   "fichero": "CONTRATO_5BIS_EXP5B_27nov.ANEXO3_28nov.md",
+   "sha256": "7d5e0a6e7a17f35b24346cb68c242efde1259d750eb04b7686d6d6ccabbf57c5"
+  },
+  {
+   "fichero": "CONTRATO_5BIS_EXP5B_27nov.ANEXO4_28nov.md",
+   "sha256": "0dc43881d9ca9d318bb36dcb9e206a97d81c433406d78c30ab16a47710475be7"
+  }
+ ],
+ "brazos_L_cancel": {
+  "111": {
+   "canal": "usuario",
+   "origen": "p90 de cancel_ex_menos_envio de ensayo_real_B2 (111,4 ms, n=105; informe_final.json anclas_detalle)",
+   "rol": "heredado"
+  },
+  "119": {
+   "canal": "mercado",
+   "origen": "p90 \"mercado todas\" del ANEXO4 A (P1b B 28-Nov) REFUTADO por el validador: mezcla + primer salto contaminado; unicas p90 global 58-59. Se conserva como brazo de trazabilidad, rotulado no medido",
+   "rol": "no_medido"
+  },
+  "1320": {
+   "canal": "usuario",
+   "origen": "cancel_ex_menos_envio p90 del canal de USUARIO en P1b B 28-Nov (ANEXO3 \u00a70)",
+   "rol": "estres_informativo"
+  },
+  "147": {
+   "canal": "usuario",
+   "origen": "p90 de ALTA (alta_ex_menos_envio) de ensayo_real_B2 (146,6 ms, n=107) -- NO es una cancelacion (ADENDA p3_agrega_v12.py:68); se mantiene como brazo de estres de cola",
+   "rol": "heredado"
+  },
+  "202": {
+   "canal": "usuario",
+   "origen": "cancel_ex_menos_envio p50 del canal de USUARIO en P1b B 28-Nov (ANEXO3 \u00a70); una franja nocturna; no es sello de mercado",
+   "rol": "estres_informativo"
+  },
+  "74": {
+   "canal": "usuario",
+   "origen": "p90 del pool 13-Nov n=313 de cancel_ex_menos_envio (comentario passT_v5.py:19 \"sens. 74 = p90\"); NO recomputable desde los informes por run (min/max por run 41-111)",
+   "rol": "intermedio_heredado_fuera_como_central"
+  }
+ },
+ "codigo": {
+  "latencias_vigentes_py_sha256": "2a07be5eafbb00df04f1cb3a73ee34beb9785645291e01d1258e14fa36a65377"
+ },
+ "fuentes": [
+  {
+   "codigo_sha256": "e50616997202ddf59e5d945fc1ee8bec5c2a712d54b37a24e3aa6e5069a1ccf9",
+   "fichero": "/root/polymarket-research-datalogs/exp5bis_27nov/paso3/ancla/ancla_A_20261128.json",
+   "sha256": "9b785e7f0ff56c8cdab99e2b0b27df44ee0dfce75bcb5b0418071c18162e57d2",
+   "sha256_resultado": "bffcd796e7085b9aed53107b0ad87f066a353080d44b16c25c02065c00c71826",
+   "tipo": "ancla_p1b_28nov"
+  },
+  {
+   "codigo_sha256": "e50616997202ddf59e5d945fc1ee8bec5c2a712d54b37a24e3aa6e5069a1ccf9",
+   "fichero": "/root/polymarket-research-datalogs/exp5bis_27nov/paso3/ancla/ancla_B_20261128.json",
+   "sha256": "309371e10ed2bc1462831bfaaeea45311de7f80ee8e591adb50ab47128f6724b",
+   "sha256_resultado": "ca0a396c1e01a4f272f1a3efa972ef2e561d7665b673ae9b7e89b7c652665607",
+   "tipo": "ancla_p1b_28nov"
+  },
+  {
+   "fichero": "/root/polymarket-research-datalogs/paquete_l/p1b_real_A_20261128T110605Z/ledger.jsonl",
+   "sha256": "6c38d481cef3ec44d44f3807c65922a9b1f8d2907e621fabb3e2fe2c4ed57f45",
+   "tipo": "ledger_p1b"
+  },
+  {
+   "fichero": "/root/polymarket-research-datalogs/paquete_l/p1b_real_B_20261128T033520Z/ledger.jsonl",
+   "sha256": "d50cb4ee1acd1f149950d9fb5427ae7b4ceba39aa0fec1e7d4ec6666cd02961a",
+   "tipo": "ledger_p1b"
+  }
+ ],
+ "por_moneda": {
+  "BTC": {
+   "ack_http": {
+    "delete_http": {
+     "n": 84,
+     "p10": 55.685,
+     "p50": 133.19,
+     "p90": 986.768
+    },
+    "post_http": {
+     "n": 84,
+     "p10": 59.042,
+     "p50": 175.049,
+     "p90": 909.2
+    }
+   },
+   "alta": {
+    "anclas": 27,
+    "calidad": "PROVISIONAL (censura 68% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+    "clases": {
+     "censurada": 57,
+     "lo": 27
+    },
+    "esperado": 84,
+    "hi": null,
+    "km_ex": {
+     "p50": 914.297,
+     "p90": null
+    },
+    "lo": {
+     "ex": {
+      "n": 27,
+      "p10": 35.175,
+      "p50": 44.262,
+      "p90": 86.501
+     },
+     "rx": {
+      "n": 27,
+      "p10": 51.323,
+      "p50": 65.994,
+      "p90": 120.501
+     }
+    },
+    "tasa_censura": 0.6786,
+    "todas_las_anclas": {
+     "ex": {
+      "n": 27,
+      "p10": 35.175,
+      "p50": 44.262,
+      "p90": 86.501
+     },
+     "rx": {
+      "n": 27,
+      "p10": 51.323,
+      "p50": 65.994,
+      "p90": 120.501
+     }
+    }
+   },
+   "cancel": {
+    "anclas": 28,
+    "calidad": "PROVISIONAL (censura 67% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+    "clases": {
+     "censurada": 56,
+     "lo": 28
+    },
+    "esperado": 84,
+    "hi": null,
+    "km_ex": {
+     "p50": 542.232,
+     "p90": null
+    },
+    "lo": {
+     "ex": {
+      "n": 28,
+      "p10": 31.703,
+      "p50": 35.699,
+      "p90": 50.861
+     },
+     "rx": {
+      "n": 28,
+      "p10": 48.419,
+      "p50": 58.096,
+      "p90": 81.813
+     }
+    },
+    "tasa_censura": 0.6667,
+    "todas_las_anclas": {
+     "ex": {
+      "n": 28,
+      "p10": 31.703,
+      "p50": 35.699,
+      "p90": 50.861
+     },
+     "rx": {
+      "n": 28,
+      "p10": 48.419,
+      "p50": 58.096,
+      "p90": 81.813
+     }
+    }
+   },
+   "d_det_a_delete": {
+    "n": 84,
+    "p10": 0.007,
+    "p50": 0.011,
+    "p90": 0.015
+   },
+   "d_post_decision_a_envio": {
+    "n": 84,
+    "p10": 63.789,
+    "p50": 76.232,
+    "p90": 89.886
+   }
+  },
+  "ETH": {
+   "ack_http": {
+    "delete_http": {
+     "n": 41,
+     "p10": 55.262,
+     "p50": 61.983,
+     "p90": 152.58
+    },
+    "post_http": {
+     "n": 41,
+     "p10": 57.107,
+     "p50": 70.576,
+     "p90": 144.202
+    }
+   },
+   "alta": {
+    "anclas": 20,
+    "calidad": "PROVISIONAL (censura 51% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+    "clases": {
+     "censurada": 21,
+     "lo": 20
+    },
+    "esperado": 41,
+    "hi": null,
+    "km_ex": {
+     "p50": 70.395,
+     "p90": null
+    },
+    "lo": {
+     "ex": {
+      "n": 20,
+      "p10": 34.312,
+      "p50": 44.478,
+      "p90": 85.84
+     },
+     "rx": {
+      "n": 20,
+      "p10": 53.012,
+      "p50": 66.995,
+      "p90": 105.84
+     }
+    },
+    "tasa_censura": 0.5122,
+    "todas_las_anclas": {
+     "ex": {
+      "n": 20,
+      "p10": 34.312,
+      "p50": 44.478,
+      "p90": 85.84
+     },
+     "rx": {
+      "n": 20,
+      "p10": 53.012,
+      "p50": 66.995,
+      "p90": 105.84
+     }
+    }
+   },
+   "cancel": {
+    "anclas": 22,
+    "calidad": "PROVISIONAL (censura 46% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+    "clases": {
+     "censurada": 19,
+     "lo": 22
+    },
+    "esperado": 41,
+    "hi": null,
+    "km_ex": {
+     "p50": 52.851,
+     "p90": null
+    },
+    "lo": {
+     "ex": {
+      "n": 22,
+      "p10": 31.889,
+      "p50": 35.023,
+      "p90": 56.909
+     },
+     "rx": {
+      "n": 22,
+      "p10": 51.552,
+      "p50": 58.889,
+      "p90": 106.851
+     }
+    },
+    "tasa_censura": 0.4634,
+    "todas_las_anclas": {
+     "ex": {
+      "n": 22,
+      "p10": 31.889,
+      "p50": 35.023,
+      "p90": 56.909
+     },
+     "rx": {
+      "n": 22,
+      "p10": 51.552,
+      "p50": 58.889,
+      "p90": 106.851
+     }
+    }
+   },
+   "d_det_a_delete": {
+    "n": 41,
+    "p10": 0.006,
+    "p50": 0.01,
+    "p90": 0.016
+   },
+   "d_post_decision_a_envio": {
+    "n": 41,
+    "p10": 63.826,
+    "p50": 72.344,
+    "p90": 91.784
+   }
+  },
+  "SOL": {
+   "ack_http": {
+    "delete_http": {
+     "n": 40,
+     "p10": 56.383,
+     "p50": 60.63,
+     "p90": 98.066
+    },
+    "post_http": {
+     "n": 40,
+     "p10": 60.427,
+     "p50": 72.475,
+     "p90": 115.459
+    }
+   },
+   "alta": {
+    "anclas": 32,
+    "calidad": "PROVISIONAL (censura 20% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+    "clases": {
+     "censurada": 8,
+     "lo": 32
+    },
+    "esperado": 40,
+    "hi": null,
+    "km_ex": {
+     "p50": 46.558,
+     "p90": null
+    },
+    "lo": {
+     "ex": {
+      "n": 32,
+      "p10": 37.87,
+      "p50": 43.746,
+      "p90": 75.885
+     },
+     "rx": {
+      "n": 32,
+      "p10": 54.354,
+      "p50": 72.134,
+      "p90": 112.854
+     }
+    },
+    "tasa_censura": 0.2,
+    "todas_las_anclas": {
+     "ex": {
+      "n": 32,
+      "p10": 37.87,
+      "p50": 43.746,
+      "p90": 75.885
+     },
+     "rx": {
+      "n": 32,
+      "p10": 54.354,
+      "p50": 72.134,
+      "p90": 112.854
+     }
+    }
+   },
+   "cancel": {
+    "anclas": 34,
+    "calidad": "PROVISIONAL (censura 15% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+    "clases": {
+     "censurada": 6,
+     "lo": 34
+    },
+    "esperado": 40,
+    "hi": null,
+    "km_ex": {
+     "p50": 36.5,
+     "p90": 97.504
+    },
+    "lo": {
+     "ex": {
+      "n": 34,
+      "p10": 33.779,
+      "p50": 36.484,
+      "p90": 59.303
+     },
+     "rx": {
+      "n": 34,
+      "p10": 52.484,
+      "p50": 59.176,
+      "p90": 99.303
+     }
+    },
+    "tasa_censura": 0.15,
+    "todas_las_anclas": {
+     "ex": {
+      "n": 34,
+      "p10": 33.779,
+      "p50": 36.484,
+      "p90": 59.303
+     },
+     "rx": {
+      "n": 34,
+      "p10": 52.484,
+      "p50": 59.176,
+      "p90": 99.303
+     }
+    }
+   },
+   "d_det_a_delete": {
+    "n": 40,
+    "p10": 0.007,
+    "p50": 0.01,
+    "p90": 0.013
+   },
+   "d_post_decision_a_envio": {
+    "n": 40,
+    "p10": 66.429,
+    "p50": 74.867,
+    "p90": 82.341
+   }
+  },
+  "XRP": {
+   "ack_http": {
+    "delete_http": {
+     "n": 42,
+     "p10": 55.505,
+     "p50": 62.091,
+     "p90": 108.593
+    },
+    "post_http": {
+     "n": 42,
+     "p10": 60.234,
+     "p50": 68.051,
+     "p90": 95.056
+    }
+   },
+   "alta": {
+    "anclas": 34,
+    "calidad": "PROVISIONAL (censura 19% > 10 %: ancla no unica; el p50 observado esta sesgado hacia casos rapidos, usar KM/brazos)",
+    "clases": {
+     "censurada": 8,
+     "lo": 34
+    },
+    "esperado": 42,
+    "hi": null,
+    "km_ex": {
+     "p50": 43.831,
+     "p90": null
+    },
+    "lo": {
+     "ex": {
+      "n": 34,
+      "p10": 37.286,
+      "p50": 43.196,
+      "p90": 60.962
+     },
+     "rx": {
+      "n": 34,
+      "p10": 54.028,
+      "p50": 65.631,
+      "p90": 96.939
+     }
+    },
+    "tasa_censura": 0.1905,
+    "todas_las_anclas": {
+     "ex": {
+      "n": 34,
+      "p10": 37.286,
+      "p50": 43.196,
+      "p90": 60.962
+     },
+     "rx": {
+      "n": 34,
+      "p10": 54.028,
+      "p50": 65.631,
+      "p90": 96.939
+     }
+    }
+   },
+   "cancel": {
+    "anclas": 40,
+    "calidad": "ACEPTADA",
+    "clases": {
+     "censurada": 2,
+     "lo": 40
+    },
+    "esperado": 42,
+    "hi": null,
+    "km_ex": {
+     "p50": 36.479,
+     "p90": 68.481
+    },
+    "lo": {
+     "ex": {
+      "n": 40,
+      "p10": 32.748,
+      "p50": 36.479,
+      "p90": 68.481
+     },
+     "rx": {
+      "n": 40,
+      "p10": 52.167,
+      "p50": 62.622,
+      "p90": 105.695
+     }
+    },
+    "tasa_censura": 0.0476,
+    "todas_las_anclas": {
+     "ex": {
+      "n": 40,
+      "p10": 32.748,
+      "p50": 36.479,
+      "p90": 68.481
+     },
+     "rx": {
+      "n": 40,
+      "p10": 52.167,
+      "p50": 62.622,
+      "p90": 105.695
+     }
+    }
+   },
+   "d_det_a_delete": {
+    "n": 42,
+    "p10": 0.007,
+    "p50": 0.009,
+    "p90": 0.013
+   },
+   "d_post_decision_a_envio": {
+    "n": 42,
+    "p10": 63.104,
+    "p50": 74.603,
+    "p90": 87.728
+   }
+  }
+ },
+ "referencia_13nov_paquete_l": {
+  "L1_principal_ms": 34,
+  "L1_robusto_ms": 47,
+  "L3a_ms": 57,
+  "L3b_fallback_ms": 59,
+  "informes": [
+   {
+    "alta_ex_menos_envio": {
+     "n": 107,
+     "p50": 38.0,
+     "p90": 146.6000000000001
+    },
+    "canal": "usuario",
+    "cancel_ex_menos_envio": {
+     "n": 105,
+     "p50": 34.0,
+     "p90": 111.40000000000012
+    },
+    "fichero": "/root/polymarket-research-datalogs/paquete_l/ensayo_real_B2/informe_final.json",
+    "reloj": "ex(usuario)-envio",
+    "run": "ensayo_real_B2",
+    "sha256": "0d12371631930994fdf3305f57e376603e3a436292f2b1a3cac9e8c4d8a8c261",
+    "status": "COMPLETE"
+   },
+   {
+    "alta_ex_menos_envio": {
+     "n": 104,
+     "p50": 34.0,
+     "p90": 46.7
+    },
+    "canal": "usuario",
+    "cancel_ex_menos_envio": {
+     "n": 104,
+     "p50": 32.0,
+     "p90": 46.20000000000002
+    },
+    "fichero": "/root/polymarket-research-datalogs/paquete_l/ensayo_real_B3/informe_final.json",
+    "reloj": "ex(usuario)-envio",
+    "run": "ensayo_real_B3",
+    "sha256": "11d1b82ceea5105a497c3568f0a88c6a30fb80567503a5f02cfb7d6d8055c2cb",
+    "status": "COMPLETE"
+   },
+   {
+    "alta_ex_menos_envio": {
+     "n": 104,
+     "p50": 35.0,
+     "p90": 41.7
+    },
+    "canal": "usuario",
+    "cancel_ex_menos_envio": {
+     "n": 104,
+     "p50": 32.0,
+     "p90": 41.0
+    },
+    "fichero": "/root/polymarket-research-datalogs/paquete_l/ensayo_real_B5/informe_final.json",
+    "reloj": "ex(usuario)-envio",
+    "run": "ensayo_real_B5",
+    "sha256": "a8cbc57a9a5d062ac136f6e19dd405fe052a2791887dd0ea880a8967989537b0",
+    "status": "COMPLETE"
+   }
+  ],
+  "origen": "ANEXO_V2 \u00a73 / ANEXO3 \u00a70; canal de USUARIO, reloj ex(usuario); referencia, NO sustituye a la medicion de mercado"
+ },
+ "reloj": "t_envio/t_ack=local (chrony); ex=sello mercado libro5_ms; rx=recepcion local; formula C: t_arr_rx = t_dec_rx + D_post + L_alta_rx ; t_end_rx = t_trig_rx + D_det_a_DELETE + L_cancel_rx",
+ "runs": [
+  {
+   "estado": "COMPLETE",
+   "firma_tamano": false,
+   "intenciones": 113,
+   "libro": [
+    {
+     "bytes_leidos": 28966912,
+     "fichero": "libro5_ms_2026-11-28_408086.csv.gz",
+     "sha256_prefijo_leido": "2f3a3b1f7b981fbf5abba205157d95a23f07d64da4cd6d9e33efd962d8c1e245"
+    }
+   ],
+   "run": "p1b_real_B_20261128T033520Z"
+  },
+  {
+   "estado": "COMPLETE",
+   "firma_tamano": false,
+   "intenciones": 94,
+   "libro": [
+    {
+     "bytes_leidos": 102629376,
+     "fichero": "libro5_ms_2026-11-28_694284.csv.gz",
+     "sha256_prefijo_leido": "172611ab7f4777be00287e7c63025b0867da154195e3ea131680c80df32d2968"
+    }
+   ],
+   "run": "p1b_real_A_20261128T110605Z"
+  }
+ ],
+ "sha256_contenido": "68f6eedce89cc69ba83ad0643ae507bbb1515f14c9b6b1e58f82bc9041868f85",
+ "todas_monedas_ledger": {
+  "d_det_delete": {
+   "n": 207,
+   "p10": 0.007,
+   "p50": 0.01,
+   "p90": 0.015
+  },
+  "d_post": {
+   "n": 207,
+   "p10": 63.756,
+   "p50": 74.446,
+   "p90": 87.728
+  },
+  "delete_http": {
+   "n": 207,
+   "p10": 55.505,
+   "p50": 68.329,
+   "p90": 550.093
+  },
+  "post_http": {
+   "n": 207,
+   "p10": 59.042,
+   "p50": 78.158,
+   "p90": 524.636
+  }
+ },
+ "version": "latencias_vigentes_28nov_v1"
+}

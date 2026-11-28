@@ -1,0 +1,5 @@
+Identidad wrapper cobertura_bruta_v2v3 vs salida sellada out_rf5_ciego (28-Nov). Log: /root/polymarket-research-datalogs/exp5bis_27nov/paso3/ident_v2v3.log
+2026-11-15 True; 2026-11-16 True; 2026-11-17 True; 2026-11-18 True; 2026-11-19 True (todos: IDENTICA en todos los campos; unico campo distinto `codigo_sha`: wrapper 103b5d50 (el que lista HASHES_rf5) vs sellada 1d13b10a = version anterior de cobertura_bruta.py, declarado)
+2026-11-21 True; 2026-11-22 True [BAJA POTENCIA: fin de semana, poca muestra] (identicas en todos los campos incl. codigo_sha)
+2026-11-20: NO TESTABLE (no existe cobertura_bruta_2026-11-20.json sellada)
+Total: 7 dias identicos, 1 no testable, 0 distintos.
