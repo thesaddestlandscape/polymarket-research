@@ -45,7 +45,19 @@ if ! flock -w 30 200; then
 fi
 
 echo "$(date -u) inicio (libre=${libre}MB)" >> "$LOG"
-nice -n 10 git -c pack.windowMemory=100m -c pack.threads=1 maintenance run \
+# 28-Nov: con set -e un fallo de `maintenance run` mataba el script sin aviso; del 27 al 28-Nov
+# falló cada 15 min ("could not load pack": midx obsoleto) sin que nadie se enterara.
+# Ahora: fallo -> Telegram una vez al día (latch por fecha) y salida != 0.
+if ! nice -n 10 git -c pack.windowMemory=100m -c pack.threads=1 maintenance run \
   --task=loose-objects --task=incremental-repack --task=commit-graph \
-  >> "$LOG" 2>&1
+  >> "$LOG" 2>&1; then
+  echo "$(date -u) FALLO maintenance run (libre=$(libre_mb)MB)" >> "$LOG"
+  LATCH=logs/git_maintenance_aviso_fallo.fecha
+  if [ "$(cat "$LATCH" 2>/dev/null)" != "$(date -u +%F)" ]; then
+    date -u +%F > "$LATCH"
+    /usr/bin/python3 -c "import sys; sys.path.insert(0,'/root/polymarket-research'); from shadow_digest import enviar_telegram as e; e(sys.argv[1])" \
+      "🚨 git_maintenance_incremental FALLA: $(grep -E '^(error|fatal)' "$LOG" | tail -2 | tr '\n' ' ') — packs sin consolidar; revisar midx (git multi-pack-index verify). Aviso 1/día." >/dev/null 2>&1 || true
+  fi
+  exit 1
+fi
 echo "$(date -u) fin (libre=$(libre_mb)MB)" >> "$LOG"
