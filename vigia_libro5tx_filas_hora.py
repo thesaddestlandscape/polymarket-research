@@ -76,34 +76,8 @@ def main():
         except Exception as e:                              # el aviso nunca debe romper el vigía
             print(f"telegram falló: {type(e).__name__}: {e}", file=sys.stderr)
         estado["avisado_hora"] = estado["hora_utc"]
-    # 23-Nov: causa raiz de las pausas = volumen HC < 10 GB libres (libro_estado_ws pausa libro5 + libro5_tx). Avisar ANTES, a <15 GB.
-    import shutil
-    libre_gb = shutil.disk_usage("/mnt/HC_Volume_106538179").free / 1e9
-    estado["hc_libre_gb"], estado["avisado_disco_hora"] = round(libre_gb, 1), prev.get("avisado_disco_hora")
-    ult_disco = _h(prev.get("avisado_disco_hora"))
-    if libre_gb < 15 and (ult_disco is None or ult - ult_disco >= 6):
-        try:
-            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-            from shadow_digest import enviar_telegram
-            enviar_telegram(f"⚠️ Volumen HC con {libre_gb:.1f} GB libres: a <10 GB libro_estado_ws PAUSA libro5/libro5_tx (forwards 5m barato, A3-CANCEL, joins por tx). Liberar espacio.", bot="cripto")
-        except Exception as e:
-            print(f"telegram falló: {type(e).__name__}: {e}", file=sys.stderr)
-        estado["avisado_disco_hora"] = estado["hora_utc"]
-    # 28-Nov: el recordatorio de 6 h deja pasar la caída 15->10 GB sin aviso. Nivel URGENTE <11 GB cada hora
-    # (independiente del latch de 6 h) y aviso de RECUPERACIÓN al volver a >=15 GB tras haber avisado.
-    msg_extra = None
-    if libre_gb < 11:
-        msg_extra = (f"🚨 URGENTE volumen HC {libre_gb:.1f} GB libres: a <10 GB libro_estado_ws PAUSA libro5/libro5_tx YA. "
-                     "Liberar ahora (git maintenance expire, datalogs viejos).")
-    elif libre_gb >= 15 and (prev.get("hc_libre_gb") or 99) < 15:
-        msg_extra = f"✅ Volumen HC recuperado: {libre_gb:.1f} GB libres (≥15 GB)."
-    if msg_extra:
-        try:
-            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-            from shadow_digest import enviar_telegram
-            enviar_telegram(msg_extra, bot="cripto")
-        except Exception as e:
-            print(f"telegram falló: {type(e).__name__}: {e}", file=sys.stderr)
+    # 28-Nov: el aviso de disco sdb vive SOLO en scripts/vigia_disco_sdb.py (cron */10: <15 / <11 / <10 GB + recuperación);
+    # aquí estaba duplicado (dos Telegram por el mismo hecho).
     tmp = OUT + ".tmp"
     json.dump(estado, open(tmp, "w"), indent=1)
     os.replace(tmp, OUT)
