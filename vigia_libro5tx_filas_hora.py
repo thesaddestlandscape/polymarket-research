@@ -89,6 +89,21 @@ def main():
         except Exception as e:
             print(f"telegram falló: {type(e).__name__}: {e}", file=sys.stderr)
         estado["avisado_disco_hora"] = estado["hora_utc"]
+    # 28-Nov: el recordatorio de 6 h deja pasar la caída 15->10 GB sin aviso. Nivel URGENTE <11 GB cada hora
+    # (independiente del latch de 6 h) y aviso de RECUPERACIÓN al volver a >=15 GB tras haber avisado.
+    msg_extra = None
+    if libre_gb < 11:
+        msg_extra = (f"🚨 URGENTE volumen HC {libre_gb:.1f} GB libres: a <10 GB libro_estado_ws PAUSA libro5/libro5_tx YA. "
+                     "Liberar ahora (git maintenance expire, datalogs viejos).")
+    elif libre_gb >= 15 and (prev.get("hc_libre_gb") or 99) < 15:
+        msg_extra = f"✅ Volumen HC recuperado: {libre_gb:.1f} GB libres (≥15 GB)."
+    if msg_extra:
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            from shadow_digest import enviar_telegram
+            enviar_telegram(msg_extra, bot="cripto")
+        except Exception as e:
+            print(f"telegram falló: {type(e).__name__}: {e}", file=sys.stderr)
     tmp = OUT + ".tmp"
     json.dump(estado, open(tmp, "w"), indent=1)
     os.replace(tmp, OUT)
