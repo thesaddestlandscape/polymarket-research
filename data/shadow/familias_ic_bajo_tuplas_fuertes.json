@@ -24,16 +24,16 @@
  "PRICE_TARGET_GBM": {
   "ic_bayes_familia": -0.0423,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 44.12,
+  "pnl_fiel_combinado_eur": 48.67,
   "tuplas": [
    {
     "k": "PRICE_TARGET_GBM#ETH#atexpiry#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 25.4122,
-    "n_ejecutado": 126
+    "pnl_fiel_eur_sin_suelo": 26.9443,
+    "n_ejecutado": 127
    },
    {
     "k": "PRICE_TARGET_GBM#BTC#atexpiry#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 18.7061,
+    "pnl_fiel_eur_sin_suelo": 21.7224,
     "n_ejecutado": 43
    }
   ]
@@ -51,7 +51,7 @@
   ]
  },
  "LIQUIDACIONES_60M": {
-  "ic_bayes_familia": -0.0375,
+  "ic_bayes_familia": -0.0373,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 15.38,
   "tuplas": [
